@@ -1,25 +1,48 @@
 import { mudConfig, resolveTableId } from "@latticexyz/world/register";
 
 export default mudConfig({
-  overrideSystems: {
-    IncrementSystem: {
-      name: "increment",
-      openAccess: true,
-    },
+
+  enums : {
+    TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine"],
+    ObjectType: ["Axe", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
   },
+
   tables: {
-    Counter: {
+
+    MapConfig: {
+      keySchema: {},
+      dataStruct: false,
       schema: {
-        value: "uint32",
+        width:"uint32",
+        height:"uint32",
+        terrain: "bytes",
       },
-      storeArgument: true,
     },
+
+    Player: "bool",
+    Rock:"bool",
+    Road:"bool",
+    
+    Damage: "uint32",
+    Health: "uint32",
+
+    Obstruction: "bool",
+
+    Position: {
+      name: "Position",
+      schema: {
+        x: "int32",
+        y: "int32",
+      },
+    },
+
   },
   modules: [
     {
       name: "KeysWithValueModule",
       root: true,
-      args: [resolveTableId("Counter")],
+      args: [resolveTableId("Position")],
     },
+
   ],
 });

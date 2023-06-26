@@ -27,6 +27,17 @@ namespace IWorld.ContractDefinition
 
     }
 
+    public partial class AttackFunction : AttackFunctionBase { }
+
+    [Function("attack")]
+    public class AttackFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class CallFunction : CallFunctionBase { }
 
     [Function("call", "bytes")]
@@ -194,14 +205,6 @@ namespace IWorld.ContractDefinition
         public virtual string Grantee { get; set; }
     }
 
-    public partial class IncrementFunction : IncrementFunctionBase { }
-
-    [Function("increment", "uint32")]
-    public class IncrementFunctionBase : FunctionMessage
-    {
-
-    }
-
     public partial class InstallModuleFunction : InstallModuleFunctionBase { }
 
     [Function("installModule")]
@@ -230,6 +233,28 @@ namespace IWorld.ContractDefinition
     public class IsStoreFunctionBase : FunctionMessage
     {
 
+    }
+
+    public partial class MoveFunction : MoveFunctionBase { }
+
+    [Function("move")]
+    public class MoveFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
+    public partial class MoveFromFunction : MoveFromFunctionBase { }
+
+    [Function("moveFrom")]
+    public class MoveFromFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
     }
 
     public partial class PopFromField1Function : PopFromField1FunctionBase { }
@@ -262,6 +287,21 @@ namespace IWorld.ContractDefinition
         public virtual byte SchemaIndex { get; set; }
         [Parameter("uint256", "byteLengthToPop", 4)]
         public virtual BigInteger ByteLengthToPop { get; set; }
+    }
+
+    public partial class PushFunction : PushFunctionBase { }
+
+    [Function("push")]
+    public class PushFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "pushX", 3)]
+        public virtual int PushX { get; set; }
+        [Parameter("int32", "pushY", 4)]
+        public virtual int PushY { get; set; }
     }
 
     public partial class PushToFieldFunction : PushToFieldFunctionBase { }
@@ -529,6 +569,17 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Data { get; set; }
     }
 
+    public partial class SpawnFunction : SpawnFunctionBase { }
+
+    [Function("spawn")]
+    public class SpawnFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class UpdateInFieldFunction : UpdateInFieldFunctionBase { }
 
     [Function("updateInField")]
@@ -770,6 +821,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -832,6 +885,12 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
+
+
+
+
 
 
 

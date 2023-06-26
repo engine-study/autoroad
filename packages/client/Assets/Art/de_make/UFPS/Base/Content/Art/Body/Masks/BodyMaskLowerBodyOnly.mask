@@ -1,0 +1,142 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &101100000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: BodyMaskLowerBodyOnly
+  m_Mask: 01000000000000000000000001000000010000000000000000000000000000000000000001000000010000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Pelvis
+    m_Weight: 1
+  - m_Path: Pelvis/LLegUpper
+    m_Weight: 1
+  - m_Path: Pelvis/LLegUpper/LLegCalf
+    m_Weight: 1
+  - m_Path: Pelvis/LLegUpper/LLegCalf/LLegAnkle
+    m_Weight: 1
+  - m_Path: Pelvis/LLegUpper/LLegCalf/LLegAnkle/LLegToe1
+    m_Weight: 1
+  - m_Path: Pelvis/RLegUpper
+    m_Weight: 1
+  - m_Path: Pelvis/RLegUpper/RLegCalf
+    m_Weight: 1
+  - m_Path: Pelvis/RLegUpper/RLegCalf/RLegAnkle
+    m_Weight: 1
+  - m_Path: Pelvis/RLegUpper/RLegCalf/RLegAnkle/RLegToe1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmIndex1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmIndex1/LArmIndex2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmIndex1/LArmIndex2/LArmIndex3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmMid1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmMid1/LArmMid2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmMid1/LArmMid2/LArmMid3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmPinky1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmPinky1/LArmPinky2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmPinky1/LArmPinky2/LArmPinky3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmRing1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmRing1/LArmRing2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmRing1/LArmRing2/LArmRing3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmThumb1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmThumb1/LArmThumb2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/LArmCollarbone/LArmUpper1/LArmUpper2/LArmForearm1/LArmForearm2/LArmHand/LArmThumb1/LArmThumb2/LArmThumb3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1/NeckHead
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1/NeckHead/Lbrow
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1/NeckHead/Leyelid
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1/NeckHead/Lmouth
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1/NeckHead/Rbrow
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1/NeckHead/Reyelid
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/Neck1/NeckHead/Rmouth
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmIndex1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmIndex1/RArmIndex2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmIndex1/RArmIndex2/RArmIndex3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmMid1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmMid1/RArmMid2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmMid1/RArmMid2/RArmMid3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmPinky1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmPinky1/RArmPinky2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmPinky1/RArmPinky2/RArmPinky3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmRing1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmRing1/RArmRing2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmRing1/RArmRing2/RArmRing3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmThumb1
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmThumb1/RArmThumb2
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/RArmThumb1/RArmThumb2/RArmThumb3
+    m_Weight: 1
+  - m_Path: Pelvis/Spine1/Spine2/Spine3/RArmCollarbone/RArmUpper1/RArmUpper2/RArmForearm1/RArmForearm2/RArmHand/WeaponLocator
+    m_Weight: 1
+  - m_Path: Soldier
+    m_Weight: 1
+  - m_Path: SoldierWithoutHeadAndArms
+    m_Weight: 1

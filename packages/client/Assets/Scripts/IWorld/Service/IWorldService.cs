@@ -48,6 +48,34 @@ namespace IWorld.Service
             ContractHandler = web3.Eth.GetContractHandler(contractAddress);
         }
 
+        public Task<string> AttackRequestAsync(AttackFunction attackFunction)
+        {
+             return ContractHandler.SendRequestAsync(attackFunction);
+        }
+
+        public Task<TransactionReceipt> AttackRequestAndWaitForReceiptAsync(AttackFunction attackFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(attackFunction, cancellationToken);
+        }
+
+        public Task<string> AttackRequestAsync(int x, int y)
+        {
+            var attackFunction = new AttackFunction();
+                attackFunction.X = x;
+                attackFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(attackFunction);
+        }
+
+        public Task<TransactionReceipt> AttackRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var attackFunction = new AttackFunction();
+                attackFunction.X = x;
+                attackFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(attackFunction, cancellationToken);
+        }
+
         public Task<string> CallRequestAsync(CallFunction callFunction)
         {
              return ContractHandler.SendRequestAsync(callFunction);
@@ -339,26 +367,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(grantAccessFunction, cancellationToken);
         }
 
-        public Task<string> IncrementRequestAsync(IncrementFunction incrementFunction)
-        {
-             return ContractHandler.SendRequestAsync(incrementFunction);
-        }
-
-        public Task<string> IncrementRequestAsync()
-        {
-             return ContractHandler.SendRequestAsync<IncrementFunction>();
-        }
-
-        public Task<TransactionReceipt> IncrementRequestAndWaitForReceiptAsync(IncrementFunction incrementFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(incrementFunction, cancellationToken);
-        }
-
-        public Task<TransactionReceipt> IncrementRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync<IncrementFunction>(null, cancellationToken);
-        }
-
         public Task<string> InstallModuleRequestAsync(InstallModuleFunction installModuleFunction)
         {
              return ContractHandler.SendRequestAsync(installModuleFunction);
@@ -416,6 +424,62 @@ namespace IWorld.Service
         }
 
 
+
+        public Task<string> MoveRequestAsync(MoveFunction moveFunction)
+        {
+             return ContractHandler.SendRequestAsync(moveFunction);
+        }
+
+        public Task<TransactionReceipt> MoveRequestAndWaitForReceiptAsync(MoveFunction moveFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFunction, cancellationToken);
+        }
+
+        public Task<string> MoveRequestAsync(int x, int y)
+        {
+            var moveFunction = new MoveFunction();
+                moveFunction.X = x;
+                moveFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(moveFunction);
+        }
+
+        public Task<TransactionReceipt> MoveRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var moveFunction = new MoveFunction();
+                moveFunction.X = x;
+                moveFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFunction, cancellationToken);
+        }
+
+        public Task<string> MoveFromRequestAsync(MoveFromFunction moveFromFunction)
+        {
+             return ContractHandler.SendRequestAsync(moveFromFunction);
+        }
+
+        public Task<TransactionReceipt> MoveFromRequestAndWaitForReceiptAsync(MoveFromFunction moveFromFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFromFunction, cancellationToken);
+        }
+
+        public Task<string> MoveFromRequestAsync(int x, int y)
+        {
+            var moveFromFunction = new MoveFromFunction();
+                moveFromFunction.X = x;
+                moveFromFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(moveFromFunction);
+        }
+
+        public Task<TransactionReceipt> MoveFromRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var moveFromFunction = new MoveFromFunction();
+                moveFromFunction.X = x;
+                moveFromFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFromFunction, cancellationToken);
+        }
 
         public Task<string> PopFromFieldRequestAsync(PopFromField1Function popFromField1Function)
         {
@@ -481,6 +545,38 @@ namespace IWorld.Service
                 popFromFieldFunction.ByteLengthToPop = byteLengthToPop;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(popFromFieldFunction, cancellationToken);
+        }
+
+        public Task<string> PushRequestAsync(PushFunction pushFunction)
+        {
+             return ContractHandler.SendRequestAsync(pushFunction);
+        }
+
+        public Task<TransactionReceipt> PushRequestAndWaitForReceiptAsync(PushFunction pushFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(pushFunction, cancellationToken);
+        }
+
+        public Task<string> PushRequestAsync(int x, int y, int pushX, int pushY)
+        {
+            var pushFunction = new PushFunction();
+                pushFunction.X = x;
+                pushFunction.Y = y;
+                pushFunction.PushX = pushX;
+                pushFunction.PushY = pushY;
+            
+             return ContractHandler.SendRequestAsync(pushFunction);
+        }
+
+        public Task<TransactionReceipt> PushRequestAndWaitForReceiptAsync(int x, int y, int pushX, int pushY, CancellationTokenSource cancellationToken = null)
+        {
+            var pushFunction = new PushFunction();
+                pushFunction.X = x;
+                pushFunction.Y = y;
+                pushFunction.PushX = pushX;
+                pushFunction.PushY = pushY;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(pushFunction, cancellationToken);
         }
 
         public Task<string> PushToFieldRequestAsync(PushToFieldFunction pushToFieldFunction)
@@ -1069,6 +1165,34 @@ namespace IWorld.Service
                 setRecordFunction.Data = data;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setRecordFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnRequestAsync(SpawnFunction spawnFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(SpawnFunction spawnFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnRequestAsync(int x, int y)
+        {
+            var spawnFunction = new SpawnFunction();
+                spawnFunction.X = x;
+                spawnFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(spawnFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnFunction = new SpawnFunction();
+                spawnFunction.X = x;
+                spawnFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }
 
         public Task<string> UpdateInFieldRequestAsync(UpdateInFieldFunction updateInFieldFunction)
