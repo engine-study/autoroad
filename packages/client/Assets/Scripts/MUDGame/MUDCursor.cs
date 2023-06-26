@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SPCursor : MonoBehaviour
+public class MUDCursor : MonoBehaviour
 {
-    public static SPCursor Instance;
+    public static MUDCursor Instance;
     public static Vector3 WorldPos {get{return Instance.mousePos;}}
     public static Vector3 GridPos {get{return Instance.gridPos;}}
     public static System.Action<Entity> OnHover;

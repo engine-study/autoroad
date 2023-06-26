@@ -23,7 +23,7 @@ public class Placement : MonoBehaviour
         valid.SetActive(canPlace);
         invalid.SetActive(!canPlace);
 
-        transform.position = SPCursor.GridPos;
+        transform.position = MUDCursor.GridPos;
 
     }
     public bool ValidSpot() {

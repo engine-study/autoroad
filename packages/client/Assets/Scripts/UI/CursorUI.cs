@@ -18,14 +18,14 @@ public class CursorUI : MonoBehaviour
 
     void Awake() {
         Instance = this;
-        SPCursor.OnHover += UpdateHover;
-        SPCursor.OnGridPosition += OnCursorPosition;
+        MUDCursor.OnHover += UpdateHover;
+        MUDCursor.OnGridPosition += OnCursorPosition;
     }
 
     void OnDestroy() {
         Instance = null;
-        SPCursor.OnHover -= UpdateHover;
-        SPCursor.OnGridPosition -= OnCursorPosition;
+        MUDCursor.OnHover -= UpdateHover;
+        MUDCursor.OnGridPosition -= OnCursorPosition;
     }
 
     void OnCursorPosition(Vector3 newPos) {

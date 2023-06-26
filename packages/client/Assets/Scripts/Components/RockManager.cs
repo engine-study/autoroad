@@ -11,10 +11,10 @@ using IWorld.ContractDefinition;
 using mud.Client;
 using Cysharp.Threading.Tasks;
 
-public class StoneManager : MUDTableManager {
+public class RockManager : MUDTableManager {
 
     // [Header("Building Manager")]
-    public static StoneManager Instance;
+    public static RockManager Instance;
 
     protected override void Awake() {
         base.Awake();

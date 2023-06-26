@@ -20,6 +20,6 @@ public class BuildUI : PhaseUI
     }
 
     public override void UpdatePhase() {
-        targetEntity.transform.position = SPCursor.GridPos;
+        targetEntity.transform.position = MUDCursor.GridPos;
     }
 }
