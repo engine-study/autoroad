@@ -21,7 +21,6 @@ public class PlayerManager : MUDTableManager
 
     protected override async void InitTable(NetworkManager nm)
     {
-        Debug.Log("PLAYER MANAGER SPAWN");
 
         var addressKey = net.addressKey;
         var currentPlayer = PlayerTable.GetTableValue(addressKey);
