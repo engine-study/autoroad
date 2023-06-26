@@ -27,26 +27,25 @@ public class RockManager : MUDTableManager {
 
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {
-        // var SpawnSubscription = BuildingTable.OnRecordInsert().ObserveOnMainThread().Subscribe(OnInsertRecord);
-        // _disposers.Add(SpawnSubscription);
+        var SpawnSubscription = RockTable.OnRecordInsert().ObserveOnMainThread().Subscribe(OnInsertRecord);
+        _disposers.Add(SpawnSubscription);
 
-        // var UpdateSubscription = BuildingTable.OnRecordUpdate().ObserveOnMainThread().Subscribe(OnUpdateRecord);
-        // _disposers.Add(UpdateSubscription);
-
+        var UpdateSubscription = RockTable.OnRecordUpdate().ObserveOnMainThread().Subscribe(OnUpdateRecord);
+        _disposers.Add(UpdateSubscription);
     }
 
     protected override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
     {
-        // BuildingTableUpdate update = tableUpdate as BuildingTableUpdate;
+        RockTableUpdate update = tableUpdate as RockTableUpdate;
 
-        // var currentValue = update.TypedValue.Item1;
-        // if (currentValue == null)
-        // {
-        //     Debug.LogError("No currentValue");
-        //     return null;
-        // }
+        var currentValue = update.TypedValue.Item1;
+        if (currentValue == null)
+        {
+            Debug.LogError("No currentValue");
+            return null;
+        }
 
-        // return currentValue;
+        return currentValue;
         return null;
     }
 
