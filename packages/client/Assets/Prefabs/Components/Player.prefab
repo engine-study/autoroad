@@ -67,6 +67,8 @@ GameObject:
   - component: {fileID: 7877383074114644386}
   - component: {fileID: 4765553126336188459}
   - component: {fileID: 7126306196510897201}
+  - component: {fileID: 7389045190273371532}
+  - component: {fileID: 5252423910711337837}
   - component: {fileID: 8714677117460968964}
   - component: {fileID: 8880456862153127819}
   - component: {fileID: 1911895687799555717}
@@ -91,7 +93,7 @@ Transform:
   m_Children:
   - {fileID: 3887731599593465078}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4765553126336188459
 MonoBehaviour:
@@ -117,7 +119,6 @@ MonoBehaviour:
   animator: {fileID: 0}
   reciever: {fileID: 0}
   resources: {fileID: 0}
-  playerComponent: {fileID: 7126306196510897201}
 --- !u!114 &7126306196510897201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,6 +134,61 @@ MonoBehaviour:
   entity: {fileID: 0}
   table: {fileID: 0}
   spawned: 0
+--- !u!114 &7389045190273371532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625912502078787175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b3e1b7180b74f489c546c82e96fae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 4765553126336188459}
+  input: {x: 0, y: 0, z: 0}
+  crouchFlag: 0
+  jumpFlag: 0
+  hoverFlag: 0
+  inputRaw: {x: 0, y: 0, z: 0}
+  mouseInputting: 0
+--- !u!114 &5252423910711337837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625912502078787175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a29feb63c03a43cd8ab8379280ef8219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  rigidbodies: []
+  grounded: 0
+  bumped: 0
+  crouching: 0
+  bhopping: 0
+  noclip: 0
+  jumping: 0
+  canBhop: 0
+  airAccel: 1
+  minAirAccel: 1
+  maxAirAccel: 6
+  bhopBoost: 0.25
+  moveDirection: {x: 0, y: 0, z: 0}
+  lookAt: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0, z: 0}
+  moveDirectionNoY: {x: 0, y: 0, z: 0}
+  forceVelocity: {x: 0, y: 0, z: 0}
+  tagging: 1
+  detectCollisions: 1
+  moveMarker: {fileID: 0}
+  footsteps: []
+  pushes: []
+  pops: []
 --- !u!54 &8714677117460968964
 Rigidbody:
   m_ObjectHideFlags: 0
