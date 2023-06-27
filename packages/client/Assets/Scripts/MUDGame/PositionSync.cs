@@ -14,15 +14,16 @@ public class PositionSync : ComponentSync
     protected Position pos;
     protected Vector3 targetPos;
 
-    protected override string GetComponentName() {return "Position";}
+    public override System.Type TargetComponentType() {return typeof(Position);}
 
-    protected override void Awake() {
+    protected override void Start() {
+
+        base.Start();
 
         if(targetTransform == null) {
             targetTransform = transform;
         }
 
-        base.Awake();
     }
 
     protected override void InitComponents() {
