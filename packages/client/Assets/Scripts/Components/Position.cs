@@ -8,8 +8,8 @@ public class Position : MUDComponent
     public Vector3 Pos { get { return position3D; } }
 
     [Header("Position")]
-    public Vector2 position2D;
-    public Vector3 position3D;
+    [SerializeField] protected Vector2 position2D;
+    [SerializeField] protected Vector3 position3D;
     public override void UpdateComponent(mud.Client.IMudTable update, TableEvent eventType)
     {
 

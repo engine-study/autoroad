@@ -23,6 +23,7 @@ public class PlayerMUD : SPPlayer
         entity = GetComponentInParent<MUDEntity>();
         if(Player.Loaded) NetworkInit();
         else Player.OnLoaded += NetworkInit;
+
     }
 
     protected override void Destroy()
