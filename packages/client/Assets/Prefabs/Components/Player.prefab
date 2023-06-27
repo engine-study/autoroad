@@ -120,6 +120,9 @@ MonoBehaviour:
   animator: {fileID: 0}
   reciever: {fileID: 0}
   resources: {fileID: 0}
+  entity: {fileID: 0}
+  playerComponent: {fileID: 7126306196510897201}
+  positionComponent: {fileID: 0}
 --- !u!114 &7126306196510897201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,9 +135,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dee59fdc01549b47bc6c719e038be4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expectedComponents: []
   entity: {fileID: 0}
   table: {fileID: 0}
+  hasInit: 0
+  hasExpectedComponents: 0
+  componentsLoaded: 0
+  loaded: 0
   spawned: 0
+  isLocalPlayer: 0
 --- !u!114 &7389045190273371532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +195,7 @@ MonoBehaviour:
   forceVelocity: {x: 0, y: 0, z: 0}
   tagging: 1
   detectCollisions: 1
+  playerTransform: {fileID: 0}
   moveMarker: {fileID: 5541991144685123981}
   footsteps: []
   pushes: []

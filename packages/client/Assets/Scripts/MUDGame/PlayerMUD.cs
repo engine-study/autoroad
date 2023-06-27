@@ -9,15 +9,20 @@ public class PlayerMUD : SPPlayer
     public Position Position{get{return positionComponent;}}
 
     [Header("MUD")]
-    [SerializeField] protected MUDEntity entity;
     [SerializeField] protected Player playerComponent;
+
+    [Header("Debug")]
+    [SerializeField] protected MUDEntity entity;
     [SerializeField] protected Position positionComponent;
 
     public override void Init() {
         base.Init();
         
+        Debug.Log("Player Init");
+
         entity = GetComponentInParent<MUDEntity>();
-        Player.OnLoaded += NetworkInit;
+        if(Player.Loaded) NetworkInit();
+        else Player.OnLoaded += NetworkInit;
     }
 
     protected override void Destroy()
@@ -28,11 +33,17 @@ public class PlayerMUD : SPPlayer
 
 
     protected override void NetworkInit() {
-        base.NetworkInit();
-
+        
         if(playerComponent.IsLocalPlayer) {
             SetLocalPlayer(this);
         }
+
+        base.NetworkInit();
+
+        Debug.Log("Player Network Init");
+
+        positionComponent = entity.GetMUDComponent<Position>() as Position;
+
 
     }
 
