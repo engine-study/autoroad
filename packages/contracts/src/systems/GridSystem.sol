@@ -5,8 +5,8 @@ import { MapConfig, Damage, Position, PositionTableId, Player, PositionData, Hea
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../addressToEntityKey.sol";
 
-contract MoveSystem is System {
+contract GridSystem is System {
 
-    
+
 
 }

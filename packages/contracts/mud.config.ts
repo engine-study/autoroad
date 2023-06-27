@@ -20,13 +20,23 @@ export default mudConfig({
     },
 
     Player: "bool",
-    Rock:"bool",
+    Shovel: "bool",
+    Pickaxe: "bool",
+
+    Rock: {
+      name: "Rock",
+      schema: {
+        size: "int32",
+      },
+    },
+
     Road:"bool",
     
     Damage: "uint32",
     Health: "uint32",
 
     Obstruction: "bool",
+    Shovelable:"bool",
 
     Position: {
       name: "Position",

@@ -47,15 +47,16 @@ public class ControllerMUD : SPController
         playerScript = GetComponentInParent<PlayerMUD>();
         entityReady = true;
 
-        _disposer = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().Merge(PositionTable.OnRecordUpdate()).ObserveOnMainThread(),
-                OnChainPositionUpdate);
-                
+        // _disposer = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().Merge(PositionTable.OnRecordUpdate()).ObserveOnMainThread(),
+        //         OnChainPositionUpdate);
+        
+        playerScript.Position.OnUpdated += PositionUpdate;
 
         moveMarker.SetActive(false);
 
         controller.enabled = false;
 
-        playerTransform = transform.parent;
+        playerTransform = transform;
         moveMarker.transform.parent = null;
         moveMarker.transform.position = playerTransform.position;
 
@@ -63,6 +64,10 @@ public class ControllerMUD : SPController
 
     private void OnDestroy()
     {
+        if(playerScript) {
+            playerScript.Position.OnUpdated -= PositionUpdate;
+        }
+
         _disposer?.Dispose();
     }
 
@@ -75,27 +80,15 @@ public class ControllerMUD : SPController
         enabled = true;
     }
 
-    private void OnChainPositionUpdate(PositionTableUpdate update)
+    private void PositionUpdate()
     {
         if (!entityReady) { return; }
-        if (entity.Key == null || update.Key != entity.Key) return;
-
-        // if (_player.IsLocalPlayer()) {
-        //     moveMarker.SetActive(false);
-        // }
-
-
-        var currentValue = update.TypedValue.Item1;
-        if (currentValue == null) return;
-        var x = Convert.ToSingle(currentValue.x);
-        var y = Convert.ToSingle(currentValue.y);
 
         Vector3 lastOnchainPos = _onchainPosition == null ? playerTransform.position : (Vector3)_onchainPosition;
 
-        _onchainPosition = new Vector3(x, 0, y);
+        _onchainPosition = playerScript.Position.Pos;
         markerPos = (Vector3)_onchainPosition;
 
-        Debug.Log("New Pos: " + SPHelper.GiveTruncatedHash(update.Key));
         Debug.Log("New Pos: " + _onchainPosition.ToString());
 
         UpdateAnimation((Vector3)_onchainPosition);

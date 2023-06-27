@@ -38,12 +38,11 @@ public class PlayerMUD : SPPlayer
             SetLocalPlayer(this);
         }
 
+        positionComponent = entity.GetMUDComponent<Position>() as Position;
+
         base.NetworkInit();
 
         Debug.Log("Player Network Init");
-
-        positionComponent = entity.GetMUDComponent<Position>() as Position;
-
 
     }
 
