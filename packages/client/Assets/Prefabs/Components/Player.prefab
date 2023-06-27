@@ -120,8 +120,8 @@ MonoBehaviour:
   animator: {fileID: 0}
   reciever: {fileID: 0}
   resources: {fileID: 0}
-  entity: {fileID: 0}
   playerComponent: {fileID: 7126306196510897201}
+  entity: {fileID: 0}
   positionComponent: {fileID: 0}
 --- !u!114 &7126306196510897201
 MonoBehaviour:
@@ -135,11 +135,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dee59fdc01549b47bc6c719e038be4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expectedComponents: []
+  expectedComponents:
+  - {fileID: 7126306196510897201}
+  - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   entity: {fileID: 0}
   table: {fileID: 0}
   hasInit: 0
-  hasExpectedComponents: 0
   componentsLoaded: 0
   loaded: 0
   spawned: 0
