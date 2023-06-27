@@ -5164,12 +5164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b22358974b512842a3acb2c8aaeceb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents: []
-  entity: {fileID: 0}
-  table: {fileID: 0}
-  hasInit: 0
-  componentsLoaded: 0
-  loaded: 0
+  requiredComponents:
+  - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
 --- !u!114 &7201583706257857126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5183,9 +5179,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncType: 0
-  lerpSpeed: 0.1
+  componentPrefab: {fileID: 0}
   ourComponent: {fileID: 0}
-  pos: {fileID: 0}
+  targetComponent: {fileID: 0}
+  targetTransform: {fileID: 0}
+  lerpSpeed: 0.1
 --- !u!54 &3967535639495750451
 Rigidbody:
   m_ObjectHideFlags: 0
