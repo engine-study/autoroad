@@ -23,21 +23,21 @@ public class PositionManager : MUDTableManager
         _disposers.Add(UpdateSub);
     }
 
-    public static void GetPosition(Position component)
-    {
+    // public static void GetPosition(Position component)
+    // {
 
-        Position positionComp = component as Position;
+    //     Position positionComp = component as Position;
 
-        var table = PositionTable.GetTableValue(component.Entity.Key);
+    //     var table = PositionTable.GetTableValue(component.Entity.Key);
 
-        if (table == null)
-        {
-            Debug.LogError("No position on " + component.Entity.gameObject, component.Entity.gameObject);
-            return;
-        }
+    //     if (table == null)
+    //     {
+    //         Debug.LogError("No position on " + component.Entity.gameObject, component.Entity.gameObject);
+    //         return;
+    //     }
 
-        positionComp.UpdateComponent(table, TableEvent.Manual);
-    }
+    //     positionComp.UpdateComponent(table, TableEvent.Manual);
+    // }
 
 
     protected override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
