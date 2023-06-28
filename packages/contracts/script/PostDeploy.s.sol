@@ -6,7 +6,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { MapConfig, Obstruction, Position, Rock } from "../src/codegen/Tables.sol";
 import { TerrainType } from "../src/codegen/Types.sol";
-import { positionToEntityKey } from "../src/positionToEntityKey.sol";
+import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
 
 contract PostDeploy is Script {
 

@@ -10,8 +10,9 @@ public class Position : MUDComponent
     [Header("Position")]
     [SerializeField] protected Vector2 position2D;
     [SerializeField] protected Vector3 position3D;
-    public override void UpdateComponent(mud.Client.IMudTable update, TableEvent eventType)
+    protected override void UpdateComponent(mud.Client.IMudTable update, TableEvent eventType)
     {
+        base.UpdateComponent(update, eventType);
 
         PositionTable pos = (PositionTable)update;
 
@@ -21,7 +22,6 @@ public class Position : MUDComponent
         
         // entity.gameObject.transform.position = new Vector3(position.x, 0f, position.y);
 
-        base.UpdateComponent(update, eventType);
 
     }
 
