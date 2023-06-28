@@ -111,13 +111,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 3887731599593465078}
   visual: {fileID: 8681323706182717963}
+  actor: {fileID: 0}
+  reciever: {fileID: 3955994449410173385}
   isNPC: 0
   logic: {fileID: 7389045190273371532}
   controller: {fileID: 5252423910711337837}
   anim: {fileID: 1492224391178781041}
-  actor: {fileID: 0}
   animator: {fileID: 2520871121364187547}
-  reciever: {fileID: 3955994449410173385}
   resources: {fileID: 411999650646453098}
   playerComponent: {fileID: 7126306196510897201}
   entity: {fileID: 0}
@@ -136,11 +136,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
-  entity: {fileID: 0}
-  table: {fileID: 0}
-  hasInit: 0
-  componentsLoaded: 0
-  loaded: 0
   spawned: 0
   isLocalPlayer: 0
 --- !u!114 &7389045190273371532
@@ -522,10 +517,6 @@ PrefabInstance:
     - target: {fileID: 3111246606379771535, guid: ba6fcb2775ef5c14aa8a7d69b0299a0d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4506517696508786958, guid: ba6fcb2775ef5c14aa8a7d69b0299a0d, type: 3}
-      propertyPath: sfx
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4617639846449470392, guid: ba6fcb2775ef5c14aa8a7d69b0299a0d, type: 3}
       propertyPath: m_Name
