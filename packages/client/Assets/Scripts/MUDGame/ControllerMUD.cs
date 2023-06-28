@@ -289,7 +289,7 @@ public class ControllerMUD : SPController
             player?.Animator.PlayClip("Tired");
 
         }
-        else if (hit.collider && (hit.collider.GetComponentInParent<Rock>() != null || hit.collider.GetComponentInParent<Player>() != null))
+        else if (hit.collider && (hit.collider.GetComponentInParent<RockComponent>() != null || hit.collider.GetComponentInParent<PlayerComponent>() != null))
         {
 
             // Debug.Log("PUSHING");

@@ -5,15 +5,15 @@ using mud.Client;
 
 public class PlayerMUD : SPPlayer
 {
-    public Player Player{get{return playerComponent;}}
-    public Position Position{get{return positionComponent;}}
+    public PlayerComponent Player{get{return playerComponent;}}
+    public PositionComponent Position{get{return positionComponent;}}
 
     [Header("MUD")]
-    [SerializeField] protected Player playerComponent;
+    [SerializeField] protected PlayerComponent playerComponent;
 
     [Header("Debug")]
     [SerializeField] protected MUDEntity entity;
-    [SerializeField] protected Position positionComponent;
+    [SerializeField] protected PositionComponent positionComponent;
 
     public override void Init() {
         base.Init();
@@ -39,8 +39,8 @@ public class PlayerMUD : SPPlayer
             SetLocalPlayer(this);
         }
 
-        positionComponent = entity.GetMUDComponent<Position>() as Position;
-
+        positionComponent = entity.GetMUDComponent<PositionComponent>() as PositionComponent;
+        transform.position = positionComponent.Pos;
         base.NetworkInit();
 
         Debug.Log("Player Network Init");

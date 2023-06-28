@@ -11,10 +11,10 @@ public class PositionSync : ComponentSync
     public float lerpSpeed = .1f;
 
     [Header("Debug")]
-    protected Position pos;
+    protected PositionComponent pos;
     protected Vector3 targetPos;
 
-    public override System.Type TargetComponentType() {return typeof(Position);}
+    public override System.Type TargetComponentType() {return typeof(PositionComponent);}
 
     protected override void Start() {
 
@@ -29,7 +29,7 @@ public class PositionSync : ComponentSync
     protected override void InitComponents() {
         base.InitComponents();
 
-        pos = targetComponent as Position;
+        pos = targetComponent as PositionComponent;
 
     }
 
