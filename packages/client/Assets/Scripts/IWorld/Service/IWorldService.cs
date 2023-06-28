@@ -425,34 +425,6 @@ namespace IWorld.Service
 
 
 
-        public Task<string> MoveRequestAsync(MoveFunction moveFunction)
-        {
-             return ContractHandler.SendRequestAsync(moveFunction);
-        }
-
-        public Task<TransactionReceipt> MoveRequestAndWaitForReceiptAsync(MoveFunction moveFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFunction, cancellationToken);
-        }
-
-        public Task<string> MoveRequestAsync(int x, int y)
-        {
-            var moveFunction = new MoveFunction();
-                moveFunction.X = x;
-                moveFunction.Y = y;
-            
-             return ContractHandler.SendRequestAsync(moveFunction);
-        }
-
-        public Task<TransactionReceipt> MoveRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
-        {
-            var moveFunction = new MoveFunction();
-                moveFunction.X = x;
-                moveFunction.Y = y;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFunction, cancellationToken);
-        }
-
         public Task<string> MoveFromRequestAsync(MoveFromFunction moveFromFunction)
         {
              return ContractHandler.SendRequestAsync(moveFromFunction);

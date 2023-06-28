@@ -235,17 +235,6 @@ namespace IWorld.ContractDefinition
 
     }
 
-    public partial class MoveFunction : MoveFunctionBase { }
-
-    [Function("move")]
-    public class MoveFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
-    }
-
     public partial class MoveFromFunction : MoveFromFunctionBase { }
 
     [Function("moveFrom")]
@@ -885,8 +874,6 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
-
-
 
 
 
