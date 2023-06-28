@@ -26,7 +26,6 @@ public class ControllerMUD : SPController
 
     float alive = 0f;
     float distance;
-    public AudioClip[] footsteps;
     public AudioClip[] pushes;
     public AudioClip[] pops;
     bool entityReady = false;
@@ -269,7 +268,7 @@ public class ControllerMUD : SPController
         if (alive > 1f && distance > 1f)
         {
             distance -= 1f;
-            player.resources.sfx.PlaySound(footsteps);
+            player.resources.sfx.PlaySound(player.resources.stepSFX);
         }
 
     }
