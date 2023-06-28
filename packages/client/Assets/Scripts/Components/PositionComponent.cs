@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
-
+using mud.Client;
 public class PositionComponent : MUDComponent
 {
     public Vector3 Pos { get { return position3D; } }
@@ -10,7 +10,7 @@ public class PositionComponent : MUDComponent
     [Header("Position")]
     [SerializeField] protected Vector2 position2D;
     [SerializeField] protected Vector3 position3D;
-    protected override void UpdateComponent(mud.Client.IMudTable update, TableEvent eventType)
+    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType)
     {
         base.UpdateComponent(update, eventType);
 

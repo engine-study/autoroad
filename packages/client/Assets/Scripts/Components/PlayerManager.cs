@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Collections;
 using ObservableExtensions = UniRx.ObservableExtensions;
 using System.Threading.Tasks;
+using mud.Client;
 
 public class PlayerManager : MUDTableManager
 {

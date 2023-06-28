@@ -13,7 +13,7 @@ public class RockComponent : MUDComponent
 
     [SerializeField] GameObject [] stages;
 
-    protected override void UpdateComponent(mud.Client.IMudTable update, TableEvent eventType) {
+    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
 
         base.UpdateComponent(update, eventType);
 

@@ -341,21 +341,6 @@ public class MapGenerator : Generator
                         // Vector3 position = new Vector3(x - mapData.mapWidth * .5f, mapRegions.regions [i].height * .75f + currentBiome * .5f, y - mapData.mapHeight * .5f);
                         // Vector3 position = new Vector3(.5f + x - mapData.mapWidth * .5f, currentBiome, .5f + y - mapData.mapHeight * .5f);
                         Ground newGround = SpawnObject(mapRegions.regions[i].block.gameObject, position, Quaternion.identity, blockParent).GetComponent<Ground>();
-                        if (Application.isPlaying)
-                        {
-                            newGround = Instantiate(mapRegions.regions[i].block, position, Quaternion.identity, blockParent).GetComponent<Ground>();
-                        }
-                        else
-                        {
-#if UNITY_EDITOR
-                            newGround = UnityEditor.PrefabUtility.InstantiatePrefab(mapRegions.regions[i].block) as Ground;
-                            newGround.transform.position = position;
-                            newGround.transform.rotation = Quaternion.identity;
-                            newGround.transform.parent = blockParent;
-#else
-							block = Instantiate(mapRegions.regions[i].block, position, Quaternion.identity, blockParent).GetComponent<Block>();
-#endif
-                        }
 
                         // newGround.gridPos = new Vector3(x, currentHeight, y);
                         AddGround(new Vector2(x, y), newGround);
@@ -399,7 +384,7 @@ public class MapGenerator : Generator
             go.transform.rotation = rotation;
             go.transform.parent = parent;
 #else
-            go = Instantiate(spawnGO, position, rotation, parent);
+            go = Instantiate(spawnGO, position, rotation, parent) as GameObject;
 #endif
         }
 
