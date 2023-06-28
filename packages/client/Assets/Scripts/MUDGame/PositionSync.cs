@@ -8,7 +8,7 @@ public class PositionSync : ComponentSync
 
     [Header("Optional")]
     public Transform targetTransform;
-    public float lerpSpeed = .1f;
+    public float deltaSpeed = 2.5f;
 
     [Header("Debug")]
     protected PositionComponent pos;
@@ -49,6 +49,7 @@ public class PositionSync : ComponentSync
         if (syncType == ComponentSyncType.Lerp)
         {
             targetPos = pos.Pos;
+            enabled = transform.position != targetPos;
         }
         else if (syncType == ComponentSyncType.Instant)
         {
@@ -59,6 +60,12 @@ public class PositionSync : ComponentSync
     }
 
     protected override void UpdateLerp() {
-        transform.position = Vector3.Lerp(transform.position, targetPos, lerpSpeed);
+        
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, deltaSpeed * Time.deltaTime);
+        
+        //turn off for efficiency until next update
+        if(transform.position == targetPos) {
+            enabled = false;
+        }
     }
 }
