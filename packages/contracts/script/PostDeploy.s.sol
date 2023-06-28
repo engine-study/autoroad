@@ -5,7 +5,7 @@ import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { MapConfig, Obstruction, Position, Rock } from "../src/codegen/Tables.sol";
-import { TerrainType } from "../src/codegen/Types.sol";
+import { TerrainType, ObjectType } from "../src/codegen/Types.sol";
 import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
 
 contract PostDeploy is Script {
@@ -82,7 +82,7 @@ contract PostDeploy is Script {
         bytes32 entity = positionToEntityKey(x,y);
 
         if(terrainType == TerrainType.Rock) {
-          Rock.set(world, entity, 5);
+          Rock.set(world, entity, 5, ObjectType.Statumen);
           Position.set(world, entity, positionX, positionY);
           Obstruction.set(world, entity, true);
         }

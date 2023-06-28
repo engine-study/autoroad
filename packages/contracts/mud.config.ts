@@ -27,6 +27,7 @@ export default mudConfig({
       name: "Rock",
       schema: {
         size: "int32",
+        rockType: "ObjectType",
       },
     },
 

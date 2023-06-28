@@ -7,7 +7,7 @@ import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
 import { Player, PlayerTableId } from "./tables/Player.sol";
 import { Shovel, ShovelTableId } from "./tables/Shovel.sol";
 import { Pickaxe, PickaxeTableId } from "./tables/Pickaxe.sol";
-import { Rock, RockTableId } from "./tables/Rock.sol";
+import { Rock, RockData, RockTableId } from "./tables/Rock.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Damage, DamageTableId } from "./tables/Damage.sol";
 import { Health, HealthTableId } from "./tables/Health.sol";
