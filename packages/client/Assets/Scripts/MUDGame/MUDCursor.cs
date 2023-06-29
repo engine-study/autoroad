@@ -9,6 +9,8 @@ public class MUDCursor : MonoBehaviour
     public static Vector3 GridPos {get{return Instance.gridPos;}}
     public static System.Action<Entity> OnHover;
     public static System.Action<Vector3> OnGridPosition;
+    public static System.Action<Vector3> OnUpdateCursor;
+
     [Header("Cursor")]
     public bool grid;
     public Transform graphics;
@@ -37,11 +39,10 @@ public class MUDCursor : MonoBehaviour
 
         if (grid)
         {
-            mousePos = new Vector3(Mathf.Round(rawMousePos.x * 1f) / 1f, rawMousePos.y, Mathf.Round(rawMousePos.z * 1f) / 1f);
 
             lastGridPos = gridPos;
 
-            gridPos = new Vector3(Mathf.Round(gridPos.x),Mathf.Round(gridPos.y),Mathf.Round(gridPos.z));
+            gridPos = new Vector3(Mathf.Round(rawMousePos.x),Mathf.Round(rawMousePos.y),Mathf.Round(rawMousePos.z));
             mousePos = gridPos;
 
             if(gridPos != lastGridPos) {
@@ -51,13 +52,15 @@ public class MUDCursor : MonoBehaviour
 
         }
         else
-        {
+        {   
             mousePos = Vector3.MoveTowards(graphics.position, rawMousePos, 50f * Time.deltaTime);
         }
 
-        graphics.position = mousePos;
+        graphics.position = mousePos;   
 
-   
+        if(lastPos != rawMousePos) {
+            OnUpdateCursor?.Invoke(rawMousePos);
+        }
 
         if(mousePos != lastPos) {
             UpdateHover();
