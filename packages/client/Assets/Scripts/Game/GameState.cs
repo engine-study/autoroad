@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public enum GamePhase {Lobby, Build, Action, PostGame,_Count}
+public enum GamePhase {Lobby, Game, PostGame,_Count}
 public class GameState : MonoBehaviour
 {
     public static GamePhase Phase {get{return Instance.phase;}}
@@ -13,7 +13,6 @@ public class GameState : MonoBehaviour
     public GamePhase phase;
 
     [Header("UI")]
-    public GameUI gameUI;
     public PhaseUI [] phaseUI;
     public static System.Action<GamePhase> OnPhaseUpdate;
 
@@ -23,7 +22,11 @@ public class GameState : MonoBehaviour
     }
 
     void Start() {
+        for(int i = 0; i < phaseUI.Length; i++) {
+            phaseUI[i].ToggleWindowClose();
+        }
 
+        TogglePhase(phase);
     }
 
     void UpdatePhase() {
@@ -36,24 +39,18 @@ public class GameState : MonoBehaviour
 
         if(phase == GamePhase.Lobby) {
 
-        } else if(phase == GamePhase.Build) {
-
-        } else if(phase == GamePhase.Action) {
+        } else if(phase == GamePhase.Game) {
 
         } else if(phase == GamePhase.PostGame) {
 
         }
 
         phase = newPhase;
-
-        gameUI.UpdatePhase(phase);
         phaseUI[(int)phase].ToggleWindow(true);
 
         if(phase == GamePhase.Lobby) {
 
-        } else if(phase == GamePhase.Build) {
-
-        } else if(phase == GamePhase.Action) {
+        } else if(phase == GamePhase.Game) {
 
         } else if(phase == GamePhase.PostGame) {
 
@@ -66,7 +63,7 @@ public class GameState : MonoBehaviour
     }
 
     #if UNITY_EDITOR
-    [MenuItem("Engine/Next Phase &q")]
+    [MenuItem("Engine/Game State &q")]
     static void TogglePhase()
     {
         GameState gs = FindObjectOfType<GameState>();

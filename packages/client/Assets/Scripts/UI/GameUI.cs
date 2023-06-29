@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class GameUI : MonoBehaviour
+public class GameUI : PhaseUI
 {
     public TextMeshProUGUI phaseText;
     public void UpdatePhase(GamePhase newPhase) {

@@ -107,9 +107,9 @@ public class ControllerMUD : SPController
         catch (Exception ex)
         {
             //if our transaction fails, force the player back to their position on the table
-
             Debug.LogException(ex);
-
+            playerTransform.position = playerScript.Position.Pos;
+            _onchainPosition = playerScript.Position.Pos;
         }
     }
 
