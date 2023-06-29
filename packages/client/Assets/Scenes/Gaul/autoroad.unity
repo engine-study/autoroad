@@ -66164,7 +66164,7 @@ SpriteRenderer:
   m_Size: {x: 0.75, y: 0.78}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1512671973
@@ -88736,6 +88736,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 622862814}
     m_Modifications:
+    - target: {fileID: 481909876603885472, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 826307476415820403, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000030517578
+      objectReference: {fileID: 0}
+    - target: {fileID: 2138499020309148153, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00030517578
+      objectReference: {fileID: 0}
     - target: {fileID: 3078605959455251152, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -88744,9 +88756,29 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3078605960159661374, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 3078605960159661375, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3078605960159661375, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3078605960159661375, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3078605960159661375, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.00006275229
+      objectReference: {fileID: 0}
+    - target: {fileID: 3078605960159661375, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.00000080451656
+      objectReference: {fileID: 0}
+    - target: {fileID: 3078605960159661375, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3078605960737196571, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
       propertyPath: m_IsActive
@@ -88759,6 +88791,10 @@ PrefabInstance:
     - target: {fileID: 5729295028405548050, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
       propertyPath: m_Name
       value: ActionManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5729295028405548050, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5729295028405548051, guid: 624ea6a8e191a9643a559a0eb3105d6e, type: 3}
       propertyPath: m_Pivot.x
@@ -90675,7 +90711,7 @@ SpriteRenderer:
   m_Size: {x: 0.75, y: 0.78}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1887592922
