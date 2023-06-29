@@ -48,7 +48,7 @@ public class ControllerMUD : SPController
 
         // _disposer = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().Merge(PositionTable.OnRecordUpdate()).ObserveOnMainThread(),
         //         OnChainPositionUpdate);
-        
+
         playerScript.Position.OnUpdated += PositionUpdate;
 
         moveMarker.SetActive(false);
@@ -63,7 +63,8 @@ public class ControllerMUD : SPController
 
     private void OnDestroy()
     {
-        if(playerScript) {
+        if (playerScript)
+        {
             playerScript.Position.OnUpdated -= PositionUpdate;
         }
 
@@ -88,7 +89,7 @@ public class ControllerMUD : SPController
         _onchainPosition = playerScript.Position.Pos;
         markerPos = (Vector3)_onchainPosition;
 
-        Debug.Log("New Pos: " + _onchainPosition.ToString());
+        // Debug.Log("New Pos: " + _onchainPosition.ToString());
 
         UpdateAnimation((Vector3)_onchainPosition);
 
@@ -105,7 +106,10 @@ public class ControllerMUD : SPController
         }
         catch (Exception ex)
         {
+            //if our transaction fails, force the player back to their position on the table
+
             Debug.LogException(ex);
+
         }
     }
 
@@ -119,6 +123,9 @@ public class ControllerMUD : SPController
         catch (Exception ex)
         {
             Debug.LogException(ex);
+            playerTransform.position = playerScript.Position.Pos;
+            _onchainPosition = playerScript.Position.Pos;
+
         }
     }
 
