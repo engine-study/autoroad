@@ -21,8 +21,8 @@ public class PlayerMUD : SPPlayer
         Debug.Log("Player Init");
 
         entity = GetComponentInParent<MUDEntity>();
-        if(Player.Loaded) NetworkInit();
-        else Player.OnLoaded += NetworkInit;
+        if(Player.Loaded) DoNetworkInit();
+        else Player.OnLoaded += DoNetworkInit;
 
     }
 
@@ -35,13 +35,14 @@ public class PlayerMUD : SPPlayer
 
     protected override void NetworkInit() {
         
+        base.NetworkInit();
+
         if(playerComponent.IsLocalPlayer) {
             SetLocalPlayer(this);
         }
 
         positionComponent = entity.GetMUDComponent<PositionComponent>() as PositionComponent;
         transform.position = positionComponent.Pos;
-        base.NetworkInit();
 
         Debug.Log("Player Network Init");
 
