@@ -18,7 +18,6 @@ public class GameState : MonoBehaviour
 
     void Awake() {
         Instance = this;
-        phase = GamePhase.Lobby;
     }
 
     void Start() {

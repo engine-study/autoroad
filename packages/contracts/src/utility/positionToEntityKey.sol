@@ -9,3 +9,4 @@ function positionToEntityKey(uint32 x, uint32 y) pure returns (bytes32) {
 function position3DToEntityKey(uint32 x, uint32 y, uint32 z) pure returns (bytes32) {
   return keccak256(abi.encode(x, y, z));
 }
+

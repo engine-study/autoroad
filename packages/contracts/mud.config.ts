@@ -2,42 +2,59 @@ import { mudConfig, resolveTableId } from "@latticexyz/world/register";
 
 export default mudConfig({
 
-  enums : {
+  enums: {
     TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine"],
     ObjectType: ["Axe", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
   },
 
   tables: {
 
+    //map
     MapConfig: {
+      //empty keySchema creates a singleton
       keySchema: {},
       dataStruct: false,
       schema: {
-        width:"uint32",
-        height:"uint32",
+        width: "uint32",
+        height: "uint32",
         terrain: "bytes",
       },
     },
 
-    Player: "bool",
-    Shovel: "bool",
-    Pickaxe: "bool",
+    Entity: {
+      entity: "bytes32",
+    }
 
-    Rock: {
-      name: "Rock",
+    Mile: {
+      dataStruct: false,
       schema: {
-        size: "int32",
-        rockType: "ObjectType",
+        width: "uint32",
+        height: "uint32",
+        contributors: "bytes32[]",
       },
     },
 
-    Road:"bool",
-    
-    Damage: "uint32",
-    Health: "uint32",
+    Row: {
+      dataStruct: false,
+      schema: {
+        segments: "uint32",
+      },
+    },
 
+    Road: {
+      dataStruct: false,
+      schema: {
+        contributors: "bytes32[]",
+      },
+    },
+
+    //items
+    Shovel: "bool",
+    Pickaxe: "bool",
+
+    //roadwork
     Obstruction: "bool",
-    Shovelable:"bool",
+    Shovelable: "bool",
 
     Position: {
       name: "Position",
@@ -46,6 +63,22 @@ export default mudConfig({
         y: "int32",
       },
     },
+
+    //player state   
+    Player: "bool",
+    Damage: "uint32",
+    Health: "uint32",
+
+    //unique objects
+    Rock: {
+      name: "Rock",
+      schema: {
+        size: "int32",
+        rockType: "ObjectType",
+      },
+    },
+
+
 
   },
   modules: [
