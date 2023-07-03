@@ -21,15 +21,12 @@ export default mudConfig({
       },
     },
 
-    Entity: {
-      entity: "bytes32",
-    }
-
     Mile: {
       dataStruct: false,
       schema: {
         width: "uint32",
         height: "uint32",
+        //dynamic list of people who have helped build the mile
         contributors: "bytes32[]",
       },
     },

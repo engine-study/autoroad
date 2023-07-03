@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { MapConfig, Map, Obstruction, Position, Rock } from "../src/codegen/Tables.sol";
+import { MapConfig, Mile, Obstruction, Position, Rock } from "../src/codegen/Tables.sol";
 import { TerrainType, ObjectType } from "../src/codegen/Types.sol";
 import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
 
