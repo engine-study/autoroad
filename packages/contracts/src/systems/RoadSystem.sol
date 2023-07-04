@@ -47,13 +47,18 @@ contract RoadSystem is System {
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
 
-        if (x == 1) {
+        if (x == 3) {
             terrainType = TerrainType.Tree;
         } else if (x == 0) {
            terrainType = TerrainType.Rock;
         }
 
-        spawnTerrain(int32(x), int32(y), terrainType);
+        //don't spawn anything
+        if(terrainType == TerrainType.None) {
+          continue;
+        }
+
+        spawnTerrain(int32(x), int32(y) + heightStart, terrainType);
 
       }
     }
