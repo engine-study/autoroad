@@ -51,6 +51,24 @@ namespace IWorld.ContractDefinition
         public virtual byte[] FuncSelectorAndArgs { get; set; }
     }
 
+    public partial class CreateMapFunction : CreateMapFunctionBase { }
+
+    [Function("createMap")]
+    public class CreateMapFunctionBase : FunctionMessage
+    {
+        [Parameter("address", "worldAddress", 1)]
+        public virtual string WorldAddress { get; set; }
+    }
+
+    public partial class CreateMileFunction : CreateMileFunctionBase { }
+
+    [Function("createMile")]
+    public class CreateMileFunctionBase : FunctionMessage
+    {
+        [Parameter("uint32", "mileNumber", 1)]
+        public virtual uint MileNumber { get; set; }
+    }
+
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }
 
     [Function("deleteRecord")]
@@ -799,6 +817,10 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
+
+
 
 
 

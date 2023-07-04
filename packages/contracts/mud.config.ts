@@ -2,6 +2,13 @@ import { mudConfig, resolveTableId } from "@latticexyz/world/register";
 
 export default mudConfig({
 
+  systems: {
+    RoadSystem: {
+      name: "road",
+      openAccess: false, // it's a subsystem now!
+    },
+  },
+
   enums: {
     TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine"],
     ObjectType: ["Axe", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
@@ -21,12 +28,34 @@ export default mudConfig({
       },
     },
 
-    Mile: {
+    RoadConfig: {
+      //empty keySchema creates a singleton
+      keySchema: {},
       dataStruct: false,
       schema: {
         width: "uint32",
         height: "uint32",
+      },
+    },
+
+    GameState: {
+      keySchema: {},
+      dataStruct: false,
+      schema: {
+        miles: "uint32",
+      },
+    },
+
+    Chunk: {
+      dataStruct: false,
+      openAccess: false, // it's a subsystem now!
+      schema: {
+        mileNumber: "uint32",
+
         //dynamic list of people who have helped build the mile
+        entities: "bytes32[]",
+
+          //dynamic list of people who have helped build the mile
         contributors: "bytes32[]",
       },
     },
@@ -49,7 +78,7 @@ export default mudConfig({
     Shovel: "bool",
     Pickaxe: "bool",
 
-    //roadwork
+    //properties
     Obstruction: "bool",
     Shovelable: "bool",
 
@@ -65,6 +94,9 @@ export default mudConfig({
     Player: "bool",
     Damage: "uint32",
     Health: "uint32",
+
+    //properties
+    Infinite: "bool",
 
     //unique objects
     Rock: {

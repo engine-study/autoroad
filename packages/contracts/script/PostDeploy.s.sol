@@ -4,9 +4,10 @@ pragma solidity >=0.8.0;
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { MapConfig, Mile, Obstruction, Position, Rock } from "../src/codegen/Tables.sol";
-import { TerrainType, ObjectType } from "../src/codegen/Types.sol";
+import { GameState, MapConfig, Chunk, Obstruction, Position, Rock, Row } from "../src/codegen/Tables.sol";
 import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
+import { RoadSystem } from "../src/systems/RoadSystem.sol";
+import { MapSystem } from "../src/systems/MapSystem.sol";
 
 contract PostDeploy is Script {
 
@@ -17,85 +18,18 @@ contract PostDeploy is Script {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
-    TerrainType O = TerrainType.None;
-    TerrainType R = TerrainType.Rock;
-    TerrainType M = TerrainType.Mine;
+  
+    GameState.set(world, 0);
+  
+    world.createMap(worldAddress);
+    world.createMile(uint32(0));
+    // world.createMile(0);
 
-    TerrainType[12][40] memory map = [
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, R, O, O, R, O, O, O, O, R, R, O],
-      [O, O, R, O, O, O, O, O, R, O, O, O],
-      [O, R, O, O, O, O, O, O, O, O, O, O],
-      [O, R, O, O, O, O, O, O, O, R, O, O], 
-      [O, O, O, O, O, O, R, O, O, O, O, O],
-      [O, O, O, R, O, O, O, O, O, O, O, O],
-      [O, O, R, O, O, O, O, O, O, O, R, O],
-      [O, O, O, O, O, O, R, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, R, O, O, O, O, O, R, R, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, R, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O], 
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, R, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, R, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, R, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, R, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, R, O, O, O, O], 
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, R, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, R, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O], 
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O],
-      [O, O, R, O, O, O, O, O, O, O, O, O],
-      [O, O, O, O, O, O, O, O, O, O, O, O]
-    ];
-
-    uint32 height = uint32(map.length);
-    uint32 width = uint32(map[0].length);
-    bytes memory terrain = new bytes(width * height);
-
-    for (uint32 y = 0; y < height; y++) {
-      for (uint32 x = 0; x < width; x++) {
-
-        int32 positionX = int32(x);
-        int32 positionY = int32(y);
-
-        TerrainType terrainType = map[y][x];
-        if (terrainType == TerrainType.None) continue;
-
-        terrain[(y * width) + x] = bytes1(uint8(terrainType));
-
-        bytes32 entity = positionToEntityKey(x,y);
-
-        if(terrainType == TerrainType.Rock) {
-          Rock.set(world, entity, 5, ObjectType.Statumen);
-          Position.set(world, entity, positionX, positionY);
-          Obstruction.set(world, entity, true);
-        }
-      }
-    }
-
-    MapConfig.set(world, width, height, terrain);
-
-    //layer of ground
-    Map.set(abi.encode(0));
+    // //layer of ground
+    // Map.set(abi.encode(0));
     
-    //layer of entities
-    Map.set(abi.encode(1));
+    // //layer of entities
+    // Map.set(abi.encode(1));
     
     vm.stopBroadcast();
   }

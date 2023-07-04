@@ -106,6 +106,58 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(callFunction, cancellationToken);
         }
 
+        public Task<string> CreateMapRequestAsync(CreateMapFunction createMapFunction)
+        {
+             return ContractHandler.SendRequestAsync(createMapFunction);
+        }
+
+        public Task<TransactionReceipt> CreateMapRequestAndWaitForReceiptAsync(CreateMapFunction createMapFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createMapFunction, cancellationToken);
+        }
+
+        public Task<string> CreateMapRequestAsync(string worldAddress)
+        {
+            var createMapFunction = new CreateMapFunction();
+                createMapFunction.WorldAddress = worldAddress;
+            
+             return ContractHandler.SendRequestAsync(createMapFunction);
+        }
+
+        public Task<TransactionReceipt> CreateMapRequestAndWaitForReceiptAsync(string worldAddress, CancellationTokenSource cancellationToken = null)
+        {
+            var createMapFunction = new CreateMapFunction();
+                createMapFunction.WorldAddress = worldAddress;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createMapFunction, cancellationToken);
+        }
+
+        public Task<string> CreateMileRequestAsync(CreateMileFunction createMileFunction)
+        {
+             return ContractHandler.SendRequestAsync(createMileFunction);
+        }
+
+        public Task<TransactionReceipt> CreateMileRequestAndWaitForReceiptAsync(CreateMileFunction createMileFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createMileFunction, cancellationToken);
+        }
+
+        public Task<string> CreateMileRequestAsync(uint mileNumber)
+        {
+            var createMileFunction = new CreateMileFunction();
+                createMileFunction.MileNumber = mileNumber;
+            
+             return ContractHandler.SendRequestAsync(createMileFunction);
+        }
+
+        public Task<TransactionReceipt> CreateMileRequestAndWaitForReceiptAsync(uint mileNumber, CancellationTokenSource cancellationToken = null)
+        {
+            var createMileFunction = new CreateMileFunction();
+                createMileFunction.MileNumber = mileNumber;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createMileFunction, cancellationToken);
+        }
+
         public Task<string> DeleteRecordRequestAsync(DeleteRecordFunction deleteRecordFunction)
         {
              return ContractHandler.SendRequestAsync(deleteRecordFunction);
