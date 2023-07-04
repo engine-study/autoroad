@@ -19,3 +19,4 @@ import { Damage, DamageTableId } from "./tables/Damage.sol";
 import { Health, HealthTableId } from "./tables/Health.sol";
 import { Infinite, InfiniteTableId } from "./tables/Infinite.sol";
 import { Rock, RockData, RockTableId } from "./tables/Rock.sol";
+import { Tree, TreeTableId } from "./tables/Tree.sol";

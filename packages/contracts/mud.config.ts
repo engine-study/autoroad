@@ -10,7 +10,7 @@ export default mudConfig({
   },
 
   enums: {
-    TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine"],
+    TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine", "Tree"],
     ObjectType: ["Axe", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
   },
 
@@ -106,6 +106,8 @@ export default mudConfig({
         rockType: "ObjectType",
       },
     },
+
+    Tree: "bool",
 
 
 

@@ -1,24 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, RoadConfig, Chunk, Position, PositionTableId, Player, PositionData } from "../codegen/Tables.sol";
+import { MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
+import { Player, Rock, Obstruction, Tree } from "../codegen/Tables.sol";
 import { TerrainType, ObjectType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { lineWalkPositions } from "../utility/grid.sol";
+import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
 
 contract RoadSystem is System {
   //updateRow
   //finishRow
 
   function createMile(uint32 mileNumber) public {
+
+    //create an entity for the chunk itself
     bytes32 chunkEntity = keccak256(abi.encode("chunk", mileNumber));
-
-    TerrainType O = TerrainType.None;
-    TerrainType R = TerrainType.Rock;
-    TerrainType M = TerrainType.Mine;
-
-    // TerrainType[][] memory map = new TerrainType[](0);
 
     // MyTable.pushFooArray(keccak256("some.key"), 4242); // adds 4242 at end of fooArray
     // MyTable.popFooArray(keccak256("some.key")); // pop fooArray
@@ -29,24 +27,43 @@ contract RoadSystem is System {
 
     //create a new chunk
     (uint32 mapWidth, uint32 mapHeight, ) = MapConfig.get();
-    (uint32 roadWidth, uint32 roadHeight ) = RoadConfig.get();
+    (uint32 roadWidth, uint32 roadHeight) = RoadConfig.get();
+
+    int32 heightStart = int32(mileNumber) * int32(roadHeight);
 
     //spawn all the rows
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    //move through rows
-    for (uint32 i = 0; i < roadHeight; i++) {
+    for (uint32 y = 0; y < roadHeight; y++) {
 
-        //move through columns of stones on road
-        for (uint32 j = 0; j < roadWidth; j++) {
+      TerrainType[] memory map = new TerrainType[](roadWidth);
 
+      for (uint32 x = 0; x < roadWidth; x++) {
+
+        int32 positionX = int32(x);
+        int32 positionY = int32(y) + heightStart;
+
+        //set the terrain type to empty
+        TerrainType terrainType = TerrainType.None;
+
+        bytes32 entity = positionToEntityKey(x, y);
+
+        if (x == 1) {
+          Rock.set(entity, 5, ObjectType.Statumen);
+          Position.set(entity, positionX, positionY);
+          Obstruction.set(entity, true);
+        } else if (x == 0) {
+          Rock.set(entity, 5, ObjectType.Statumen);
+          Position.set(entity, positionX, positionY);
+          Obstruction.set(entity, true);
+          Tree.set(entity, true);
         }
+      }
     }
 
     //set the chunk of road
     Chunk.set(chunkEntity, mileNumber, entitiesArray, contributorsArray);
-
 
   }
 }
