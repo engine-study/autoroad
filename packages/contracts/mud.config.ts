@@ -3,10 +3,20 @@ import { mudConfig, resolveTableId } from "@latticexyz/world/register";
 export default mudConfig({
 
   systems: {
+
+    MapSystem: {
+      name: "map",
+      openAccess: false,
+    },
     RoadSystem: {
       name: "road",
+      openAccess: false,
+    },
+    SpawnSystem: {
+      name: "spawn",
       openAccess: false, // it's a subsystem now!
     },
+
   },
 
   enums: {
@@ -50,6 +60,7 @@ export default mudConfig({
       dataStruct: false,
       openAccess: false, // it's a subsystem now!
       schema: {
+        completed: "bool",
         mileNumber: "uint32",
 
         //dynamic list of people who have helped build the mile

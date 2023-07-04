@@ -1219,6 +1219,66 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }
 
+        public Task<string> SpawnRequestAsync(Spawn1Function spawn1Function)
+        {
+             return ContractHandler.SendRequestAsync(spawn1Function);
+        }
+
+        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(Spawn1Function spawn1Function, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawn1Function, cancellationToken);
+        }
+
+        public Task<string> SpawnRequestAsync(int x, int y, byte tType)
+        {
+            var spawn1Function = new Spawn1Function();
+                spawn1Function.X = x;
+                spawn1Function.Y = y;
+                spawn1Function.TType = tType;
+            
+             return ContractHandler.SendRequestAsync(spawn1Function);
+        }
+
+        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(int x, int y, byte tType, CancellationTokenSource cancellationToken = null)
+        {
+            var spawn1Function = new Spawn1Function();
+                spawn1Function.X = x;
+                spawn1Function.Y = y;
+                spawn1Function.TType = tType;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawn1Function, cancellationToken);
+        }
+
+        public Task<string> SpawnTerrainRequestAsync(SpawnTerrainFunction spawnTerrainFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnTerrainFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnTerrainRequestAndWaitForReceiptAsync(SpawnTerrainFunction spawnTerrainFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnTerrainRequestAsync(int x, int y, byte tType)
+        {
+            var spawnTerrainFunction = new SpawnTerrainFunction();
+                spawnTerrainFunction.X = x;
+                spawnTerrainFunction.Y = y;
+                spawnTerrainFunction.TType = tType;
+            
+             return ContractHandler.SendRequestAsync(spawnTerrainFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnTerrainRequestAndWaitForReceiptAsync(int x, int y, byte tType, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnTerrainFunction = new SpawnTerrainFunction();
+                spawnTerrainFunction.X = x;
+                spawnTerrainFunction.Y = y;
+                spawnTerrainFunction.TType = tType;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainFunction, cancellationToken);
+        }
+
         public Task<string> UpdateInFieldRequestAsync(UpdateInFieldFunction updateInFieldFunction)
         {
              return ContractHandler.SendRequestAsync(updateInFieldFunction);

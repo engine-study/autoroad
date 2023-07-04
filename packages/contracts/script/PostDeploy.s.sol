@@ -10,7 +10,7 @@ import { RoadSystem } from "../src/systems/RoadSystem.sol";
 import { MapSystem } from "../src/systems/MapSystem.sol";
 
 contract PostDeploy is Script {
-
+  
   function run(address worldAddress) external {
     console.log("Deployed world: ", worldAddress);
     IWorld world = IWorld(worldAddress);
@@ -18,25 +18,25 @@ contract PostDeploy is Script {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
-  
-    GameState.set(world, 0);
+    GameState.set(0);
 
     //deploys the MapConfig
-    MapConfig.set(world, 13, 1000000000, new bytes(0));
-    world.createMap(worldAddress);
+    bytes memory terrain = new bytes(0);
+    MapConfig.set(13, 0, terrain);
+    RoadConfig.set(5, 20);
 
-    //deploys the RoadConfig
-    RoadConfig.set(world, 5, 20);
-    world.createMile(uint32(0));
+    //do we pass the world as an argument? 
+    // MapConfig.set(world, 13, 0, new bytes(0));
+    // RoadConfig.set(world, 5, 20);
+
+    // world.createMap(worldAddress);
 
     // world.createMile(0);
+    // world.createMile(1);
+    // world.createMile(2);
+    // world.createMile(3);
+    // world.createMile(4);
 
-    // //layer of ground
-    // Map.set(abi.encode(0));
-    
-    // //layer of entities
-    // Map.set(abi.encode(1));
-    
     vm.stopBroadcast();
   }
 }

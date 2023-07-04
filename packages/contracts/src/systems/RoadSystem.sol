@@ -8,6 +8,7 @@ import { TerrainType, ObjectType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
+// import { SpawnSystem } from "../systems/SpawnSystem.sol";
 
 contract RoadSystem is System {
   //updateRow
@@ -47,23 +48,36 @@ contract RoadSystem is System {
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
 
-        bytes32 entity = positionToEntityKey(x, y);
-
         if (x == 1) {
-          Rock.set(entity, 5, ObjectType.Statumen);
-          Position.set(entity, positionX, positionY);
-          Obstruction.set(entity, true);
+            terrainType = TerrainType.Tree;
         } else if (x == 0) {
-          Rock.set(entity, 5, ObjectType.Statumen);
-          Position.set(entity, positionX, positionY);
-          Obstruction.set(entity, true);
-          Tree.set(entity, true);
+           terrainType = TerrainType.Rock;
         }
+
+        spawnTerrain(int32(x), int32(y), terrainType);
+
       }
     }
 
     //set the chunk of road
-    Chunk.set(chunkEntity, mileNumber, entitiesArray, contributorsArray);
+    Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
 
   }
+
+   function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
+
+        bytes32 entity = positionToEntityKey(x, y);
+        
+        Position.set(entity, x, y);
+        Obstruction.set(entity, true);
+
+        if(tType == TerrainType.Rock) {
+            Rock.set(entity, 5, ObjectType.Statumen);
+        } else if(tType == TerrainType.Tree) {
+            Tree.set(entity, true);
+        } else if(tType == TerrainType.Mine) {
+
+        }
+    }
+
 }
