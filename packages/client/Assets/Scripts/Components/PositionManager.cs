@@ -21,6 +21,8 @@ public class PositionManager : MUDTableManager
         var UpdateSub = ObservableExtensions.Subscribe(PositionTable.OnRecordUpdate().ObserveOnMainThread(),
                 OnUpdateRecord);
         _disposers.Add(UpdateSub);
+
+        //var MergedUpdate = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().Merge(PositionTable.OnRecordUpdate()).ObserveOnMainThread(),OnChainPositionUpdate);
     }
 
     // public static void GetPosition(Position component)

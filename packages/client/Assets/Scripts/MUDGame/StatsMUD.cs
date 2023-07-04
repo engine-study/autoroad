@@ -4,7 +4,7 @@ using UnityEngine;
 using DefaultNamespace;
 
 [CreateAssetMenu(fileName = "Stats", menuName = "MUD/Components/Stats", order = 1)]
-public class StatsMUD : MUDComponent
+public class StatsMUD : mud.Client.MUDComponent
 {
     [Header("Stats")]
     public int health;

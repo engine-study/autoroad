@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using mud.Client;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,6 +20,7 @@ public class GameState : MonoBehaviour
 
     void Awake() {
         Instance = this;
+
     }
 
     void Start() {

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
 using mud.Client;
+using NetworkManager = mud.Unity.NetworkManager;
+using Cysharp.Threading.Tasks;
+using UniRx;
+
 public class PositionComponent : MUDComponent
 {
     public Vector3 Pos { get { return position3D; } }
