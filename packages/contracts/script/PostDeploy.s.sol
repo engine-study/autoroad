@@ -18,20 +18,20 @@ contract PostDeploy is Script {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
-    GameState.set(0);
+    GameState.set(world, 0);
 
     //deploys the MapConfig
-    bytes memory terrain = new bytes(0);
-    MapConfig.set(13, 0, terrain);
-    RoadConfig.set(5, 20);
+    bytes memory terrain = new bytes(5);
+    MapConfig.set(world, 13, 0, terrain);
+    RoadConfig.set(world, 5, 20);
 
     //do we pass the world as an argument? 
-    // MapConfig.set(world, 13, 0, new bytes(0));
-    // RoadConfig.set(world, 5, 20);
+    MapConfig.set(world, 13, 0, new bytes(0));
+    RoadConfig.set(world, 5, 20);
 
-    // world.createMap(worldAddress);
+    world.createMap(worldAddress);
 
-    // world.createMile(0);
+    world.createMile(0);
     // world.createMile(1);
     // world.createMile(2);
     // world.createMile(3);

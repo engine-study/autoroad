@@ -12,10 +12,6 @@ export default mudConfig({
       name: "road",
       openAccess: false,
     },
-    SpawnSystem: {
-      name: "spawn",
-      openAccess: false, // it's a subsystem now!
-    },
 
   },
 

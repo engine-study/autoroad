@@ -587,19 +587,6 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
-    public partial class Spawn1Function : Spawn1FunctionBase { }
-
-    [Function("spawn")]
-    public class Spawn1FunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
-        [Parameter("uint8", "tType", 3)]
-        public virtual byte TType { get; set; }
-    }
-
     public partial class SpawnTerrainFunction : SpawnTerrainFunctionBase { }
 
     [Function("spawnTerrain")]
@@ -922,8 +909,6 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
-
-
 
 
 

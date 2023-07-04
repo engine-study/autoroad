@@ -8,7 +8,6 @@ import { TerrainType, ObjectType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
-// import { SpawnSystem } from "../systems/SpawnSystem.sol";
 
 contract RoadSystem is System {
   //updateRow
