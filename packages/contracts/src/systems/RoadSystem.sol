@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
+import { console } from "forge-std/console.sol";
 import { MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { Player, Rock, Obstruction, Tree } from "../codegen/Tables.sol";
 import { TerrainType, ObjectType } from "../codegen/Types.sol";
@@ -64,7 +65,9 @@ contract RoadSystem is System {
     }
 
     //set the chunk of road
-    Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
+    // Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
+    Chunk.set(chunkEntity, false, mileNumber);
+    console.log("added mile ", mileNumber);
 
   }
 

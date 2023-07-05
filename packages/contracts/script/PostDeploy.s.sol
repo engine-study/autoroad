@@ -24,18 +24,21 @@ contract PostDeploy is Script {
     MapConfig.set(world, 13, 0, terrain);
     RoadConfig.set(world, 5, 20);
 
-    //do we pass the world as an argument?
-    MapConfig.set(world, 13, 0, new bytes(0));
-    RoadConfig.set(world, 5, 20);
-
     world.createMap(worldAddress);
 
     world.createMile(0);
     world.createMile(1);
-    // world.createMile(2);
-    // world.createMile(3);
-    // world.createMile(4);
+    world.createMile(2);
+    world.createMile(3);
+    world.createMile(4);
 
+    //some debug to check if our abiencode is working
+    // abiTest();
+
+    vm.stopBroadcast();
+  }
+
+  function abiTest(address worldAddress) public {
     bytes32 positionHash = keccak256(abi.encode(5, 10));
     bytes32 worldHash = keccak256(abi.encode(worldAddress));
     bytes32 combinedHash = keccak256(abi.encode(worldAddress, 5, 10));
@@ -45,7 +48,5 @@ contract PostDeploy is Script {
     console.logBytes32(positionHash);
     console.logBytes32(combinedHash);
     console.logBytes32(stringInt);
-
-    vm.stopBroadcast();
   }
 }

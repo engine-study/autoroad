@@ -9,7 +9,7 @@ public class ChunkComponent : MUDComponent
 
     [Header("Position")]
     [SerializeField] protected bool completed;
-    [SerializeField] protected int mileNumber;
+    [SerializeField] protected float mileNumber;
 
     //    completed: "bool",
     //     mileNumber: "uint32",
@@ -37,8 +37,12 @@ public class ChunkComponent : MUDComponent
 
 
 
-        completed = table.completed.GetValueOrDefault() ;
-        mileNumber = (int)table.mileNumber.GetValueOrDefault();
+        completed = table.completed != null ? (bool)table.completed : completed;
+        mileNumber = table.mileNumber != null ? (float)table.mileNumber : mileNumber;
+
+        Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
+        Debug.Log("MileTest " + table.mileNumber, this);
+        Debug.Log("Mile " + mileNumber, this);
 
         transform.position = Vector3.forward * mileNumber * 20f;
 

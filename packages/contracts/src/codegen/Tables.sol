@@ -6,7 +6,7 @@ pragma solidity >=0.8.0;
 import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
 import { RoadConfig, RoadConfigTableId } from "./tables/RoadConfig.sol";
 import { GameState, GameStateTableId } from "./tables/GameState.sol";
-import { Chunk, ChunkTableId } from "./tables/Chunk.sol";
+import { Chunk, ChunkData, ChunkTableId } from "./tables/Chunk.sol";
 import { Row, RowTableId } from "./tables/Row.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Shovel, ShovelTableId } from "./tables/Shovel.sol";
