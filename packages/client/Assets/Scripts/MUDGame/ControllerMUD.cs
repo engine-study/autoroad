@@ -108,8 +108,7 @@ public class ControllerMUD : SPController
         {
             //if our transaction fails, force the player back to their position on the table
             Debug.LogException(ex);
-            playerTransform.position = playerScript.Position.Pos;
-            _onchainPosition = playerScript.Position.Pos;
+            RevertPosition();
         }
     }
 
@@ -123,10 +122,14 @@ public class ControllerMUD : SPController
         catch (Exception ex)
         {
             Debug.LogException(ex);
-            playerTransform.position = playerScript.Position.Pos;
-            _onchainPosition = playerScript.Position.Pos;
-
+            RevertPosition();
         }
+    }
+
+    void RevertPosition() {
+        Debug.Log("Reverting position");
+        playerTransform.position = playerScript.Position.Pos;
+        _onchainPosition = playerScript.Position.Pos;
     }
 
     // private async UniTaskVoid SendMoveTx(int x, int y)

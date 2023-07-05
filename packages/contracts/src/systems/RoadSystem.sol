@@ -31,31 +31,30 @@ contract RoadSystem is System {
     (uint32 roadWidth, uint32 roadHeight) = RoadConfig.get();
 
     int32 heightStart = int32(mileNumber) * int32(roadHeight);
+    int32 halfWidth = int32(mapWidth)/int32(2);
 
     //spawn all the rows
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    for (uint32 y = 0; y < roadHeight; y++) {
+    for (int32 y = heightStart; y < int32(roadHeight)+heightStart; y++) {
       TerrainType[] memory map = new TerrainType[](roadWidth);
 
-      for (uint32 x = 0; x < roadWidth; x++) {
-        int32 positionX = int32(x);
-        int32 positionY = int32(y) + heightStart;
+      for (int32 x = int32(-halfWidth); x < halfWidth; x++) {
 
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
         GameConfigData memory config = GameConfig.get();
 
-        uint noiseCoord = randomCoord(0, 100, positionX, positionY);
+        uint noiseCoord = randomCoord(0, 100, x, y);
 
         console.log("noise ", noiseCoord);
 
-        if (noiseCoord < 10) {
+        if (noiseCoord < 5) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord < 30) {
+        } else if (noiseCoord < 10) {
           terrainType = TerrainType.Rock;
-        } else if (config.dummyPlayers && noiseCoord < 35) {
+        } else if (config.dummyPlayers && noiseCoord == 50) {
           terrainType = TerrainType.Player;
         } else if (config.stressTest && noiseCoord < 50) {}
 
