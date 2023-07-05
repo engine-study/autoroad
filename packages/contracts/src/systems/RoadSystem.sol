@@ -50,9 +50,9 @@ contract RoadSystem is System {
 
         console.log("noise ", noiseCoord);
 
-        if (noiseCoord < 5) {
+        if (noiseCoord < 2) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord < 10) {
+        } else if (noiseCoord < 8) {
           terrainType = TerrainType.Rock;
         } else if (config.dummyPlayers && noiseCoord == 50) {
           terrainType = TerrainType.Player;
