@@ -16,11 +16,20 @@ export default mudConfig({
   },
 
   enums: {
-    TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine", "Tree"],
+    TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine", "Tree", "Player"],
     ObjectType: ["Axe", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
   },
 
   tables: {
+
+    GameConfig : {
+      keySchema: {},
+      schema: {
+        dummyPlayers: "bool",
+        stressTest: "bool",
+      },
+    },
+
 
     //map
     MapConfig: {

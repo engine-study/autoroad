@@ -40,9 +40,9 @@ public class ChunkComponent : MUDComponent
         completed = table.completed != null ? (bool)table.completed : completed;
         mileNumber = table.mileNumber != null ? (float)table.mileNumber : mileNumber;
 
-        Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
-        Debug.Log("MileTest " + table.mileNumber, this);
-        Debug.Log("Mile " + mileNumber, this);
+        // Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
+        // Debug.Log("MileTest " + table.mileNumber, this);
+        // Debug.Log("Mile " + mileNumber, this);
 
         transform.position = Vector3.forward * mileNumber * 20f;
 
