@@ -32,9 +32,9 @@ contract PostDeploy is Script {
 
     world.createMile(0);
     world.createMile(1);
-    world.createMile(2);
-    world.createMile(3);
-    world.createMile(4);
+    // world.createMile(2);
+    // world.createMile(3);
+    // world.createMile(4);
 
     bytes32 positionHash = keccak256(abi.encode(5, 10));
     bytes32 worldHash = keccak256(abi.encode(worldAddress));

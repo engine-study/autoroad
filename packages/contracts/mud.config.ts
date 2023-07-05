@@ -58,10 +58,8 @@ export default mudConfig({
       schema: {
         completed: "bool",
         mileNumber: "uint32",
-
         //dynamic list of people who have helped build the mile
         entities: "bytes32[]",
-
           //dynamic list of people who have helped build the mile
         contributors: "bytes32[]",
       },

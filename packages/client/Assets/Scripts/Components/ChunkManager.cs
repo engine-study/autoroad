@@ -1,26 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using mud.Unity;
 using mud.Client;
+using DefaultNamespace;
+
 
 using UniRx;
 using ObservableExtensions = UniRx.ObservableExtensions;
 
-using DefaultNamespace;
-
-public class PositionManager : MUDTableManager
+public class ChunkManager : MUDTableManager
 {
-
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {
 
-        var InsertSub = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().ObserveOnMainThread(),
+        var InsertSub = ObservableExtensions.Subscribe(ChunkTable.OnRecordInsert().ObserveOnMainThread(),
                 OnInsertRecord);
         _disposers.Add(InsertSub);
 
-        var UpdateSub = ObservableExtensions.Subscribe(PositionTable.OnRecordUpdate().ObserveOnMainThread(),
+        var UpdateSub = ObservableExtensions.Subscribe(ChunkTable.OnRecordUpdate().ObserveOnMainThread(),
                 OnUpdateRecord);
         _disposers.Add(UpdateSub);
 
@@ -46,7 +43,7 @@ public class PositionManager : MUDTableManager
 
     protected override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
     {
-        PositionTableUpdate update = tableUpdate as PositionTableUpdate;
+        ChunkTableUpdate update = tableUpdate as ChunkTableUpdate;
 
         var currentValue = update.TypedValue.Item1;
         if (currentValue == null)
@@ -57,6 +54,4 @@ public class PositionManager : MUDTableManager
 
         return currentValue;
     }
-
-
 }
