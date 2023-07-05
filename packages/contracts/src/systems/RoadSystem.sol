@@ -37,7 +37,7 @@ contract RoadSystem is System {
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    for (int32 y = heightStart; y < int32(roadHeight)+heightStart; y++) {
+    for (int32 y = heightStart; y < int32(roadHeight)+int32(heightStart); y++) {
       TerrainType[] memory map = new TerrainType[](roadWidth);
 
       for (int32 x = int32(-halfWidth); x < halfWidth; x++) {
@@ -63,7 +63,7 @@ contract RoadSystem is System {
           continue;
         }
 
-        spawnTerrain(int32(x), int32(y) + heightStart, terrainType);
+        spawnTerrain(x, y, terrainType);
       }
     }
 
