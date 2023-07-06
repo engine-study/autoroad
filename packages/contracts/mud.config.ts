@@ -115,6 +115,7 @@ export default mudConfig({
     //unique objects
     Rock: {
       name: "Rock",
+      dataStruct: false,
       schema: {
         size: "int32",
         rockType: "ObjectType",

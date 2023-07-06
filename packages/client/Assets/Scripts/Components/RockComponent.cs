@@ -28,24 +28,22 @@ public class RockComponent : MUDComponent
 
         base.UpdateComponent(update, eventType);
 
-
         RockTable rockUpdate = (RockTable)update;
 
-        if (rockUpdate.size == null)
+        if (rockUpdate == null)
         {
-            // Debug.LogError("No currentValue");
-
+            Debug.LogError("No rockUpdate", this);
         }
         else
         {
 
-            stage = (int)rockUpdate.size;
-            rockType = (RockType)rockUpdate.rockType;
+            stage = rockUpdate.size != null ? (int)rockUpdate.size : stage;
+            rockType = rockUpdate.size != null ? (RockType)rockUpdate.rockType : rockType;
 
         }
 
         if(stage == -1) {
-            Debug.LogError("Could not setup rock", this);
+            // Debug.LogError("Could not setup rock", this);
             return;
         }
 

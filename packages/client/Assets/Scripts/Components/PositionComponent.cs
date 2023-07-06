@@ -18,9 +18,9 @@ public class PositionComponent : MUDComponent
     {
         base.UpdateComponent(update, eventType);
 
-        PositionTable pos = (PositionTable)update;
+        PositionTable table = (PositionTable)update;
 
-        position2D = new Vector2((float)pos.x, (float)pos.y);
+        position2D = new Vector2((float)table.x, (float)table.y);
         transform.position = new Vector3(position2D.x, 0f, position2D.y);
         position3D = transform.position;
         

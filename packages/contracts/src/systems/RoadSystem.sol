@@ -38,11 +38,11 @@ contract RoadSystem is System {
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    for (int32 y = heightStart; y <= int32(roadHeight)+int32(heightStart); y++) {
+    for (int32 y = heightStart; y < int32(roadHeight)+int32(heightStart); y++) {
       TerrainType[] memory map = new TerrainType[](roadWidth);
 
       //SPAWN TERRAIN
-      for (int32 x = int32(-halfWidth); x < halfWidth; x++) {
+      for (int32 x = int32(-halfWidth); x <= halfWidth; x++) {
 
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
@@ -65,7 +65,7 @@ contract RoadSystem is System {
           continue;
         }
 
-        if(x >= halfRoad && x <= halfRoad) {
+        if(x >= -halfRoad && x <= halfRoad) {
           bytes32 entity = position3DToEntityKey(x, -1, y);
           Road.set(entity, RoadState.None);
           Position.set(entity, x, y);
