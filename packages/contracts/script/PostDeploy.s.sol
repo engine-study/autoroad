@@ -30,8 +30,6 @@ contract PostDeploy is Script {
     world.createMile(0);
     world.createMile(1);
     world.createMile(2);
-    world.createMile(3);
-    world.createMile(4);
 
     //some debug to check if our abiencode is working
     // abiTest();
