@@ -15,7 +15,6 @@ public class ControllerMUD : SPController
     private Vector3 enginePosition;
 
     Quaternion lookRotation;
-
     public Transform playerTransform;
     public GameObject moveMarker;
     Vector3 markerPos;
@@ -45,9 +44,6 @@ public class ControllerMUD : SPController
 
         playerScript = GetComponentInParent<PlayerMUD>();
         entityReady = true;
-
-        // _disposer = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().Merge(PositionTable.OnRecordUpdate()).ObserveOnMainThread(),
-        //         OnChainPositionUpdate);
 
         playerScript.Position.OnUpdated += PositionUpdate;
 
@@ -96,6 +92,23 @@ public class ControllerMUD : SPController
         // playerTransform.position = (Vector3)_destination;
     }
 
+    // private void SubscribeToCounter(NetworkManager _)
+    // {
+    // 	_counterSub = ObservableExtensions.Subscribe(CounterTable.OnRecordUpdate().ObserveOnMainThread(), OnIncrement);
+    // }
+
+    // private async UniTaskVoid SendIncrementTxAsync()
+    // {
+    //     try
+    //     {
+    //         await net.worldSend.TxExecute<IncrementFunction>();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         // Handle your exception here
+    //         Debug.LogException(ex);
+    //     }
+    // }
 
     private async UniTaskVoid SendMoveFromTx(int x, int y)
     {
@@ -126,7 +139,8 @@ public class ControllerMUD : SPController
         }
     }
 
-    void RevertPosition() {
+    void RevertPosition()
+    {
         Debug.Log("Reverting position");
         playerTransform.position = playerScript.Position.Pos;
         _onchainPosition = playerScript.Position.Pos;
