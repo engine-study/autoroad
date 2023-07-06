@@ -16,7 +16,7 @@ public class RockComponent : MUDComponent
 
     [SerializeField] GameObject[] stages;
     [SerializeField] AudioClip [] sfx_break;
-
+    int lastStage = -1;
     protected override void Awake() {
         base.Awake();
 
@@ -28,7 +28,6 @@ public class RockComponent : MUDComponent
 
         base.UpdateComponent(update, eventType);
 
-        int lastStage = stage;
 
         RockTable rockUpdate = (RockTable)update;
 
@@ -45,7 +44,12 @@ public class RockComponent : MUDComponent
 
         }
 
-        if(lastStage != -1) {
+        if(stage == -1) {
+            Debug.LogError("Could not setup rock", this);
+            return;
+        }
+
+        if(lastStage != stage) {
 
             source.PlaySound(sfx_break);
             
@@ -56,6 +60,8 @@ public class RockComponent : MUDComponent
             }
         
         }
+
+        lastStage = stage;
 
     }
 
