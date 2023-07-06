@@ -31,22 +31,28 @@ contract RoadSystem is System {
     (uint32 roadWidth, uint32 roadHeight) = RoadConfig.get();
 
     int32 heightStart = int32(mileNumber) * int32(roadHeight);
-    int32 halfWidth = int32(mapWidth)/int32(2);
-    int32 halfRoad = int32(roadWidth)/int32(2);
+    int32 halfWidth = int32(mapWidth) / int32(2);
+    int32 halfRoad = int32(roadWidth) / int32(2);
 
     //spawn all the rows
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    for (int32 y = heightStart; y < int32(roadHeight)+int32(heightStart); y++) {
+    for (int32 y = heightStart; y < int32(roadHeight) + int32(heightStart); y++) {
       TerrainType[] memory map = new TerrainType[](roadWidth);
 
       //SPAWN TERRAIN
       for (int32 x = int32(-halfWidth); x <= halfWidth; x++) {
-
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
         GameConfigData memory config = GameConfig.get();
+
+        //spawn the road
+        if (x >= int32(-halfRoad) && x <= halfRoad) {
+          bytes32 entity = position3DToEntityKey(x, -1, y);
+          Road.set(entity, RoadState.None);
+          Position.set(entity, x, y);
+        }
 
         uint noiseCoord = randomCoord(0, 100, x, y);
 
@@ -65,15 +71,8 @@ contract RoadSystem is System {
           continue;
         }
 
-        if(x >= -halfRoad && x <= halfRoad) {
-          bytes32 entity = position3DToEntityKey(x, -1, y);
-          Road.set(entity, RoadState.None);
-          Position.set(entity, x, y);
-        }
-
         spawnTerrain(x, y, terrainType);
       }
-
     }
 
     //set the chunk of road
