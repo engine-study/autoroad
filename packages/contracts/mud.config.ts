@@ -16,7 +16,8 @@ export default mudConfig({
   },
 
   enums: {
-    TerrainType: ["None", "Excavated", "Filled", "Pavement", "Rock", "Mine", "Tree", "Player"],
+    TerrainType: ["None", "Rock", "Mine", "Tree", "Player"],
+    RoadState: ["None", "Shoveled", "Filled", "Paved"],
     ObjectType: ["Axe", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
   },
 
@@ -83,7 +84,7 @@ export default mudConfig({
     Road: {
       dataStruct: false,
       schema: {
-        contributors: "bytes32[]",
+        state: "RoadState",
       },
     },
 

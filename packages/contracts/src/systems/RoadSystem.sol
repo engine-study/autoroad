@@ -4,11 +4,11 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { Player, Rock, Obstruction, Tree } from "../codegen/Tables.sol";
-import { TerrainType, ObjectType } from "../codegen/Types.sol";
+import { Road, Player, Rock, Obstruction, Tree } from "../codegen/Tables.sol";
+import { TerrainType, ObjectType, RoadState } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
+import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
 import { randomCoord } from "../utility/random.sol";
 
 contract RoadSystem is System {
@@ -32,14 +32,16 @@ contract RoadSystem is System {
 
     int32 heightStart = int32(mileNumber) * int32(roadHeight);
     int32 halfWidth = int32(mapWidth)/int32(2);
+    int32 halfRoad = int32(roadWidth)/int32(2);
 
     //spawn all the rows
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    for (int32 y = heightStart; y < int32(roadHeight)+int32(heightStart); y++) {
+    for (int32 y = heightStart; y <= int32(roadHeight)+int32(heightStart); y++) {
       TerrainType[] memory map = new TerrainType[](roadWidth);
 
+      //SPAWN TERRAIN
       for (int32 x = int32(-halfWidth); x < halfWidth; x++) {
 
         //set the terrain type to empty
@@ -63,8 +65,15 @@ contract RoadSystem is System {
           continue;
         }
 
+        if(x >= halfRoad && x <= halfRoad) {
+          bytes32 entity = position3DToEntityKey(x, -1, y);
+          Road.set(entity, RoadState.None);
+          Position.set(entity, x, y);
+        }
+
         spawnTerrain(x, y, terrainType);
       }
+
     }
 
     //set the chunk of road
