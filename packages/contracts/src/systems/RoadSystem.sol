@@ -47,12 +47,13 @@ contract RoadSystem is System {
         TerrainType terrainType = TerrainType.None;
         GameConfigData memory config = GameConfig.get();
 
-        //spawn the road
-        if (x >= int32(-halfRoad) && x <= halfRoad) {
-          bytes32 entity = position3DToEntityKey(x, -1, y);
-          Road.set(entity, RoadState.None);
-          Position.set(entity, x, y);
-        }
+        // //spawn the road
+        // not doing this anymore, instead players will spawn the road by digging
+        // if (x >= int32(-halfRoad) && x <= halfRoad) {
+        //   bytes32 entity = position3DToEntityKey(x, -1, y);
+        //   Road.set(entity, RoadState.None);
+        //   Position.set(entity, x, y);
+        // }  
 
         uint noiseCoord = randomCoord(0, 100, x, y);
 
