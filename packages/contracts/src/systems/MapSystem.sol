@@ -2,15 +2,20 @@
 pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, Chunk, Position, PositionTableId, Player, Rock, Obstruction, PositionData } from "../codegen/Tables.sol";
+import { MapConfig, Bounds, Chunk, Position, PositionTableId, Player, Rock, Obstruction, PositionData } from "../codegen/Tables.sol";
 import { TerrainType, RockType } from "../codegen/Types.sol";
 import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
 
-
 contract MapSystem is System {
+
+  function onMap(int32 x, int32 y) public returns (bool) {
+    // bound to map
+    (int32 left, int32 right, int32 up, int32 down) = Bounds.get();
+    return x >= int32(left) && x <= right && y <= up && y >= down;
+  }
+
   function createMap(address worldAddress) public {
     IWorld world = IWorld(worldAddress);
-
 
     //old emojimon method
 
@@ -23,7 +28,7 @@ contract MapSystem is System {
     //   [O, R, O, O, R, O, O, O, O, R, R, O,O],
     //   [O, O, R, O, O, O, O, O, R, O, O, O,O],
     //   [O, R, O, O, O, O, O, O, O, O, O, O,O],
-    //   [O, R, O, O, O, O, O, O, O, R, O, O,O], 
+    //   [O, R, O, O, O, O, O, O, O, R, O, O,O],
     //   [O, O, O, O, O, O, R, O, O, O, O, O,O],
     //   [O, O, O, R, O, O, O, O, O, O, O, O,O],
     //   [O, O, R, O, O, O, O, O, O, O, R, O,O],
@@ -33,7 +38,7 @@ contract MapSystem is System {
     //   [O, O, R, O, O, O, O, O, R, R, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, R, O, O, O, O, O, O,O],
-    //   [O, O, O, O, O, O, O, O, O, O, O, O,O], 
+    //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, R, O, O,O],
@@ -43,7 +48,7 @@ contract MapSystem is System {
     //   [O, O, O, R, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, R, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
-    //   [O, O, O, O, O, O, O, R, O, O, O, O,O], 
+    //   [O, O, O, O, O, O, O, R, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, R, O, O, O, O, O, O,O],
@@ -53,7 +58,7 @@ contract MapSystem is System {
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
-    //   [O, O, O, O, O, O, O, O, O, O, O, O,O], 
+    //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
     //   [O, O, O, O, O, O, O, O, O, O, O, O,O],
@@ -87,7 +92,5 @@ contract MapSystem is System {
     // }
 
     // MapConfig.set(world, width, height, terrain);
-
   }
-
 }

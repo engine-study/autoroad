@@ -44,6 +44,17 @@ export default mudConfig({
       },
     },
 
+    Bounds: {
+      keySchema: {},
+      dataStruct: false,
+      schema: {
+        left: "int32",
+        right: "int32",
+        up: "int32",
+        down: "int32",
+      },
+    },
+
     RoadConfig: {
       //empty keySchema creates a singleton
       keySchema: {},
@@ -89,6 +100,7 @@ export default mudConfig({
 
     //properties
     Obstruction: "bool",
+    Pushable: "bool",
     Shovelable: "bool",
 
     Position: {
@@ -108,13 +120,7 @@ export default mudConfig({
     Infinite: "bool",
 
     //unique objects
-    Rock: {
-      name: "Rock",
-      dataStruct: false,
-      schema: {
-        rockType: "RockType",
-      },
-    },
+    Rock: "RockType",
 
     Tree: "bool",
 

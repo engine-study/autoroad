@@ -6,6 +6,8 @@ pragma solidity >=0.8.0;
 interface IMoveSystem {
   function push(int32 x, int32 y, int32 pushX, int32 pushY) external;
 
+  function shovel(int32 x, int32 y) external;
+
   function moveFrom(int32 x, int32 y) external;
 
   function spawn(int32 x, int32 y) external;

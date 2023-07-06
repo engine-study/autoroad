@@ -1,25 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, Damage, Position, PositionTableId, Player, PositionData, Health } from "../codegen/Tables.sol";
+import { MapConfig, Damage, Position, PositionTableId, Pushable, PushableTableId, Player, PositionData, Health } from "../codegen/Tables.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions } from "../utility/grid.sol";
+import { MapSystem } from "../systems/MapSystem.sol";
 
 contract MoveSystem is System {
 
 
   function push(int32 x, int32 y, int32 pushX, int32 pushY) public {
+
+    IWorld world = IWorld(_world());
+
     bytes32 player = addressToEntityKey(address(_msgSender()));
     PositionData memory startPos = Position.get(player);
 
-    //bound to map
-    // (uint32 width, uint32 height, ) = MapConfig.get();
-    // require(x < int32(width) && x > -1 && y < int32(height) && y > -1, "moving off grid");
-    // require(pushX < int32(width) && pushX > -1 && pushY < int32(height) && pushY > -1, "pushing off grid");
+    require(world.onMap(x,y), "off grid");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length == 1, "trying to push an empty spot");
+    bool pushable = Pushable.get(atPosition[0]);
+    require(pushable, "pushing a non-pushable object");
     bytes32[] memory atPushPosition = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
     require(atPushPosition.length != 1, "pushing into an occupied spot");
 
@@ -28,6 +32,15 @@ contract MoveSystem is System {
 
     //and then player (which ovewrites where the push object was)
     Position.set(player, x, y);
+  }
+
+  function shovel(int32 x, int32 y) public {
+
+    IWorld world = IWorld(_world());
+    require(world.onMap(x,y), "off grid");
+
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    PositionData memory startPos = Position.get(player);
   }
 
   function moveFrom(int32 x, int32 y) public {

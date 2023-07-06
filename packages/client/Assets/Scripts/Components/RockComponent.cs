@@ -19,7 +19,7 @@ public class RockComponent : MUDComponent
     RockType lastStage = RockType._Count;
     protected override void Awake() {
         base.Awake();
-
+        rockType = RockType._Count;
         stage = -1;
     }
 
@@ -38,7 +38,8 @@ public class RockComponent : MUDComponent
         {
 
             // stage = rockUpdate.rockType != null ? (int)rockUpdate.rockType : stage;
-            rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
+            // rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
+            rockType = (RockType)rockUpdate.value;
 
         }
 

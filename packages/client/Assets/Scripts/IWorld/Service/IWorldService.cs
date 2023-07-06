@@ -505,6 +505,62 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFromFunction, cancellationToken);
         }
 
+        public Task<string> OnMapRequestAsync(OnMapFunction onMapFunction)
+        {
+             return ContractHandler.SendRequestAsync(onMapFunction);
+        }
+
+        public Task<TransactionReceipt> OnMapRequestAndWaitForReceiptAsync(OnMapFunction onMapFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(onMapFunction, cancellationToken);
+        }
+
+        public Task<string> OnMapRequestAsync(int x, int y)
+        {
+            var onMapFunction = new OnMapFunction();
+                onMapFunction.X = x;
+                onMapFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(onMapFunction);
+        }
+
+        public Task<TransactionReceipt> OnMapRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var onMapFunction = new OnMapFunction();
+                onMapFunction.X = x;
+                onMapFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(onMapFunction, cancellationToken);
+        }
+
+        public Task<string> OnRoadRequestAsync(OnRoadFunction onRoadFunction)
+        {
+             return ContractHandler.SendRequestAsync(onRoadFunction);
+        }
+
+        public Task<TransactionReceipt> OnRoadRequestAndWaitForReceiptAsync(OnRoadFunction onRoadFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(onRoadFunction, cancellationToken);
+        }
+
+        public Task<string> OnRoadRequestAsync(int x, int y)
+        {
+            var onRoadFunction = new OnRoadFunction();
+                onRoadFunction.X = x;
+                onRoadFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(onRoadFunction);
+        }
+
+        public Task<TransactionReceipt> OnRoadRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var onRoadFunction = new OnRoadFunction();
+                onRoadFunction.X = x;
+                onRoadFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(onRoadFunction, cancellationToken);
+        }
+
         public Task<string> PopFromFieldRequestAsync(PopFromField1Function popFromField1Function)
         {
              return ContractHandler.SendRequestAsync(popFromField1Function);
@@ -1189,6 +1245,34 @@ namespace IWorld.Service
                 setRecordFunction.Data = data;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setRecordFunction, cancellationToken);
+        }
+
+        public Task<string> ShovelRequestAsync(ShovelFunction shovelFunction)
+        {
+             return ContractHandler.SendRequestAsync(shovelFunction);
+        }
+
+        public Task<TransactionReceipt> ShovelRequestAndWaitForReceiptAsync(ShovelFunction shovelFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(shovelFunction, cancellationToken);
+        }
+
+        public Task<string> ShovelRequestAsync(int x, int y)
+        {
+            var shovelFunction = new ShovelFunction();
+                shovelFunction.X = x;
+                shovelFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(shovelFunction);
+        }
+
+        public Task<TransactionReceipt> ShovelRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var shovelFunction = new ShovelFunction();
+                shovelFunction.X = x;
+                shovelFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(shovelFunction, cancellationToken);
         }
 
         public Task<string> SpawnRequestAsync(SpawnFunction spawnFunction)

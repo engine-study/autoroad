@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { Road, Player, Rock, Obstruction, Tree } from "../codegen/Tables.sol";
+import { Road, Player, Rock, Obstruction, Tree, Pushable } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
@@ -14,6 +14,10 @@ import { randomCoord } from "../utility/random.sol";
 contract RoadSystem is System {
   //updateRow
   //finishRow
+
+  function onRoad(int32 x, int32 y) public returns (bool){
+
+  }
 
   function createMile(uint32 mileNumber) public {
     //create an entity for the chunk itself
@@ -90,6 +94,7 @@ contract RoadSystem is System {
 
     if (tType == TerrainType.Rock) {
       Rock.set(entity, RockType.Statumen);
+      Pushable.set(entity,true);
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
     } else if (tType == TerrainType.Mine) {} else if (tType == TerrainType.Player) {

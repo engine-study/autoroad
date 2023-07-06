@@ -46,7 +46,7 @@ public class RockManager : MUDTableManager {
         }
 
         return currentValue;
-        return null;
+
     }
 
     public void Build(Vector2 position) {

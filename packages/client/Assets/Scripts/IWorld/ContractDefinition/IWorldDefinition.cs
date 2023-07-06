@@ -264,6 +264,28 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class OnMapFunction : OnMapFunctionBase { }
+
+    [Function("onMap", "bool")]
+    public class OnMapFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
+    public partial class OnRoadFunction : OnRoadFunctionBase { }
+
+    [Function("onRoad", "bool")]
+    public class OnRoadFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class PopFromField1Function : PopFromField1FunctionBase { }
 
     [Function("popFromField")]
@@ -574,6 +596,17 @@ namespace IWorld.ContractDefinition
         public virtual List<byte[]> Key { get; set; }
         [Parameter("bytes", "data", 3)]
         public virtual byte[] Data { get; set; }
+    }
+
+    public partial class ShovelFunction : ShovelFunctionBase { }
+
+    [Function("shovel")]
+    public class ShovelFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
     }
 
     public partial class SpawnFunction : SpawnFunctionBase { }
@@ -909,6 +942,12 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
+
+
+
+
 
 
 
