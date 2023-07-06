@@ -18,12 +18,12 @@ export default mudConfig({
   enums: {
     TerrainType: ["None", "Rock", "Mine", "Tree", "Player"],
     RoadState: ["None", "Shoveled", "Filled", "Paved"],
-    ObjectType: ["Axe", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
+    RockType: ["Raw", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
   },
 
   tables: {
 
-    GameConfig : {
+    GameConfig: {
       keySchema: {},
       schema: {
         dummyPlayers: "bool",
@@ -81,12 +81,7 @@ export default mudConfig({
       },
     },
 
-    Road: {
-      dataStruct: false,
-      schema: {
-        state: "RoadState",
-      },
-    },
+    Road: "RoadState",
 
     //items
     Shovel: "bool",
@@ -117,8 +112,7 @@ export default mudConfig({
       name: "Rock",
       dataStruct: false,
       schema: {
-        size: "int32",
-        rockType: "ObjectType",
+        rockType: "RockType",
       },
     },
 

@@ -5,7 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { Road, Player, Rock, Obstruction, Tree } from "../codegen/Tables.sol";
-import { TerrainType, ObjectType, RoadState } from "../codegen/Types.sol";
+import { TerrainType, RockType, RoadState } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
@@ -89,7 +89,7 @@ contract RoadSystem is System {
     Obstruction.set(entity, true);
 
     if (tType == TerrainType.Rock) {
-      Rock.set(entity, 5, ObjectType.Statumen);
+      Rock.set(entity, RockType.Statumen);
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
     } else if (tType == TerrainType.Mine) {} else if (tType == TerrainType.Player) {

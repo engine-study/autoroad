@@ -4,7 +4,7 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public enum RockType { Statumen, Rudus, Nucleus, Pavimentum, _Count }
+public enum RockType { Raw, Statumen, Rudus, Nucleus, Pavimentum, _Count }
 public class RockComponent : MUDComponent
 {
     public int Stage { get { return stage; } }
@@ -16,7 +16,7 @@ public class RockComponent : MUDComponent
 
     [SerializeField] GameObject[] stages;
     [SerializeField] AudioClip [] sfx_break;
-    int lastStage = -1;
+    RockType lastStage = RockType._Count;
     protected override void Awake() {
         base.Awake();
 
@@ -37,29 +37,24 @@ public class RockComponent : MUDComponent
         else
         {
 
-            stage = rockUpdate.size != null ? (int)rockUpdate.size : stage;
-            rockType = rockUpdate.size != null ? (RockType)rockUpdate.rockType : rockType;
+            // stage = rockUpdate.rockType != null ? (int)rockUpdate.rockType : stage;
+            rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
 
         }
 
-        if(stage == -1) {
-            // Debug.LogError("Could not setup rock", this);
-            return;
-        }
-
-        if(lastStage != stage) {
+        if(lastStage != rockType) {
 
             source.PlaySound(sfx_break);
             
             for (int i = 0; i < stages.Length; i++)
             {
-                stages[i].SetActive(i == stage);
+                stages[i].SetActive(i == (int)rockType);
             
             }
         
         }
 
-        lastStage = stage;
+        lastStage = rockType;
 
     }
 

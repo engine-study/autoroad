@@ -18,7 +18,7 @@ public class RoadComponent : MUDComponent
 
         RoadTable table = (RoadTable)update;
 
-        state = table.state != null? (RoadState)table.state : state;
+        state = table.value != null? (RoadState)table.value : state;
         // entity.gameObject.transform.position = new Vector3(position.x, 0f, position.y);
 
 
