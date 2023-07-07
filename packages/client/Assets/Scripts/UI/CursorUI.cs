@@ -19,7 +19,12 @@ public class CursorUI : MonoBehaviour
     public MUDEntity entity;
 
     void Awake() {
+        
         Instance = this;
+
+        info.ToggleWindowClose();
+        actor.ToggleWindowClose();
+
         CursorMUD.OnHoverEntity += UpdateHoverEntity;
         CursorMUD.OnUpdateCursor += OnCursorPosition;
     }

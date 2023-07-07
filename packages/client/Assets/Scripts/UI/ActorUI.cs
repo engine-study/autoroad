@@ -16,27 +16,18 @@ public class ActorUI : SPWindowBase
     {
         base.UpdateObject(newObject);
 
-        // MUDEntity mEntity = newEntity as MUDEntity;
-        // if(mEntity) {
-        //     healthStat.SetValue(mEntity.stats.health.ToString());
-        //     attackStat.SetValue(mEntity.stats.attack.ToString());
-        //     nameText.text = mEntity.stats.objectName;
+        if(newObject == null) {
+            ToggleWindowClose();
+            return;
+        }
 
-        //     if(mEntity is Structure) {
-        //         Structure structure = mEntity as Structure;
+        SPBase actor = newObject as SPBase;
+        if(actor) {
 
-        //     } else if(mEntity is Resource) {
-        //         Resource resource = mEntity as Resource;
-
-        //     } else if (mEntity is Unit) {
-        //         Unit unit = mEntity as Unit;
-
-        //     } else {
-        //         ToggleWindowClose();
-        //     }
-        // } else {
-        //     ToggleWindowClose();
-        // }
+            nameText.text = actor.gameObject.name;
+            // coordinate.UpdateField("[" + x + " , " + y + "]");
+            // text.UpdateField(actor.stats.description);
+        }
 
         
     }

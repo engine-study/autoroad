@@ -12,15 +12,30 @@ public class InfoUI : SPWindow
     public SPHeading playerName, coordinate;
     public SPRawText text;
 
-    public void UpdateInfo(SPBase newBase, int x, int y)
+    public void UpdateInfo(Entity newEntity, int x, int y)
     {
 
-        SPBaseActor actor = newBase as SPBaseActor;
-        if(actor) {
+        MUDEntity mEntity = newEntity as MUDEntity;
 
-            header.UpdateField(actor.gameObject.name);
-            coordinate.UpdateField("[" + x + " , " + y + "]");
-            // text.UpdateField(actor.stats.description);
+        if(mEntity == null) {
+            ToggleWindowClose();
+            return;
         }
+
+        header.UpdateField(mEntity.gameObject.name);
+        coordinate.UpdateField("[ " + x + " ] [ " + y + " ]");
+
+        if(mEntity is Structure) {
+            Structure structure = mEntity as Structure;
+
+        } else if(mEntity is Resource) {
+            Resource resource = mEntity as Resource;
+
+        } else if (mEntity is Unit) {
+            Unit unit = mEntity as Unit;
+
+        }
+
+
     }
 }

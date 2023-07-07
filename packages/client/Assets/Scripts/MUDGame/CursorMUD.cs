@@ -37,7 +37,7 @@ public class CursorMUD : MonoBehaviour
     void UpdateMouse()
     {
         lastPos = rawMousePos;
-        rawMousePos = SPInput.MouseWorldPos;
+        rawMousePos = SPInput.MousePlanePos;
 
         if (grid)
         {
@@ -72,7 +72,7 @@ public class CursorMUD : MonoBehaviour
     void UpdateHover() {
 
         lastHover = hover;
-        hover = GetEntityFromRadius(mousePos + Vector3.up * .1f,.25f);
+        hover = GetEntityFromRadius(mousePos + Vector3.up * .5f,.25f);
 
         if(lastHover != hover) {
             OnHoverEntity?.Invoke(hover);
@@ -86,7 +86,7 @@ public class CursorMUD : MonoBehaviour
     public Entity GetEntityFromRadius(Vector3 position, float radius) {
         if (hits == null) { hits = new Collider[10]; }
 
-        int amount = Physics.OverlapSphereNonAlloc(position, radius, hits, LayerMask.NameToLayer("Nothing"), QueryTriggerInteraction.Collide);
+        int amount = Physics.OverlapSphereNonAlloc(position, radius, hits, LayerMask.NameToLayer("Nothing"), QueryTriggerInteraction.Ignore);
         int selectedItem = -1;
         float minDistance = 999f;
         Entity bestItem = null;
@@ -118,7 +118,7 @@ public class CursorMUD : MonoBehaviour
 
         if (hits == null) { hits = new Collider[10]; }
 
-        int amount = Physics.OverlapSphereNonAlloc(position, radius, hits, LayerMask.NameToLayer("Nothing"), QueryTriggerInteraction.Collide);
+        int amount = Physics.OverlapSphereNonAlloc(position, radius, hits, LayerMask.NameToLayer("Nothing"), QueryTriggerInteraction.Ignore);
         int selectedItem = -1;
         float minDistance = 999f;
         Entity bestItem = null;
