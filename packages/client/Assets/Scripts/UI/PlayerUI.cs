@@ -17,8 +17,10 @@ public class PlayerUI : MonoBehaviour
     }
 
     void SetupPlayer() {
+        
         actionPosition.SetFollow(SPPlayer.LocalPlayer.Root);
         actions.Setup(SPPlayer.LocalPlayer.Actor);
+
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
     }
 

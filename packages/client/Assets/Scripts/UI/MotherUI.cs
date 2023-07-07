@@ -10,6 +10,9 @@ public class MotherUI : SPUIInstance
     public GameObject loadingScreen;
     public Image loadingScreenBackground;
 
+    [Header("Game")]
+    public GameUI game;
+
     protected override void Awake()
     {
         base.Awake();
@@ -18,7 +21,8 @@ public class MotherUI : SPUIInstance
 
         SPEvents.OnLocalPlayerSpawn += StartGame;
     }
-    protected override void Start() {
+    protected override void Start()
+    {
         base.Start();
 
 
@@ -31,26 +35,36 @@ public class MotherUI : SPUIInstance
         SPEvents.OnLocalPlayerSpawn -= StartGame;
     }
 
-    void StartGame() {
+    void StartGame()
+    {
         StartCoroutine(StartCoroutine());
     }
-    IEnumerator StartCoroutine() {
+    IEnumerator StartCoroutine()
+    {
 
         //play a sound
         SPEvents.OnLocalPlayerSpawn -= StartGame;
 
-        if(!SPGlobal.IsDebug) {
+        //animate out screen 
+        if (!SPGlobal.IsDebug)
+        {
             yield return new WaitForSeconds(1f);
+            float lerp = 0f;
+
+            while (lerp < 1f)
+            {
+                lerp += Time.deltaTime;
+                loadingScreenBackground.color = Color.white - Color.black * lerp;
+                yield return null;
+            }
+            
+            //another sound
+            yield return new WaitForSeconds(.5f);
+
+
         }
 
-        float lerp = 0f;
-
-        while(lerp < 1f) {
-            lerp += Time.deltaTime;
-            loadingScreenBackground.color = Color.white - Color.black * lerp;
-            yield return null;
-        }
-
+        //hide loading
         loadingScreen.SetActive(false);
 
         //show the game!

@@ -188,6 +188,10 @@ public class ControllerMUD : SPController
         if (!player.IsLocalPlayer)
             return;
 
+        if(_onchainPosition == null || playerTransform.position != _onchainPosition) {
+            return;
+        }
+
         bool push = Input.GetKey(KeyCode.LeftShift);
 
         bool input = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
@@ -240,7 +244,6 @@ public class ControllerMUD : SPController
         moveDest.x = Mathf.Round(moveDest.x);
         moveDest.y = 0f;
         moveDest.z = Mathf.Round(moveDest.z);
-
 
         if (push)
         {
