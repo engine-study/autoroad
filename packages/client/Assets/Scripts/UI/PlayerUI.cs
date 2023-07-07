@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class SPPlayerUI : MonoBehaviour
+using UnityEngine.UI;
+public class PlayerUI : MonoBehaviour
 {
     public SPActionUI actions;
+    public Image actionWheel;
 
     void Awake() {
         SPEvents.OnLocalPlayerSpawn += SetupPlayer;
@@ -18,4 +19,6 @@ public class SPPlayerUI : MonoBehaviour
         actions.Setup(SPPlayer.LocalPlayer.Actor);
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
     }
+
+    
 }

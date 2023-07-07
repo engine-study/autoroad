@@ -6,6 +6,6 @@ public class GlobalUI : MonoBehaviour
 {
 
     public GameObject [] phaseUI;
-    public StatsUI stats;
+    public ActorUI stats;
     public InfoUI info;
 }

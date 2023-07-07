@@ -14,13 +14,16 @@ public class GameState : MonoBehaviour
     public static GameState Instance;
     public GamePhase phase;
 
+    [Header("Debug")]
+    public GameObject editorObjects;
+
     [Header("UI")]
     public PhaseUI [] phaseUI;
     public static System.Action<GamePhase> OnPhaseUpdate;
 
     void Awake() {
         Instance = this;
-
+        editorObjects.SetActive(false);
     }
 
     void Start() {

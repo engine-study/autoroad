@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class MUDCursor : MonoBehaviour
+public class CursorMUD : MonoBehaviour
 {
-    public static MUDCursor Instance;
+    public static CursorMUD Instance;
     public static Vector3 WorldPos {get{return Instance.mousePos;}}
     public static Vector3 GridPos {get{return Instance.gridPos;}}
-    public static System.Action<Entity> OnHover;
+    public static System.Action<Entity> OnHoverEntity;
     public static System.Action<Vector3> OnGridPosition;
     public static System.Action<Vector3> OnUpdateCursor;
 
     [Header("Cursor")]
     public bool grid;
-    public Transform graphics;
-    [SerializeField] Vector3 rawMousePos, mousePos, lastPos;
+    public Transform visuals;
+
+    [Header("Debug")]
+    [SerializeField] Vector3 rawMousePos;
+    [SerializeField] Vector3 mousePos, lastPos;
     [SerializeField] Vector3 gridPos, lastGridPos;
     [SerializeField] Entity hover, lastHover;
 
@@ -53,10 +55,10 @@ public class MUDCursor : MonoBehaviour
         }
         else
         {   
-            mousePos = Vector3.MoveTowards(graphics.position, rawMousePos, 50f * Time.deltaTime);
+            mousePos = Vector3.MoveTowards(visuals.position, rawMousePos, 50f * Time.deltaTime);
         }
 
-        graphics.position = mousePos;   
+        visuals.position = mousePos;   
 
         if(lastPos != rawMousePos) {
             OnUpdateCursor?.Invoke(rawMousePos);
@@ -70,10 +72,10 @@ public class MUDCursor : MonoBehaviour
     void UpdateHover() {
 
         lastHover = hover;
-        // hover = GetEntityFromRadius(mousePos + Vector3.up * .1f,.25f);
+        hover = GetEntityFromRadius(mousePos + Vector3.up * .1f,.25f);
 
         if(lastHover != hover) {
-            OnHover?.Invoke(hover);
+            OnHoverEntity?.Invoke(hover);
         }
 
 

@@ -1,63 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using mud.Client;
+using DefaultNamespace;
 
 public class CursorUI : MonoBehaviour
 {
     public static CursorUI Instance;
-    public static Entity CursorEntity {get{return Instance.entity;}}
-    public static Ground CursorGround {get{return Instance.terrain;}}
+    public static SPBase CursorObject {get{return Instance.baseObject;}}
     public static System.Action CursorUpdate;
 
     [Header("Cursor")]
-    public StatsUI stats;
+    public ActorUI actor;
     public InfoUI info;
 
     [Header("Debug")]
-    public Entity entity;
-    public Ground terrain;
+    public SPBase baseObject;
+    public MUDEntity entity;
 
     void Awake() {
         Instance = this;
-        MUDCursor.OnHover += UpdateHover;
-        MUDCursor.OnUpdateCursor += OnCursorPosition;
+        CursorMUD.OnHoverEntity += UpdateHoverEntity;
+        CursorMUD.OnUpdateCursor += OnCursorPosition;
     }
 
     void OnDestroy() {
         Instance = null;
-        MUDCursor.OnHover -= UpdateHover;
-        MUDCursor.OnUpdateCursor -= OnCursorPosition;
+        CursorMUD.OnHoverEntity -= UpdateHoverEntity;
+        CursorMUD.OnUpdateCursor -= OnCursorPosition;
     }
 
     void OnCursorPosition(Vector3 newPos) {
         
-        // Entity newEntity = MapGenerator.GetEntityAtPosition((Vector3)newPos);
-        // entity = newEntity;
-        entity = null;
 
-        if(entity == null) {
-            stats.ToggleWindow(false);
-        } else {
-            stats.ToggleWindow(true);
-            stats.UpdateEntity(entity);
-        }
+        //useless to do it this way.. need reverse mapping
+        // string positionKey = MUDHelper.GetSha3ABIEncoded(newPos.x, newPos.z);
+        // MUDEntity mudEntity = PositionManager.Instance.EntityHasComponent(positionKey) ? EntityDictionary.GetEntity(positionKey) : null;
+        // SPBase newObject = mudEntity != null ? mudEntity.GetComponentInChildren<SPBase>() : null;
 
+        //check the terrain and reverse mappings of units in the position table at ths position
+        return;
+
+        // INFO OF THE CURRENT GRID SLOT
         // Ground newTerrain = MapGenerator.GetTerrainAtPosition((Vector3)newPos);
-        terrain = null;
         
-        if(terrain == null) {
+        if(entity == null) {
             info.ToggleWindow(false);
         } else {
             info.ToggleWindow(true);
-            info.UpdateEntity(terrain);
+            info.UpdateInfo(null, (int)newPos.x, (int)newPos.z);
         }
 
         CursorUpdate?.Invoke();
 
     }
 
-    void UpdateHover(Entity newEntity) {
-      
+    //CHECK FOR INTERACTIONS
+    void UpdateHoverEntity(Entity newEntity) {
+        
+        SPBase newObject = newEntity != null ? newEntity.GetComponentInChildren<SPBase>() : null;
+        baseObject = newObject;
+
+        if(baseObject == null) {
+            actor.ToggleWindow(false);
+        } else {
+            actor.ToggleWindow(true);
+            actor.UpdateObject(baseObject);
+        }
+
+        CursorUpdate?.Invoke();
     }
 
 

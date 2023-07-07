@@ -23,18 +23,19 @@ public class Placement : MonoBehaviour
         valid.SetActive(canPlace);
         invalid.SetActive(!canPlace);
 
-        transform.position = MUDCursor.GridPos;
+        transform.position = CursorMUD.GridPos;
 
     }
     public bool ValidSpot() {
 
-        Ground groundAt = CursorUI.CursorGround;
+        // Ground groundAt = CursorUI.CursorGround;
+        Ground groundAt = null;
         if(groundAt == null || groundAt.material == GroundMaterial.Dust) {
             // Debug.Log("No ground");
             return false;
         }
 
-        Entity entity = CursorUI.CursorEntity;
+        SPBase entity = CursorUI.CursorObject;
         if(entity != null) {
             // Debug.Log("Entity");
             return false;

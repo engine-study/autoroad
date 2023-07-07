@@ -9,6 +9,18 @@ using DefaultNamespace;
 public class PositionManager : MUDTableManager
 {
 
+    public static PositionManager Instance;
+
+    protected override void Awake() {
+        base.Awake();
+        Instance = this;
+    }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        Instance = null;
+    }
+    
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {
 

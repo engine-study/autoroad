@@ -5,16 +5,16 @@ using TMPro;
 using UnityEngine.UI;
 using mud.Client;
 
-public class StatsUI : WindowEntity
+public class ActorUI : SPWindowBase
 {
     [Header("Stats")]
     public StatUI healthStat;
     public StatUI attackStat;
     public TextMeshProUGUI nameText;
 
-    public override void UpdateEntity(Entity newEntity)
+    public override void UpdateObject(SPBase newObject)
     {
-        base.UpdateEntity(newEntity);
+        base.UpdateObject(newObject);
 
         // MUDEntity mEntity = newEntity as MUDEntity;
         // if(mEntity) {

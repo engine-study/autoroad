@@ -5,29 +5,22 @@ using TMPro;
 using UnityEngine.UI;
 using mud.Client;
 
-public class InfoUI : WindowEntity
+public class InfoUI : SPWindow
 {
     [Header("Info")]
     public SPHeading header;
     public SPHeading playerName, coordinate;
     public SPRawText text;
 
-    public override void UpdateEntity(Entity newEntity)
+    public void UpdateInfo(SPBase newBase, int x, int y)
     {
-        base.UpdateEntity(newEntity);
 
-        // Entity mEntity = newEntity as MUDEntity;
-        // if(mEntity) {
+        SPBaseActor actor = newBase as SPBaseActor;
+        if(actor) {
 
-        //     header.UpdateField(mEntity.stats.objectName);
-        //     coordinate.UpdateField("[" + mEntity.gridPos.x + " , " + mEntity.gridPos.z + "]");
-        //     text.UpdateField(mEntity.stats.description);
-
-        //     if(mEntity is Ground) {
-
-        //     } else if(mEntity is Structure) {
-
-        //     }
-        // }
+            header.UpdateField(actor.gameObject.name);
+            coordinate.UpdateField("[" + x + " , " + y + "]");
+            // text.UpdateField(actor.stats.description);
+        }
     }
 }

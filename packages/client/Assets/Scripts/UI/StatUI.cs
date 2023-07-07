@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatUI : WindowEntity
+public class StatUI : SPWindowBase
 {
     [Header("Stat")]
     public TMPro.TextMeshProUGUI textField;

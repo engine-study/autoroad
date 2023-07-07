@@ -53,7 +53,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1491723774338699290
 RectTransform:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 1496850644082841987}
   - component: {fileID: 1540200641366062793}
   m_Layer: 5
-  m_Name: Stats
+  m_Name: Actor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
   _texts: []
   _images: []
   hasInit: 0
-  entity: {fileID: 0}
+  baseObject: {fileID: 0}
   position: {fileID: 1540200641366062793}
   healthStat: {fileID: 5344530423898199690}
   attackStat: {fileID: 43617892950550044}
@@ -447,10 +447,6 @@ PrefabInstance:
     - target: {fileID: 3850158772824078102, guid: 52a1e9089f96ba64a88858d3550ed517, type: 3}
       propertyPath: m_text
       value: Building
-      objectReference: {fileID: 0}
-    - target: {fileID: 3850158772824078102, guid: 52a1e9089f96ba64a88858d3550ed517, type: 3}
-      propertyPath: m_fontSize
-      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 3850158772824078102, guid: 52a1e9089f96ba64a88858d3550ed517, type: 3}
       propertyPath: m_fontSizeBase
