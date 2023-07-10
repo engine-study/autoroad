@@ -47,6 +47,7 @@ public class ControllerMUD : SPController
 
         playerScript.Position.OnUpdated += PositionUpdate;
 
+
         moveMarker.SetActive(false);
 
         controller.enabled = false;
@@ -54,6 +55,8 @@ public class ControllerMUD : SPController
         playerTransform = transform;
         moveMarker.transform.parent = null;
         moveMarker.transform.position = playerTransform.position;
+
+        RevertPosition();
 
     }
 

@@ -11,6 +11,11 @@ public class RoadComponent : MUDComponent
     [Header("Road")]
     public RoadState state;
 
+    protected override void Awake() {
+        base.Awake();
+        Debug.Log("Road awake", this);
+        state = RoadState.None;
+    }
     protected override void UpdateComponent(IMudTable update, UpdateEvent eventType)
     {
         base.UpdateComponent(update, eventType);
@@ -20,6 +25,8 @@ public class RoadComponent : MUDComponent
 
         state = table.value != null? (RoadState)table.value : state;
         // entity.gameObject.transform.position = new Vector3(position.x, 0f, position.y);
+
+        Debug.Log("Road update", this);
 
 
     }

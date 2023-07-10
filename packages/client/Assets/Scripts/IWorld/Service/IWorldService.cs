@@ -106,6 +106,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(callFunction, cancellationToken);
         }
 
+        public Task<string> CarryRequestAsync(CarryFunction carryFunction)
+        {
+             return ContractHandler.SendRequestAsync(carryFunction);
+        }
+
+        public Task<TransactionReceipt> CarryRequestAndWaitForReceiptAsync(CarryFunction carryFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(carryFunction, cancellationToken);
+        }
+
+        public Task<string> CarryRequestAsync(int x, int y)
+        {
+            var carryFunction = new CarryFunction();
+                carryFunction.X = x;
+                carryFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(carryFunction);
+        }
+
+        public Task<TransactionReceipt> CarryRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var carryFunction = new CarryFunction();
+                carryFunction.X = x;
+                carryFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(carryFunction, cancellationToken);
+        }
+
         public Task<string> CreateMapRequestAsync(CreateMapFunction createMapFunction)
         {
              return ContractHandler.SendRequestAsync(createMapFunction);
@@ -214,6 +242,34 @@ namespace IWorld.Service
                 deleteRecord1Function.Key = key;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteRecord1Function, cancellationToken);
+        }
+
+        public Task<string> DropRequestAsync(DropFunction dropFunction)
+        {
+             return ContractHandler.SendRequestAsync(dropFunction);
+        }
+
+        public Task<TransactionReceipt> DropRequestAndWaitForReceiptAsync(DropFunction dropFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(dropFunction, cancellationToken);
+        }
+
+        public Task<string> DropRequestAsync(int x, int y)
+        {
+            var dropFunction = new DropFunction();
+                dropFunction.X = x;
+                dropFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(dropFunction);
+        }
+
+        public Task<TransactionReceipt> DropRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var dropFunction = new DropFunction();
+                dropFunction.X = x;
+                dropFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(dropFunction, cancellationToken);
         }
 
         public Task<string> EmitEphemeralRecordRequestAsync(EmitEphemeralRecord1Function emitEphemeralRecord1Function)

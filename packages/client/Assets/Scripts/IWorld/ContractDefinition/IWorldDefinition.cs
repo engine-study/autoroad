@@ -51,6 +51,17 @@ namespace IWorld.ContractDefinition
         public virtual byte[] FuncSelectorAndArgs { get; set; }
     }
 
+    public partial class CarryFunction : CarryFunctionBase { }
+
+    [Function("carry")]
+    public class CarryFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class CreateMapFunction : CreateMapFunctionBase { }
 
     [Function("createMap")]
@@ -91,6 +102,17 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Name { get; set; }
         [Parameter("bytes32[]", "key", 3)]
         public virtual List<byte[]> Key { get; set; }
+    }
+
+    public partial class DropFunction : DropFunctionBase { }
+
+    [Function("drop")]
+    public class DropFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
     }
 
     public partial class EmitEphemeralRecord1Function : EmitEphemeralRecord1FunctionBase { }
@@ -863,6 +885,10 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
+
+
 
 
 

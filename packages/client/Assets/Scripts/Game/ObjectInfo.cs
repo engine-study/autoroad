@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Stat", menuName = "Engine/Stats/Stat", order = 1)]
-public class Stats : ScriptableObject
+[CreateAssetMenu(fileName = "ObjectInfo", menuName = "Engine/Object/Info", order = 1)]
+public class ObjectInfo : ScriptableObject
 {
     public string objectName;
     [TextArea(1,4)]

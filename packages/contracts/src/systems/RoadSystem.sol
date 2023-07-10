@@ -5,7 +5,8 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
 import { Road, Player, Rock, Obstruction, Tree, Pushable } from "../codegen/Tables.sol";
-import { TerrainType, RockType, RoadState } from "../codegen/Types.sol";
+import { Move } from "../codegen/Tables.sol";
+import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
@@ -15,13 +16,16 @@ contract RoadSystem is System {
   //updateRow
   //finishRow
 
-  function onRoad(int32 x, int32 y) public returns (bool){
-
+  
+  function onRoad(int32 x, int32 y) public returns (bool) {
+    // bound to map
+    (uint32 width, uint32 height, int32 left, int32 right) = RoadConfig.get();
+    return x >= int32(left) && x <= right;
   }
 
   function createMile(uint32 mileNumber) public {
     //create an entity for the chunk itself
-    bytes32 chunkEntity = keccak256(abi.encode("chunk", mileNumber));
+    bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
 
 
     // MyTable.pushFooArray(keccak256("some.key"), 4242); // adds 4242 at end of fooArray
@@ -32,23 +36,21 @@ contract RoadSystem is System {
     bytes32[] memory contributorsArray = new bytes32[](0);
 
     //create a new chunk
-    (uint32 mapWidth, uint32 mapHeight, ) = MapConfig.get();
-    (uint32 roadWidth, uint32 roadHeight) = RoadConfig.get();
+    (uint32 mapWidth,,) = MapConfig.get();
+    (uint32 roadWidth, uint32 roadHeight,,) = RoadConfig.get();
 
 
     int32 yStart = int32(mileNumber) * int32(roadHeight);
     int32 yEnd = (int32(mileNumber) * int32(roadHeight)) + int32(roadHeight);
     int32 halfWidth = int32(mapWidth) / int32(2);
-    int32 halfRoad = int32(roadWidth) / int32(2);
-
-    Bounds.set(int32(-halfWidth), halfWidth, 0, yEnd);
+    
+    Bounds.set(int32(-halfWidth), halfWidth, yEnd, 0);
 
     //spawn all the rows
     //spawn all the obstacles
     //spawn all the rocks/resources
 
     for (int32 y = yStart; y < int32(roadHeight) + int32(yStart); y++) {
-      TerrainType[] memory map = new TerrainType[](roadWidth);
 
       //SPAWN TERRAIN
       for (int32 x = int32(-halfWidth); x <= halfWidth; x++) {
@@ -66,7 +68,7 @@ contract RoadSystem is System {
 
         uint noiseCoord = randomCoord(0, 100, x, y);
 
-        console.log("noise ", noiseCoord);
+        // console.log("noise ", noiseCoord);
 
         if (noiseCoord < 2) {
           terrainType = TerrainType.Tree;
@@ -95,15 +97,19 @@ contract RoadSystem is System {
     bytes32 entity = positionToEntityKey(x, y);
 
     Position.set(entity, x, y);
-    Obstruction.set(entity, true);
 
     if (tType == TerrainType.Rock) {
       Rock.set(entity, RockType.Statumen);
+      Move.set(entity, MoveType.Push);
       Pushable.set(entity,true);
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
-    } else if (tType == TerrainType.Mine) {} else if (tType == TerrainType.Player) {
+      Obstruction.set(entity, true);
+    } else if (tType == TerrainType.Player) {
       Player.set(entity, true);
+      Move.set(entity, MoveType.Push);
+      Pushable.set(entity,true);
+
     }
   }
 }

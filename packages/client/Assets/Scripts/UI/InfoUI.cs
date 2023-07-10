@@ -12,29 +12,36 @@ public class InfoUI : SPWindow
     public SPHeading playerName, coordinate;
     public SPRawText text;
 
-    public void UpdateInfo(Entity newEntity, int x, int y)
+    public void UpdateCoordinate(int x, int y) {
+        coordinate.UpdateField("[ " + x + " ] [ " + y + " ]");
+    }
+
+    public void ClearCoordinate() {
+        coordinate.UpdateField("[ ? ] [ ? ]");
+    }
+    public void UpdateInfo(Entity newEntity)
     {
 
         MUDEntity mEntity = newEntity as MUDEntity;
 
         if(mEntity == null) {
-            ToggleWindowClose();
-            return;
+            header.UpdateField("Empty");
+        } else {
+            header.UpdateField(MUDHelper.TruncateHash(mEntity.Key));
         }
 
-        header.UpdateField(mEntity.gameObject.name);
-        coordinate.UpdateField("[ " + x + " ] [ " + y + " ]");
 
-        if(mEntity is Structure) {
-            Structure structure = mEntity as Structure;
+    
+        // if(mEntity is Structure) {
+        //     Structure structure = mEntity as Structure;
 
-        } else if(mEntity is Resource) {
-            Resource resource = mEntity as Resource;
+        // } else if(mEntity is Resource) {
+        //     Resource resource = mEntity as Resource;
 
-        } else if (mEntity is Unit) {
-            Unit unit = mEntity as Unit;
+        // } else if (mEntity is Unit) {
+        //     Unit unit = mEntity as Unit;
 
-        }
+         // }
 
 
     }
