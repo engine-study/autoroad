@@ -39,7 +39,7 @@ public class RockComponent : MUDComponent
 
             // stage = rockUpdate.rockType != null ? (int)rockUpdate.rockType : stage;
             // rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
-            Debug.Log(rockUpdate.value.ToString());
+            // Debug.Log(rockUpdate.value.ToString());
             
             rockType = rockUpdate.value != null ? (RockType)rockUpdate.value : RockType._Count;
 

@@ -67,7 +67,8 @@ GameObject:
   - component: {fileID: 7877383074114644386}
   - component: {fileID: 4765553126336188459}
   - component: {fileID: 7126306196510897201}
-  - component: {fileID: 7389045190273371532}
+  - component: {fileID: 6141718005193121758}
+  - component: {fileID: 8650400663727963926}
   - component: {fileID: 5252423910711337837}
   - component: {fileID: 1140786668023697111}
   - component: {fileID: 8714677117460968964}
@@ -114,7 +115,7 @@ MonoBehaviour:
   actor: {fileID: 1140786668023697111}
   reciever: {fileID: 3955994449410173385}
   isNPC: 0
-  logic: {fileID: 7389045190273371532}
+  logic: {fileID: 0}
   controller: {fileID: 5252423910711337837}
   anim: {fileID: 1492224391178781041}
   animator: {fileID: 2520871121364187547}
@@ -138,7 +139,7 @@ MonoBehaviour:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   spawned: 0
   isLocalPlayer: 0
---- !u!114 &7389045190273371532
+--- !u!114 &6141718005193121758
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,7 +148,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3625912502078787175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66b3e1b7180b74f489c546c82e96fae5, type: 3}
+  m_Script: {fileID: 11500000, guid: 05bf0e19f3730a043ba57a4e0b8584cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 4765553126336188459}
@@ -157,6 +158,23 @@ MonoBehaviour:
   hoverFlag: 0
   inputRaw: {x: 0, y: 0, z: 0}
   mouseInputting: 0
+  actions: {fileID: 8650400663727963926}
+--- !u!114 &8650400663727963926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625912502078787175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c511f87a15eaa8f44914292bfe8cd5db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShovelAction: {fileID: 11400000, guid: d09b5cca64a660343ac5fdfeabfad9ba, type: 2}
+  MineAction: {fileID: 0}
+  PushAction: {fileID: 0}
+  WalkAction: {fileID: 0}
 --- !u!114 &5252423910711337837
 MonoBehaviour:
   m_ObjectHideFlags: 0

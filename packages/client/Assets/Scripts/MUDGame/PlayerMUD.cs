@@ -18,7 +18,7 @@ public class PlayerMUD : SPPlayer
     public override void Init() {
         base.Init();
         
-        Debug.Log("Player Init");
+        // Debug.Log("Player Init");
 
         entity = GetComponentInParent<MUDEntity>();
         if(Player.Loaded) DoNetworkInit();
