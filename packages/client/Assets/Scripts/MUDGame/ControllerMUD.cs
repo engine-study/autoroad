@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
@@ -19,7 +18,7 @@ public class ControllerMUD : SPController
     public GameObject moveMarker;
     Vector3 markerPos;
 
-    private IDisposable? _disposer;
+    private System.IDisposable? _disposer;
     private MUDEntity entity;
     private PlayerMUD playerScript;
 
@@ -55,6 +54,9 @@ public class ControllerMUD : SPController
         playerTransform = transform;
         moveMarker.transform.parent = null;
         moveMarker.transform.position = playerTransform.position;
+
+        playerTransform.rotation = Quaternion.Euler(0f, Random.Range(0,4) * 90f, 0f);
+
 
         RevertPosition();
 
@@ -120,7 +122,7 @@ public class ControllerMUD : SPController
             // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
             await NetworkManager.Instance.worldSend.TxExecute<MoveFromFunction>(x, y);
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             //if our transaction fails, force the player back to their position on the table
             Debug.LogException(ex);
@@ -135,7 +137,7 @@ public class ControllerMUD : SPController
             // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
             await NetworkManager.Instance.worldSend.TxExecute<PushFunction>(x, y, pushX, pushY);
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             Debug.LogException(ex);
             RevertPosition();
@@ -257,14 +259,14 @@ public class ControllerMUD : SPController
             moveDest = new Vector3(Mathf.Round(playerTransform.position.x + direction.x), 0f, Mathf.Round(playerTransform.position.z + direction.z));
             Vector3 pushToPos = new Vector3(Mathf.Round(moveDest.x + direction.x), 0f, Mathf.Round(moveDest.z + direction.z));
 
-            SendPushTx(Convert.ToInt32(moveDest.x), Convert.ToInt32(moveDest.z), Convert.ToInt32(pushToPos.x), Convert.ToInt32(pushToPos.z)).Forget();
+            SendPushTx(System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z)).Forget();
         }
         else
         {
 
             Debug.Log("WALKING");
             markerPos = moveDest;
-            SendMoveFromTx(Convert.ToInt32(moveDest.x), Convert.ToInt32(moveDest.z)).Forget();
+            SendMoveFromTx(System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z)).Forget();
         }
 
         markerPos = moveDest;
