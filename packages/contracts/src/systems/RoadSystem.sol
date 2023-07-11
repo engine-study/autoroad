@@ -99,7 +99,7 @@ contract RoadSystem is System {
     Position.set(entity, x, y);
 
     if (tType == TerrainType.Rock) {
-      Rock.set(entity, RockType.Statumen);
+      Rock.set(entity, 1);
       Move.set(entity, MoveType.Push);
       Pushable.set(entity,true);
     } else if (tType == TerrainType.Tree) {

@@ -1,6 +1,7 @@
 using UnityEngine;
 using mud.Unity;
 using IWorld.ContractDefinition;
+using DefaultNamespace;
 
 public class InteractShovel : SPInteract
 {
@@ -10,7 +11,7 @@ public class InteractShovel : SPInteract
         base.Interact(toggle, newActor);
 
         if(toggle) {
-            ShovelAction((int)transform.position.x, (int)transform.position.y);
+            ShovelAction((int)transform.position.x, (int)transform.position.z);
         }
     }
 

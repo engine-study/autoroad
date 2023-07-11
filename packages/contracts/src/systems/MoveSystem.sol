@@ -4,9 +4,9 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Pushable,  Player, Health } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Obstruction } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Obstruction, Rock } from "../codegen/Tables.sol";
 import { PushableTableId, PositionTableId, PositionData} from "../codegen/Tables.sol";
-import { RoadState, MoveType, StateType } from "../codegen/Types.sol";
+import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinDistance } from "../utility/grid.sol";
@@ -42,12 +42,11 @@ contract MoveSystem is System {
       bool obstruction = Obstruction.get(atPushPosition[0]);
       require(obstruction == false, "pushing into an occupied spot");
 
-      RoadState road = Road.get(atPushPosition[0]);
-      uint roadInt = uint(road);
+      uint32 roadInt = Road.get(atPushPosition[0]);
       require(roadInt < uint(RoadState.Paved), "Road state too high");
 
       roadInt++;
-      Road.set(atPushPosition[0], RoadState(roadInt));
+      Road.set(atPushPosition[0], roadInt);
 
       //ROAD COMPLETE!!!
       if(roadInt == uint(RoadState.Paved)) {
@@ -66,6 +65,23 @@ contract MoveSystem is System {
     Position.set(player, x, y);
   }
 
+  function mine(int32 mineX, int32 mineY) public {
+    
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(mineX, mineY));
+
+     // Position
+    require(withinDistance(PositionData(mineX, mineY), Position.get(player), 1), "too far to mine");
+    require(atPosition.length >= 1, "mining an empty spot");
+
+    uint32 rockState = Rock.get(atPosition[0]);
+
+    require(rockState > 0, "Road error");
+
+    Rock.set(atPosition[0], rockState + 1);
+
+  }
+
   function carry(int32 carryX, int32 carryY) public {
 
     bytes32 player = addressToEntityKey(address(_msgSender()));
@@ -77,7 +93,7 @@ contract MoveSystem is System {
     require(move == MoveType.Carry, "non-carry object");
 
     Carrying.set(player, atPosition[0]);
-    
+
     // Position.deleteRecord()
     // bytes32[] memory atPushPosition = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
     // require(atPushPosition.length != 1, "pushing into an occupied spot");
@@ -112,7 +128,7 @@ contract MoveSystem is System {
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
 
-    Road.set(roadEntity, RoadState.Shoveled);
+    Road.set(roadEntity, 1);
     Position.set(roadEntity, x, y);
   }
 

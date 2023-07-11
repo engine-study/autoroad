@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c511f87a15eaa8f44914292bfe8cd5db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShovelAction: {fileID: 0}
+  ShovelAction: {fileID: 7898837568567867605}
   MineAction: {fileID: 0}
   PushAction: {fileID: 0}
   WalkAction: {fileID: 0}
@@ -563,6 +563,12 @@ MonoBehaviour:
   state: {fileID: 0}
   interacting: 0
   actorPlayer: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
   go: {fileID: 0}
 --- !u!1001 &4268825892496020068
 PrefabInstance:

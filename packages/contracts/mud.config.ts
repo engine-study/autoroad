@@ -106,8 +106,6 @@ export default mudConfig({
       },
     },
 
-    Road: "RoadState",
-
     //items
     Shovel: "bool",
     Pickaxe: "bool",
@@ -139,7 +137,8 @@ export default mudConfig({
     Infinite: "bool",
 
     //unique objects
-    Rock: "RockType",
+    Rock: "uint32",
+    Road: "uint32",
 
     Tree: "bool",
 

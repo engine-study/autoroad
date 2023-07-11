@@ -275,6 +275,17 @@ namespace IWorld.ContractDefinition
 
     }
 
+    public partial class MineFunction : MineFunctionBase { }
+
+    [Function("mine")]
+    public class MineFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "mineX", 1)]
+        public virtual int MineX { get; set; }
+        [Parameter("int32", "mineY", 2)]
+        public virtual int MineY { get; set; }
+    }
+
     public partial class MoveFromFunction : MoveFromFunctionBase { }
 
     [Function("moveFrom")]
@@ -968,6 +979,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

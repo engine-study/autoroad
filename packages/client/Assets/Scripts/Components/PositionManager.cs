@@ -35,6 +35,20 @@ public class PositionManager : MUDTableManager
         //var MergedUpdate = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().Merge(PositionTable.OnRecordUpdate()).ObserveOnMainThread(),OnChainPositionUpdate);
     }
 
+    protected override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+    {
+        PositionTableUpdate update = tableUpdate as PositionTableUpdate;
+
+        var currentValue = update.TypedValue.Item1;
+        if (currentValue == null)
+        {
+            Debug.LogError("No currentValue");
+            return null;
+        }
+
+        return currentValue;
+    }
+
     // public static void GetPosition(Position component)
     // {
 
@@ -50,21 +64,5 @@ public class PositionManager : MUDTableManager
 
     //     positionComp.UpdateComponent(table, TableEvent.Manual);
     // }
-
-
-    protected override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
-    {
-        PositionTableUpdate update = tableUpdate as PositionTableUpdate;
-
-        var currentValue = update.TypedValue.Item1;
-        if (currentValue == null)
-        {
-            Debug.LogError("No currentValue");
-            return null;
-        }
-
-        return currentValue;
-    }
-
 
 }

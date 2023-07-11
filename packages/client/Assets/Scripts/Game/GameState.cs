@@ -14,6 +14,9 @@ public class GameState : MonoBehaviour
     public static GameState Instance;
     public GamePhase phase;
 
+    [Header("Scroll")]
+    public WorldScroll scroll;
+    
     [Header("Debug")]
     public GameObject editorObjects;
 

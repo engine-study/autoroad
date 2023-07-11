@@ -61,7 +61,6 @@ public class MotherUI : SPUIInstance
             //another sound
             yield return new WaitForSeconds(.5f);
 
-
         }
 
         //hide loading

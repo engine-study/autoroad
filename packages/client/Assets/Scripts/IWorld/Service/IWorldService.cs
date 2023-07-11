@@ -533,6 +533,34 @@ namespace IWorld.Service
 
 
 
+        public Task<string> MineRequestAsync(MineFunction mineFunction)
+        {
+             return ContractHandler.SendRequestAsync(mineFunction);
+        }
+
+        public Task<TransactionReceipt> MineRequestAndWaitForReceiptAsync(MineFunction mineFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(mineFunction, cancellationToken);
+        }
+
+        public Task<string> MineRequestAsync(int mineX, int mineY)
+        {
+            var mineFunction = new MineFunction();
+                mineFunction.MineX = mineX;
+                mineFunction.MineY = mineY;
+            
+             return ContractHandler.SendRequestAsync(mineFunction);
+        }
+
+        public Task<TransactionReceipt> MineRequestAndWaitForReceiptAsync(int mineX, int mineY, CancellationTokenSource cancellationToken = null)
+        {
+            var mineFunction = new MineFunction();
+                mineFunction.MineX = mineX;
+                mineFunction.MineY = mineY;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(mineFunction, cancellationToken);
+        }
+
         public Task<string> MoveFromRequestAsync(MoveFromFunction moveFromFunction)
         {
              return ContractHandler.SendRequestAsync(moveFromFunction);
