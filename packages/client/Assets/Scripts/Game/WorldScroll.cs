@@ -22,7 +22,7 @@ public class WorldScroll : MonoBehaviour
 
     void Update()
     {
-        if (SPUIBase.IsMouseOnScreen)
+        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && !Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl))
         {
 
             mileScroll += Input.mouseScrollDelta.y * .1f;

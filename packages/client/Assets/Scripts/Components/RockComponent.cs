@@ -16,6 +16,7 @@ public class RockComponent : MUDComponent
     [SerializeField] protected RockType rockType;
     [SerializeField] ParticleSystem fx_break, fx_drag;
     [SerializeField] SPAudioSource source;
+    SPBase rockBase;
 
     [SerializeField] GameObject[] stages;
     public AudioClip [] sfx_smallBreaks, sfx_bigBreaks;
@@ -24,6 +25,7 @@ public class RockComponent : MUDComponent
     protected override void Awake() {
         base.Awake();
         rockType = RockType._Count;
+        rockBase = GetComponent<SPBase>();
         stage = -1;
     }
 
@@ -60,6 +62,8 @@ public class RockComponent : MUDComponent
             {
                 stages[i].SetActive(i == (int)rockType);
             }
+
+            rockBase.baseName = rockType.ToString();
         
         }
 

@@ -24,7 +24,7 @@ public class ActorUI : SPWindowBase
         SPBase actor = newObject as SPBase;
         if(actor) {
 
-            nameText.text = actor.gameObject.name;
+            nameText.text = actor.Name;
             // coordinate.UpdateField("[" + x + " , " + y + "]");
             // text.UpdateField(actor.stats.description);
         }
