@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class ActionsMUD : MonoBehaviour
 {
-    public SPAction ShovelAction;
-    public SPAction MineAction;
-    public SPAction PushAction;
-    public SPAction WalkAction;
+    public SPInteract ShovelAction;
+    public SPInteract MineAction;
+    public SPInteract PushAction;
+    public SPInteract WalkAction;
 
-    public List<SPInteract> interacts;
+
     SPPlayer player;
     SPActor actor;
 
     void Awake()
     {
-        player = GetComponent<SPPlayer>();
+        player = GetComponentInParent<SPPlayer>();
         player.OnPostInit += Init;
 
     }
@@ -25,19 +25,8 @@ public class ActionsMUD : MonoBehaviour
         if (!player.IsLocalPlayer)
             return;
 
-        SPInteract interactable = new SPInteract();
-        interactable.go = gameObject;
-        
-        interactable.action = ShovelAction;
+        player.Reciever.ToggleInteractableManual(true, ShovelAction);
 
-        player.Reciever.ToggleInteractableManual(true, interactable);
-
-        interacts.Add(interactable);
-
-    }
-
-    void Update()
-    {
 
     }
 

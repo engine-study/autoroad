@@ -9,7 +9,7 @@ import { PushableTableId, PositionTableId, PositionData} from "../codegen/Tables
 import { RoadState, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { lineWalkPositions } from "../utility/grid.sol";
+import { lineWalkPositions, withinDistance } from "../utility/grid.sol";
 import { MapSystem } from "../systems/MapSystem.sol";
 import { RoadSystem } from "../systems/RoadSystem.sol";
 
@@ -66,16 +66,19 @@ contract MoveSystem is System {
     Position.set(player, x, y);
   }
 
-  function carry(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function carry(int32 carryX, int32 carryY) public {
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(carryX, carryY));
+
+    // Position
     require(atPosition.length >= 1, "trying to carry an empty spot");
     MoveType move = Move.get(atPosition[0]);
     require(move == MoveType.Carry, "non-carry object");
 
     Carrying.set(player, atPosition[0]);
-
+    
+    // Position.deleteRecord()
     // bytes32[] memory atPushPosition = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
     // require(atPushPosition.length != 1, "pushing into an occupied spot");
   }

@@ -56,10 +56,10 @@ namespace IWorld.ContractDefinition
     [Function("carry")]
     public class CarryFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
+        [Parameter("int32", "carryX", 1)]
+        public virtual int CarryX { get; set; }
+        [Parameter("int32", "carryY", 2)]
+        public virtual int CarryY { get; set; }
     }
 
     public partial class CreateMapFunction : CreateMapFunctionBase { }

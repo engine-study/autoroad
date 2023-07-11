@@ -21,10 +21,12 @@ import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/T
 //   return positions;
 // }
 
-function lineWalkPositions(
-  PositionData memory start,
-  PositionData memory end
-) pure returns (PositionData[] memory) {
+function withinDistance(PositionData memory start, PositionData memory end, int32 distance) pure returns (bool) {
+  distance += 1;
+  return end.x - start.x < distance && start.x - end.x > int32(-distance) &&  end.y - start.y < distance && start.y - end.y > int32(-distance);
+}
+
+function lineWalkPositions(PositionData memory start, PositionData memory end) pure returns (PositionData[] memory) {
   //get the change of x and y
   int32 deltaX = end.x - start.x;
   int32 deltaY = end.y - start.y;

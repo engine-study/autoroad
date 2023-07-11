@@ -6,7 +6,7 @@ pragma solidity >=0.8.0;
 interface IMoveSystem {
   function push(int32 x, int32 y, int32 pushX, int32 pushY) external;
 
-  function carry(int32 x, int32 y) external;
+  function carry(int32 carryX, int32 carryY) external;
 
   function drop(int32 x, int32 y) external;
 

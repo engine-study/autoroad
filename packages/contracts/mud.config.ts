@@ -33,6 +33,16 @@ export default mudConfig({
       },
     },
 
+    Stats: {
+      dataStruct:false,
+      schema: {
+        mined: "int32",
+        moved: "int32",
+        pushed: "int32",
+        shoveled: "int32",
+      },
+    },
+
 
     //map
     MapConfig: {

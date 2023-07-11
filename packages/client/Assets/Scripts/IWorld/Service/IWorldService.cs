@@ -116,20 +116,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(carryFunction, cancellationToken);
         }
 
-        public Task<string> CarryRequestAsync(int x, int y)
+        public Task<string> CarryRequestAsync(int carryX, int carryY)
         {
             var carryFunction = new CarryFunction();
-                carryFunction.X = x;
-                carryFunction.Y = y;
+                carryFunction.CarryX = carryX;
+                carryFunction.CarryY = carryY;
             
              return ContractHandler.SendRequestAsync(carryFunction);
         }
 
-        public Task<TransactionReceipt> CarryRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CarryRequestAndWaitForReceiptAsync(int carryX, int carryY, CancellationTokenSource cancellationToken = null)
         {
             var carryFunction = new CarryFunction();
-                carryFunction.X = x;
-                carryFunction.Y = y;
+                carryFunction.CarryX = carryX;
+                carryFunction.CarryY = carryY;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(carryFunction, cancellationToken);
         }
