@@ -16,7 +16,7 @@ namespace <%= namespace %>
 	public class <%= tableClassName %> : IMudTable
 	{
 		public readonly static TableId ID = new ("<%= tableNamespace %>", "<%= tableName %>");
-		public readonly TableId TableId = new ("<%= tableNamespace %>", "<%= tableName %>");
+		public override TableId GetTableId() {return new ("<%= tableNamespace %>", "<%= tableName %>");}
 
 		<% for (const field of fields) { -%>
 			public <%= field.type %>? <%= field.key %>;
@@ -24,8 +24,10 @@ namespace <%= namespace %>
 		
 		public override void SetValues(params object[] functionParameters){
 
+			<% var i = 0 -%>
 			<% for (const field of fields) { -%>
-			<%= field.key %> = (<%= field.type %>?)functionParameters[0];
+				<%= field.key %> = (<%= field.type %>)functionParameters[<%= i -%>];
+				<% i++ -%>
 			<% } -%>
 		}
         public override object[] GetValues() {

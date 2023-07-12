@@ -31,9 +31,8 @@ public class ControllerMUD : SPController
 
     void Awake()
     {
-
         entity = GetComponentInParent<MUDEntity>();
-
+        enabled = false; 
     }
 
     public override void Init()
@@ -244,8 +243,8 @@ public class ControllerMUD : SPController
             markerPos = moveDest;
             _onchainPosition = moveDest;
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
-            TxManager.Send<MoveFromFunction>(playerScript.Position, updates, (int)moveDest.x, (int)moveDest.z);
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
+            TxManager.Send<MoveFromFunction>(playerScript.Position, updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
         }
 
         markerPos = moveDest;
