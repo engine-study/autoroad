@@ -18,10 +18,15 @@ public class PositionComponent : MUDComponent
     {
         base.UpdateComponent(update, eventType);
 
-        PositionTable table = (PositionTable)update;
+        PositionTable table = (PositionTable)activeTable;
 
-        position2D = new Vector2((float)table.x, (float)table.y);
+        Debug.Log("Type: " + eventType.ToString());
+        Debug.Log("X: " + (table.x != null ? table.x.ToString() : "no"));
+        Debug.Log("Y: " + (table.y != null ? table.y.ToString() : "no"));
+
+        position2D = new Vector2(table.x ?? position2D.x, table.y ?? position2D.y);
         transform.position = new Vector3(position2D.x, 0f, position2D.y);
+
         position3D = transform.position;
         
         // entity.gameObject.transform.position = new Vector3(position.x, 0f, position.y);

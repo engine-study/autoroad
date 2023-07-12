@@ -44,7 +44,7 @@ public class ControllerMUD : SPController
         playerScript = GetComponentInParent<PlayerMUD>();
         entityReady = true;
 
-        playerScript.Position.OnUpdated += PositionUpdate;
+        playerScript.Position.OnUpdated += ComponentUpdate;
 
         moveMarker.SetActive(false);
 
@@ -56,8 +56,9 @@ public class ControllerMUD : SPController
 
         playerTransform.rotation = Quaternion.Euler(0f, Random.Range(0, 4) * 90f, 0f);
 
-
-        RevertPosition();
+        playerTransform.position = playerScript.Position.Pos;
+        _onchainPosition = playerScript.Position.Pos;
+        moveDest = playerScript.Position.Pos;
 
     }
 
@@ -65,7 +66,7 @@ public class ControllerMUD : SPController
     {
         if (playerScript)
         {
-            playerScript.Position.OnUpdated -= PositionUpdate;
+            playerScript.Position.OnUpdated -= ComponentUpdate;
         }
 
         _disposer?.Dispose();
@@ -80,71 +81,6 @@ public class ControllerMUD : SPController
         enabled = true;
     }
 
-    private void PositionUpdate()
-    {
-        if (!entityReady) { return; }
-
-        Vector3 lastOnchainPos = _onchainPosition == null ? playerTransform.position : (Vector3)_onchainPosition;
-
-        _onchainPosition = playerScript.Position.Pos;
-
-        //WE MUST UPDATE, this is because our walk might have been cut short but the MoveSystem
-        moveDest = playerScript.Position.Pos;
-
-    }
-
-
-    private async UniTaskVoid SendMoveFromTx(int x, int y)
-    {
-        try
-        {
-            // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
-            await NetworkManager.Instance.worldSend.TxExecute<MoveFromFunction>(x, y);
-        }
-        catch (System.Exception ex)
-        {
-            //if our transaction fails, force the player back to their position on the table
-            Debug.LogException(ex);
-            RevertPosition();
-        }
-    }
-
-    private async UniTaskVoid SendPushTx(int x, int y, int pushX, int pushY)
-    {
-        try
-        {
-            // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
-            await NetworkManager.Instance.worldSend.TxExecute<PushFunction>(x, y, pushX, pushY);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogException(ex);
-            RevertPosition();
-        }
-    }
-
-    void RevertPosition()
-    {
-        Debug.Log("Reverting position");
-        playerTransform.position = playerScript.Position.Pos;
-        _onchainPosition = playerScript.Position.Pos;
-        moveDest = playerScript.Position.Pos;
-    }
-
-    // private async UniTaskVoid SendMoveTx(int x, int y)
-    // {
-    //     try
-    //     {
-    //         // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
-    //         await NetworkManager.Instance.worldSend.TxExecute<MoveFunction>(x, y);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Debug.LogException(ex);
-    //     }
-    // }
-
-    float moveTimeout = .5f;
 
     void Update()
     {
@@ -168,7 +104,7 @@ public class ControllerMUD : SPController
             return;
 
         //playerTransform.position != _onchainPosition ||
-        if (_onchainPosition == null || Vector3.Distance(playerTransform.position, moveDest) > .1f)
+        if (Vector3.Distance(playerTransform.position, moveDest) > .1f)
         {
             return;
         }
@@ -180,15 +116,7 @@ public class ControllerMUD : SPController
         if (!input)
             return;
 
-        if (_onchainPosition == null)
-        {
-            moveDest = playerTransform.position;
-            moveDest.y = 0f;
-        }
-        else
-        {
-            moveDest = (Vector3)_onchainPosition;
-        }
+        moveDest = (Vector3)_onchainPosition;        
 
         // Vector3 moveDest = (Vector3)_destination;
         float moveDistance = 2f;
@@ -230,23 +158,20 @@ public class ControllerMUD : SPController
             Debug.Log("PUSHING");
 
             Vector3 direction = (moveDest - playerTransform.position).normalized;
-            moveDest = new Vector3(Mathf.Round(playerTransform.position.x + direction.x), 0f, Mathf.Round(playerTransform.position.z + direction.z));
-            Vector3 pushToPos = new Vector3(Mathf.Round(moveDest.x + direction.x), 0f, Mathf.Round(moveDest.z + direction.z));
-
-            _onchainPosition = moveDest;
+            Vector3 newPos = new Vector3(Mathf.Round(playerTransform.position.x + direction.x), 0f, Mathf.Round(playerTransform.position.z + direction.z));
+            Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
-            // updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(newPos.x), System.Convert.ToInt64(newPos.z)));
+            // updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(newPos.x), System.Convert.ToInt64(newPos.z)));
 
-            TxManager.Send<PushFunction>(playerScript.Position, updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
+            TxManager.Send<PushFunction>(playerScript.Position, updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
         }
         else
         {
 
             Debug.Log("WALKING");
             markerPos = moveDest;
-            _onchainPosition = moveDest;
 
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
@@ -255,12 +180,6 @@ public class ControllerMUD : SPController
         }
 
         markerPos = moveDest;
-        moveTimeout = .75f;
-
-        UpdateAnimation(moveDest);
-
-        // UIMother.PlayAccept();
-
     }
 
 
@@ -288,6 +207,21 @@ public class ControllerMUD : SPController
             distance -= 1f;
             player.resources.sfx.PlaySound(player.resources.stepSFX);
         }
+
+    }
+
+    private void ComponentUpdate()
+    {
+        if (!entityReady) { return; }
+
+        Vector3 lastOnchainPos = _onchainPosition ?? playerTransform.position;
+
+        _onchainPosition = playerScript.Position.Pos;
+
+        //WE MUST UPDATE, this is because our walk might have been cut short but the MoveSystem
+        moveDest = playerScript.Position.Pos;
+
+        UpdateAnimation(moveDest);
 
     }
 

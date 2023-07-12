@@ -26,7 +26,7 @@ public class PlayerManager : MUDTableManager
     {
 
         var addressKey = net.addressKey;
-        var currentPlayer = PlayerTable.GetValue<PlayerTable>(addressKey);
+        var currentPlayer = IMudTable.GetTable<PlayerTable>(addressKey);
 
         if (currentPlayer == null)
         {

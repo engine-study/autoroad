@@ -30,9 +30,6 @@ namespace <%= namespace %>
 				<% i++ -%>
 			<% } -%>
 		}
-        public override object[] GetValues() {
-			return null;
-		}
 
 		public override bool SetValues(IEnumerable<Property> result)
 		{
@@ -63,7 +60,7 @@ namespace <%= namespace %>
             return hasValues; 
 		}
 
-		public override IMudTable? GetTableValue(string key)
+		public override IMudTable GetTableValue(string key)
 		{
 			var query = new Query().Find("?value", "?attribute").Where(TableId.ToString(), key, "?attribute", "?value");
             var result = NetworkManager.Instance.ds.Query(query);
