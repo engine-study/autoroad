@@ -8,6 +8,7 @@ using DefaultNamespace;
 public class RoadManager : MUDTableManager
 {
    
+    public override System.Type TableType() {return typeof(RoadTable);}
 
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {

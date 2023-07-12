@@ -14,6 +14,7 @@ using Cysharp.Threading.Tasks;
 public class TreeManager : MUDTableManager {
 
     // [Header("Building Manager")]
+    public override System.Type TableType() {return typeof(TreeTable);}
 
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {

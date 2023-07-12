@@ -10,6 +10,8 @@ using mud.Client;
 
 public class PlayerManager : MUDTableManager
 {
+
+    public override System.Type TableType() {return typeof(PlayerTable);}
     protected override void Subscribe(NetworkManager nm)
     {
         var SpawnSubscription = PlayerTable.OnRecordInsert().ObserveOnMainThread().Subscribe(OnInsertRecord);
@@ -24,7 +26,7 @@ public class PlayerManager : MUDTableManager
     {
 
         var addressKey = net.addressKey;
-        var currentPlayer = PlayerTable.GetPlayerTableValue(addressKey);
+        var currentPlayer = PlayerTable.GetValue<PlayerTable>(addressKey);
 
         if (currentPlayer == null)
         {

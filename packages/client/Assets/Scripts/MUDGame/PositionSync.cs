@@ -8,8 +8,8 @@ public class PositionSync : ComponentSync
 
     [Header("Optional")]
     public Transform targetTransform;
-    public float deltaSpeed = 2.5f;
-
+    [SerializeField] protected float speed = 1f;
+    
     [Header("Debug")]
     protected PositionComponent pos;
     protected Vector3 targetPos;
@@ -61,7 +61,7 @@ public class PositionSync : ComponentSync
 
     protected override void UpdateLerp() {
         
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, deltaSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
         
         //turn off for efficiency until next update
         if(transform.position == targetPos) {

@@ -10,6 +10,9 @@ using ObservableExtensions = UniRx.ObservableExtensions;
 
 public class ChunkManager : MUDTableManager
 {
+
+    public override System.Type TableType() {return typeof(ChunkTable);}
+
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {
 

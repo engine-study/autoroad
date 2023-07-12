@@ -8,6 +8,7 @@ using DefaultNamespace;
 
 public class GameStateManager : MUDTableManager {
 
+    public override System.Type TableType() {return typeof(GameStateTable);}
 
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {

@@ -8,6 +8,8 @@ using DefaultNamespace;
 public class MoveManager : MUDTableManager
 {
    
+    public override System.Type TableType() {return typeof(MoveTable);}
+
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {
 

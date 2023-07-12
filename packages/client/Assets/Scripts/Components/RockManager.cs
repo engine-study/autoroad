@@ -13,17 +13,8 @@ using Cysharp.Threading.Tasks;
 
 public class RockManager : MUDTableManager {
 
-    // [Header("Building Manager")]
-    public static RockManager Instance;
 
-    protected override void Awake() {
-        base.Awake();
-        Instance = this;
-    }
-    protected override void OnDestroy() {
-        base.OnDestroy();
-        Instance = null;
-    }
+    public override System.Type TableType() {return typeof(RockTable);}
 
     protected override void Subscribe(mud.Unity.NetworkManager nm)
     {
