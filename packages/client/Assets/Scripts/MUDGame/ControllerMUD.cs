@@ -234,7 +234,12 @@ public class ControllerMUD : SPController
             Vector3 pushToPos = new Vector3(Mathf.Round(moveDest.x + direction.x), 0f, Mathf.Round(moveDest.z + direction.z));
 
             _onchainPosition = moveDest;
-            SendPushTx(System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z)).Forget();
+
+            List<TxUpdate> updates = new List<TxUpdate>();
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
+            // updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
+
+            TxManager.Send<PushFunction>(playerScript.Position, updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
         }
         else
         {
@@ -242,8 +247,10 @@ public class ControllerMUD : SPController
             Debug.Log("WALKING");
             markerPos = moveDest;
             _onchainPosition = moveDest;
+
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
+
             TxManager.Send<MoveFromFunction>(playerScript.Position, updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
         }
 
