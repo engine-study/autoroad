@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { GameState, GameConfig, MapConfig, RoadConfig, Chunk, Obstruction, Position, Rock, Row } from "../src/codegen/Tables.sol";
+import { GameState, GameConfig, MapConfig, RoadConfig } from "../src/codegen/Tables.sol";
 import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
 import { RoadSystem } from "../src/systems/RoadSystem.sol";
 import { MapSystem } from "../src/systems/MapSystem.sol";

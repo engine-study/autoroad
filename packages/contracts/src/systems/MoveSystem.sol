@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Damage, Position, Pushable,  Player, Health } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Obstruction, Rock } from "../codegen/Tables.sol";
-import { PushableTableId, PositionTableId, PositionData} from "../codegen/Tables.sol";
+import { RoadConfig, MapConfig, Damage, Position, Player, Health } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Rock } from "../codegen/Tables.sol";
+import { PositionTableId, PositionData} from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
@@ -28,8 +28,8 @@ contract MoveSystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
     require(atPosition.length >= 1, "trying to push an empty spot");
-    bool pushable = Pushable.get(atPosition[0]);
-    require(pushable, "pushing a non-pushable object");
+    uint32 move = Move.get(atPosition[0]);
+    require(move == uint32(MoveType.Push), "pushing a non-pushable object");
 
     bytes32[] memory atPushPosition = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
 
@@ -39,17 +39,17 @@ contract MoveSystem is System {
     if (atPushPosition.length >= 1) {
 
       //check if there is an obstruction
-      bool obstruction = Obstruction.get(atPushPosition[0]);
+      bool obstruction = Move.get(atPushPosition[0]) != 0;
       require(obstruction == false, "pushing into an occupied spot");
 
       uint32 roadInt = Road.get(atPushPosition[0]);
-      require(roadInt < uint(RoadState.Paved), "Road state too high");
+      require(roadInt < uint32(RoadState.Paved), "Road state too high");
 
       roadInt++;
       Road.set(atPushPosition[0], roadInt);
 
       //ROAD COMPLETE!!!
-      if(roadInt == uint(RoadState.Paved)) {
+      if(roadInt == uint32(RoadState.Paved)) {
         Pavement.set(keccak256(abi.encode("Pavement", x, y)), true);
         Position.deleteRecord(atPushPosition[0]);
       }
@@ -78,7 +78,14 @@ contract MoveSystem is System {
 
     require(rockState > 0, "Road error");
 
+    //give rocks that are mined a pushable component
+    if(rockState == uint32(RockType.Raw)) {
+      Move.set(atPosition[0], uint32(MoveType.Push));
+    }
+
     Rock.set(atPosition[0], rockState + 1);
+
+
 
   }
 
@@ -89,8 +96,8 @@ contract MoveSystem is System {
 
     // Position
     require(atPosition.length >= 1, "trying to carry an empty spot");
-    MoveType move = Move.get(atPosition[0]);
-    require(move == MoveType.Carry, "non-carry object");
+    uint32 move = Move.get(atPosition[0]);
+    require(move == uint32(MoveType.Carry), "non-carry object");
 
     Carrying.set(player, atPosition[0]);
 

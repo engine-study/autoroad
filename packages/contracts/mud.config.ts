@@ -18,9 +18,9 @@ export default mudConfig({
   enums: {
     TerrainType: ["None", "Rock", "Mine", "Tree", "Player"],
     RoadState: ["None", "Shoveled", "Filled", "Paved"],
-    RockType: ["Raw", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
+    RockType: ["None", "Raw", "Statumen", "Rudus", "Nucleus", "Pavimentum"],
     StateType: ["Idle", "Dead", "Carrying"],
-    MoveType: ["None", "Shovel", "Carry", "Push"],
+    MoveType: ["None", "Obstruction", "Shovel", "Carry", "Push"],
   },
 
   tables: {
@@ -110,11 +110,6 @@ export default mudConfig({
     Shovel: "bool",
     Pickaxe: "bool",
 
-
-    //properties
-    Obstruction: "bool",
-    Pushable: "bool",
-
     Position: {
       name: "Position",
       schema: {
@@ -126,7 +121,7 @@ export default mudConfig({
     //player state   
     Player: "bool",
     State: "StateType",
-    Move: "MoveType",
+    Move: "uint32",
     Carrying: "bytes32",
     Pavement: "bool",
 

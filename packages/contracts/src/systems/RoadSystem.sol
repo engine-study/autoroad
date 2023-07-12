@@ -4,8 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
-import { Road, Player, Rock, Obstruction, Tree, Pushable } from "../codegen/Tables.sol";
-import { Move } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Tree } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
@@ -100,17 +99,14 @@ contract RoadSystem is System {
     Position.set(entity, x, y);
 
     if (tType == TerrainType.Rock) {
-      Rock.set(entity, 1);
-      Move.set(entity, MoveType.Push);
-      Pushable.set(entity,true);
+      Rock.set(entity, uint32(RockType.Raw));
+      Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
-      Obstruction.set(entity, true);
+      Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Player) {
       Player.set(entity, true);
-      Move.set(entity, MoveType.Push);
-      Pushable.set(entity,true);
-
+      Move.set(entity, uint32(MoveType.Push));
     }
   }
 }
