@@ -7,6 +7,7 @@ public class WorldScroll : MonoBehaviour
 
     [Header("World Scroll")]
     public SPHeading mileHeading;
+    public float maxMile = 0f;
 
     float mileScroll, lastScroll = -100f;
     float mileCount = -1f;
@@ -49,12 +50,16 @@ public class WorldScroll : MonoBehaviour
         SetMile(0f);
     }
 
+    public void SetMaxMile(float newMaxMile) {
+        maxMile = newMaxMile;
+    }
     public void SetMile(float newMile)
     {
 
         // mileHeading.UpdateField("Mile " + newMile);
 
-        mileCount = newMile;
+        mileCount = Mathf.Clamp(newMile,0f, maxMile);
+        
         SPCamera.SetTarget(Vector3.forward * MileTotal);
 
     }

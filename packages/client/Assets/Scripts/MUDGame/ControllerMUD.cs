@@ -149,6 +149,7 @@ public class ControllerMUD : SPController
         Debug.Log("Reverting position");
         playerTransform.position = playerScript.Position.Pos;
         _onchainPosition = playerScript.Position.Pos;
+        moveDest = playerScript.Position.Pos;
     }
 
     // private async UniTaskVoid SendMoveTx(int x, int y)
@@ -184,16 +185,11 @@ public class ControllerMUD : SPController
             return;
         }
 
-        if (moveTimeout > 0f)
-        {
-            moveTimeout -= Time.deltaTime;
-            return;
-        }
-
         if (!player.IsLocalPlayer)
             return;
 
-        if(_onchainPosition == null || playerTransform.position != _onchainPosition) {
+        //playerTransform.position != _onchainPosition ||
+        if(_onchainPosition == null || Vector3.Distance(playerTransform.position, moveDest) > .1f) {
             return;
         }
 
@@ -203,8 +199,6 @@ public class ControllerMUD : SPController
 
         if (!input)
             return;
-
-        moveDest = Vector3.zero;
 
         if (_onchainPosition == null)
         {
@@ -259,6 +253,7 @@ public class ControllerMUD : SPController
             moveDest = new Vector3(Mathf.Round(playerTransform.position.x + direction.x), 0f, Mathf.Round(playerTransform.position.z + direction.z));
             Vector3 pushToPos = new Vector3(Mathf.Round(moveDest.x + direction.x), 0f, Mathf.Round(moveDest.z + direction.z));
 
+            _onchainPosition = moveDest;
             SendPushTx(System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z)).Forget();
         }
         else
@@ -266,6 +261,7 @@ public class ControllerMUD : SPController
 
             Debug.Log("WALKING");
             markerPos = moveDest;
+            _onchainPosition = moveDest;
             SendMoveFromTx(System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z)).Forget();
         }
 

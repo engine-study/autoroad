@@ -19,9 +19,8 @@ public class GameStateComponent : MUDComponent
         GameStateTable table = (GameStateTable)update;
 
         miles = (int)table.miles;
-        scroll.SetMile(miles);
+        scroll.SetMaxMile(miles);
         
-
     }
 
 }

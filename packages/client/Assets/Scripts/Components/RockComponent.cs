@@ -6,7 +6,7 @@ using DefaultNamespace;
 using mud.Unity;
 using IWorld.ContractDefinition;
 
-public enum RockType { None, Raw, Statumen, Rudus, Nucleus, Pavimentum, _Count }
+public enum RockType { None, Stone, Statumen, Rudus, Nucleus, Pavimentum, _Count }
 public class RockComponent : MUDComponent
 {
     public int Stage { get { return stage; } }
@@ -89,7 +89,7 @@ public class RockComponent : MUDComponent
             //if our transaction fails, force the player back to their position on the table
             Debug.LogException(ex);
             RockTable fakeTable = new RockTable();
-            fakeTable.value = RockTable.GetTableValue(Entity.Key).value;
+            fakeTable.value = RockTable.GetRockTableValue(Entity.Key).value;
             UpdateComponent(fakeTable, UpdateEvent.Revert);
 
         }
