@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
 import { Road, Player, Rock, Obstruction, Tree, Pushable } from "../codegen/Tables.sol";
 import { Move } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
@@ -27,6 +27,7 @@ contract RoadSystem is System {
     //create an entity for the chunk itself
     bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
 
+    GameState.set(mileNumber);
 
     // MyTable.pushFooArray(keccak256("some.key"), 4242); // adds 4242 at end of fooArray
     // MyTable.popFooArray(keccak256("some.key")); // pop fooArray

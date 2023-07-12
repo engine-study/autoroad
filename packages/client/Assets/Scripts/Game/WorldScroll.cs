@@ -8,11 +8,11 @@ public class WorldScroll : MonoBehaviour
     [Header("World Scroll")]
     public SPHeading mileHeading;
     public float maxMile = 0f;
+    public float currentMile = -1f;
 
     float mileScroll, lastScroll = -100f;
-    float mileCount = -1f;
 
-    public float MileTotal { get { return mileCount * MILE_DISTANCE; } }
+    public float MileTotal { get { return currentMile * MILE_DISTANCE; } }
     public float MileTotalScroll { get { return mileScroll * MILE_DISTANCE; } }
     public static float MILE_DISTANCE = 20f;
 
@@ -23,7 +23,7 @@ public class WorldScroll : MonoBehaviour
 
     void Update()
     {
-        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && !Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl))
+        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftAlt))
         {
 
             mileScroll += Input.mouseScrollDelta.y * .1f;
@@ -32,7 +32,7 @@ public class WorldScroll : MonoBehaviour
         }
 
         //magnetism, lerp back to current mile
-        mileScroll = Mathf.MoveTowards(mileScroll, mileCount, 1f * Time.deltaTime);
+        mileScroll = Mathf.MoveTowards(mileScroll, currentMile, 1f * Time.deltaTime);
 
         //if we're more than halfway to the next mile, magnet over to it
         if (Mathf.Abs((mileScroll * MILE_DISTANCE) - MileTotal) > MILE_DISTANCE * .5f)
@@ -58,7 +58,7 @@ public class WorldScroll : MonoBehaviour
 
         // mileHeading.UpdateField("Mile " + newMile);
 
-        mileCount = Mathf.Clamp(newMile,0f, maxMile);
+        currentMile = Mathf.Clamp(newMile,0f, maxMile);
         
         SPCamera.SetTarget(Vector3.forward * MileTotal);
 
