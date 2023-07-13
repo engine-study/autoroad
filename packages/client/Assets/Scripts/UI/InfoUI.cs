@@ -12,6 +12,12 @@ public class InfoUI : SPWindow
     public SPHeading playerName, coordinate;
     public SPRawText text;
 
+    protected override void Awake() {
+        base.Awake();
+        header.ToggleWindowClose();
+        coordinate.ToggleWindowClose();
+        playerName.ToggleWindowClose();
+    }
     public void UpdateCoordinate(int x, int y) {
         coordinate.ToggleWindowOpen();
         coordinate.UpdateField("(" + x + "," + y + ")");

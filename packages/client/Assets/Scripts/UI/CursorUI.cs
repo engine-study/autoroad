@@ -23,7 +23,6 @@ public class CursorUI : MonoBehaviour
 
         Instance = this;
 
-        info.ToggleWindowClose();
         actor.ToggleWindowClose();
 
         CursorMUD.OnHoverEntity += UpdateHoverEntity;

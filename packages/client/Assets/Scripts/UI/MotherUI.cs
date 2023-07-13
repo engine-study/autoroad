@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using mud.Client;
 public class MotherUI : SPUIInstance
 {
+
+    public static MotherUI Mother;
 
     [Header("UI")]
     public GameObject loadingScreen;
     public Image loadingScreenBackground;
+    public SPActionWheelUI wheel;
+
 
     [Header("Game")]
     public GameUI game;
@@ -17,9 +21,12 @@ public class MotherUI : SPUIInstance
     {
         base.Awake();
 
+        Mother = this;
+
         loadingScreen.SetActive(true);
 
         SPEvents.OnLocalPlayerSpawn += StartGame;
+        TxManager.OnTransaction += UpdateWheel;
     }
     protected override void Start()
     {
@@ -28,11 +35,23 @@ public class MotherUI : SPUIInstance
 
     }
 
+    void UpdateWheel(bool txSuccess) {
+        if(txSuccess) {
+
+        } else {
+            wheel.UpdateState(ActionEndState.Failed);
+        }
+    }
+    
     protected override void OnDestroy()
     {
         base.OnDestroy();
 
+        Mother = null;
+
         SPEvents.OnLocalPlayerSpawn -= StartGame;
+        TxManager.OnTransaction -= UpdateWheel;
+
     }
 
     void StartGame()
