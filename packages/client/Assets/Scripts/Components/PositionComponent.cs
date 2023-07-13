@@ -20,9 +20,9 @@ public class PositionComponent : MUDComponent
 
         PositionTable table = (PositionTable)activeTable;
 
-        Debug.Log(eventType.ToString() + ": " + gameObject.name);
-        Debug.Log("X: " + (table.x != null ? table.x.ToString() : "no"));
-        Debug.Log("Y: " + (table.y != null ? table.y.ToString() : "no"));
+        // Debug.Log(eventType.ToString() + ": " + gameObject.name);
+        // Debug.Log("X: " + (table.x != null ? table.x.ToString() : "no"));
+        // Debug.Log("Y: " + (table.y != null ? table.y.ToString() : "no"));
 
         position2D = new Vector2(table.x ?? position2D.x, table.y ?? position2D.y);
         transform.position = new Vector3(position2D.x, 0f, position2D.y);

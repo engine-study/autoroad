@@ -8,7 +8,7 @@ public class PositionSync : ComponentSync
 
     [Header("Optional")]
     public Transform targetTransform;
-    [SerializeField] protected float speed = 1f;
+    // [SerializeField] protected float speed = 1f;
     
     [Header("Debug")]
     protected PositionComponent pos;
@@ -39,8 +39,6 @@ public class PositionSync : ComponentSync
         //set up our side of the compnents BEFORE 
         targetTransform.position = pos.Pos;
         targetPos = pos.Pos;
-
-
     }
 
     protected override void UpdateSync(UpdateEvent updateType) {
@@ -63,7 +61,7 @@ public class PositionSync : ComponentSync
 
     protected override void UpdateLerp() {
         
-        targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
+        targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, ControllerMUD.MOVE_SPEED * Time.deltaTime);
         
         //turn off for efficiency until next update
         if(targetTransform.position == targetPos) {

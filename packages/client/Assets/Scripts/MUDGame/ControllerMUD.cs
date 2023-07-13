@@ -187,7 +187,7 @@ public class ControllerMUD : SPController
     }
 
 
-    public const float MOVE_SPEED = 1f;
+    public const float MOVE_SPEED = 1.5f;
     public void UpdatePosition()
     {
 
