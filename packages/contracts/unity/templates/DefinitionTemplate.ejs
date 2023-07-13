@@ -26,7 +26,12 @@ namespace <%= namespace %>
 
 			<% var i = 0 -%>
 			<% for (const field of fields) { -%>
+				<% if (field.type === "long" || field.type === "ulong") { -%> 
+				<%= field.key %> = (<%= field.type %>)(int)functionParameters[<%= i -%>];
+				<% } else { -%> 
 				<%= field.key %> = (<%= field.type %>)functionParameters[<%= i -%>];
+				<% } -%> 
+
 				<% i++ -%>
 			<% } -%>
 		}

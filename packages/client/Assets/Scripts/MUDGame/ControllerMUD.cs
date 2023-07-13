@@ -167,8 +167,8 @@ public class ControllerMUD : SPController
             Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(newPos.x), System.Convert.ToInt64(newPos.z)));
-            updates.Add(TxManager.MakeOptimistic(otherPosition, System.Convert.ToInt64(pushToPos.x), System.Convert.ToInt64(pushToPos.z)));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, newPos.x, newPos.z));
+            updates.Add(TxManager.MakeOptimistic(otherPosition, pushToPos.x, pushToPos.z));
             TxManager.Send<PushFunction>(playerScript.Position, updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
         }
         else
@@ -178,7 +178,7 @@ public class ControllerMUD : SPController
             markerPos = moveDest;
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(moveDest.x), System.Convert.ToInt64(moveDest.z)));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
 
             TxManager.Send<MoveFromFunction>(playerScript.Position, updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
         }

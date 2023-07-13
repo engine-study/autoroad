@@ -19,10 +19,11 @@ public class RockComponent : MUDComponent
     SPBase rockBase;
 
     [SerializeField] GameObject[] stages;
-    public AudioClip [] sfx_smallBreaks, sfx_bigBreaks;
+    public AudioClip[] sfx_smallBreaks, sfx_bigBreaks;
     RockType lastStage = RockType._Count;
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
         rockType = RockType._Count;
         rockBase = GetComponent<SPBase>();
@@ -46,14 +47,16 @@ public class RockComponent : MUDComponent
             // stage = rockUpdate.rockType != null ? (int)rockUpdate.rockType : stage;
             // rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
             // Debug.Log(rockUpdate.value.ToString());
-            
+
             rockType = rockUpdate.value != null ? (RockType)rockUpdate.value : RockType._Count;
 
         }
 
-        if(lastStage != rockType) {
+        if (lastStage != rockType)
+        {
 
-            if(eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
+            if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic)
+            {
                 source.PlaySound((int)rockType < 3 ? sfx_bigBreaks : sfx_smallBreaks);
                 fx_break.Play();
             }
@@ -64,34 +67,42 @@ public class RockComponent : MUDComponent
             }
 
             rockBase.baseName = rockType.ToString();
-        
+
         }
 
         lastStage = rockType;
 
     }
 
-    public void Mine() {
+    public void Mine()
+    {
         MineRock((int)transform.position.x, (int)transform.position.z);
     }
+
     public async void MineRock(int x, int y)
     {
-        try
-        {
-            RockTable fakeTable = new RockTable();
-            fakeTable.value = (ulong)(rockType+1);
-            // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
-            UpdateComponent(fakeTable, UpdateEvent.Optimistic);
-            await NetworkManager.Instance.worldSend.TxExecute<MineFunction>(x, y);
-        }
-        catch (System.Exception ex)
-        {
-            //if our transaction fails, force the player back to their position on the table
-            Debug.LogException(ex);
-            RockTable fakeTable = new RockTable();
-            // fakeTable.value = RockTable.GetRockTableValue(Entity.Key).value;
-            UpdateComponent(fakeTable, UpdateEvent.Revert);
-
-        }
+        List<TxUpdate> updates = new List<TxUpdate>();
+        updates.Add(TxManager.MakeOptimistic(this, (int)x, (int)y));
+        await TxManager.Send<MineFunction>(this, updates, x, y);
     }
+    // public async void MineRock(int x, int y)
+    // {
+    //     try
+    //     {
+    //         RockTable fakeTable = new RockTable();
+    //         fakeTable.value = (ulong)(rockType+1);
+    //         // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
+    //         UpdateComponent(fakeTable, UpdateEvent.Optimistic);
+    //         await NetworkManager.Instance.worldSend.TxExecute<MineFunction>(x, y);
+    //     }
+    //     catch (System.Exception ex)
+    //     {
+    //         //if our transaction fails, force the player back to their position on the table
+    //         Debug.LogException(ex);
+    //         RockTable fakeTable = new RockTable();
+    //         // fakeTable.value = RockTable.GetRockTableValue(Entity.Key).value;
+    //         UpdateComponent(fakeTable, UpdateEvent.Revert);
+
+    //     }
+    // }
 }
