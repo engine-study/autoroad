@@ -12,7 +12,6 @@ using mud.Client;
 public class ControllerMUD : SPController
 {
     private Vector3? _onchainPosition;
-    private Vector3 enginePosition;
 
     Quaternion lookRotation;
     public Transform playerTransform;
@@ -44,7 +43,7 @@ public class ControllerMUD : SPController
         playerScript = GetComponentInParent<PlayerMUD>();
         entityReady = true;
 
-        playerScript.Position.OnUpdated += ComponentUpdate;
+        playerScript.Position.OnUpdatedDetails += ComponentUpdate;
 
         moveMarker.SetActive(false);
 
@@ -66,7 +65,7 @@ public class ControllerMUD : SPController
     {
         if (playerScript)
         {
-            playerScript.Position.OnUpdated -= ComponentUpdate;
+            playerScript.Position.OnUpdatedDetails -= ComponentUpdate;
         }
 
         _disposer?.Dispose();
@@ -167,8 +166,8 @@ public class ControllerMUD : SPController
             Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, newPos.x, newPos.z));
-            updates.Add(TxManager.MakeOptimistic(otherPosition, pushToPos.x, pushToPos.z));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)newPos.x, (int)newPos.z));
+            updates.Add(TxManager.MakeOptimistic(otherPosition, (int)pushToPos.x, (int)pushToPos.z));
             TxManager.Send<PushFunction>(playerScript.Position, updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
         }
         else
@@ -214,7 +213,7 @@ public class ControllerMUD : SPController
 
     }
 
-    private void ComponentUpdate()
+    private void ComponentUpdate(UpdateEvent eventType)
     {
         if (!entityReady) { return; }
 
@@ -225,19 +224,13 @@ public class ControllerMUD : SPController
         //WE MUST UPDATE, this is because our walk might have been cut short but the MoveSystem
         moveDest = playerScript.Position.Pos;
 
-        UpdateAnimation(moveDest);
-
-    }
-
-    void UpdateAnimation(Vector3 toPosition)
-    {
-
+        //raycast to the world
         RaycastHit hit;
-        Vector3 direction = (toPosition - playerTransform.position).normalized;
+        Vector3 direction = (moveDest - playerTransform.position).normalized;
         Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
 
-        if (playerTransform.position == toPosition)
+        if (playerTransform.position == moveDest)
         {
             player?.Animator.PlayClip("Tired");
         }
@@ -254,18 +247,17 @@ public class ControllerMUD : SPController
         {
             // Debug.Log("WALKING");
             player?.Animator.PlayClip("Idle");
-            markerPos = toPosition;
+            markerPos = moveDest;
         }
 
-        toPosition.y = ChainPosToEngine(toPosition).y;
-        enginePosition = toPosition;
+        if(eventType != UpdateEvent.Revert) {
+            var _lookY = moveDest;
+            _lookY.y = playerTransform.position.y;
 
-        var _lookY = toPosition;
-        _lookY.y = playerTransform.position.y;
-
-        if (_lookY != playerTransform.position)
-        {
-            lookRotation = Quaternion.LookRotation(_lookY - playerTransform.position);
+            if (_lookY != playerTransform.position)
+            {
+                lookRotation = Quaternion.LookRotation(_lookY - playerTransform.position);
+            }
         }
     }
 
