@@ -52,7 +52,7 @@ public class RockComponent : MUDComponent
 
         }
 
-        if (lastStage != rockType)
+        if (loaded && lastStage != rockType)
         {
 
             if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic)

@@ -46,7 +46,7 @@ public class PlayerMUD : SPPlayer
 
         baseName = MUDHelper.TruncateHash(GetComponent<PlayerComponent>().Entity.Key);
 
-        Debug.Log("Player Network Init");
+        // Debug.Log("Player Network Init");
 
     }
 

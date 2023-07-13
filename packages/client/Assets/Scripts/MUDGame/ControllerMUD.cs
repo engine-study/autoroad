@@ -38,7 +38,7 @@ public class ControllerMUD : SPController
     {
         base.Init();
 
-        Debug.Log("Controller Init");
+        // Debug.Log("Controller Init");
 
         playerScript = GetComponentInParent<PlayerMUD>();
         entityReady = true;
