@@ -13,11 +13,12 @@ public class InfoUI : SPWindow
     public SPRawText text;
 
     public void UpdateCoordinate(int x, int y) {
-        coordinate.UpdateField("[ " + x + " ] [ " + y + " ]");
+        coordinate.ToggleWindowOpen();
+        coordinate.UpdateField("(" + x + "," + y + ")");
     }
 
     public void ClearCoordinate() {
-        coordinate.UpdateField("[ ? ] [ ? ]");
+        coordinate.UpdateField("? ?");
     }
     public void UpdateInfo(Entity newEntity)
     {
@@ -25,13 +26,13 @@ public class InfoUI : SPWindow
         MUDEntity mEntity = newEntity as MUDEntity;
 
         if(mEntity == null) {
+            header.ToggleWindowClose();
             header.UpdateField("Empty");
         } else {
+            header.ToggleWindowOpen();
             header.UpdateField(MUDHelper.TruncateHash(mEntity.Key));
         }
 
-
-    
         // if(mEntity is Structure) {
         //     Structure structure = mEntity as Structure;
 

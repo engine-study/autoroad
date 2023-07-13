@@ -41,6 +41,7 @@ public class CursorUI : MonoBehaviour
     {
 
         info.UpdateCoordinate((int)newPos.x, (int)newPos.z);
+
         CursorUpdate?.Invoke();
 
     }
@@ -53,13 +54,13 @@ public class CursorUI : MonoBehaviour
         baseObject = newObject;
 
         actor.ToggleWindow(baseObject != null);
-        info.ToggleWindow(baseObject != null);
 
         if (baseObject != null)
         {
-            info.UpdateInfo(newEntity);
             actor.UpdateObject(baseObject);
         }
+
+        info.UpdateInfo(newEntity);
 
         CursorUpdate?.Invoke();
     }
