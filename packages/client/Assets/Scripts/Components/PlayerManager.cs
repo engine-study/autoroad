@@ -32,7 +32,7 @@ public class PlayerManager : MUDTableManager
         {
             // spawn the player
             Debug.Log("Spawning TX...");
-            await nm.worldSend.TxExecute<SpawnFunction>(0, 0);
+            await TxManager.Send<SpawnFunction>(0,0);
 
         }
 

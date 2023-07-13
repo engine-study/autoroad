@@ -83,7 +83,7 @@ public class RockComponent : MUDComponent
     {
         List<TxUpdate> updates = new List<TxUpdate>();
         updates.Add(TxManager.MakeOptimistic(this, (int)(rockType + 1)));
-        await TxManager.Send<MineFunction>(this, updates, x, y);
+        await TxManager.Send<MineFunction>(updates, x, y);
     }
     // public async void MineRock(int x, int y)
     // {

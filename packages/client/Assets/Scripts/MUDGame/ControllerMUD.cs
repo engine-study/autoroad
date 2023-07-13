@@ -55,10 +55,14 @@ public class ControllerMUD : SPController
 
         playerTransform.rotation = Quaternion.Euler(0f, Random.Range(0, 4) * 90f, 0f);
 
-        playerTransform.position = playerScript.Position.Pos;
-        _onchainPosition = playerScript.Position.Pos;
-        moveDest = playerScript.Position.Pos;
+        SetPosition(playerScript.Position.Pos);
+    }
 
+    public void SetPosition(Vector3 newPos) {
+
+        playerTransform.position = newPos;
+        _onchainPosition = newPos;
+        moveDest = newPos;
     }
 
     private void OnDestroy()
@@ -168,7 +172,7 @@ public class ControllerMUD : SPController
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)newPos.x, (int)newPos.z));
             updates.Add(TxManager.MakeOptimistic(otherPosition, (int)pushToPos.x, (int)pushToPos.z));
-            TxManager.Send<PushFunction>(playerScript.Position, updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
+            TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
         }
         else
         {
@@ -179,7 +183,7 @@ public class ControllerMUD : SPController
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
 
-            TxManager.Send<MoveFromFunction>(playerScript.Position, updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+            TxManager.Send<MoveFromFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
         }
 
         markerPos = moveDest;
@@ -216,6 +220,11 @@ public class ControllerMUD : SPController
     private void ComponentUpdate(UpdateEvent eventType)
     {
         if (!entityReady) { return; }
+
+        if(eventType == UpdateEvent.Revert) {
+            SetPosition(playerScript.Position.Pos);
+            return;
+        }
 
         Vector3 lastOnchainPos = _onchainPosition ?? playerTransform.position;
 
