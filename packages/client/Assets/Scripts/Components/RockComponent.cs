@@ -16,7 +16,7 @@ public class RockComponent : MUDComponent {
     SPBase rockBase;
 
     [SerializeField] GameObject[] stages;
-    public AudioClip[] sfx_smallBreaks, sfx_bigBreaks;
+    public AudioClip[] sfx_pickHit, sfx_smallBreaks, sfx_bigBreaks;
     RockType lastStage = RockType._Count;
 
     protected override void Awake() {
@@ -51,7 +51,8 @@ public class RockComponent : MUDComponent {
         if (loaded && lastStage != rockType) {
 
             if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
-                source.PlaySound((int)rockType < 3 ? sfx_bigBreaks : sfx_smallBreaks);
+                source.PlaySound(sfx_pickHit);
+                source.PlaySound(rockType < RockType.Nucleus ? sfx_bigBreaks : sfx_smallBreaks);
                 fx_break.Play();
             }
         }

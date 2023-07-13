@@ -76,7 +76,8 @@ contract MoveSystem is System {
 
     uint32 rockState = Rock.get(atPosition[0]);
 
-    require(rockState > 0, "Road error");
+    require(rockState > uint32(RockType.None), "Rock not found or none");
+    require(rockState < uint32(RockType.Nucleus), "Rock ground to a pulp");
 
     //give rocks that are mined a pushable component
     if(rockState == uint32(RockType.Raw)) {

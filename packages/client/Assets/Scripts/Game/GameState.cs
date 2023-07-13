@@ -50,7 +50,7 @@ public class GameState : MonoBehaviour {
     }
 
     void UpdateInput() {
-        if(SPUIBase.CanInput && Input.GetMouseButtonDown(0)) {
+        if(SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
             if(CursorMUD.Base) {
                 SPCamera.SetFollow(CursorMUD.Base.Root);
             } else {
