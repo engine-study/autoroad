@@ -6,11 +6,9 @@ using ObservableExtensions = UniRx.ObservableExtensions;
 
 using DefaultNamespace;
 
-public class PositionManager : MUDTableManager
-{
-    public override System.Type TableType() {return typeof(PositionTable);}
-    protected override void Subscribe(mud.Unity.NetworkManager nm)
-    {
+public class PositionManager : MUDTableManager {
+    public override System.Type TableType() { return typeof(PositionTable); }
+    protected override void Subscribe(mud.Unity.NetworkManager nm) {
 
         var InsertSub = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().ObserveOnMainThread(),
                 OnInsertRecord);
@@ -23,13 +21,11 @@ public class PositionManager : MUDTableManager
         //var MergedUpdate = ObservableExtensions.Subscribe(PositionTable.OnRecordInsert().Merge(PositionTable.OnRecordUpdate()).ObserveOnMainThread(),OnChainPositionUpdate);
     }
 
-    protected override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
-    {
+    protected override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate) {
         PositionTableUpdate update = tableUpdate as PositionTableUpdate;
 
         var currentValue = update.TypedValue.Item1;
-        if (currentValue == null)
-        {
+        if (currentValue == null) {
             Debug.LogError("No currentValue");
             return null;
         }

@@ -7,10 +7,9 @@ using mud.Client;
 using UnityEditor;
 #endif
 
-public enum GamePhase {Lobby, Game, PostGame,_Count}
-public class GameState : MonoBehaviour
-{
-    public static GamePhase Phase {get{return Instance.phase;}}
+public enum GamePhase { Lobby, Game, PostGame, _Count }
+public class GameState : MonoBehaviour {
+    public static GamePhase Phase { get { return Instance.phase; } }
     public static GameState Instance;
     public GamePhase phase;
     public RecieverMUD reciever;
@@ -18,12 +17,12 @@ public class GameState : MonoBehaviour
 
     [Header("Scroll")]
     public WorldScroll scroll;
-    
+
     [Header("Debug")]
     public GameObject editorObjects;
 
     [Header("UI")]
-    public PhaseUI [] phaseUI;
+    public PhaseUI[] phaseUI;
     public static System.Action<GamePhase> OnPhaseUpdate;
 
     void Awake() {
@@ -38,7 +37,7 @@ public class GameState : MonoBehaviour
     }
 
     void Start() {
-        for(int i = 0; i < phaseUI.Length; i++) {
+        for (int i = 0; i < phaseUI.Length; i++) {
             phaseUI[i].ToggleWindowClose();
         }
 
@@ -53,22 +52,22 @@ public class GameState : MonoBehaviour
 
         phaseUI[(int)phase].ToggleWindow(false);
 
-        if(phase == GamePhase.Lobby) {
+        if (phase == GamePhase.Lobby) {
 
-        } else if(phase == GamePhase.Game) {
+        } else if (phase == GamePhase.Game) {
 
-        } else if(phase == GamePhase.PostGame) {
+        } else if (phase == GamePhase.PostGame) {
 
         }
 
         phase = newPhase;
         phaseUI[(int)phase].ToggleWindow(true);
 
-        if(phase == GamePhase.Lobby) {
+        if (phase == GamePhase.Lobby) {
 
-        } else if(phase == GamePhase.Game) {
+        } else if (phase == GamePhase.Game) {
 
-        } else if(phase == GamePhase.PostGame) {
+        } else if (phase == GamePhase.PostGame) {
 
         }
 
@@ -78,17 +77,16 @@ public class GameState : MonoBehaviour
         Instance = null;
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     [MenuItem("Engine/Game State &q")]
-    static void TogglePhase()
-    {
+    static void TogglePhase() {
         GameState gs = FindObjectOfType<GameState>();
 
-        if(!gs) {return;}
+        if (!gs) { return; }
 
-        gs.TogglePhase((GamePhase)((int)(gs.phase + 1)%(int)GamePhase._Count));
+        gs.TogglePhase((GamePhase)((int)(gs.phase + 1) % (int)GamePhase._Count));
         Selection.activeGameObject = gs.phaseUI[(int)gs.phase].gameObject;
 
     }
-    #endif
+#endif
 }

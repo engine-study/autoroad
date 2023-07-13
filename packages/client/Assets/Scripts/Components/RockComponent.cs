@@ -7,12 +7,9 @@ using mud.Unity;
 using IWorld.ContractDefinition;
 
 public enum RockType { None, Stone, Statumen, Rudus, Nucleus, Pavimentum, _Count }
-public class RockComponent : MUDComponent
-{
-    public int Stage { get { return stage; } }
+public class RockComponent : MUDComponent {
 
     [Header("Rock")]
-    [SerializeField] protected int stage = -1;
     [SerializeField] protected RockType rockType;
     [SerializeField] ParticleSystem fx_break, fx_drag;
     [SerializeField] SPAudioSource source;
@@ -22,27 +19,21 @@ public class RockComponent : MUDComponent
     public AudioClip[] sfx_smallBreaks, sfx_bigBreaks;
     RockType lastStage = RockType._Count;
 
-    protected override void Awake()
-    {
+    protected override void Awake() {
         base.Awake();
         rockType = RockType._Count;
         rockBase = GetComponent<SPBase>();
-        stage = -1;
     }
 
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType)
-    {
+    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
 
         base.UpdateComponent(update, eventType);
 
         RockTable rockUpdate = (RockTable)update;
 
-        if (rockUpdate == null)
-        {
+        if (rockUpdate == null) {
             Debug.LogError("No rockUpdate", this);
-        }
-        else
-        {
+        } else {
 
             // stage = rockUpdate.rockType != null ? (int)rockUpdate.rockType : stage;
             // rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
@@ -52,35 +43,28 @@ public class RockComponent : MUDComponent
 
         }
 
-        if (loaded && lastStage != rockType)
-        {
+        rockBase.baseName = rockType.ToString();
+        for (int i = 0; i < stages.Length; i++) {
+            stages[i].SetActive(i == (int)rockType);
+        }
 
-            if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic)
-            {
+        if (loaded && lastStage != rockType) {
+
+            if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
                 source.PlaySound((int)rockType < 3 ? sfx_bigBreaks : sfx_smallBreaks);
                 fx_break.Play();
             }
-
-            for (int i = 0; i < stages.Length; i++)
-            {
-                stages[i].SetActive(i == (int)rockType);
-            }
-
-            rockBase.baseName = rockType.ToString();
-
         }
 
         lastStage = rockType;
 
     }
 
-    public void Mine()
-    {
+    public void Mine() {
         MineRock((int)transform.position.x, (int)transform.position.z);
     }
 
-    public async void MineRock(int x, int y)
-    {
+    public async void MineRock(int x, int y) {
         List<TxUpdate> updates = new List<TxUpdate>();
         updates.Add(TxManager.MakeOptimistic(this, (int)(rockType + 1)));
         await TxManager.Send<MineFunction>(updates, x, y);
