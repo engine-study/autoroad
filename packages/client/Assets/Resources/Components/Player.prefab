@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &273984399273008564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4774572205973967718}
+  m_Layer: 0
+  m_Name: Empty
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4774572205973967718
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273984399273008564}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7061242282504548509}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1986036947442427805
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,8 +193,6 @@ MonoBehaviour:
   root: {fileID: 3887731599593465078}
   visual: {fileID: 8681323706182717963}
   baseName: 
-  actor: {fileID: 1140786668023697111}
-  reciever: {fileID: 3955994449410173385}
   isNPC: 0
   logic: {fileID: 0}
   controller: {fileID: 5252423910711337837}
@@ -258,7 +287,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sender: {fileID: 4765553126336188459}
-  reciever: {fileID: 3955994449410173385}
   State: {fileID: 0}
   actionRef: {fileID: 0}
   currentInteract: {fileID: 0}
@@ -807,17 +835,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3111246606379771535, guid: ba6fcb2775ef5c14aa8a7d69b0299a0d, type: 3}
   m_PrefabInstance: {fileID: 4268825892496020068}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3955994449410173385 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 998507696857922477, guid: ba6fcb2775ef5c14aa8a7d69b0299a0d, type: 3}
-  m_PrefabInstance: {fileID: 4268825892496020068}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 314c6e6323f190d4c9551c9e33231c8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6020690718913198676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1009,6 +1026,10 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.z
       value: 0.0027488838
       objectReference: {fileID: 0}
+    - target: {fileID: 7114386003235904790, guid: b029e466851ca6e4dbb7711591124456, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7381148977968418189, guid: b029e466851ca6e4dbb7711591124456, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -1087,6 +1108,9 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3792249001387857580, guid: b029e466851ca6e4dbb7711591124456, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4774572205973967718}
+    - targetCorrespondingSourceObject: {fileID: 3792249001387857580, guid: b029e466851ca6e4dbb7711591124456, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 4060949686539504870}
     - targetCorrespondingSourceObject: {fileID: 3792249001387857580, guid: b029e466851ca6e4dbb7711591124456, type: 3}
       insertIndex: -1
@@ -1162,15 +1186,16 @@ MonoBehaviour:
   randomType: 0
   seed: 0
   rotateY: 0
-  number: -1
-  rotateNumber: -1
   objects:
+  - {fileID: 273984399273008564}
   - {fileID: 4027682951763884839}
   - {fileID: 3679639450932713052}
   - {fileID: 2778643336950412390}
   - {fileID: 6219295244158161047}
   - {fileID: 7973025808511337573}
   - {fileID: 4553760911337090831}
+  number: -1
+  rotateNumber: -1
 --- !u!1001 &6854985617196786874
 PrefabInstance:
   m_ObjectHideFlags: 0
