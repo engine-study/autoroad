@@ -13,6 +13,8 @@ public class GameState : MonoBehaviour
     public static GamePhase Phase {get{return Instance.phase;}}
     public static GameState Instance;
     public GamePhase phase;
+    public RecieverMUD reciever;
+    public PlayerMUD localPlayer;
 
     [Header("Scroll")]
     public WorldScroll scroll;
@@ -27,6 +29,12 @@ public class GameState : MonoBehaviour
     void Awake() {
         Instance = this;
         editorObjects.SetActive(false);
+
+        SPEvents.OnLocalPlayerSpawn += SetupPlayer;
+    }
+
+    void SetupPlayer() {
+        SPPlayer.LocalPlayer.SetReciever(reciever);
     }
 
     void Start() {

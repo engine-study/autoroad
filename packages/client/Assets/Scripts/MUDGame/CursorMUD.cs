@@ -7,6 +7,7 @@ public class CursorMUD : MonoBehaviour
     public static Vector3 WorldPos {get{return Instance.mousePos;}}
     public static Vector3 GridPos {get{return Instance.gridPos;}}
     public static System.Action<Entity> OnHoverEntity;
+    public static System.Action<Entity> OnLeaveEntity;
     public static System.Action<Vector3> OnGridPosition;
     public static System.Action<Vector3> OnUpdateCursor;
 
@@ -71,13 +72,14 @@ public class CursorMUD : MonoBehaviour
 
     void UpdateHover() {
 
-        lastHover = hover;
         hover = GetEntityFromRadius(mousePos + Vector3.up * .5f,.25f);
 
         if(lastHover != hover) {
+            OnLeaveEntity?.Invoke(lastHover);
             OnHoverEntity?.Invoke(hover);
         }
 
+        lastHover = hover;  
 
     }
 

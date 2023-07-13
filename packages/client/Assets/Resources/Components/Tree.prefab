@@ -5088,6 +5088,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 841130514871191239}
   visual: {fileID: 1509795468996390432}
+  baseName: 
 --- !u!114 &1672090630131356949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5114,10 +5115,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: d55458b104cac5a4b954f4c4a26d8691, type: 2}
+  action: {fileID: 11400000, guid: 7c0d9b0122320cd4a99eb6c6269b076d, type: 2}
   state: {fileID: 0}
   interacting: 0
   actorPlayer: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  go: {fileID: 0}
 --- !u!114 &7225809694366648449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5132,7 +5140,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncType: 1
   targetTransform: {fileID: 0}
-  deltaSpeed: 2.5
 --- !u!54 &8594184875338892328
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5336,9 +5343,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomType: 0
-  objects: []
   seed: 0
+  rotateY: 1
+  objects: []
   number: -1
+  rotateNumber: -1
 --- !u!1001 &267092416017031056
 PrefabInstance:
   m_ObjectHideFlags: 0
