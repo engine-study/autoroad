@@ -50,7 +50,7 @@ public class ControllerMUD : SPController
         controller.enabled = false;
 
         playerTransform = transform;
-        moveMarker.transform.parent = null;
+        moveMarker.transform.parent = playerScript.Player.transform;
         moveMarker.transform.position = playerTransform.position;
 
         playerTransform.rotation = Quaternion.Euler(0f, Random.Range(0, 4) * 90f, 0f);

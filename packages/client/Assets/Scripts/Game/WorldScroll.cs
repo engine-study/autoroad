@@ -59,7 +59,6 @@ public class WorldScroll : MonoBehaviour
         // mileHeading.UpdateField("Mile " + newMile);
 
         currentMile = Mathf.Clamp(newMile,0f, maxMile);
-        
         SPCamera.SetTarget(Vector3.forward * MileTotal);
 
     }
