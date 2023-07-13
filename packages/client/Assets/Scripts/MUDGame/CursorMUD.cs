@@ -73,7 +73,7 @@ public class CursorMUD : MonoBehaviour {
 
     void UpdateHover() {
 
-        hover = GetEntityFromRadius(mousePos + Vector3.up * .5f, .25f);
+        hover = MUDHelper.GetMUDEntityFromRadius(mousePos + Vector3.up * .25f, .1f);
 
         if (lastHover != hover) {
 
@@ -88,65 +88,4 @@ public class CursorMUD : MonoBehaviour {
 
     }
 
-
-    Collider[] hits;
-    public Entity GetEntityFromRadius(Vector3 position, float radius) {
-        if (hits == null) { hits = new Collider[10]; }
-
-        int amount = Physics.OverlapSphereNonAlloc(position, radius, hits, LayerMask.NameToLayer("Nothing"), QueryTriggerInteraction.Ignore);
-        int selectedItem = -1;
-        float minDistance = 999f;
-        Entity bestItem = null;
-        List<Entity> entities = new List<Entity>();
-
-        for (int i = 0; i < amount; i++) {
-            Entity checkItem = hits[i].GetComponentInParent<Entity>();
-
-            if (!checkItem)
-                continue;
-
-            entities.Add(checkItem);
-
-            float distance = Vector3.Distance(position, hits[i].ClosestPoint(position));
-            if (distance < minDistance) {
-                minDistance = distance;
-                selectedItem = i;
-                bestItem = checkItem;
-            }
-        }
-
-        return bestItem;
-    }
-
-    public Entity[] GetEntitiesFromRadius(Vector3 position, float radius) {
-
-        if (hits == null) { hits = new Collider[10]; }
-
-        int amount = Physics.OverlapSphereNonAlloc(position, radius, hits, LayerMask.NameToLayer("Nothing"), QueryTriggerInteraction.Ignore);
-        int selectedItem = -1;
-        float minDistance = 999f;
-        Entity bestItem = null;
-        List<Entity> entities = new List<Entity>();
-
-        for (int i = 0; i < amount; i++) {
-            Entity checkItem = hits[i].GetComponentInParent<Entity>();
-
-            if (!checkItem)
-                continue;
-
-            entities.Add(checkItem);
-
-            float distance = Vector3.Distance(position, checkItem.transform.position);
-            if (distance < minDistance) {
-                minDistance = distance;
-                selectedItem = i;
-                bestItem = checkItem;
-            }
-        }
-
-        // return bestItem;
-
-        return entities.ToArray();
-
-    }
 }
