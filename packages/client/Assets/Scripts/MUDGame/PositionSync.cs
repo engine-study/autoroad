@@ -49,6 +49,8 @@ public class PositionSync : ComponentSync
         if (syncType == ComponentSyncType.Instant || updateType == UpdateEvent.Revert)
         {
             targetTransform.position = pos.Pos;
+            targetPos = pos.Pos;
+            enabled = false;
         }
         else if (syncType == ComponentSyncType.Lerp)
         {
@@ -61,10 +63,10 @@ public class PositionSync : ComponentSync
 
     protected override void UpdateLerp() {
         
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+        targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
         
         //turn off for efficiency until next update
-        if(transform.position == targetPos) {
+        if(targetTransform.position == targetPos) {
             enabled = false;
         }
     }

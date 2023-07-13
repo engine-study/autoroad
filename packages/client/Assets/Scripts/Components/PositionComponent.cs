@@ -20,7 +20,7 @@ public class PositionComponent : MUDComponent
 
         PositionTable table = (PositionTable)activeTable;
 
-        Debug.Log("Type: " + eventType.ToString());
+        Debug.Log(eventType.ToString() + ": " + gameObject.name);
         Debug.Log("X: " + (table.x != null ? table.x.ToString() : "no"));
         Debug.Log("Y: " + (table.y != null ? table.y.ToString() : "no"));
 
