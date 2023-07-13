@@ -8,12 +8,10 @@ using ObservableExtensions = UniRx.ObservableExtensions;
 using System.Threading.Tasks;
 using mud.Client;
 
-public class PlayerManager : MUDTableManager
-{
+public class PlayerManager : MUDTableManager {
 
-    public override System.Type TableType() {return typeof(PlayerTable);}
-    protected override void Subscribe(NetworkManager nm)
-    {
+    public override System.Type TableType() { return typeof(PlayerTable); }
+    protected override void Subscribe(NetworkManager nm) {
         var SpawnSubscription = PlayerTable.OnRecordInsert().ObserveOnMainThread().Subscribe(OnInsertRecord);
         _disposers.Add(SpawnSubscription);
 
@@ -22,17 +20,15 @@ public class PlayerManager : MUDTableManager
         _disposers.Add(UpdateSubscription);
     }
 
-    protected override async void InitTable(NetworkManager nm)
-    {
+    protected override async void InitTable(NetworkManager nm) {
 
         var addressKey = net.addressKey;
         var currentPlayer = IMudTable.GetTable<PlayerTable>(addressKey);
 
-        if (currentPlayer == null)
-        {
+        if (currentPlayer == null) {
             // spawn the player
             Debug.Log("Spawning TX...");
-            await TxManager.Send<SpawnFunction>(0,0);
+            await TxManager.Send<SpawnFunction>(0, 0);
 
         }
 
@@ -40,8 +36,7 @@ public class PlayerManager : MUDTableManager
 
     }
 
-    protected override mud.Client.IMudTable RecordUpdateToTable(mud.Client.RecordUpdate tableUpdate)
-    {
+    protected override mud.Client.IMudTable RecordUpdateToTable(mud.Client.RecordUpdate tableUpdate) {
         return (tableUpdate as PlayerTableUpdate).TypedValue.Item1;
     }
 
