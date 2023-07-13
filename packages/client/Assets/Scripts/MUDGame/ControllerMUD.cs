@@ -220,7 +220,7 @@ public class ControllerMUD : SPController
         if (alive > 1f && distance > 1f)
         {
             distance -= 1f;
-            player.resources.sfx.PlaySound(player.resources.stepSFX);
+            player.Resources.sfx.PlaySound(player.Resources.stepSFX);
         }
 
     }
