@@ -23,12 +23,9 @@ public class WorldScroll : MonoBehaviour
 
     void Update()
     {
-        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftAlt))
-        {
-
+        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftAlt)) {
             mileScroll += Input.mouseScrollDelta.y * .1f;
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
-
         }
 
         //magnetism, lerp back to current mile

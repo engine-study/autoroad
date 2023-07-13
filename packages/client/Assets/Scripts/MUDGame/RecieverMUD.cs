@@ -5,7 +5,8 @@ using mud.Client;
 
 public class RecieverMUD : SPReciever
 {
-
+    public GameObject EntityGO;
+    
     void Start() {
         CursorMUD.OnHoverEntity += AddActions;
         CursorMUD.OnLeaveEntity += RemoveActions;

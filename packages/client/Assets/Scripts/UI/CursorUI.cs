@@ -40,7 +40,6 @@ public class CursorUI : MonoBehaviour
     {
 
         info.UpdateCoordinate((int)newPos.x, (int)newPos.z);
-
         CursorUpdate?.Invoke();
 
     }

@@ -44,6 +44,22 @@ public class GameState : MonoBehaviour {
         TogglePhase(phase);
     }
 
+    void Update() {
+        UpdateInput();
+    }
+
+    void UpdateInput() {
+        if(Input.GetMouseButtonDown(0)) {
+            if(CursorMUD.Position) {
+                SPCamera.SetFollow(CursorMUD.Position.transform);
+            } else {
+                SPCamera.SetFollow(null);
+                SPCamera.SetTarget(SPInput.MousePlanePos);
+            }
+            
+        }
+    }
+
     void UpdatePhase() {
         phaseUI[(int)phase].UpdatePhase();
     }
