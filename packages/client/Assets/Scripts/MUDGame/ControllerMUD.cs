@@ -95,6 +95,7 @@ public class ControllerMUD : SPController
 
     }
 
+    float minTime = 0f;
     Vector3 moveDest;
     void UpdateInput()
     {
@@ -105,6 +106,11 @@ public class ControllerMUD : SPController
 
         if (!player.IsLocalPlayer)
             return;
+
+        minTime -= Time.deltaTime;
+        if(minTime > 0f) {
+            return;
+        }
 
         //playerTransform.position != _onchainPosition ||
         if (Vector3.Distance(playerTransform.position, moveDest) > .1f)
@@ -154,6 +160,8 @@ public class ControllerMUD : SPController
         moveDest.x = Mathf.Round(moveDest.x);
         moveDest.y = 0f;
         moveDest.z = Mathf.Round(moveDest.z);
+
+        minTime = .75f;
 
         Vector3 direction = (moveDest - playerTransform.position).normalized;
         MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .5f,.25f);
