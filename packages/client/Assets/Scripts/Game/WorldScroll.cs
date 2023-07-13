@@ -12,9 +12,8 @@ public class WorldScroll : MonoBehaviour
 
     float mileScroll, lastScroll = -100f;
 
-    public float MileTotal { get { return currentMile * MILE_DISTANCE; } }
-    public float MileTotalScroll { get { return mileScroll * MILE_DISTANCE; } }
-    public static float MILE_DISTANCE = 20f;
+    public float MileTotal { get { return currentMile * GameStateComponent.MILE_DISTANCE; } }
+    public float MileTotalScroll { get { return mileScroll * GameStateComponent.MILE_DISTANCE; } }
 
     void Start()
     {
@@ -32,7 +31,7 @@ public class WorldScroll : MonoBehaviour
         mileScroll = Mathf.MoveTowards(mileScroll, currentMile, 1f * Time.deltaTime);
 
         //if we're more than halfway to the next mile, magnet over to it
-        if (Mathf.Abs((mileScroll * MILE_DISTANCE) - MileTotal) > MILE_DISTANCE * .5f)
+        if (Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileTotal) > GameStateComponent.MILE_DISTANCE * .5f)
         {
             SetMile(Mathf.Round(mileScroll));
         }

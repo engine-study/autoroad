@@ -9,6 +9,11 @@ using UniRx;
 
 public class GameStateComponent : MUDComponent
 {
+    public static GameStateComponent Instance;
+    public const float MILE_DISTANCE = 20f;
+    public static float MILE_COUNT;
+    public static float MILE_ENDPOS;
+
     [Header("Position")]
     [SerializeField] protected int miles;
     [SerializeField] protected WorldScroll scroll;
@@ -22,7 +27,10 @@ public class GameStateComponent : MUDComponent
         miles = (int)table.miles;
         scroll.SetMaxMile(miles);
 
-        edge.transform.position = Vector3.forward * miles * WorldScroll.MILE_DISTANCE;
+        MILE_COUNT = miles;
+        MILE_ENDPOS = MILE_COUNT * MILE_DISTANCE;
+
+        edge.transform.position = Vector3.forward * miles * MILE_DISTANCE;
         
     }
 
