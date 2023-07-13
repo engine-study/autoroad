@@ -9,6 +9,7 @@ public class CursorMUD : MonoBehaviour {
     public static Vector3 GridPos { get { return Instance.gridPos; } }
     public static Entity Entity { get { return Instance.hover; } }
     public static PositionComponent Position { get { return Instance.pos; } }
+    public static SPBase Base { get { return Instance.baseObject; } }
     public static System.Action<Entity> OnHoverEntity;
     public static System.Action<Entity> OnLeaveEntity;
     public static System.Action<Vector3> OnGridPosition;
@@ -24,6 +25,7 @@ public class CursorMUD : MonoBehaviour {
     [SerializeField] Vector3 gridPos, lastGridPos;
     [SerializeField] Entity hover, lastHover;
     [SerializeField] PositionComponent pos;
+    [SerializeField] SPBase baseObject;
 
 
     void Awake() {
@@ -76,6 +78,7 @@ public class CursorMUD : MonoBehaviour {
         if (lastHover != hover) {
 
             pos = hover != null && hover is MUDEntity ? (hover as MUDEntity).GetMUDComponent<PositionComponent>() : null;
+            baseObject = hover != null ? hover.GetComponentInChildren<SPBase>() : null;
 
             OnLeaveEntity?.Invoke(lastHover);
             OnHoverEntity?.Invoke(hover);

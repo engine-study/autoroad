@@ -34,6 +34,7 @@ public class GameState : MonoBehaviour {
 
     void SetupPlayer() {
         SPPlayer.LocalPlayer.SetReciever(reciever);
+        localPlayer = SPPlayer.LocalPlayer as PlayerMUD; 
     }
 
     void Start() {
@@ -49,14 +50,20 @@ public class GameState : MonoBehaviour {
     }
 
     void UpdateInput() {
-        if(Input.GetMouseButtonDown(0)) {
-            if(CursorMUD.Position) {
-                SPCamera.SetFollow(CursorMUD.Position.transform);
+        if(SPUIBase.CanInput && Input.GetMouseButtonDown(0)) {
+            if(CursorMUD.Base) {
+                SPCamera.SetFollow(CursorMUD.Base.Root);
             } else {
                 SPCamera.SetFollow(null);
                 SPCamera.SetTarget(SPInput.MousePlanePos);
             }
             
+        }
+
+        if(SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
+            if(localPlayer) {
+                SPCamera.SetFollow(localPlayer.Root);
+            }
         }
     }
 
