@@ -171,7 +171,7 @@ contract MoveSystem is System {
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
-      if (atPosition.length == 1 && i > 0) {
+      if (atPosition.length > 0 && i > 0) {
         Position.set(player, positions[i - 1]);
         return;
       } else if (i == positions.length - 1) {
@@ -189,8 +189,7 @@ contract MoveSystem is System {
 
     Player.set(playerEntity, true);
     Position.set(playerEntity, x, y);
-    Health.set(playerEntity, 100);
-    Damage.set(playerEntity, 10);
+    Move.set(playerEntity, uint32(MoveType.Push));
   }
 
   // function move(int32 x, int32 y) public {
