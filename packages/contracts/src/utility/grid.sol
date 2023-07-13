@@ -21,10 +21,17 @@ import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/T
 //   return positions;
 // }
 
-function withinDistance(PositionData memory start, PositionData memory end, int32 distance) pure returns (bool) {
+function withinManhattanDistance(PositionData memory start, PositionData memory end, int32 distance) pure returns (bool) {
   distance += 1;
-  return end.x - start.x < distance && start.x - end.x > int32(-distance) &&  end.y - start.y < distance && start.y - end.y > int32(-distance);
+  return abs(end.x - start.x) + abs(end.y - start.y) < distance;
 }
+
+
+function withinChessDistance(PositionData memory start, PositionData memory end, int32 distance) pure returns (bool) {
+  distance += 1;
+  return abs(end.x - start.x) < distance && abs(end.y - start.y) < distance;
+}
+
 
 function lineWalkPositions(PositionData memory start, PositionData memory end) pure returns (PositionData[] memory) {
   //get the change of x and y
@@ -61,4 +68,8 @@ function lineWalkPositions(PositionData memory start, PositionData memory end) p
   }
 
   return positions;
+}
+
+function abs(int x) pure returns (int) {
+    return x >= 0 ? x : -x;
 }

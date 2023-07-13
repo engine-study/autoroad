@@ -8,12 +8,13 @@ import { IBaseWorld } from "@latticexyz/world/src/interfaces/IBaseWorld.sol";
 import { IAttackSystem } from "./IAttackSystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
 import { IMoveSystem } from "./IMoveSystem.sol";
+import { INameSystem } from "./INameSystem.sol";
 import { IRoadSystem } from "./IRoadSystem.sol";
 
 /**
  * The IWorld interface includes all systems dynamically added to the World
  * during the deploy process.
  */
-interface IWorld is IBaseWorld, IAttackSystem, IMapSystem, IMoveSystem, IRoadSystem {
+interface IWorld is IBaseWorld, IAttackSystem, IMapSystem, IMoveSystem, INameSystem, IRoadSystem {
 
 }

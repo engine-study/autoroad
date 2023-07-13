@@ -9,7 +9,7 @@ import { PositionTableId, PositionData} from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { lineWalkPositions, withinDistance } from "../utility/grid.sol";
+import { lineWalkPositions, withinManhattanDistance, withinChessDistance } from "../utility/grid.sol";
 import { MapSystem } from "../systems/MapSystem.sol";
 import { RoadSystem } from "../systems/RoadSystem.sol";
 
@@ -71,7 +71,7 @@ contract MoveSystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(mineX, mineY));
 
      // Position
-    require(withinDistance(PositionData(mineX, mineY), Position.get(player), 1), "too far to mine");
+    require(withinManhattanDistance(PositionData(mineX, mineY), Position.get(player), 1), "too far to mine");
     require(atPosition.length >= 1, "mining an empty spot");
 
     uint32 rockState = Rock.get(atPosition[0]);
@@ -191,15 +191,6 @@ contract MoveSystem is System {
     Position.set(playerEntity, x, y);
     Move.set(playerEntity, uint32(MoveType.Push));
   }
-
-  // function move(int32 x, int32 y) public {
-  //   bytes32 player = addressToEntityKey(address(_msgSender()));
-  //   // check if there is a player at the position
-  //   bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-  //   require(atPosition.length == 0, "position occupied");
-
-  //   Position.set(player, x, y);
-  // }
 
   function abs(int x) private pure returns (int) {
     return x >= 0 ? x : -x;

@@ -39,7 +39,7 @@ public class MotherUI : SPUIInstance
         if(txSuccess) {
 
         } else {
-            wheel.UpdateState(ActionEndState.Failed);
+            wheel.UpdateState(ActionEndState.Failed, true);
         }
     }
     

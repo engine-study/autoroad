@@ -32,7 +32,6 @@ public class PlayerMUD : SPPlayer
         Player.OnLoaded -= NetworkInit;
     }
 
-
     protected override void NetworkInit() {
         
         base.NetworkInit();
@@ -49,6 +48,19 @@ public class PlayerMUD : SPPlayer
         // Debug.Log("Player Network Init");
 
     }
+
+    protected override void UpdateInput() {
+        base.UpdateInput();
+
+        if (Reciever.TargetGO) {
+            Actor.InputClick(0, Reciever.TargetInteract);
+        }
+
+
+
+    }
+
+
 
     
 }
