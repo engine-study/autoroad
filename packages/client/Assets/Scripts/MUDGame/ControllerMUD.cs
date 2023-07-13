@@ -28,7 +28,7 @@ public class ControllerMUD : SPController
     public AudioClip[] pushes;
     public AudioClip[] pops;
     bool entityReady = false;
-
+    
     void Awake()
     {
         entity = GetComponentInParent<MUDEntity>();
@@ -152,19 +152,23 @@ public class ControllerMUD : SPController
         moveDest.y = 0f;
         moveDest.z = Mathf.Round(moveDest.z);
 
+        Vector3 direction = (moveDest - playerTransform.position).normalized;
+        MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .5f,.25f);
+        PositionComponent otherPosition = (e != null ? e.GetMUDComponent<PositionComponent>() : null);
+        push = otherPosition != null;
+
         if (push)
         {
 
             Debug.Log("PUSHING");
 
-            Vector3 direction = (moveDest - playerTransform.position).normalized;
+           
             Vector3 newPos = new Vector3(Mathf.Round(playerTransform.position.x + direction.x), 0f, Mathf.Round(playerTransform.position.z + direction.z));
             Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
 
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(newPos.x), System.Convert.ToInt64(newPos.z)));
-            // updates.Add(TxManager.MakeOptimistic(playerScript.Position, System.Convert.ToInt64(newPos.x), System.Convert.ToInt64(newPos.z)));
-
+            updates.Add(TxManager.MakeOptimistic(otherPosition, System.Convert.ToInt64(pushToPos.x), System.Convert.ToInt64(pushToPos.z)));
             TxManager.Send<PushFunction>(playerScript.Position, updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
         }
         else

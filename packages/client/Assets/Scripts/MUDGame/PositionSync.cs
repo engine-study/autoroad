@@ -43,17 +43,17 @@ public class PositionSync : ComponentSync
 
     }
 
-    protected override void UpdateSync() {
-        base.UpdateSync();
+    protected override void UpdateSync(UpdateEvent updateType) {
+        base.UpdateSync(updateType);
 
-        if (syncType == ComponentSyncType.Lerp)
+        if (syncType == ComponentSyncType.Instant || updateType == UpdateEvent.Revert)
+        {
+            targetTransform.position = pos.Pos;
+        }
+        else if (syncType == ComponentSyncType.Lerp)
         {
             targetPos = pos.Pos;
             enabled = transform.position != targetPos;
-        }
-        else if (syncType == ComponentSyncType.Instant)
-        {
-            targetTransform.position = pos.Pos;
         }
 
 
