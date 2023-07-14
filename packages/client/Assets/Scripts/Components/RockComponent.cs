@@ -51,8 +51,13 @@ public class RockComponent : MUDComponent {
         if (loaded && lastStage != rockType) {
 
             if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
-                source.PlaySound(sfx_pickHit);
-                source.PlaySound(rockType < RockType.Nucleus ? sfx_bigBreaks : sfx_smallBreaks);
+                if(lastStage < RockType.Nucleus) {
+                    source.PlaySound(sfx_pickHit);
+                    source.PlaySound(sfx_bigBreaks);
+                } else {
+                    source.PlaySound(sfx_smallBreaks);
+                }
+              
                 fx_break.Play();
             }
         }

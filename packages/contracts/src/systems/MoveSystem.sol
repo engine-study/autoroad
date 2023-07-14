@@ -79,13 +79,19 @@ contract MoveSystem is System {
     require(rockState > uint32(RockType.None), "Rock not found or none");
     require(rockState < uint32(RockType.Nucleus), "Rock ground to a pulp");
 
+    //increment the rock state
+    rockState += 1;
+
+    Rock.set(atPosition[0], rockState);
+
     //give rocks that are mined a pushable component
-    if(rockState == uint32(RockType.Raw)) {
+    if(rockState == uint32(RockType.Statumen)) {
       Move.set(atPosition[0], uint32(MoveType.Push));
+    } 
+    //become shovelable once we are broken down enough
+    else if(rockState == uint32(RockType.Nucleus)) {
+      Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
-
-    Rock.set(atPosition[0], rockState + 1);
-
 
 
   }
