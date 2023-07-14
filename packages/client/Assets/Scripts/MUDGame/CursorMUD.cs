@@ -6,6 +6,7 @@ using mud.Client;
 public class CursorMUD : MonoBehaviour {
     public static CursorMUD Instance;
     public static Transform CursorTransform {get{return Instance.visuals;}}
+    public static Transform CursorTransformRaw {get{return Instance.rawTransform;}}
     public static Transform LookTarget {get{return Instance.lookTarget;}}
     public static Vector3 WorldPos { get { return Instance.mousePos; } }
     public static Vector3 GridPos { get { return Instance.gridPos; } }
@@ -20,6 +21,7 @@ public class CursorMUD : MonoBehaviour {
     [Header("Cursor")]
     public bool grid;
     [SerializeField] private Transform visuals;
+    [SerializeField] private Transform rawTransform;
     [SerializeField] private Transform lookTarget;
 
     [Header("Debug")]
@@ -46,6 +48,8 @@ public class CursorMUD : MonoBehaviour {
     void UpdateMouse() {
         lastPos = rawMousePos;
         rawMousePos = SPInput.MousePlanePos;
+
+        rawTransform.position = rawMousePos;
 
         if (grid) {
 

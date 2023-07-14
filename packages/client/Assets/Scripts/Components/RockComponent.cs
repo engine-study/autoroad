@@ -72,7 +72,6 @@ public class RockComponent : MUDComponent {
             // Debug.Log(rockUpdate.value.ToString());
 
             rockType = rockUpdate.value != null ? (RockType)rockUpdate.value : RockType._Count;
-
         }
 
         rockBase.baseName = rockType.ToString();
@@ -105,7 +104,7 @@ public class RockComponent : MUDComponent {
 
     public async void MineRock(int x, int y) {
         List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(TxManager.MakeOptimistic(this, (int)(rockType + 1)));
+        updates.Add(TxManager.MakeOptimistic(this, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus) )));
         await TxManager.Send<MineFunction>(updates, x, y);
     }
     // public async void MineRock(int x, int y)

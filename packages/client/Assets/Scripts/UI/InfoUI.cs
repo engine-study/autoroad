@@ -7,6 +7,8 @@ using mud.Client;
 
 public class InfoUI : SPWindow
 {
+    MUDEntity entity;
+
     [Header("Info")]
     public SPHeading header;
     public SPHeading playerName, coordinate;
@@ -29,14 +31,22 @@ public class InfoUI : SPWindow
     public void UpdateInfo(Entity newEntity)
     {
 
-        MUDEntity mEntity = newEntity as MUDEntity;
+        if(entity != null && entity != newEntity) {
+            entity.OnUpdated -= Refresh;
+        }
+        
+        entity = newEntity as MUDEntity;
 
-        if(mEntity == null) {
+        if(entity != null) {
+            entity.OnUpdated += Refresh;
+        }
+
+        if(entity == null) {
             header.ToggleWindowClose();
             header.UpdateField("Empty");
         } else {
             header.ToggleWindowOpen();
-            header.UpdateField(MUDHelper.TruncateHash(mEntity.Key));
+            header.UpdateField(MUDHelper.TruncateHash(entity.Key));
         }
 
         // if(mEntity is Structure) {
@@ -50,6 +60,9 @@ public class InfoUI : SPWindow
 
          // }
 
+    }
 
+    void Refresh() {
+        UpdateInfo(entity);
     }
 }
