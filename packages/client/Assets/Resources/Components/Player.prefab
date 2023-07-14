@@ -272,8 +272,10 @@ MonoBehaviour:
   detectCollisions: 1
   playerTransform: {fileID: 0}
   moveMarker: {fileID: 5541991144685123981}
-  pushes: []
-  pops: []
+  sfx_bump:
+  - {fileID: 8300000, guid: 27a774bfddb203942a5100d641d37384, type: 3}
+  - {fileID: 8300000, guid: 4b2e7ac8ee2f22a409eaadbf7a337909, type: 3}
+  - {fileID: 8300000, guid: a294fa733fd95db4590a60279b319781, type: 3}
 --- !u!114 &1140786668023697111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1185,7 +1187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomType: 0
   seed: 0
-  rotateY: 0
+  randomizeChildren: 1
   objects:
   - {fileID: 273984399273008564}
   - {fileID: 4027682951763884839}
@@ -1194,8 +1196,13 @@ MonoBehaviour:
   - {fileID: 6219295244158161047}
   - {fileID: 7973025808511337573}
   - {fileID: 4553760911337090831}
-  number: -1
-  rotateNumber: -1
+  rotateY: 0
+  rotationRound: 0
+  useScale: 0
+  range: {x: 1, y: 1}
+  child: -1
+  rotate: -1
+  scale: -1
 --- !u!1001 &6854985617196786874
 PrefabInstance:
   m_ObjectHideFlags: 0

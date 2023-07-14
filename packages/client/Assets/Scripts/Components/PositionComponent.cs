@@ -22,6 +22,9 @@ public class PositionComponent : MUDComponent {
         // Debug.Log("X: " + (table.x != null ? table.x.ToString() : "no"));
         // Debug.Log("Y: " + (table.y != null ? table.y.ToString() : "no"));
 
+        if (table.x == null) { Debug.LogError("No x", this); }
+        if (table.y == null) { Debug.LogError("No y", this); }
+
         position2D = new Vector2(table.x ?? position2D.x, table.y ?? position2D.y);
         transform.position = new Vector3(position2D.x, 0f, position2D.y);
 

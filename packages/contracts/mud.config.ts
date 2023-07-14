@@ -116,6 +116,7 @@ export default mudConfig({
       schema: {
         x: "int32",
         y: "int32",
+        height: "int32",
       },
     },
 

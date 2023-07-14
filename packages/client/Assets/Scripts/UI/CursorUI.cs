@@ -43,6 +43,7 @@ public class CursorUI : MonoBehaviour {
     //CHECK FOR INTERACTIONS
     void UpdateHoverEntity(Entity newEntity) {
 
+        SPCursorTexture.UpdateCursor(newEntity == null ? SPCursorState.Default : SPCursorState.Hand);
         SPBase newObject = newEntity != null ? newEntity.GetComponentInChildren<SPBase>() : null;
         baseObject = newObject;
 

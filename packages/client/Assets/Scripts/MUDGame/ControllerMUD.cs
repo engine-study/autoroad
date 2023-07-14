@@ -22,9 +22,10 @@ public class ControllerMUD : SPController {
     private PlayerMUD playerScript;
 
     float alive = 0f;
+    float rotationSpeed = 720f;
     float distance;
-    public AudioClip[] pushes;
-    public AudioClip[] pops;
+    // public AudioClip[] pushes;
+    public AudioClip[] sfx_bump;
     bool entityReady = false;
 
     void Awake() {
@@ -60,7 +61,6 @@ public class ControllerMUD : SPController {
         playerTransform.position = newPos;
         onchainPos = newPos;
         moveDest = newPos;
-        lastOnchainPos = newPos;
     }
 
     private void OnDestroy() {
@@ -92,6 +92,7 @@ public class ControllerMUD : SPController {
     float minTime = 0f;
     Vector3 moveDest;
     void UpdateInput() {
+
         if (!hasInit) {
             return;
         }
@@ -108,6 +109,12 @@ public class ControllerMUD : SPController {
         if (Vector3.Distance(playerTransform.position, moveDest) > .1f) {
             return;
         }
+
+        //update rotation based on mouseInput
+        // Determine the new rotation
+        Vector3 eulerAngles = Quaternion.LookRotation(SPInput.MousePlanePos - playerTransform.position).eulerAngles;
+        lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y/90) * 90, eulerAngles.z);
+
 
         bool push = Input.GetKey(KeyCode.LeftShift);
 
@@ -130,17 +137,6 @@ public class ControllerMUD : SPController {
             moveDest += Vector3.right * moveDistance;
         }
 
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        // 	var ray = _camera.ScreenPointToRay(Input.mousePosition);
-        // 	if (!Physics.Raycast(ray, out var hit)) return;
-
-        // 	dest = hit.point;
-
-
-        // }
-
-        // dest = Vector3.Normalize(dest);
         moveDest.x = Mathf.Round(moveDest.x);
         moveDest.y = 0f;
         moveDest.z = Mathf.Round(moveDest.z);
@@ -189,17 +185,15 @@ public class ControllerMUD : SPController {
             distance += Vector3.Distance(playerTransform.position, newPosition);
 
             playerTransform.position = newPosition;
-
         }
 
         // Determine the new rotation
-        var newRotation = Quaternion.RotateTowards(transform.rotation, lookRotation, 720f * Time.deltaTime);
-        transform.rotation = newRotation;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
 
         moveMarker.transform.position = Vector3.Lerp(moveMarker.transform.position, markerPos + Vector3.up * .1f + Vector3.up * Mathf.Sin(Time.time * 5f) * .1f, .2f);
 
-        if (alive > 1f && distance > 1f) {
-            distance -= 1f;
+        if (alive > 1f && distance > .5f) {
+            distance -= .5f;
             player.Resources.sfx.PlaySound(player.Resources.stepSFX);
         }
 
@@ -211,7 +205,6 @@ public class ControllerMUD : SPController {
 
         if (eventType == UpdateEvent.Revert) {
             SetPosition(playerScript.Position.Pos);
-            return;
         }
 
         //get the actual onchainposition
@@ -226,9 +219,10 @@ public class ControllerMUD : SPController {
             return;
         }
 
+
         //raycast to the world
         RaycastHit hit;
-        Vector3 direction = (moveDest - playerTransform.position).normalized;
+        Vector3 direction = moveDest == playerScript.Position.Pos ? player.Root.forward : (moveDest - playerTransform.position).normalized;
         Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
 
@@ -238,13 +232,21 @@ public class ControllerMUD : SPController {
             Vector3 hitGrid = new Vector3(Mathf.Round(hit.point.x), 0f, Mathf.Round(hit.point.z));
             Vector3 pushSpot = new Vector3(Mathf.Round(hitGrid.x + direction.x), 0f, Mathf.Round(hitGrid.z + direction.z));
 
-            player?.Animator.PlayClip("Push");
+            if (playerTransform.position == moveDest) {
+                //appear tired because we tried to move but our position didn't change (walking into a wall)
+                Debug.Log("Tired", this);
+                player.Animator.PlayClip("Tired");
+                player.Resources.sfx.PlaySound(sfx_bump);
+            } else {
+                Debug.Log("Pushing", this);
+                player.Animator.PlayClip("Push");
+            }
+
             markerPos = hitGrid;
-        } else if (playerTransform.position == moveDest) {
-            //appear tired because we tried to move but our position didn't change (walking into a wall)
-            player?.Animator.PlayClip("Tired");
+
         } else {
             //remember the idle animation actually has walk functionality in the AnimationController
+            Debug.Log("Walking", this);
             player?.Animator.PlayClip("Idle");
             markerPos = moveDest;
         }
