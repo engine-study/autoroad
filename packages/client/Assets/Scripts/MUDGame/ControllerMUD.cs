@@ -222,11 +222,12 @@ public class ControllerMUD : SPController {
 
         //raycast to the world
         RaycastHit hit;
-        Vector3 direction = moveDest == playerScript.Position.Pos ? player.Root.forward : (moveDest - playerTransform.position).normalized;
+        Vector3 direction = playerTransform.position == moveDest ? player.Root.forward : (moveDest - playerTransform.position).normalized;
         Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
 
-        if (hit.collider && (hit.collider.GetComponentInParent<RockComponent>() != null || hit.collider.GetComponentInParent<PlayerComponent>() != null)) {
+        //&& (hit.collider.GetComponentInParent<RockComponent>() != null || hit.collider.GetComponentInParent<PlayerComponent>() != null)
+        if (hit.collider) {
             //pushing animation
             // Debug.Log("PUSHING");
             Vector3 hitGrid = new Vector3(Mathf.Round(hit.point.x), 0f, Mathf.Round(hit.point.z));
@@ -235,7 +236,7 @@ public class ControllerMUD : SPController {
             if (playerTransform.position == moveDest) {
                 //appear tired because we tried to move but our position didn't change (walking into a wall)
                 Debug.Log("Tired", this);
-                player.Animator.PlayClip("Tired");
+                player.Animator.PlayClip("Hit");
                 player.Resources.sfx.PlaySound(sfx_bump);
             } else {
                 Debug.Log("Pushing", this);
