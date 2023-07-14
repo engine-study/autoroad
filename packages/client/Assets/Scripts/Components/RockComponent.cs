@@ -33,8 +33,8 @@ public class RockComponent : MUDComponent {
 
     protected override void InitDestroy() {
         base.InitDestroy();
-        if(entity) {
-            entity.OnComponentUpdated -= UpdatePositionCheck;
+        if(Entity) {
+            Entity.OnComponentUpdated -= UpdatePositionCheck;
         }
 
     }
@@ -80,7 +80,7 @@ public class RockComponent : MUDComponent {
             stages[i].SetActive(i == (int)rockType);
         }
 
-        if (loaded && lastStage != rockType) {
+        if (Loaded && lastStage != rockType) {
 
             if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
                 source.PlaySound(sfx_whoosh);

@@ -16,7 +16,7 @@ public class PositionComponent : MUDComponent {
     protected override void UpdateComponent(IMudTable update, UpdateEvent eventType) {
         base.UpdateComponent(update, eventType);
 
-        PositionTable table = (PositionTable)activeTable;
+        PositionTable table = (PositionTable)update;
 
         // Debug.Log(eventType.ToString() + ": " + gameObject.name);
         // Debug.Log("X: " + (table.x != null ? table.x.ToString() : "no"));
