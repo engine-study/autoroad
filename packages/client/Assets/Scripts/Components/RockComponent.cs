@@ -16,13 +16,39 @@ public class RockComponent : MUDComponent {
     SPBase rockBase;
 
     [SerializeField] GameObject[] stages;
-    public AudioClip[] sfx_pickHit, sfx_smallBreaks, sfx_bigBreaks;
+    public AudioClip[] sfx_drag, sfx_dragBase, sfx_pickHit, sfx_whoosh, sfx_smallBreaks, sfx_bigBreaks;
     RockType lastStage = RockType._Count;
 
     protected override void Awake() {
         base.Awake();
         rockType = RockType._Count;
         rockBase = GetComponent<SPBase>();
+    }
+
+    public override void Init(MUDEntity ourEntity, MUDTableManager ourTable) {
+        base.Init(ourEntity, ourTable);
+
+        ourEntity.OnComponentUpdated += UpdatePositionCheck;
+    }
+
+    protected override void InitDestroy() {
+        base.InitDestroy();
+        if(entity) {
+            entity.OnComponentUpdated -= UpdatePositionCheck;
+        }
+
+    }
+
+    Vector3 lastPos;
+    void UpdatePositionCheck(MUDComponent c, UpdateEvent updateType) {
+
+        PositionComponent pos = c as PositionComponent;
+        if(pos && updateType != UpdateEvent.Revert && lastPos != pos.Pos) {
+            fx_drag.Play();
+            source.PlaySound(sfx_drag);
+            source.PlaySound(sfx_dragBase);
+            lastPos = pos.Pos;
+        }
     }
 
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
@@ -51,6 +77,7 @@ public class RockComponent : MUDComponent {
         if (loaded && lastStage != rockType) {
 
             if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
+                source.PlaySound(sfx_whoosh);
                 if(lastStage < RockType.Nucleus) {
                     source.PlaySound(sfx_pickHit);
                     source.PlaySound(sfx_bigBreaks);
