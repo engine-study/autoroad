@@ -61206,8 +61206,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1200377520162337971, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
+      propertyPath: mainnet
+      value: 
+      objectReference: {fileID: 11400000, guid: c37cc5018cb90234ca19fedb30ef6a2a, type: 2}
+    - target: {fileID: 1200377520162337971, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
+      propertyPath: testnet
+      value: 
+      objectReference: {fileID: 11400000, guid: 273a7931be4ee9f4cbab90e0c0ab9e9c, type: 2}
+    - target: {fileID: 1200377520162337971, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
       propertyPath: networkType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2648249632607742580, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
       propertyPath: entityParent

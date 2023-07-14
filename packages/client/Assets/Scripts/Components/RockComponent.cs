@@ -6,7 +6,7 @@ using DefaultNamespace;
 using mud.Unity;
 using IWorld.ContractDefinition;
 
-public enum RockType { None, Stone, Statumen, Rudus, Nucleus, Pavimentum, _Count }
+public enum RockType { None, Stone, Statumen, Pavimentum, Rudus, Nucleus, _Count }
 public class RockComponent : MUDComponent {
 
     [Header("Rock")]
@@ -43,13 +43,17 @@ public class RockComponent : MUDComponent {
     void UpdatePositionCheck(MUDComponent c, UpdateEvent updateType) {
 
         PositionComponent pos = c as PositionComponent;
-        if(pos && updateType != UpdateEvent.Revert && lastPos != pos.Pos) {
-            fx_drag.Play();
-            source.PlaySound(sfx_drag);
-            source.PlaySound(sfx_dragBase);
+        if(pos) {
+            if(updateType != UpdateEvent.Revert && lastPos != pos.Pos) {
+                fx_drag.Play();
+                source.PlaySound(sfx_drag);
+                source.PlaySound(sfx_dragBase);
+            }
+            
+            lastPos = pos.Pos;
+
         }
 
-        lastPos = pos.Pos;
 
     }
 
@@ -80,7 +84,7 @@ public class RockComponent : MUDComponent {
 
             if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
                 source.PlaySound(sfx_whoosh);
-                if(lastStage < RockType.Nucleus) {
+                if(lastStage < RockType.Rudus) {
                     source.PlaySound(sfx_pickHit);
                     source.PlaySound(sfx_bigBreaks);
                 } else {
