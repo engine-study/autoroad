@@ -76,8 +76,8 @@ namespace IWorld.ContractDefinition
     [Function("createMile")]
     public class CreateMileFunctionBase : FunctionMessage
     {
-        [Parameter("uint32", "mileNumber", 1)]
-        public virtual uint MileNumber { get; set; }
+        [Parameter("int32", "mileNumber", 1)]
+        public virtual int MileNumber { get; set; }
     }
 
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }

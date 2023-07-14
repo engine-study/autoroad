@@ -38,7 +38,7 @@ public class ChunkComponent : MUDComponent
 
 
         completed = table.completed != null ? (bool)table.completed : completed;
-        mileNumber = table.mileNumber != null ? (float)table.mileNumber : mileNumber;
+        mileNumber = table.mile != null ? (float)table.mile : mileNumber;
 
         // Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
         // Debug.Log("MileTest " + table.mileNumber, this);

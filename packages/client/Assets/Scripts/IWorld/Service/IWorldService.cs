@@ -170,7 +170,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createMileFunction, cancellationToken);
         }
 
-        public Task<string> CreateMileRequestAsync(uint mileNumber)
+        public Task<string> CreateMileRequestAsync(int mileNumber)
         {
             var createMileFunction = new CreateMileFunction();
                 createMileFunction.MileNumber = mileNumber;
@@ -178,7 +178,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(createMileFunction);
         }
 
-        public Task<TransactionReceipt> CreateMileRequestAndWaitForReceiptAsync(uint mileNumber, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CreateMileRequestAndWaitForReceiptAsync(int mileNumber, CancellationTokenSource cancellationToken = null)
         {
             var createMileFunction = new CreateMileFunction();
                 createMileFunction.MileNumber = mileNumber;

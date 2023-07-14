@@ -83,15 +83,16 @@ export default mudConfig({
       keySchema: {},
       dataStruct: false,
       schema: {
-        miles: "uint32",
+        miles: "int32",
       },
     },
 
     Chunk: {
+      name: "Chunk",
       openAccess: false, // it's a subsystem now!
       schema: {
         completed: "bool",
-        mileNumber: "uint32",
+        mile: "int32",
         // // dynamic list of people who have helped build the mile
         // entities: "bytes32[]",
         //   //dynamic list of people who have helped build the mile
@@ -145,7 +146,13 @@ export default mudConfig({
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("Position")],
+    }, 
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("Chunk")],
     },
+
 
   ],
 });

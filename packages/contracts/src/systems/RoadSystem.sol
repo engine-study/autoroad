@@ -5,6 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Tree } from "../codegen/Tables.sol";
+import { ChunkTableId } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
@@ -22,8 +23,12 @@ contract RoadSystem is System {
     return x >= int32(left) && x <= right;
   }
 
-  function createMile(uint32 mileNumber) public {
-    //create an entity for the chunk itself
+  function createMile(int32 mileNumber) public {
+
+    bytes32[] memory atPosition = getKeysWithValue(ChunkTableId, Chunk.encode(true, int32(mileNumber-1)));
+    require(mileNumber == 0 || atPosition.length > 0, "cannot create a new mile until the active one is complete");
+
+    //create an entity for the chunk itself 
     bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
 
     GameState.set(mileNumber);
@@ -90,7 +95,7 @@ contract RoadSystem is System {
     //set the chunk of road
     // Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
     Chunk.set(chunkEntity, false, mileNumber);
-    console.log("added mile ", mileNumber);
+    // console.log("added mile ", mileNumber);
   }
 
   function spawnTerrain(int32 x, int32 y, TerrainType tType) public {

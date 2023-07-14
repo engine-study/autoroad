@@ -17,19 +17,15 @@ contract PostDeploy is Script {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
-    GameState.set(world, 0);
-
     //deploys the MapConfig
+    GameState.set(world, int32(-1));
     GameConfig.set(world, true, true);
     bytes memory terrain = new bytes(5);
     MapConfig.set(world, 21, 0, terrain);
     RoadConfig.set(world, 5, 20, -2, 2);
 
     world.createMap(worldAddress);
-
     world.createMile(0);
-    world.createMile(1);
-    world.createMile(2);
 
     //some debug to check if our abiencode is working
     // abiTest();
