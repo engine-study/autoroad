@@ -115,6 +115,7 @@ public class ControllerMUD : SPController {
         Vector3 eulerAngles = Quaternion.LookRotation(SPInput.MousePlanePos - playerTransform.position).eulerAngles;
         lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y/90) * 90, eulerAngles.z);
 
+        playerScript.Animator.ik.SetLook(CursorMUD.LookTarget);
 
         bool push = Input.GetKey(KeyCode.LeftShift);
 
@@ -252,6 +253,7 @@ public class ControllerMUD : SPController {
             markerPos = moveDest;
         }
 
+        //UPDATE ROTATION
         if (eventType != UpdateEvent.Revert) {
             var _lookY = moveDest;
             _lookY.y = playerTransform.position.y;
@@ -259,6 +261,11 @@ public class ControllerMUD : SPController {
             if (_lookY != playerTransform.position) {
                 lookRotation = Quaternion.LookRotation(_lookY - playerTransform.position);
             }
+        }
+
+        if(playerScript.IsLocalPlayer) {
+            //stop the player from looking at the cursor when theyre moving
+            playerScript.Animator.ik.SetLook(null);
         }
 
         lastOnchainPos = (Vector3)onchainPos;

@@ -5,6 +5,8 @@ using mud.Client;
 
 public class CursorMUD : MonoBehaviour {
     public static CursorMUD Instance;
+    public static Transform CursorTransform {get{return Instance.visuals;}}
+    public static Transform LookTarget {get{return Instance.lookTarget;}}
     public static Vector3 WorldPos { get { return Instance.mousePos; } }
     public static Vector3 GridPos { get { return Instance.gridPos; } }
     public static Entity Entity { get { return Instance.hover; } }
@@ -17,7 +19,8 @@ public class CursorMUD : MonoBehaviour {
 
     [Header("Cursor")]
     public bool grid;
-    public Transform visuals;
+    [SerializeField] private Transform visuals;
+    [SerializeField] private Transform lookTarget;
 
     [Header("Debug")]
     [SerializeField] Vector3 rawMousePos;
