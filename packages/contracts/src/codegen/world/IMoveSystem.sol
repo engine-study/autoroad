@@ -16,5 +16,5 @@ interface IMoveSystem {
 
   function moveFrom(int32 x, int32 y) external;
 
-  function spawn(int32 x, int32 y) external;
+  function spawn() external;
 }

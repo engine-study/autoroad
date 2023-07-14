@@ -647,10 +647,7 @@ namespace IWorld.ContractDefinition
     [Function("spawn")]
     public class SpawnFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
+
     }
 
     public partial class SpawnTerrainFunction : SpawnTerrainFunctionBase { }

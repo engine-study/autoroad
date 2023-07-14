@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Damage, Position, Player, Health } from "../codegen/Tables.sol";
+import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
 import { Road, Pavement, Move, State, Carrying, Rock } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData} from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
@@ -23,7 +23,8 @@ contract MoveSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     PositionData memory startPos = Position.get(player);
 
-    require(world.onMap(x, y), "off grid");
+    require(world.onMap(pushX, pushY), "off grid");
+    require(withinManhattanDistance(PositionData(x, y), PositionData(pushX, pushY), 1), "too far to push");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
@@ -190,13 +191,19 @@ contract MoveSystem is System {
     require(false, "No available place to move");
   }
 
-  function spawn(int32 x, int32 y) public {
+  function spawn() public {
+    
     bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
     require(!Player.get(playerEntity), "already spawned");
 
+    // uint32 mileDistance = GameState.get()
+    (int32 l,int32 r,int32 up,) = Bounds.get();
+
     Player.set(playerEntity, true);
-    Position.set(playerEntity, x, y);
     Move.set(playerEntity, uint32(MoveType.Push));
+
+    //spawn at the top of the road
+    Position.set(playerEntity, 0, int32(up + 5));
   }
 
   function abs(int x) private pure returns (int) {

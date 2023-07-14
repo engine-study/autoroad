@@ -28,7 +28,7 @@ public class PlayerManager : MUDTableManager {
         if (currentPlayer == null) {
             // spawn the player
             Debug.Log("Spawning TX...");
-            await TxManager.Send<SpawnFunction>(0, 0);
+            await TxManager.Send<SpawnFunction>();
 
         }
 
