@@ -47,8 +47,10 @@ public class RockComponent : MUDComponent {
             fx_drag.Play();
             source.PlaySound(sfx_drag);
             source.PlaySound(sfx_dragBase);
-            lastPos = pos.Pos;
         }
+
+        lastPos = pos.Pos;
+
     }
 
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {

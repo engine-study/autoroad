@@ -60,6 +60,7 @@ public class ControllerMUD : SPController {
         playerTransform.position = newPos;
         onchainPos = newPos;
         moveDest = newPos;
+        lastOnchainPos = newPos;
     }
 
     private void OnDestroy() {
