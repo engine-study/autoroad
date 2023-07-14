@@ -30,7 +30,7 @@ public class GameStateComponent : MUDComponent
         MILE_COUNT = miles;
         MILE_ENDPOS = MILE_COUNT * MILE_DISTANCE;
 
-        edge.transform.position = Vector3.forward * miles * MILE_DISTANCE;
+        edge.transform.position = Vector3.forward * (miles * MILE_DISTANCE + MILE_DISTANCE);
         
     }
 
