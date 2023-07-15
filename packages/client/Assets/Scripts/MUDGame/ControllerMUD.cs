@@ -155,7 +155,6 @@ public class ControllerMUD : SPController {
 
             Debug.Log("PUSHING");
 
-
             Vector3 newPos = new Vector3(Mathf.Round(playerTransform.position.x + direction.x), 0f, Mathf.Round(playerTransform.position.z + direction.z));
             Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
 
@@ -244,6 +243,8 @@ public class ControllerMUD : SPController {
             } else {
                 Debug.Log("Pushing", this);
                 player.Animator.PlayClip("Push");
+                player.Resources.sfx.PlaySound(sfx_bump);
+
             }
 
             markerPos = hitGrid;
