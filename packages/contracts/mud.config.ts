@@ -116,7 +116,6 @@ export default mudConfig({
       schema: {
         x: "int32",
         y: "int32",
-        height: "int32",
       },
     },
 
@@ -127,11 +126,9 @@ export default mudConfig({
     Carrying: "bytes32",
     Pavement: "bool",
 
-    Damage: "uint32",
-    Health: "uint32",
-
     //properties
-    Infinite: "bool",
+    Damage: "int32",
+    Health: "int32",
 
     //unique objects
     Rock: "uint32",

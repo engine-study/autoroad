@@ -12,7 +12,7 @@ public class TreeComponent : MUDComponent
     public bool treeState;
     public ParticleSystem fx_hit, fx_fall;
     public AudioClip [] sfx_hits, sfx_falls;
-    
+
     bool lastState = false;
     
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
@@ -51,5 +51,15 @@ public class TreeComponent : MUDComponent
 
         lastState = treeState;
 
+    }
+
+    public void Chop() {
+        ChopTree(Entity.Key);
+    }
+
+    public async void ChopTree(string entity) {
+        // List<TxUpdate> updates = new List<TxUpdate>();
+        // updates.Add(TxManager.MakeOptimistic(this, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus) )));
+        // await TxManager.Send<MineFunction>(updates, x, y);
     }
 }

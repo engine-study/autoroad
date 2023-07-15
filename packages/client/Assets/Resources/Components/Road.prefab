@@ -362,8 +362,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83921339934ff5e4fb20ffaed6ac82b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tableType: {fileID: 11400000, guid: 47391164026c15848bd3305272e6fa11, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  entity: {fileID: 0}
+  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
   state: 0
   stages:
   - {fileID: 5753392562771026058}
@@ -614,8 +619,11 @@ MonoBehaviour:
   objects: []
   rotateY: 1
   rotationRound: 90
+  useScale: 0
+  range: {x: 1, y: 1}
   child: -1
   rotate: -1
+  scale: -1
 --- !u!1 &5357489925716226740
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,8 +840,11 @@ MonoBehaviour:
   objects: []
   rotateY: 1
   rotationRound: 90
+  useScale: 0
+  range: {x: 1, y: 1}
   child: -1
   rotate: -1
+  scale: -1
 --- !u!1 &7700110636993054679
 GameObject:
   m_ObjectHideFlags: 0

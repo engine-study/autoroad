@@ -28,9 +28,9 @@ contract AttackSystem is System {
     require(Player.get(defender), "target is not a player");
     require(Health.get(defender) > 0, "target is dead");
 
-    uint32 playerDamage = Damage.get(player);
-    uint32 defenderHealth = Health.get(defender);
-    uint32 newHealth = defenderHealth - playerDamage;
+    int32 playerDamage = Damage.get(player);
+    int32 defenderHealth = Health.get(defender);
+    int32 newHealth = defenderHealth - playerDamage;
     if (newHealth <= 0) {
       Health.deleteRecord(defender);
       Position.deleteRecord(defender);

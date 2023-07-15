@@ -214,8 +214,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dee59fdc01549b47bc6c719e038be4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tableType: {fileID: 11400000, guid: b5eb93f893881bc43bb6c3f825f192bb, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  entity: {fileID: 0}
+  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
   spawned: 0
   isLocalPlayer: 0
 --- !u!114 &6141718005193121758
@@ -290,8 +295,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sender: {fileID: 4765553126336188459}
   State: {fileID: 0}
-  actionRef: {fileID: 0}
-  currentInteract: {fileID: 0}
+  reciever: {fileID: 0}
+  actionScript: {fileID: 0}
+  currentGO: {fileID: 0}
   gos: []
   internalState: 0
   castCount: 0

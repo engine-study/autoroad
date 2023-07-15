@@ -44,6 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7893dc13d78eea64e936553ae595b4f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tableType: {fileID: 11400000, guid: 8e745996730ce374fbe25d888e26c75e, type: 2}
+  requiredComponents: []
   entity: {fileID: 0}
-  table: {fileID: 0}
-  position: {x: 0, y: 0}
+  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
+  position2D: {x: 0, y: 0}
+  position3D: {x: 0, y: 0, z: 0}

@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Rock } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Rock, Tree } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData} from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -66,13 +66,34 @@ contract MoveSystem is System {
     Position.set(player, x, y);
   }
 
-  function mine(int32 mineX, int32 mineY) public {
+
+  function chop(bytes32 tree) public {
+
+      bytes32 player = addressToEntityKey(address(_msgSender()));
+
+      require(Tree.get(tree), "not a tree");
+      require(withinManhattanDistance(Position.get(tree), Position.get(player), 1), "too far to chop");
+
+      int32 health = Health.get(tree);
+      health--;
+
+      if(health == 0) {
+        Tree.deleteRecord(tree);
+        Position.deleteRecord(tree);
+        Health.deleteRecord(tree);
+        Move.deleteRecord(tree);
+      } else {
+        Health.set(tree, health);
+      }
+  }
+
+  function mine(int32 x, int32 y) public {
     
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(mineX, mineY));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
      // Position
-    require(withinManhattanDistance(PositionData(mineX, mineY), Position.get(player), 1), "too far to mine");
+    require(withinManhattanDistance(PositionData(x, y), Position.get(player), 1), "too far to mine");
     require(atPosition.length >= 1, "mining an empty spot");
 
     uint32 rockState = Rock.get(atPosition[0]);
@@ -93,8 +114,6 @@ contract MoveSystem is System {
     else if(rockState == uint32(RockType.Nucleus)) {
       Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
-
-
   }
 
   function carry(int32 carryX, int32 carryY) public {

@@ -21,7 +21,6 @@ import { Carrying, CarryingTableId } from "./tables/Carrying.sol";
 import { Pavement, PavementTableId } from "./tables/Pavement.sol";
 import { Damage, DamageTableId } from "./tables/Damage.sol";
 import { Health, HealthTableId } from "./tables/Health.sol";
-import { Infinite, InfiniteTableId } from "./tables/Infinite.sol";
 import { Rock, RockTableId } from "./tables/Rock.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Tree, TreeTableId } from "./tables/Tree.sol";

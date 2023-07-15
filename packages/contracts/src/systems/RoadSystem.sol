@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Tree } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Tree, Health } from "../codegen/Tables.sol";
 import { ChunkTableId } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -99,8 +99,9 @@ contract RoadSystem is System {
   }
 
   function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
-    bytes32 entity = positionToEntityKey(x, y);
 
+    bytes32 entity = keccak256(abi.encode("Terrain", x, y));
+    
     Position.set(entity, x, y);
 
     if (tType == TerrainType.Rock) {
@@ -108,6 +109,7 @@ contract RoadSystem is System {
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
+      Health.set(entity, 3);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Player) {
       Player.set(entity, true);

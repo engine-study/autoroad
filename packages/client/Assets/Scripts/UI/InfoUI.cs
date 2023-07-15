@@ -31,15 +31,19 @@ public class InfoUI : SPWindow
     public void UpdateInfo(Entity newEntity)
     {
 
-        if(entity != null && entity != newEntity) {
-            entity.OnUpdated -= Refresh;
+        if(entity != newEntity) {
+            if(entity != null)
+                entity.OnUpdated -= Refresh;
+            
+            MUDEntity m = newEntity as MUDEntity;
+            if(m != null) {
+                m.OnUpdated += Refresh;
+            }
         }
-        
+    
         entity = newEntity as MUDEntity;
 
-        if(entity != null) {
-            entity.OnUpdated += Refresh;
-        }
+
 
         if(entity == null) {
             header.ToggleWindowClose();

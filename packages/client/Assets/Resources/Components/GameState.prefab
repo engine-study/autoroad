@@ -33,7 +33,7 @@ Transform:
   - {fileID: 1760384498211291556}
   - {fileID: 849606387523660649}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5650571335107367827
 MonoBehaviour:
@@ -47,7 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c480bcb2934d8904ab7e485f771b1f75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tableType: {fileID: 11400000, guid: 398b3bd022fd9424886c12ae1396ada3, type: 2}
   requiredComponents: []
+  entity: {fileID: 0}
+  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
   miles: 0
   scroll: {fileID: 702117180495448203}
   edge: {fileID: 5751675364159246322}

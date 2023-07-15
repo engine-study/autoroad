@@ -62,6 +62,15 @@ namespace IWorld.ContractDefinition
         public virtual int CarryY { get; set; }
     }
 
+    public partial class ChopFunction : ChopFunctionBase { }
+
+    [Function("chop")]
+    public class ChopFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "tree", 1)]
+        public virtual byte[] Tree { get; set; }
+    }
+
     public partial class CreateMapFunction : CreateMapFunctionBase { }
 
     [Function("createMap")]
@@ -280,10 +289,10 @@ namespace IWorld.ContractDefinition
     [Function("mine")]
     public class MineFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "mineX", 1)]
-        public virtual int MineX { get; set; }
-        [Parameter("int32", "mineY", 2)]
-        public virtual int MineY { get; set; }
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
     }
 
     public partial class MoveFromFunction : MoveFromFunctionBase { }
@@ -893,6 +902,8 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
 
 
 

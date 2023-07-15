@@ -134,6 +134,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(carryFunction, cancellationToken);
         }
 
+        public Task<string> ChopRequestAsync(ChopFunction chopFunction)
+        {
+             return ContractHandler.SendRequestAsync(chopFunction);
+        }
+
+        public Task<TransactionReceipt> ChopRequestAndWaitForReceiptAsync(ChopFunction chopFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(chopFunction, cancellationToken);
+        }
+
+        public Task<string> ChopRequestAsync(byte[] tree)
+        {
+            var chopFunction = new ChopFunction();
+                chopFunction.Tree = tree;
+            
+             return ContractHandler.SendRequestAsync(chopFunction);
+        }
+
+        public Task<TransactionReceipt> ChopRequestAndWaitForReceiptAsync(byte[] tree, CancellationTokenSource cancellationToken = null)
+        {
+            var chopFunction = new ChopFunction();
+                chopFunction.Tree = tree;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(chopFunction, cancellationToken);
+        }
+
         public Task<string> CreateMapRequestAsync(CreateMapFunction createMapFunction)
         {
              return ContractHandler.SendRequestAsync(createMapFunction);
@@ -543,20 +569,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(mineFunction, cancellationToken);
         }
 
-        public Task<string> MineRequestAsync(int mineX, int mineY)
+        public Task<string> MineRequestAsync(int x, int y)
         {
             var mineFunction = new MineFunction();
-                mineFunction.MineX = mineX;
-                mineFunction.MineY = mineY;
+                mineFunction.X = x;
+                mineFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(mineFunction);
         }
 
-        public Task<TransactionReceipt> MineRequestAndWaitForReceiptAsync(int mineX, int mineY, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MineRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var mineFunction = new MineFunction();
-                mineFunction.MineX = mineX;
-                mineFunction.MineY = mineY;
+                mineFunction.X = x;
+                mineFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(mineFunction, cancellationToken);
         }
