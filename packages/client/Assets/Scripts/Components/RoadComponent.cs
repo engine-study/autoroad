@@ -16,7 +16,6 @@ public class RoadComponent : MUDComponent
 
     protected override void Awake() {
         base.Awake();
-        Debug.Log("Road awake", this);
         state = RoadState.None;
     }
 
