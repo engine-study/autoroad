@@ -9,18 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 962853a17268aef40bf8f0aaf0fce6fc, type: 3}
-  m_Name: Computer_ActionOpenUI
+  m_Script: {fileID: 11500000, guid: e6beca4e58ff1e242b9cb2ba458bfff8, type: 3}
+  m_Name: ActionPlayer_Mine
   m_EditorClassIdentifier: 
-  actionName: Login
+  actionName: Mine
   actionType: 0
-  actionCastTime: 0.5
-  actionDuration: 1
-  fx: {fileID: 0}
-  actionBehaviour: {fileID: 0}
+  CastDuration: 1
+  ActionDuration: 0
   conditions: []
   endAction: []
-  hasInit: 0
-  internalState: 0
-  uniqueUITag: Computer
-  uniqueUI: {fileID: 0}
+  animatorState: {fileID: 11400000, guid: 6db02c21e248d3247b05400f75d0d456, type: 2}

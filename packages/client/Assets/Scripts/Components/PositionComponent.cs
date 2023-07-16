@@ -18,7 +18,6 @@ public class PositionComponent : MUDComponent {
 
 
     protected override void UpdateComponent(IMudTable update, UpdateEvent eventType) {
-        base.UpdateComponent(update, eventType);
 
         PositionTable table = update as PositionTable;
 

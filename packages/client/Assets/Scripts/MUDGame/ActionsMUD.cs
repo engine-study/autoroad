@@ -12,21 +12,38 @@ public class ActionsMUD : MonoBehaviour
 
     SPPlayer player;
     SPActor actor;
+    float distanceToPlayer = 999f;
 
     void Awake()
     {
         player = GetComponentInParent<SPPlayer>();
         player.OnPostInit += Init;
+    }
 
+    void OnDestroy() {
+
+        player.OnPostInit -= Init;
+        CursorMUD.OnGridPosition -= AddGridActions;
     }
 
     void Init()
     {
+        gameObject.SetActive(player.IsLocalPlayer);
+
         if (!player.IsLocalPlayer)
             return;
+            
+        CursorMUD.OnGridPosition += AddGridActions;
 
-        player.Reciever.ToggleInteractableManual(true, ShovelAction);
+    }
 
+    //add actions base on what we encounter on the grid
+    void AddGridActions(Vector3 newPos) {
+
+        distanceToPlayer = Vector3.Distance(newPos, player.transform.position);
+        
+        //add the shovel action next to the player at empty spots
+        player.Reciever.ToggleInteractableManual(distanceToPlayer <= 1f && CursorMUD.Entity != null, ShovelAction);
 
     }
 

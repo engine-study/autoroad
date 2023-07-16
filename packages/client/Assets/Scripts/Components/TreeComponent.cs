@@ -4,20 +4,18 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public class TreeComponent : MUDComponent
-{
-    
+public class TreeComponent : MUDComponent {
+
     [Header("Tree")]
 
     public bool treeState;
     public ParticleSystem fx_hit, fx_fall;
-    public AudioClip [] sfx_hits, sfx_falls;
+    public AudioClip[] sfx_hits, sfx_falls;
 
     bool lastState = false;
-    
+
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
 
-        base.UpdateComponent(update, eventType);
 
         TreeTable treeUpdate = (TreeTable)update;
 
@@ -44,7 +42,7 @@ public class TreeComponent : MUDComponent
             //     } else {
             //         source.PlaySound(sfx_smallBreaks);
             //     }
-              
+
             //     fx_break.Play();
             // }
         }

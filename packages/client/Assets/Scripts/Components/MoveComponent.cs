@@ -4,14 +4,11 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public enum MoveType {None, Shovel, Carry, Push} //"None", "Shovel", "Carry", "Push"
-public class MoveComponent : MUDComponent
-{
+public enum MoveType { None, Shovel, Carry, Push } //"None", "Shovel", "Carry", "Push"
+public class MoveComponent : MUDComponent {
     public MoveType moveType;
 
-    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType)
-    {
-        base.UpdateComponent(update, eventType);
+    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType) {
 
         MoveTable table = (MoveTable)update;
 

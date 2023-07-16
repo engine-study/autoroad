@@ -7,8 +7,7 @@ using NetworkManager = mud.Unity.NetworkManager;
 using Cysharp.Threading.Tasks;
 using UniRx;
 
-public class GameStateComponent : MUDComponent
-{
+public class GameStateComponent : MUDComponent {
     public static GameStateComponent Instance;
     public const float MILE_DISTANCE = 20f;
     public static float MILE_COUNT;
@@ -17,10 +16,8 @@ public class GameStateComponent : MUDComponent
     [Header("Position")]
     [SerializeField] protected int miles;
     [SerializeField] protected WorldScroll scroll;
-    [SerializeField] protected GameObject edge; 
-    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType)
-    {
-        base.UpdateComponent(update, eventType);
+    [SerializeField] protected GameObject edge;
+    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType) {
 
         GameStateTable table = (GameStateTable)update;
 
@@ -31,7 +28,7 @@ public class GameStateComponent : MUDComponent
         MILE_ENDPOS = MILE_COUNT * MILE_DISTANCE;
 
         edge.transform.position = Vector3.forward * (miles * MILE_DISTANCE + MILE_DISTANCE);
-        
+
     }
 
 }

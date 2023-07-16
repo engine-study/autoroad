@@ -16,7 +16,7 @@ public class GameState : MonoBehaviour {
     public static GameState Instance;
     public GamePhase phase;
     public RecieverMUD reciever;
-    public MUDTableManager playerTable;
+    public TableManager playerTable;
 
     [Header("Scroll")]
     public WorldScroll scroll;

@@ -6,6 +6,6 @@ using ObservableExtensions = UniRx.ObservableExtensions;
 
 using DefaultNamespace;
 
-public class PositionManager : MUDTableManager {
+public class PositionManager : TableManager {
    
 }

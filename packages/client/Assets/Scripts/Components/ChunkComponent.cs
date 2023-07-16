@@ -4,12 +4,13 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public class ChunkComponent : MUDComponent
-{
+public class ChunkComponent : MUDComponent {
 
     [Header("Position")]
     [SerializeField] protected bool completed;
     [SerializeField] protected float mileNumber;
+    public GameObject activeObjects;
+
 
     //    completed: "bool",
     //     mileNumber: "uint32",
@@ -18,20 +19,22 @@ public class ChunkComponent : MUDComponent
     //       //dynamic list of people who have helped build the mile
     //     contributors: "bytes32[]",
 
-    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType)
-    {
-        base.UpdateComponent(update, eventType);
+    protected override void Awake() {
+        base.Awake();
+
+        activeObjects.SetActive(false);
+    }
+
+    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType) {
 
         // Debug.Log("Chunk: " + eventType.ToString());
 
         ChunkTable table = (ChunkTable)update;
 
-        if (update == null)
-        {
+        if (update == null) {
             Debug.LogError("Chunk is null", this);
         }
-        if (table == null)
-        {
+        if (table == null) {
             Debug.LogError("Table is null", this);
         }
 
@@ -45,7 +48,7 @@ public class ChunkComponent : MUDComponent
         // Debug.Log("Mile " + mileNumber, this);
 
         transform.position = Vector3.forward * mileNumber * 20f;
-
+        activeObjects.SetActive(!completed);
 
     }
 

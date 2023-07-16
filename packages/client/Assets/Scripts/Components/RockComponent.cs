@@ -25,7 +25,7 @@ public class RockComponent : MUDComponent {
         rockBase = GetComponent<SPBase>();
     }
 
-    public override void Init(MUDEntity ourEntity, MUDTableManager ourTable) {
+    public override void Init(MUDEntity ourEntity, TableManager ourTable) {
         base.Init(ourEntity, ourTable);
 
         ourEntity.OnComponentUpdated += UpdatePositionCheck;
@@ -33,7 +33,7 @@ public class RockComponent : MUDComponent {
 
     protected override void InitDestroy() {
         base.InitDestroy();
-        if(Entity) {
+        if (Entity) {
             Entity.OnComponentUpdated -= UpdatePositionCheck;
         }
 
@@ -43,13 +43,13 @@ public class RockComponent : MUDComponent {
     void UpdatePositionCheck(MUDComponent c, UpdateEvent updateType) {
 
         PositionComponent pos = c as PositionComponent;
-        if(pos) {
-            if(updateType != UpdateEvent.Revert && lastPos != pos.Pos) {
+        if (pos) {
+            if (updateType != UpdateEvent.Revert && lastPos != pos.Pos) {
                 fx_drag.Play();
                 source.PlaySound(sfx_drag);
                 source.PlaySound(sfx_dragBase);
             }
-            
+
             lastPos = pos.Pos;
 
         }
@@ -58,8 +58,6 @@ public class RockComponent : MUDComponent {
     }
 
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
-
-        base.UpdateComponent(update, eventType);
 
         RockTable rockUpdate = (RockTable)update;
 
@@ -83,13 +81,13 @@ public class RockComponent : MUDComponent {
 
             if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
                 source.PlaySound(sfx_whoosh);
-                if(lastStage < RockType.Rudus) {
+                if (lastStage < RockType.Rudus) {
                     source.PlaySound(sfx_pickHit);
                     source.PlaySound(sfx_bigBreaks);
                 } else {
                     source.PlaySound(sfx_smallBreaks);
                 }
-              
+
                 fx_break.Play();
             }
         }
@@ -104,27 +102,8 @@ public class RockComponent : MUDComponent {
 
     public async void MineRock(int x, int y) {
         List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(TxManager.MakeOptimistic(this, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus) )));
+        updates.Add(TxManager.MakeOptimistic(this, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus))));
         await TxManager.Send<MineFunction>(updates, x, y);
     }
-    // public async void MineRock(int x, int y)
-    // {
-    //     try
-    //     {
-    //         RockTable fakeTable = new RockTable();
-    //         fakeTable.value = (ulong)(rockType+1);
-    //         // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
-    //         UpdateComponent(fakeTable, UpdateEvent.Optimistic);
-    //         await NetworkManager.Instance.worldSend.TxExecute<MineFunction>(x, y);
-    //     }
-    //     catch (System.Exception ex)
-    //     {
-    //         //if our transaction fails, force the player back to their position on the table
-    //         Debug.LogException(ex);
-    //         RockTable fakeTable = new RockTable();
-    //         // fakeTable.value = RockTable.GetRockTableValue(Entity.Key).value;
-    //         UpdateComponent(fakeTable, UpdateEvent.Revert);
-
-    //     }
-    // }
+   
 }

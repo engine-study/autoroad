@@ -2,6 +2,7 @@ using UnityEngine;
 using mud.Unity;
 using IWorld.ContractDefinition;
 using DefaultNamespace;
+using mud.Client;
 
 public class InteractShovel : SPInteract
 {
@@ -17,6 +18,7 @@ public class InteractShovel : SPInteract
 
     public async void ShovelAction(int x, int y)
     {
+
         try
         {
             // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {

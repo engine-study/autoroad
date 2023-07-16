@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6beca4e58ff1e242b9cb2ba458bfff8, type: 3}
-  m_Name: Chopping_ActionPlayer 1
+  m_Name: ActionPlayer_Throw
   m_EditorClassIdentifier: 
-  actionName: Chop
+  actionName: Throw
   actionType: 0
-  CastDuration: 1
-  ActionDuration: 0
+  actionCastTime: 5
+  fx: {fileID: 0}
   conditions: []
   endAction: []
-  animatorState: {fileID: 11400000, guid: c7937e1cbf9b33b48a4fa02a404ba3c3, type: 2}
+  hasInit: 0
+  internalState: 0
+  animatorState: {fileID: 11400000, guid: 34a87ce91057c54458a2ac125701c1a5, type: 2}
+  player: {fileID: 0}
+  anim: {fileID: 0}
