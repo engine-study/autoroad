@@ -568,7 +568,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2361047939324948252
 Transform:
   m_ObjectHideFlags: 0
@@ -599,14 +599,13 @@ MonoBehaviour:
   action: {fileID: 11400000, guid: d09b5cca64a660343ac5fdfeabfad9ba, type: 2}
   state: {fileID: 0}
   interacting: 0
-  actorPlayer: {fileID: 0}
+  targetGO: {fileID: 9028070207732247028}
   OnStartEvent:
     m_PersistentCalls:
       m_Calls: []
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
-  go: {fileID: 0}
 --- !u!1001 &61157945458236254
 PrefabInstance:
   m_ObjectHideFlags: 0

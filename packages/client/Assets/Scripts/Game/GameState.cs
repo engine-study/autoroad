@@ -5,6 +5,7 @@ using mud.Client;
 using mud.Unity;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -27,7 +28,7 @@ public class GameState : MonoBehaviour {
     [Header("UI")]
     public GameObject editorObjects;
     public PhaseUI[] phaseUI;
-    public static System.Action<GamePhase> OnPhaseUpdate;
+    public static Action<GamePhase> OnPhaseUpdate;
 
     void Awake() {
         Instance = this;

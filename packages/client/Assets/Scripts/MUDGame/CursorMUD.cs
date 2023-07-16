@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
+using System;
 
 public class CursorMUD : MonoBehaviour {
     public static CursorMUD Instance;
@@ -13,10 +14,10 @@ public class CursorMUD : MonoBehaviour {
     public static Entity Entity { get { return Instance.hover; } }
     public static PositionComponent Position { get { return Instance.pos; } }
     public static SPBase Base { get { return Instance.baseObject; } }
-    public static System.Action<Entity> OnHoverEntity;
-    public static System.Action<Entity> OnLeaveEntity;
-    public static System.Action<Vector3> OnGridPosition;
-    public static System.Action<Vector3> OnUpdateCursor;
+    public static Action<Entity> OnHoverEntity;
+    public static Action<Entity> OnLeaveEntity;
+    public static Action<Vector3> OnGridPosition;
+    public static Action<Vector3> OnUpdateCursor;
 
     [Header("Cursor")]
     public bool grid;

@@ -12,23 +12,15 @@ public class InteractShovel : SPInteract
         base.Interact(toggle, newActor);
 
         if(toggle) {
-            ShovelAction((int)transform.position.x, (int)transform.position.z);
+            Shovel();
         }
     }
 
-    public async void ShovelAction(int x, int y)
-    {
+    public void Shovel() {
+        //no way of optimistic spawning yet
+        // TxManager.MakeOptimistic
 
-        try
-        {
-            // function moveFrom(int32 startX, int32 startY, int32 x, int32 y) public {
-            await NetworkManager.Instance.worldSend.TxExecute<ShovelFunction>(x, y);
-        }
-        catch (System.Exception ex)
-        {
-            //if our transaction fails, force the player back to their position on the table
-            Debug.LogException(ex);
-        }
+        TxManager.Send<ShovelFunction>(transform.position.x, transform.position.z);
     }
 
 }

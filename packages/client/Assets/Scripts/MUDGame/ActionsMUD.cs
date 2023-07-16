@@ -43,7 +43,13 @@ public class ActionsMUD : MonoBehaviour
         distanceToPlayer = Vector3.Distance(newPos, player.transform.position);
         
         //add the shovel action next to the player at empty spots
-        player.Reciever.ToggleInteractableManual(distanceToPlayer > .5f && distanceToPlayer <= 1f && CursorMUD.Entity == null, ShovelAction);
+        bool shovelToggle = distanceToPlayer > .5f && distanceToPlayer <= 1f && BoundsComponent.InBounds((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null;
+        if(shovelToggle) {
+            ShovelAction.transform.position = newPos;
+        }
+        player.Reciever.ToggleInteractableManual(shovelToggle, ShovelAction);
+
+      
 
     }
 
