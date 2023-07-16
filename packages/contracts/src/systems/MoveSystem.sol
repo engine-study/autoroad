@@ -191,6 +191,7 @@ contract MoveSystem is System {
     PositionData[] memory positions = lineWalkPositions(startPos, PositionData(x, y));
 
     // iterate over all the positions we move over, stop at the first blockage
+    //START index at 1, ignoring our own position
     for (uint i = 0; i < positions.length; i++) {
       PositionData memory pos = positions[i];
       bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y));
@@ -198,7 +199,7 @@ contract MoveSystem is System {
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
-      if (atPosition.length > 0 && i > 0) {
+      if (atPosition.length > 0 && i > 1) {
         Position.set(player, positions[i - 1]);
         return;
       } else if (i == positions.length - 1) {
