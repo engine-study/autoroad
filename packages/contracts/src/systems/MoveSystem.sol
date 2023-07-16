@@ -222,7 +222,7 @@ contract MoveSystem is System {
     Move.set(playerEntity, uint32(MoveType.Push));
 
     //spawn at the top of the road
-    Position.set(playerEntity, 0, int32(up + 5));
+    Position.set(playerEntity, 0, int32(up + 1));
   }
 
   function abs(int x) private pure returns (int) {

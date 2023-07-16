@@ -32,7 +32,7 @@ public class ActionsMUD : MonoBehaviour
 
         if (!player.IsLocalPlayer)
             return;
-            
+
         CursorMUD.OnGridPosition += AddGridActions;
 
     }
@@ -43,7 +43,7 @@ public class ActionsMUD : MonoBehaviour
         distanceToPlayer = Vector3.Distance(newPos, player.transform.position);
         
         //add the shovel action next to the player at empty spots
-        player.Reciever.ToggleInteractableManual(distanceToPlayer <= 1f && CursorMUD.Entity != null, ShovelAction);
+        player.Reciever.ToggleInteractableManual(distanceToPlayer > .5f && distanceToPlayer <= 1f && CursorMUD.Entity == null, ShovelAction);
 
     }
 
