@@ -10,13 +10,17 @@ public class ActionsMUD : MonoBehaviour
     public SPInteract WalkAction;
 
 
-    SPPlayer player;
+    PlayerMUD player;
+    PositionComponent position;
     SPActor actor;
     float distanceToPlayer = 999f;
+    Vector3 cursorPosition;
+    Vector3 playerPosition;
+
 
     void Awake()
     {
-        player = GetComponentInParent<SPPlayer>();
+        player = GetComponentInParent<PlayerMUD>();
         player.OnPostInit += Init;
     }
 
@@ -24,6 +28,10 @@ public class ActionsMUD : MonoBehaviour
 
         player.OnPostInit -= Init;
         CursorMUD.OnGridPosition -= AddGridActions;
+
+        if(position) {
+            position.OnUpdated -= AddPositionActions;
+        }
     }
 
     void Init()
@@ -33,14 +41,25 @@ public class ActionsMUD : MonoBehaviour
         if (!player.IsLocalPlayer)
             return;
 
+        gameObject.transform.parent = null;
+        gameObject.transform.position = Vector3.zero;
+
+        position = player.Position;
+
+        position.OnUpdated += AddPositionActions;
         CursorMUD.OnGridPosition += AddGridActions;
 
+    }
+
+    //everytime player updates position we should recalculate the actions
+    void AddPositionActions() {
+        AddGridActions(cursorPosition);
     }
 
     //add actions base on what we encounter on the grid
     void AddGridActions(Vector3 newPos) {
 
-        distanceToPlayer = Vector3.Distance(newPos, player.transform.position);
+        distanceToPlayer = Vector3.Distance(newPos, position.Pos);
         
         //add the shovel action next to the player at empty spots
         bool shovelToggle = distanceToPlayer > .5f && distanceToPlayer <= 1f && BoundsComponent.InBounds((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null;
@@ -48,9 +67,6 @@ public class ActionsMUD : MonoBehaviour
             ShovelAction.transform.position = newPos;
         }
         player.Reciever.ToggleInteractableManual(shovelToggle, ShovelAction);
-
-      
-
     }
 
 }

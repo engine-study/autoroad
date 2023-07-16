@@ -20,7 +20,7 @@ public class InteractShovel : SPInteract
         //no way of optimistic spawning yet
         // TxManager.MakeOptimistic
 
-        TxManager.Send<ShovelFunction>(transform.position.x, transform.position.z);
+        TxManager.Send<ShovelFunction>(System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
     }
 
 }
