@@ -131,14 +131,7 @@ namespace DefaultNamespace
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
             RoadConfigTableUpdate update = (RoadConfigTableUpdate)tableUpdate;
-
-            var currentValue = update?.TypedValue.Item1;
-            if (currentValue == null)
-            {
-                Debug.LogError("No value on RoadConfigTable update");
-            }
-
-            return currentValue;
+            return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)

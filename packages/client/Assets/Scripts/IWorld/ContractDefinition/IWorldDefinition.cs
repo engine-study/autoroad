@@ -152,6 +152,17 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Data { get; set; }
     }
 
+    public partial class FillFunction : FillFunctionBase { }
+
+    [Function("fill")]
+    public class FillFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "filler", 1)]
+        public virtual byte[] Filler { get; set; }
+        [Parameter("bytes32", "hole", 2)]
+        public virtual byte[] Hole { get; set; }
+    }
+
     public partial class GetFieldFunction : GetFieldFunctionBase { }
 
     [Function("getField", "bytes")]
@@ -902,6 +913,8 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
 
 
 

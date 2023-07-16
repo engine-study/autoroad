@@ -104,14 +104,7 @@ namespace DefaultNamespace
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
             PositionTableUpdate update = (PositionTableUpdate)tableUpdate;
-
-            var currentValue = update?.TypedValue.Item1;
-            if (currentValue == null)
-            {
-                Debug.LogError("No value on PositionTable update");
-            }
-
-            return currentValue;
+            return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)

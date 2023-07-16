@@ -20,52 +20,70 @@ contract MoveSystem is System {
   function push(int32 x, int32 y, int32 pushX, int32 pushY) public {
     IWorld world = IWorld(_world());
 
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-    PositionData memory startPos = Position.get(player);
+    bytes32 pusher = addressToEntityKey(address(_msgSender()));
+    PositionData memory startPos = Position.get(pusher);
 
     require(world.onMap(pushX, pushY), "off grid");
     require(withinManhattanDistance(PositionData(x, y), PositionData(pushX, pushY), 1), "too far to push");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
-    require(atPosition.length >= 1, "trying to push an empty spot");
-    uint32 move = Move.get(atPosition[0]);
+    require(atPush.length > 0, "trying to push an empty spot");
+    uint32 move = Move.get(atPush[0]);
     require(move == uint32(MoveType.Push), "pushing a non-pushable object");
 
-    bytes32[] memory atPushPosition = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
+    bytes32[] memory atDestination = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
 
-    assert(atPosition.length < 2);
+    assert(atPush.length < 2);
+
+    bool canPush = true;
 
     //check if we are pushing rocks into a road ditch
-    if (atPushPosition.length >= 1) {
+    if (atDestination.length > 0) {
 
       //check if there is an obstruction
-      bool obstruction = Move.get(atPushPosition[0]) != 0;
+      bool obstruction = Move.get(atDestination[0]) != 0;
       require(obstruction == false, "pushing into an occupied spot");
 
-      uint32 roadInt = Road.get(atPushPosition[0]);
-      require(roadInt < uint32(RoadState.Paved), "Road state too high");
+      uint32 roadInt = Road.get(atDestination[0]);
+      //there is a road here
+      if(roadInt != 0) {
+         require(roadInt == uint32(RoadState.Shoveled), "Road already full");
 
-      roadInt++;
-      Road.set(atPushPosition[0], roadInt);
+        //this has now become a fill()
+        canPush = false; 
+        fill(atPush[0], atDestination[0]);
 
-      //ROAD COMPLETE!!!
-      if(roadInt == uint32(RoadState.Paved)) {
-        Pavement.set(keccak256(abi.encode("Pavement", x, y)), true);
-        Position.deleteRecord(atPushPosition[0]);
       }
 
     } else {
 
     }
 
-    //move push object first
-    Position.set(atPosition[0], pushX, pushY);
+    //move push object before then setting the pusher to the new position
+    if(canPush) {
+      Position.set(atPush[0], pushX, pushY);
+    }
 
     //and then player (which ovewrites where the push object was)
-    Position.set(player, x, y);
+    Position.set(pusher, x, y);
   }
 
+  function fill(bytes32 filler, bytes32 hole) public {
+
+      uint32 roadInt = Road.get(hole);
+
+      // roadInt++;
+      //go directly to finished road for now
+      roadInt = uint32(RoadState.Paved);
+      Road.set(hole, roadInt);
+
+      //ROAD COMPLETE!!!
+      if(roadInt == uint32(RoadState.Paved)) {
+        // Pavement.set(keccak256(abi.encode("Pavement", x, y)), true);
+        Position.deleteRecord(filler);
+      }
+  }
 
   function chop(bytes32 tree) public {
 

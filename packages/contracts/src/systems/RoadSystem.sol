@@ -45,8 +45,8 @@ contract RoadSystem is System {
     (uint32 roadWidth, uint32 roadHeight,,) = RoadConfig.get();
 
 
-    int32 yStart = int32(mileNumber) * int32(roadHeight);
-    int32 yEnd = (int32(mileNumber) * int32(roadHeight)) + int32(roadHeight);
+    int32 yStart = mileNumber * int32(roadHeight);
+    int32 yEnd = (mileNumber * int32(roadHeight)) + int32(roadHeight) - 1;
     int32 halfWidth = int32(mapWidth) / int32(2);
     
     Bounds.set(int32(-halfWidth), halfWidth, yEnd, 0);

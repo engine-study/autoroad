@@ -101,15 +101,8 @@ namespace <%= namespace %>
 		}
 
 		public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate) {
-			
 			<%= tableClassName%>Update update = (<%= tableClassName%>Update)tableUpdate;
-			
-			var currentValue = update?.TypedValue.Item1;
-			if (currentValue == null) {
-				Debug.LogError("No value on <%= tableClassName%> update");
-			}
-	
-			return currentValue;
+			return update?.TypedValue.Item1;
 		}	
 
 		public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)

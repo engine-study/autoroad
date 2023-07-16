@@ -91,14 +91,7 @@ namespace DefaultNamespace
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
             MoveTableUpdate update = (MoveTableUpdate)tableUpdate;
-
-            var currentValue = update?.TypedValue.Item1;
-            if (currentValue == null)
-            {
-                Debug.LogError("No value on MoveTable update");
-            }
-
-            return currentValue;
+            return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)

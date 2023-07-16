@@ -91,14 +91,7 @@ namespace DefaultNamespace
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
             TreeTableUpdate update = (TreeTableUpdate)tableUpdate;
-
-            var currentValue = update?.TypedValue.Item1;
-            if (currentValue == null)
-            {
-                Debug.LogError("No value on TreeTable update");
-            }
-
-            return currentValue;
+            return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)

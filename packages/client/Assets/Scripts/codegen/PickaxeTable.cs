@@ -91,14 +91,7 @@ namespace DefaultNamespace
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
             PickaxeTableUpdate update = (PickaxeTableUpdate)tableUpdate;
-
-            var currentValue = update?.TypedValue.Item1;
-            if (currentValue == null)
-            {
-                Debug.LogError("No value on PickaxeTable update");
-            }
-
-            return currentValue;
+            return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)

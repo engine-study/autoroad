@@ -26,6 +26,10 @@ public class PositionComponent : MUDComponent {
 
         position3D = transform.position;
 
+        if(eventType == UpdateEvent.Delete) {
+            Entity.gameObject.SetActive(false);
+        }
+
         // entity.gameObject.transform.position = new Vector3(position.x, 0f, position.y);
 
 

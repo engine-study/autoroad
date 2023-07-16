@@ -360,6 +360,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(emitEphemeralRecordFunction, cancellationToken);
         }
 
+        public Task<string> FillRequestAsync(FillFunction fillFunction)
+        {
+             return ContractHandler.SendRequestAsync(fillFunction);
+        }
+
+        public Task<TransactionReceipt> FillRequestAndWaitForReceiptAsync(FillFunction fillFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(fillFunction, cancellationToken);
+        }
+
+        public Task<string> FillRequestAsync(byte[] filler, byte[] hole)
+        {
+            var fillFunction = new FillFunction();
+                fillFunction.Filler = filler;
+                fillFunction.Hole = hole;
+            
+             return ContractHandler.SendRequestAsync(fillFunction);
+        }
+
+        public Task<TransactionReceipt> FillRequestAndWaitForReceiptAsync(byte[] filler, byte[] hole, CancellationTokenSource cancellationToken = null)
+        {
+            var fillFunction = new FillFunction();
+                fillFunction.Filler = filler;
+                fillFunction.Hole = hole;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(fillFunction, cancellationToken);
+        }
+
         public Task<byte[]> GetFieldQueryAsync(GetFieldFunction getFieldFunction, BlockParameter blockParameter = null)
         {
             return ContractHandler.QueryAsync<GetFieldFunction, byte[]>(getFieldFunction, blockParameter);
