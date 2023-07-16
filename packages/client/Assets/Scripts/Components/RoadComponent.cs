@@ -47,4 +47,8 @@ public class RoadComponent : MUDComponent {
 
     }
 
+    public void SetStage(RoadState newState) {
+        
+    }
+
 }

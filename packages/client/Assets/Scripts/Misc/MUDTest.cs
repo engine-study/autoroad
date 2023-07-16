@@ -19,10 +19,10 @@ public class MUDTest : mud.Client.MUDNetworkSync
         var data = JsonUtility.FromJson<mud.Unity.LocalDeploy>(jsonFile.text);
         worldAddress = data.worldAddress;
 
-        Debug.Log("World: " + MUDHelper.GetSha3ABIEncodedAddress(worldAddress));
-        Debug.Log("WorldEncoded: " + MUDHelper.GetSha3ABIEncoded(worldAddress));
-        Debug.Log("Position: " + MUDHelper.GetSha3ABIEncoded(5, 10));
-        Debug.Log("Combined: " + MUDHelper.GetSha3ABIEncoded(worldAddress, 5, 10));
-        Debug.Log("StringInt: " + MUDHelper.GetSha3ABIEncoded("hello", 5, 10));
+        Debug.Log("World: " + MUDHelper.Keccak256(worldAddress));
+        Debug.Log("WorldEncoded: " + MUDHelper.Keccak256Address(worldAddress));
+        Debug.Log("Position: " + MUDHelper.Keccak256(5, 10));
+        Debug.Log("Combined: " + MUDHelper.Keccak256Address(worldAddress, 5, 10));
+        Debug.Log("StringInt: " + MUDHelper.Keccak256("hello", 5, 10));
     }
 }

@@ -13,7 +13,7 @@ public class PositionSync : ComponentSync
     [Header("Debug")]
     protected PositionComponent pos;
     protected Vector3 targetPos;
-
+    
     public override System.Type TargetComponentType() {return typeof(PositionComponent);}
 
     protected override void Start() {

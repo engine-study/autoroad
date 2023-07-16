@@ -83,7 +83,7 @@ public class GameState : MonoBehaviour {
                 SPCamera.SetFollow(CursorMUD.Base.Root);
             } else {
                 SPCamera.SetFollow(null);
-                float x = Mathf.Clamp(SPInput.MousePlanePos.x, -10f, 10f);
+                float x = Mathf.Clamp(SPInput.MousePlanePos.x, BoundsComponent.Left, BoundsComponent.Right);
                 float z = Mathf.Clamp(SPInput.MousePlanePos.z, 0f, GameStateComponent.MILE_ENDPOS);
                 SPCamera.SetTarget(new Vector3(x, 0f, z));
             }

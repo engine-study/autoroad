@@ -27,8 +27,8 @@ contract PostDeploy is Script {
     world.createMap(worldAddress);
     world.createMile(0);
 
-    //some debug to check if our abiencode is working
-    // abiTest();
+    // some debug to check if our abiencode is working
+    abiTest(worldAddress);
 
     vm.stopBroadcast();
   }
