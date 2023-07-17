@@ -4,6 +4,7 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
+using Cysharp.Threading.Tasks;
 
 public enum RoadState { None, Shoveled, Filled, Paved }
 
@@ -11,7 +12,11 @@ public class RoadComponent : MUDComponent {
     [Header("Road")]
     public RoadState state;
     public GameObject[] stages;
+    public ParticleSystem fx_spawn, fx_fill;
+    public AudioClip[] sfx_digs, sfx_fills;
     RoadState lastStage = RoadState.None;
+    int mileNumber;
+
 
     protected override void Awake() {
         base.Awake();
@@ -47,8 +52,38 @@ public class RoadComponent : MUDComponent {
 
     }
 
+    protected override void PostInit() {
+        base.PostInit();
+        AddToChunk();
+    }
+    
     public void SetStage(RoadState newState) {
-        
+
+    }
+
+    
+    public async UniTaskVoid AddToChunk() {
+
+        //we need the roadconfig info and the road pieces to have spawned to load the chunk
+        //lots of waiting
+
+        while (TableManager.FindTable<ChunkComponent>() == null) {
+            await UniTask.Delay(500);
+        }
+
+        while (RoadConfigComponent.Width == 0) {
+            await UniTask.Delay(500);
+        }
+
+        //infer mileNumber;
+        mileNumber = Mathf.RoundToInt(transform.position.y / RoadConfigComponent.Height);
+
+        //infer entity of our chunk and look for it
+        string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
+        ChunkComponent c = TableManager.FindComponent<ChunkComponent>(chunkEntity);
+
+
+        c.AddRoadComponent(Entity.Key, this, (int)transform.position.x, (int)transform.position.y);
     }
 
 }

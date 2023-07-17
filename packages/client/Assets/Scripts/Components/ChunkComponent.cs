@@ -86,16 +86,18 @@ public class ChunkComponent : MUDComponent {
 
                     //try to find the road component and add it to the row if one exists
                     string entity = MUDHelper.Keccak256("Road", x + RoadConfigComponent.Left, y);
-                    RoadComponent roadComponent = TableManager.FindComponent<RoadComponent>(entity);
+                    RoadComponent c = TableManager.FindComponent<RoadComponent>(entity);
 
                     int yIndex = y - RoadConfigComponent.Height;
-                    rows[y].SetRoadBlock(entity, x, roadComponent);
+                    AddRoadComponent(entity, c, x, y);
 
                 }
             }
-
-
         }
+    }
+
+    public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {
+        rows[y].SetRoadBlock(entity, x, c);
     }
 
 
