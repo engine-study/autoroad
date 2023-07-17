@@ -80,24 +80,24 @@ public class ChunkComponent : MUDComponent {
 
         } else {
 
-            //search the table for entities pertaining to the road
-            for (int y = mileStartHeight; y < mileStartHeight + RoadConfigComponent.Height; y++) {
-                for (int x = 0; x < RoadConfigComponent.Width; x++) {
+            // //search the table for entities pertaining to the road
+            // for (int y = mileStartHeight; y < mileStartHeight + RoadConfigComponent.Height; y++) {
+            //     for (int x = 0; x < RoadConfigComponent.Width; x++) {
 
-                    //try to find the road component and add it to the row if one exists
-                    string entity = MUDHelper.Keccak256("Road", x + RoadConfigComponent.Left, y);
-                    RoadComponent c = TableManager.FindComponent<RoadComponent>(entity);
+            //         //try to find the road component and add it to the row if one exists
+            //         string entity = MUDHelper.Keccak256("Road", x + RoadConfigComponent.Left, y);
+            //         RoadComponent c = TableManager.FindComponent<RoadComponent>(entity);
 
-                    int yIndex = y - RoadConfigComponent.Height;
-                    AddRoadComponent(entity, c, x, y);
+            //         int yIndex = y - RoadConfigComponent.Height;
+            //         AddRoadComponent(entity, c, x, y);
 
-                }
-            }
+            //     }
+            // }
         }
     }
 
     public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {
-        rows[y].SetRoadBlock(entity, x, c);
+        rows[y].SetRoadBlock(entity, x + RoadConfigComponent.Left, c);
     }
 
 

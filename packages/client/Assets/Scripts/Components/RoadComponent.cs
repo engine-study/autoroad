@@ -12,10 +12,15 @@ public class RoadComponent : MUDComponent {
     [Header("Road")]
     public RoadState state;
     public GameObject[] stages;
+
     public ParticleSystem fx_spawn, fx_fill;
     public AudioClip[] sfx_digs, sfx_fills;
+
+    [Header("Debug")]
+    public ChunkComponent parent;
+    public int mileNumber;
+    public Vector2Int chunkPos;
     RoadState lastStage = RoadState.None;
-    int mileNumber;
 
 
     protected override void Awake() {
@@ -56,18 +61,18 @@ public class RoadComponent : MUDComponent {
         base.PostInit();
         AddToChunk();
     }
-    
+
     public void SetStage(RoadState newState) {
 
     }
 
-    
+
     public async UniTaskVoid AddToChunk() {
 
         //we need the roadconfig info and the road pieces to have spawned to load the chunk
         //lots of waiting
 
-        while (TableManager.FindTable<ChunkComponent>() == null) {
+        while (TableManager.FindTable<ChunkComponent>().SpawnedComponents.Count < 1) {
             await UniTask.Delay(500);
         }
 
@@ -76,14 +81,15 @@ public class RoadComponent : MUDComponent {
         }
 
         //infer mileNumber;
-        mileNumber = Mathf.RoundToInt(transform.position.y / RoadConfigComponent.Height);
+        mileNumber = Mathf.FloorToInt(transform.position.z / (float)RoadConfigComponent.Height);
 
         //infer entity of our chunk and look for it
         string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
-        ChunkComponent c = TableManager.FindComponent<ChunkComponent>(chunkEntity);
+        parent = TableManager.FindComponent<ChunkComponent>(chunkEntity);
+        chunkPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
 
-        c.AddRoadComponent(Entity.Key, this, (int)transform.position.x, (int)transform.position.y);
+        parent.AddRoadComponent(Entity.Key, this, chunkPos.x, chunkPos.y);
     }
 
 }
