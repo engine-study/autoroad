@@ -97,7 +97,7 @@ public class ChunkComponent : MUDComponent {
     }
 
     public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {
-        rows[y].SetRoadBlock(entity, x + RoadConfigComponent.Left, c);
+        rows[y].SetRoadBlock(entity, x + RoadConfigComponent.Right, c);
     }
 
 
