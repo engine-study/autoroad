@@ -12,15 +12,12 @@ public class PlayerMUD : SPPlayer
     [SerializeField] protected PlayerComponent playerComponent;
 
     [Header("Debug")]
-    [SerializeField] protected MUDEntity entity;
     [SerializeField] protected PositionComponent positionComponent;
 
     public override void Init() {
         base.Init();
         
         // Debug.Log("Player Init");
-
-        entity = GetComponentInParent<MUDEntity>();
         if(Player.Loaded) DoNetworkInit();
         else Player.OnLoaded += DoNetworkInit;
 
@@ -40,10 +37,16 @@ public class PlayerMUD : SPPlayer
             SetLocalPlayer(this);
         }
 
-        positionComponent = entity.GetMUDComponent<PositionComponent>();
+        for(int i = 0; i < playerComponent.Entity.Components.Count; i++) {
+            Debug.Log("Player: " + playerComponent.Entity.Components[i].GetType().ToString());
+        }
+
+        Debug.Log("Position: " + playerComponent.Entity.GetMUDComponent<PositionComponent>().GetType().ToString());
+
+        positionComponent = playerComponent.Entity.GetMUDComponent<PositionComponent>();
         transform.position = positionComponent.Pos;
 
-        baseName = MUDHelper.TruncateHash(GetComponent<PlayerComponent>().Entity.Key);
+        baseName = MUDHelper.TruncateHash(playerComponent.Entity.Key);
 
         // Debug.Log("Player Network Init");
 

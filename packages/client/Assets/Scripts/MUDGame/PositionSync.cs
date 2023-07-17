@@ -11,7 +11,7 @@ public class PositionSync : ComponentSync
     // [SerializeField] protected float speed = 1f;
     
     [Header("Debug")]
-    protected PositionComponent pos;
+    [SerializeField] protected PositionComponent pos;
     protected Vector3 targetPos;
     
     public override System.Type TargetComponentType() {return typeof(PositionComponent);}
