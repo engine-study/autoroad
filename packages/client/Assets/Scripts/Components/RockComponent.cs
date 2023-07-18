@@ -14,6 +14,7 @@ public class RockComponent : MUDComponent {
     [SerializeField] ParticleSystem fx_break, fx_drag;
     [SerializeField] SPAudioSource source;
     SPBase rockBase;
+    PositionComponent pos;
 
     [SerializeField] GameObject[] stages;
     public AudioClip[] sfx_drag, sfx_dragBase, sfx_pickHit, sfx_whoosh, sfx_smallBreaks, sfx_bigBreaks;
@@ -54,6 +55,13 @@ public class RockComponent : MUDComponent {
 
         }
 
+
+    }
+
+    protected override void PostInit() {
+        base.PostInit();
+
+        pos = Entity.GetMUDComponent<PositionComponent>();
 
     }
 

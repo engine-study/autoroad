@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using mud.Client;
 
 public class PositionSync : ComponentSync
 {
+    public Action OnMoveComplete;
 
     [Header("Optional")]
     public Transform targetTransform;
@@ -12,8 +14,8 @@ public class PositionSync : ComponentSync
     
     [Header("Debug")]
     [SerializeField] protected PositionComponent pos;
-    protected Vector3 targetPos;
-    
+    [SerializeField] protected Vector3 targetPos;
+    [SerializeField] bool moving = false;    
     public override System.Type TargetComponentType() {return typeof(PositionComponent);}
 
     protected override void Start() {
@@ -48,14 +50,19 @@ public class PositionSync : ComponentSync
         {
             targetTransform.position = pos.Pos;
             targetPos = pos.Pos;
-            enabled = false;
+
+            if(transform.position != targetPos) {
+                EndMove();
+            }
         }
         else if (syncType == ComponentSyncType.Lerp)
         {
             targetPos = pos.Pos;
-            enabled = transform.position != targetPos;
-        }
 
+            if(transform.position != targetPos) {
+                StartMove();
+            }
+        }
 
     }
 
@@ -65,7 +72,19 @@ public class PositionSync : ComponentSync
         
         //turn off for efficiency until next update
         if(targetTransform.position == targetPos) {
-            enabled = false;
+            EndMove();
         }
+    }
+
+    void StartMove() {
+        enabled = true;
+        moving = true;
+    }
+
+    void EndMove() {
+        enabled = false;
+
+        moving = false;
+        OnMoveComplete?.Invoke();
     }
 }
