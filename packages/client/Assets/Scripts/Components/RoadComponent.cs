@@ -28,7 +28,7 @@ public class RoadComponent : MUDComponent {
         state = RoadState.None;
     }
 
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
+    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RoadTable roadUpdate = (RoadTable)update;
 
@@ -42,10 +42,10 @@ public class RoadComponent : MUDComponent {
 
         if (lastStage != state) {
 
-            if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
-                // source.PlaySound((int)state < 3 ? sfx_bigBreaks : sfx_smallBreaks);
-                // fx_break.Play();
-            }
+            // if (eventType == UpdateType.SetField || eventType == UpdateEvent.Optimistic) {
+            //     // source.PlaySound((int)state < 3 ? sfx_bigBreaks : sfx_smallBreaks);
+            //     // fx_break.Play();
+            // }
 
             for (int i = 0; i < stages.Length; i++) {
                 stages[i].SetActive(i == (int)state);

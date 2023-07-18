@@ -28,7 +28,7 @@ public class ChunkComponent : MUDComponent {
         activeObjects.SetActive(false);
     }
 
-    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType) {
+    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         // Debug.Log("Chunk: " + eventType.ToString());
 
@@ -50,7 +50,7 @@ public class ChunkComponent : MUDComponent {
 
         activeObjects.SetActive(!completed);
 
-        if (eventType == UpdateEvent.Insert) {
+        if (newInfo.UpdateType == UpdateType.SetRecord) {
             CreateChunk();
         }
 

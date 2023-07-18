@@ -7,6 +7,7 @@ using mud.Client;
 public class PositionSync : ComponentSync
 {
     public Action OnMoveComplete;
+    public PositionComponent Pos {get{return pos;}}
 
     [Header("Optional")]
     public Transform targetTransform;
@@ -31,8 +32,7 @@ public class PositionSync : ComponentSync
     protected override void InitComponents() {
         base.InitComponents();
 
-        pos = targetComponent as PositionComponent;
-
+        pos = SyncComponent as PositionComponent;
     }
 
     protected override void InitialSync() {
@@ -43,10 +43,10 @@ public class PositionSync : ComponentSync
         targetPos = pos.Pos;
     }
 
-    protected override void UpdateSync(UpdateEvent updateType) {
-        base.UpdateSync(updateType);
+    protected override void UpdateSync() {
+        base.UpdateSync();
 
-        if (syncType == ComponentSyncType.Instant || updateType == UpdateEvent.Revert)
+        if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateSource == UpdateSource.Revert)
         {
             targetTransform.position = pos.Pos;
             targetPos = pos.Pos;
@@ -83,8 +83,8 @@ public class PositionSync : ComponentSync
 
     void EndMove() {
         enabled = false;
-
         moving = false;
+
         OnMoveComplete?.Invoke();
     }
 }

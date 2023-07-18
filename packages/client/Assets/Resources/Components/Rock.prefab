@@ -10798,6 +10798,7 @@ MonoBehaviour:
   fx_break: {fileID: 2375352521298061233}
   fx_drag: {fileID: 3347394206648939041}
   source: {fileID: 5250168534217083149}
+  posSync: {fileID: 7201583706257857126}
   stages:
   - {fileID: 4825848422724391024}
   - {fileID: 7605106085113506639}
@@ -10843,7 +10844,7 @@ MonoBehaviour:
   action: {fileID: 11400000, guid: d55458b104cac5a4b954f4c4a26d8691, type: 2}
   state: {fileID: 0}
   interacting: 0
-  actorPlayer: {fileID: 0}
+  targetGO: {fileID: 0}
   OnStartEvent:
     m_PersistentCalls:
       m_Calls:
@@ -10862,7 +10863,6 @@ MonoBehaviour:
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
-  go: {fileID: 0}
 --- !u!114 &7201583706257857126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10876,7 +10876,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncType: 1
+  synced: 0
+  targetComponent: {fileID: 0}
   targetTransform: {fileID: 0}
+  pos: {fileID: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  moving: 0
 --- !u!54 &3967535639495750451
 Rigidbody:
   m_ObjectHideFlags: 0

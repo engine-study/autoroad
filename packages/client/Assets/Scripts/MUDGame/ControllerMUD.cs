@@ -41,7 +41,7 @@ public class ControllerMUD : SPController {
         playerScript = GetComponentInParent<PlayerMUD>();
         entityReady = true;
 
-        playerScript.Position.OnUpdatedDetails += ComponentUpdate;
+        playerScript.Position.OnUpdated += ComponentUpdate;
 
         moveMarker.SetActive(false);
 
@@ -65,7 +65,7 @@ public class ControllerMUD : SPController {
 
     private void OnDestroy() {
         if (playerScript) {
-            playerScript.Position.OnUpdatedDetails -= ComponentUpdate;
+            playerScript.Position.OnUpdated -= ComponentUpdate;
         }
 
         _disposer?.Dispose();
@@ -159,8 +159,8 @@ public class ControllerMUD : SPController {
             Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)newPos.x, (int)newPos.z));
-            updates.Add(TxManager.MakeOptimistic(otherPosition, (int)pushToPos.x, (int)pushToPos.z));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, UpdateType.SetField, (int)newPos.x, (int)newPos.z));
+            updates.Add(TxManager.MakeOptimistic(otherPosition, UpdateType.SetField, (int)pushToPos.x, (int)pushToPos.z));
             TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
         } else {
 
@@ -168,7 +168,7 @@ public class ControllerMUD : SPController {
             markerPos = moveDest;
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, UpdateType.SetField, (int)moveDest.x, (int)moveDest.z));
 
             TxManager.Send<MoveFromFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
         }
@@ -202,10 +202,10 @@ public class ControllerMUD : SPController {
     }
 
 
-    private void ComponentUpdate(UpdateEvent eventType) {
+    private void ComponentUpdate() {
         if (!entityReady) { return; }
 
-        if (eventType == UpdateEvent.Revert) {
+        if (playerScript.Position.UpdateSource == UpdateSource.Revert) {
             SetPosition(playerScript.Position.Pos);
         }
 
@@ -217,7 +217,7 @@ public class ControllerMUD : SPController {
 
         //our onchain position didn't change, either because we got an update that was already made optimistically
         //or because we literally didn't move
-        if (eventType == UpdateEvent.Update && (Vector3)onchainPos == lastOnchainPos) {
+        if (playerScript.Position.UpdateType == UpdateType.SetField && (Vector3)onchainPos == lastOnchainPos) {
             return;
         }
 
@@ -257,7 +257,7 @@ public class ControllerMUD : SPController {
         }
 
         //UPDATE ROTATION
-        if (eventType != UpdateEvent.Revert) {
+        if (playerScript.Position.UpdateSource != UpdateSource.Revert) {
             var _lookY = moveDest;
             _lookY.y = playerTransform.position.y;
 

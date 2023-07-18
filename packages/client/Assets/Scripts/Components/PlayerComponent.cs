@@ -18,7 +18,7 @@ public class PlayerComponent : MUDComponent {
         isLocalPlayer = ourEntity.Key == NetworkManager.Instance.addressKey;
     }
 
-    protected override void UpdateComponent(IMudTable table, UpdateEvent eventType) {
+    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
         // throw new System.NotImplementedException();
     }
 }

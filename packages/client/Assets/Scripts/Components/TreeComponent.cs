@@ -14,7 +14,7 @@ public class TreeComponent : MUDComponent {
 
     bool lastState = false;
 
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
+    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
 
         TreeTable treeUpdate = (TreeTable)update;
@@ -34,7 +34,7 @@ public class TreeComponent : MUDComponent {
 
         if (Loaded && lastState != treeState) {
 
-            // if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
+            // if (eventType == UpdateType.SetField || eventType == UpdateEvent.Optimistic) {
             //     source.PlaySound(sfx_whoosh);
             //     if(lastStage < RockType.Rudus) {
             //         source.PlaySound(sfx_pickHit);

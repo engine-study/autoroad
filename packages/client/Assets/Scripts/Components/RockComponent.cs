@@ -13,8 +13,8 @@ public class RockComponent : MUDComponent {
     [SerializeField] protected RockType rockType;
     [SerializeField] ParticleSystem fx_break, fx_drag;
     [SerializeField] SPAudioSource source;
+    [SerializeField] PositionSync posSync;
     SPBase rockBase;
-    PositionComponent pos;
 
     [SerializeField] GameObject[] stages;
     public AudioClip[] sfx_drag, sfx_dragBase, sfx_pickHit, sfx_whoosh, sfx_smallBreaks, sfx_bigBreaks;
@@ -34,38 +34,54 @@ public class RockComponent : MUDComponent {
 
     protected override void InitDestroy() {
         base.InitDestroy();
-        if (Entity) {
-            Entity.OnComponentUpdated -= UpdatePositionCheck;
-        }
+        Entity.OnComponentUpdated -= UpdatePositionCheck;
+        posSync.OnMoveComplete -= Sink;
+        
 
     }
 
+
+    protected override void PostInit() {
+        base.PostInit();
+
+        if(posSync.Pos.UpdateType == UpdateType.DeleteRecord) {
+            gameObject.SetActive(false);
+        }
+    }
+
     Vector3 lastPos;
-    void UpdatePositionCheck(MUDComponent c, UpdateEvent updateType) {
+    void UpdatePositionCheck(MUDComponent c, UpdateInfo newInfo) {
 
         PositionComponent pos = c as PositionComponent;
         if (pos) {
-            if (updateType != UpdateEvent.Revert && lastPos != pos.Pos) {
+
+            if (newInfo.UpdateSource != UpdateSource.Revert && lastPos != pos.Pos) {
                 fx_drag.Play();
                 source.PlaySound(sfx_drag);
                 source.PlaySound(sfx_dragBase);
             }
 
-            lastPos = pos.Pos;
+            //our position component was deleted
+            //we got pushed into a hole, when we finish moving to the hole, sink into into it
+            if(newInfo.UpdateType == UpdateType.DeleteRecord) {
+        
+                if(Loaded) {
+                    gameObject.SetActive(false);
+                } else {
+                    posSync.OnMoveComplete += Sink;
+                }
+            }
 
+            lastPos = pos.Pos;
         }
 
+    }
+
+    void Sink() {
 
     }
 
-    protected override void PostInit() {
-        base.PostInit();
-
-        pos = Entity.GetMUDComponent<PositionComponent>();
-
-    }
-
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateEvent eventType) {
+    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RockTable rockUpdate = (RockTable)update;
 
@@ -87,7 +103,7 @@ public class RockComponent : MUDComponent {
 
         if (Loaded && lastStage != rockType) {
 
-            if (eventType == UpdateEvent.Update || eventType == UpdateEvent.Optimistic) {
+            if (newInfo.UpdateType == UpdateType.SetField || newInfo.UpdateSource == UpdateSource.Optimistic) {
                 source.PlaySound(sfx_whoosh);
                 if (lastStage < RockType.Rudus) {
                     source.PlaySound(sfx_pickHit);
@@ -110,7 +126,7 @@ public class RockComponent : MUDComponent {
 
     public async void MineRock(int x, int y) {
         List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(TxManager.MakeOptimistic(this, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus))));
+        updates.Add(TxManager.MakeOptimistic(this, UpdateType.SetField, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus))));
         await TxManager.Send<MineFunction>(updates, x, y);
     }
    

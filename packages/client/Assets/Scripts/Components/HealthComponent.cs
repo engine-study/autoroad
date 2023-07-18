@@ -5,7 +5,7 @@ using DefaultNamespace;
 using mud.Client;
 
 public class HealthComponent : MUDComponent {
-    protected override void UpdateComponent(IMudTable table, UpdateEvent eventType) {
+    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
 
     }
 }

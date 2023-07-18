@@ -17,7 +17,7 @@ public class GameStateComponent : MUDComponent {
     [SerializeField] protected int miles;
     [SerializeField] protected WorldScroll scroll;
     [SerializeField] protected GameObject edge;
-    protected override void UpdateComponent(IMudTable update, UpdateEvent eventType) {
+    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         GameStateTable table = (GameStateTable)update;
 
