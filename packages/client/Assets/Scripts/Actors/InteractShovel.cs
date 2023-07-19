@@ -17,9 +17,11 @@ public class InteractShovel : SPInteract
     }
 
     public void Shovel() {
+        int x = (int)transform.position.x;
+        int y = (int)transform.position.z;
         //no way of optimistic spawning yet
-        // TxManager.MakeOptimistic
-
+        TxManager.MakeOptimisticInsert<RoadComponent>(MUDHelper.Keccak256("Road", x,y), 1);
+        TxManager.MakeOptimisticInsert<PositionComponent>(MUDHelper.Keccak256("Road", x,y), x,y);
         TxManager.Send<ShovelFunction>(System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
     }
 
