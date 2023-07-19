@@ -11,14 +11,15 @@ public class RockComponent : MUDComponent {
 
     [Header("Rock")]
     [SerializeField] protected RockType rockType;
-    [SerializeField] ParticleSystem fx_break, fx_drag;
-    [SerializeField] SPAudioSource source;
+    [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles;
+    [SerializeField] SPAudioSource source, rockSlide;
     [SerializeField] PositionSync posSync;
-    SPBase rockBase;
 
+    [SerializeField] GameObject visualParent;
     [SerializeField] GameObject[] stages;
-    public AudioClip[] sfx_drag, sfx_dragBase, sfx_pickHit, sfx_whoosh, sfx_smallBreaks, sfx_bigBreaks;
+    public AudioClip[] sfx_drag, sfx_dragBase, sfx_pickHit, sfx_whoosh, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
     RockType lastStage = RockType._Count;
+    SPBase rockBase;
 
     protected override void Awake() {
         base.Awake();
@@ -79,7 +80,30 @@ public class RockComponent : MUDComponent {
 
     void Sink() {
 
+        StartCoroutine(SinkCoroutine());
+
     }
+
+    IEnumerator SinkCoroutine() {
+
+        fx_fillParticles.Play();
+        source.PlaySound(sfx_fillSound);
+
+        rockSlide.Source.Play();
+        rockSlide.Source.time = Random.Range(0f, rockSlide.Source.clip.length);
+
+        float lerp = 0f;
+
+        while(lerp < 1f) {
+            lerp += Time.deltaTime * 5f;
+            visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * .2f, lerp);
+            yield return null;
+        }
+
+        source.PlaySound(sfx_finalThump);
+        rockSlide.Source.Stop();
+    }
+
 
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 

@@ -112,9 +112,9 @@ public class ControllerMUD : SPController {
 
         //update rotation based on mouseInput
         // Determine the new rotation
-        if(playerScript.Actor.ActionState == ActionState.Idle) {
+        if (playerScript.Actor.ActionState == ActionState.Idle) {
             Vector3 eulerAngles = Quaternion.LookRotation(SPInput.MousePlanePos - playerTransform.position).eulerAngles;
-            lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y/90) * 90, eulerAngles.z);
+            lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
         }
 
         playerScript.Animator.ik.SetLook(CursorMUD.LookTarget);
@@ -140,9 +140,13 @@ public class ControllerMUD : SPController {
             moveDest += Vector3.right * moveDistance;
         }
 
+
+
         moveDest.x = Mathf.Round(moveDest.x);
         moveDest.y = 0f;
         moveDest.z = Mathf.Round(moveDest.z);
+
+
 
         minTime = .75f;
 
@@ -151,7 +155,15 @@ public class ControllerMUD : SPController {
         PositionComponent otherPosition = (e != null ? e.GetMUDComponent<PositionComponent>() : null);
         push = otherPosition != null;
 
-        if (push) {
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
+            moveDest = CursorMUD.GridPos;
+            Debug.Log("TELEPORT");
+            markerPos = moveDest;
+            List<TxUpdate> updates = new List<TxUpdate>();
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
+            TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+
+        } else if (push) {
 
             Debug.Log("PUSHING");
 
@@ -162,6 +174,7 @@ public class ControllerMUD : SPController {
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)newPos.x, (int)newPos.z));
             updates.Add(TxManager.MakeOptimistic(otherPosition, (int)pushToPos.x, (int)pushToPos.z));
             TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
+
         } else {
 
             Debug.Log("WALKING");
@@ -266,7 +279,7 @@ public class ControllerMUD : SPController {
             }
         }
 
-        if(playerScript.IsLocalPlayer) {
+        if (playerScript.IsLocalPlayer) {
             //stop the player from looking at the cursor when theyre moving
             playerScript.Animator.ik.SetLook(null);
         }

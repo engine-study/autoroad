@@ -5,7 +5,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
 import { Road, Pavement, Move, State, Carrying, Rock, Tree } from "../codegen/Tables.sol";
-import { PositionTableId, PositionData} from "../codegen/Tables.sol";
+import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
@@ -14,8 +14,6 @@ import { MapSystem } from "../systems/MapSystem.sol";
 import { RoadSystem } from "../systems/RoadSystem.sol";
 
 contract MoveSystem is System {
-
-
   //push
   function push(int32 x, int32 y, int32 pushX, int32 pushY) public {
     IWorld world = IWorld(_world());
@@ -40,28 +38,23 @@ contract MoveSystem is System {
 
     //check if we are pushing rocks into a road ditch
     if (atDestination.length > 0) {
-
       //check if there is an obstruction
       bool obstruction = Move.get(atDestination[0]) != 0;
       require(obstruction == false, "pushing into an occupied spot");
 
       uint32 roadInt = Road.get(atDestination[0]);
       //there is a road here
-      if(roadInt != 0) {
-         require(roadInt == uint32(RoadState.Shoveled), "Road already full");
+      if (roadInt != 0) {
+        require(roadInt == uint32(RoadState.Shoveled), "Road already full");
 
         //this has now become a fill()
-        canPush = false; 
+        canPush = false;
         fill(atPush[0], atDestination[0]);
-
       }
-
-    } else {
-
-    }
+    } else {}
 
     //move push object before then setting the pusher to the new position
-    if(canPush) {
+    if (canPush) {
       Position.set(atPush[0], pushX, pushY);
     }
 
@@ -70,47 +63,44 @@ contract MoveSystem is System {
   }
 
   function fill(bytes32 filler, bytes32 hole) public {
+    uint32 roadInt = Road.get(hole);
 
-      uint32 roadInt = Road.get(hole);
+    // roadInt++;
+    //go directly to finished road for now
+    roadInt = uint32(RoadState.Paved);
+    Road.set(hole, roadInt);
 
-      // roadInt++;
-      //go directly to finished road for now
-      roadInt = uint32(RoadState.Paved);
-      Road.set(hole, roadInt);
-
-      //ROAD COMPLETE!!!
-      if(roadInt == uint32(RoadState.Paved)) {
-        // Pavement.set(keccak256(abi.encode("Pavement", x, y)), true);
-        Position.deleteRecord(filler);
-      }
+    //ROAD COMPLETE!!!
+    if (roadInt == uint32(RoadState.Paved)) {
+      // Pavement.set(keccak256(abi.encode("Pavement", x, y)), true);
+      Position.deleteRecord(filler);
+    }
   }
 
   function chop(bytes32 tree) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
 
-      bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(Tree.get(tree), "not a tree");
+    require(withinManhattanDistance(Position.get(tree), Position.get(player), 1), "too far to chop");
 
-      require(Tree.get(tree), "not a tree");
-      require(withinManhattanDistance(Position.get(tree), Position.get(player), 1), "too far to chop");
+    int32 health = Health.get(tree);
+    health--;
 
-      int32 health = Health.get(tree);
-      health--;
-
-      if(health == 0) {
-        Tree.deleteRecord(tree);
-        Position.deleteRecord(tree);
-        Health.deleteRecord(tree);
-        Move.deleteRecord(tree);
-      } else {
-        Health.set(tree, health);
-      }
+    if (health == 0) {
+      Tree.deleteRecord(tree);
+      Position.deleteRecord(tree);
+      Health.deleteRecord(tree);
+      Move.deleteRecord(tree);
+    } else {
+      Health.set(tree, health);
+    }
   }
 
   function mine(int32 x, int32 y) public {
-    
     bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
-     // Position
+    // Position
     require(withinManhattanDistance(PositionData(x, y), Position.get(player), 1), "too far to mine");
     require(atPosition.length >= 1, "mining an empty spot");
 
@@ -125,17 +115,16 @@ contract MoveSystem is System {
     Rock.set(atPosition[0], rockState);
 
     //give rocks that are mined a pushable component
-    if(rockState == uint32(RockType.Statumen)) {
+    if (rockState == uint32(RockType.Statumen)) {
       Move.set(atPosition[0], uint32(MoveType.Push));
-    } 
+    }
     //become shovelable once we are broken down enough
-    else if(rockState == uint32(RockType.Nucleus)) {
+    else if (rockState == uint32(RockType.Nucleus)) {
       Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
   }
 
   function carry(int32 carryX, int32 carryY) public {
-
     bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(carryX, carryY));
 
@@ -184,6 +173,13 @@ contract MoveSystem is System {
     Position.set(roadEntity, x, y);
   }
 
+  function teleport(int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    require(atPosition.length < 1, "occupied");
+    Position.set(player, PositionData(x, y));
+  }
+
   function moveFrom(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     PositionData memory startPos = Position.get(player);
@@ -230,12 +226,11 @@ contract MoveSystem is System {
   }
 
   function spawn() public {
-    
     bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
     require(!Player.get(playerEntity), "already spawned");
 
     // uint32 mileDistance = GameState.get()
-    (int32 l,int32 r,int32 up,) = Bounds.get();
+    (int32 l, int32 r, int32 up, ) = Bounds.get();
 
     Player.set(playerEntity, true);
     Move.set(playerEntity, uint32(MoveType.Push));

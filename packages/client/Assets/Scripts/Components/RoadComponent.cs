@@ -12,7 +12,7 @@ public class RoadComponent : MUDComponent {
     [Header("Road")]
     public RoadState state;
     public GameObject[] stages;
-
+    public SPAudioSource audio;
     public ParticleSystem fx_spawn, fx_fill;
     public AudioClip[] sfx_digs, sfx_fills;
 
@@ -35,18 +35,19 @@ public class RoadComponent : MUDComponent {
         if (roadUpdate == null) {
             Debug.LogError("No roadUpdate", this);
         } else {
-
             state = roadUpdate.value != null ? (RoadState)roadUpdate.value : RoadState.None;
-
         }
 
         if (lastStage != state) {
 
-            // if (eventType == UpdateType.SetField || eventType == UpdateEvent.Optimistic) {
-            //     // source.PlaySound((int)state < 3 ? sfx_bigBreaks : sfx_smallBreaks);
-            //     // fx_break.Play();
-            // }
-
+            if(state == RoadState.Shoveled) {
+                fx_spawn.Play();
+                audio.PlaySound(sfx_digs);
+            } else if(state == RoadState.Filled) {
+                fx_fill.Play();
+                audio.PlaySound(sfx_fills);
+            }
+            
             for (int i = 0; i < stages.Length; i++) {
                 stages[i].SetActive(i == (int)state);
             }

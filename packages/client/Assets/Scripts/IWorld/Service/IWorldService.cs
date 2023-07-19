@@ -1463,6 +1463,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainFunction, cancellationToken);
         }
 
+        public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)
+        {
+             return ContractHandler.SendRequestAsync(teleportFunction);
+        }
+
+        public Task<TransactionReceipt> TeleportRequestAndWaitForReceiptAsync(TeleportFunction teleportFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportFunction, cancellationToken);
+        }
+
+        public Task<string> TeleportRequestAsync(int x, int y)
+        {
+            var teleportFunction = new TeleportFunction();
+                teleportFunction.X = x;
+                teleportFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(teleportFunction);
+        }
+
+        public Task<TransactionReceipt> TeleportRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var teleportFunction = new TeleportFunction();
+                teleportFunction.X = x;
+                teleportFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportFunction, cancellationToken);
+        }
+
         public Task<string> UpdateInFieldRequestAsync(UpdateInFieldFunction updateInFieldFunction)
         {
              return ContractHandler.SendRequestAsync(updateInFieldFunction);
