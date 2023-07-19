@@ -8,6 +8,7 @@ public class PositionSync : ComponentSync
 {
     public Action OnMoveComplete;
     public PositionComponent Pos {get{return pos;}}
+    public bool Moving {get{return moving;}}
 
     [Header("Optional")]
     public Transform targetTransform;

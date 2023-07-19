@@ -118,8 +118,18 @@ public class ControllerMUD : SPController {
         }
 
         playerScript.Animator.ik.SetLook(CursorMUD.LookTarget);
+         
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
+            moveDest = CursorMUD.GridPos;
+            Debug.Log("TELEPORT");
+            markerPos = moveDest;
+            List<TxUpdate> updates = new List<TxUpdate>();
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
+            TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+            SetPosition(moveDest);
+            return;
+        }
 
-        bool push = Input.GetKey(KeyCode.LeftShift);
 
         bool input = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
 
@@ -127,6 +137,7 @@ public class ControllerMUD : SPController {
             return;
 
         moveDest = (Vector3)onchainPos;
+
 
         // Vector3 moveDest = (Vector3)_destination;
         float moveDistance = 2f;
@@ -146,24 +157,14 @@ public class ControllerMUD : SPController {
         moveDest.y = 0f;
         moveDest.z = Mathf.Round(moveDest.z);
 
-
-
         minTime = .75f;
 
         Vector3 direction = (moveDest - playerTransform.position).normalized;
         MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .25f, .1f);
         PositionComponent otherPosition = (e != null ? e.GetMUDComponent<PositionComponent>() : null);
-        push = otherPosition != null;
+        bool push = otherPosition != null;
 
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
-            moveDest = CursorMUD.GridPos;
-            Debug.Log("TELEPORT");
-            markerPos = moveDest;
-            List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
-            TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
-
-        } else if (push) {
+        if (push) {
 
             Debug.Log("PUSHING");
 

@@ -67,9 +67,10 @@ public class RockComponent : MUDComponent {
             if(newInfo.UpdateType == UpdateType.DeleteRecord) {
         
                 if(Loaded) {
-                    gameObject.SetActive(false);
+                    if(posSync.Moving) posSync.OnMoveComplete += Sink;
+                    else Sink();
                 } else {
-                    posSync.OnMoveComplete += Sink;
+                    gameObject.SetActive(false);
                 }
             }
 
@@ -95,7 +96,7 @@ public class RockComponent : MUDComponent {
         float lerp = 0f;
 
         while(lerp < 1f) {
-            lerp += Time.deltaTime * 5f;
+            lerp += Time.deltaTime * .5f;
             visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * .2f, lerp);
             yield return null;
         }

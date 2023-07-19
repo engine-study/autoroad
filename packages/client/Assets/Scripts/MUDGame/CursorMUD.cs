@@ -6,9 +6,9 @@ using System;
 
 public class CursorMUD : MonoBehaviour {
     public static CursorMUD Instance;
-    public static Transform CursorTransform {get{return Instance.visuals;}}
-    public static Transform CursorTransformRaw {get{return Instance.rawTransform;}}
-    public static Transform LookTarget {get{return Instance.lookTarget;}}
+    public static Transform CursorTransform { get { return Instance.visuals; } }
+    public static Transform CursorTransformRaw { get { return Instance.rawTransform; } }
+    public static Transform LookTarget { get { return Instance.lookTarget; } }
     public static Vector3 WorldPos { get { return Instance.mousePos; } }
     public static Vector3 GridPos { get { return Instance.gridPos; } }
     public static Entity Entity { get { return Instance.hover; } }
@@ -47,22 +47,16 @@ public class CursorMUD : MonoBehaviour {
     }
 
     void UpdateMouse() {
-        lastPos = rawMousePos;
         rawMousePos = SPInput.MousePlanePos;
 
         rawTransform.position = rawMousePos;
 
         if (grid) {
 
-            lastGridPos = gridPos;
 
             gridPos = new Vector3(Mathf.Round(rawMousePos.x), Mathf.Round(rawMousePos.y), Mathf.Round(rawMousePos.z));
             mousePos = gridPos;
 
-            if (gridPos != lastGridPos) {
-                if (OnGridPosition != null)
-                    OnGridPosition.Invoke(gridPos);
-            }
 
         } else {
             mousePos = Vector3.MoveTowards(visuals.position, rawMousePos, 50f * Time.deltaTime);
@@ -77,11 +71,19 @@ public class CursorMUD : MonoBehaviour {
         if (mousePos != lastPos) {
             UpdateHover();
         }
+
+        if (gridPos != lastGridPos) {
+            OnGridPosition?.Invoke(gridPos);
+        }
+
+        lastGridPos = gridPos;
+        lastPos = mousePos;
+
     }
 
     void UpdateHover() {
 
-        hover = MUDHelper.GetMUDEntityFromRadius(mousePos + Vector3.up * .25f, .1f);
+        hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
 
         if (lastHover != hover) {
 
