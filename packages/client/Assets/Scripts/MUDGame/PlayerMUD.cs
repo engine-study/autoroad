@@ -38,10 +38,10 @@ public class PlayerMUD : SPPlayer
         }
 
         for(int i = 0; i < playerComponent.Entity.Components.Count; i++) {
-            Debug.Log("Player: " + playerComponent.Entity.Components[i].GetType().ToString());
+            // Debug.Log("Player: " + playerComponent.Entity.Components[i].GetType().ToString());
         }
 
-        Debug.Log("Position: " + playerComponent.Entity.GetMUDComponent<PositionComponent>().GetType().ToString());
+        // Debug.Log("Position: " + playerComponent.Entity.GetMUDComponent<PositionComponent>().GetType().ToString());
 
         positionComponent = playerComponent.Entity.GetMUDComponent<PositionComponent>();
         transform.position = positionComponent.Pos;
