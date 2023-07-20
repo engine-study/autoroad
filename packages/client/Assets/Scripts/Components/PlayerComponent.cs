@@ -13,17 +13,17 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] bool spawned;
     [SerializeField] bool isLocalPlayer;
     [SerializeField] PlayerMUD playerScript;
-    [SerializeField] HealthComponent health;
     [SerializeField] SPInteract meleeInteract;
+
+    [Header("Debug")]
+    [SerializeField] HealthComponent health;
 
     public static string? LocalPlayerKey;
 
     public override void Init(MUDEntity ourEntity, TableManager ourTable) {
         base.Init(ourEntity, ourTable);
 
-        playerScript = GetComponent<PlayerMUD>();
         isLocalPlayer = ourEntity.Key == NetworkManager.Instance.addressKey;
-        meleeInteract.OnInteractToggle += Meleed;
     }
 
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
@@ -34,6 +34,7 @@ public class PlayerComponent : MUDComponent {
         base.PostInit();
 
         health = Entity.GetMUDComponent<HealthComponent>();
+        meleeInteract.OnInteractToggle += Meleed;
 
     }
 
