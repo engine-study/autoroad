@@ -173,6 +173,27 @@ contract MoveSystem is System {
     Position.set(roadEntity, x, y);
   }
 
+  function melee(bytes32 target) public {
+
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    PositionData memory attackerPos = Position.get(player);
+    PositionData memory targetPos = Position.get(target);
+    
+    require(withinManhattanDistance(attackPos, targetPos, 1), "too far to attack");
+
+    int32 health = Health.get(target);
+
+    health--;
+
+    if(health <= 0) {
+      kill(player, target);
+    }
+  }
+
+  function kill(bytes32 attacker, bytes32 target) private {
+
+  }
+
   function teleport(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
@@ -233,6 +254,7 @@ contract MoveSystem is System {
     (int32 l, int32 r, int32 up, ) = Bounds.get();
 
     Player.set(playerEntity, true);
+    Health.set(playerEntity, 3)
     Move.set(playerEntity, uint32(MoveType.Push));
 
     //spawn at the top of the road

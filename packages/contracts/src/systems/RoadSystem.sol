@@ -113,6 +113,7 @@ contract RoadSystem is System {
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Player) {
       Player.set(entity, true);
+      Health.set(entity, 3);
       Move.set(entity, uint32(MoveType.Push));
     }
   }
