@@ -39,19 +39,17 @@ public class RoadComponent : MUDComponent {
         }
 
         if (Loaded && lastStage != state) {
-
-            if(state == RoadState.Shoveled) {
+            if (state == RoadState.Shoveled) {
                 fx_spawn.Play();
                 audio.PlaySound(sfx_digs);
-            } else if(state == RoadState.Filled) {
+            } else if (state == RoadState.Filled) {
                 fx_fill.Play();
                 audio.PlaySound(sfx_fills);
             }
-            
-            for (int i = 0; i < stages.Length; i++) {
-                stages[i].SetActive(i == (int)state);
-            }
+        }
 
+        for (int i = 0; i < stages.Length; i++) {
+            stages[i].SetActive(i == (int)state);
         }
 
         lastStage = state;
