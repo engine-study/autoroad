@@ -1,18 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using mud.Client;
+using DefaultNamespace;
 
-public class BonesComponent : MonoBehaviour
+public class BonesComponent : MUDComponent
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

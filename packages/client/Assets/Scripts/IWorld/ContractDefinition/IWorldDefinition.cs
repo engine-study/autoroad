@@ -152,17 +152,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Data { get; set; }
     }
 
-    public partial class FillFunction : FillFunctionBase { }
-
-    [Function("fill")]
-    public class FillFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "filler", 1)]
-        public virtual byte[] Filler { get; set; }
-        [Parameter("bytes32", "hole", 2)]
-        public virtual byte[] Hole { get; set; }
-    }
-
     public partial class GetFieldFunction : GetFieldFunctionBase { }
 
     [Function("getField", "bytes")]
@@ -293,6 +282,15 @@ namespace IWorld.ContractDefinition
     public class IsStoreFunctionBase : FunctionMessage
     {
 
+    }
+
+    public partial class MeleeFunction : MeleeFunctionBase { }
+
+    [Function("melee")]
+    public class MeleeFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "target", 1)]
+        public virtual byte[] Target { get; set; }
     }
 
     public partial class MineFunction : MineFunctionBase { }
@@ -947,8 +945,6 @@ namespace IWorld.ContractDefinition
 
 
 
-
-
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1011,6 +1007,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

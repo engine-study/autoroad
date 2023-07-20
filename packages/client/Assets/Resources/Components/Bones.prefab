@@ -175,6 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3439431349450781075}
+  - component: {fileID: 5952638462309608961}
   m_Layer: 0
   m_Name: Bones
   m_TagString: Untagged
@@ -200,6 +201,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5952638462309608961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994103424863024445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eded08c18b00bbd40860d708d302596f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tableType: {fileID: 11400000, guid: 02fcd7b9b249fa8408403d3129042856, type: 2}
+  requiredComponents:
+  - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  updateInfo:
+    updateType: 0
+    source: 0
+  entity: {fileID: 0}
+  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
 --- !u!1 &7598813968439101505
 GameObject:
   m_ObjectHideFlags: 0

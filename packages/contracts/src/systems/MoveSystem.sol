@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Rock, Tree } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -62,7 +62,7 @@ contract MoveSystem is System {
     Position.set(pusher, x, y);
   }
 
-  function fill(bytes32 filler, bytes32 hole) public {
+  function fill(bytes32 filler, bytes32 hole) private {
     uint32 roadInt = Road.get(hole);
 
     // roadInt++;
@@ -178,19 +178,26 @@ contract MoveSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     PositionData memory attackerPos = Position.get(player);
     PositionData memory targetPos = Position.get(target);
-    
-    require(withinManhattanDistance(attackPos, targetPos, 1), "too far to attack");
+
+    require(withinManhattanDistance(attackerPos, targetPos, 1), "too far to attack");
 
     int32 health = Health.get(target);
+    require(health > 0, "this thing on?");
 
     health--;
 
     if(health <= 0) {
-      kill(player, target);
+      kill(player, target, targetPos);
     }
   }
 
-  function kill(bytes32 attacker, bytes32 target) private {
+  function kill(bytes32 attacker, bytes32 target, PositionData memory pos) private {
+    Position.deleteRecord(target);
+    bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
+
+    Bones.set(bonesEntity, true);
+    Position.set(bonesEntity, pos);
+    Move.set(bonesEntity, uint32(MoveType.Push));
 
   }
 
@@ -254,7 +261,7 @@ contract MoveSystem is System {
     (int32 l, int32 r, int32 up, ) = Bounds.get();
 
     Player.set(playerEntity, true);
-    Health.set(playerEntity, 3)
+    Health.set(playerEntity, 3);
     Move.set(playerEntity, uint32(MoveType.Push));
 
     //spawn at the top of the road

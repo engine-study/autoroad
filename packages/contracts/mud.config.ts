@@ -114,6 +114,7 @@ export default mudConfig({
     //items
     Shovel: "bool",
     Pickaxe: "bool",
+    Bones: "bool",
 
     Position: {
       name: "Position",

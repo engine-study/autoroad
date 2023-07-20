@@ -23,10 +23,14 @@ namespace DefaultNamespace
             return ID;
         }
 
+        public long? startingMile;
+        public long? kills;
+        public long? deaths;
+        public long? moves;
         public long? mined;
-        public long? moved;
         public long? pushed;
         public long? shoveled;
+        public long? completed;
 
         public override Type TableType()
         {
@@ -40,13 +44,21 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            mined = (long)(int)functionParameters[0];
+            startingMile = (long)(int)functionParameters[0];
 
-            moved = (long)(int)functionParameters[1];
+            kills = (long)(int)functionParameters[1];
 
-            pushed = (long)(int)functionParameters[2];
+            deaths = (long)(int)functionParameters[2];
 
-            shoveled = (long)(int)functionParameters[3];
+            moves = (long)(int)functionParameters[3];
+
+            mined = (long)(int)functionParameters[4];
+
+            pushed = (long)(int)functionParameters[5];
+
+            shoveled = (long)(int)functionParameters[6];
+
+            completed = (long)(int)functionParameters[7];
         }
 
         public override bool SetValues(IEnumerable<Property> result)
@@ -59,14 +71,29 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
+                    case "startingMile":
+                        var startingMileValue = (long)value;
+                        startingMile = startingMileValue;
+                        hasValues = true;
+                        break;
+                    case "kills":
+                        var killsValue = (long)value;
+                        kills = killsValue;
+                        hasValues = true;
+                        break;
+                    case "deaths":
+                        var deathsValue = (long)value;
+                        deaths = deathsValue;
+                        hasValues = true;
+                        break;
+                    case "moves":
+                        var movesValue = (long)value;
+                        moves = movesValue;
+                        hasValues = true;
+                        break;
                     case "mined":
                         var minedValue = (long)value;
                         mined = minedValue;
-                        hasValues = true;
-                        break;
-                    case "moved":
-                        var movedValue = (long)value;
-                        moved = movedValue;
                         hasValues = true;
                         break;
                     case "pushed":
@@ -77,6 +104,11 @@ namespace DefaultNamespace
                     case "shoveled":
                         var shoveledValue = (long)value;
                         shoveled = shoveledValue;
+                        hasValues = true;
+                        break;
+                    case "completed":
+                        var completedValue = (long)value;
+                        completed = completedValue;
                         hasValues = true;
                         break;
                 }
@@ -101,14 +133,29 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
+                    case "startingMile":
+                        var startingMileValue = (long)value;
+                        statsTable.startingMile = startingMileValue;
+                        hasValues = true;
+                        break;
+                    case "kills":
+                        var killsValue = (long)value;
+                        statsTable.kills = killsValue;
+                        hasValues = true;
+                        break;
+                    case "deaths":
+                        var deathsValue = (long)value;
+                        statsTable.deaths = deathsValue;
+                        hasValues = true;
+                        break;
+                    case "moves":
+                        var movesValue = (long)value;
+                        statsTable.moves = movesValue;
+                        hasValues = true;
+                        break;
                     case "mined":
                         var minedValue = (long)value;
                         statsTable.mined = minedValue;
-                        hasValues = true;
-                        break;
-                    case "moved":
-                        var movedValue = (long)value;
-                        statsTable.moved = movedValue;
                         hasValues = true;
                         break;
                     case "pushed":
@@ -119,6 +166,11 @@ namespace DefaultNamespace
                     case "shoveled":
                         var shoveledValue = (long)value;
                         statsTable.shoveled = shoveledValue;
+                        hasValues = true;
+                        break;
+                    case "completed":
+                        var completedValue = (long)value;
+                        statsTable.completed = completedValue;
                         hasValues = true;
                         break;
                 }
@@ -155,11 +207,23 @@ namespace DefaultNamespace
                 {
                     current = new StatsTable
                     {
+                        startingMile = value.Item1.TryGetValue(
+                            "startingMile",
+                            out var startingMileVal
+                        )
+                            ? (long)startingMileVal
+                            : default,
+                        kills = value.Item1.TryGetValue("kills", out var killsVal)
+                            ? (long)killsVal
+                            : default,
+                        deaths = value.Item1.TryGetValue("deaths", out var deathsVal)
+                            ? (long)deathsVal
+                            : default,
+                        moves = value.Item1.TryGetValue("moves", out var movesVal)
+                            ? (long)movesVal
+                            : default,
                         mined = value.Item1.TryGetValue("mined", out var minedVal)
                             ? (long)minedVal
-                            : default,
-                        moved = value.Item1.TryGetValue("moved", out var movedVal)
-                            ? (long)movedVal
                             : default,
                         pushed = value.Item1.TryGetValue("pushed", out var pushedVal)
                             ? (long)pushedVal
@@ -167,16 +231,23 @@ namespace DefaultNamespace
                         shoveled = value.Item1.TryGetValue("shoveled", out var shoveledVal)
                             ? (long)shoveledVal
                             : default,
+                        completed = value.Item1.TryGetValue("completed", out var completedVal)
+                            ? (long)completedVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
                     current = new StatsTable
                     {
+                        startingMile = null,
+                        kills = null,
+                        deaths = null,
+                        moves = null,
                         mined = null,
-                        moved = null,
                         pushed = null,
                         shoveled = null,
+                        completed = null,
                     };
                 }
             }
@@ -187,11 +258,23 @@ namespace DefaultNamespace
                 {
                     previous = new StatsTable
                     {
+                        startingMile = value.Item2.TryGetValue(
+                            "startingMile",
+                            out var startingMileVal
+                        )
+                            ? (long)startingMileVal
+                            : default,
+                        kills = value.Item2.TryGetValue("kills", out var killsVal)
+                            ? (long)killsVal
+                            : default,
+                        deaths = value.Item2.TryGetValue("deaths", out var deathsVal)
+                            ? (long)deathsVal
+                            : default,
+                        moves = value.Item2.TryGetValue("moves", out var movesVal)
+                            ? (long)movesVal
+                            : default,
                         mined = value.Item2.TryGetValue("mined", out var minedVal)
                             ? (long)minedVal
-                            : default,
-                        moved = value.Item2.TryGetValue("moved", out var movedVal)
-                            ? (long)movedVal
                             : default,
                         pushed = value.Item2.TryGetValue("pushed", out var pushedVal)
                             ? (long)pushedVal
@@ -199,16 +282,23 @@ namespace DefaultNamespace
                         shoveled = value.Item2.TryGetValue("shoveled", out var shoveledVal)
                             ? (long)shoveledVal
                             : default,
+                        completed = value.Item2.TryGetValue("completed", out var completedVal)
+                            ? (long)completedVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
                     previous = new StatsTable
                     {
+                        startingMile = null,
+                        kills = null,
+                        deaths = null,
+                        moves = null,
                         mined = null,
-                        moved = null,
                         pushed = null,
                         shoveled = null,
+                        completed = null,
                     };
                 }
             }

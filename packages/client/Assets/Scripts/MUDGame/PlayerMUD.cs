@@ -59,7 +59,13 @@ public class PlayerMUD : SPPlayer
             Actor.InputClick(0, Reciever.TargetInteract);
         }
 
+    }
 
+    
+    public override void Kill() {
+        base.Kill();
+
+        Animator.PlayClip("Die");
 
     }
 

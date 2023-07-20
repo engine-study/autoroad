@@ -153,6 +153,7 @@ GameObject:
   - component: {fileID: 8714677117460968964}
   - component: {fileID: 8880456862153127819}
   - component: {fileID: 1911895687799555717}
+  - component: {fileID: 650409719297324991}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -200,7 +201,6 @@ MonoBehaviour:
   animator: {fileID: 2520871121364187547}
   resources: {fileID: 411999650646453098}
   playerComponent: {fileID: 7126306196510897201}
-  entity: {fileID: 0}
   positionComponent: {fileID: 0}
 --- !u!114 &7126306196510897201
 MonoBehaviour:
@@ -217,12 +217,16 @@ MonoBehaviour:
   tableType: {fileID: 11400000, guid: 4ca985249dec0844eae0a3451a5349ad, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  updateInfo:
+    updateType: 0
+    source: 0
   entity: {fileID: 0}
   tableManager: {fileID: 0}
   hasInit: 0
   loaded: 0
   spawned: 0
   isLocalPlayer: 0
+  playerScript: {fileID: 0}
 --- !u!114 &6141718005193121758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,6 +385,40 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!114 &650409719297324991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625912502078787175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action: {fileID: 11400000, guid: b0530f009882d4745b843783cf964d06, type: 2}
+  state: {fileID: 0}
+  interacting: 0
+  targetGO: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4765553126336188459}
+        m_TargetAssemblyTypeName: SPPlayer, study.engine.studio
+        m_MethodName: Meleed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3966948329552520257
 GameObject:
   m_ObjectHideFlags: 0

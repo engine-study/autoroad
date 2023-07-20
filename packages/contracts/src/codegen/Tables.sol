@@ -13,6 +13,7 @@ import { Chunk, ChunkData, ChunkTableId } from "./tables/Chunk.sol";
 import { Row, RowTableId } from "./tables/Row.sol";
 import { Shovel, ShovelTableId } from "./tables/Shovel.sol";
 import { Pickaxe, PickaxeTableId } from "./tables/Pickaxe.sol";
+import { Bones, BonesTableId } from "./tables/Bones.sol";
 import { Position, PositionData, PositionTableId } from "./tables/Position.sol";
 import { Player, PlayerTableId } from "./tables/Player.sol";
 import { State, StateTableId } from "./tables/State.sol";
