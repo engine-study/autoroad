@@ -569,18 +569,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(meleeFunction, cancellationToken);
         }
 
-        public Task<string> MeleeRequestAsync(byte[] target)
+        public Task<string> MeleeRequestAsync(int x, int y)
         {
             var meleeFunction = new MeleeFunction();
-                meleeFunction.Target = target;
+                meleeFunction.X = x;
+                meleeFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(meleeFunction);
         }
 
-        public Task<TransactionReceipt> MeleeRequestAndWaitForReceiptAsync(byte[] target, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MeleeRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var meleeFunction = new MeleeFunction();
-                meleeFunction.Target = target;
+                meleeFunction.X = x;
+                meleeFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(meleeFunction, cancellationToken);
         }

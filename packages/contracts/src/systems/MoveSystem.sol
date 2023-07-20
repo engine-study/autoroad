@@ -173,21 +173,21 @@ contract MoveSystem is System {
     Position.set(roadEntity, x, y);
   }
 
-  function melee(bytes32 target) public {
+  function melee(int32 x, int32 y) public {
 
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    PositionData memory attackerPos = Position.get(player);
-    PositionData memory targetPos = Position.get(target);
+    PositionData memory pos = PositionData(x,y);
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    require(atPosition.length > 0, "attacking an empty spot");
+    require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
 
-    require(withinManhattanDistance(attackerPos, targetPos, 1), "too far to attack");
-
-    int32 health = Health.get(target);
+    int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
     health--;
 
     if(health <= 0) {
-      kill(player, target, targetPos);
+      kill(player, atPosition[0], pos);
     }
   }
 

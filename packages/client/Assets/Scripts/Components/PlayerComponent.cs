@@ -4,7 +4,9 @@ using mud.Client;
 using NetworkManager = mud.Unity.NetworkManager;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
-
+using System.Numerics;
+using System;
+using System.Collections;
 
 public class PlayerComponent : MUDComponent {
     public bool IsLocalPlayer { get { return isLocalPlayer; } }
@@ -17,6 +19,7 @@ public class PlayerComponent : MUDComponent {
 
     [Header("Debug")]
     [SerializeField] HealthComponent health;
+    [SerializeField] string attackerKey;
 
     public static string? LocalPlayerKey;
 
@@ -45,6 +48,7 @@ public class PlayerComponent : MUDComponent {
 
     public void Meleed(bool toggle, IActor actor) {
         PlayerComponent otherPlayer = actor.Owner().GetComponent<PlayerComponent>();
+        PlayerMUD playerScript = actor.Owner().GetComponent<PlayerMUD>();
 
         if(otherPlayer == null) {
             Debug.LogError("Not sure: " + actor.Owner().name, this);
@@ -52,7 +56,8 @@ public class PlayerComponent : MUDComponent {
 
         string targetAddress = otherPlayer.Entity.Key;
         TxUpdate update = TxManager.MakeOptimistic(health, health.health - 1);
-        TxManager.Send<MeleeFunction>(update, targetAddress);
+        TxManager.Send<MeleeFunction>(update, System.Convert.ToInt32(playerScript.Position.Pos.x), System.Convert.ToInt32(playerScript.Position.Pos.z));
+        
     }
 
     void Die() {

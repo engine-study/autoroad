@@ -289,8 +289,10 @@ namespace IWorld.ContractDefinition
     [Function("melee")]
     public class MeleeFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "target", 1)]
-        public virtual byte[] Target { get; set; }
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
     }
 
     public partial class MineFunction : MineFunctionBase { }
