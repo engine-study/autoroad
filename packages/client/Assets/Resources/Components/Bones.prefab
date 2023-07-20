@@ -176,6 +176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3439431349450781075}
   - component: {fileID: 5952638462309608961}
+  - component: {fileID: -9116631373830796470}
   m_Layer: 0
   m_Name: Bones
   m_TagString: Untagged
@@ -223,6 +224,25 @@ MonoBehaviour:
   tableManager: {fileID: 0}
   hasInit: 0
   loaded: 0
+--- !u!114 &-9116631373830796470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994103424863024445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ee193c86faf2e145926df25a0cded22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncType: 0
+  synced: 0
+  targetComponent: {fileID: 0}
+  targetTransform: {fileID: 0}
+  pos: {fileID: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  moving: 0
 --- !u!1 &7598813968439101505
 GameObject:
   m_ObjectHideFlags: 0

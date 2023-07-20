@@ -184,7 +184,9 @@ contract MoveSystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
-    Health.set(atPosition[0], health - 1);
+    health--;
+
+    Health.set(atPosition[0], health);
 
     if(health <= 0) {
       kill(player, atPosition[0], pos);
