@@ -16,10 +16,10 @@ public class RockComponent : MUDComponent {
     [SerializeField] PositionSync posSync;
 
     [SerializeField] GameObject visualParent;
+    [SerializeField] SPBase rockBase;
     [SerializeField] GameObject[] stages;
     public AudioClip[] sfx_drag, sfx_dragBase, sfx_pickHit, sfx_whoosh, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
     RockType lastStage = RockType._Count;
-    SPBase rockBase;
 
     protected override void Awake() {
         base.Awake();
