@@ -38,7 +38,7 @@ public class RoadComponent : MUDComponent {
             state = roadUpdate.value != null ? (RoadState)roadUpdate.value : RoadState.None;
         }
 
-        if (lastStage != state) {
+        if (Loaded && lastStage != state) {
 
             if(state == RoadState.Shoveled) {
                 fx_spawn.Play();
