@@ -23,6 +23,8 @@ public class RockComponent : MUDComponent {
 
     protected override void Awake() {
         base.Awake();
+
+        // Debug.Log("Rock Awake", this);
         rockType = RockType._Count;
         rockBase = GetComponent<SPBase>();
     }
@@ -56,10 +58,12 @@ public class RockComponent : MUDComponent {
         PositionComponent pos = c as PositionComponent;
         if (pos) {
 
-            if (newInfo.UpdateSource != UpdateSource.Revert && lastPos != pos.Pos) {
-                fx_drag.Play();
-                source.PlaySound(sfx_drag);
-                source.PlaySound(sfx_dragBase);
+            if(Loaded) {
+                if (newInfo.UpdateSource != UpdateSource.Revert && lastPos != pos.Pos) {
+                    fx_drag.Play();
+                    source.PlaySound(sfx_drag);
+                    source.PlaySound(sfx_dragBase);
+                }
             }
 
             //our position component was deleted
@@ -87,6 +91,8 @@ public class RockComponent : MUDComponent {
 
     IEnumerator SinkCoroutine() {
 
+        Debug.Log("Sinking", this);
+
         fx_fillParticles.Play();
         source.PlaySound(sfx_fillSound);
 
@@ -113,13 +119,11 @@ public class RockComponent : MUDComponent {
         if (rockUpdate == null) {
             Debug.LogError("No rockUpdate", this);
         } else {
-
-            // stage = rockUpdate.rockType != null ? (int)rockUpdate.rockType : stage;
-            // rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
-            // Debug.Log(rockUpdate.value.ToString());
-
-            rockType = rockUpdate.value != null ? (RockType)rockUpdate.value : RockType._Count;
+            // rockType = rockUpdate.value != null ? (RockType)rockUpdate.value : RockType._Count;
+            rockType = (RockType)rockUpdate.value;
         }
+
+        // Debug.Log(rockType.ToString());
 
         rockBase.baseName = rockType.ToString();
         for (int i = 0; i < stages.Length; i++) {
@@ -150,9 +154,7 @@ public class RockComponent : MUDComponent {
     }
 
     public async void MineRock(int x, int y) {
-        List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(TxManager.MakeOptimistic(this, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus))));
-        await TxManager.Send<MineFunction>(updates, x, y);
+        await TxManager.Send<MineFunction>(TxManager.MakeOptimistic(this, Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus)), x, y);
     }
    
 }
