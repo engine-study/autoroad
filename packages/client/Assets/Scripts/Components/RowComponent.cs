@@ -21,7 +21,6 @@ public class RowComponent : MUDComponent
     }
 
     public void SetRoadBlock(string entityName, int x, RoadComponent road) {
-
         
         roadFiller[x].gameObject.SetActive(road == null);
         roadFiller[x].gameObject.name = MUDHelper.TruncateHash(entityName);
