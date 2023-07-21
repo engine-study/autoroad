@@ -42,6 +42,11 @@ public class PositionSync : ComponentSync
         //set up our side of the compnents BEFORE 
         targetTransform.position = pos.Pos;
         targetPos = pos.Pos;
+
+        //hide us if we don't have a position
+        if(pos.UpdateType == UpdateType.DeleteRecord) {
+            gameObject.SetActive(false);
+        }
     }
 
     protected override void UpdateSync() {
