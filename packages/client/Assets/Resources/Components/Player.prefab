@@ -177,7 +177,7 @@ Transform:
   - {fileID: 9117573476988391779}
   - {fileID: 4467642363891478077}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4765553126336188459
 MonoBehaviour:
@@ -227,8 +227,9 @@ MonoBehaviour:
   spawned: 0
   isLocalPlayer: 0
   playerScript: {fileID: 4765553126336188459}
-  health: {fileID: 0}
   meleeInteract: {fileID: 650409719297324991}
+  health: {fileID: 0}
+  attackerKey: 
 --- !u!114 &6141718005193121758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1149,6 +1150,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8621502410555695018, guid: b029e466851ca6e4dbb7711591124456, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 7063633957114395646}
     m_RemovedComponents:
     - {fileID: 6194457223843608620, guid: b029e466851ca6e4dbb7711591124456, type: 3}
     m_RemovedGameObjects: []
@@ -1211,6 +1216,11 @@ GameObject:
 --- !u!4 &7061242282504548509 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3792249001387857580, guid: b029e466851ca6e4dbb7711591124456, type: 3}
+  m_PrefabInstance: {fileID: 6151446698690045489}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7063633957114395646 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3988295389107969487, guid: b029e466851ca6e4dbb7711591124456, type: 3}
   m_PrefabInstance: {fileID: 6151446698690045489}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8681323706182717963 stripped
