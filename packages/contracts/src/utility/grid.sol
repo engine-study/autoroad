@@ -21,6 +21,10 @@ import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/T
 //   return positions;
 // }
 
+function getDistance(PositionData memory start, PositionData memory end) pure returns (uint) {
+  return uint(abs(end.x - start.x) + abs(end.y - start.y));
+}
+
 function withinManhattanDistance(PositionData memory start, PositionData memory end, int32 distance) pure returns (bool) {
   distance += 1;
   return abs(end.x - start.x) + abs(end.y - start.y) < distance;

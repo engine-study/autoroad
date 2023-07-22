@@ -9,7 +9,7 @@ import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { lineWalkPositions, withinManhattanDistance, withinChessDistance } from "../utility/grid.sol";
+import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance } from "../utility/grid.sol";
 import { MapSystem } from "../systems/MapSystem.sol";
 import { RoadSystem } from "../systems/RoadSystem.sol";
 
@@ -228,11 +228,15 @@ contract MoveSystem is System {
     //   y = 0;
     // }
 
+
     require(startPos.x == x || startPos.y == y, "cannot move diagonally ");
     require(startPos.x != x || startPos.y != y, "cannot move in place");
 
+    PositionData memory endPos = PositionData(x, y);
+    require(getDistance(startPos,endPos) == 5, "move distance is not 5");
+
     // get all the positions in the line we are walking
-    PositionData[] memory positions = lineWalkPositions(startPos, PositionData(x, y));
+    PositionData[] memory positions = lineWalkPositions(startPos, endPos);
 
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position

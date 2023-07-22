@@ -146,7 +146,7 @@ public class ControllerMUD : SPController {
 
 
         // Vector3 moveDest = (Vector3)_destination;
-        float moveDistance = 2f;
+        float moveDistance = 5f;
         if (Input.GetKey(KeyCode.W)) {
             moveDest += Vector3.forward * moveDistance;
         } else if (Input.GetKey(KeyCode.A)) {
