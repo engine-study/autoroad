@@ -126,6 +126,8 @@ public class RockComponent : MUDComponent {
         // Debug.Log(rockType.ToString());
 
         rockBase.baseName = rockType.ToString();
+        Entity.SetName(rockType.ToString());
+        
         for (int i = 0; i < stages.Length; i++) {
             stages[i].SetActive(i == (int)rockType);
         }

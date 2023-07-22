@@ -47,13 +47,9 @@ public class CursorUI : MonoBehaviour {
         SPBase newObject = newEntity != null ? newEntity.GetComponentInChildren<SPBase>() : null;
         baseObject = newObject;
 
-        actor.ToggleWindow(baseObject != null);
-
-        if (baseObject != null) {
-            actor.UpdateObject(baseObject);
-        }
-
         info.UpdateInfo(newEntity);
+        actor.UpdateInfo(newEntity);
+        actor.UpdateObject(newObject);
 
         CursorUpdate?.Invoke();
     }

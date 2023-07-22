@@ -5,30 +5,39 @@ using TMPro;
 using UnityEngine.UI;
 using mud.Client;
 
-public class ActorUI : SPWindowBase
-{
+public class ActorUI : SPWindowBase {
     [Header("Stats")]
+    public MUDEntity entity;
     public StatUI healthStat;
     public StatUI attackStat;
     public TextMeshProUGUI nameText;
+    public void UpdateInfo(Entity newEntity) {
 
-    public override void UpdateObject(SPBase newObject)
-    {
-        base.UpdateObject(newObject);
+        if (entity != newEntity) {
+            if (entity != null)
+                entity.OnUpdated -= Refresh;
 
-        if(newObject == null) {
-            ToggleWindowClose();
-            return;
+            MUDEntity m = newEntity as MUDEntity;
+            if (m != null) {
+                m.OnUpdated += Refresh;
+            }
         }
 
-        SPBase actor = newObject as SPBase;
-        if(actor) {
+        entity = (MUDEntity)newEntity;
 
-            nameText.text = actor.Name;
-            // coordinate.UpdateField("[" + x + " , " + y + "]");
-            // text.UpdateField(actor.stats.description);
+        if (entity == null) {
+            nameText.text = "";
+            position.SetFollow(null);   
+        } else {
+            nameText.text = entity.Name;
+            position.SetFollow(entity.transform, Vector3.down * .75f);   
         }
 
-        
+        gameObject.SetActive(entity != null);
     }
+
+    void Refresh() {
+        UpdateInfo(entity);
+    }
+
 }

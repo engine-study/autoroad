@@ -47,6 +47,7 @@ public class PlayerMUD : SPPlayer
         transform.position = positionComponent.Pos;
 
         baseName = MUDHelper.TruncateHash(playerComponent.Entity.Key);
+        playerComponent.Entity.SetName(MUDHelper.TruncateHash(playerComponent.Entity.Key));
 
         // Debug.Log("Player Network Init");
 
