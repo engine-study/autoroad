@@ -245,15 +245,18 @@ public class ControllerMUD : SPController {
         //raycast to the world
         RaycastHit hit;
         Vector3 direction = playerTransform.position == moveDest ? player.Root.forward : (moveDest - playerTransform.position).normalized;
-        Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
-        Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
+        Vector3 position = playerTransform.position + direction;
+       
+        MUDEntity entityAtMove = GridMUD.GetEntityAt(position);
+        MUDEntity terrainAtMove = GridMUD.GetEntityAt(position + Vector3.down);
+
+        // Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        // Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
 
         //&& (hit.collider.GetComponentInParent<RockComponent>() != null || hit.collider.GetComponentInParent<PlayerComponent>() != null)
-        if (hit.collider) {
+        if (entityAtMove) {
             //pushing animation
             // Debug.Log("PUSHING");
-            Vector3 hitGrid = new Vector3(Mathf.Round(hit.point.x), 0f, Mathf.Round(hit.point.z));
-            Vector3 pushSpot = new Vector3(Mathf.Round(hitGrid.x + direction.x), 0f, Mathf.Round(hitGrid.z + direction.z));
 
             if (playerTransform.position == moveDest) {
                 //appear tired because we tried to move but our position didn't change (walking into a wall)
@@ -267,7 +270,7 @@ public class ControllerMUD : SPController {
 
             }
 
-            markerPos = hitGrid;
+            // markerPos = hitGrid;
 
         } else {
             //remember the idle animation actually has walk functionality in the AnimationController

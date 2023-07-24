@@ -10759,7 +10759,7 @@ Transform:
   - {fileID: 6251374293622234378}
   - {fileID: 9119056052170538840}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7173250004357761728
 MonoBehaviour:
@@ -10801,7 +10801,7 @@ MonoBehaviour:
   rockType: 0
   fx_break: {fileID: 2375352521298061233}
   fx_drag: {fileID: 3347394206648939041}
-  fx_fillParticles: {fileID: 0}
+  fx_fillParticles: {fileID: 6048572632352566504}
   source: {fileID: 5250168534217083149}
   rockSlide: {fileID: 2517442970918158014}
   posSync: {fileID: 7201583706257857126}
@@ -10837,7 +10837,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6fad0af3dac904a418d43d2c37c3e9c7, type: 3}
   - {fileID: 8300000, guid: f08ddeb1462ecf74693ac73ee5218531, type: 3}
   - {fileID: 8300000, guid: 99e55ac04932f454599059c8c092e4ef, type: 3}
-  sfx_fillSound: []
+  sfx_fillSound:
+  - {fileID: 8300000, guid: d366feb3545048848b439c471946ec36, type: 3}
+  - {fileID: 8300000, guid: b1cccf5e485b3c94aa478201110db913, type: 3}
+  - {fileID: 8300000, guid: 716941ed1f33ed049b9d77dc5585e561, type: 3}
   sfx_finalThump:
   - {fileID: 8300000, guid: 11569f3c07bff774aa707e655b3e0177, type: 3}
   - {fileID: 8300000, guid: aa44c37f59d56d64ea5e08ea74bbbb5e, type: 3}
