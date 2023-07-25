@@ -13,9 +13,31 @@ public class TreeComponent : MUDComponent {
     public AudioClip[] sfx_hits, sfx_falls;
 
     bool lastState = false;
+    HealthComponent health;
+    protected override void PostInit() {
+        base.PostInit();
+        health = Entity.GetMUDComponent<HealthComponent>();
+        health.OnUpdated += TreeHit;
+    }
+
+    protected override void InitDestroy() {
+        base.InitDestroy();
+        health.OnUpdated -= TreeHit;
+    }
+
+    void TreeHit() {
+        if(Loaded) {
+            if(health.health == 0) {
+                SPAudioSource.Play(transform.position, sfx_falls);
+                fx_fall.Play();
+            } else {
+                SPAudioSource.Play(transform.position, sfx_hits);
+                fx_hit.Play();
+            }
+        }
+    }
 
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
-
 
         TreeTable treeUpdate = (TreeTable)update;
 

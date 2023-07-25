@@ -5642,7 +5642,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 30
+    angle: 35
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 0
@@ -9900,8 +9900,8 @@ Transform:
   m_Children:
   - {fileID: 841130514871191239}
   - {fileID: 8719389430433991540}
-  - {fileID: 6426710764759275813}
   - {fileID: 7759007312444956436}
+  - {fileID: 6426710764759275813}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9935,18 +9935,26 @@ MonoBehaviour:
   tableType: {fileID: 11400000, guid: f4034d86bcd0c374780ffd85b5e23357, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  - {fileID: 77022645062805081, guid: 219b049c5faf436428e270937e831a80, type: 3}
+  entity: {fileID: 0}
+  tableManager: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
+  networkInfo:
+    updateType: 0
+    source: 0
   hasInit: 0
   loaded: 0
   treeState: 0
-  fx_hit: {fileID: 0}
-  fx_fall: {fileID: 0}
-  sfx_hits: []
-  sfx_falls: []
+  fx_hit: {fileID: 5971642603421424576}
+  fx_fall: {fileID: 5683911409690809342}
+  sfx_hits:
+  - {fileID: 8300000, guid: 00c570c193759374781fe0e1e8dd05a0, type: 3}
+  - {fileID: 8300000, guid: 6baa0f56623f4234ab6a89988d5b443c, type: 3}
+  - {fileID: 8300000, guid: 0c660ab008bc5e84c8464b4a7053e5c3, type: 3}
+  sfx_falls:
+  - {fileID: 8300000, guid: 99741cb3eb211fd48864e5091f8566fe, type: 3}
 --- !u!114 &8503245968997051454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10169,13 +10177,18 @@ MonoBehaviour:
   seed: 0
   randomizeChildren: 1
   objects: []
+  useRotation: 0
   rotateY: 1
   rotationRound: 0
   useScale: 1
   range: {x: 0.75, y: 1.25}
+  usePos: 0
+  minPos: {x: 0, y: 0, z: 0}
+  maxPos: {x: 0, y: 0, z: 0}
   child: -1
   rotate: -1
   scale: -1
+  position: -1
 --- !u!54 &56774326686213670
 Rigidbody:
   m_ObjectHideFlags: 0
