@@ -23,7 +23,7 @@ public class PlayerComponent : MUDComponent {
 
     public static string? LocalPlayerKey;
 
-    public override void Init(MUDEntity ourEntity, TableManager ourTable) {
+    protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
         base.Init(ourEntity, ourTable);
 
         isLocalPlayer = ourEntity.Key == NetworkManager.Instance.addressKey;

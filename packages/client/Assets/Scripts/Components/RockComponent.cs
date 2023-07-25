@@ -31,7 +31,7 @@ public class RockComponent : MUDComponent {
 
     }
 
-    public override void Init(MUDEntity ourEntity, TableManager ourTable) {
+    protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
         base.Init(ourEntity, ourTable);
 
         Entity.SetName(rockType.ToString());
@@ -163,13 +163,11 @@ public class RockComponent : MUDComponent {
             stages[i].SetActive(i == (int)rockType);
         }
 
-        flash.SetTarget(stages[(int)rockType]);
+        flash.SetTarget(stages[(int)rockType].GetComponent<RandomSelector>()?.ActiveChild);
 
         if (Loaded && lastStage != rockType) {
 
             if (newInfo.UpdateType == UpdateType.SetField || newInfo.UpdateSource == UpdateSource.Optimistic) {
-
-
                 if (lastStage < RockType.Rudus) {
                     source.PlaySound(sfx_bigBreaks);
                 } else {
