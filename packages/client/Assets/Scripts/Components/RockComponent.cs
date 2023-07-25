@@ -27,10 +27,13 @@ public class RockComponent : MUDComponent {
         // Debug.Log("Rock Awake", this);
         rockType = RockType._Count;
         rockBase = GetComponent<SPBase>();
+
     }
 
     public override void Init(MUDEntity ourEntity, TableManager ourTable) {
         base.Init(ourEntity, ourTable);
+
+        Entity.SetName(rockType.ToString());
 
     }
 
@@ -38,9 +41,9 @@ public class RockComponent : MUDComponent {
         base.PostInit();
 
         posSync.Pos.OnUpdatedInfo += UpdatePositionCheck;
-        posSync.OnMoveComplete += CheckSink;
+        // posSync.OnMoveComplete += CheckSink;
 
-        if (posSync.Pos.UpdateType == UpdateType.DeleteRecord) {
+        if (posSync.Pos.NetworkInfo.UpdateType == UpdateType.DeleteRecord) {
             gameObject.SetActive(false);
         }
     }
@@ -48,7 +51,7 @@ public class RockComponent : MUDComponent {
     protected override void InitDestroy() {
         base.InitDestroy();
         posSync.Pos.OnUpdatedInfo -= UpdatePositionCheck;
-        posSync.OnMoveComplete -= CheckSink;
+        // posSync.OnMoveComplete -= CheckSink;
     }
 
 
@@ -58,37 +61,34 @@ public class RockComponent : MUDComponent {
         PositionComponent pos = c as PositionComponent;
 
         if (Loaded) {
+
             if (newInfo.UpdateSource != UpdateSource.Revert && lastPos != pos.Pos) {
                 fx_drag.Play();
                 source.PlaySound(sfx_drag);
                 source.PlaySound(sfx_dragBase);
             }
-        }
 
-        //our position component was deleted
-        //we got pushed into a hole, when we finish moving to the hole, sink into into it
-        if (newInfo.UpdateType == UpdateType.DeleteRecord) {
-
-            if (Loaded) {
-
-            } else {
-
+            //our position component was deleted
+            //we got pushed into a hole, when we finish moving to the hole, sink into into 
+            if (newInfo.UpdateType == UpdateType.DeleteRecord) {
+                CheckSink();
             }
         }
 
         lastPos = pos.Pos;
+
     }
 
     void CheckSink() {
 
         Debug.Log("Check Sink", this);
 
-        if (!Loaded) {
-            return;
-        }
+        // if (!Loaded) {
+        //     return;
+        // }
 
         //we stopped moving, AND we have a deleleted record, lets get pushed into a hole
-        if (posSync.Pos.UpdateType == UpdateType.DeleteRecord) {
+        if (posSync.Pos.NetworkInfo.UpdateType == UpdateType.DeleteRecord) {
             Sink();
         }
     }
@@ -96,9 +96,8 @@ public class RockComponent : MUDComponent {
     Coroutine sinkCoroutine;
     void Sink() {
 
-        if(sinkCoroutine != null) {
+        if (sinkCoroutine != null) {
             StopCoroutine(sinkCoroutine);
-            Debug.LogError("double sinking", this);
         }
 
         StartCoroutine(SinkCoroutine());
@@ -109,6 +108,12 @@ public class RockComponent : MUDComponent {
 
         Debug.Log("Sinking", this);
 
+        while (posSync.Moving) { yield return null; }
+        if (posSync.Pos.NetworkInfo.UpdateType != UpdateType.DeleteRecord) {
+            Debug.LogError("Sunk but we aren't deleleted");
+            yield break;
+        }
+
         fx_fillParticles.Play();
         source.PlaySound(sfx_fillSound);
 
@@ -118,13 +123,16 @@ public class RockComponent : MUDComponent {
         float lerp = 0f;
 
         while (lerp < 1f) {
-            lerp += Time.deltaTime * .25f;
-            visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * .2f, lerp);
+            lerp += Time.deltaTime * .66f;
+            visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * 1f, lerp);
             yield return null;
         }
 
-        source.PlaySound(sfx_finalThump);
         rockSlide.Source.Stop();
+        fx_fillParticles.Emit(10);
+        source.PlaySound(sfx_finalThump);
+
+        SPCamera.AddShake( Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .5f);
     }
 
 

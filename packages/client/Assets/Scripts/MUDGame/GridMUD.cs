@@ -49,10 +49,10 @@ public class GridMUD : MonoBehaviour {
         PositionComponent p = c as PositionComponent;
         if (p != null) {
             // Store the position in the dictionary
-            if (componentPositions.ContainsKey(p.Pos)) {
-                componentPositions[p.Pos] = p;
+            if (componentPositions.ContainsKey(p.PosLayer)) {
+                componentPositions[p.PosLayer] = p;
             } else {
-                componentPositions.Add(p.Pos, p);
+                componentPositions.Add(p.PosLayer, p);
             }
         }
     }

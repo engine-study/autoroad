@@ -10,24 +10,30 @@ using System;
 
 public class PositionComponent : MUDComponent {
     public Vector3 Pos { get { return position3D; } }
+    public Vector3 PosLayer { get { return position3DLayer; } }
 
 
     [Header("Position")]
-    public int layer = 0;
-    [SerializeField] protected Vector2 position2D;
-    [SerializeField] protected Vector3 position3D;
+    [SerializeField] private int layer = 0;
+    [SerializeField] private Vector2 position2D;
+    [SerializeField] private Vector3 position3D;
+    [SerializeField] private Vector3 position3DLayer;
 
 
+    public void SetLayer(int newLayer) {
+        layer = newLayer;
+        position3DLayer = new Vector3(position2D.x, layer, position2D.y);
+    }
 
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         PositionTable table = update as PositionTable;
 
-        position2D = new Vector2(table.x ?? position2D.x, table.y ?? position2D.y);
-        position3D = new Vector3(position2D.x, layer, position2D.y);
-        
-        transform.position = new Vector3(position2D.x, 0f, position2D.y);
+        position2D = new Vector2((int)table.x, (int)table.y);
+        position3D = new Vector3(position2D.x, 0f, position2D.y);
+        position3DLayer = new Vector3(position2D.x, layer, position2D.y);
 
+        transform.position = position3D;
 
     }
 

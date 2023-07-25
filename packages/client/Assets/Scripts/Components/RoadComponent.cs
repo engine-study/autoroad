@@ -28,45 +28,45 @@ public class RoadComponent : MUDComponent {
         state = RoadState.None;
     }
 
+    protected override void PostInit() {
+        base.PostInit();
+
+        //BIG BIG BIG
+        Entity.GetMUDComponent<PositionComponent>().SetLayer(-1);
+
+        AddToChunk();
+    }
+
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RoadTable roadUpdate = (RoadTable)update;
 
-        if (roadUpdate == null) {
-            Debug.LogError("No roadUpdate", this);
-        } else {
-            state = roadUpdate.value != null ? (RoadState)roadUpdate.value : RoadState.None;
-        }
+        SetStage((RoadState)roadUpdate.value);
 
-        if (Loaded && lastStage != state) {
+        if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != state)) {
             if (state == RoadState.Shoveled) {
                 fx_spawn.Play();
                 audio.PlaySound(sfx_digs);
             } else if (state == RoadState.Filled) {
-                fx_fill.Play();
-                audio.PlaySound(sfx_fills);
+                // fx_fill.Play();
+                // audio.PlaySound(sfx_fills);
             }
-        }
 
-        for (int i = 0; i < stages.Length; i++) {
-            stages[i].SetActive(i == (int)state);
+            SetStage((RoadState)roadUpdate.value);
+
         }
 
         lastStage = state;
 
     }
 
-    protected override void PostInit() {
-        base.PostInit();
-
-        //BIG BIG BIG
-        Entity.GetMUDComponent<PositionComponent>().layer = -1;
-
-        AddToChunk();
-    }
-
     public void SetStage(RoadState newState) {
+        
+        state = newState;
 
+        for (int i = 0; i < stages.Length; i++) {
+            stages[i].SetActive(i == (int)state);
+        }
     }
 
 

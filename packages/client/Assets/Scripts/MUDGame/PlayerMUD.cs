@@ -13,6 +13,7 @@ public class PlayerMUD : SPPlayer
 
     [Header("Debug")]
     [SerializeField] protected PositionComponent positionComponent;
+    [SerializeField] protected HealthComponent healthComponent;
 
     public override void Init() {
         base.Init();
@@ -45,6 +46,8 @@ public class PlayerMUD : SPPlayer
 
         positionComponent = playerComponent.Entity.GetMUDComponent<PositionComponent>();
         transform.position = positionComponent.Pos;
+
+        healthComponent = playerComponent.Entity.GetMUDComponent<HealthComponent>();
 
         baseName = MUDHelper.TruncateHash(playerComponent.Entity.Key);
         playerComponent.Entity.SetName(MUDHelper.TruncateHash(playerComponent.Entity.Key));

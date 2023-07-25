@@ -12,6 +12,7 @@ using mud.Client;
 public class ControllerMUD : SPController {
     private Vector3? onchainPos;
     private Vector3 lastOnchainPos = Vector3.down;
+    Vector3 lookVector;
     Quaternion lookRotation;
     public Transform playerTransform;
     public GameObject moveMarker;
@@ -63,10 +64,10 @@ public class ControllerMUD : SPController {
         moveDest = newPos;
 
         //hide us if we don't have a position
-        if(playerScript.Position.UpdateType == UpdateType.DeleteRecord) {
+        if (playerScript.Position.UpdateType == UpdateType.DeleteRecord) {
             gameObject.SetActive(false);
         }
-        
+
     }
 
     private void OnDestroy() {
@@ -119,12 +120,14 @@ public class ControllerMUD : SPController {
         //update rotation based on mouseInput
         // Determine the new rotation
         if (playerScript.Actor.ActionState == ActionState.Idle) {
+
             Vector3 eulerAngles = Quaternion.LookRotation(SPInput.MousePlanePos - playerTransform.position).eulerAngles;
+            lookVector = (SPInput.MousePlanePos - playerTransform.position).normalized;
             lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
         }
 
         playerScript.Animator.ik.SetLook(CursorMUD.LookTarget);
-         
+
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
             moveDest = CursorMUD.GridPos;
             Debug.Log("TELEPORT");
@@ -224,11 +227,10 @@ public class ControllerMUD : SPController {
 
     private void ComponentUpdate() {
         if (!entityReady) { return; }
-
         if (playerScript.Position.UpdateSource == UpdateSource.Revert) {
             SetPosition(playerScript.Position.Pos);
         }
-
+   
         //get the actual onchainposition
         onchainPos = playerScript.Position.Pos;
 
@@ -241,12 +243,18 @@ public class ControllerMUD : SPController {
             return;
         }
 
+        UpdateState();
+
+    }
+
+
+    private void UpdateState() {
 
         //raycast to the world
         RaycastHit hit;
         Vector3 direction = playerTransform.position == moveDest ? player.Root.forward : (moveDest - playerTransform.position).normalized;
         Vector3 position = playerTransform.position + direction;
-       
+
         MUDEntity entityAtMove = GridMUD.GetEntityAt(position);
         MUDEntity terrainAtMove = GridMUD.GetEntityAt(position + Vector3.down);
 
@@ -286,6 +294,7 @@ public class ControllerMUD : SPController {
 
             if (_lookY != playerTransform.position) {
                 lookRotation = Quaternion.LookRotation(_lookY - playerTransform.position);
+                lookVector = (_lookY - playerTransform.position).normalized;
             }
         }
 

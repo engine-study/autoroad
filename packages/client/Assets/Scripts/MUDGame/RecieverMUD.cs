@@ -26,12 +26,17 @@ public class RecieverMUD : SPReciever
 
     void ToggleActions(bool toggle, Entity newEntity) {
         
-        if(newEntity == null) {
+        MUDEntity m = (MUDEntity)newEntity;
+        if(m == null) {
             return;
         }
 
-        SPInteract [] interacts = newEntity.GetComponentsInChildren<SPInteract>();
+        PlayerComponent player = m.GetMUDComponent<PlayerComponent>();
+        if(player && player.IsLocalPlayer) {
+            return;
+        }
 
+        SPInteract [] interacts = m.GetComponentsInChildren<SPInteract>();
         if(interacts == null) {
             return;
         }
