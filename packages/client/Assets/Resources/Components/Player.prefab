@@ -288,6 +288,8 @@ MonoBehaviour:
   detectCollisions: 1
   playerTransform: {fileID: 0}
   moveMarker: {fileID: 5541991144685123981}
+  walkingState: {fileID: 11400000, guid: 719f9ecaa85e40d438978cbf3451c71e, type: 2}
+  pushState: {fileID: 11400000, guid: 719f9ecaa85e40d438978cbf3451c71e, type: 2}
   sfx_bump:
   - {fileID: 8300000, guid: 27a774bfddb203942a5100d641d37384, type: 3}
   - {fileID: 8300000, guid: 4b2e7ac8ee2f22a409eaadbf7a337909, type: 3}
@@ -1243,6 +1245,7 @@ MonoBehaviour:
   - {fileID: 6219295244158161047}
   - {fileID: 7973025808511337573}
   - {fileID: 4553760911337090831}
+  activeChild: {fileID: 0}
   useRotation: 0
   rotateY: 0
   rotationRound: 0

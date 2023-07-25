@@ -12,9 +12,9 @@ public class RoadComponent : MUDComponent {
     [Header("Road")]
     public RoadState state;
     public GameObject[] stages;
-    public SPAudioSource audio;
     public ParticleSystem fx_spawn, fx_fill;
     public AudioClip[] sfx_digs, sfx_fills;
+    SPFlashShake flash;
 
     [Header("Debug")]
     public ChunkComponent parent;
@@ -46,7 +46,11 @@ public class RoadComponent : MUDComponent {
         if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != state)) {
             if (state == RoadState.Shoveled) {
                 fx_spawn.Play();
-                audio.PlaySound(sfx_digs);
+                SPAudioSource.Play(transform.position, sfx_digs);
+                
+                if(flash == null) { flash = gameObject.AddComponent<SPFlashShake>();}
+                flash.SetTarget(stages[(int)state]);
+
             } else if (state == RoadState.Filled) {
                 // fx_fill.Play();
                 // audio.PlaySound(sfx_fills);

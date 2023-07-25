@@ -33,13 +33,13 @@ public class HoverPolish : MonoBehaviour
 
         if(baseObject != null) {
             if(baseObject is PlayerMUD) {
-                TogglePlayer(toggle, baseObject as PlayerMUD);
+                HoverPlayer(toggle, baseObject as PlayerMUD);
             }
         }
 
     }
 
-    void TogglePlayer(bool toggle, PlayerMUD player) {
-        player.Animator.ik.SetLook(toggle ? SPUIBase.Camera.transform : null);
+    void HoverPlayer(bool toggle, PlayerMUD player) {
+        player.Animator.IK.SetLook(toggle ? SPUIBase.Camera.transform : null);
     }
 }

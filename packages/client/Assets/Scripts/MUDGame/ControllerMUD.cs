@@ -14,9 +14,11 @@ public class ControllerMUD : SPController {
     private Vector3 lastOnchainPos = Vector3.down;
     Vector3 lookVector;
     Quaternion lookRotation;
-    public Transform playerTransform;
-    public GameObject moveMarker;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private GameObject moveMarker;
     Vector3 markerPos;
+    [SerializeField] private SPAnimatorState walkingState; 
+    [SerializeField] private SPAnimatorState pushState; 
 
     private System.IDisposable? _disposer;
     private MUDEntity entity;
@@ -25,8 +27,8 @@ public class ControllerMUD : SPController {
     float alive = 0f;
     float rotationSpeed = 720f;
     float distance;
-    // public AudioClip[] pushes;
-    public AudioClip[] sfx_bump;
+    // [SerializeField] private AudioClip[] pushes;
+    [SerializeField] private AudioClip[] sfx_bump;
     bool entityReady = false;
 
     void Awake() {
@@ -126,7 +128,9 @@ public class ControllerMUD : SPController {
             lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
         }
 
-        playerScript.Animator.ik.SetLook(CursorMUD.LookTarget);
+        if(playerScript.Actor.ActionState == ActionState.Idle) {
+            playerScript.Animator.IK.SetLook(CursorMUD.LookTarget);
+        }
 
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
             moveDest = CursorMUD.GridPos;
@@ -270,10 +274,12 @@ public class ControllerMUD : SPController {
             if (playerTransform.position == moveDest) {
                 //appear tired because we tried to move but our position didn't change (walking into a wall)
                 Debug.Log("Tired", this);
+                walkingState.Apply(player.Animator);
                 player.Animator.PlayClip("Hit");
                 player.Resources.sfx.PlaySound(sfx_bump);
             } else {
                 Debug.Log("Pushing", this);
+                pushState.Apply(player.Animator);
                 player.Animator.PlayClip("Push");
                 player.Resources.sfx.PlaySound(sfx_bump);
 
@@ -301,7 +307,7 @@ public class ControllerMUD : SPController {
 
         if (playerScript.IsLocalPlayer) {
             //stop the player from looking at the cursor when theyre moving
-            playerScript.Animator.ik.SetLook(null);
+            playerScript.Animator.IK.SetLook(null);
         }
 
         lastOnchainPos = (Vector3)onchainPos;
