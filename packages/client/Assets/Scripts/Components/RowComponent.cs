@@ -6,8 +6,12 @@ using mud.Client;
 public class RowComponent : MUDComponent
 {
     [Header("Row")]
-    [SerializeField] public RoadComponent [] spawnedRoads;
-    [SerializeField] public RoadComponent [] roadFiller;
+    [SerializeField] private GameObject complete;
+    [SerializeField] private RoadComponent [] roadFiller;
+
+    [Header("Debug")]
+    [SerializeField] private RoadComponent [] spawnedRoads;
+
 
 
     protected override void Awake() {
@@ -18,6 +22,8 @@ public class RowComponent : MUDComponent
         for(int i = 0; i < roadFiller.Length; i++) {
             roadFiller[i].SetStage(RoadState.Paved);
         }
+
+        complete.SetActive(true);
     }
 
     public void SetRoadBlock(string entityName, int x, RoadComponent road) {

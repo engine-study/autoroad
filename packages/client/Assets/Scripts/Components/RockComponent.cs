@@ -11,7 +11,7 @@ public class RockComponent : MUDComponent {
 
     [Header("Rock")]
     [SerializeField] protected RockType rockType;
-    [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles;
+    [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles, fx_fillExplosion;
     [SerializeField] SPAudioSource source, rockSlide;
     [SerializeField] PositionSync posSync;
 
@@ -130,9 +130,12 @@ public class RockComponent : MUDComponent {
 
         rockSlide.Source.Stop();
         fx_fillParticles.Emit(10);
+        fx_fillExplosion.Play();
         source.PlaySound(sfx_finalThump);
 
-        SPCamera.AddShake( Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .5f);
+        visualParent.SetActive(false);
+
+        SPCamera.AddShake( Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .25f);
     }
 
 

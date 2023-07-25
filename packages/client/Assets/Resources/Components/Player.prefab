@@ -202,6 +202,7 @@ MonoBehaviour:
   resources: {fileID: 411999650646453098}
   playerComponent: {fileID: 7126306196510897201}
   positionComponent: {fileID: 0}
+  healthComponent: {fileID: 0}
 --- !u!114 &7126306196510897201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,11 +218,14 @@ MonoBehaviour:
   tableType: {fileID: 11400000, guid: 4ca985249dec0844eae0a3451a5349ad, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  entity: {fileID: 0}
+  tableManager: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
+  networkInfo:
+    updateType: 0
+    source: 0
   hasInit: 0
   loaded: 0
   spawned: 0
@@ -1239,13 +1243,18 @@ MonoBehaviour:
   - {fileID: 6219295244158161047}
   - {fileID: 7973025808511337573}
   - {fileID: 4553760911337090831}
+  useRotation: 0
   rotateY: 0
   rotationRound: 0
   useScale: 0
   range: {x: 1, y: 1}
+  usePos: 0
+  minPos: {x: 0, y: 0, z: 0}
+  maxPos: {x: 0, y: 0, z: 0}
   child: -1
   rotate: -1
   scale: -1
+  position: -1
 --- !u!1001 &6854985617196786874
 PrefabInstance:
   m_ObjectHideFlags: 0
