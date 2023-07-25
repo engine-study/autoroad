@@ -79,6 +79,7 @@ MonoBehaviour:
   seed: 1
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 1
   rotateY: 1
   rotationRound: 90
@@ -206,6 +207,7 @@ MonoBehaviour:
   seed: 5
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 1
   rotateY: 1
   rotationRound: 90
@@ -272,6 +274,7 @@ MonoBehaviour:
   seed: 0
   randomizeChildren: 0
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 0
   rotateY: 0
   rotationRound: 0
@@ -426,6 +429,7 @@ MonoBehaviour:
   seed: 2
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 1
   rotateY: 1
   rotationRound: 0
@@ -522,6 +526,7 @@ MonoBehaviour:
   seed: 3
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 0
   rotateY: 1
   rotationRound: 0
@@ -10419,6 +10424,7 @@ MonoBehaviour:
   seed: 5
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 0
   rotateY: 1
   rotationRound: 0
@@ -10515,6 +10521,7 @@ MonoBehaviour:
   seed: 4
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 0
   rotateY: 1
   rotationRound: 0
@@ -10580,6 +10587,7 @@ MonoBehaviour:
   seed: 4
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 0
   rotateY: 1
   rotationRound: 0
@@ -10666,6 +10674,7 @@ MonoBehaviour:
   seed: 0
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 1
   rotateY: 1
   rotationRound: 90
@@ -10754,6 +10763,7 @@ MonoBehaviour:
   seed: 3
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 1
   rotateY: 1
   rotationRound: 0
@@ -10857,7 +10867,7 @@ MonoBehaviour:
   fx_break: {fileID: 2375352521298061233}
   fx_drag: {fileID: 3347394206648939041}
   fx_fillParticles: {fileID: 6048572632352566504}
-  fx_fillExplosion: {fileID: 0}
+  fx_fillExplosion: {fileID: 5416060074575888529}
   source: {fileID: 5250168534217083149}
   rockSlide: {fileID: 2517442970918158014}
   posSync: {fileID: 7201583706257857126}
@@ -10877,16 +10887,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: aba2b4b7033c22b4ea84a1f72eb0c02b, type: 3}
   sfx_dragBase:
   - {fileID: 8300000, guid: d5ee7222908a93047894b349f7b195a6, type: 3}
-  sfx_pickHit:
-  - {fileID: 8300000, guid: 63b2331edc9ac4d40a5d7d297ea66d16, type: 3}
-  - {fileID: 8300000, guid: 23dae5f08a5e3c14db90173a7b8542fa, type: 3}
-  - {fileID: 8300000, guid: 58edb4b4ef92b064ea63e7d0ad1dd885, type: 3}
-  - {fileID: 8300000, guid: dafdf3c7b650af14290620a6a2a96526, type: 3}
-  sfx_whoosh:
-  - {fileID: 8300000, guid: f54a71f29085a4d4c8fdadc5d400238f, type: 3}
-  - {fileID: 8300000, guid: 260307873c13860438e83d4f08f11af2, type: 3}
-  - {fileID: 8300000, guid: 4eea3dcd0e98768468d091fdb988b36a, type: 3}
-  - {fileID: 8300000, guid: ff9c95f46d3a1444682c78f0b09eab75, type: 3}
   sfx_smallBreaks:
   - {fileID: 8300000, guid: 189b35826a005784ab0886ee0e61f11d, type: 3}
   sfx_bigBreaks:
@@ -11079,6 +11079,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 2621405225017724336}
   clone: {fileID: 0}
+  renderers: []
 --- !u!1 &8253397741737444425
 GameObject:
   m_ObjectHideFlags: 0

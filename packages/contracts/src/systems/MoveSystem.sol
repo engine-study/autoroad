@@ -74,6 +74,7 @@ contract MoveSystem is System {
     if (roadInt == uint32(RoadState.Paved)) {
       // Pavement.set(keccak256(abi.encode("Pavement", x, y)), true);
       Position.deleteRecord(filler);
+      Position.deleteRecord(hole);
     }
   }
 
@@ -259,7 +260,7 @@ contract MoveSystem is System {
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
-      if (atPosition.length > 0 && i > 1) {
+      if (atPosition.length > 0 && i > 0) {
         Position.set(player, positions[i - 1]);
         return;
       } else if (i == positions.length - 1) {

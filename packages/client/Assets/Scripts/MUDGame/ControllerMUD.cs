@@ -262,7 +262,7 @@ public class ControllerMUD : SPController {
 
         MUDEntity entityAtMove = GridMUD.GetEntityAt(position);
         MUDEntity terrainAtMove = GridMUD.GetEntityAt(position + Vector3.down);
-
+        
         // Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         // Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
 
