@@ -17,8 +17,9 @@ public class RockComponent : MUDComponent {
 
     [SerializeField] GameObject visualParent;
     [SerializeField] SPBase rockBase;
+    [SerializeField] SPFlashShake flash;
     [SerializeField] GameObject[] stages;
-    public AudioClip[] sfx_drag, sfx_dragBase, sfx_pickHit, sfx_whoosh, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
+    public AudioClip[] sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
     RockType lastStage = RockType._Count;
 
     protected override void Awake() {
@@ -66,6 +67,7 @@ public class RockComponent : MUDComponent {
                 fx_drag.Play();
                 source.PlaySound(sfx_drag);
                 source.PlaySound(sfx_dragBase);
+                flash.Flash();
             }
 
             //our position component was deleted
@@ -114,6 +116,8 @@ public class RockComponent : MUDComponent {
             yield break;
         }
 
+        flash.Flash();
+
         fx_fillParticles.Play();
         source.PlaySound(sfx_fillSound);
 
@@ -159,17 +163,20 @@ public class RockComponent : MUDComponent {
             stages[i].SetActive(i == (int)rockType);
         }
 
+        flash.SetTarget(stages[(int)rockType]);
+
         if (Loaded && lastStage != rockType) {
 
             if (newInfo.UpdateType == UpdateType.SetField || newInfo.UpdateSource == UpdateSource.Optimistic) {
-                source.PlaySound(sfx_whoosh);
+
+
                 if (lastStage < RockType.Rudus) {
-                    source.PlaySound(sfx_pickHit);
                     source.PlaySound(sfx_bigBreaks);
                 } else {
                     source.PlaySound(sfx_smallBreaks);
                 }
 
+                flash.Flash();
                 fx_break.Play();
             }
         }

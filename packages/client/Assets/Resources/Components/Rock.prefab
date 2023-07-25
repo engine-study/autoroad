@@ -10781,6 +10781,7 @@ GameObject:
   - component: {fileID: 7201583706257857126}
   - component: {fileID: 5250168534217083149}
   - component: {fileID: 6777126390548094225}
+  - component: {fileID: 7397639299022656998}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -10862,6 +10863,7 @@ MonoBehaviour:
   posSync: {fileID: 7201583706257857126}
   visualParent: {fileID: 2621405225017724336}
   rockBase: {fileID: 7173250004357761728}
+  flash: {fileID: 7397639299022656998}
   stages:
   - {fileID: 4825848422724391024}
   - {fileID: 7605106085113506639}
@@ -10950,6 +10952,7 @@ MonoBehaviour:
   synced: 0
   targetComponent: {fileID: 0}
   targetTransform: {fileID: 0}
+  hideIfNoPosition: 1
   pos: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
   moving: 0
@@ -11062,6 +11065,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7397639299022656998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176298541283094271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692c6c608be4b9b4f9bc46648e03d466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2621405225017724336}
+  clone: {fileID: 0}
 --- !u!1 &8253397741737444425
 GameObject:
   m_ObjectHideFlags: 0

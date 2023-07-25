@@ -9879,6 +9879,7 @@ GameObject:
   - component: {fileID: 7225809694366648449}
   - component: {fileID: 3351734600612434880}
   - component: {fileID: 3899430275617106030}
+  - component: {fileID: 2653067428443919282}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -9947,6 +9948,7 @@ MonoBehaviour:
   hasInit: 0
   loaded: 0
   treeState: 0
+  flash: {fileID: 2653067428443919282}
   fx_hit: {fileID: 5971642603421424576}
   fx_fall: {fileID: 5683911409690809342}
   sfx_hits:
@@ -10118,6 +10120,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2653067428443919282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5532680924661891200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692c6c608be4b9b4f9bc46648e03d466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 8628776724216354954}
+  clone: {fileID: 0}
 --- !u!1 &8628776724216354954
 GameObject:
   m_ObjectHideFlags: 0

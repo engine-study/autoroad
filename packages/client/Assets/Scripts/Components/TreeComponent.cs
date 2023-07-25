@@ -9,10 +9,12 @@ public class TreeComponent : MUDComponent {
     [Header("Tree")]
 
     public bool treeState;
+    public SPFlashShake flash;
     public ParticleSystem fx_hit, fx_fall;
     public AudioClip[] sfx_hits, sfx_falls;
-
     bool lastState = false;
+    int lastHealth = -1;
+
     HealthComponent health;
     protected override void PostInit() {
         base.PostInit();
@@ -26,15 +28,22 @@ public class TreeComponent : MUDComponent {
     }
 
     void TreeHit() {
-        if(Loaded) {
-            if(health.health == 0 && health.UpdateSource == UpdateSource.Onchain) {
+
+        if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.health) {
+
+
+            if (health.health == 0 && health.UpdateSource == UpdateSource.Onchain) {
                 SPAudioSource.Play(transform.position, sfx_falls);
                 fx_fall.Play();
+                flash.Flash();
             } else {
                 SPAudioSource.Play(transform.position, sfx_hits);
                 fx_hit.Play();
+                flash.Flash();
             }
         }
+
+        lastHealth = health.health;
     }
 
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {

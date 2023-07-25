@@ -77,23 +77,24 @@ contract MoveSystem is System {
     }
   }
 
-  function interact(bytes32 player, bytes32 entity, uint distance) private returns (bool) {
+  function interact(bytes32 player, int32 x, int32 y, bytes32[] memory entities, uint distance) private returns (bool) {
+
+    require(entities.length > 0, "empty position");
 
     PositionData memory playerPos = Position.get(player);
-    PositionData memory entityPos = Position.get(entity);
+    PositionData memory entityPos = Position.get(entities[0]);
 
     // checks that positions are where they should be, also that the entities actually have positions
-    bool isWithin = withinManhattanMinimum(entityPos, playerPos, distance);
-    require(isWithin, "too far or too close");
+    require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
 
-    return isWithin;
+    return true;
   }
 
   function mine(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-    
-    require(interact(player, atPosition[0], 1),"bad interact");
+
+    require(interact(player, x, y, atPosition, 1),"bad interact");
 
     uint32 rockState = Rock.get(atPosition[0]);
 
@@ -119,7 +120,8 @@ contract MoveSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
-    require(interact(player, atPosition[0], 1),"bad interact");
+    require(interact(player, x, y, atPosition, 1),"bad interact");
+    require(Tree.get(atPosition[0]), "no tree");
 
     int32 health = Health.get(atPosition[0]);
     health--;
@@ -139,7 +141,7 @@ contract MoveSystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(carryX, carryY));
 
     // Position
-    require(atPosition.length >= 1, "trying to carry an empty spot");
+    require(atPosition.length > 0, "trying to carry an empty spot");
     uint32 move = Move.get(atPosition[0]);
     require(move == uint32(MoveType.Carry), "non-carry object");
 
