@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
-
+using IWorld.ContractDefinition;
 public class TreeComponent : MUDComponent {
 
     [Header("Tree")]
@@ -27,7 +27,7 @@ public class TreeComponent : MUDComponent {
 
     void TreeHit() {
         if(Loaded) {
-            if(health.health == 0) {
+            if(health.health == 0 && health.UpdateSource == UpdateSource.Onchain) {
                 SPAudioSource.Play(transform.position, sfx_falls);
                 fx_fall.Play();
             } else {
@@ -53,22 +53,6 @@ public class TreeComponent : MUDComponent {
 
         }
 
-
-        if (Loaded && lastState != treeState) {
-
-            // if (eventType == UpdateType.SetField || eventType == UpdateEvent.Optimistic) {
-            //     source.PlaySound(sfx_whoosh);
-            //     if(lastStage < RockType.Rudus) {
-            //         source.PlaySound(sfx_pickHit);
-            //         source.PlaySound(sfx_bigBreaks);
-            //     } else {
-            //         source.PlaySound(sfx_smallBreaks);
-            //     }
-
-            //     fx_break.Play();
-            // }
-        }
-
         lastState = treeState;
 
     }
@@ -78,8 +62,6 @@ public class TreeComponent : MUDComponent {
     }
 
     public async void ChopTree(string entity) {
-        // List<TxUpdate> updates = new List<TxUpdate>();
-        // updates.Add(TxManager.MakeOptimistic(this, (Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Rudus) )));
-        // await TxManager.Send<MineFunction>(updates, x, y);
+        await TxManager.Send<ChopFunction>(TxManager.MakeOptimistic(health, (int)Mathf.Clamp(health.health - 1, 0, Mathf.Infinity)), System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
     }
 }

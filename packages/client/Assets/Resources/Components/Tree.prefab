@@ -9973,7 +9973,19 @@ MonoBehaviour:
   targetGO: {fileID: 0}
   OnStartEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1672090630131356949}
+        m_TargetAssemblyTypeName: TreeComponent, Assembly-CSharp
+        m_MethodName: Chop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -9993,6 +10005,7 @@ MonoBehaviour:
   synced: 0
   targetComponent: {fileID: 0}
   targetTransform: {fileID: 0}
+  hideIfNoPosition: 1
   pos: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
   moving: 0

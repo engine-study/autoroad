@@ -21,19 +21,27 @@ import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/T
 //   return positions;
 // }
 
-function getDistance(PositionData memory start, PositionData memory end) pure returns (uint) {
-  return uint(abs(end.x - start.x) + abs(end.y - start.y));
+
+function withinManhattanMinimum(PositionData memory start, PositionData memory end, uint distance) pure returns (bool) {
+  distance += 1;
+  uint d = abs(end.x - start.x) + abs(end.y - start.y);
+  return d < distance && d > 0;
 }
 
-function withinManhattanDistance(PositionData memory start, PositionData memory end, int32 distance) pure returns (bool) {
+
+function withinManhattanDistance(PositionData memory start, PositionData memory end, uint distance) pure returns (bool) {
   distance += 1;
   return abs(end.x - start.x) + abs(end.y - start.y) < distance;
 }
 
 
-function withinChessDistance(PositionData memory start, PositionData memory end, int32 distance) pure returns (bool) {
+function withinChessDistance(PositionData memory start, PositionData memory end, uint distance) pure returns (bool) {
   distance += 1;
   return abs(end.x - start.x) < distance && abs(end.y - start.y) < distance;
+}
+
+function getDistance(PositionData memory start, PositionData memory end) pure returns (uint) {
+  return abs(end.x - start.x) + abs(end.y - start.y);
 }
 
 
@@ -74,6 +82,6 @@ function lineWalkPositions(PositionData memory start, PositionData memory end) p
   return positions;
 }
 
-function abs(int x) pure returns (int) {
-    return x >= 0 ? x : -x;
+function abs(int x) pure returns (uint) {
+    return uint(x >= 0 ? x : -x);
 }

@@ -9,7 +9,7 @@ import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance } from "../utility/grid.sol";
+import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 import { MapSystem } from "../systems/MapSystem.sol";
 import { RoadSystem } from "../systems/RoadSystem.sol";
 
@@ -77,32 +77,23 @@ contract MoveSystem is System {
     }
   }
 
-  function chop(bytes32 tree) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function interact(bytes32 player, bytes32 entity, uint distance) private returns (bool) {
 
-    require(Tree.get(tree), "not a tree");
-    require(withinManhattanDistance(Position.get(tree), Position.get(player), 1), "too far to chop");
+    PositionData memory playerPos = Position.get(player);
+    PositionData memory entityPos = Position.get(entity);
 
-    int32 health = Health.get(tree);
-    health--;
+    // checks that positions are where they should be, also that the entities actually have positions
+    bool isWithin = withinManhattanMinimum(entityPos, playerPos, distance);
+    require(isWithin, "too far or too close");
 
-    if (health == 0) {
-      Tree.deleteRecord(tree);
-      Position.deleteRecord(tree);
-      Health.deleteRecord(tree);
-      Move.deleteRecord(tree);
-    } else {
-      Health.set(tree, health);
-    }
+    return isWithin;
   }
 
   function mine(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-
-    // Position
-    require(withinManhattanDistance(PositionData(x, y), Position.get(player), 1), "too far to mine");
-    require(atPosition.length >= 1, "mining an empty spot");
+    
+    require(interact(player, atPosition[0], 1),"bad interact");
 
     uint32 rockState = Rock.get(atPosition[0]);
 
@@ -121,6 +112,25 @@ contract MoveSystem is System {
     //become shovelable once we are broken down enough
     else if (rockState == uint32(RockType.Nucleus)) {
       Move.set(atPosition[0], uint32(MoveType.Shovel));
+    }
+  }
+
+  function chop(int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+
+    require(interact(player, atPosition[0], 1),"bad interact");
+
+    int32 health = Health.get(atPosition[0]);
+    health--;
+
+    if (health == 0) {
+      Tree.deleteRecord(atPosition[0]);
+      Position.deleteRecord(atPosition[0]);
+      Health.deleteRecord(atPosition[0]);
+      Move.deleteRecord(atPosition[0]);
+    } else {
+      Health.set(atPosition[0], health);
     }
   }
 

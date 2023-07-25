@@ -144,18 +144,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(chopFunction, cancellationToken);
         }
 
-        public Task<string> ChopRequestAsync(byte[] tree)
+        public Task<string> ChopRequestAsync(int x, int y)
         {
             var chopFunction = new ChopFunction();
-                chopFunction.Tree = tree;
+                chopFunction.X = x;
+                chopFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(chopFunction);
         }
 
-        public Task<TransactionReceipt> ChopRequestAndWaitForReceiptAsync(byte[] tree, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> ChopRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var chopFunction = new ChopFunction();
-                chopFunction.Tree = tree;
+                chopFunction.X = x;
+                chopFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(chopFunction, cancellationToken);
         }

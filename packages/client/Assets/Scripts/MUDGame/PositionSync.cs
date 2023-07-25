@@ -11,13 +11,14 @@ public class PositionSync : ComponentSync
     public bool Moving {get{return moving;}}
 
     [Header("Optional")]
-    public Transform targetTransform;
+    [SerializeField] private Transform targetTransform;
+    [SerializeField] private bool hideIfNoPosition = true;    
     // [SerializeField] protected float speed = 1f;
     
     [Header("Debug")]
-    [SerializeField] protected PositionComponent pos;
-    [SerializeField] protected Vector3 targetPos;
-    [SerializeField] bool moving = false;    
+    [SerializeField] private PositionComponent pos;
+    [SerializeField] private Vector3 targetPos;
+    [SerializeField] private bool moving = false;    
     public override System.Type TargetComponentType() {return typeof(PositionComponent);}
 
     protected override void Start() {
@@ -44,7 +45,7 @@ public class PositionSync : ComponentSync
         targetPos = pos.Pos;
 
         //hide us if we don't have a position
-        if(pos.UpdateType == UpdateType.DeleteRecord) {
+        if(pos.UpdateType == UpdateType.DeleteRecord && hideIfNoPosition) {
             gameObject.SetActive(false);
         }
     }
