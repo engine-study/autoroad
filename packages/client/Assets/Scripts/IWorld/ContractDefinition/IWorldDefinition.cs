@@ -669,7 +669,12 @@ namespace IWorld.ContractDefinition
     [Function("spawn")]
     public class SpawnFunctionBase : FunctionMessage
     {
-
+        [Parameter("uint32", "firstName", 1)]
+        public virtual uint FirstName { get; set; }
+        [Parameter("uint32", "middleName", 2)]
+        public virtual uint MiddleName { get; set; }
+        [Parameter("uint32", "lastName", 3)]
+        public virtual uint LastName { get; set; }
     }
 
     public partial class SpawnTerrainFunction : SpawnTerrainFunctionBase { }

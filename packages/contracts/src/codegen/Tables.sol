@@ -5,6 +5,7 @@ pragma solidity >=0.8.0;
 
 import { GameConfig, GameConfigData, GameConfigTableId } from "./tables/GameConfig.sol";
 import { Stats, StatsTableId } from "./tables/Stats.sol";
+import { Name, NameTableId } from "./tables/Name.sol";
 import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
 import { Bounds, BoundsTableId } from "./tables/Bounds.sol";
 import { RoadConfig, RoadConfigTableId } from "./tables/RoadConfig.sol";

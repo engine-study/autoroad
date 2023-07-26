@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -259,7 +259,8 @@ contract MoveSystem is System {
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
-      if (atPosition.length > 0 && i > 0) {
+      if (atPosition.length > 0) {
+        require(i > 0, "nowhere to move");
         Position.set(player, positions[i - 1]);
         return;
       } else if (i == positions.length - 1) {
@@ -271,13 +272,19 @@ contract MoveSystem is System {
     require(false, "No available place to move");
   }
 
-  function spawn() public {
+  function spawn(uint32 firstName, uint32 middleName, uint32 lastName) public {
+
+    require(firstName < 36, "first name");
+    require(middleName < 1025, "middle name");
+    require(lastName < 1734, "last name");
+
     bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
     require(!Player.get(playerEntity), "already spawned");
 
     // uint32 mileDistance = GameState.get()
     (int32 l, int32 r, int32 up, ) = Bounds.get();
 
+    Name.set(playerEntity, firstName, middleName, lastName);
     Player.set(playerEntity, true);
     Health.set(playerEntity, 3);
     Move.set(playerEntity, uint32(MoveType.Push));

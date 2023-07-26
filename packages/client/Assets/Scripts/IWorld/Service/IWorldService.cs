@@ -1420,19 +1420,29 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(spawnFunction);
         }
 
-        public Task<string> SpawnRequestAsync()
-        {
-             return ContractHandler.SendRequestAsync<SpawnFunction>();
-        }
-
         public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(SpawnFunction spawnFunction, CancellationTokenSource cancellationToken = null)
         {
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }
 
-        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        public Task<string> SpawnRequestAsync(uint firstName, uint middleName, uint lastName)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync<SpawnFunction>(null, cancellationToken);
+            var spawnFunction = new SpawnFunction();
+                spawnFunction.FirstName = firstName;
+                spawnFunction.MiddleName = middleName;
+                spawnFunction.LastName = lastName;
+            
+             return ContractHandler.SendRequestAsync(spawnFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(uint firstName, uint middleName, uint lastName, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnFunction = new SpawnFunction();
+                spawnFunction.FirstName = firstName;
+                spawnFunction.MiddleName = middleName;
+                spawnFunction.LastName = lastName;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }
 
         public Task<string> SpawnTerrainRequestAsync(SpawnTerrainFunction spawnTerrainFunction)

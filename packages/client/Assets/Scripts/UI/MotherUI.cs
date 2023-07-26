@@ -55,6 +55,10 @@ public class MotherUI : SPUIInstance
 
     }
 
+    public static void TogglePlayerCreation(bool toggle) {
+        Mother.playerCreate.gameObject.SetActive(toggle);
+    }
+
     void StartGame()
     {
         StartCoroutine(StartCoroutine());

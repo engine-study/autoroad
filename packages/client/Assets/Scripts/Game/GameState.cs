@@ -6,6 +6,8 @@ using mud.Unity;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 using System;
+using Cysharp.Threading.Tasks;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,19 +17,19 @@ public enum GamePhase { Lobby, Game, PostGame, _Count }
 public class GameState : MonoBehaviour {
     public static GamePhase Phase { get { return Instance.phase; } }
     public static GameState Instance;
+    public static Action<GamePhase> OnPhaseUpdate;
+
     public GamePhase phase;
     public RecieverMUD reciever;
     public TableManager playerTable;
-    [Header("Scroll")]
     public WorldScroll scroll;
-
-    [Header("Debug")]
-    public PlayerMUD localPlayer;
 
     [Header("UI")]
     public GameObject editorObjects;
     public PhaseUI[] phaseUI;
-    public static Action<GamePhase> OnPhaseUpdate;
+
+    [Header("Debug")]
+    public PlayerMUD localPlayer;
 
     void Awake() {
         Instance = this;
@@ -50,19 +52,19 @@ public class GameState : MonoBehaviour {
 
         if (currentPlayer == null) {
             // spawn the player
-            Debug.Log("Spawning Local Player");
+            Debug.Log("Go to player creation");
             SetupPlayerCreation();
         } else {
-            Debug.Log("Found Local Player");
+            Debug.Log("Found spawned player");
             StartGame();
         }
 
     }
 
+
+
     void SetupPlayerCreation() {
-
-        TxManager.Send<SpawnFunction>();
-
+        
     }
 
     void StartGame() {

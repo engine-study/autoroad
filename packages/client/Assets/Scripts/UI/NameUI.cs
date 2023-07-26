@@ -5,7 +5,7 @@ using UnityEngine;
 public class NameUI {
 
     public static string TableToName(int first, int second, int third) {
-        return praenomen[first] + nomen[second] + cognomina[third];
+        return praenomen[first] + " " + nomen[second]; //+ " " + cognomina[third]
     }
     
     public static string [] praenomen = {

@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
+using mud.Client;
+using IWorld.ContractDefinition;
 
 public class NameOptionUI : MonoBehaviour {
 
     bool spawning = false; 
     public static string PlayerName;
-    public NameClass selectedName;
+    public static NameClass Name;
     public NameClass[] names;
     public SPButton[] buttons;
     public AudioClip [] sfx_rollPlayer, sfx_acceptPlayer;
@@ -14,6 +17,10 @@ public class NameOptionUI : MonoBehaviour {
     // bool spawning = false;
     void OnEnable() {
         Roll();
+    }
+
+    void OnDisable() {
+        Name = null;
     }
 
     public void Roll() {
@@ -28,19 +35,36 @@ public class NameOptionUI : MonoBehaviour {
 
     }
 
-    public void SpawnPlayer() {
+    public async void SpawnPlayer() {
+
+        if(Name == null) {
+            return;
+        }
 
         if(spawning) {
             return;
         }
 
-        spawning = true;
         SPUIBase.PlaySound(sfx_acceptPlayer);
-        // TxManager
+        spawning = true;
+
+        bool didSpawn = await SpawnTx();
+
+        if(didSpawn) {
+            
+        } else {
+            spawning = false;
+        }
+
+    }
+
+    public static async UniTask<bool> SpawnTx() {
+        return await TxManager.Send<SpawnFunction>(System.Convert.ToUInt32(Name.first), System.Convert.ToUInt32(Name.second), System.Convert.ToUInt32(Name.third));
     }
 
     public void Selected(int button) {
         PlayerName = buttons[button].Text;
+        Name = names[button];
     }
 
 }

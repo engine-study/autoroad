@@ -47,6 +47,14 @@ export default mudConfig({
       },
     },
 
+    Name: {
+      dataStruct: false,
+      schema: {
+        first: "uint32",
+        middle: "uint32",
+        last: "uint32",
+      },
+    },
 
     //map
     MapConfig: {
