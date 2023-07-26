@@ -12,6 +12,7 @@ public class MotherUI : SPUIInstance
     public GameObject loadingScreen;
     public Image loadingScreenBackground;
     public SPActionWheelUI wheel;
+    public NameOptionUI playerCreate;
 
 
     [Header("Game")]

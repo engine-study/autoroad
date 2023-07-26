@@ -9731,6 +9731,13 @@ MonoBehaviour:
   - {fileID: 722842999}
   - {fileID: 2028506312}
   - {fileID: 1605254145}
+  sfx_rollPlayer:
+  - {fileID: 8300000, guid: a6044589ea6afb04080f7a76c922594c, type: 3}
+  - {fileID: 8300000, guid: 270b261762d9e904f8b175fd6261fd98, type: 3}
+  - {fileID: 8300000, guid: 0c931b1feace9a94ca905ad15e78ff78, type: 3}
+  - {fileID: 8300000, guid: 1e06d3637bb0fcb43b74a238a74e0513, type: 3}
+  sfx_acceptPlayer:
+  - {fileID: 8300000, guid: 5f2e2e3261bfd1246a7ace22fc2a0add, type: 3}
 --- !u!1001 &388846638
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55165,6 +55172,7 @@ MonoBehaviour:
   loadingScreen: {fileID: 959642922}
   loadingScreenBackground: {fileID: 1380748303}
   wheel: {fileID: 65396861}
+  playerCreate: {fileID: 0}
   game: {fileID: 0}
 --- !u!114 &1925883603
 MonoBehaviour:

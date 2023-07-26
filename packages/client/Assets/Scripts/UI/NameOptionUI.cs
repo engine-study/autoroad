@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class NameOptionUI : MonoBehaviour {
 
+    bool spawning = false; 
     public static string PlayerName;
     public NameClass selectedName;
     public NameClass[] names;
     public SPButton[] buttons;
+    public AudioClip [] sfx_rollPlayer, sfx_acceptPlayer;
+
     // bool spawning = false;
     void OnEnable() {
         Roll();
@@ -20,10 +23,19 @@ public class NameOptionUI : MonoBehaviour {
             names[i] = new NameClass();
             buttons[i].UpdateField(NameUI.TableToName(names[i].first, names[i].second, names[i].third));
         }
+        
+        SPUIBase.PlaySound(sfx_rollPlayer);
 
     }
 
     public void SpawnPlayer() {
+
+        if(spawning) {
+            return;
+        }
+
+        spawning = true;
+        SPUIBase.PlaySound(sfx_acceptPlayer);
         // TxManager
     }
 

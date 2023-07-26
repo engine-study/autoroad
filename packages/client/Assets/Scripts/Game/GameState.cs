@@ -18,7 +18,6 @@ public class GameState : MonoBehaviour {
     public GamePhase phase;
     public RecieverMUD reciever;
     public TableManager playerTable;
-
     [Header("Scroll")]
     public WorldScroll scroll;
 
@@ -35,12 +34,12 @@ public class GameState : MonoBehaviour {
         editorObjects.SetActive(false);
 
         playerTable.OnInit += SpawnLocalPlayer;
-        SPEvents.OnLocalPlayerSpawn += SetupPlayer;
+        SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
     }
 
     void OnDestroy() {
         playerTable.OnInit -= SpawnLocalPlayer;
-        SPEvents.OnLocalPlayerSpawn -= SetupPlayer;
+        SPEvents.OnLocalPlayerSpawn -= RecieverPlayer;
         Instance = null;
     }
 
@@ -52,14 +51,27 @@ public class GameState : MonoBehaviour {
         if (currentPlayer == null) {
             // spawn the player
             Debug.Log("Spawning Local Player");
-            TxManager.Send<SpawnFunction>();
+            SetupPlayerCreation();
         } else {
             Debug.Log("Found Local Player");
+            StartGame();
         }
 
     }
 
-    void SetupPlayer() {
+    void SetupPlayerCreation() {
+
+        TxManager.Send<SpawnFunction>();
+
+    }
+
+    void StartGame() {
+
+    }
+
+
+    //player is spawned
+    void RecieverPlayer() {
         SPPlayer.LocalPlayer.SetReciever(reciever);
         localPlayer = SPPlayer.LocalPlayer as PlayerMUD; 
     }
