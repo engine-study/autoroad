@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NameUI : MonoBehaviour {
+public class NameUI {
 
-    string [] praenomen = {
+    public static string TableToName(int first, int second, int third) {
+        return praenomen[first] + nomen[second] + cognomina[third];
+    }
+    
+    public static string [] praenomen = {
         "Agrippa",
         "Appius",
         "Aulus",
@@ -42,7 +46,7 @@ public class NameUI : MonoBehaviour {
         "Volesus",
         "Vopiscus"
     };
-    string [] nomen = {
+    public static string [] nomen = {
         "Abercius",
         "Abito",
         "Abundantius",
@@ -1070,7 +1074,7 @@ public class NameUI : MonoBehaviour {
         "Vulpius"
     };
 
-    string[] cognomina = {
+    public static string[] cognomina = {
         "Abercius", 
         "Abito", 
         "Abundantius", 
@@ -2807,7 +2811,7 @@ public class NameUI : MonoBehaviour {
         "Zoticus",
     };
 
-    string[] adjectives = {
+    public static string[] adjectives = {
 
         "Adorable",
         "Aggressive",
@@ -2955,7 +2959,7 @@ public class NameUI : MonoBehaviour {
         "Witty"
     };
 
-    string [] names = {
+    public static string [] names = {
         "Abs",
         "Arms",
         "Bagels",
