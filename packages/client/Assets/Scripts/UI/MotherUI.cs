@@ -67,7 +67,7 @@ public class MotherUI : SPUIInstance
         //animate out screen 
         if (!SPGlobal.IsDebug)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             float lerp = 0f;
 
             while (lerp < 1f)
@@ -78,7 +78,7 @@ public class MotherUI : SPUIInstance
             }
             
             //another sound
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1f);
 
         }
 
