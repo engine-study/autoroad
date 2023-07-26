@@ -253,14 +253,14 @@ contract MoveSystem is System {
 
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
-    for (uint i = 0; i < positions.length; i++) {
+    for (uint i = 1; i < positions.length; i++) {
 
       bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y));
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
       if (atPosition.length > 0) {
-        require(i > 0, "nowhere to move");
+        require(i > 1, "nowhere to move");
         Position.set(player, positions[i - 1]);
         return;
       } else if (i == positions.length - 1) {

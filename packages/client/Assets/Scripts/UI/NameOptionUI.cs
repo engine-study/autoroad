@@ -7,15 +7,16 @@ using IWorld.ContractDefinition;
 
 public class NameOptionUI : MonoBehaviour {
 
-    bool spawning = false; 
+    bool spawning = false;
     public static string PlayerName;
     public static NameClass Name;
     public NameClass[] names;
     public SPButton[] buttons;
-    public AudioClip [] sfx_rollPlayer, sfx_acceptPlayer;
+    public AudioClip[] sfx_rollPlayer, sfx_acceptPlayer;
+
 
     // bool spawning = false;
-    void OnEnable() {
+    void Start() {
         Roll();
     }
 
@@ -26,22 +27,39 @@ public class NameOptionUI : MonoBehaviour {
     public void Roll() {
 
         names = new NameClass[5];
-        for(int i = 0; i < buttons.Length; i++) {
-            names[i] = new NameClass();
+        
+        for (int i = 0; i < buttons.Length; i++) {
+
+            bool duplicateName = true;
+
+            while (duplicateName) {
+
+                names[i] = new NameClass();
+                duplicateName = false; 
+
+                for (int j = i-1; j > -1; j--) {
+                    if (names[i].first == names[j].first || names[i].second == names[j].second || names[i].third == names[j].third) {
+                        duplicateName = true;
+                        break;
+                    }
+                }
+                
+            }
+
             buttons[i].UpdateField(NameUI.TableToName(names[i].first, names[i].second, names[i].third));
         }
-        
+
         SPUIBase.PlaySound(sfx_rollPlayer);
 
     }
 
     public async void SpawnPlayer() {
 
-        if(Name == null) {
+        if (Name == null) {
             return;
         }
 
-        if(spawning) {
+        if (spawning) {
             return;
         }
 
@@ -50,8 +68,8 @@ public class NameOptionUI : MonoBehaviour {
 
         bool didSpawn = await SpawnTx();
 
-        if(didSpawn) {
-            
+        if (didSpawn) {
+
         } else {
             spawning = false;
         }
