@@ -243,7 +243,7 @@ contract MoveSystem is System {
 
 
     require(startPos.x == x || startPos.y == y, "cannot move diagonally ");
-    require(startPos.x != x || startPos.y != y, "cannot move in place");
+    require(startPos.x != x || startPos.y != y, "moving in place");
 
     PositionData memory endPos = PositionData(x, y);
     require(getDistance(startPos,endPos) == 5, "move distance is not 5");
@@ -254,9 +254,8 @@ contract MoveSystem is System {
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
     for (uint i = 0; i < positions.length; i++) {
-      PositionData memory pos = positions[i];
-      bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y));
 
+      bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y));
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
