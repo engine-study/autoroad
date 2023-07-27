@@ -27,8 +27,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5576221101108090883}
+  m_Children: []
   m_Father: {fileID: 1609274097852576520}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9900,6 +9899,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 841130514871191239}
+  - {fileID: 5576221101108090883}
   - {fileID: 8719389430433991540}
   - {fileID: 7759007312444956436}
   - {fileID: 6426710764759275813}
@@ -9947,7 +9947,7 @@ MonoBehaviour:
     source: 0
   hasInit: 0
   loaded: 0
-  treeState: 0
+  treeRoot: {fileID: 8628776724216354954}
   flash: {fileID: 2653067428443919282}
   fx_hit: {fileID: 5971642603421424576}
   fx_fall: {fileID: 5683911409690809342}
@@ -9957,6 +9957,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0c660ab008bc5e84c8464b4a7053e5c3, type: 3}
   sfx_falls:
   - {fileID: 8300000, guid: 99741cb3eb211fd48864e5091f8566fe, type: 3}
+  treeState: 0
 --- !u!114 &8503245968997051454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10134,6 +10135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 8628776724216354954}
   clone: {fileID: 0}
+  renderers: []
 --- !u!1 &8628776724216354954
 GameObject:
   m_ObjectHideFlags: 0
@@ -10144,7 +10146,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5576221101108090883}
   - component: {fileID: 3149375707509837361}
-  - component: {fileID: 56774326686213670}
   - component: {fileID: 5628933316423774376}
   m_Layer: 0
   m_Name: Visuals
@@ -10160,8 +10161,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8628776724216354954}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10187,7 +10188,7 @@ Transform:
   - {fileID: 2235015131955449172}
   - {fileID: 3859370878103839628}
   - {fileID: 4192988311556315203}
-  m_Father: {fileID: 841130514871191239}
+  m_Father: {fileID: 1609274097852576520}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3149375707509837361
@@ -10206,6 +10207,7 @@ MonoBehaviour:
   seed: 0
   randomizeChildren: 1
   objects: []
+  activeChild: {fileID: 0}
   useRotation: 0
   rotateY: 1
   rotationRound: 0
@@ -10218,33 +10220,6 @@ MonoBehaviour:
   rotate: -1
   scale: -1
   position: -1
---- !u!54 &56774326686213670
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8628776724216354954}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!136 &5628933316423774376
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10264,10 +10239,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
-  m_Height: 2
+  m_Radius: 0.15
+  m_Height: 5
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 2.5, z: 0}
 --- !u!1001 &267092416017031056
 PrefabInstance:
   m_ObjectHideFlags: 0

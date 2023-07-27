@@ -7,15 +7,18 @@ using IWorld.ContractDefinition;
 public class TreeComponent : MUDComponent {
 
     [Header("Tree")]
-
-    public bool treeState;
+    public GameObject treeRoot;
     public SPFlashShake flash;
     public ParticleSystem fx_hit, fx_fall;
     public AudioClip[] sfx_hits, sfx_falls;
+    HealthComponent health;
+    Rigidbody rb;
+
+    [Header("Debug")]
+    public bool treeState;
     bool lastState = false;
     int lastHealth = -1;
 
-    HealthComponent health;
     protected override void PostInit() {
         base.PostInit();
         health = Entity.GetMUDComponent<HealthComponent>();
@@ -31,15 +34,32 @@ public class TreeComponent : MUDComponent {
 
         if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.health) {
 
-            if (health.health == 0 && health.UpdateSource == UpdateSource.Onchain) {
+            if (health.health == 0) {
+                SPAudioSource.Play(transform.position, sfx_hits);
                 SPAudioSource.Play(transform.position, sfx_falls);
+                fx_hit.Play();
                 fx_fall.Play();
                 flash.Flash();
+
+                fallCoroutine = StartCoroutine(FallCoroutine());
+
             } else {
                 SPAudioSource.Play(transform.position, sfx_hits);
                 fx_hit.Play();
                 flash.Flash();
             }
+        } else if (health.UpdateSource == UpdateSource.Revert) {
+
+            if (fallCoroutine != null) {
+                StopCoroutine(fallCoroutine);
+            }
+
+            if (rb) {
+                rb.isKinematic = true;
+            }
+
+            treeRoot.transform.localPosition = Vector3.zero;
+            treeRoot.transform.localRotation = Quaternion.identity;
         }
 
         lastHealth = health.health;
@@ -51,12 +71,20 @@ public class TreeComponent : MUDComponent {
 
         treeState = treeUpdate.value != null ? (bool)treeUpdate.value : false;
 
-        if(newInfo.UpdateType == UpdateType.DeleteRecord) {
-            gameObject.SetActive(false);
-        }
+        // if(newInfo.UpdateType == UpdateType.DeleteRecord) {
+        //     gameObject.SetActive(false);
+        // }
 
         lastState = treeState;
 
+    }
+
+    Coroutine fallCoroutine;
+    IEnumerator FallCoroutine() {
+        if (rb == null)
+            rb = treeRoot.AddComponent<Rigidbody>();
+        yield return new WaitForSeconds(2.5f);
+        gameObject.SetActive(false);
     }
 
     public void Chop() {

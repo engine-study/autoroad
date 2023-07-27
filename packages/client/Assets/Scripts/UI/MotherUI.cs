@@ -28,19 +28,7 @@ public class MotherUI : SPUIInstance {
 
         SPEvents.OnLocalPlayerSpawn += StartGame;
         TxManager.OnTransaction += UpdateWheel;
-    }
-    protected override void Start() {
-        base.Start();
-
-
-    }
-
-    void UpdateWheel(bool txSuccess) {
-        if (txSuccess) {
-
-        } else {
-            wheel.UpdateState(ActionEndState.Failed, true);
-        }
+        TxUpdate.OnUpdate += UpdateWheelOptimistic;
     }
 
     protected override void OnDestroy() {
@@ -50,7 +38,23 @@ public class MotherUI : SPUIInstance {
 
         SPEvents.OnLocalPlayerSpawn -= StartGame;
         TxManager.OnTransaction -= UpdateWheel;
+        TxUpdate.OnUpdate -= UpdateWheelOptimistic;
 
+    }
+
+
+    void UpdateWheelOptimistic(TxUpdate update) {
+        if (update.Info.UpdateSource == UpdateSource.Optimistic) {
+            wheel.UpdateState(ActionEndState.Success, true);
+        }
+    }
+    
+    void UpdateWheel(bool txSuccess) {
+        if (txSuccess) {
+
+        } else {
+            wheel.UpdateState(ActionEndState.Failed, true);
+        }
     }
 
     public static void ToggleLoading(bool toggle) {
