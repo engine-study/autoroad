@@ -17,15 +17,13 @@ public class NameOptionUI : SPWindowParent {
     public NameClass[] names;
     public SPButton[] buttons;
     public AudioClip[] sfx_rollPlayer, sfx_acceptPlayer;
-
+    public AudioClip sfx_wagon;
 
     // bool spawning = false;
-    void Start() {
-        Roll();
-    }
+    protected override void Start() {
+        base.Start();
 
-    void OnDisable() {
-        Name = null;
+        Roll();
     }
 
     public void Roll() {
@@ -37,6 +35,7 @@ public class NameOptionUI : SPWindowParent {
         }
 
         selection = -1;
+        Name = null;
 
         for (int i = 0; i < buttons.Length; i++) {
 
@@ -78,18 +77,24 @@ public class NameOptionUI : SPWindowParent {
 
         parent.SetActive(false);
 
+        MotherUI.ToggleLoading(true);
+        MotherUI.TogglePlayerCreation(false);
+
+        //spawn transaction
         bool didSpawn = await SpawnTx();
 
         if (didSpawn) {
-            MotherUI.TogglePlayerCreation(false);
+            // SPUIBase.PlaySound(sfx_wagon);
         } else {
+            MotherUI.TogglePlayerCreation(true);
+            MotherUI.ToggleLoading(false);
             spawning = false;
             parent.SetActive(true);
         }
 
     }
 
-    public static async UniTask<bool> SpawnTx() {
+    public async UniTask<bool> SpawnTx() {
         return await TxManager.Send<SpawnFunction>(System.Convert.ToUInt32(Name.first), System.Convert.ToUInt32(Name.second), System.Convert.ToUInt32(Name.third));
     }
 

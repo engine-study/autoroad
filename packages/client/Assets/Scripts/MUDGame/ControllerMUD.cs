@@ -122,7 +122,7 @@ public class ControllerMUD : SPController {
         //update rotation based on mouseInput
         // Determine the new rotation
         Vector3 mouseDir = SPInput.MousePlanePos - playerTransform.position;
-        if (playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > 1f) {
+        if (playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > .5f) {
 
             playerScript.Animator.IK.SetLook(CursorMUD.LookTarget);
             Vector3 eulerAngles = Quaternion.LookRotation(mouseDir).eulerAngles;

@@ -31,7 +31,6 @@ public class TreeComponent : MUDComponent {
 
         if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.health) {
 
-
             if (health.health == 0 && health.UpdateSource == UpdateSource.Onchain) {
                 SPAudioSource.Play(transform.position, sfx_falls);
                 fx_fall.Play();
@@ -50,16 +49,10 @@ public class TreeComponent : MUDComponent {
 
         TreeTable treeUpdate = (TreeTable)update;
 
-        if (treeUpdate == null) {
-            Debug.LogError("No rockUpdate", this);
-        } else {
+        treeState = treeUpdate.value != null ? (bool)treeUpdate.value : false;
 
-            // stage = rockUpdate.rockType != null ? (int)rockUpdate.rockType : stage;
-            // rockType = rockUpdate.rockType != null ? (RockType)rockUpdate.rockType : rockType;
-            // Debug.Log(rockUpdate.value.ToString());
-
-            treeState = treeUpdate.value != null ? (bool)treeUpdate.value : false;
-
+        if(newInfo.UpdateType == UpdateType.DeleteRecord) {
+            gameObject.SetActive(false);
         }
 
         lastState = treeState;
