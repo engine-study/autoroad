@@ -36,6 +36,7 @@ public class GameState : MonoBehaviour {
         editorObjects.SetActive(false);
 
         NetworkManager.OnInitialized += SetupGame;
+        NetworkManager.OnInitialized += LoadServer;
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
 
     }
@@ -53,6 +54,7 @@ public class GameState : MonoBehaviour {
     void OnDestroy() {
 
         NetworkManager.OnInitialized -= SetupGame;
+        NetworkManager.OnInitialized -= LoadServer;
         SPEvents.OnLocalPlayerSpawn -= RecieverPlayer;
 
         Instance = null;
@@ -63,12 +65,22 @@ public class GameState : MonoBehaviour {
     }
 
 
-
-    async UniTask GameSetup() {
+    void LoadServer() {
+        LoadMap();
+    }
+    async UniTask LoadMap() {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
 
+        while(TableManager.FindTable<BoundsComponent>().HasInit == false) {await UniTask.Delay(500);}
+        while(TableManager.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
+
         SPEvents.OnServerLoaded?.Invoke();
+
+    }
+    async UniTask GameSetup() {
+
+        while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
 
         //wait for name table
         while(TableManager.FindTable<NameComponent>().HasInit == false) {await UniTask.Delay(500);}

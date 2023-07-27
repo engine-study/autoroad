@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using mud.Client;
 using IWorld.ContractDefinition;
+using Cysharp.Threading.Tasks;
 
 public class MotherUI : SPUIInstance {
 
@@ -73,8 +74,13 @@ public class MotherUI : SPUIInstance {
 
         TxManager.OnTransaction += UpdateWheel;
         TxUpdate.OnUpdate += UpdateWheelOptimistic;
+        
         SPUIBase.PlaySound(sfx_spawn);
+
+        SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
+
     }
+
 
     void ShowServer() {
         StartCoroutine(ServerCoroutine());

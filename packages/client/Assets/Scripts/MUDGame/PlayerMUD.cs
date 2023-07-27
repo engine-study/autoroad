@@ -34,15 +34,9 @@ public class PlayerMUD : SPPlayer
         
         base.NetworkInit();
 
-        if(playerComponent.IsLocalPlayer) {
-            SetLocalPlayer(this);
-        }
-
-        for(int i = 0; i < playerComponent.Entity.Components.Count; i++) {
-            // Debug.Log("Player: " + playerComponent.Entity.Components[i].GetType().ToString());
-        }
-
-        // Debug.Log("Position: " + playerComponent.Entity.GetMUDComponent<PositionComponent>().GetType().ToString());
+        // for(int i = 0; i < playerComponent.Entity.Components.Count; i++) {
+        //     Debug.Log("Player: " + playerComponent.Entity.Components[i].GetType().ToString());
+        // }
 
         positionComponent = playerComponent.Entity.GetMUDComponent<PositionComponent>();
         transform.position = positionComponent.Pos;
@@ -52,6 +46,10 @@ public class PlayerMUD : SPPlayer
         baseName = MUDHelper.TruncateHash(playerComponent.Entity.Key);
 
         // Debug.Log("Player Network Init");
+
+        if(playerComponent.IsLocalPlayer) {
+            SetLocalPlayer(this);
+        }
 
     }
 
