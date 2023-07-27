@@ -40,6 +40,10 @@ public class HoverPolish : MonoBehaviour
     }
 
     void HoverPlayer(bool toggle, PlayerMUD player) {
-        player.Animator.IK.SetLook(toggle ? SPUIBase.Camera.transform : null);
+        if(player.IsLocalPlayer) {
+
+        } else {
+            player.Animator.IK.SetLook(toggle ? SPUIBase.Camera.transform : null);
+        }
     }
 }

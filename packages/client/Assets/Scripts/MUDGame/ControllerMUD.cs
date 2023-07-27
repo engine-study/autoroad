@@ -17,8 +17,8 @@ public class ControllerMUD : SPController {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject moveMarker;
     Vector3 markerPos;
-    [SerializeField] private SPAnimatorState walkingState; 
-    [SerializeField] private SPAnimatorState pushState; 
+    [SerializeField] private SPAnimatorState walkingState;
+    [SerializeField] private SPAnimatorState pushState;
 
     private System.IDisposable? _disposer;
     private MUDEntity entity;
@@ -121,15 +121,15 @@ public class ControllerMUD : SPController {
 
         //update rotation based on mouseInput
         // Determine the new rotation
-        if (playerScript.Actor.ActionState == ActionState.Idle) {
+        Vector3 mouseDir = SPInput.MousePlanePos - playerTransform.position;
+        if (playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > 1f) {
 
-            Vector3 eulerAngles = Quaternion.LookRotation(SPInput.MousePlanePos - playerTransform.position).eulerAngles;
-            lookVector = (SPInput.MousePlanePos - playerTransform.position).normalized;
-            lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
-        }
-
-        if(playerScript.Actor.ActionState == ActionState.Idle) {
             playerScript.Animator.IK.SetLook(CursorMUD.LookTarget);
+            Vector3 eulerAngles = Quaternion.LookRotation(mouseDir).eulerAngles;
+            lookVector = (mouseDir).normalized;
+            lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
+        } else {
+            playerScript.Animator.IK.SetLook(null);
         }
 
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
@@ -235,7 +235,7 @@ public class ControllerMUD : SPController {
         if (playerScript.Position.UpdateSource == UpdateSource.Revert) {
             SetPosition(playerScript.Position.Pos);
         }
-   
+
         //get the actual onchainposition
         onchainPos = playerScript.Position.Pos;
 
@@ -262,7 +262,7 @@ public class ControllerMUD : SPController {
 
         MUDEntity entityAtMove = GridMUD.GetEntityAt(position);
         MUDEntity terrainAtMove = GridMUD.GetEntityAt(position + Vector3.down);
-        
+
         // Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         // Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
 

@@ -25,6 +25,7 @@ public class MotherUI : SPUIInstance
         Mother = this;
 
         loadingScreen.SetActive(true);
+        playerCreate.gameObject.SetActive(false);
 
         SPEvents.OnLocalPlayerSpawn += StartGame;
         TxManager.OnTransaction += UpdateWheel;

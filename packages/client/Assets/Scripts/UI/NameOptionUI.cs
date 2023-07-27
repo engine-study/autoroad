@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using mud.Client;
 using IWorld.ContractDefinition;
 
-public class NameOptionUI : MonoBehaviour {
+public class NameOptionUI : SPWindowParent {
 
     bool spawning = false;
     int selection = -1;
@@ -81,7 +81,7 @@ public class NameOptionUI : MonoBehaviour {
         bool didSpawn = await SpawnTx();
 
         if (didSpawn) {
-
+            MotherUI.TogglePlayerCreation(false);
         } else {
             spawning = false;
             parent.SetActive(true);

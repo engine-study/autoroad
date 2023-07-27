@@ -64,7 +64,7 @@ public class GameState : MonoBehaviour {
 
 
     void SetupPlayerCreation() {
-        
+        MotherUI.TogglePlayerCreation(true);
     }
 
     void StartGame() {
