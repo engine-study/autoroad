@@ -9,7 +9,7 @@ public class TreeComponent : MUDComponent {
     [Header("Tree")]
     public GameObject treeRoot;
     public SPFlashShake flash;
-    public ParticleSystem fx_hit, fx_fall;
+    public ParticleSystem fx_hit, fx_fall, fx_fallLarge;
     public AudioClip[] sfx_hits, sfx_falls;
     HealthComponent health;
     Rigidbody rb;
@@ -39,6 +39,7 @@ public class TreeComponent : MUDComponent {
                 SPAudioSource.Play(transform.position, sfx_falls);
                 fx_hit.Play();
                 fx_fall.Play();
+                fx_fallLarge.Play();
                 flash.Flash();
 
                 fallCoroutine = StartCoroutine(FallCoroutine());
@@ -84,12 +85,14 @@ public class TreeComponent : MUDComponent {
 
     Coroutine fallCoroutine;
     IEnumerator FallCoroutine() {
-        if (rb == null) {
-            rb = treeRoot.AddComponent<Rigidbody>();
-            rb.drag = .5f;
-            rb.centerOfMass = Vector3.zero;
-            rb.angularVelocity = (Vector3.right * Random.Range(-5f,5f) + Vector3.forward * Random.Range(-5f,5f) );
-        }
+
+        // if (rb == null) {
+        //     rb = treeRoot.AddComponent<Rigidbody>();
+        //     rb.drag = .5f;
+        //     rb.centerOfMass = Vector3.zero;
+        //     rb.angularVelocity = (Vector3.right * Random.Range(-5f,5f) + Vector3.forward * Random.Range(-5f,5f) );
+        // }
+        treeRoot.gameObject.SetActive(false);
         yield return new WaitForSeconds(2.5f);
         gameObject.SetActive(false);
     }
