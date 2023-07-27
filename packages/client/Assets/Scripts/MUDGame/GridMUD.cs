@@ -5,14 +5,15 @@ using mud.Client;
 
 public class GridMUD : MonoBehaviour {
     public static GridMUD Instance;
-    public static Dictionary<Vector3, MUDComponent> Grid { get { return Instance.componentPositions; } }
+    public static Dictionary<string, MUDComponent> Grid { get { return Instance.positionDictionary; } }
 
     [Header("Grid")]
     [SerializeField] private List<MUDComponent> positions;
     TableManager positionTable;
-    private Dictionary<Vector3, MUDComponent> componentPositions = new Dictionary<Vector3, MUDComponent>();
+    private Dictionary<string, MUDComponent> positionDictionary = new Dictionary<string, MUDComponent>();
+    private Dictionary<MUDComponent, string> componentDictionary = new Dictionary<MUDComponent, string>();
 
-    public static MUDEntity GetEntityAt(Vector3 newPos) {MUDComponent c; Grid.TryGetValue(newPos, out c); return c?.Entity;}
+    public static MUDEntity GetEntityAt(Vector3 newPos) { MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; }
 
     void Awake() {
         Instance = this;
@@ -28,7 +29,7 @@ public class GridMUD : MonoBehaviour {
         }
 
         for (int i = 0; i < positions.Count; i++) {
-            positions[i].OnUpdatedInfo -= AddToTable;
+            positions[i].OnUpdatedInfo -= UpdatePosition;
         }
     }
 
@@ -40,21 +41,44 @@ public class GridMUD : MonoBehaviour {
     }
 
     void AddPosition(bool toggle, MUDComponent newPos) {
-        if(toggle) {
+        if (toggle) {
             positions.Add(newPos);
-            newPos.OnUpdatedInfo += AddToTable;
+            newPos.OnUpdatedInfo += UpdatePosition;
+        } else {
+
         }
     }
-    void AddToTable(MUDComponent c, UpdateInfo info) {
-        PositionComponent p = c as PositionComponent;
-        if (p != null) {
-            // Store the position in the dictionary
-            if (componentPositions.ContainsKey(p.PosLayer)) {
-                componentPositions[p.PosLayer] = p;
-            } else {
-                componentPositions.Add(p.PosLayer, p);
-            }
+    void UpdatePosition(MUDComponent c, UpdateInfo info) {
+
+        PositionComponent component = c as PositionComponent;
+
+        if (component == null) {
+            Debug.LogError("Not a position", this);
+            return;
         }
+
+        string position = component.PosLayer.ToString();
+        string oldPosition = componentDictionary.ContainsKey(component) ? componentDictionary[component] : "";
+
+        //Remove the old position from the dictionary
+        if(string.IsNullOrEmpty(oldPosition) == false) {
+            componentDictionary[component] = position;
+
+            if(positionDictionary.ContainsKey(oldPosition) && positionDictionary[oldPosition] == component) {
+                positionDictionary.Remove(oldPosition);
+            }
+
+        } else {
+            componentDictionary.Add(component, position);
+        }
+
+        // Store the position in the dictionary
+        if (positionDictionary.ContainsKey(position)) {
+            positionDictionary[position] = component;
+        } else {
+            positionDictionary.Add(position, component);
+        }
+
     }
 
 

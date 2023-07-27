@@ -50,16 +50,19 @@ public class TreeComponent : MUDComponent {
             }
         } else if (health.UpdateSource == UpdateSource.Revert) {
 
-            if (fallCoroutine != null) {
-                StopCoroutine(fallCoroutine);
-            }
+            //if we reverted to an alive state, fix
+            if(health.health > 0) {
+                if (fallCoroutine != null) {
+                    StopCoroutine(fallCoroutine);
+                }
 
-            if (rb) {
-                rb.isKinematic = true;
-            }
+                if (rb) {
+                    rb.isKinematic = true;
+                }
 
-            treeRoot.transform.localPosition = Vector3.zero;
-            treeRoot.transform.localRotation = Quaternion.identity;
+                treeRoot.transform.localPosition = Vector3.zero;
+                treeRoot.transform.localRotation = Quaternion.identity;
+            }
         }
 
         lastHealth = health.health;
@@ -81,8 +84,12 @@ public class TreeComponent : MUDComponent {
 
     Coroutine fallCoroutine;
     IEnumerator FallCoroutine() {
-        if (rb == null)
+        if (rb == null) {
             rb = treeRoot.AddComponent<Rigidbody>();
+            rb.drag = .5f;
+            rb.centerOfMass = Vector3.zero;
+            rb.angularVelocity = (Vector3.right * Random.Range(-5f,5f) + Vector3.forward * Random.Range(-5f,5f) );
+        }
         yield return new WaitForSeconds(2.5f);
         gameObject.SetActive(false);
     }

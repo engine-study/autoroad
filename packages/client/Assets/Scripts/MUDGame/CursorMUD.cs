@@ -47,8 +47,8 @@ public class CursorMUD : MonoBehaviour {
     }
 
     void UpdateMouse() {
-        rawMousePos = SPInput.MousePlanePos;
 
+        rawMousePos = SPInput.MousePlanePos;
         rawTransform.position = rawMousePos;
 
         if (grid) {
@@ -83,7 +83,8 @@ public class CursorMUD : MonoBehaviour {
 
     void UpdateHover() {
 
-        hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
+        // hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
+        hover = GridMUD.GetEntityAt(mousePos);
 
         if (lastHover != hover) {
 
@@ -96,6 +97,10 @@ public class CursorMUD : MonoBehaviour {
 
         lastHover = hover;
 
+    }
+
+    void OnDrawGizmosSelected() {
+        Gizmos.DrawWireSphere(mousePos, .25f);
     }
 
 }
