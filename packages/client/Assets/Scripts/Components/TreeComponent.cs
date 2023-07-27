@@ -9,7 +9,7 @@ public class TreeComponent : MUDComponent {
     [Header("Tree")]
     public GameObject treeRoot;
     public SPFlashShake flash;
-    public ParticleSystem fx_hit, fx_fall, fx_fallLarge;
+    public ParticleSystem fx_hit, fx_fall;
     public AudioClip[] sfx_hits, sfx_falls;
     HealthComponent health;
     Rigidbody rb;
@@ -38,8 +38,7 @@ public class TreeComponent : MUDComponent {
                 SPAudioSource.Play(transform.position, sfx_hits);
                 SPAudioSource.Play(transform.position, sfx_falls);
                 fx_hit.Play();
-                fx_fall.Play();
-                fx_fallLarge.Play();
+                fx_fall.Play(true);
                 flash.Flash();
 
                 fallCoroutine = StartCoroutine(FallCoroutine());
