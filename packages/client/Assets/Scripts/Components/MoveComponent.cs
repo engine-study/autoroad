@@ -4,16 +4,15 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public enum MoveType { None, Shovel, Carry, Push } //"None", "Shovel", "Carry", "Push"
+public enum MoveType { None, Obstruction, Shovel, Carry, Push } 
 public class MoveComponent : MUDComponent {
     public MoveType moveType;
 
-    protected override IMudTable GetTable() {return new MoveTable();}
+    protected override IMudTable GetTable() { return new MoveTable(); }
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         MoveTable table = (MoveTable)update;
-
-        moveType = table.value != null ? (MoveType)table.value : MoveType.None;
+        moveType = (MoveType)table.value;
 
     }
 }
