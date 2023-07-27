@@ -9,6 +9,9 @@ public class NameOptionUI : MonoBehaviour {
 
     bool spawning = false;
     int selection = -1;
+
+    public GameObject parent;
+
     public static string PlayerName;
     public static NameClass Name;
     public NameClass[] names;
@@ -29,6 +32,12 @@ public class NameOptionUI : MonoBehaviour {
 
         names = new NameClass[5];
         
+        if(selection > -1) {
+            buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Bold;
+        }
+
+        selection = -1;
+
         for (int i = 0; i < buttons.Length; i++) {
 
             bool duplicateName = true;
@@ -56,7 +65,7 @@ public class NameOptionUI : MonoBehaviour {
 
     public async void SpawnPlayer() {
 
-        if (Name == null) {
+        if (selection < 0 || Name == null) {
             return;
         }
 
@@ -67,12 +76,15 @@ public class NameOptionUI : MonoBehaviour {
         SPUIBase.PlaySound(sfx_acceptPlayer);
         spawning = true;
 
+        parent.SetActive(false);
+
         bool didSpawn = await SpawnTx();
 
         if (didSpawn) {
 
         } else {
             spawning = false;
+            parent.SetActive(true);
         }
 
     }

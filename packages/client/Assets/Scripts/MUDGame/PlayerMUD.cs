@@ -50,7 +50,6 @@ public class PlayerMUD : SPPlayer
         healthComponent = playerComponent.Entity.GetMUDComponent<HealthComponent>();
 
         baseName = MUDHelper.TruncateHash(playerComponent.Entity.Key);
-        playerComponent.Entity.SetName(MUDHelper.TruncateHash(playerComponent.Entity.Key));
 
         // Debug.Log("Player Network Init");
 
