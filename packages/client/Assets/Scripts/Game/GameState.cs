@@ -69,7 +69,7 @@ public class GameState : MonoBehaviour {
         SPEvents.OnServerLoaded?.Invoke();
 
         //wait for name table
-        while(TableManager.FindTable<NameComponent>() == null) {await UniTask.Delay(500);}
+        while(TableManager.FindTable<NameComponent>().HasInit == false) {await UniTask.Delay(500);}
         NameTable localName = TableManager.FindValue<NameTable>(NetworkManager.LocalAddress);
 
         //create our player name
@@ -91,7 +91,7 @@ public class GameState : MonoBehaviour {
         }
         
         //wait for player table
-        while(TableManager.FindTable<PlayerComponent>() == null) {await UniTask.Delay(500);}
+        while(TableManager.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
         PlayerTable localPlayerComponent = TableManager.FindValue<PlayerTable>(NetworkManager.LocalAddress);
 
         if (localPlayerComponent == null) {

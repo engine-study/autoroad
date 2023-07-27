@@ -291,7 +291,8 @@ contract MoveSystem is System {
 
     // uint32 mileDistance = GameState.get()
     (int32 l, int32 r, int32 up, ) = Bounds.get();
-    require(y > up, "spawning too low");
+    require(y > up, "out of range y");
+    require(x >= l && x <= r, "out of range x");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
