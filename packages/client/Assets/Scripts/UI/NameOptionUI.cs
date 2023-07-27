@@ -8,6 +8,7 @@ using IWorld.ContractDefinition;
 public class NameOptionUI : MonoBehaviour {
 
     bool spawning = false;
+    int selection = -1;
     public static string PlayerName;
     public static NameClass Name;
     public NameClass[] names;
@@ -80,9 +81,18 @@ public class NameOptionUI : MonoBehaviour {
         return await TxManager.Send<SpawnFunction>(System.Convert.ToUInt32(Name.first), System.Convert.ToUInt32(Name.second), System.Convert.ToUInt32(Name.third));
     }
 
-    public void Selected(int button) {
-        PlayerName = buttons[button].Text;
-        Name = names[button];
+    public void Selected(int newSelection) {
+
+        if(selection > -1) {
+            buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Bold;
+        }
+
+        selection = newSelection;
+
+        PlayerName = buttons[selection].Text;
+        Name = names[selection];
+
+        buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Underline | TMPro.FontStyles.Bold;
     }
 
 }
