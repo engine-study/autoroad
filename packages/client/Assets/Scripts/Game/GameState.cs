@@ -35,28 +35,78 @@ public class GameState : MonoBehaviour {
         Instance = this;
         editorObjects.SetActive(false);
 
-        playerTable.OnInit += SpawnLocalPlayer;
+        NetworkManager.OnInitialized += SetupGame;
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
     }
 
+    async void Start() {
+
+        for (int i = 0; i < phaseUI.Length; i++) {
+            phaseUI[i].ToggleWindowClose();
+        }
+
+        TogglePhase(phase);
+
+        await GameSetup();
+    }
+
     void OnDestroy() {
-        playerTable.OnInit -= SpawnLocalPlayer;
+        NetworkManager.OnInitialized -= SetupGame;
         SPEvents.OnLocalPlayerSpawn -= RecieverPlayer;
         Instance = null;
     }
 
-    void SpawnLocalPlayer() {
+    async void SetupGame() {
+        await GameSetup();
+    }
 
-        var addressKey = NetworkManager.Instance.addressKey;
-        var currentPlayer = IMudTable.GetValueFromTable<PlayerTable>(addressKey);
 
-        if (currentPlayer == null) {
-            // spawn the player
-            Debug.Log("Go to player creation");
-            SetupPlayerCreation();
-        } else {
-            Debug.Log("Found spawned player");
-            StartGame();
+
+    async UniTask GameSetup() {
+
+        while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
+
+        SPEvents.OnServerLoaded?.Invoke();
+
+        //wait for name table
+        while(TableManager.FindTable<NameComponent>() == null) {await UniTask.Delay(500);}
+        NameTable localName = TableManager.FindValue<NameTable>(NetworkManager.LocalAddress);
+
+        //create our player name
+        if (localName == null) {
+
+            if (SPGlobal.IsDebug) {
+
+                Debug.Log("Making Name");
+                while(await MotherUI.Mother.playerCreate.MakeName() == false) {await UniTask.Delay(2000);}
+
+            } else {
+                Debug.Log("Choosing Name");
+                SetupPlayerCreation();
+            }
+
+            //wait for the name
+            while(string.IsNullOrEmpty(NameComponent.LocalName)) {await UniTask.Delay(500);}
+
+        }
+        
+        //wait for player table
+        while(TableManager.FindTable<PlayerComponent>() == null) {await UniTask.Delay(500);}
+        PlayerTable localPlayerComponent = TableManager.FindValue<PlayerTable>(NetworkManager.LocalAddress);
+
+        if (localPlayerComponent == null) {
+
+            if(SPGlobal.IsDebug) {
+                Debug.Log("Spawning player at 0," + BoundsComponent.Up);
+                while(await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(0),System.Convert.ToInt32(BoundsComponent.Up + 1)) == false)  {await UniTask.Delay(2000);}
+            } else {
+                Debug.Log("Choosing spawn");
+                SetupSpawning();
+            }
+
+            //wait for the player
+            while(PlayerComponent.LocalPlayerKey == null) {await UniTask.Delay(500);}
+
         }
 
     }
@@ -67,45 +117,39 @@ public class GameState : MonoBehaviour {
         MotherUI.TogglePlayerCreation(true);
     }
 
-    void StartGame() {
+    void SetupSpawning() {
 
     }
+
+
 
 
     //player is spawned
     void RecieverPlayer() {
         SPPlayer.LocalPlayer.SetReciever(reciever);
-        localPlayer = SPPlayer.LocalPlayer as PlayerMUD; 
+        localPlayer = SPPlayer.LocalPlayer as PlayerMUD;
     }
 
-
-    void Start() {
-        for (int i = 0; i < phaseUI.Length; i++) {
-            phaseUI[i].ToggleWindowClose();
-        }
-
-        TogglePhase(phase);
-    }
 
     void Update() {
         UpdateInput();
     }
 
     void UpdateInput() {
-        if(SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
-            if(CursorMUD.Base) {
+        if (SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
+            if (CursorMUD.Base) {
                 SPCamera.SetFollow(CursorMUD.Base.Root);
             } else {
                 SPCamera.SetFollow(null);
                 float x = Mathf.Clamp(SPInput.MousePlanePos.x, BoundsComponent.Left, BoundsComponent.Right);
-                float z = Mathf.Clamp(SPInput.MousePlanePos.z, 0f, GameStateComponent.MILE_ENDPOS);
+                float z = Mathf.Clamp(SPInput.MousePlanePos.z, BoundsComponent.Down, BoundsComponent.Up);
                 SPCamera.SetTarget(new Vector3(x, 0f, z));
             }
-            
+
         }
 
-        if(SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
-            if(localPlayer) {
+        if (SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
+            if (localPlayer) {
                 SPCamera.SetFollow(localPlayer.Root);
             }
         }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using mud.Client;
+using IWorld.ContractDefinition;
+
 public class MotherUI : SPUIInstance {
 
     public static MotherUI Mother;
@@ -26,9 +28,9 @@ public class MotherUI : SPUIInstance {
         ToggleLoading(true);
         TogglePlayerCreation(false);
 
-        SPEvents.OnLocalPlayerSpawn += StartGame;
-        TxManager.OnTransaction += UpdateWheel;
-        TxUpdate.OnUpdate += UpdateWheelOptimistic;
+        SPEvents.OnServerLoaded += ShowServer;
+        SPEvents.OnLocalPlayerSpawn += SpawnPlayer;
+
     }
 
     protected override void OnDestroy() {
@@ -36,7 +38,9 @@ public class MotherUI : SPUIInstance {
 
         Mother = null;
 
-        SPEvents.OnLocalPlayerSpawn -= StartGame;
+        SPEvents.OnServerLoaded -= ShowServer;
+        SPEvents.OnLocalPlayerSpawn -= SpawnPlayer;
+
         TxManager.OnTransaction -= UpdateWheel;
         TxUpdate.OnUpdate -= UpdateWheelOptimistic;
 
@@ -48,8 +52,9 @@ public class MotherUI : SPUIInstance {
             wheel.UpdateState(ActionEndState.Success, true);
         }
     }
-    
+
     void UpdateWheel(bool txSuccess) {
+
         if (txSuccess) {
 
         } else {
@@ -64,34 +69,29 @@ public class MotherUI : SPUIInstance {
         Mother.playerCreate.gameObject.SetActive(toggle);
     }
 
-    void StartGame() {
-        StartCoroutine(StartCoroutine());
+    void SpawnPlayer() {
+
+        TxManager.OnTransaction += UpdateWheel;
+        TxUpdate.OnUpdate += UpdateWheelOptimistic;
+        SPUIBase.PlaySound(sfx_spawn);
     }
 
+    void ShowServer() {
+        StartCoroutine(ServerCoroutine());
+    }
 
-    IEnumerator StartCoroutine() {
+    IEnumerator ServerCoroutine() {
 
         //play a sound
-        SPEvents.OnLocalPlayerSpawn -= StartGame;
-
-        SPUIBase.PlaySound(sfx_spawn);
 
         //animate out screen 
-        if (!SPGlobal.IsDebug) {
-
-            yield return new WaitForSeconds(1f);
-            loadingScreenBackground.color = Color.black - Color.black;
-            yield return new WaitForSeconds(1f);
-
-        }
+        loadingScreenBackground.color = Color.black - Color.black;
+        yield return new WaitForSeconds(.1f);
 
         SPUIBase.PlaySound(sfx_start);
 
         //hide loading
-        loadingScreen.SetActive(false);
-
-        //show the game!
-
+        ToggleLoading(false);
 
     }
 

@@ -77,7 +77,6 @@ public class NameOptionUI : SPWindowParent {
 
         parent.SetActive(false);
 
-        MotherUI.ToggleLoading(true);
         MotherUI.TogglePlayerCreation(false);
 
         //spawn transaction
@@ -87,15 +86,19 @@ public class NameOptionUI : SPWindowParent {
             // SPUIBase.PlaySound(sfx_wagon);
         } else {
             MotherUI.TogglePlayerCreation(true);
-            MotherUI.ToggleLoading(false);
             spawning = false;
             parent.SetActive(true);
         }
 
     }
 
+    public async UniTask<bool> MakeName() {
+        Name = new NameClass();
+        return await SpawnTx();
+    }
+    
     public async UniTask<bool> SpawnTx() {
-        return await TxManager.Send<SpawnFunction>(System.Convert.ToUInt32(Name.first), System.Convert.ToUInt32(Name.second), System.Convert.ToUInt32(Name.third));
+        return await TxManager.Send<NameFunction>(System.Convert.ToUInt32(Name.first), System.Convert.ToUInt32(Name.second), System.Convert.ToUInt32(Name.third));
     }
 
     public void Selected(int newSelection) {

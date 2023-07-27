@@ -68,6 +68,7 @@ public class TreeComponent : MUDComponent {
         lastHealth = health.health;
     }
 
+    protected override IMudTable GetTable() {return new TreeTable();}
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         TreeTable treeUpdate = (TreeTable)update;

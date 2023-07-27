@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
+using DefaultNamespace;
 
 public class RowComponent : MUDComponent
 {
@@ -38,6 +39,7 @@ public class RowComponent : MUDComponent
         }
     }
 
+    protected override IMudTable GetTable() {throw new System.NotImplementedException();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
     }

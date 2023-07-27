@@ -23,6 +23,7 @@ namespace DefaultNamespace
             return ID;
         }
 
+        public bool? named;
         public ulong? first;
         public ulong? middle;
         public ulong? last;
@@ -39,11 +40,13 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            first = (ulong)(int)functionParameters[0];
+            named = (bool)functionParameters[0];
 
-            middle = (ulong)(int)functionParameters[1];
+            first = (ulong)(int)functionParameters[1];
 
-            last = (ulong)(int)functionParameters[2];
+            middle = (ulong)(int)functionParameters[2];
+
+            last = (ulong)(int)functionParameters[3];
         }
 
         public override bool SetValues(IEnumerable<Property> result)
@@ -56,6 +59,11 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
+                    case "named":
+                        var namedValue = (bool)value;
+                        named = namedValue;
+                        hasValues = true;
+                        break;
                     case "first":
                         var firstValue = (ulong)value;
                         first = firstValue;
@@ -93,6 +101,11 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
+                    case "named":
+                        var namedValue = (bool)value;
+                        nameTable.named = namedValue;
+                        hasValues = true;
+                        break;
                     case "first":
                         var firstValue = (ulong)value;
                         nameTable.first = firstValue;
@@ -142,6 +155,9 @@ namespace DefaultNamespace
                 {
                     current = new NameTable
                     {
+                        named = value.Item1.TryGetValue("named", out var namedVal)
+                            ? (bool)namedVal
+                            : default,
                         first = value.Item1.TryGetValue("first", out var firstVal)
                             ? (ulong)firstVal
                             : default,
@@ -157,6 +173,7 @@ namespace DefaultNamespace
                 {
                     current = new NameTable
                     {
+                        named = null,
                         first = null,
                         middle = null,
                         last = null,
@@ -170,6 +187,9 @@ namespace DefaultNamespace
                 {
                     previous = new NameTable
                     {
+                        named = value.Item2.TryGetValue("named", out var namedVal)
+                            ? (bool)namedVal
+                            : default,
                         first = value.Item2.TryGetValue("first", out var firstVal)
                             ? (ulong)firstVal
                             : default,
@@ -185,6 +205,7 @@ namespace DefaultNamespace
                 {
                     previous = new NameTable
                     {
+                        named = null,
                         first = null,
                         middle = null,
                         last = null,

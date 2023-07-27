@@ -50,6 +50,7 @@ export default mudConfig({
     Name: {
       dataStruct: false,
       schema: {
+        named: "bool",
         first: "uint32",
         middle: "uint32",
         last: "uint32",

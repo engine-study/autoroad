@@ -10,6 +10,7 @@ public class StatsMUD : MUDComponent {
     public int attack;
     public int energy;
 
+    protected override IMudTable GetTable() {return new StatsTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
     }
 

@@ -12,6 +12,7 @@ public class RoadConfigComponent : MUDComponent
     public static int Right;
     public int width,height,left,right;
 
+    protected override IMudTable GetTable() {return new RoadConfigTable();}
     protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
         RoadConfigTable update = (RoadConfigTable)table;
         width = (int)update.width;

@@ -8,6 +8,7 @@ public enum MoveType { None, Shovel, Carry, Push } //"None", "Shovel", "Carry", 
 public class MoveComponent : MUDComponent {
     public MoveType moveType;
 
+    protected override IMudTable GetTable() {return new MoveTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         MoveTable table = (MoveTable)update;

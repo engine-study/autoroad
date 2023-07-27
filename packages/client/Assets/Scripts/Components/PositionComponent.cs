@@ -19,6 +19,7 @@ public class PositionComponent : MUDComponent {
         position3DLayer = new Vector3(position2D.x, layer, position2D.y);
     }
 
+    protected override IMudTable GetTable() {return new PositionTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         PositionTable table = update as PositionTable;

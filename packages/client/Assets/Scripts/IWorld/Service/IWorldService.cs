@@ -645,6 +645,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFromFunction, cancellationToken);
         }
 
+        public Task<string> NameRequestAsync(NameFunction nameFunction)
+        {
+             return ContractHandler.SendRequestAsync(nameFunction);
+        }
+
+        public Task<TransactionReceipt> NameRequestAndWaitForReceiptAsync(NameFunction nameFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(nameFunction, cancellationToken);
+        }
+
+        public Task<string> NameRequestAsync(uint firstName, uint middleName, uint lastName)
+        {
+            var nameFunction = new NameFunction();
+                nameFunction.FirstName = firstName;
+                nameFunction.MiddleName = middleName;
+                nameFunction.LastName = lastName;
+            
+             return ContractHandler.SendRequestAsync(nameFunction);
+        }
+
+        public Task<TransactionReceipt> NameRequestAndWaitForReceiptAsync(uint firstName, uint middleName, uint lastName, CancellationTokenSource cancellationToken = null)
+        {
+            var nameFunction = new NameFunction();
+                nameFunction.FirstName = firstName;
+                nameFunction.MiddleName = middleName;
+                nameFunction.LastName = lastName;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(nameFunction, cancellationToken);
+        }
+
         public Task<string> OnMapRequestAsync(OnMapFunction onMapFunction)
         {
              return ContractHandler.SendRequestAsync(onMapFunction);
@@ -1425,22 +1455,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }
 
-        public Task<string> SpawnRequestAsync(uint firstName, uint middleName, uint lastName)
+        public Task<string> SpawnRequestAsync(int x, int y)
         {
             var spawnFunction = new SpawnFunction();
-                spawnFunction.FirstName = firstName;
-                spawnFunction.MiddleName = middleName;
-                spawnFunction.LastName = lastName;
+                spawnFunction.X = x;
+                spawnFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(spawnFunction);
         }
 
-        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(uint firstName, uint middleName, uint lastName, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var spawnFunction = new SpawnFunction();
-                spawnFunction.FirstName = firstName;
-                spawnFunction.MiddleName = middleName;
-                spawnFunction.LastName = lastName;
+                spawnFunction.X = x;
+                spawnFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }

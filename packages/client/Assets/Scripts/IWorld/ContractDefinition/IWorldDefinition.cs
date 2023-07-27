@@ -319,6 +319,19 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class NameFunction : NameFunctionBase { }
+
+    [Function("name")]
+    public class NameFunctionBase : FunctionMessage
+    {
+        [Parameter("uint32", "firstName", 1)]
+        public virtual uint FirstName { get; set; }
+        [Parameter("uint32", "middleName", 2)]
+        public virtual uint MiddleName { get; set; }
+        [Parameter("uint32", "lastName", 3)]
+        public virtual uint LastName { get; set; }
+    }
+
     public partial class OnMapFunction : OnMapFunctionBase { }
 
     [Function("onMap", "bool")]
@@ -669,12 +682,10 @@ namespace IWorld.ContractDefinition
     [Function("spawn")]
     public class SpawnFunctionBase : FunctionMessage
     {
-        [Parameter("uint32", "firstName", 1)]
-        public virtual uint FirstName { get; set; }
-        [Parameter("uint32", "middleName", 2)]
-        public virtual uint MiddleName { get; set; }
-        [Parameter("uint32", "lastName", 3)]
-        public virtual uint LastName { get; set; }
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
     }
 
     public partial class SpawnTerrainFunction : SpawnTerrainFunctionBase { }
@@ -1016,6 +1027,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

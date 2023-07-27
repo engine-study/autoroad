@@ -272,25 +272,35 @@ contract MoveSystem is System {
     require(false, "No available place to move");
   }
 
-  function spawn(uint32 firstName, uint32 middleName, uint32 lastName) public {
-
+  function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
+    bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
+    (bool hasName,,,) = Name.get(playerEntity);
+    require(!hasName, "already has name");
     require(firstName < 36, "first name");
     require(middleName < 1025, "middle name");
     require(lastName < 1734, "last name");
+    require(!Player.get(playerEntity), "already spawned");
+    Name.set(playerEntity, true, firstName, middleName, lastName);
+
+  }
+
+  function spawn(int32 x, int32 y) public {
 
     bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
     require(!Player.get(playerEntity), "already spawned");
 
     // uint32 mileDistance = GameState.get()
     (int32 l, int32 r, int32 up, ) = Bounds.get();
+    require(y > up, "spawning too low");
 
-    Name.set(playerEntity, firstName, middleName, lastName);
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    require(atPosition.length < 1, "occupied");
+
     Player.set(playerEntity, true);
     Health.set(playerEntity, 3);
     Move.set(playerEntity, uint32(MoveType.Push));
+    Position.set(playerEntity, x, y);
 
-    //spawn at the top of the road
-    Position.set(playerEntity, 0, int32(up + 1));
   }
 
   function abs(int x) private pure returns (int) {

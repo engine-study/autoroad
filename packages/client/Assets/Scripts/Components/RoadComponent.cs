@@ -37,6 +37,7 @@ public class RoadComponent : MUDComponent {
         AddToChunk();
     }
 
+    protected override IMudTable GetTable() {return new RoadTable();}
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RoadTable roadUpdate = (RoadTable)update;

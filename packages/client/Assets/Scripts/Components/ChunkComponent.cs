@@ -27,7 +27,7 @@ public class ChunkComponent : MUDComponent {
 
         activeObjects.SetActive(false);
     }
-
+    protected override IMudTable GetTable() {return new ChunkTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         // Debug.Log("Chunk: " + eventType.ToString());

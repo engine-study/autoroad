@@ -9894,7 +9894,6 @@ MonoBehaviour:
   flash: {fileID: 2653067428443919282}
   fx_hit: {fileID: 5971642603421424576}
   fx_fall: {fileID: 5683911409690809342}
-  fx_fallLarge: {fileID: 5670050820948970219}
   sfx_hits:
   - {fileID: 8300000, guid: 00c570c193759374781fe0e1e8dd05a0, type: 3}
   - {fileID: 8300000, guid: 6baa0f56623f4234ab6a89988d5b443c, type: 3}
@@ -10195,9 +10194,9 @@ ParticleSystem:
     enabled: 1
     startLifetime:
       serializedVersion: 2
-      minMaxState: 3
-      scalar: 2
-      minScalar: 1
+      minMaxState: 0
+      scalar: 1.5
+      minScalar: 1.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -10368,7 +10367,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 1
-      minScalar: 0.5
+      minScalar: 0.75
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -11124,7 +11123,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
+          time: 0.72862875
           value: 1
           inSlope: 0
           outSlope: 0
@@ -13876,7 +13875,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 0.1
       minScalar: 0
       maxCurve:
         serializedVersion: 2

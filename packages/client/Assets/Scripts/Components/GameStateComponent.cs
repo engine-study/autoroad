@@ -11,12 +11,13 @@ public class GameStateComponent : MUDComponent {
     public static GameStateComponent Instance;
     public const float MILE_DISTANCE = 20f;
     public static float MILE_COUNT;
-    public static float MILE_ENDPOS;
 
     [Header("Position")]
     [SerializeField] protected int miles;
     [SerializeField] protected WorldScroll scroll;
     [SerializeField] protected GameObject edge;
+
+    protected override IMudTable GetTable() {return new GameStateTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         GameStateTable table = (GameStateTable)update;
@@ -25,7 +26,6 @@ public class GameStateComponent : MUDComponent {
         scroll.SetMaxMile(miles);
 
         MILE_COUNT = miles;
-        MILE_ENDPOS = MILE_COUNT * MILE_DISTANCE;
 
         edge.transform.position = Vector3.forward * (miles * MILE_DISTANCE + MILE_DISTANCE);
 

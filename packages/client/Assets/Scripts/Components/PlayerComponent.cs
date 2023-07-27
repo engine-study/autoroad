@@ -26,9 +26,10 @@ public class PlayerComponent : MUDComponent {
     protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
         base.Init(ourEntity, ourTable);
 
-        isLocalPlayer = ourEntity.Key == NetworkManager.Instance.addressKey;
+        isLocalPlayer = ourEntity.Key == NetworkManager.LocalAddress;
     }
 
+    protected override IMudTable GetTable() {return new PlayerTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
         // throw new System.NotImplementedException();
     }

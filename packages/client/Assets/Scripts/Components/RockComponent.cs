@@ -143,6 +143,7 @@ public class RockComponent : MUDComponent {
     }
 
 
+    protected override IMudTable GetTable() {return new RockTable();}
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RockTable rockUpdate = (RockTable)update;
