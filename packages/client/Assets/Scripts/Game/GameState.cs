@@ -37,9 +37,10 @@ public class GameState : MonoBehaviour {
 
         NetworkManager.OnInitialized += SetupGame;
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
+
     }
 
-    async void Start() {
+    void Start() {
 
         for (int i = 0; i < phaseUI.Length; i++) {
             phaseUI[i].ToggleWindowClose();
@@ -47,12 +48,13 @@ public class GameState : MonoBehaviour {
 
         TogglePhase(phase);
 
-        await GameSetup();
     }
 
     void OnDestroy() {
+
         NetworkManager.OnInitialized -= SetupGame;
         SPEvents.OnLocalPlayerSpawn -= RecieverPlayer;
+
         Instance = null;
     }
 
