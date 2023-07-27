@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Tree, Health } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Tree, Health, Carriage } from "../codegen/Tables.sol";
 import { ChunkTableId } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -49,7 +49,7 @@ contract RoadSystem is System {
     int32 yEnd = (mileNumber * int32(roadHeight)) + int32(roadHeight) - 1;
     int32 halfWidth = int32(mapWidth) / int32(2);
     
-    Bounds.set(int32(-halfWidth), halfWidth, yEnd, 0);
+    Bounds.set(int32(-halfWidth), halfWidth, yEnd, yStart);
 
     //spawn all the rows
     //spawn all the obstacles
@@ -95,6 +95,7 @@ contract RoadSystem is System {
     //set the chunk of road
     // Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
     Chunk.set(chunkEntity, false, mileNumber);
+    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd);
     // console.log("added mile ", mileNumber);
   }
 

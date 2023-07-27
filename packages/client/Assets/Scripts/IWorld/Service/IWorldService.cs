@@ -272,6 +272,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteRecord1Function, cancellationToken);
         }
 
+        public Task<string> DestroyPlayerRequestAsync(DestroyPlayerFunction destroyPlayerFunction)
+        {
+             return ContractHandler.SendRequestAsync(destroyPlayerFunction);
+        }
+
+        public Task<string> DestroyPlayerRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<DestroyPlayerFunction>();
+        }
+
+        public Task<TransactionReceipt> DestroyPlayerRequestAndWaitForReceiptAsync(DestroyPlayerFunction destroyPlayerFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(destroyPlayerFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> DestroyPlayerRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<DestroyPlayerFunction>(null, cancellationToken);
+        }
+
         public Task<string> DropRequestAsync(DropFunction dropFunction)
         {
              return ContractHandler.SendRequestAsync(dropFunction);

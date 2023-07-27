@@ -15,6 +15,7 @@ public class MotherUI : SPUIInstance {
     public Image loadingScreenBackground;
     public SPActionWheelUI wheel;
     public NameOptionUI playerCreate;
+    public SpawningUI spawning;
 
     [Header("Game")]
     public GameUI game;
@@ -67,14 +68,19 @@ public class MotherUI : SPUIInstance {
         Mother.loadingScreen.SetActive(toggle);
     }
     public static void TogglePlayerCreation(bool toggle) {
-        Mother.playerCreate.gameObject.SetActive(toggle);
+        Mother.playerCreate.ToggleWindow(toggle);
     }
+
+    public static void TogglePlayerSpawning(bool toggle) {
+        Mother.spawning.ToggleWindow(toggle);
+    }
+
 
     void SpawnPlayer() {
 
         TxManager.OnTransaction += UpdateWheel;
         TxUpdate.OnUpdate += UpdateWheelOptimistic;
-        
+
         SPUIBase.PlaySound(sfx_spawn);
 
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);

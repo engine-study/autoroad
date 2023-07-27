@@ -19,10 +19,15 @@ public class GameState : MonoBehaviour {
     public static GameState Instance;
     public static Action<GamePhase> OnPhaseUpdate;
 
+    [Header("Test")]
+    public bool freshStart = false; 
+
+    [Header("Game")]
     public GamePhase phase;
     public RecieverMUD reciever;
     public TableManager playerTable;
     public WorldScroll scroll;
+
 
     [Header("UI")]
     public GameObject editorObjects;
@@ -82,6 +87,11 @@ public class GameState : MonoBehaviour {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
 
+
+        if(freshStart) {
+            await TxManager.Send<DestroyPlayerFunction>();
+        }
+
         //wait for name table
         while(TableManager.FindTable<NameComponent>().HasInit == false) {await UniTask.Delay(500);}
         NameTable localName = TableManager.FindValue<NameTable>(NetworkManager.LocalAddress);
@@ -132,10 +142,8 @@ public class GameState : MonoBehaviour {
     }
 
     void SetupSpawning() {
-
+        MotherUI.TogglePlayerSpawning(true);
     }
-
-
 
 
     //player is spawned

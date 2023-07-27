@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, Bounds, Chunk, Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
+import { MapConfig, Bounds, Chunk, Position, PositionTableId, PositionData, Carriage } from "../codegen/Tables.sol";
 import { TerrainType, RockType } from "../codegen/Types.sol";
 import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
 
@@ -16,6 +16,8 @@ contract MapSystem is System {
 
   function createMap(address worldAddress) public {
     IWorld world = IWorld(worldAddress);
+
+    Carriage.set(keccak256(abi.encode("Carriage")), true);
 
     //old emojimon method
 

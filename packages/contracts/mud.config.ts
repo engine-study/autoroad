@@ -147,6 +147,7 @@ export default mudConfig({
     //unique objects
     Rock: "uint32",
     Road: "uint32",
+    Carriage: "bool",
 
     Tree: "bool",
 

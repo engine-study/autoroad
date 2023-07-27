@@ -290,9 +290,10 @@ contract MoveSystem is System {
     require(!Player.get(playerEntity), "already spawned");
 
     // uint32 mileDistance = GameState.get()
-    (int32 l, int32 r, int32 up, ) = Bounds.get();
-    require(y > up, "out of range y");
-    require(x >= l && x <= r, "out of range x");
+    (int32 l, int32 r, int32 up, int32 down ) = Bounds.get();
+    (,, int32 roadL, int32 roadR) = RoadConfig.get();
+    require(y < up && y > down, "out of range y");
+    require(x >= l && x < roadL && x <= r && x > roadR , "out of range x");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
@@ -302,6 +303,16 @@ contract MoveSystem is System {
     Move.set(playerEntity, uint32(MoveType.Push));
     Position.set(playerEntity, x, y);
 
+  }
+
+  function destroyPlayer() public {
+    bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
+
+    Name.deleteRecord(playerEntity);
+    Player.deleteRecord(playerEntity);
+    Health.deleteRecord(playerEntity);
+    Move.deleteRecord(playerEntity);
+    Position.deleteRecord(playerEntity);
   }
 
   function abs(int x) private pure returns (int) {

@@ -115,6 +115,14 @@ namespace IWorld.ContractDefinition
         public virtual List<byte[]> Key { get; set; }
     }
 
+    public partial class DestroyPlayerFunction : DestroyPlayerFunctionBase { }
+
+    [Function("destroyPlayer")]
+    public class DestroyPlayerFunctionBase : FunctionMessage
+    {
+
+    }
+
     public partial class DropFunction : DropFunctionBase { }
 
     [Function("drop")]
@@ -942,6 +950,8 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
 
 
 
