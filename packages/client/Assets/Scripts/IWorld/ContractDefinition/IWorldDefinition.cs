@@ -362,6 +362,17 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class OnWorldFunction : OnWorldFunctionBase { }
+
+    [Function("onWorld", "bool")]
+    public class OnWorldFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class PopFromField1Function : PopFromField1FunctionBase { }
 
     [Function("popFromField")]
@@ -1037,6 +1048,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

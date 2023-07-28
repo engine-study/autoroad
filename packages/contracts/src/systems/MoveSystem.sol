@@ -224,23 +224,12 @@ contract MoveSystem is System {
   }
 
   function moveFrom(int32 x, int32 y) public {
+
+    IWorld world = IWorld(_world());
+    require(world.onWorld(x, y), "off world");
+
     bytes32 player = addressToEntityKey(address(_msgSender()));
     PositionData memory startPos = Position.get(player);
-
-    //bound to map size
-    // (uint32 width, uint32 height, ) = MapConfig.get();
-    // if (x >= int32(width)) {
-    //   x = int32(width) - 1;
-    // } else if (x < 0) {
-    //   x = 0;
-    // }
-
-    // if (y >= int32(height)) {
-    //   y = int32(height) - 1;
-    // } else if (y < 0) {
-    //   y = 0;
-    // }
-
 
     require(startPos.x == x || startPos.y == y, "cannot move diagonally ");
     require(startPos.x != x || startPos.y != y, "moving in place");
@@ -289,12 +278,11 @@ contract MoveSystem is System {
     bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
     require(!Player.get(playerEntity), "already spawned");
 
-    // uint32 mileDistance = GameState.get()
     (,,int32 up, int32 down ) = Bounds.get();
     (int32 playWidth, int32 spawnWidth) = MapConfig.get();
-    require(x >= int32(-spawnWidth) && x <= spawnWidth, "outside spawn");
-    require(y <= up && y >= down, "out of range y");
-    require(x < int32(-playWidth) || x > playWidth , "out of range x");
+
+    require(x > playWidth && x <= spawnWidth, "x outside spawn");
+    require(y <= up && y >= down, "y outside of spawn");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");

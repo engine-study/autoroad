@@ -17,12 +17,14 @@ public class SpawningUI : SPWindowParent
     public GameObject spawnZone; 
     public GameObject ok, bad;
 
+    public AudioClip sfx_spawnChoose;
+
     protected override void OnEnable() {
         base.OnEnable();
 
         SPCamera.SetFollow(null);
-        SPCamera.SetFOVGlobal(20f);
-        SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + RoadConfigComponent.Height * .5f));
+        SPCamera.SetFOVGlobal(10f);
+        SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + RoadConfigComponent.Height * .5f) + Vector3.right * (BoundsComponent.Right + 2));
 
         nameButton.UpdateField(NameComponent.LocalName);
 
@@ -62,8 +64,7 @@ public class SpawningUI : SPWindowParent
 
         goodSpawn = true; 
 
-        goodSpawn = y <= BoundsComponent.Up && y >= BoundsComponent.Down && (x < BoundsComponent.Left || x > BoundsComponent.Right);
-        goodSpawn = goodSpawn && x >= -MapConfigComponent.SpawnWidth && x <= MapConfigComponent.SpawnWidth;
+        goodSpawn = y <= BoundsComponent.Up && y >= BoundsComponent.Down && x > MapConfigComponent.PlayWidth && x <= MapConfigComponent.SpawnWidth;
         goodSpawn = goodSpawn && CursorMUD.Entity == null;
 
         ok.SetActive(goodSpawn);
@@ -73,12 +74,20 @@ public class SpawningUI : SPWindowParent
     }
 
     async void Spawn() {
+
+        SPUIBase.PlaySound(sfx_spawnChoose);
+        cursor.SetActive(false);
+        spawnZone.SetActive(false);
+
         spawning = true; 
         bool success = await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(x),System.Convert.ToInt32(y));
         spawning = false;
 
         if(success) {
             ToggleWindowClose();
+        } else { 
+            cursor.SetActive(true);
+            spawnZone.SetActive(true);
         }
     }
 

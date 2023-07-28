@@ -751,6 +751,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(onRoadFunction, cancellationToken);
         }
 
+        public Task<string> OnWorldRequestAsync(OnWorldFunction onWorldFunction)
+        {
+             return ContractHandler.SendRequestAsync(onWorldFunction);
+        }
+
+        public Task<TransactionReceipt> OnWorldRequestAndWaitForReceiptAsync(OnWorldFunction onWorldFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(onWorldFunction, cancellationToken);
+        }
+
+        public Task<string> OnWorldRequestAsync(int x, int y)
+        {
+            var onWorldFunction = new OnWorldFunction();
+                onWorldFunction.X = x;
+                onWorldFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(onWorldFunction);
+        }
+
+        public Task<TransactionReceipt> OnWorldRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var onWorldFunction = new OnWorldFunction();
+                onWorldFunction.X = x;
+                onWorldFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(onWorldFunction, cancellationToken);
+        }
+
         public Task<string> PopFromFieldRequestAsync(PopFromField1Function popFromField1Function)
         {
              return ContractHandler.SendRequestAsync(popFromField1Function);
