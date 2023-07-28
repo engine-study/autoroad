@@ -199,14 +199,16 @@ contract MoveSystem is System {
 
     health--;
 
-    Health.set(atPosition[0], health);
-
     if(health <= 0) {
       kill(player, atPosition[0], pos);
+    } else {
+      Health.set(atPosition[0], health);
     }
+
   }
 
   function kill(bytes32 attacker, bytes32 target, PositionData memory pos) private {
+    Health.set(target, -1);
     Position.deleteRecord(target);
     bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
 
@@ -276,8 +278,12 @@ contract MoveSystem is System {
   function spawn(int32 x, int32 y) public {
 
     bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
-    require(!Player.get(playerEntity), "already spawned");
+    bool playerExists = Player.get(playerEntity);
 
+    if(playerExists) {
+      require(Health.get(playerEntity) == -1, "not dead, can't respawn");
+    }
+    
     (,,int32 up, int32 down ) = Bounds.get();
     (int32 playWidth, int32 spawnWidth) = MapConfig.get();
 
@@ -287,10 +293,17 @@ contract MoveSystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
 
-    Player.set(playerEntity, true);
+    if(!playerExists) {
+      Player.set(playerEntity, true);
+    }
+
     Health.set(playerEntity, 3);
     Move.set(playerEntity, uint32(MoveType.Push));
     Position.set(playerEntity, x, y);
+
+  }
+
+  function spawnTo(int32 x, int32 y) public {
 
   }
 
