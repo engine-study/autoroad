@@ -9,17 +9,16 @@ public class NameComponent : MUDComponent {
     public static Action OnLocalName;
     public string Name { get { return playerName; } }
     public static string LocalName {get{return localName;}}
-    private static string localName;
+    private static string localName = null;
 
     [Header("Name")]
     [SerializeField] private string playerName;
 
-    protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
-        base.Init(ourEntity, ourTable);
-
-    
-
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        localName = null;
     }
+
     protected override void PostInit() {
         base.PostInit();
         Entity.SetName(playerName);

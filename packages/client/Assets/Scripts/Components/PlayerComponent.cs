@@ -43,6 +43,14 @@ public class PlayerComponent : MUDComponent {
 
     }
 
+    
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        LocalPlayerKey = null;
+        isLocalPlayer = false;
+    }
+
+
     //we got meleed
     public void Meleed() {
 

@@ -29,6 +29,7 @@ public class MotherUI : SPUIInstance {
 
         ToggleLoading(true);
         TogglePlayerCreation(false);
+        TogglePlayerSpawning(false);
 
         SPEvents.OnServerLoaded += ShowServer;
         SPEvents.OnLocalPlayerSpawn += SpawnPlayer;

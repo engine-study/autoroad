@@ -291,9 +291,8 @@ contract MoveSystem is System {
 
     // uint32 mileDistance = GameState.get()
     (int32 l, int32 r, int32 up, int32 down ) = Bounds.get();
-    (,, int32 roadL, int32 roadR) = RoadConfig.get();
     require(y < up && y > down, "out of range y");
-    require(x >= l && x < roadL && x <= r && x > roadR , "out of range x");
+    require(x < l || x > r , "out of range x");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");

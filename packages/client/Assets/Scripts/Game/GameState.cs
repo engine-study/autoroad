@@ -106,7 +106,7 @@ public class GameState : MonoBehaviour {
 
             } else {
                 Debug.Log("Choosing Name");
-                SetupPlayerCreation();
+                MotherUI.TogglePlayerCreation(true);
             }
 
             //wait for the name
@@ -114,6 +114,9 @@ public class GameState : MonoBehaviour {
 
         }
         
+        //wait for name component to spawn
+        while(NameComponent.LocalName == null) {await UniTask.Delay(500);}
+
         //wait for player table
         while(TableManager.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
         PlayerTable localPlayerComponent = TableManager.FindValue<PlayerTable>(NetworkManager.LocalAddress);
@@ -121,28 +124,20 @@ public class GameState : MonoBehaviour {
         if (localPlayerComponent == null) {
 
             if(SPGlobal.IsDebug) {
-                Debug.Log("Spawning player at 0," + BoundsComponent.Up);
-                while(await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(0),System.Convert.ToInt32(BoundsComponent.Up + 1)) == false)  {await UniTask.Delay(2000);}
+                int x = BoundsComponent.Right + 1;
+                int y = BoundsComponent.Down + 5;
+                Debug.Log("Spawning player at " + x + "," + y);
+                while(await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y)) == false)  {await UniTask.Delay(2000);}
             } else {
                 Debug.Log("Choosing spawn");
-                SetupSpawning();
+                MotherUI.TogglePlayerSpawning(true);
             }
-
-            //wait for the player
-            while(PlayerComponent.LocalPlayerKey == null) {await UniTask.Delay(500);}
 
         }
 
-    }
+        //wait for the player
+        while(PlayerComponent.LocalPlayerKey == null) {await UniTask.Delay(500);}
 
-
-
-    void SetupPlayerCreation() {
-        MotherUI.TogglePlayerCreation(true);
-    }
-
-    void SetupSpawning() {
-        MotherUI.TogglePlayerSpawning(true);
     }
 
 

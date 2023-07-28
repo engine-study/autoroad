@@ -11,6 +11,7 @@ public class SpawningUI : SPWindowParent
     bool spawning;
     int x;
     int y;
+    bool goodSpawn;
 
     public GameObject cursor; 
     public GameObject ok, bad;
@@ -20,41 +21,43 @@ public class SpawningUI : SPWindowParent
 
         nameButton.UpdateField(NameComponent.LocalName);
 
+        cursor.transform.parent = CursorMUD.CursorTransform;
+
+        cursor.transform.localPosition = Vector3.zero;
+        cursor.transform.localRotation = Quaternion.identity;
+        cursor.transform.localScale = Vector3.one;
+
+        cursor.SetActive(true);
+
         CursorMUD.OnGridPosition += UpdateCursor;
     }
 
     protected override void OnDisable() {
         base.OnDisable();
         CursorMUD.OnGridPosition -= UpdateCursor;
+        cursor.SetActive(false);
     }
 
     void Update() {
-        if(Input.GetMouseButton(0)) {
+        if(Input.GetMouseButton(0) && goodSpawn) {
             Spawn();
         }
     }
 
     void UpdateCursor(Vector3 newPos) {
 
-        cursor.transform.position = newPos;
-
         x = (int)newPos.x;
         y = (int)newPos.z;
 
-        bool goodSpawn = true; 
+        goodSpawn = true; 
 
-        goodSpawn = y < BoundsComponent.Up && y > BoundsComponent.Down;
-        goodSpawn = goodSpawn && x >= BoundsComponent.Left && x < RoadConfigComponent.Left && x <= BoundsComponent.Right && x > RoadConfigComponent.Right;
+        goodSpawn = y < BoundsComponent.Up && y > BoundsComponent.Down && (x < BoundsComponent.Left || x > BoundsComponent.Right);
         goodSpawn = goodSpawn && CursorMUD.Entity == null;
 
         ok.SetActive(goodSpawn);
         bad.SetActive(!goodSpawn);
 
         spawnButton.ToggleState(goodSpawn ? SPSelectableState.Default : SPSelectableState.Disabled);
-        
-        if(goodSpawn) {
-            Spawn();
-        }
     }
 
     async void Spawn() {
