@@ -1066,7 +1066,7 @@ ParticleSystem:
       repeatInterval: 0.01
       probability: 1
   SizeModule:
-    enabled: 1
+    enabled: 0
     curve:
       serializedVersion: 2
       minMaxState: 1
@@ -9876,7 +9876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c25e50c1b73444fa8abab85fc67c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tableType: {fileID: 11400000, guid: f4034d86bcd0c374780ffd85b5e23357, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   - {fileID: 77022645062805081, guid: 219b049c5faf436428e270937e831a80, type: 3}
@@ -10194,9 +10193,9 @@ ParticleSystem:
     enabled: 1
     startLifetime:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1.5
-      minScalar: 1.5
+      minMaxState: 3
+      scalar: 2
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -11113,7 +11112,7 @@ ParticleSystem:
       repeatInterval: 0.01
       probability: 1
   SizeModule:
-    enabled: 1
+    enabled: 0
     curve:
       serializedVersion: 2
       minMaxState: 1

@@ -56,13 +56,13 @@ public class ControllerMUD : SPController {
 
         playerTransform.rotation = Quaternion.Euler(0f, Random.Range(0, 4) * 90f, 0f);
 
-        SetPosition(playerScript.Position.Pos);
+        onchainPos = playerScript.Position.Pos;
+        SetPositionInstant(playerScript.Position.Pos);
     }
 
-    public void SetPosition(Vector3 newPos) {
+    public void SetPositionInstant(Vector3 newPos) {
 
         playerTransform.position = newPos;
-        onchainPos = newPos;
         moveDest = newPos;
 
         //hide us if we don't have a position
@@ -138,8 +138,8 @@ public class ControllerMUD : SPController {
             markerPos = moveDest;
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
+            SetPositionInstant(moveDest);
             TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
-            SetPosition(moveDest);
             return;
         }
 
@@ -233,7 +233,8 @@ public class ControllerMUD : SPController {
     private void ComponentUpdate() {
         if (!entityReady) { return; }
         if (playerScript.Position.UpdateSource == UpdateSource.Revert) {
-            SetPosition(playerScript.Position.Pos);
+            onchainPos = playerScript.Position.Pos;
+            SetPositionInstant(playerScript.Position.Pos);
         }
 
         //get the actual onchainposition
