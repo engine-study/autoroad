@@ -252,12 +252,10 @@ contract MoveSystem is System {
     // Stats.setDeaths(target, stat2 + 1);
 
     //spawn bones
-    bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
-    Bones.set(bonesEntity, true);
-    Position.set(bonesEntity, pos);
-    Move.set(bonesEntity, uint32(MoveType.Push));
-
-
+    // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
+    // Bones.set(bonesEntity, true);
+    // Position.set(bonesEntity, pos);
+    // Move.set(bonesEntity, uint32(MoveType.Push));
 
   }
 

@@ -76,7 +76,10 @@ public class PlayerComponent : MUDComponent {
             }
         }
 
-        // gameObject.SetActive(health.health > 0);
+        if(lastHealth < 1 && health.health > 0) {
+            gameObject.SetActive(health.health > 0);
+        }
+
         if(IsLocalPlayer) {
             MotherUI.TogglePlayerSpawning(health.health <= 0);
         }

@@ -65,11 +65,6 @@ public class ControllerMUD : SPController {
         playerTransform.position = newPos;
         moveDest = newPos;
 
-        //hide us if we don't have a position
-        if (playerScript.Position.UpdateType == UpdateType.DeleteRecord) {
-            gameObject.SetActive(false);
-        }
-
     }
 
     private void OnDestroy() {
