@@ -16,11 +16,13 @@ import { RoadSystem } from "../systems/RoadSystem.sol";
 contract MoveSystem is System {
   //push
   function push(int32 x, int32 y, int32 pushX, int32 pushY) public {
+
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");    
+    
+    PositionData memory startPos = Position.get(player);
+    
     IWorld world = IWorld(_world());
-
-    bytes32 pusher = addressToEntityKey(address(_msgSender()));
-    PositionData memory startPos = Position.get(pusher);
-
     require(world.onMap(pushX, pushY), "off grid");
     require(withinManhattanDistance(PositionData(x, y), PositionData(pushX, pushY), 1), "too far to push");
 
@@ -59,7 +61,7 @@ contract MoveSystem is System {
     }
 
     //and then player (which ovewrites where the push object was)
-    Position.set(pusher, x, y);
+    Position.set(player, x, y);
   }
 
   function fill(bytes32 filler, bytes32 hole) private {
@@ -78,7 +80,11 @@ contract MoveSystem is System {
     }
   }
 
-  function interact(bytes32 player, int32 x, int32 y, bytes32[] memory entities, uint distance) private returns (bool) {
+  function canDoStuff(bytes32 player) private returns (bool) {
+    require(Health.get(player) > 0, "we dead");
+  }
+
+  function canInteract(bytes32 player, int32 x, int32 y, bytes32[] memory entities, uint distance) private returns (bool) {
 
     require(entities.length > 0, "empty position");
 
@@ -93,9 +99,11 @@ contract MoveSystem is System {
 
   function mine(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");
+
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
-    require(interact(player, x, y, atPosition, 1),"bad interact");
+    require(canInteract(player, x, y, atPosition, 1),"bad interact");
 
     uint32 rockState = Rock.get(atPosition[0]);
 
@@ -119,9 +127,11 @@ contract MoveSystem is System {
 
   function chop(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");
+
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
-    require(interact(player, x, y, atPosition, 1),"bad interact");
+    require(canInteract(player, x, y, atPosition, 1),"bad interact");
     require(Tree.get(atPosition[0]), "no tree");
 
     int32 health = Health.get(atPosition[0]);
@@ -139,6 +149,8 @@ contract MoveSystem is System {
 
   function carry(int32 carryX, int32 carryY) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");
+
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(carryX, carryY));
 
     // Position
@@ -155,6 +167,7 @@ contract MoveSystem is System {
 
   function drop(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");
 
     bytes32 carrying = Carrying.get(player);
     require(carrying != 0, "Not carrying anything");
@@ -170,6 +183,7 @@ contract MoveSystem is System {
 
   function shovel(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");
 
     IWorld world = IWorld(_world());
     require(world.onMap(x, y), "off grid");
@@ -187,8 +201,9 @@ contract MoveSystem is System {
   }
 
   function melee(int32 x, int32 y) public {
-
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");
+
     PositionData memory pos = PositionData(x,y);
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length > 0, "attacking an empty spot");
@@ -208,10 +223,13 @@ contract MoveSystem is System {
   }
 
   function kill(bytes32 attacker, bytes32 target, PositionData memory pos) private {
+
+    //kill target
     Health.set(target, -1);
     Position.deleteRecord(target);
-    bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
 
+    //spawn bones
+    bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
     Bones.set(bonesEntity, true);
     Position.set(bonesEntity, pos);
     Move.set(bonesEntity, uint32(MoveType.Push));
@@ -231,6 +249,8 @@ contract MoveSystem is System {
     require(world.onWorld(x, y), "off world");
 
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");    
+    
     PositionData memory startPos = Position.get(player);
 
     require(startPos.x == x || startPos.y == y, "cannot move diagonally ");
@@ -283,7 +303,7 @@ contract MoveSystem is System {
     if(playerExists) {
       require(Health.get(playerEntity) == -1, "not dead, can't respawn");
     }
-    
+
     (,,int32 up, int32 down ) = Bounds.get();
     (int32 playWidth, int32 spawnWidth) = MapConfig.get();
 
@@ -300,10 +320,6 @@ contract MoveSystem is System {
     Health.set(playerEntity, 3);
     Move.set(playerEntity, uint32(MoveType.Push));
     Position.set(playerEntity, x, y);
-
-  }
-
-  function spawnTo(int32 x, int32 y) public {
 
   }
 
