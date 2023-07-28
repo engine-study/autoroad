@@ -290,9 +290,11 @@ contract MoveSystem is System {
     require(!Player.get(playerEntity), "already spawned");
 
     // uint32 mileDistance = GameState.get()
-    (int32 l, int32 r, int32 up, int32 down ) = Bounds.get();
+    (,,int32 up, int32 down ) = Bounds.get();
+    (int32 playWidth, int32 spawnWidth) = MapConfig.get();
+    require(x >= int32(-spawnWidth) && x <= spawnWidth, "outside spawn");
     require(y < up && y > down, "out of range y");
-    require(x < l || x > r , "out of range x");
+    require(x < int32(-playWidth) || x > playWidth , "out of range x");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");

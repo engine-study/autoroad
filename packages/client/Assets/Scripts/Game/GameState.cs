@@ -125,7 +125,7 @@ public class GameState : MonoBehaviour {
 
             if(SPGlobal.IsDebug) {
                 int x = BoundsComponent.Right + 1;
-                int y = BoundsComponent.Down + 5;
+                int y = BoundsComponent.Up - 5;
                 Debug.Log("Spawning player at " + x + "," + y);
                 while(await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y)) == false)  {await UniTask.Delay(2000);}
             } else {

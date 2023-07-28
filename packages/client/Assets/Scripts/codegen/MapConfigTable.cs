@@ -24,9 +24,8 @@ namespace DefaultNamespace
             return ID;
         }
 
-        public ulong? width;
-        public ulong? height;
-        public string? terrain;
+        public long? playArea;
+        public long? spawnArea;
 
         public override Type TableType()
         {
@@ -40,11 +39,9 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            width = (ulong)(int)functionParameters[0];
+            playArea = (long)(int)functionParameters[0];
 
-            height = (ulong)(int)functionParameters[1];
-
-            terrain = (string)functionParameters[2];
+            spawnArea = (long)(int)functionParameters[1];
         }
 
         public override bool SetValues(IEnumerable<Property> result)
@@ -57,19 +54,14 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
-                    case "width":
-                        var widthValue = (ulong)value;
-                        width = widthValue;
+                    case "playArea":
+                        var playAreaValue = (long)value;
+                        playArea = playAreaValue;
                         hasValues = true;
                         break;
-                    case "height":
-                        var heightValue = (ulong)value;
-                        height = heightValue;
-                        hasValues = true;
-                        break;
-                    case "terrain":
-                        var terrainValue = (string)value;
-                        terrain = terrainValue;
+                    case "spawnArea":
+                        var spawnAreaValue = (long)value;
+                        spawnArea = spawnAreaValue;
                         hasValues = true;
                         break;
                 }
@@ -94,19 +86,14 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
-                    case "width":
-                        var widthValue = (ulong)value;
-                        mapConfigTable.width = widthValue;
+                    case "playArea":
+                        var playAreaValue = (long)value;
+                        mapConfigTable.playArea = playAreaValue;
                         hasValues = true;
                         break;
-                    case "height":
-                        var heightValue = (ulong)value;
-                        mapConfigTable.height = heightValue;
-                        hasValues = true;
-                        break;
-                    case "terrain":
-                        var terrainValue = (string)value;
-                        mapConfigTable.terrain = terrainValue;
+                    case "spawnArea":
+                        var spawnAreaValue = (long)value;
+                        mapConfigTable.spawnArea = spawnAreaValue;
                         hasValues = true;
                         break;
                 }
@@ -145,25 +132,17 @@ namespace DefaultNamespace
                 {
                     current = new MapConfigTable
                     {
-                        width = value.Item1.TryGetValue("width", out var widthVal)
-                            ? (ulong)widthVal
+                        playArea = value.Item1.TryGetValue("playArea", out var playAreaVal)
+                            ? (long)playAreaVal
                             : default,
-                        height = value.Item1.TryGetValue("height", out var heightVal)
-                            ? (ulong)heightVal
-                            : default,
-                        terrain = value.Item1.TryGetValue("terrain", out var terrainVal)
-                            ? (string)terrainVal
+                        spawnArea = value.Item1.TryGetValue("spawnArea", out var spawnAreaVal)
+                            ? (long)spawnAreaVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new MapConfigTable
-                    {
-                        width = null,
-                        height = null,
-                        terrain = null,
-                    };
+                    current = new MapConfigTable { playArea = null, spawnArea = null, };
                 }
             }
 
@@ -173,25 +152,17 @@ namespace DefaultNamespace
                 {
                     previous = new MapConfigTable
                     {
-                        width = value.Item2.TryGetValue("width", out var widthVal)
-                            ? (ulong)widthVal
+                        playArea = value.Item2.TryGetValue("playArea", out var playAreaVal)
+                            ? (long)playAreaVal
                             : default,
-                        height = value.Item2.TryGetValue("height", out var heightVal)
-                            ? (ulong)heightVal
-                            : default,
-                        terrain = value.Item2.TryGetValue("terrain", out var terrainVal)
-                            ? (string)terrainVal
+                        spawnArea = value.Item2.TryGetValue("spawnArea", out var spawnAreaVal)
+                            ? (long)spawnAreaVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new MapConfigTable
-                    {
-                        width = null,
-                        height = null,
-                        terrain = null,
-                    };
+                    previous = new MapConfigTable { playArea = null, spawnArea = null, };
                 }
             }
 

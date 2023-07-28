@@ -63,9 +63,8 @@ export default mudConfig({
       keySchema: {},
       dataStruct: false,
       schema: {
-        width: "uint32",
-        height: "uint32",
-        terrain: "bytes",
+        playArea: "int32",
+        spawnArea: "int32",
       },
     },
 

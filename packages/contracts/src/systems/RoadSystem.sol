@@ -41,15 +41,14 @@ contract RoadSystem is System {
     bytes32[] memory contributorsArray = new bytes32[](0);
 
     //create a new chunk
-    (uint32 mapWidth,,) = MapConfig.get();
+    (int32 playArea, int32 spawnArea) = MapConfig.get();
     (uint32 roadWidth, uint32 roadHeight,,) = RoadConfig.get();
 
 
     int32 yStart = mileNumber * int32(roadHeight);
     int32 yEnd = (mileNumber * int32(roadHeight)) + int32(roadHeight) - 1;
-    int32 halfWidth = int32(mapWidth) / int32(2);
     
-    Bounds.set(int32(-halfWidth), halfWidth, yEnd, yStart);
+    Bounds.set(int32(-playArea), playArea, yEnd, yStart);
 
     //spawn all the rows
     //spawn all the obstacles
@@ -58,7 +57,7 @@ contract RoadSystem is System {
     for (int32 y = yStart; y < int32(roadHeight) + int32(yStart); y++) {
 
       //SPAWN TERRAIN
-      for (int32 x = int32(-halfWidth); x <= halfWidth; x++) {
+      for (int32 x = int32(-playArea); x <= playArea; x++) {
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
         GameConfigData memory config = GameConfig.get();

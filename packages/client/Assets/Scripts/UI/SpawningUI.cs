@@ -52,6 +52,7 @@ public class SpawningUI : SPWindowParent
         goodSpawn = true; 
 
         goodSpawn = y < BoundsComponent.Up && y > BoundsComponent.Down && (x < BoundsComponent.Left || x > BoundsComponent.Right);
+        goodSpawn = x >= -MapConfigComponent.SpawnWidth && x <= MapConfigComponent.SpawnWidth;
         goodSpawn = goodSpawn && CursorMUD.Entity == null;
 
         ok.SetActive(goodSpawn);

@@ -20,8 +20,7 @@ contract PostDeploy is Script {
     //deploys the MapConfig
     GameState.set(world, int32(-1));
     GameConfig.set(world, true, true);
-    bytes memory terrain = new bytes(5);
-    MapConfig.set(world, 21, 0, terrain);
+    MapConfig.set(world, 10, 13);
     RoadConfig.set(world, 5, 20, -2, 2);
 
     world.createMap(worldAddress);
