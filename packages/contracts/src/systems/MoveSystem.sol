@@ -293,7 +293,7 @@ contract MoveSystem is System {
     (,,int32 up, int32 down ) = Bounds.get();
     (int32 playWidth, int32 spawnWidth) = MapConfig.get();
     require(x >= int32(-spawnWidth) && x <= spawnWidth, "outside spawn");
-    require(y < up && y > down, "out of range y");
+    require(y <= up && y >= down, "out of range y");
     require(x < int32(-playWidth) || x > playWidth , "out of range x");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));

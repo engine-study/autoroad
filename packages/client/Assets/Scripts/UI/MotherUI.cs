@@ -85,6 +85,7 @@ public class MotherUI : SPUIInstance {
         SPUIBase.PlaySound(sfx_spawn);
 
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
+        SPCamera.SetFOVGlobal(5f);
 
     }
 

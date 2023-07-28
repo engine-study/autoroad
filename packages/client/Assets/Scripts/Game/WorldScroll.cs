@@ -17,7 +17,7 @@ public class WorldScroll : MonoBehaviour
 
     void Start()
     {
-        SetMile(-1f);
+        currentMile = -1;
     }
 
     void Update()

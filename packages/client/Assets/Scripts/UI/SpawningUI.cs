@@ -14,20 +14,30 @@ public class SpawningUI : SPWindowParent
     bool goodSpawn;
 
     public GameObject cursor; 
+    public GameObject spawnZone; 
     public GameObject ok, bad;
 
     protected override void OnEnable() {
         base.OnEnable();
 
+        SPCamera.SetFollow(null);
+        SPCamera.SetFOVGlobal(20f);
+        SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + RoadConfigComponent.Height * .5f));
+
         nameButton.UpdateField(NameComponent.LocalName);
 
+        spawnZone.transform.parent = null;
+        spawnZone.transform.position = Vector3.forward * BoundsComponent.Down;
+        spawnZone.transform.rotation = Quaternion.identity;
+        spawnZone.transform.localScale =  Vector3.one;
+        
         cursor.transform.parent = CursorMUD.CursorTransform;
-
         cursor.transform.localPosition = Vector3.zero;
         cursor.transform.localRotation = Quaternion.identity;
         cursor.transform.localScale = Vector3.one;
 
         cursor.SetActive(true);
+        spawnZone.SetActive(true);
 
         CursorMUD.OnGridPosition += UpdateCursor;
     }
@@ -36,10 +46,11 @@ public class SpawningUI : SPWindowParent
         base.OnDisable();
         CursorMUD.OnGridPosition -= UpdateCursor;
         cursor.SetActive(false);
+        spawnZone.SetActive(false);
     }
 
     void Update() {
-        if(Input.GetMouseButton(0) && goodSpawn) {
+        if(!spawning && Input.GetMouseButtonDown(0) && goodSpawn) {
             Spawn();
         }
     }
@@ -51,7 +62,7 @@ public class SpawningUI : SPWindowParent
 
         goodSpawn = true; 
 
-        goodSpawn = y < BoundsComponent.Up && y > BoundsComponent.Down && (x < BoundsComponent.Left || x > BoundsComponent.Right);
+        goodSpawn = y <= BoundsComponent.Up && y >= BoundsComponent.Down && (x < BoundsComponent.Left || x > BoundsComponent.Right);
         goodSpawn = goodSpawn && x >= -MapConfigComponent.SpawnWidth && x <= MapConfigComponent.SpawnWidth;
         goodSpawn = goodSpawn && CursorMUD.Entity == null;
 
