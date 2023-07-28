@@ -23,6 +23,8 @@ public class TreeComponent : MUDComponent {
         base.PostInit();
         health = Entity.GetMUDComponent<HealthComponent>();
         health.OnUpdated += TreeHit;
+
+        Entity.SetName("Tree");
     }
 
     protected override void InitDestroy() {

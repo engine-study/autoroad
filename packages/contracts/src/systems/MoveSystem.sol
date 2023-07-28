@@ -82,6 +82,7 @@ contract MoveSystem is System {
 
   function canDoStuff(bytes32 player) private returns (bool) {
     require(Health.get(player) > 0, "we dead");
+    return true;
   }
 
   function canInteract(bytes32 player, int32 x, int32 y, bytes32[] memory entities, uint distance) private returns (bool) {
@@ -238,6 +239,8 @@ contract MoveSystem is System {
 
   function teleport(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");        
+    
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
     Position.set(player, PositionData(x, y));

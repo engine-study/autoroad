@@ -6,7 +6,7 @@ using DefaultNamespace;
 using mud.Unity;
 using IWorld.ContractDefinition;
 
-public enum RockType { None, Stone, Statumen, Pavimentum, Rudus, Nucleus, _Count }
+public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, _Count }
 public class RockComponent : MUDComponent {
 
     [Header("Rock")]

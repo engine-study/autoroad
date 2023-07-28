@@ -16,10 +16,12 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] bool isLocalPlayer;
     [SerializeField] PlayerMUD playerScript;
     [SerializeField] SPInteract meleeInteract;
+    [SerializeField] AudioClip [] sfx_hitSound;
+    [SerializeField] AudioClip [] sfx_deathSound;
 
     [Header("Debug")]
     [SerializeField] HealthComponent health;
-    [SerializeField] string attackerKey;
+    int lastHealth;
 
     public static string? LocalPlayerKey;
 
@@ -56,8 +58,30 @@ public class PlayerComponent : MUDComponent {
 
     }
 
+    Coroutine dieCoroutine;
+
     void CheckHealth() {
-        gameObject.SetActive(health.health > 0);
+
+        if(!Loaded) {
+            return;
+        }
+
+        if(health.health != lastHealth) {
+            if(health.health < 0) {
+                SPAudioSource.Play(transform.position, sfx_deathSound);
+                playerScript.Animator.PlayClip("Die");
+            } else {
+                SPAudioSource.Play(transform.position, sfx_hitSound);
+                playerScript.Animator.PlayClip("Hit");
+            }
+        }
+
+        // gameObject.SetActive(health.health > 0);
+        if(IsLocalPlayer) {
+            MotherUI.TogglePlayerSpawning(health.health <= 0);
+        }
+
+        lastHealth = health.health;
     }
 
     public void Meleed(bool toggle, IActor actor) {

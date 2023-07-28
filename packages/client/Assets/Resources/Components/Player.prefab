@@ -215,7 +215,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dee59fdc01549b47bc6c719e038be4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tableType: {fileID: 11400000, guid: 4ca985249dec0844eae0a3451a5349ad, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   entity: {fileID: 0}
@@ -232,8 +231,12 @@ MonoBehaviour:
   isLocalPlayer: 0
   playerScript: {fileID: 4765553126336188459}
   meleeInteract: {fileID: 650409719297324991}
+  sfx_hitSound:
+  - {fileID: 8300000, guid: 00077265487bfa44d9a2c504d0c151c1, type: 3}
+  - {fileID: 8300000, guid: 48e57600f3c0a3f439b4a8a06696b757, type: 3}
+  sfx_deathSound:
+  - {fileID: 8300000, guid: 8f423d80a2384a84ebf4fa459c4e2916, type: 3}
   health: {fileID: 0}
-  attackerKey: 
 --- !u!114 &6141718005193121758
 MonoBehaviour:
   m_ObjectHideFlags: 0

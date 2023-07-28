@@ -84,7 +84,12 @@ public class CursorMUD : MonoBehaviour {
     void UpdateHover() {
 
         // hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
-        hover = GridMUD.GetEntityAt(mousePos);
+
+        if(SPUIBase.IsPointerOverUIElement) {
+            hover = null;
+        } else {
+            hover = GridMUD.GetEntityAt(mousePos);
+        }
 
         if (lastHover != hover) {
 
