@@ -80,6 +80,8 @@ public class ControllerMUD : SPController {
         base.ToggleController(toggle);
 
         controller.enabled = false;
+
+        //WE ARE ALWAYS ENABLED, BUT OUR CONTROLLER IS NOT
         enabled = true;
     }
 
@@ -87,6 +89,10 @@ public class ControllerMUD : SPController {
     void Update() {
 
         alive += Time.deltaTime;
+
+        if(!playerScript.Alive) {
+            return;
+        }
 
         UpdateInput();
         UpdatePosition();
@@ -226,8 +232,9 @@ public class ControllerMUD : SPController {
 
 
     private void ComponentUpdate() {
+
         if (!entityReady) { return; }
-        if (playerScript.Position.UpdateSource == UpdateSource.Revert) {
+        if (playerScript.Position.UpdateSource == UpdateSource.Revert || playerScript.Position.UpdateType == UpdateType.SetRecord) {
             onchainPos = playerScript.Position.Pos;
             SetPositionInstant(playerScript.Position.Pos);
         }

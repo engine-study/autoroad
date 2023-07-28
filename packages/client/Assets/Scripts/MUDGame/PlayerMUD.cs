@@ -61,7 +61,6 @@ public class PlayerMUD : SPPlayer
         }
 
     }
-
     
     public override void Kill() {
         base.Kill();

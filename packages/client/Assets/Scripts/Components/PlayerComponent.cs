@@ -66,18 +66,24 @@ public class PlayerComponent : MUDComponent {
             return;
         }
 
+
         if(health.health != lastHealth) {
+            
+            SPAudioSource.Play(transform.position, sfx_hitSound);
+
             if(health.health < 0) {
-                SPAudioSource.Play(transform.position, sfx_deathSound);
+                // SPAudioSource.Play(transform.position, sfx_deathSound);
                 playerScript.Animator.PlayClip("Die");
             } else {
-                SPAudioSource.Play(transform.position, sfx_hitSound);
+                // SPAudioSource.Play(transform.position, sfx_hitSound);
                 playerScript.Animator.PlayClip("Hit");
             }
-        }
-
-        if(lastHealth < 1 && health.health > 0) {
-            gameObject.SetActive(health.health > 0);
+            
+            if(health.health < 1) {
+                playerScript.Kill();
+            } else if(lastHealth < 1) {
+                playerScript.Respawn(transform.position);
+            }
         }
 
         if(IsLocalPlayer) {
@@ -88,6 +94,12 @@ public class PlayerComponent : MUDComponent {
     }
 
     public void Meleed(bool toggle, IActor actor) {
+
+        if(health.health < 1) {
+            //already dead
+            return;
+        }
+
         PlayerComponent otherPlayer = actor.Owner().GetComponent<PlayerComponent>();
         PlayerMUD otherScript = actor.Owner().GetComponent<PlayerMUD>();
 
@@ -96,7 +108,7 @@ public class PlayerComponent : MUDComponent {
         }
 
         string targetAddress = otherPlayer.Entity.Key;
-        TxUpdate update = TxManager.MakeOptimistic(health, health.health - 1);
+        TxUpdate update = TxManager.MakeOptimistic(health, health.health == 1 ? -1 : health.health - 1);
         TxManager.Send<MeleeFunction>(update, System.Convert.ToInt32(playerScript.Position.Pos.x), System.Convert.ToInt32(playerScript.Position.Pos.z));
 
     }

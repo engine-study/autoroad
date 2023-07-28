@@ -72,6 +72,11 @@ public class GridMUD : MonoBehaviour {
             componentDictionary.Add(component, position);
         }
 
+        //if we deleted the position, do not add it back 
+        if(info.UpdateType == UpdateType.DeleteRecord) {
+            return;
+        }
+
         // Store the position in the dictionary
         if (positionDictionary.ContainsKey(position)) {
             positionDictionary[position] = component;
