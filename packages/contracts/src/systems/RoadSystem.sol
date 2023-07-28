@@ -31,8 +31,10 @@ contract RoadSystem is System {
     //create an entity for the chunk itself 
     bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
 
-    GameState.set(mileNumber);
-
+    // (, int32 players) = GameState.get();
+    // GameState.set(mileNumber, players);
+    GameState.setMiles(mileNumber);
+    
     // MyTable.pushFooArray(keccak256("some.key"), 4242); // adds 4242 at end of fooArray
     // MyTable.popFooArray(keccak256("some.key")); // pop fooArray
     // MyTable.setItemFooArray(keccak256("some.key"), 0, 123); // set fooArray[0] to 123

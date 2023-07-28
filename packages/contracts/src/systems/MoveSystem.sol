@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name, Stats } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -62,6 +62,9 @@ contract MoveSystem is System {
 
     //and then player (which ovewrites where the push object was)
     Position.set(player, x, y);
+    // int32 stat = Stats.getPushed(player);
+    // Stats.setPushed(player, stat + 1);
+
   }
 
   function fill(bytes32 filler, bytes32 hole) private {
@@ -78,6 +81,10 @@ contract MoveSystem is System {
       Position.deleteRecord(filler);
       Position.deleteRecord(hole);
     }
+
+    // int32 stat = Stats.getCompleted(filler);
+    // Stats.setCompleted(filler, stat + 1);
+
   }
 
   function canDoStuff(bytes32 player) private returns (bool) {
@@ -124,6 +131,10 @@ contract MoveSystem is System {
     else if (rockState == uint32(RockType.Nucleus)) {
       Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
+
+    // int32 stat = Stats.getMined(player);
+    // Stats.setMined(player, stat + 1);
+
   }
 
   function chop(int32 x, int32 y) public {
@@ -199,6 +210,10 @@ contract MoveSystem is System {
 
     Road.set(roadEntity, 1);
     Position.set(roadEntity, x, y);
+
+    // int32 stat = Stats.getShoveled(player);
+    // Stats.setShoveled(player, stat + 1);
+
   }
 
   function melee(int32 x, int32 y) public {
@@ -225,15 +240,24 @@ contract MoveSystem is System {
 
   function kill(bytes32 attacker, bytes32 target, PositionData memory pos) private {
 
+    //credit attacker with kill
+    // int32 stat = Stats.getKills(attacker);
+    // Stats.setKills(attacker, stat + 1);
+
     //kill target
     Health.set(target, -1);
     Position.deleteRecord(target);
+
+    // int32 stat2 = Stats.getDeaths(target);
+    // Stats.setDeaths(target, stat2 + 1);
 
     //spawn bones
     bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
     Bones.set(bonesEntity, true);
     Position.set(bonesEntity, pos);
     Move.set(bonesEntity, uint32(MoveType.Push));
+
+
 
   }
 
@@ -284,6 +308,10 @@ contract MoveSystem is System {
     }
 
     require(false, "No available place to move");
+
+    // int32 stat = Stats.getMoves(player);
+    // Stats.setMoves(player, stat + 1);
+
   }
 
   function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
@@ -318,6 +346,8 @@ contract MoveSystem is System {
 
     if(!playerExists) {
       Player.set(playerEntity, true);
+      int32 miles = GameState.getMiles();
+      Stats.set(playerEntity, miles, 0, 0, 0, 0, 0, 0, 0);
     }
 
     Health.set(playerEntity, 3);

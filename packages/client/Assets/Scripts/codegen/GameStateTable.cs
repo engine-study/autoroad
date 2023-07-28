@@ -25,6 +25,7 @@ namespace DefaultNamespace
         }
 
         public long? miles;
+        public long? playerCount;
 
         public override Type TableType()
         {
@@ -39,6 +40,8 @@ namespace DefaultNamespace
         public override void SetValues(params object[] functionParameters)
         {
             miles = (long)(int)functionParameters[0];
+
+            playerCount = (long)(int)functionParameters[1];
         }
 
         public override bool SetValues(IEnumerable<Property> result)
@@ -54,6 +57,11 @@ namespace DefaultNamespace
                     case "miles":
                         var milesValue = (long)value;
                         miles = milesValue;
+                        hasValues = true;
+                        break;
+                    case "playerCount":
+                        var playerCountValue = (long)value;
+                        playerCount = playerCountValue;
                         hasValues = true;
                         break;
                 }
@@ -81,6 +89,11 @@ namespace DefaultNamespace
                     case "miles":
                         var milesValue = (long)value;
                         gameStateTable.miles = milesValue;
+                        hasValues = true;
+                        break;
+                    case "playerCount":
+                        var playerCountValue = (long)value;
+                        gameStateTable.playerCount = playerCountValue;
                         hasValues = true;
                         break;
                 }
@@ -122,11 +135,14 @@ namespace DefaultNamespace
                         miles = value.Item1.TryGetValue("miles", out var milesVal)
                             ? (long)milesVal
                             : default,
+                        playerCount = value.Item1.TryGetValue("playerCount", out var playerCountVal)
+                            ? (long)playerCountVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new GameStateTable { miles = null, };
+                    current = new GameStateTable { miles = null, playerCount = null, };
                 }
             }
 
@@ -139,11 +155,14 @@ namespace DefaultNamespace
                         miles = value.Item2.TryGetValue("miles", out var milesVal)
                             ? (long)milesVal
                             : default,
+                        playerCount = value.Item2.TryGetValue("playerCount", out var playerCountVal)
+                            ? (long)playerCountVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new GameStateTable { miles = null, };
+                    previous = new GameStateTable { miles = null, playerCount = null, };
                 }
             }
 

@@ -18,7 +18,7 @@ contract PostDeploy is Script {
     vm.startBroadcast(deployerPrivateKey);
 
     //deploys the MapConfig
-    GameState.set(world, int32(-1));
+    GameState.set(world, int32(-1), 0);
     GameConfig.set(world, true, true);
     MapConfig.set(world, 10, 13);
     RoadConfig.set(world, 5, 20, -2, 2);
@@ -27,7 +27,7 @@ contract PostDeploy is Script {
     world.createMile(0);
 
     // some debug to check if our abiencode is working
-    abiTest(worldAddress);
+    // abiTest(worldAddress);
 
     vm.stopBroadcast();
   }

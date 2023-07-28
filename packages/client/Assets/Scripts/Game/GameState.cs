@@ -119,9 +119,11 @@ public class GameState : MonoBehaviour {
 
         //wait for player table
         while(TableManager.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
-        PlayerTable localPlayerComponent = TableManager.FindValue<PlayerTable>(NetworkManager.LocalAddress);
+        while(TableManager.FindTable<HealthComponent>().HasInit == false) {await UniTask.Delay(500);}
+        PlayerTable playerTable = TableManager.FindValue<PlayerTable>(NetworkManager.LocalAddress);
+        HealthTable healthTable = TableManager.FindValue<HealthTable>(NetworkManager.LocalAddress);
 
-        if (localPlayerComponent == null) {
+        if (playerTable == null || healthTable == null || (int)healthTable.value < 1) {
 
             if(SPGlobal.IsDebug) {
                 int x = BoundsComponent.Right + 1;

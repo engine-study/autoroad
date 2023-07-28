@@ -96,6 +96,7 @@ export default mudConfig({
       dataStruct: false,
       schema: {
         miles: "int32",
+        playerCount: "int32",
       },
     },
 
@@ -150,9 +151,8 @@ export default mudConfig({
 
     Tree: "bool",
 
-
-
   },
+
   modules: [
     {
       name: "KeysWithValueModule",
@@ -164,7 +164,6 @@ export default mudConfig({
       root: true,
       args: [resolveTableId("Chunk")],
     },
-
-
   ],
+
 });
