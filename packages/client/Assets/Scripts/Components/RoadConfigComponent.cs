@@ -12,6 +12,7 @@ public class RoadConfigComponent : MUDComponent
     public static int Right;
 
     [SerializeField] private int width,height,left,right;
+    public static bool OnRoad(int x, int y) {return x >= Left && x <= Right;}
 
     protected override IMudTable GetTable() {return new RoadConfigTable();}
     protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {

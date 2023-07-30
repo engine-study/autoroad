@@ -38,6 +38,15 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class BuyFunction : BuyFunctionBase { }
+
+    [Function("buy")]
+    public class BuyFunctionBase : FunctionMessage
+    {
+        [Parameter("uint32", "item", 1)]
+        public virtual uint Item { get; set; }
+    }
+
     public partial class CallFunction : CallFunctionBase { }
 
     [Function("call", "bytes")]
@@ -292,6 +301,15 @@ namespace IWorld.ContractDefinition
     public class IsStoreFunctionBase : FunctionMessage
     {
 
+    }
+
+    public partial class ManifestFunction : ManifestFunctionBase { }
+
+    [Function("manifest", "bool")]
+    public class ManifestFunctionBase : FunctionMessage
+    {
+        [Parameter("uint32", "item", 1)]
+        public virtual uint Item { get; set; }
     }
 
     public partial class MeleeFunction : MeleeFunctionBase { }
@@ -707,17 +725,17 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
-    public partial class SpawnTerrainFunction : SpawnTerrainFunctionBase { }
+    public partial class SpawnBotFunction : SpawnBotFunctionBase { }
 
-    [Function("spawnTerrain")]
-    public class SpawnTerrainFunctionBase : FunctionMessage
+    [Function("spawnBot")]
+    public class SpawnBotFunctionBase : FunctionMessage
     {
         [Parameter("int32", "x", 1)]
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
-        [Parameter("uint8", "tType", 3)]
-        public virtual byte TType { get; set; }
+        [Parameter("bytes32", "entity", 3)]
+        public virtual byte[] Entity { get; set; }
     }
 
     public partial class TeleportFunction : TeleportFunctionBase { }
@@ -986,6 +1004,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1048,6 +1068,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

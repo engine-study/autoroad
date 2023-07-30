@@ -52,8 +52,6 @@ public class CursorMUD : MonoBehaviour {
         rawTransform.position = rawMousePos;
 
         if (grid) {
-
-
             gridPos = new Vector3(Mathf.Round(rawMousePos.x), Mathf.Round(rawMousePos.y), Mathf.Round(rawMousePos.z));
             mousePos = gridPos;
 
@@ -62,6 +60,10 @@ public class CursorMUD : MonoBehaviour {
             mousePos = Vector3.MoveTowards(visuals.position, rawMousePos, 50f * Time.deltaTime);
         }
 
+        if(SPUIBase.IsPointerOverUIElement) {
+            return;
+        }
+        
         visuals.position = mousePos;
 
         if (lastPos != rawMousePos) {

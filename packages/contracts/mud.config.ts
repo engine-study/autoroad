@@ -151,6 +151,22 @@ export default mudConfig({
 
     Tree: "bool",
 
+    GameEvent: {
+      ephemeral: true,
+      schema: {
+        eventType: "string",
+      },
+    },
+
+    // Item: {
+    //   dataStruct: false,
+    //   schema: {
+    //     name: "string",
+    //     id: "uint32",
+    //     equipped: "bool",
+    //   },
+    // },
+
   },
 
   modules: [

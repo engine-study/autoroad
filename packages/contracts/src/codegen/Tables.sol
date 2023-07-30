@@ -27,3 +27,4 @@ import { Rock, RockTableId } from "./tables/Rock.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Carriage, CarriageTableId } from "./tables/Carriage.sol";
 import { Tree, TreeTableId } from "./tables/Tree.sol";
+import { GameEvent, GameEventTableId } from "./tables/GameEvent.sol";

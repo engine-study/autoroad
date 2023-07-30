@@ -21,6 +21,7 @@ public class PlayerComponent : MUDComponent {
 
     [Header("Debug")]
     [SerializeField] HealthComponent health;
+    [SerializeField] GameEventComponent gameEvent;
     int lastHealth;
 
     public static string? LocalPlayerKey;
@@ -40,8 +41,20 @@ public class PlayerComponent : MUDComponent {
         base.PostInit();
 
         health = Entity.GetMUDComponent<HealthComponent>();
+        gameEvent = Entity.GetMUDComponent<GameEventComponent>();
+        
         health.OnUpdated += CheckHealth;
+        gameEvent.OnUpdated += PlayerEvent;
+
         meleeInteract.OnInteractToggle += Meleed;
+
+    }
+
+    protected override void InitDestroy() {
+        base.InitDestroy();
+
+        health.OnUpdated -= CheckHealth;
+        gameEvent.OnUpdated -= PlayerEvent;
 
     }
 
@@ -56,6 +69,13 @@ public class PlayerComponent : MUDComponent {
     //we got meleed
     public void Meleed() {
 
+    }
+
+
+    void PlayerEvent() {
+        string eventName = gameEvent.GameEvent;
+
+        playerScript.Resources.fx_spawn.Play();
     }
 
     Coroutine dieCoroutine;

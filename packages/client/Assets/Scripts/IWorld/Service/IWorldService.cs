@@ -76,6 +76,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(attackFunction, cancellationToken);
         }
 
+        public Task<string> BuyRequestAsync(BuyFunction buyFunction)
+        {
+             return ContractHandler.SendRequestAsync(buyFunction);
+        }
+
+        public Task<TransactionReceipt> BuyRequestAndWaitForReceiptAsync(BuyFunction buyFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyFunction, cancellationToken);
+        }
+
+        public Task<string> BuyRequestAsync(uint item)
+        {
+            var buyFunction = new BuyFunction();
+                buyFunction.Item = item;
+            
+             return ContractHandler.SendRequestAsync(buyFunction);
+        }
+
+        public Task<TransactionReceipt> BuyRequestAndWaitForReceiptAsync(uint item, CancellationTokenSource cancellationToken = null)
+        {
+            var buyFunction = new BuyFunction();
+                buyFunction.Item = item;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyFunction, cancellationToken);
+        }
+
         public Task<string> CallRequestAsync(CallFunction callFunction)
         {
              return ContractHandler.SendRequestAsync(callFunction);
@@ -580,6 +606,32 @@ namespace IWorld.Service
         }
 
 
+
+        public Task<string> ManifestRequestAsync(ManifestFunction manifestFunction)
+        {
+             return ContractHandler.SendRequestAsync(manifestFunction);
+        }
+
+        public Task<TransactionReceipt> ManifestRequestAndWaitForReceiptAsync(ManifestFunction manifestFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(manifestFunction, cancellationToken);
+        }
+
+        public Task<string> ManifestRequestAsync(uint item)
+        {
+            var manifestFunction = new ManifestFunction();
+                manifestFunction.Item = item;
+            
+             return ContractHandler.SendRequestAsync(manifestFunction);
+        }
+
+        public Task<TransactionReceipt> ManifestRequestAndWaitForReceiptAsync(uint item, CancellationTokenSource cancellationToken = null)
+        {
+            var manifestFunction = new ManifestFunction();
+                manifestFunction.Item = item;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(manifestFunction, cancellationToken);
+        }
 
         public Task<string> MeleeRequestAsync(MeleeFunction meleeFunction)
         {
@@ -1521,34 +1573,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }
 
-        public Task<string> SpawnTerrainRequestAsync(SpawnTerrainFunction spawnTerrainFunction)
+        public Task<string> SpawnBotRequestAsync(SpawnBotFunction spawnBotFunction)
         {
-             return ContractHandler.SendRequestAsync(spawnTerrainFunction);
+             return ContractHandler.SendRequestAsync(spawnBotFunction);
         }
 
-        public Task<TransactionReceipt> SpawnTerrainRequestAndWaitForReceiptAsync(SpawnTerrainFunction spawnTerrainFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnBotRequestAndWaitForReceiptAsync(SpawnBotFunction spawnBotFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotFunction, cancellationToken);
         }
 
-        public Task<string> SpawnTerrainRequestAsync(int x, int y, byte tType)
+        public Task<string> SpawnBotRequestAsync(int x, int y, byte[] entity)
         {
-            var spawnTerrainFunction = new SpawnTerrainFunction();
-                spawnTerrainFunction.X = x;
-                spawnTerrainFunction.Y = y;
-                spawnTerrainFunction.TType = tType;
+            var spawnBotFunction = new SpawnBotFunction();
+                spawnBotFunction.X = x;
+                spawnBotFunction.Y = y;
+                spawnBotFunction.Entity = entity;
             
-             return ContractHandler.SendRequestAsync(spawnTerrainFunction);
+             return ContractHandler.SendRequestAsync(spawnBotFunction);
         }
 
-        public Task<TransactionReceipt> SpawnTerrainRequestAndWaitForReceiptAsync(int x, int y, byte tType, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnBotRequestAndWaitForReceiptAsync(int x, int y, byte[] entity, CancellationTokenSource cancellationToken = null)
         {
-            var spawnTerrainFunction = new SpawnTerrainFunction();
-                spawnTerrainFunction.X = x;
-                spawnTerrainFunction.Y = y;
-                spawnTerrainFunction.TType = tType;
+            var spawnBotFunction = new SpawnBotFunction();
+                spawnBotFunction.X = x;
+                spawnBotFunction.Y = y;
+                spawnBotFunction.Entity = entity;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotFunction, cancellationToken);
         }
 
         public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)

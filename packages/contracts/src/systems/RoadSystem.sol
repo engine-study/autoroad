@@ -5,6 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds} from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Tree, Health, Carriage } from "../codegen/Tables.sol";
+import { MoveSystem } from "./MoveSystem.sol";
 import { ChunkTableId } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -100,10 +101,11 @@ contract RoadSystem is System {
     // console.log("added mile ", mileNumber);
   }
 
-  function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
+  function spawnTerrain(int32 x, int32 y, TerrainType tType) private {
 
-    bytes32 entity = keccak256(abi.encode("Terrain", x, y));
-    
+    IWorld world = IWorld(_world());
+
+    bytes32 entity = keccak256(abi.encode("Terrain", x, y));    
     Position.set(entity, x, y);
 
     if (tType == TerrainType.Rock) {
@@ -114,9 +116,7 @@ contract RoadSystem is System {
       Health.set(entity, 3);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Player) {
-      Player.set(entity, true);
-      Health.set(entity, 1);
-      Move.set(entity, uint32(MoveType.Push));
+      world.spawnBot(x, y, entity);
     }
   }
 }

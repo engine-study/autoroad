@@ -59,10 +59,10 @@ public class ActionsMUD : MonoBehaviour
     //add actions base on what we encounter on the grid
     void AddGridActions(Vector3 newPos) {
 
-        distanceToPlayer = Vector3.Distance(newPos, position.Pos);
+        // distanceToPlayer = Vector3.Distance(newPos, position.Pos);
         
         //add the shovel action next to the player at empty spots
-        bool shovelToggle = distanceToPlayer > .5f && distanceToPlayer <= 1f && BoundsComponent.InBounds((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null;
+        bool shovelToggle = RoadConfigComponent.OnRoad((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
         if(shovelToggle) {
             ShovelAction.transform.position = newPos;
         }

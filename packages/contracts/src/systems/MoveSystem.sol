@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name, Stats } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -12,6 +12,7 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 import { MapSystem } from "../systems/MapSystem.sol";
 import { RoadSystem } from "../systems/RoadSystem.sol";
+import { randomCoord } from "../utility/random.sol";
 
 contract MoveSystem is System {
   //push
@@ -228,6 +229,8 @@ contract MoveSystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
+    GameEvent.emitEphemeral(player,"melee");
+
     health--;
 
     if(health <= 0) {
@@ -271,7 +274,6 @@ contract MoveSystem is System {
   function moveFrom(int32 x, int32 y) public {
 
     IWorld world = IWorld(_world());
-    require(world.onWorld(x, y), "off world");
 
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player),"hmm");    
@@ -295,7 +297,7 @@ contract MoveSystem is System {
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
-      if (atPosition.length > 0) {
+      if (atPosition.length > 0 || world.onWorld(positions[i].x, positions[i].y) == false) {
         require(i > 1, "nowhere to move");
         Position.set(player, positions[i - 1]);
         return;
@@ -313,24 +315,24 @@ contract MoveSystem is System {
   }
 
   function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
-    bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
-    (bool hasName,,,) = Name.get(playerEntity);
+    bytes32 entity = addressToEntityKey(address(_msgSender()));
+    (bool hasName,,,) = Name.get(entity);
     require(!hasName, "already has name");
     require(firstName < 36, "first name");
     require(middleName < 1025, "middle name");
     require(lastName < 1734, "last name");
-    require(!Player.get(playerEntity), "already spawned");
-    Name.set(playerEntity, true, firstName, middleName, lastName);
+    require(!Player.get(entity), "already spawned");
+    Name.set(entity, true, firstName, middleName, lastName);
 
   }
 
   function spawn(int32 x, int32 y) public {
 
-    bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
-    bool playerExists = Player.get(playerEntity);
+    bytes32 entity = addressToEntityKey(address(_msgSender()));
+    bool playerExists = Player.get(entity);
 
     if(playerExists) {
-      require(Health.get(playerEntity) == -1, "not dead, can't respawn");
+      require(Health.get(entity) == -1, "not dead, can't respawn");
     }
 
     (,,int32 up, int32 down ) = Bounds.get();
@@ -342,27 +344,39 @@ contract MoveSystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
 
+    spawnPlayer(x, y, entity);
+  }
+
+  function spawnBot(int32 x, int32 y, bytes32 entity) public {
+    Name.set(entity, true, uint32(randomCoord(0, 35, x,y)), uint32(randomCoord(0, 1024, x,y+1)), uint32(randomCoord(0, 1733, x,y+2) ));  
+    spawnPlayer(x,y,entity);
+  }
+
+  function spawnPlayer(int32 x, int32 y, bytes32 entity) private {
+
+    bool playerExists = Player.get(entity);
+
     if(!playerExists) {
-      Player.set(playerEntity, true);
+      Player.set(entity, true);
       int32 miles = GameState.getMiles();
-      Stats.set(playerEntity, miles, 0, 0, 0, 0, 0, 0, 0);
+      Stats.set(entity, miles, 0, 0, 0, 0, 0, 0, 0);
     }
 
-    Health.set(playerEntity, 3);
-    Move.set(playerEntity, uint32(MoveType.Push));
-    Position.set(playerEntity, x, y);
-
+    Health.set(entity, 3);
+    Move.set(entity, uint32(MoveType.Push));
+    Position.set(entity, x, y);
   }
 
   function destroyPlayer() public {
-    bytes32 playerEntity = addressToEntityKey(address(_msgSender()));
+    bytes32 entity = addressToEntityKey(address(_msgSender()));
 
-    Name.deleteRecord(playerEntity);
-    Player.deleteRecord(playerEntity);
-    Health.deleteRecord(playerEntity);
-    Move.deleteRecord(playerEntity);
-    Position.deleteRecord(playerEntity);
+    Name.deleteRecord(entity);
+    Player.deleteRecord(entity);
+    Health.deleteRecord(entity);
+    Move.deleteRecord(entity);
+    Position.deleteRecord(entity);
   }
+
 
   function abs(int x) private pure returns (int) {
     return x >= 0 ? x : -x;
