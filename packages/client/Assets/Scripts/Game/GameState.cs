@@ -78,12 +78,6 @@ public class GameState : MonoBehaviour {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
 
-        //spawn debug road elements
-        while(GameStateComponent.MILE_COUNT == -1) {await UniTask.Delay(500);}
-        if(GameStateComponent.PlayerCount == 0) {
-            TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
-        }
-
         //destroy the player if we want to simulate the login sequence
         if(freshStart) {
             await TxManager.Send<DestroyPlayerFunction>();
@@ -136,9 +130,14 @@ public class GameState : MonoBehaviour {
         }
 
         //wait for the player
-        while(PlayerComponent.LocalPlayerKey == null) {await UniTask.Delay(500);}
+        while(PlayerMUD.LocalPlayer == null) {await UniTask.Delay(500);}
 
-
+        //spawn debug road elements
+        while(GameStateComponent.PlayerCount == 0) {await UniTask.Delay(500);}
+        if(GameStateComponent.PlayerCount == 1) {
+            Debug.Log("Spawning debug road", this);
+            TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
+        }
     }
 
 

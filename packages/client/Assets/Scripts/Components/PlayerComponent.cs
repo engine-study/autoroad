@@ -24,8 +24,6 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] GameEventComponent gameEvent;
     int lastHealth;
 
-    public static string? LocalPlayerKey;
-
     protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
         base.Init(ourEntity, ourTable);
 
@@ -43,7 +41,6 @@ public class PlayerComponent : MUDComponent {
         health = Entity.GetMUDComponent<HealthComponent>();
         
         health.OnUpdated += CheckHealth;
-
         meleeInteract.OnInteractToggle += Meleed;
 
     }
@@ -67,7 +64,6 @@ public class PlayerComponent : MUDComponent {
     
     protected override void OnDestroy() {
         base.OnDestroy();
-        LocalPlayerKey = null;
         isLocalPlayer = false;
     }
 

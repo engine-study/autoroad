@@ -30,11 +30,6 @@ contract RoadSystem is System {
     (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
 
     int32 yStart = mile * int32(roadHeight);
-    int32 yEnd = (mile * int32(roadHeight)) + int32(roadHeight) - 1;
-
-    //spawn all the rows
-    //spawn all the obstacles
-    //spawn all the rocks/resources
 
     for (int32 y = yStart; y < int32(roadHeight) + int32(yStart); y++) {
       //SPAWN TERRAIN
