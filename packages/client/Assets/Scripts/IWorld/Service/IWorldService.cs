@@ -240,6 +240,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createMileFunction, cancellationToken);
         }
 
+        public Task<string> DebugMileRequestAsync(DebugMileFunction debugMileFunction)
+        {
+             return ContractHandler.SendRequestAsync(debugMileFunction);
+        }
+
+        public Task<TransactionReceipt> DebugMileRequestAndWaitForReceiptAsync(DebugMileFunction debugMileFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(debugMileFunction, cancellationToken);
+        }
+
+        public Task<string> DebugMileRequestAsync(int mile)
+        {
+            var debugMileFunction = new DebugMileFunction();
+                debugMileFunction.Mile = mile;
+            
+             return ContractHandler.SendRequestAsync(debugMileFunction);
+        }
+
+        public Task<TransactionReceipt> DebugMileRequestAndWaitForReceiptAsync(int mile, CancellationTokenSource cancellationToken = null)
+        {
+            var debugMileFunction = new DebugMileFunction();
+                debugMileFunction.Mile = mile;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(debugMileFunction, cancellationToken);
+        }
+
         public Task<string> DeleteRecordRequestAsync(DeleteRecordFunction deleteRecordFunction)
         {
              return ContractHandler.SendRequestAsync(deleteRecordFunction);

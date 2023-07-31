@@ -28,8 +28,9 @@ export default mudConfig({
     GameConfig: {
       keySchema: {},
       schema: {
+        debug: "bool",
         dummyPlayers: "bool",
-        stressTest: "bool",
+        roadComplete: "bool",
       },
     },
 

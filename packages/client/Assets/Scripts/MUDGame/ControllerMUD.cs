@@ -138,8 +138,8 @@ public class ControllerMUD : SPController {
             Debug.Log("TELEPORT");
             markerPos = moveDest;
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
             SetPositionInstant(moveDest);
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
             TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
             return;
         }
@@ -235,6 +235,7 @@ public class ControllerMUD : SPController {
 
         if (!entityReady) { return; }
         if (playerScript.Position.UpdateSource == UpdateSource.Revert || playerScript.Position.UpdateType == UpdateType.SetRecord) {
+            Debug.Log("Teleporting", this);
             onchainPos = playerScript.Position.Pos;
             SetPositionInstant(playerScript.Position.Pos);
         }

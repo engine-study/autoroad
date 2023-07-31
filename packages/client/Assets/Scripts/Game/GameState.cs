@@ -15,9 +15,7 @@ using UnityEditor;
 
 public enum GamePhase { Lobby, Game, PostGame, _Count }
 public class GameState : MonoBehaviour {
-    public static GamePhase Phase { get { return Instance.phase; } }
     public static GameState Instance;
-    public static Action<GamePhase> OnPhaseUpdate;
 
     [Header("Test")]
     public bool freshStart = false; 
@@ -31,7 +29,6 @@ public class GameState : MonoBehaviour {
 
     [Header("UI")]
     public GameObject editorObjects;
-    public PhaseUI[] phaseUI;
 
     [Header("Debug")]
     public PlayerMUD localPlayer;
@@ -47,12 +44,6 @@ public class GameState : MonoBehaviour {
     }
 
     void Start() {
-
-        for (int i = 0; i < phaseUI.Length; i++) {
-            phaseUI[i].ToggleWindowClose();
-        }
-
-        TogglePhase(phase);
 
     }
 
@@ -87,9 +78,16 @@ public class GameState : MonoBehaviour {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
 
+        //spawn debug road elements
+        while(GameStateComponent.MILE_COUNT == -1) {await UniTask.Delay(500);}
+        if(GameStateComponent.PlayerCount == 0) {
+            TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
+        }
 
+        //destroy the player if we want to simulate the login sequence
         if(freshStart) {
             await TxManager.Send<DestroyPlayerFunction>();
+            //while(player is not null) {}
         }
 
         //wait for name table
@@ -140,6 +138,7 @@ public class GameState : MonoBehaviour {
         //wait for the player
         while(PlayerComponent.LocalPlayerKey == null) {await UniTask.Delay(500);}
 
+
     }
 
 
@@ -174,45 +173,19 @@ public class GameState : MonoBehaviour {
         }
     }
 
-    void UpdatePhase() {
-        phaseUI[(int)phase].UpdatePhase();
-    }
 
-    public void TogglePhase(GamePhase newPhase) {
+// #if UNITY_EDITOR
+//     [MenuItem("Engine/Game State &q")]
+//     static void TogglePhase() {
+//         GameState gs = FindObjectOfType<GameState>();
 
-        phaseUI[(int)phase].ToggleWindow(false);
+//         if (!gs) { return; }
 
-        if (phase == GamePhase.Lobby) {
+//         gs.TogglePhase((GamePhase)((int)(gs.phase + 1) % (int)GamePhase._Count));
+//         Selection.activeGameObject = gs.phaseUI[(int)gs.phase].gameObject;
 
-        } else if (phase == GamePhase.Game) {
+//     }
+// #endif
 
-        } else if (phase == GamePhase.PostGame) {
 
-        }
-
-        phase = newPhase;
-        phaseUI[(int)phase].ToggleWindow(true);
-
-        if (phase == GamePhase.Lobby) {
-
-        } else if (phase == GamePhase.Game) {
-
-        } else if (phase == GamePhase.PostGame) {
-
-        }
-
-    }
-
-#if UNITY_EDITOR
-    [MenuItem("Engine/Game State &q")]
-    static void TogglePhase() {
-        GameState gs = FindObjectOfType<GameState>();
-
-        if (!gs) { return; }
-
-        gs.TogglePhase((GamePhase)((int)(gs.phase + 1) % (int)GamePhase._Count));
-        Selection.activeGameObject = gs.phaseUI[(int)gs.phase].gameObject;
-
-    }
-#endif
 }

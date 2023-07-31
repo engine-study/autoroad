@@ -17,9 +17,13 @@ contract PostDeploy is Script {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
+    bool debug = true; 
+    bool dummyPlayers = true; 
+    bool roadComplete = true; 
+
     //deploys the MapConfig
     GameState.set(world, int32(-1), 0);
-    GameConfig.set(world, true, true);
+    GameConfig.set(world, debug, dummyPlayers, roadComplete);
     MapConfig.set(world, 10, 13);
     RoadConfig.set(world, 5, 20, -2, 2);
 

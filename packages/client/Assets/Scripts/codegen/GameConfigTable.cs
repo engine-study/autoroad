@@ -24,8 +24,9 @@ namespace DefaultNamespace
             return ID;
         }
 
+        public bool? debug;
         public bool? dummyPlayers;
-        public bool? stressTest;
+        public bool? roadComplete;
 
         public override Type TableType()
         {
@@ -39,9 +40,11 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            dummyPlayers = (bool)functionParameters[0];
+            debug = (bool)functionParameters[0];
 
-            stressTest = (bool)functionParameters[1];
+            dummyPlayers = (bool)functionParameters[1];
+
+            roadComplete = (bool)functionParameters[2];
         }
 
         public override bool SetValues(IEnumerable<Property> result)
@@ -54,14 +57,19 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
+                    case "debug":
+                        var debugValue = (bool)value;
+                        debug = debugValue;
+                        hasValues = true;
+                        break;
                     case "dummyPlayers":
                         var dummyPlayersValue = (bool)value;
                         dummyPlayers = dummyPlayersValue;
                         hasValues = true;
                         break;
-                    case "stressTest":
-                        var stressTestValue = (bool)value;
-                        stressTest = stressTestValue;
+                    case "roadComplete":
+                        var roadCompleteValue = (bool)value;
+                        roadComplete = roadCompleteValue;
                         hasValues = true;
                         break;
                 }
@@ -86,14 +94,19 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
+                    case "debug":
+                        var debugValue = (bool)value;
+                        gameConfigTable.debug = debugValue;
+                        hasValues = true;
+                        break;
                     case "dummyPlayers":
                         var dummyPlayersValue = (bool)value;
                         gameConfigTable.dummyPlayers = dummyPlayersValue;
                         hasValues = true;
                         break;
-                    case "stressTest":
-                        var stressTestValue = (bool)value;
-                        gameConfigTable.stressTest = stressTestValue;
+                    case "roadComplete":
+                        var roadCompleteValue = (bool)value;
+                        gameConfigTable.roadComplete = roadCompleteValue;
                         hasValues = true;
                         break;
                 }
@@ -132,20 +145,31 @@ namespace DefaultNamespace
                 {
                     current = new GameConfigTable
                     {
+                        debug = value.Item1.TryGetValue("debug", out var debugVal)
+                            ? (bool)debugVal
+                            : default,
                         dummyPlayers = value.Item1.TryGetValue(
                             "dummyPlayers",
                             out var dummyPlayersVal
                         )
                             ? (bool)dummyPlayersVal
                             : default,
-                        stressTest = value.Item1.TryGetValue("stressTest", out var stressTestVal)
-                            ? (bool)stressTestVal
+                        roadComplete = value.Item1.TryGetValue(
+                            "roadComplete",
+                            out var roadCompleteVal
+                        )
+                            ? (bool)roadCompleteVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new GameConfigTable { dummyPlayers = null, stressTest = null, };
+                    current = new GameConfigTable
+                    {
+                        debug = null,
+                        dummyPlayers = null,
+                        roadComplete = null,
+                    };
                 }
             }
 
@@ -155,20 +179,31 @@ namespace DefaultNamespace
                 {
                     previous = new GameConfigTable
                     {
+                        debug = value.Item2.TryGetValue("debug", out var debugVal)
+                            ? (bool)debugVal
+                            : default,
                         dummyPlayers = value.Item2.TryGetValue(
                             "dummyPlayers",
                             out var dummyPlayersVal
                         )
                             ? (bool)dummyPlayersVal
                             : default,
-                        stressTest = value.Item2.TryGetValue("stressTest", out var stressTestVal)
-                            ? (bool)stressTestVal
+                        roadComplete = value.Item2.TryGetValue(
+                            "roadComplete",
+                            out var roadCompleteVal
+                        )
+                            ? (bool)roadCompleteVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new GameConfigTable { dummyPlayers = null, stressTest = null, };
+                    previous = new GameConfigTable
+                    {
+                        debug = null,
+                        dummyPlayers = null,
+                        roadComplete = null,
+                    };
                 }
             }
 

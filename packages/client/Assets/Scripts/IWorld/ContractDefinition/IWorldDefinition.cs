@@ -100,6 +100,15 @@ namespace IWorld.ContractDefinition
         public virtual int MileNumber { get; set; }
     }
 
+    public partial class DebugMileFunction : DebugMileFunctionBase { }
+
+    [Function("debugMile")]
+    public class DebugMileFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "mile", 1)]
+        public virtual int Mile { get; set; }
+    }
+
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }
 
     [Function("deleteRecord")]
@@ -979,6 +988,8 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
 
 
 

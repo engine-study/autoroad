@@ -209,7 +209,7 @@ contract MoveSystem is System {
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
 
-    Road.set(roadEntity, 1);
+    Road.set(roadEntity, uint32(RoadState.Shoveled));
     Position.set(roadEntity, x, y);
 
     // int32 stat = Stats.getShoveled(player);
@@ -344,27 +344,36 @@ contract MoveSystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
 
-    spawnPlayer(x, y, entity);
+    spawnPlayer(x, y, entity, false);
   }
 
   function spawnBot(int32 x, int32 y, bytes32 entity) public {
     Name.set(entity, true, uint32(randomCoord(0, 35, x,y)), uint32(randomCoord(0, 1024, x,y+1)), uint32(randomCoord(0, 1733, x,y+2) ));  
-    spawnPlayer(x,y,entity);
+    spawnPlayer(x,y,entity, true);
   }
 
-  function spawnPlayer(int32 x, int32 y, bytes32 entity) private {
+  function spawnPlayer(int32 x, int32 y, bytes32 entity, bool isBot) private {
 
     bool playerExists = Player.get(entity);
 
     if(!playerExists) {
       Player.set(entity, true);
-      int32 miles = GameState.getMiles();
+
+      (int32 miles, int32 players) = GameState.get();
+
       Stats.set(entity, miles, 0, 0, 0, 0, 0, 0, 0);
+      
+      if(!isBot) {
+        GameState.set(miles, players+1);
+        // GameState.setPlayerCount(playerCount + 1);
+      }
     }
 
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y);
+
+
   }
 
   function destroyPlayer() public {

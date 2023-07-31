@@ -18,8 +18,10 @@ public class RoadComponent : MUDComponent {
 
     [Header("Debug")]
     public ChunkComponent parent;
+    public Coin coin;
     public int mileNumber;
     public Vector2Int chunkPos;
+
     RoadState lastStage = RoadState.None;
 
 
@@ -31,7 +33,6 @@ public class RoadComponent : MUDComponent {
     protected override void PostInit() {
         base.PostInit();
 
-        //BIG BIG BIG
         Entity.GetMUDComponent<PositionComponent>().SetLayer(-1);
 
         AddToChunk();
@@ -63,6 +64,21 @@ public class RoadComponent : MUDComponent {
 
         lastStage = state;
 
+    }
+
+    public void ToggleComplete(bool toggle) {
+        if(toggle) {
+            
+            if(coin == null) {
+                coin = (Resources.Load("Prefabs/Coin") as GameObject).GetComponent<Coin>();
+            }
+
+
+        } else {
+            if(coin != null) {
+                coin.gameObject.SetActive(false);
+            }
+        }
     }
 
     public void SetStage(RoadState newState) {

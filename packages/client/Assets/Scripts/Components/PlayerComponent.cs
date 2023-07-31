@@ -41,12 +41,16 @@ public class PlayerComponent : MUDComponent {
         base.PostInit();
 
         health = Entity.GetMUDComponent<HealthComponent>();
-        gameEvent = Entity.GetMUDComponent<GameEventComponent>();
         
         health.OnUpdated += CheckHealth;
-        gameEvent.OnUpdated += PlayerEvent;
 
         meleeInteract.OnInteractToggle += Meleed;
+
+    }
+
+    void AddGameEvents() {
+        gameEvent = Entity.GetMUDComponent<GameEventComponent>();
+        gameEvent.OnUpdated += PlayerEvent;
 
     }
 
@@ -54,7 +58,9 @@ public class PlayerComponent : MUDComponent {
         base.InitDestroy();
 
         health.OnUpdated -= CheckHealth;
-        gameEvent.OnUpdated -= PlayerEvent;
+
+        if(gameEvent)
+            gameEvent.OnUpdated -= PlayerEvent;
 
     }
 
