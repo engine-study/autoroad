@@ -4,10 +4,12 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class GameUI : PhaseUI
+public class GameUI : SPWindowParent
 {
-    public TextMeshProUGUI phaseText;
-    public void UpdatePhase(GamePhase newPhase) {
-        phaseText.text = newPhase.ToString() + " Phase";
-    }
+
+    public SPInputField coins;
+    public SPInputField storeButton;
+    public SPInputField menuButton;
+
+
 }

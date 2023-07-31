@@ -7,6 +7,7 @@ using DefaultNamespace;
 public class RowComponent : MUDComponent
 {
     [Header("Row")]
+    [SerializeField] private ChunkComponent chunk;
     [SerializeField] private GameObject complete;
     [SerializeField] private RoadComponent [] roadFiller;
 
@@ -38,6 +39,20 @@ public class RowComponent : MUDComponent
             road.Entity.transform.parent = transform;
         }
     }
+
+    
+    public bool CheckIfCompleted(){
+
+        for(int i = 0; i < spawnedRoads.Length; i++) {
+            if(spawnedRoads[i] == null || spawnedRoads[i].state != RoadState.Paved) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
 
     protected override IMudTable GetTable() {throw new System.NotImplementedException();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {

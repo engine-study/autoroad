@@ -16,6 +16,10 @@ public class MotherUI : SPUIInstance {
     public SPActionWheelUI wheel;
     public NameOptionUI playerCreate;
     public SpawningUI spawning;
+    public SPWindowParent gameplay;
+
+    [Header("store")]
+    public StoreUI store;
 
     [Header("Game")]
     public GameUI game;
@@ -26,6 +30,9 @@ public class MotherUI : SPUIInstance {
         base.Awake();
 
         Mother = this;
+
+        gameplay.ToggleWindowClose();
+        store.ToggleWindowClose();
 
         ToggleLoading(true);
         TogglePlayerCreation(false);
@@ -87,6 +94,7 @@ public class MotherUI : SPUIInstance {
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
         SPCamera.SetFOVGlobal(5f);
 
+        gameplay.ToggleWindowOpen();
     }
 
 

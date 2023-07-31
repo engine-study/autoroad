@@ -74,7 +74,6 @@ public class RoadComponent : MUDComponent {
         }
     }
 
-
     public async UniTaskVoid AddToChunk() {
 
         //we need the roadconfig info and the road pieces to have spawned to load the chunk
