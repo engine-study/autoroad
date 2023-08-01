@@ -30,8 +30,9 @@ contract RoadSystem is System {
     (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
 
     int32 yStart = mile * int32(roadHeight);
+    int32 yEnd = yStart + 2;
 
-    for (int32 y = yStart; y < int32(roadHeight) + int32(yStart); y++) {
+    for (int32 y = yStart; y < yEnd; y++) {
       //SPAWN TERRAIN
       for (int32 x = int32(-playArea); x <= playArea; x++) {
 
@@ -72,6 +73,7 @@ contract RoadSystem is System {
     (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
 
     int32 yStart = mileNumber * int32(roadHeight);
+    int32 yStop = int32(roadHeight) + int32(yStart);
     int32 yEnd = (mileNumber * int32(roadHeight)) + int32(roadHeight) - 1;
 
     Bounds.set(int32(-playArea), playArea, yEnd, yStart);
@@ -80,7 +82,7 @@ contract RoadSystem is System {
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    for (int32 y = yStart; y < int32(roadHeight) + int32(yStart); y++) {
+    for (int32 y = yStart; y < yStop; y++) {
       //SPAWN TERRAIN
       for (int32 x = int32(-playArea); x <= playArea; x++) {
         //set the terrain type to empty
@@ -145,7 +147,7 @@ contract RoadSystem is System {
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
     Position.set(roadEntity, x, y);
     Road.set(roadEntity, uint32(RoadState.Paved));
-    Position.deleteRecord(roadEntity);
+    // Position.deleteRecord(roadEntity);
   }
 
   function spawnShoveledRoad(int32 x, int32 y) private {

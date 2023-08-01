@@ -101,6 +101,7 @@ export default mudConfig({
       },
     },
 
+
     Chunk: {
       name: "Chunk",
       openAccess: false, // it's a subsystem now!
@@ -125,6 +126,9 @@ export default mudConfig({
     Shovel: "bool",
     Pickaxe: "bool",
     Bones: "bool",
+    Stick : "bool",
+    Scroll : "uint32",
+    Coinage : "int32",
 
     Position: {
       name: "Position",

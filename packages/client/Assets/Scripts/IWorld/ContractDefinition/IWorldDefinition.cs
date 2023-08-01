@@ -47,6 +47,15 @@ namespace IWorld.ContractDefinition
         public virtual uint Item { get; set; }
     }
 
+    public partial class BuyScrollFunction : BuyScrollFunctionBase { }
+
+    [Function("buyScroll")]
+    public class BuyScrollFunctionBase : FunctionMessage
+    {
+        [Parameter("uint32", "item", 1)]
+        public virtual uint Item { get; set; }
+    }
+
     public partial class CallFunction : CallFunctionBase { }
 
     [Function("call", "bytes")]
@@ -624,6 +633,15 @@ namespace IWorld.ContractDefinition
         public virtual string Grantee { get; set; }
     }
 
+    public partial class SendCoinsFunction : SendCoinsFunctionBase { }
+
+    [Function("sendCoins")]
+    public class SendCoinsFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "amount", 1)]
+        public virtual int Amount { get; set; }
+    }
+
     public partial class SetFieldFunction : SetFieldFunctionBase { }
 
     [Function("setField")]
@@ -1017,6 +1035,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1079,6 +1099,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

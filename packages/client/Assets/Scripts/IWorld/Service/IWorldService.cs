@@ -102,6 +102,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(buyFunction, cancellationToken);
         }
 
+        public Task<string> BuyScrollRequestAsync(BuyScrollFunction buyScrollFunction)
+        {
+             return ContractHandler.SendRequestAsync(buyScrollFunction);
+        }
+
+        public Task<TransactionReceipt> BuyScrollRequestAndWaitForReceiptAsync(BuyScrollFunction buyScrollFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyScrollFunction, cancellationToken);
+        }
+
+        public Task<string> BuyScrollRequestAsync(uint item)
+        {
+            var buyScrollFunction = new BuyScrollFunction();
+                buyScrollFunction.Item = item;
+            
+             return ContractHandler.SendRequestAsync(buyScrollFunction);
+        }
+
+        public Task<TransactionReceipt> BuyScrollRequestAndWaitForReceiptAsync(uint item, CancellationTokenSource cancellationToken = null)
+        {
+            var buyScrollFunction = new BuyScrollFunction();
+                buyScrollFunction.Item = item;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyScrollFunction, cancellationToken);
+        }
+
         public Task<string> CallRequestAsync(CallFunction callFunction)
         {
              return ContractHandler.SendRequestAsync(callFunction);
@@ -1351,6 +1377,32 @@ namespace IWorld.Service
                 revokeAccessFunction.Grantee = grantee;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(revokeAccessFunction, cancellationToken);
+        }
+
+        public Task<string> SendCoinsRequestAsync(SendCoinsFunction sendCoinsFunction)
+        {
+             return ContractHandler.SendRequestAsync(sendCoinsFunction);
+        }
+
+        public Task<TransactionReceipt> SendCoinsRequestAndWaitForReceiptAsync(SendCoinsFunction sendCoinsFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(sendCoinsFunction, cancellationToken);
+        }
+
+        public Task<string> SendCoinsRequestAsync(int amount)
+        {
+            var sendCoinsFunction = new SendCoinsFunction();
+                sendCoinsFunction.Amount = amount;
+            
+             return ContractHandler.SendRequestAsync(sendCoinsFunction);
+        }
+
+        public Task<TransactionReceipt> SendCoinsRequestAndWaitForReceiptAsync(int amount, CancellationTokenSource cancellationToken = null)
+        {
+            var sendCoinsFunction = new SendCoinsFunction();
+                sendCoinsFunction.Amount = amount;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(sendCoinsFunction, cancellationToken);
         }
 
         public Task<string> SetFieldRequestAsync(SetFieldFunction setFieldFunction)

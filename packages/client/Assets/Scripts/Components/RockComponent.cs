@@ -127,7 +127,7 @@ public class RockComponent : MUDComponent {
         float lerp = 0f;
 
         while (lerp < 1f) {
-            lerp += Time.deltaTime * .66f;
+            lerp += Time.deltaTime * 1f;
             visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * 1f, lerp);
             yield return null;
         }
@@ -139,7 +139,7 @@ public class RockComponent : MUDComponent {
 
         visualParent.SetActive(false);
 
-        SPCamera.AddShake( Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .25f);
+        SPCamera.AddShake( Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .2f);
     }
 
 

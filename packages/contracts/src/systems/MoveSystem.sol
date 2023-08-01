@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent } from "../codegen/Tables.sol";
+import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -83,6 +83,9 @@ contract MoveSystem is System {
       Position.deleteRecord(hole);
     }
 
+    int32 coins = Coinage.get(filler);
+    Coinage.set(filler, coins + 5);
+
     // int32 stat = Stats.getCompleted(filler);
     // Stats.setCompleted(filler, stat + 1);
 
@@ -129,8 +132,9 @@ contract MoveSystem is System {
       Move.set(atPosition[0], uint32(MoveType.Push));
     }
     //become shovelable once we are broken down enough
-    else if (rockState == uint32(RockType.Nucleus)) {
-      Move.set(atPosition[0], uint32(MoveType.Shovel));
+    else if (rockState == uint32(RockType.Rudus)) {
+      Position.deleteRecord(atPosition[0]);
+      // Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
 
     // int32 stat = Stats.getMined(player);
@@ -358,11 +362,10 @@ contract MoveSystem is System {
 
     if(!playerExists) {
       Player.set(entity, true);
+      Coinage.set(entity, 0);
 
       (int32 miles, int32 players) = GameState.get();
-
       Stats.set(entity, miles, 0, 0, 0, 0, 0, 0, 0);
-      
       if(!isBot) {
         GameState.set(miles, players+1);
         // GameState.setPlayerCount(playerCount + 1);

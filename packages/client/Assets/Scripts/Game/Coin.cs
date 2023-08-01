@@ -8,6 +8,10 @@ public class Coin : MonoBehaviour
     Transform target;
     [SerializeField] private AudioClip [] coinSounds;
 
+
+    public void TipCoin(Transform target) {
+        
+    }
     IEnumerator CoinAnimation() {
 
         start = transform.position;

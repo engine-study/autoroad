@@ -43,9 +43,9 @@ public class RoadComponent : MUDComponent {
 
         RoadTable roadUpdate = (RoadTable)update;
 
-        SetStage((RoadState)roadUpdate.value);
 
         if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != state)) {
+
             if (state == RoadState.Shoveled) {
                 fx_spawn.Play();
                 SPAudioSource.Play(transform.position, sfx_digs);
@@ -57,10 +57,11 @@ public class RoadComponent : MUDComponent {
                 // fx_fill.Play();
                 // audio.PlaySound(sfx_fills);
             }
-
-            SetStage((RoadState)roadUpdate.value);
-
         }
+
+        SetStage((RoadState)roadUpdate.value);
+
+        ToggleComplete(state == RoadState.Paved);
 
         lastStage = state;
 
@@ -72,6 +73,8 @@ public class RoadComponent : MUDComponent {
             if(coin == null) {
                 coin = (Resources.Load("Prefabs/Coin") as GameObject).GetComponent<Coin>();
             }
+
+            
 
 
         } else {
