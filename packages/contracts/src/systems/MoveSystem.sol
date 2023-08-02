@@ -91,6 +91,18 @@ contract MoveSystem is System {
     require(Health.get(player) > 0, "we dead");
     return true;
   }
+  
+  function canInteractEmpty(bytes32 player, int32 x, int32 y, int32 emptyX, int32 emptyY, bytes32[] memory entities, uint distance) private returns (bool) {
+    require(entities.length == 0, "not empty");
+
+    PositionData memory playerPos = Position.get(player);
+    PositionData memory entityPos = PositionData(x,y);
+
+    // checks that positions are where they should be, also that the entities actually have positions
+    require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
+
+    return true;
+  }
 
   function canInteract(bytes32 player, int32 x, int32 y, bytes32[] memory entities, uint distance) private returns (bool) {
 
@@ -199,10 +211,10 @@ contract MoveSystem is System {
     require(canDoStuff(player),"hmm");
 
     IWorld world = IWorld(_world());
-    require(world.onMap(x, y), "off grid");
     require(world.onRoad(x, y), "off road");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    require(canInteract(player, x, y, atPosition, 1),"bad interact");
 
     require(atPosition.length < 1, "trying to dig an occupied spot");
     require(Pavement.get(keccak256(abi.encode("Pavement", x, y))) == false, "Digging on pavement");

@@ -24,10 +24,10 @@ public class Coin : MonoBehaviour
         while(lerp < 1f) {
             
             transform.position = Vector3.Lerp(start, target.position, lerp) + Vector3.up * 5f * Mathf.Sin(lerp * Mathf.PI);
-            transform.Rotate(Vector3.up * Time.deltaTime * 360f);
-            transform.Rotate(Vector3.right * Time.deltaTime * 800f);
+            transform.Rotate(Vector3.up * Time.deltaTime * 720f);
+            transform.Rotate(Vector3.right * Time.deltaTime * 1080f);
 
-            lerp += Time.deltaTime * .5f;
+            lerp += Time.deltaTime * .75f;
 
             yield return null;
         }
