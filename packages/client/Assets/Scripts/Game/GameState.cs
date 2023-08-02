@@ -80,7 +80,7 @@ public class GameState : MonoBehaviour {
 
         //destroy the player if we want to simulate the login sequence
         if(freshStart) {
-            await TxManager.Send<DestroyPlayerFunction>();
+            await TxManager.Send<DestroyPlayerAdminFunction>();
             //while(player is not null) {}
         }
 

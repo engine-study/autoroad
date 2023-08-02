@@ -396,24 +396,24 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteRecord1Function, cancellationToken);
         }
 
-        public Task<string> DestroyPlayerRequestAsync(DestroyPlayerFunction destroyPlayerFunction)
+        public Task<string> DestroyPlayerAdminRequestAsync(DestroyPlayerAdminFunction destroyPlayerAdminFunction)
         {
-             return ContractHandler.SendRequestAsync(destroyPlayerFunction);
+             return ContractHandler.SendRequestAsync(destroyPlayerAdminFunction);
         }
 
-        public Task<string> DestroyPlayerRequestAsync()
+        public Task<string> DestroyPlayerAdminRequestAsync()
         {
-             return ContractHandler.SendRequestAsync<DestroyPlayerFunction>();
+             return ContractHandler.SendRequestAsync<DestroyPlayerAdminFunction>();
         }
 
-        public Task<TransactionReceipt> DestroyPlayerRequestAndWaitForReceiptAsync(DestroyPlayerFunction destroyPlayerFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> DestroyPlayerAdminRequestAndWaitForReceiptAsync(DestroyPlayerAdminFunction destroyPlayerAdminFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(destroyPlayerFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(destroyPlayerAdminFunction, cancellationToken);
         }
 
-        public Task<TransactionReceipt> DestroyPlayerRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> DestroyPlayerAdminRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync<DestroyPlayerFunction>(null, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<DestroyPlayerAdminFunction>(null, cancellationToken);
         }
 
         public Task<string> DropRequestAsync(DropFunction dropFunction)
@@ -1697,34 +1697,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFunction, cancellationToken);
         }
 
-        public Task<string> SpawnBotRequestAsync(SpawnBotFunction spawnBotFunction)
+        public Task<string> SpawnBotAdminRequestAsync(SpawnBotAdminFunction spawnBotAdminFunction)
         {
-             return ContractHandler.SendRequestAsync(spawnBotFunction);
+             return ContractHandler.SendRequestAsync(spawnBotAdminFunction);
         }
 
-        public Task<TransactionReceipt> SpawnBotRequestAndWaitForReceiptAsync(SpawnBotFunction spawnBotFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnBotAdminRequestAndWaitForReceiptAsync(SpawnBotAdminFunction spawnBotAdminFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotAdminFunction, cancellationToken);
         }
 
-        public Task<string> SpawnBotRequestAsync(int x, int y, byte[] entity)
+        public Task<string> SpawnBotAdminRequestAsync(int x, int y, byte[] entity)
         {
-            var spawnBotFunction = new SpawnBotFunction();
-                spawnBotFunction.X = x;
-                spawnBotFunction.Y = y;
-                spawnBotFunction.Entity = entity;
+            var spawnBotAdminFunction = new SpawnBotAdminFunction();
+                spawnBotAdminFunction.X = x;
+                spawnBotAdminFunction.Y = y;
+                spawnBotAdminFunction.Entity = entity;
             
-             return ContractHandler.SendRequestAsync(spawnBotFunction);
+             return ContractHandler.SendRequestAsync(spawnBotAdminFunction);
         }
 
-        public Task<TransactionReceipt> SpawnBotRequestAndWaitForReceiptAsync(int x, int y, byte[] entity, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnBotAdminRequestAndWaitForReceiptAsync(int x, int y, byte[] entity, CancellationTokenSource cancellationToken = null)
         {
-            var spawnBotFunction = new SpawnBotFunction();
-                spawnBotFunction.X = x;
-                spawnBotFunction.Y = y;
-                spawnBotFunction.Entity = entity;
+            var spawnBotAdminFunction = new SpawnBotAdminFunction();
+                spawnBotAdminFunction.X = x;
+                spawnBotAdminFunction.Y = y;
+                spawnBotAdminFunction.Entity = entity;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotAdminFunction, cancellationToken);
         }
 
         public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)

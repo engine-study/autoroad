@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Pavement, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage } from "../codegen/Tables.sol";
+import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -76,7 +76,7 @@ contract MoveSystem is System {
     Position.deleteRecord(road);
 
     //set the rock to the position and then delete it
-    Position.set(stone, x, y);
+    // Position.set(stone, x, y);
     Position.deleteRecord(stone);
 
     int32 coins = Coinage.get(stone);
@@ -214,10 +214,9 @@ contract MoveSystem is System {
     require(world.onRoad(x, y), "off road");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-    require(canInteract(player, x, y, atPosition, 1),"bad interact");
+    // require(canInteractEmpty(player, x, y, atPosition, 1),"bad interact");
 
     require(atPosition.length < 1, "trying to dig an occupied spot");
-    require(Pavement.get(keccak256(abi.encode("Pavement", x, y))) == false, "Digging on pavement");
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
 
@@ -359,7 +358,7 @@ contract MoveSystem is System {
     spawnPlayer(x, y, entity, false);
   }
 
-  function spawnBot(int32 x, int32 y, bytes32 entity) public {
+  function spawnBotAdmin(int32 x, int32 y, bytes32 entity) public {
     Name.set(entity, true, uint32(randomCoord(0, 35, x,y)), uint32(randomCoord(0, 1024, x,y+1)), uint32(randomCoord(0, 1733, x,y+2) ));  
     spawnPlayer(x,y,entity, true);
   }
@@ -374,10 +373,12 @@ contract MoveSystem is System {
 
       (int32 miles, int32 players) = GameState.get();
       Stats.set(entity, miles, 0, 0, 0, 0, 0, 0, 0);
+
       if(!isBot) {
         GameState.set(miles, players+1);
         // GameState.setPlayerCount(playerCount + 1);
       }
+
     }
 
     Health.set(entity, 3);
@@ -387,10 +388,9 @@ contract MoveSystem is System {
 
   }
 
-  function destroyPlayer() public {
+  function destroyPlayerAdmin() public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
 
-    Name.deleteRecord(entity);
     Player.deleteRecord(entity);
     Health.deleteRecord(entity);
     Move.deleteRecord(entity);

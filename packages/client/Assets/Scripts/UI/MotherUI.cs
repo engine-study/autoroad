@@ -19,7 +19,8 @@ public class MotherUI : SPUIInstance {
     public SPWindowParent gameplay;
 
     [Header("Menu")]
-    public SPWindowParent menu;
+    public MenuUI menu;
+    public DebugUI debug;
 
     [Header("Store")]
     public StoreUI store;
@@ -36,6 +37,8 @@ public class MotherUI : SPUIInstance {
 
         gameplay.ToggleWindowClose();
         store.ToggleWindowClose();
+        debug.ToggleWindowClose();
+        menu.ToggleWindowClose();
 
         ToggleLoading(true);
         TogglePlayerCreation(false);

@@ -20,10 +20,12 @@ public class Coin : MonoBehaviour
         
         SPAudioSource.Play(transform.position, sfx_spawn);
 
+        float randomHeight = Random.Range(4f, 5f);
+
         float lerp = 0f;
         while(lerp < 1f) {
             
-            transform.position = Vector3.Lerp(start, target.position, lerp) + Vector3.up * 5f * Mathf.Sin(lerp * Mathf.PI);
+            transform.position = Vector3.Lerp(start, target.position, lerp) + Vector3.up * randomHeight * Mathf.Sin(lerp * Mathf.PI);
             transform.Rotate(Vector3.up * Time.deltaTime * 720f);
             transform.Rotate(Vector3.right * Time.deltaTime * 1080f);
 
@@ -33,7 +35,7 @@ public class Coin : MonoBehaviour
         }
 
         SPAudioSource.Play(transform.position, sfx_recieve);
-        gameObject.SetActive(false);
 
+        Destroy(gameObject);
     } 
 }

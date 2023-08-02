@@ -144,7 +144,6 @@ export default mudConfig({
     State: "StateType",
     Move: "uint32",
     Carrying: "bytes32",
-    Pavement: "bool",
 
     //properties
     Damage: "int32",

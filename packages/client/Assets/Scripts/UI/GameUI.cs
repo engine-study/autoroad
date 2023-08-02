@@ -12,6 +12,7 @@ public class GameUI : SPWindowParent
     public SPButton coins;
     public SPButton scrolls;
     public SPButton storeButton;
+    public SPButton debugButton;
     public SPButton menuButton;
 
 
@@ -59,10 +60,9 @@ public class GameUI : SPWindowParent
     }
 
 
-    void Update() {
-        if(Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKey(KeyCode.D)) {
-            TxManager.Send<AddCoinsAdminFunction>(25);
-        }
+    public void ToggleDebug() {
+        MotherUI.Mother.debug.ToggleWindow();
     }
-    
+
+
 }

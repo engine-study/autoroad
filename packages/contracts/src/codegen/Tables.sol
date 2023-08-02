@@ -24,7 +24,6 @@ import { Player, PlayerTableId } from "./tables/Player.sol";
 import { State, StateTableId } from "./tables/State.sol";
 import { Move, MoveTableId } from "./tables/Move.sol";
 import { Carrying, CarryingTableId } from "./tables/Carrying.sol";
-import { Pavement, PavementTableId } from "./tables/Pavement.sol";
 import { Damage, DamageTableId } from "./tables/Damage.sol";
 import { Health, HealthTableId } from "./tables/Health.sol";
 import { Rock, RockTableId } from "./tables/Rock.sol";

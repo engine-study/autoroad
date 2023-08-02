@@ -159,10 +159,10 @@ namespace IWorld.ContractDefinition
         public virtual List<byte[]> Key { get; set; }
     }
 
-    public partial class DestroyPlayerFunction : DestroyPlayerFunctionBase { }
+    public partial class DestroyPlayerAdminFunction : DestroyPlayerAdminFunctionBase { }
 
-    [Function("destroyPlayer")]
-    public class DestroyPlayerFunctionBase : FunctionMessage
+    [Function("destroyPlayerAdmin")]
+    public class DestroyPlayerAdminFunctionBase : FunctionMessage
     {
 
     }
@@ -769,10 +769,10 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
-    public partial class SpawnBotFunction : SpawnBotFunctionBase { }
+    public partial class SpawnBotAdminFunction : SpawnBotAdminFunctionBase { }
 
-    [Function("spawnBot")]
-    public class SpawnBotFunctionBase : FunctionMessage
+    [Function("spawnBotAdmin")]
+    public class SpawnBotAdminFunctionBase : FunctionMessage
     {
         [Parameter("int32", "x", 1)]
         public virtual int X { get; set; }
