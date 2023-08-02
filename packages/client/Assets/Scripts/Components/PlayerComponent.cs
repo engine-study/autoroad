@@ -16,6 +16,7 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] bool isLocalPlayer;
     [SerializeField] PlayerMUD playerScript;
     [SerializeField] SPInteract meleeInteract;
+    [SerializeField] ParticleSystem fx_death;    
     [SerializeField] AudioClip [] sfx_hitSound;
     [SerializeField] AudioClip [] sfx_deathSound;
 
@@ -89,35 +90,47 @@ public class PlayerComponent : MUDComponent {
         }
 
 
-        if(health.health != lastHealth) {
-            
-            SPAudioSource.Play(transform.position, sfx_hitSound);
-
-            if(health.health < 0) {
-                // SPAudioSource.Play(transform.position, sfx_deathSound);
-                playerScript.Animator.PlayClip("Die");
-            } else {
-                // SPAudioSource.Play(transform.position, sfx_hitSound);
-                playerScript.Animator.PlayClip("Hit");
-            }
-            
-            if(health.health < 1) {
+        if(health.Health != lastHealth) {
+                    
+            if(health.Health < 1) {
+                //we are dead
                 playerScript.Kill();
+                playerScript.Animator.PlayClip("Die");
+                fx_death.Play();
+                killCoroutine = StartCoroutine(KillCoroutine());
+
             } else if(lastHealth < 1) {
+                if(killCoroutine != null) {StopCoroutine(killCoroutine);}
+                //we are alive again after being dead
                 playerScript.Respawn(transform.position);
+                playerScript.Root.gameObject.SetActive(true);
+                playerScript.Animator.PlayClip("Idle");
+
+            } else {
+                //normal hit
+                playerScript.Animator.PlayClip("Hit");
+                SPAudioSource.Play(transform.position, sfx_hitSound);
+
             }
         }
 
         if(IsLocalPlayer) {
-            MotherUI.TogglePlayerSpawning(health.health <= 0 || health.UpdateType == UpdateType.DeleteRecord);
+            MotherUI.TogglePlayerSpawning(health.Health <= 0 || health.UpdateType == UpdateType.DeleteRecord);
         }
 
-        lastHealth = health.health;
+        lastHealth = health.Health;
+    }
+
+    Coroutine killCoroutine;
+    IEnumerator KillCoroutine() {
+        yield return new WaitForSeconds(1f);
+        playerScript.Root.gameObject.SetActive(true);
+
     }
 
     public void Meleed(bool toggle, IActor actor) {
 
-        if(health.health < 1) {
+        if(health.Health < 1) {
             //already dead
             return;
         }
@@ -129,8 +142,10 @@ public class PlayerComponent : MUDComponent {
             Debug.LogError("Not sure: " + actor.Owner().name, this);
         }
 
+        Debug.Log("Meleed", this);
+
         string targetAddress = otherPlayer.Entity.Key;
-        TxUpdate update = TxManager.MakeOptimistic(health, health.health == 1 ? -1 : health.health - 1);
+        TxUpdate update = TxManager.MakeOptimistic(health, health.Health == 1 ? -1 : health.Health - 1);
         TxManager.Send<MeleeFunction>(update, System.Convert.ToInt32(playerScript.Position.Pos.x), System.Convert.ToInt32(playerScript.Position.Pos.z));
 
     }

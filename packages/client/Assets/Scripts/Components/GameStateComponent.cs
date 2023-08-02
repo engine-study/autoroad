@@ -37,9 +37,9 @@ public class GameStateComponent : MUDComponent {
 
         edge.transform.position = Vector3.forward * (miles * MILE_DISTANCE + MILE_DISTANCE);
 
-        Debug.Log("Game State:");
-        Debug.Log("Miles: " + (table.miles != null ? (int)table.miles : "null"));
-        Debug.Log("Players: " + (table.playerCount != null ? (int)table.playerCount : "null"));
+        // Debug.Log("Game State:");
+        // Debug.Log("Miles: " + (table.miles != null ? (int)table.miles : "null"));
+        // Debug.Log("Players: " + (table.playerCount != null ? (int)table.playerCount : "null"));
 
     }
 

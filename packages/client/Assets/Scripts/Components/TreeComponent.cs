@@ -34,9 +34,9 @@ public class TreeComponent : MUDComponent {
 
     void TreeHit() {
 
-        if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.health) {
+        if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.Health) {
 
-            if (health.health == 0) {
+            if (health.Health == 0) {
                 SPAudioSource.Play(transform.position, sfx_hits);
                 SPAudioSource.Play(transform.position, sfx_falls);
                 fx_hit.Play();
@@ -53,7 +53,7 @@ public class TreeComponent : MUDComponent {
         } else if (health.UpdateSource == UpdateSource.Revert) {
 
             //if we reverted to an alive state, fix
-            if(health.health > 0) {
+            if(health.Health > 0) {
                 if (fallCoroutine != null) {
                     StopCoroutine(fallCoroutine);
                 }
@@ -67,7 +67,7 @@ public class TreeComponent : MUDComponent {
             }
         }
 
-        lastHealth = health.health;
+        lastHealth = health.Health;
     }
 
     protected override IMudTable GetTable() {return new TreeTable();}
@@ -104,6 +104,6 @@ public class TreeComponent : MUDComponent {
     }
 
     public async void ChopTree(string entity) {
-        await TxManager.Send<ChopFunction>(TxManager.MakeOptimistic(health, (int)Mathf.Clamp(health.health - 1, 0, Mathf.Infinity)), System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
+        await TxManager.Send<ChopFunction>(TxManager.MakeOptimistic(health, (int)Mathf.Clamp(health.Health - 1, 0, Mathf.Infinity)), System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
     }
 }

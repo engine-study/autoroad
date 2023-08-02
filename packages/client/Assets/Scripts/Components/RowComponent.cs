@@ -44,7 +44,7 @@ public class RowComponent : MUDComponent
     public bool CheckIfCompleted(){
 
         for(int i = 0; i < spawnedRoads.Length; i++) {
-            if(spawnedRoads[i] == null || spawnedRoads[i].state != RoadState.Paved) {
+            if(spawnedRoads[i] == null || spawnedRoads[i].state < RoadState.Paved) {
                 return false;
             }
         }

@@ -17,7 +17,7 @@ export default mudConfig({
 
   enums: {
     TerrainType: ["None", "Rock", "Mine", "Tree", "Player"],
-    RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved"],
+    RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
     StateType: ["Idle", "Dead", "Carrying"],
     MoveType: ["None", "Obstruction", "Shovel", "Carry", "Push"],

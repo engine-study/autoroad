@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Cosmetic : MonoBehaviour
 {
+    public System.Action OnUpdated;
     public GameObject defaultBody;
     public Transform bodyParent;
 
@@ -41,6 +42,8 @@ public class Cosmetic : MonoBehaviour
         activeBody.transform.parent = bodyParent;
         activeBody.transform.localPosition = Vector3.zero;
         activeBody.transform.localRotation = Quaternion.identity;
+
+        OnUpdated?.Invoke();
         
     }
 }

@@ -84,7 +84,7 @@ contract SpawnSystem is System {
 
     Player.deleteRecord(entity);
     Position.deleteRecord(entity);
-    Health.deleteRecord(entity);
+    Health.set(entity, -1);
     Move.deleteRecord(entity);
   }
 

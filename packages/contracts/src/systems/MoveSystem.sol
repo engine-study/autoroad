@@ -16,12 +16,11 @@ import { RoadSystem } from "../systems/RoadSystem.sol";
 contract MoveSystem is System {
   //push
   function push(int32 x, int32 y, int32 pushX, int32 pushY) public {
-
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");    
-    
+    require(canDoStuff(player), "hmm");
+
     PositionData memory startPos = Position.get(player);
-    
+
     IWorld world = IWorld(_world());
     require(world.onMap(pushX, pushY), "off grid");
     require(withinManhattanDistance(PositionData(x, y), PositionData(pushX, pushY), 1), "too far to push");
@@ -41,14 +40,14 @@ contract MoveSystem is System {
     //check if we are pushing rocks into a road ditch
     if (atDestination.length > 0) {
       //check if there is an obstruction
-      bool obstruction = Move.get(atDestination[0]) != 0;
-      require(obstruction == false, "pushing into an occupied spot");
+      bool empty = Move.get(atDestination[0]) == uint32(MoveType.None);
+      require(empty, "pushing into an occupied spot");
 
-      (uint32 roadInt,) = Road.get(atDestination[0]);
+      (uint32 roadInt, ) = Road.get(atDestination[0]);
+
       //there is a road here
       if (roadInt != 0) {
-        require(roadInt == uint32(RoadState.Shoveled), "Road already full");
-
+        require(roadInt == uint32(RoadState.Shoveled), "Road not shoveled");
         //this has now become a fill()
         canPush = false;
         fill(player, atPush[0], atDestination[0], pushX, pushY);
@@ -64,26 +63,33 @@ contract MoveSystem is System {
     Position.set(player, x, y);
     // int32 stat = Stats.getPushed(player);
     // Stats.setPushed(player, stat + 1);
-
   }
 
-  function fill(bytes32 player, bytes32 stone, bytes32 road, int32 x, int32 y) private {
+  function fill(bytes32 player, bytes32 pushed, bytes32 road, int32 x, int32 y) private {
 
-    Road.set(road, uint32(RoadState.Paved), player);
 
     //ROAD COMPLETE!!!
     Position.deleteRecord(road);
 
     //set the rock to the position and then delete it
     // Position.set(stone, x, y);
-    Position.deleteRecord(stone);
+    Position.deleteRecord(pushed);
 
-    int32 coins = Coinage.get(stone);
-    Coinage.set(stone, coins + 5);
+    int32 coins = Coinage.get(pushed);
+    Coinage.set(pushed, coins + 5);
+
+    bool isPlayer = Player.get(pushed);
+    // bool isRock = Rock.get(atDestination[0]);
+    if (isPlayer) {
+      Health.set(pushed, -1);
+      Road.set(road, uint32(RoadState.Bones), player);
+
+    } else {
+      Road.set(road, uint32(RoadState.Paved), player);
+    }
 
     // int32 stat = Stats.getCompleted(filler);
     // Stats.setCompleted(filler, stat + 1);
-
   }
 
   function canDoStuff(bytes32 player) private returns (bool) {
@@ -91,8 +97,13 @@ contract MoveSystem is System {
     return true;
   }
 
-  function canInteract(bytes32 player, int32 x, int32 y, bytes32[] memory entities, uint distance) private returns (bool) {
-
+  function canInteract(
+    bytes32 player,
+    int32 x,
+    int32 y,
+    bytes32[] memory entities,
+    uint distance
+  ) private returns (bool) {
     require(entities.length > 0, "empty position");
 
     PositionData memory playerPos = Position.get(player);
@@ -106,11 +117,11 @@ contract MoveSystem is System {
 
   function mine(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");
+    require(canDoStuff(player), "hmm");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
-    require(canInteract(player, x, y, atPosition, 1),"bad interact");
+    require(canInteract(player, x, y, atPosition, 1), "bad interact");
 
     uint32 rockState = Rock.get(atPosition[0]);
 
@@ -134,16 +145,15 @@ contract MoveSystem is System {
 
     // int32 stat = Stats.getMined(player);
     // Stats.setMined(player, stat + 1);
-
   }
 
   function chop(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");
+    require(canDoStuff(player), "hmm");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
-    require(canInteract(player, x, y, atPosition, 1),"bad interact");
+    require(canInteract(player, x, y, atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]), "no tree");
 
     int32 health = Health.get(atPosition[0]);
@@ -161,7 +171,7 @@ contract MoveSystem is System {
 
   function carry(int32 carryX, int32 carryY) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");
+    require(canDoStuff(player), "hmm");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(carryX, carryY));
 
@@ -179,7 +189,7 @@ contract MoveSystem is System {
 
   function drop(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");
+    require(canDoStuff(player), "hmm");
 
     bytes32 carrying = Carrying.get(player);
     require(carrying != 0, "Not carrying anything");
@@ -195,7 +205,7 @@ contract MoveSystem is System {
 
   function shovel(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");
+    require(canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
@@ -210,14 +220,13 @@ contract MoveSystem is System {
 
     // int32 stat = Stats.getShoveled(player);
     // Stats.setShoveled(player, stat + 1);
-
   }
 
   function melee(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");
+    require(canDoStuff(player), "hmm");
 
-    PositionData memory pos = PositionData(x,y);
+    PositionData memory pos = PositionData(x, y);
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length > 0, "attacking an empty spot");
     require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
@@ -225,20 +234,18 @@ contract MoveSystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
-    GameEvent.emitEphemeral(player,"melee");
+    GameEvent.emitEphemeral(player, "melee");
 
     health--;
 
-    if(health <= 0) {
+    if (health <= 0) {
       kill(player, atPosition[0], pos);
     } else {
       Health.set(atPosition[0], health);
     }
-
   }
 
   function kill(bytes32 attacker, bytes32 target, PositionData memory pos) private {
-
     //credit attacker with kill
     // int32 stat = Stats.getKills(attacker);
     // Stats.setKills(attacker, stat + 1);
@@ -255,16 +262,15 @@ contract MoveSystem is System {
     // Bones.set(bonesEntity, true);
     // Position.set(bonesEntity, pos);
     // Move.set(bonesEntity, uint32(MoveType.Push));
-
   }
 
   function teleport(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");        
+    require(canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
-    require(world.onWorld(x, y), "offworld");     
-    
+    require(world.onWorld(x, y), "offworld");
+
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
 
@@ -279,10 +285,10 @@ contract MoveSystem is System {
 
   function teleportAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");      
+    require(canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
-    require(world.onWorld(x, y), "offworld");     
+    require(world.onWorld(x, y), "offworld");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
@@ -290,19 +296,18 @@ contract MoveSystem is System {
   }
 
   function moveFrom(int32 x, int32 y) public {
-
     IWorld world = IWorld(_world());
 
     bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player),"hmm");    
-    
+    require(canDoStuff(player), "hmm");
+
     PositionData memory startPos = Position.get(player);
 
     require(startPos.x == x || startPos.y == y, "cannot move diagonally ");
     require(startPos.x != x || startPos.y != y, "moving in place");
 
     PositionData memory endPos = PositionData(x, y);
-    require(getDistance(startPos,endPos) == 5, "move distance is not 5");
+    require(getDistance(startPos, endPos) == 5, "move distance is not 5");
 
     // get all the positions in the line we are walking
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
@@ -310,7 +315,6 @@ contract MoveSystem is System {
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
     for (uint i = 1; i < positions.length; i++) {
-
       bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y));
       assert(atPosition.length < 2);
 
@@ -329,7 +333,6 @@ contract MoveSystem is System {
 
     // int32 stat = Stats.getMoves(player);
     // Stats.setMoves(player, stat + 1);
-
   }
 
   function abs(int x) private pure returns (int) {

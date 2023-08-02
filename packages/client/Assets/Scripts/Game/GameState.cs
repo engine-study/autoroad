@@ -115,7 +115,7 @@ public class GameState : MonoBehaviour {
         PlayerTable playerTable = TableManager.FindValue<PlayerTable>(NetworkManager.LocalAddress);
         HealthComponent healthComponent = TableManager.FindComponent<HealthComponent>(NetworkManager.LocalAddress);
 
-        if (playerTable == null || healthComponent == null || healthComponent.health < 1) {
+        if (playerTable == null || healthComponent == null || healthComponent.Health < 1) {
 
             if(SPGlobal.IsDebug) {
                 int x = BoundsComponent.Right + 1;

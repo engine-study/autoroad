@@ -37,14 +37,10 @@ contract RoadSystem is System {
       //SPAWN TERRAIN
       for (int32 x = int32(-playArea); x <= playArea; x++) {
 
-        if (y == yStart) {
+        if (x < playArea || y == yStart) {
           spawnFinishedRoad(x, y);
-        } else if (y == yStart + 1) {
-          if (x < playArea) {
-            spawnFinishedRoad(x, y);
-          } else {
-            spawnShoveledRoad(x, y);
-          }
+        } else {
+          spawnShoveledRoad(x, y);
         }
 
       }
@@ -144,14 +140,14 @@ contract RoadSystem is System {
     }
   }
 
-  function spawnFinishedRoad(int32 x, int32 y) private {
+  function spawnFinishedRoad(int32 x, int32 y) public {
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
     Position.set(roadEntity, x, y);
     Road.set(roadEntity, uint32(RoadState.Paved), roadEntity);
     // Position.deleteRecord(roadEntity);
   }
 
-  function spawnShoveledRoad(int32 x, int32 y) private {
+  function spawnShoveledRoad(int32 x, int32 y) public {
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
     Position.set(roadEntity, x, y);
     Road.set(roadEntity, uint32(RoadState.Shoveled), roadEntity);

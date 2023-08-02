@@ -62,9 +62,9 @@ public class RoadComponent : MUDComponent {
            
             }
 
-            if(state == RoadState.Paved) {
+            if(state >= RoadState.Paved) {
                 ToggleComplete(true);
-            } else if(lastStage == RoadState.Paved) {
+            } else if(lastStage >= RoadState.Paved) {
                 ToggleComplete(false);
             }
 

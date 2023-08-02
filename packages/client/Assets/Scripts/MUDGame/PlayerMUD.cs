@@ -14,6 +14,8 @@ public class PlayerMUD : SPPlayer
     [SerializeField] public Cosmetic headCosmetic;
     [SerializeField] public Cosmetic capeCosmetic;
     [SerializeField] public Cosmetic backpackCosmetic;
+    Cosmetic [] cosmetics;
+    [SerializeField] AudioClip [] sfx_equip;
 
     [Header("Debug")]
     [SerializeField] private PositionComponent positionComponent;
@@ -26,12 +28,17 @@ public class PlayerMUD : SPPlayer
         if(Player.Loaded) DoNetworkInit();
         else Player.OnLoaded += DoNetworkInit;
 
+        cosmetics = new Cosmetic[] {bodyCosmetic, headCosmetic, capeCosmetic, backpackCosmetic};
+        for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated += Equip;}
     }
+    void Equip() {SPAudioSource.Play(Root.position, sfx_equip);}
 
     protected override void Destroy()
     {
         base.Destroy();
         Player.OnLoaded -= NetworkInit;
+        for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
+
     }
 
     protected override void NetworkInit() {
@@ -55,8 +62,8 @@ public class PlayerMUD : SPPlayer
             SetLocalPlayer(this);
         }
 
-        if(healthComponent.health < 0) {
-            gameObject.SetActive(false);
+        if(healthComponent.Health < 0) {
+            Root.gameObject.SetActive(false);
         }
 
     }

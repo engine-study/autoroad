@@ -1727,6 +1727,62 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotAdminFunction, cancellationToken);
         }
 
+        public Task<string> SpawnFinishedRoadRequestAsync(SpawnFinishedRoadFunction spawnFinishedRoadFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnFinishedRoadFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnFinishedRoadRequestAndWaitForReceiptAsync(SpawnFinishedRoadFunction spawnFinishedRoadFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFinishedRoadFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnFinishedRoadRequestAsync(int x, int y)
+        {
+            var spawnFinishedRoadFunction = new SpawnFinishedRoadFunction();
+                spawnFinishedRoadFunction.X = x;
+                spawnFinishedRoadFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(spawnFinishedRoadFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnFinishedRoadRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnFinishedRoadFunction = new SpawnFinishedRoadFunction();
+                spawnFinishedRoadFunction.X = x;
+                spawnFinishedRoadFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFinishedRoadFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnShoveledRoadRequestAsync(SpawnShoveledRoadFunction spawnShoveledRoadFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnShoveledRoadFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnShoveledRoadRequestAndWaitForReceiptAsync(SpawnShoveledRoadFunction spawnShoveledRoadFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnShoveledRoadFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnShoveledRoadRequestAsync(int x, int y)
+        {
+            var spawnShoveledRoadFunction = new SpawnShoveledRoadFunction();
+                spawnShoveledRoadFunction.X = x;
+                spawnShoveledRoadFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(spawnShoveledRoadFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnShoveledRoadRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnShoveledRoadFunction = new SpawnShoveledRoadFunction();
+                spawnShoveledRoadFunction.X = x;
+                spawnShoveledRoadFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnShoveledRoadFunction, cancellationToken);
+        }
+
         public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)
         {
              return ContractHandler.SendRequestAsync(teleportFunction);
