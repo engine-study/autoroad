@@ -47,13 +47,21 @@ namespace IWorld.ContractDefinition
         public virtual uint Item { get; set; }
     }
 
+    public partial class BuyCosmeticFunction : BuyCosmeticFunctionBase { }
+
+    [Function("buyCosmetic")]
+    public class BuyCosmeticFunctionBase : FunctionMessage
+    {
+        [Parameter("uint32", "id", 1)]
+        public virtual uint Id { get; set; }
+    }
+
     public partial class BuyScrollFunction : BuyScrollFunctionBase { }
 
     [Function("buyScroll")]
     public class BuyScrollFunctionBase : FunctionMessage
     {
-        [Parameter("uint32", "item", 1)]
-        public virtual uint Item { get; set; }
+
     }
 
     public partial class CallFunction : CallFunctionBase { }
@@ -1006,6 +1014,8 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
 
 
 

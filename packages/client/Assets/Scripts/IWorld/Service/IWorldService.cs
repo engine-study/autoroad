@@ -102,9 +102,40 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(buyFunction, cancellationToken);
         }
 
+        public Task<string> BuyCosmeticRequestAsync(BuyCosmeticFunction buyCosmeticFunction)
+        {
+             return ContractHandler.SendRequestAsync(buyCosmeticFunction);
+        }
+
+        public Task<TransactionReceipt> BuyCosmeticRequestAndWaitForReceiptAsync(BuyCosmeticFunction buyCosmeticFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyCosmeticFunction, cancellationToken);
+        }
+
+        public Task<string> BuyCosmeticRequestAsync(uint id)
+        {
+            var buyCosmeticFunction = new BuyCosmeticFunction();
+                buyCosmeticFunction.Id = id;
+            
+             return ContractHandler.SendRequestAsync(buyCosmeticFunction);
+        }
+
+        public Task<TransactionReceipt> BuyCosmeticRequestAndWaitForReceiptAsync(uint id, CancellationTokenSource cancellationToken = null)
+        {
+            var buyCosmeticFunction = new BuyCosmeticFunction();
+                buyCosmeticFunction.Id = id;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyCosmeticFunction, cancellationToken);
+        }
+
         public Task<string> BuyScrollRequestAsync(BuyScrollFunction buyScrollFunction)
         {
              return ContractHandler.SendRequestAsync(buyScrollFunction);
+        }
+
+        public Task<string> BuyScrollRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<BuyScrollFunction>();
         }
 
         public Task<TransactionReceipt> BuyScrollRequestAndWaitForReceiptAsync(BuyScrollFunction buyScrollFunction, CancellationTokenSource cancellationToken = null)
@@ -112,20 +143,9 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(buyScrollFunction, cancellationToken);
         }
 
-        public Task<string> BuyScrollRequestAsync(uint item)
+        public Task<TransactionReceipt> BuyScrollRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
         {
-            var buyScrollFunction = new BuyScrollFunction();
-                buyScrollFunction.Item = item;
-            
-             return ContractHandler.SendRequestAsync(buyScrollFunction);
-        }
-
-        public Task<TransactionReceipt> BuyScrollRequestAndWaitForReceiptAsync(uint item, CancellationTokenSource cancellationToken = null)
-        {
-            var buyScrollFunction = new BuyScrollFunction();
-                buyScrollFunction.Item = item;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyScrollFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<BuyScrollFunction>(null, cancellationToken);
         }
 
         public Task<string> CallRequestAsync(CallFunction callFunction)

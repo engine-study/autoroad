@@ -18,7 +18,10 @@ public class MotherUI : SPUIInstance {
     public SpawningUI spawning;
     public SPWindowParent gameplay;
 
-    [Header("store")]
+    [Header("Menu")]
+    public SPWindowParent menu;
+
+    [Header("Store")]
     public StoreUI store;
 
     [Header("Game")]
