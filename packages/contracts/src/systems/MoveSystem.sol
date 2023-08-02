@@ -75,9 +75,6 @@ contract MoveSystem is System {
     // Position.set(stone, x, y);
     Position.deleteRecord(pushed);
 
-    int32 coins = Coinage.get(pushed);
-    Coinage.set(pushed, coins + 5);
-
     bool isPlayer = Player.get(pushed);
     // bool isRock = Rock.get(atDestination[0]);
     if (isPlayer) {
@@ -87,6 +84,10 @@ contract MoveSystem is System {
     } else {
       Road.set(road, uint32(RoadState.Paved), player);
     }
+
+    //reward the player
+    int32 coins = Coinage.get(player);
+    Coinage.set(player, coins + 5);
 
     // int32 stat = Stats.getCompleted(filler);
     // Stats.setCompleted(filler, stat + 1);

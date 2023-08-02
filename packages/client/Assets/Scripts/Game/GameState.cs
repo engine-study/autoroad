@@ -153,6 +153,25 @@ public class GameState : MonoBehaviour {
     }
 
     void UpdateInput() {
+
+        if(SPGlobal.IsDebug) {
+
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
+                (PlayerMUD.LocalPlayer.Controller as ControllerMUD).TeleportMUD(CursorMUD.GridPos, true);
+                return;
+            }
+
+            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0)) {
+                TxManager.Send<SpawnFinishedRoadFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
+                return;
+            }
+
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) {
+                TxManager.Send<SpawnShoveledRoadFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
+                return;
+            }
+        }
+
         if (SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
             if (CursorMUD.Base) {
                 SPCamera.SetFollow(CursorMUD.Base.Root);

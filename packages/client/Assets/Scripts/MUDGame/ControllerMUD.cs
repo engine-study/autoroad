@@ -133,15 +133,6 @@ public class ControllerMUD : SPController {
             playerScript.Animator.IK.SetLook(null);
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
-            moveDest = CursorMUD.GridPos;
-            Debug.Log("TELEPORT");
-            markerPos = moveDest;
-            TeleportMUD(moveDest, true);
-            return;
-        }
-
-
         bool reverseInput = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.LeftShift);
         bool input = !reverseInput && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
 
@@ -191,7 +182,8 @@ public class ControllerMUD : SPController {
 
     public void TeleportMUD(Vector3 position, bool admin = false) {
 
-   
+        moveDest = position;
+
         List<TxUpdate> updates = new List<TxUpdate>();
         SetPositionInstant(position);
         updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)position.x, (int)position.z));

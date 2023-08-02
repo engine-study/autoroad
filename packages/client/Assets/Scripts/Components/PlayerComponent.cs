@@ -95,7 +95,6 @@ public class PlayerComponent : MUDComponent {
             if(health.Health < 1) {
                 //we are dead
                 playerScript.Kill();
-                playerScript.Animator.PlayClip("Die");
                 fx_death.Play();
                 killCoroutine = StartCoroutine(KillCoroutine());
 
@@ -123,13 +122,17 @@ public class PlayerComponent : MUDComponent {
 
     Coroutine killCoroutine;
     IEnumerator KillCoroutine() {
-        yield return new WaitForSeconds(1f);
-        playerScript.Root.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        playerScript.Root.gameObject.SetActive(false);
 
     }
 
     public void Meleed(bool toggle, IActor actor) {
 
+        if(!toggle) {
+            return;
+        }
+        
         if(health.Health < 1) {
             //already dead
             return;
