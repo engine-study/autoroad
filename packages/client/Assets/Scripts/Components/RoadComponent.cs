@@ -59,10 +59,12 @@ public class RoadComponent : MUDComponent {
                 flash.SetTarget(stages[(int)state]);
 
             }
-            
-        }
 
-        ToggleComplete(state == RoadState.Paved);
+            if(UpdateSource == UpdateSource.Onchain) {
+                ToggleComplete(state == RoadState.Paved);
+            }
+
+        }
 
         lastStage = state;
 
@@ -76,7 +78,15 @@ public class RoadComponent : MUDComponent {
                 coin = (Resources.Load("Prefabs/Coin") as GameObject).GetComponent<Coin>();
             }
 
-            // coin.TipCoin()
+            PlayerComponent player = EntityDictionary.GetEntity(filler)?.GetMUDComponent<PlayerComponent>();
+
+            if(player == null) {
+                Debug.LogError("Couldn't find player", this);
+                return;
+            }
+
+            coin.TipCoin(player.transform);
+            
 
         } else {
             if(coin != null) {

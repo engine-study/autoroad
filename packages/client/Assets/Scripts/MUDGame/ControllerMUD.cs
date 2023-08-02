@@ -157,9 +157,7 @@ public class ControllerMUD : SPController {
         // Vector3 moveDest = (Vector3)_destination;
         float moveDistance = 5f;
 
-        moveDest += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward;
-        moveDest *= moveDistance;
-  
+        moveDest += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
   
         minTime = .75f;
 
