@@ -72,9 +72,7 @@ public class RockComponent : MUDComponent {
 
             //our position component was deleted
             //we got pushed into a hole, when we finish moving to the hole, sink into into 
-            if (newInfo.UpdateType == UpdateType.DeleteRecord) {
-                CheckSink();
-            }
+            CheckSink();
         }
 
         lastPos = pos.Pos;
@@ -83,14 +81,8 @@ public class RockComponent : MUDComponent {
 
     void CheckSink() {
 
-        Debug.Log("Check Sink", this);
-
-        // if (!Loaded) {
-        //     return;
-        // }
-
         //we stopped moving, AND we have a deleleted record, lets get pushed into a hole
-        if (posSync.Pos.NetworkInfo.UpdateType == UpdateType.DeleteRecord) {
+        if (posSync.Pos.UpdateType == UpdateType.DeleteRecord && posSync.Pos.UpdateSource == UpdateSource.Onchain) {
             Sink();
         }
     }
@@ -139,15 +131,17 @@ public class RockComponent : MUDComponent {
 
         visualParent.SetActive(false);
 
-        SPCamera.AddShake( Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .2f);
+        SPCamera.AddShake(Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .2f);
+
     }
 
 
-    protected override IMudTable GetTable() {return new RockTable();}
+
+    protected override IMudTable GetTable() { return new RockTable(); }
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RockTable rockUpdate = (RockTable)update;
-        Debug.Log("Rock: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
+        // Debug.Log("Rock: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
         if (rockUpdate == null) {
             Debug.LogError("No rockUpdate", this);

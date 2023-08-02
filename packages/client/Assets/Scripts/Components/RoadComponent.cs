@@ -20,7 +20,6 @@ public class RoadComponent : MUDComponent {
     [Header("Debug")]
     public string creditedPlayer;
     public ChunkComponent parent;
-    public Coin coin;
     public int mileNumber;
     public Vector2Int chunkPos;
 
@@ -45,25 +44,28 @@ public class RoadComponent : MUDComponent {
 
 
         RoadTable roadUpdate = (RoadTable)update;
-        Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
-        
+        // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
+
         creditedPlayer = ((string)roadUpdate.filled).ToLower();
 
         SetState((RoadState)roadUpdate.state);
 
         if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != state)) {
 
+            flash = gameObject.GetComponent<SPFlashShake>() ?? gameObject.AddComponent<SPFlashShake>();
+            flash.SetTarget(stages[(int)state]);
+            
             if (state == RoadState.Shoveled) {
                 fx_spawn.Play();
                 SPAudioSource.Play(transform.position, sfx_digs);
                 
-                if(flash == null) { flash = gameObject.AddComponent<SPFlashShake>();}
-                flash.SetTarget(stages[(int)state]);
-
+           
             }
 
-            if(UpdateSource == UpdateSource.Onchain) {
-                ToggleComplete(state == RoadState.Paved);
+            if(state == RoadState.Paved) {
+                ToggleComplete(true);
+            } else if(lastStage == RoadState.Paved) {
+                ToggleComplete(false);
             }
 
         }
@@ -71,32 +73,40 @@ public class RoadComponent : MUDComponent {
         lastStage = state;
 
     }
-
-    public void ToggleComplete(bool toggle) {
-
+    
+    Coroutine coinsCoroutine = null;
+    void ToggleComplete(bool toggle) {
         if(toggle) {
-
-            PlayerMUD player = EntityDictionary.GetEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
-
-            if(player == null) {
-                Debug.LogError("Couldn't find player", this);
-                return;
-            }
-
-            if(coin == null) {
-                coin = (Instantiate(Resources.Load("Prefabs/Coin")) as GameObject).GetComponent<Coin>();
-                coin.transform.position = transform.position + Vector3.up;
-                coin.transform.rotation = Random.rotation;
-            }
-
-            coin.TipCoin(player.Root);
-
-
+            coinsCoroutine = StartCoroutine(SpawnCoins());
         } else {
-            if(coin != null) {
-                coin.gameObject.SetActive(false);
+            if(coinsCoroutine != null) {
+                StopCoroutine(coinsCoroutine);
             }
         }
+    }
+
+    IEnumerator SpawnCoins() {
+
+        yield return new WaitForSeconds(1f);
+
+        PlayerMUD player = EntityDictionary.GetEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
+
+        if (player == null) {
+            Debug.LogError("Couldn't find player", this);
+            yield break;
+        }
+
+        for (int i = 0; i < 5; i++) {
+
+            Coin coin = (Instantiate(Resources.Load("Prefabs/Coin")) as GameObject).GetComponent<Coin>();
+
+            coin.transform.position = transform.position + Vector3.up;
+            coin.transform.rotation = Random.rotation;
+            coin.TipCoin(player.Root);
+
+            yield return new WaitForSeconds(.1f);
+        }
+
     }
 
     public void SetState(RoadState newState) {

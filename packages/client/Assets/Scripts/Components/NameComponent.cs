@@ -21,7 +21,7 @@ public class NameComponent : MUDComponent {
 
     protected override void PostInit() {
         base.PostInit();
-        Entity.SetName(playerName);
+        Entity.SetName(playerName + (playerName == LocalName ? " (YOU)" : ""));
     }
     
     protected override IMudTable GetTable() {return new NameTable();}
