@@ -52,7 +52,7 @@ contract MoveSystem is System {
 
         //this has now become a fill()
         canPush = false;
-        fill(atPush[0], atDestination[0]);
+        fill(player, atPush[0], atDestination[0], pushX, pushY);
       }
     } else {}
 
@@ -68,16 +68,19 @@ contract MoveSystem is System {
 
   }
 
-  function fill(bytes32 filler, bytes32 roadEntity) private {
+  function fill(bytes32 player, bytes32 stone, bytes32 road, int32 x, int32 y) private {
 
-    Road.set(roadEntity, uint32(RoadState.Paved), filler);
+    Road.set(road, uint32(RoadState.Paved), player);
 
     //ROAD COMPLETE!!!
-    Position.deleteRecord(filler);
-    Position.deleteRecord(roadEntity);
+    Position.deleteRecord(road);
 
-    int32 coins = Coinage.get(filler);
-    Coinage.set(filler, coins + 5);
+    //set the rock to the position and then delete it
+    Position.set(stone, x, y);
+    Position.deleteRecord(stone);
+
+    int32 coins = Coinage.get(stone);
+    Coinage.set(stone, coins + 5);
 
     // int32 stat = Stats.getCompleted(filler);
     // Stats.setCompleted(filler, stat + 1);

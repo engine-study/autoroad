@@ -18,7 +18,7 @@ public class RoadComponent : MUDComponent {
     SPFlashShake flash;
 
     [Header("Debug")]
-    public string filler;
+    public string creditedPlayer;
     public ChunkComponent parent;
     public Coin coin;
     public int mileNumber;
@@ -43,9 +43,11 @@ public class RoadComponent : MUDComponent {
     protected override IMudTable GetTable() {return new RoadTable();}
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
-        RoadTable roadUpdate = (RoadTable)update;
 
-        filler = (string)roadUpdate.filled;
+        RoadTable roadUpdate = (RoadTable)update;
+        Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
+        
+        creditedPlayer = ((string)roadUpdate.filled).ToLower();
 
         SetState((RoadState)roadUpdate.state);
 
@@ -73,20 +75,22 @@ public class RoadComponent : MUDComponent {
     public void ToggleComplete(bool toggle) {
 
         if(toggle) {
-            
-            if(coin == null) {
-                coin = (Resources.Load("Prefabs/Coin") as GameObject).GetComponent<Coin>();
-            }
 
-            PlayerComponent player = EntityDictionary.GetEntity(filler)?.GetMUDComponent<PlayerComponent>();
+            PlayerMUD player = EntityDictionary.GetEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
 
             if(player == null) {
                 Debug.LogError("Couldn't find player", this);
                 return;
             }
 
-            coin.TipCoin(player.transform);
-            
+            if(coin == null) {
+                coin = (Instantiate(Resources.Load("Prefabs/Coin")) as GameObject).GetComponent<Coin>();
+                coin.transform.position = transform.position + Vector3.up;
+                coin.transform.rotation = Random.rotation;
+            }
+
+            coin.TipCoin(player.Root);
+
 
         } else {
             if(coin != null) {

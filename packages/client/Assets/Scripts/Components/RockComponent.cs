@@ -147,6 +147,7 @@ public class RockComponent : MUDComponent {
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RockTable rockUpdate = (RockTable)update;
+        Debug.Log("Rock: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
         if (rockUpdate == null) {
             Debug.LogError("No rockUpdate", this);
