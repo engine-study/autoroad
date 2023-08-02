@@ -24635,7 +24635,7 @@ MonoBehaviour:
   loading: {fileID: 0}
   addSubcanvas: 1
   addRaycaster: 1
-  themeOverride: {fileID: 0}
+  themeOverride: {fileID: 11400000, guid: 188ff0869997b9847855c7c4e5f7d46c, type: 2}
   coins: {fileID: 170059577}
   scrolls: {fileID: 15526231}
   storeButton: {fileID: 1726724660}
@@ -44368,6 +44368,10 @@ MonoBehaviour:
   addSubcanvas: 1
   addRaycaster: 1
   themeOverride: {fileID: 0}
+  sfx_buy:
+  - {fileID: 8300000, guid: 617c9637282a1124ca6d692f0ba34212, type: 3}
+  - {fileID: 8300000, guid: ca46fb1bcd183d54d849c28c3d5a48c1, type: 3}
+  - {fileID: 8300000, guid: 34d72f50fda2ac44996773ab4d222c2e, type: 3}
 --- !u!114 &1553532336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64261,7 +64265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 488818311025724108, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: debug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6750066157417205809, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: m_Name
@@ -65491,7 +65495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4399858301609031612, guid: c39924b612a930f4b9498a025b672fde, type: 3}
       propertyPath: m_text
-      value: '5
+      value: '05
 
 '
       objectReference: {fileID: 0}

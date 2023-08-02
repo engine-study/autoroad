@@ -27,6 +27,15 @@ namespace IWorld.ContractDefinition
 
     }
 
+    public partial class AddCoinsAdminFunction : AddCoinsAdminFunctionBase { }
+
+    [Function("addCoinsAdmin")]
+    public class AddCoinsAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "amount", 1)]
+        public virtual int Amount { get; set; }
+    }
+
     public partial class AttackFunction : AttackFunctionBase { }
 
     [Function("attack")]
@@ -1014,6 +1023,8 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
 
 
 

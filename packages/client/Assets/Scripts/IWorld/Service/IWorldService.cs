@@ -48,6 +48,32 @@ namespace IWorld.Service
             ContractHandler = web3.Eth.GetContractHandler(contractAddress);
         }
 
+        public Task<string> AddCoinsAdminRequestAsync(AddCoinsAdminFunction addCoinsAdminFunction)
+        {
+             return ContractHandler.SendRequestAsync(addCoinsAdminFunction);
+        }
+
+        public Task<TransactionReceipt> AddCoinsAdminRequestAndWaitForReceiptAsync(AddCoinsAdminFunction addCoinsAdminFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(addCoinsAdminFunction, cancellationToken);
+        }
+
+        public Task<string> AddCoinsAdminRequestAsync(int amount)
+        {
+            var addCoinsAdminFunction = new AddCoinsAdminFunction();
+                addCoinsAdminFunction.Amount = amount;
+            
+             return ContractHandler.SendRequestAsync(addCoinsAdminFunction);
+        }
+
+        public Task<TransactionReceipt> AddCoinsAdminRequestAndWaitForReceiptAsync(int amount, CancellationTokenSource cancellationToken = null)
+        {
+            var addCoinsAdminFunction = new AddCoinsAdminFunction();
+                addCoinsAdminFunction.Amount = amount;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(addCoinsAdminFunction, cancellationToken);
+        }
+
         public Task<string> AttackRequestAsync(AttackFunction attackFunction)
         {
              return ContractHandler.SendRequestAsync(attackFunction);

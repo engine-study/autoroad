@@ -146,7 +146,7 @@ public class ControllerMUD : SPController {
 
 
         bool reverseInput = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.LeftShift);
-        bool input = !reverseInput && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
+        bool input = !reverseInput && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
 
         if (!input)
             return;
@@ -156,22 +156,11 @@ public class ControllerMUD : SPController {
 
         // Vector3 moveDest = (Vector3)_destination;
         float moveDistance = 5f;
-        if (Input.GetKey(KeyCode.W)) {
-            moveDest += Vector3.forward * moveDistance;
-        } else if (Input.GetKey(KeyCode.A)) {
-            moveDest += Vector3.left * moveDistance;
-        } else if (Input.GetKey(KeyCode.S)) {
-            moveDest += Vector3.back * moveDistance;
-        } else if (Input.GetKey(KeyCode.D)) {
-            moveDest += Vector3.right * moveDistance;
-        }
 
-
-
-        moveDest.x = Mathf.Round(moveDest.x);
-        moveDest.y = 0f;
-        moveDest.z = Mathf.Round(moveDest.z);
-
+        moveDest += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward;
+        moveDest *= moveDistance;
+  
+  
         minTime = .75f;
 
         Vector3 direction = (moveDest - playerTransform.position).normalized;

@@ -10,13 +10,17 @@ import { GameEvent } from "../codegen/Tables.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
-
 contract ItemSystem is System {
-
   function buy(uint32 item) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
 
     GameEvent.emitEphemeral(player, "buy");
+  }
+
+  function addCoinsAdmin(int32 amount) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    int32 coins = Coinage.get(player);
+    Coinage.set(player, coins + amount);
   }
 
   function sendCoins(int32 amount) public {
@@ -33,11 +37,9 @@ contract ItemSystem is System {
 
     uint32 scrolls = Scroll.get(player);
     Scroll.set(player, scrolls + 1);
-
   }
 
   function buyCosmetic(uint32 id) public {
-    
     bytes32 player = addressToEntityKey(address(_msgSender()));
     int32 coins = Coinage.get(player);
 
@@ -46,15 +48,18 @@ contract ItemSystem is System {
     int32 price = 0;
 
     //TODO instead have this read from some preset array
-    if(id == 0) {price = 10;} //stick
-    if(id == 1) {price = 25;} //robe
+    if (id == 0) {
+      price = 10;
+    } //stick
+    if (id == 1) {
+      price = 25;
+    } //robe
 
     require(price <= 0, "no item found");
     require(coins >= price, "need more coins");
 
     withdraw(player, coins, price);
     addToInventory(player, id);
-
   }
 
   function withdraw(bytes32 player, int32 coins, int32 amount) private {
@@ -63,17 +68,17 @@ contract ItemSystem is System {
   }
 
   function addToInventory(bytes32 player, uint32 id) private {
-    if(id == 0) { Stick.set(player, true);}
-    if(id == 1) { Robe.set(player, true);}
+    if (id == 0) {
+      Stick.set(player, true);
+    }
+    if (id == 1) {
+      Robe.set(player, true);
+    }
   }
 
-  function manifest(uint32 item) public returns(bool) {
-
-    if(item == 0) {
-        
-    }
+  function manifest(uint32 item) public returns (bool) {
+    if (item == 0) {}
 
     return false;
   }
-
 }

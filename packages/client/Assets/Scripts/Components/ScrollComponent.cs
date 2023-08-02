@@ -9,6 +9,8 @@ public class ScrollComponent : MUDComponent {
     public static int LocalScrolls;
     public static System.Action OnLocalUpdate;
 
+    // public AudioClip sfx_gotScroll;
+
     public int scrolls;
 
     protected override IMudTable GetTable() {return new ScrollTable();}

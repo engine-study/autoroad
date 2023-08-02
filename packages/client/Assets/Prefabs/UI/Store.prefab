@@ -70,12 +70,20 @@ PrefabInstance:
       objectReference: {fileID: -2767515488454393684, guid: e410837ce8a9e2b4d8771294d67582c5, type: 2}
     - target: {fileID: 6670800578877681329, guid: be74fee8ca86c834fa9669bd0af11f9b, type: 3}
       propertyPath: m_HorizontalAlignment
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6670800578877681329, guid: be74fee8ca86c834fa9669bd0af11f9b, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6834917320607550621, guid: be74fee8ca86c834fa9669bd0af11f9b, type: 3}
+      propertyPath: invert
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834917320607550621, guid: be74fee8ca86c834fa9669bd0af11f9b, type: 3}
+      propertyPath: customTheme
+      value: 
+      objectReference: {fileID: 11400000, guid: af4b9fab3ca50df4dbc2fecadc3e48e2, type: 2}
     - target: {fileID: 7806112309199744526, guid: be74fee8ca86c834fa9669bd0af11f9b, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -366,7 +374,9 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7944839481623435843, guid: 0e03588cede4e874f8ba9a12639c07b6, type: 3}
+    - {fileID: 6842868497604520558, guid: 0e03588cede4e874f8ba9a12639c07b6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6687807738089846992, guid: 0e03588cede4e874f8ba9a12639c07b6, type: 3}

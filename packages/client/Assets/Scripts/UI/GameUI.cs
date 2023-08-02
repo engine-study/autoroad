@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
+using mud.Unity;
+using mud.Client;
+using IWorld.ContractDefinition;
 public class GameUI : SPWindowParent
 {
 
@@ -17,6 +19,8 @@ public class GameUI : SPWindowParent
         base.Init();
 
         UpdateCoins();
+        UpdateScrolls();
+
         CoinComponent.OnLocalUpdate += UpdateCoins;
         ScrollComponent.OnLocalUpdate += UpdateScrolls;
     }
@@ -30,11 +34,20 @@ public class GameUI : SPWindowParent
     }
 
     void UpdateCoins() {
-        coins.UpdateField(CoinComponent.LocalCoins.ToString());
+        coins.UpdateField(CoinComponent.LocalCoins.ToString("00"));
     }
 
     void UpdateScrolls() {
-        scrolls.UpdateField(ScrollComponent.LocalScrolls.ToString());
+        scrolls.UpdateField(ScrollComponent.LocalScrolls.ToString("00"));
+    }
+
+
+    public void Teleport() {
+
+    }
+
+    public void SendCoin() {
+
     }
 
     public void ToggleStore() {
@@ -45,5 +58,11 @@ public class GameUI : SPWindowParent
         MotherUI.Mother.menu.ToggleWindow();
     }
 
+
+    void Update() {
+        if(Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKey(KeyCode.D)) {
+            TxManager.Send<AddCoinsAdminFunction>(25);
+        }
+    }
     
 }
