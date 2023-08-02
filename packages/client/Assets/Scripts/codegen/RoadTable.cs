@@ -23,7 +23,8 @@ namespace DefaultNamespace
             return ID;
         }
 
-        public ulong? value;
+        public ulong? state;
+        public string? filled;
 
         public override Type TableType()
         {
@@ -37,7 +38,9 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (ulong)(int)functionParameters[0];
+            state = (ulong)(int)functionParameters[0];
+
+            filled = (string)functionParameters[1];
         }
 
         public override bool SetValues(IEnumerable<Property> result)
@@ -50,9 +53,14 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
-                    case "value":
-                        var valueValue = (ulong)value;
-                        value = valueValue;
+                    case "state":
+                        var stateValue = (ulong)value;
+                        state = stateValue;
+                        hasValues = true;
+                        break;
+                    case "filled":
+                        var filledValue = (string)value;
+                        filled = filledValue;
                         hasValues = true;
                         break;
                 }
@@ -77,9 +85,14 @@ namespace DefaultNamespace
 
                 switch (attribute)
                 {
-                    case "value":
-                        var valueValue = (ulong)value;
-                        roadTable.value = valueValue;
+                    case "state":
+                        var stateValue = (ulong)value;
+                        roadTable.state = stateValue;
+                        hasValues = true;
+                        break;
+                    case "filled":
+                        var filledValue = (string)value;
+                        roadTable.filled = filledValue;
                         hasValues = true;
                         break;
                 }
@@ -116,14 +129,17 @@ namespace DefaultNamespace
                 {
                     current = new RoadTable
                     {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
+                        state = value.Item1.TryGetValue("state", out var stateVal)
+                            ? (ulong)stateVal
+                            : default,
+                        filled = value.Item1.TryGetValue("filled", out var filledVal)
+                            ? (string)filledVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new RoadTable { value = null, };
+                    current = new RoadTable { state = null, filled = null, };
                 }
             }
 
@@ -133,14 +149,17 @@ namespace DefaultNamespace
                 {
                     previous = new RoadTable
                     {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
+                        state = value.Item2.TryGetValue("state", out var stateVal)
+                            ? (ulong)stateVal
+                            : default,
+                        filled = value.Item2.TryGetValue("filled", out var filledVal)
+                            ? (string)filledVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new RoadTable { value = null, };
+                    previous = new RoadTable { state = null, filled = null, };
                 }
             }
 

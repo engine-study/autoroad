@@ -15,7 +15,7 @@ public class StoreUI : SPWindowParent
     }    
 
     public void BuyItem(int itemID) {
-        TxManager.Send<BuyCosmeticFunction>(itemID);
+        TxManager.Send<BuyCosmeticFunction>(System.Convert.ToUInt32(itemID));
         BuyFX();
     }
 

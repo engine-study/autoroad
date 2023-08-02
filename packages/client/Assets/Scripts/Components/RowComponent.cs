@@ -22,7 +22,7 @@ public class RowComponent : MUDComponent
 
     public void SetComplete() {
         for(int i = 0; i < roadFiller.Length; i++) {
-            roadFiller[i].SetStage(RoadState.Paved);
+            roadFiller[i].SetState(RoadState.Paved);
         }
 
         complete.SetActive(true);

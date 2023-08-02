@@ -146,13 +146,13 @@ contract RoadSystem is System {
   function spawnFinishedRoad(int32 x, int32 y) private {
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
     Position.set(roadEntity, x, y);
-    Road.set(roadEntity, uint32(RoadState.Paved));
+    Road.set(roadEntity, uint32(RoadState.Paved), roadEntity);
     // Position.deleteRecord(roadEntity);
   }
 
   function spawnShoveledRoad(int32 x, int32 y) private {
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
     Position.set(roadEntity, x, y);
-    Road.set(roadEntity, uint32(RoadState.Shoveled));
+    Road.set(roadEntity, uint32(RoadState.Shoveled), roadEntity);
   }
 }

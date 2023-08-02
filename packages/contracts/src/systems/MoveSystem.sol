@@ -45,7 +45,7 @@ contract MoveSystem is System {
       bool obstruction = Move.get(atDestination[0]) != 0;
       require(obstruction == false, "pushing into an occupied spot");
 
-      uint32 roadInt = Road.get(atDestination[0]);
+      (uint32 roadInt,) = Road.get(atDestination[0]);
       //there is a road here
       if (roadInt != 0) {
         require(roadInt == uint32(RoadState.Shoveled), "Road already full");
@@ -68,20 +68,13 @@ contract MoveSystem is System {
 
   }
 
-  function fill(bytes32 filler, bytes32 hole) private {
-    uint32 roadInt = Road.get(hole);
+  function fill(bytes32 filler, bytes32 roadEntity) private {
 
-    // roadInt++;
-    //go directly to finished road for now
-    roadInt = uint32(RoadState.Paved);
-    Road.set(hole, roadInt);
+    Road.set(roadEntity, uint32(RoadState.Paved), filler);
 
     //ROAD COMPLETE!!!
-    if (roadInt == uint32(RoadState.Paved)) {
-      // Pavement.set(keccak256(abi.encode("Pavement", x, y)), true);
-      Position.deleteRecord(filler);
-      Position.deleteRecord(hole);
-    }
+    Position.deleteRecord(filler);
+    Position.deleteRecord(roadEntity);
 
     int32 coins = Coinage.get(filler);
     Coinage.set(filler, coins + 5);
@@ -213,7 +206,7 @@ contract MoveSystem is System {
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
 
-    Road.set(roadEntity, uint32(RoadState.Shoveled));
+    Road.set(roadEntity, uint32(RoadState.Shoveled), player);
     Position.set(roadEntity, x, y);
 
     // int32 stat = Stats.getShoveled(player);

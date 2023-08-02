@@ -6,9 +6,10 @@ using DefaultNamespace;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 
-public enum RoadState { None, Shoveled, Filled, Paved }
+public enum RoadState { None,Shoveled,Statumen,Rudus,Nucleas,Paved }
 
 public class RoadComponent : MUDComponent {
+
     [Header("Road")]
     public RoadState state;
     public GameObject[] stages;
@@ -17,6 +18,7 @@ public class RoadComponent : MUDComponent {
     SPFlashShake flash;
 
     [Header("Debug")]
+    public string filler;
     public ChunkComponent parent;
     public Coin coin;
     public int mileNumber;
@@ -43,6 +45,9 @@ public class RoadComponent : MUDComponent {
 
         RoadTable roadUpdate = (RoadTable)update;
 
+        filler = (string)roadUpdate.filled;
+
+        SetState((RoadState)roadUpdate.state);
 
         if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != state)) {
 
@@ -53,13 +58,9 @@ public class RoadComponent : MUDComponent {
                 if(flash == null) { flash = gameObject.AddComponent<SPFlashShake>();}
                 flash.SetTarget(stages[(int)state]);
 
-            } else if (state == RoadState.Filled) {
-                // fx_fill.Play();
-                // audio.PlaySound(sfx_fills);
             }
+            
         }
-
-        SetStage((RoadState)roadUpdate.value);
 
         ToggleComplete(state == RoadState.Paved);
 
@@ -68,14 +69,14 @@ public class RoadComponent : MUDComponent {
     }
 
     public void ToggleComplete(bool toggle) {
+
         if(toggle) {
             
             if(coin == null) {
                 coin = (Resources.Load("Prefabs/Coin") as GameObject).GetComponent<Coin>();
             }
 
-            
-
+            // coin.TipCoin()
 
         } else {
             if(coin != null) {
@@ -84,7 +85,7 @@ public class RoadComponent : MUDComponent {
         }
     }
 
-    public void SetStage(RoadState newState) {
+    public void SetState(RoadState newState) {
         
         state = newState;
 

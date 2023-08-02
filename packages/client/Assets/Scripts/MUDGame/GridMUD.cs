@@ -48,12 +48,18 @@ public class GridMUD : MonoBehaviour {
 
         }
     }
+    
     void UpdatePosition(MUDComponent c, UpdateInfo info) {
 
         PositionComponent component = c as PositionComponent;
 
         if (component == null) {
             Debug.LogError("Not a position", this);
+            return;
+        }
+
+        //only listen to onchain updates
+        if(info.UpdateSource != UpdateSource.Onchain) {
             return;
         }
 

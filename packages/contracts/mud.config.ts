@@ -152,7 +152,17 @@ export default mudConfig({
 
     //unique objects
     Rock: "uint32",
-    Road: "uint32",
+    
+
+    Road: {
+      name: "Road",
+      dataStruct: false,
+      schema: {
+        state: "uint32",
+        filled: "bytes32",
+      },
+    },
+    
     Carriage: "bool",
 
     Tree: "bool",

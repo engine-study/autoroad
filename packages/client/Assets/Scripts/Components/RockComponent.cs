@@ -127,7 +127,7 @@ public class RockComponent : MUDComponent {
         float lerp = 0f;
 
         while (lerp < 1f) {
-            lerp += Time.deltaTime * 1f;
+            lerp += Time.deltaTime * 1.5f;
             visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * 1f, lerp);
             yield return null;
         }

@@ -24,7 +24,7 @@ public class InteractShovel : SPInteract
         string entity = MUDHelper.Keccak256("Road", x,y);
         List<TxUpdate> updates = new List<TxUpdate>();
         updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
-        updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1));
+        updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1, NetworkManager.LocalAddress));
         TxManager.Send<ShovelFunction>(updates, System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
     }
 
