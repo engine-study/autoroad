@@ -52,16 +52,16 @@ public class GameUI : SPWindowParent
     }
 
     public void ToggleStore() {
-        MotherUI.Mother.store.ToggleWindow();
+        MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.store);
     }
 
     public void ToggleMenu() {
-        MotherUI.Mother.menu.ToggleWindow();
+        MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.menu);
     }
 
 
     public void ToggleDebug() {
-        MotherUI.Mother.debug.ToggleWindow();
+        MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.debug);
     }
 
 

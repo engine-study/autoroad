@@ -30,15 +30,22 @@ public class MotherUI : SPUIInstance {
     public AudioClip sfx_spawn;
     public AudioClip sfx_start;
 
+    List<SPWindowParent> gameMenus = new List<SPWindowParent>();
+
     protected override void Awake() {
         base.Awake();
 
         Mother = this;
 
         gameplay.ToggleWindowClose();
-        store.ToggleWindowClose();
-        debug.ToggleWindowClose();
-        menu.ToggleWindowClose();
+
+        gameMenus.Add(store);
+        gameMenus.Add(debug);
+        gameMenus.Add(menu);
+
+        foreach(SPWindowParent w in gameMenus) {
+            w.ToggleWindowClose();
+        }
 
         ToggleLoading(true);
         TogglePlayerCreation(false);
@@ -88,7 +95,15 @@ public class MotherUI : SPUIInstance {
     public static void TogglePlayerSpawning(bool toggle) {
         Mother.spawning.ToggleWindow(toggle);
     }
-
+    
+    public void ToggleMenuWindow(SPWindowParent open) {
+        open.ToggleWindow();
+        foreach(SPWindowParent w in gameMenus) {
+            if(w != open) {
+                w.ToggleWindowClose();
+            }
+        }
+    }
 
     void SpawnPlayer() {
 

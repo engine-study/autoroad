@@ -109,7 +109,7 @@ public class PlayerComponent : MUDComponent {
         }
 
         if(IsLocalPlayer) {
-            MotherUI.TogglePlayerSpawning(health.health <= 0);
+            MotherUI.TogglePlayerSpawning(health.health <= 0 || health.UpdateType == UpdateType.DeleteRecord);
         }
 
         lastHealth = health.health;

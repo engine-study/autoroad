@@ -391,10 +391,12 @@ contract MoveSystem is System {
   function destroyPlayerAdmin() public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
 
+    require(Player.get(entity), "already destroyed");
+
     Player.deleteRecord(entity);
+    Position.deleteRecord(entity);
     Health.deleteRecord(entity);
     Move.deleteRecord(entity);
-    Position.deleteRecord(entity);
   }
 
 

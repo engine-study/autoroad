@@ -55,7 +55,7 @@ contract ItemSystem is System {
       price = 25;
     } //robe
 
-    require(price <= 0, "no item found");
+    require(price > 0, "no item found");
     require(coins >= price, "need more coins");
 
     withdraw(player, coins, price);
