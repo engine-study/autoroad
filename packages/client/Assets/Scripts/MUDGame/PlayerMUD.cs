@@ -55,7 +55,13 @@ public class PlayerMUD : SPPlayer
             SetLocalPlayer(this);
         }
 
+        if(healthComponent.health < 0) {
+            gameObject.SetActive(false);
+        }
+
     }
+
+
 
     protected override void UpdateInput() {
         base.UpdateInput();

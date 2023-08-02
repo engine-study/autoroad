@@ -15,9 +15,9 @@ contract MapSystem is System {
   }
 
   function onWorld(int32 x, int32 y) public returns (bool) {
-    (,,int32 up, int32 down ) = Bounds.get();
+    (,,int32 up,) = Bounds.get();
     (, int32 spawnWidth) = MapConfig.get();
-    return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up && y >= down;
+    return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up;
   }
 
   function createMap(address worldAddress) public {

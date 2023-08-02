@@ -137,10 +137,7 @@ public class ControllerMUD : SPController {
             moveDest = CursorMUD.GridPos;
             Debug.Log("TELEPORT");
             markerPos = moveDest;
-            List<TxUpdate> updates = new List<TxUpdate>();
-            SetPositionInstant(moveDest);
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
-            TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+            TeleportMUD(moveDest, true);
             return;
         }
 
@@ -192,6 +189,18 @@ public class ControllerMUD : SPController {
         markerPos = moveDest;
     }
 
+    public void TeleportMUD(Vector3 position, bool admin = false) {
+
+   
+        List<TxUpdate> updates = new List<TxUpdate>();
+        SetPositionInstant(position);
+        updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)position.x, (int)position.z));
+        if(admin) {
+            TxManager.Send<TeleportAdminFunction>(updates, System.Convert.ToInt32(position.x), System.Convert.ToInt32(position.z));
+        } else {
+            TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(position.x), System.Convert.ToInt32(position.z));
+        }
+    }
 
     public const float MOVE_SPEED = 1.5f;
 

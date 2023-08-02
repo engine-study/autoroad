@@ -6,6 +6,7 @@ import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds } from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Tree, Health, Carriage } from "../codegen/Tables.sol";
 import { MoveSystem } from "./MoveSystem.sol";
+import { SpawnSystem } from "./SpawnSystem.sol";
 import { ChunkTableId } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";

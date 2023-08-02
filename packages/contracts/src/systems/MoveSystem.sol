@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage } from "../codegen/Tables.sol";
+import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -12,7 +12,6 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 import { MapSystem } from "../systems/MapSystem.sol";
 import { RoadSystem } from "../systems/RoadSystem.sol";
-import { randomCoord } from "../utility/random.sol";
 
 contract MoveSystem is System {
   //push
@@ -89,18 +88,6 @@ contract MoveSystem is System {
 
   function canDoStuff(bytes32 player) private returns (bool) {
     require(Health.get(player) > 0, "we dead");
-    return true;
-  }
-  
-  function canInteractEmpty(bytes32 player, int32 x, int32 y, int32 emptyX, int32 emptyY, bytes32[] memory entities, uint distance) private returns (bool) {
-    require(entities.length == 0, "not empty");
-
-    PositionData memory playerPos = Position.get(player);
-    PositionData memory entityPos = PositionData(x,y);
-
-    // checks that positions are where they should be, also that the entities actually have positions
-    require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
-
     return true;
   }
 
@@ -214,8 +201,6 @@ contract MoveSystem is System {
     require(world.onRoad(x, y), "off road");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-    // require(canInteractEmpty(player, x, y, atPosition, 1),"bad interact");
-
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
@@ -276,7 +261,29 @@ contract MoveSystem is System {
   function teleport(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player),"hmm");        
+
+    IWorld world = IWorld(_world());
+    require(world.onWorld(x, y), "offworld");     
     
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    require(atPosition.length < 1, "occupied");
+
+    //remove scrolls
+    uint32 scrolls = Scroll.get(player);
+    require(scrolls > uint32(0), "not enough scrolls");
+    Scroll.set(player, scrolls - 1);
+
+    //set position
+    Position.set(player, PositionData(x, y));
+  }
+
+  function teleportAdmin(int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player),"hmm");      
+
+    IWorld world = IWorld(_world());
+    require(world.onWorld(x, y), "offworld");     
+
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "occupied");
     Position.set(player, PositionData(x, y));
@@ -324,81 +331,6 @@ contract MoveSystem is System {
     // Stats.setMoves(player, stat + 1);
 
   }
-
-  function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
-    bytes32 entity = addressToEntityKey(address(_msgSender()));
-    (bool hasName,,,) = Name.get(entity);
-    require(!hasName, "already has name");
-    require(firstName < 36, "first name");
-    require(middleName < 1025, "middle name");
-    require(lastName < 1734, "last name");
-    require(!Player.get(entity), "already spawned");
-    Name.set(entity, true, firstName, middleName, lastName);
-
-  }
-
-  function spawn(int32 x, int32 y) public {
-
-    bytes32 entity = addressToEntityKey(address(_msgSender()));
-    bool playerExists = Player.get(entity);
-
-    if(playerExists) {
-      require(Health.get(entity) == -1, "not dead, can't respawn");
-    }
-
-    (,,int32 up, int32 down ) = Bounds.get();
-    (int32 playWidth, int32 spawnWidth) = MapConfig.get();
-
-    require(x > playWidth && x <= spawnWidth, "x outside spawn");
-    require(y <= up && y >= down, "y outside of spawn");
-
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-    require(atPosition.length < 1, "occupied");
-
-    spawnPlayer(x, y, entity, false);
-  }
-
-  function spawnBotAdmin(int32 x, int32 y, bytes32 entity) public {
-    Name.set(entity, true, uint32(randomCoord(0, 35, x,y)), uint32(randomCoord(0, 1024, x,y+1)), uint32(randomCoord(0, 1733, x,y+2) ));  
-    spawnPlayer(x,y,entity, true);
-  }
-
-  function spawnPlayer(int32 x, int32 y, bytes32 entity, bool isBot) private {
-
-    bool playerExists = Player.get(entity);
-
-    if(!playerExists) {
-      Player.set(entity, true);
-      Coinage.set(entity, 0);
-
-      (int32 miles, int32 players) = GameState.get();
-      Stats.set(entity, miles, 0, 0, 0, 0, 0, 0, 0);
-
-      if(!isBot) {
-        GameState.set(miles, players+1);
-        // GameState.setPlayerCount(playerCount + 1);
-      }
-
-    }
-
-    Health.set(entity, 3);
-    Move.set(entity, uint32(MoveType.Push));
-    Position.set(entity, x, y);
-
-
-  }
-
-  function destroyPlayerAdmin() public {
-    bytes32 entity = addressToEntityKey(address(_msgSender()));
-
-    require(Player.get(entity), "already destroyed");
-
-    Player.deleteRecord(entity);
-    Position.deleteRecord(entity);
-    Health.deleteRecord(entity);
-    Move.deleteRecord(entity);
-  }
-
 
   function abs(int x) private pure returns (int) {
     return x >= 0 ? x : -x;
