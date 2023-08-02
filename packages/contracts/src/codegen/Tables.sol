@@ -17,6 +17,7 @@ import { Pickaxe, PickaxeTableId } from "./tables/Pickaxe.sol";
 import { Bones, BonesTableId } from "./tables/Bones.sol";
 import { Stick, StickTableId } from "./tables/Stick.sol";
 import { Robe, RobeTableId } from "./tables/Robe.sol";
+import { Head, HeadTableId } from "./tables/Head.sol";
 import { Scroll, ScrollTableId } from "./tables/Scroll.sol";
 import { Coinage, CoinageTableId } from "./tables/Coinage.sol";
 import { Position, PositionData, PositionTableId } from "./tables/Position.sol";

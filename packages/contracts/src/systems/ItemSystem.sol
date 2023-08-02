@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Coinage, Scroll, Stick, Robe } from "../codegen/Tables.sol";
+import { Coinage, Scroll, Stick, Robe, Head } from "../codegen/Tables.sol";
 import { GameEvent } from "../codegen/Tables.sol";
 // import { Item } from "../codegen/Tables.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -54,6 +54,9 @@ contract ItemSystem is System {
     if (id == 1) {
       price = 25;
     } //robe
+    if (id == 2) {
+      price = 99;
+    } //robe
 
     require(price > 0, "no item found");
     require(coins >= price, "need more coins");
@@ -72,7 +75,10 @@ contract ItemSystem is System {
       Stick.set(player, true);
     }
     if (id == 1) {
-      Robe.set(player, true);
+      Robe.set(player, 0);
+    }
+    if (id == 2) {
+      Head.set(player, 0);
     }
   }
 

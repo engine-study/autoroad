@@ -9,11 +9,15 @@ public class PlayerMUD : SPPlayer
     public PositionComponent Position{get{return positionComponent;}}
 
     [Header("MUD")]
-    [SerializeField] protected PlayerComponent playerComponent;
+    [SerializeField] private PlayerComponent playerComponent;
+    [SerializeField] public Cosmetic bodyCosmetic;
+    [SerializeField] public Cosmetic headCosmetic;
+    [SerializeField] public Cosmetic capeCosmetic;
+    [SerializeField] public Cosmetic backpackCosmetic;
 
     [Header("Debug")]
-    [SerializeField] protected PositionComponent positionComponent;
-    [SerializeField] protected HealthComponent healthComponent;
+    [SerializeField] private PositionComponent positionComponent;
+    [SerializeField] private HealthComponent healthComponent;
 
     public override void Init() {
         base.Init();

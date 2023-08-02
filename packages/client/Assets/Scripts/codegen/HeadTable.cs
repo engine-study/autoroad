@@ -12,11 +12,11 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    public class RobeTableUpdate : TypedRecordUpdate<Tuple<RobeTable?, RobeTable?>> { }
+    public class HeadTableUpdate : TypedRecordUpdate<Tuple<HeadTable?, HeadTable?>> { }
 
-    public class RobeTable : IMudTable
+    public class HeadTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Robe");
+        public readonly static TableId ID = new("", "Head");
 
         public override TableId GetTableId()
         {
@@ -27,12 +27,12 @@ namespace DefaultNamespace
 
         public override Type TableType()
         {
-            return typeof(RobeTable);
+            return typeof(HeadTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(RobeTableUpdate);
+            return typeof(HeadTableUpdate);
         }
 
         public override void SetValues(params object[] functionParameters)
@@ -67,7 +67,7 @@ namespace DefaultNamespace
                 .Find("?value", "?attribute")
                 .Where(TableId.ToString(), key, "?attribute", "?value");
             var result = NetworkManager.Instance.ds.Query(query);
-            var robeTable = new RobeTable();
+            var headTable = new HeadTable();
             var hasValues = false;
 
             foreach (var record in result)
@@ -79,24 +79,24 @@ namespace DefaultNamespace
                 {
                     case "value":
                         var valueValue = (long)value;
-                        robeTable.value = valueValue;
+                        headTable.value = valueValue;
                         hasValues = true;
                         break;
                 }
             }
 
-            return hasValues ? robeTable : null;
+            return hasValues ? headTable : null;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
-            RobeTableUpdate update = (RobeTableUpdate)tableUpdate;
+            HeadTableUpdate update = (HeadTableUpdate)tableUpdate;
             return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
         {
-            return new RobeTableUpdate
+            return new HeadTableUpdate
             {
                 TableId = newUpdate.TableId,
                 Key = newUpdate.Key,
@@ -105,16 +105,16 @@ namespace DefaultNamespace
             };
         }
 
-        public static Tuple<RobeTable?, RobeTable?> MapUpdates(Tuple<Property?, Property?> value)
+        public static Tuple<HeadTable?, HeadTable?> MapUpdates(Tuple<Property?, Property?> value)
         {
-            RobeTable? current = null;
-            RobeTable? previous = null;
+            HeadTable? current = null;
+            HeadTable? previous = null;
 
             if (value.Item1 != null)
             {
                 try
                 {
-                    current = new RobeTable
+                    current = new HeadTable
                     {
                         value = value.Item1.TryGetValue("value", out var valueVal)
                             ? (long)valueVal
@@ -123,7 +123,7 @@ namespace DefaultNamespace
                 }
                 catch (InvalidCastException)
                 {
-                    current = new RobeTable { value = null, };
+                    current = new HeadTable { value = null, };
                 }
             }
 
@@ -131,7 +131,7 @@ namespace DefaultNamespace
             {
                 try
                 {
-                    previous = new RobeTable
+                    previous = new HeadTable
                     {
                         value = value.Item2.TryGetValue("value", out var valueVal)
                             ? (long)valueVal
@@ -140,11 +140,11 @@ namespace DefaultNamespace
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new RobeTable { value = null, };
+                    previous = new HeadTable { value = null, };
                 }
             }
 
-            return new Tuple<RobeTable?, RobeTable?>(current, previous);
+            return new Tuple<HeadTable?, HeadTable?>(current, previous);
         }
     }
 }

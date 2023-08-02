@@ -127,7 +127,8 @@ export default mudConfig({
     Pickaxe: "bool",
     Bones: "bool",
     Stick : "bool",
-    Robe : "bool",
+    Robe : "int32",
+    Head : "int32",
     Scroll : "uint32",
     Coinage : "int32",
 

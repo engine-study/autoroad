@@ -10,7 +10,7 @@ using System.Collections;
 
 public class PlayerComponent : MUDComponent {
     public bool IsLocalPlayer { get { return isLocalPlayer; } }
-
+    public PlayerMUD PlayerScript {get{return playerScript;}}
     [Header("Player")]
     [SerializeField] bool spawned;
     [SerializeField] bool isLocalPlayer;
