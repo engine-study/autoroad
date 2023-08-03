@@ -114,6 +114,7 @@ public class PlayerComponent : MUDComponent {
         }
 
         if(IsLocalPlayer) {
+            Debug.Log("Died, showing Spawn UI", this);
             MotherUI.TogglePlayerSpawning(health.Health <= 0 || health.UpdateType == UpdateType.DeleteRecord);
         }
 
@@ -132,7 +133,7 @@ public class PlayerComponent : MUDComponent {
         if(!toggle) {
             return;
         }
-        
+
         if(health.Health < 1) {
             //already dead
             return;

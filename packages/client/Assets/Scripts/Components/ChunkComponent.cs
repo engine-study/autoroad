@@ -44,6 +44,8 @@ public class ChunkComponent : MUDComponent {
         completed = table.completed != null ? (bool)table.completed : completed;
         mileNumber = table.mile != null ? (int)table.mile : mileNumber;
 
+        Entity.SetName("MILE - " + mileNumber);
+
         // Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
         // Debug.Log("MileTest " + table.mileNumber, this);
         // Debug.Log("Mile " + mileNumber, this);
@@ -53,6 +55,7 @@ public class ChunkComponent : MUDComponent {
         if (newInfo.UpdateType == UpdateType.SetRecord) {
             CreateChunk();
         }
+
 
     }
 

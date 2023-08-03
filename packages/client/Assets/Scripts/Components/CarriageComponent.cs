@@ -9,5 +9,7 @@ public class CarriageComponent : MUDComponent
     protected override IMudTable GetTable() {return new CarriageTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
         // throw new System.NotImplementedException();
+
+        Entity.SetName("Carriage");
     }
 }

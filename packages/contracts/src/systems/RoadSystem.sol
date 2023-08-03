@@ -78,9 +78,10 @@ contract RoadSystem is System {
     (int32 playArea, int32 spawnArea) = MapConfig.get();
     (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
 
+    //the start of the curret mile
     int32 yStart = mileNumber * int32(roadHeight);
-    int32 yStop = int32(roadHeight) + int32(yStart);
-    int32 yEnd = (mileNumber * int32(roadHeight)) + int32(roadHeight) - 1;
+    //the end of the current mile
+    int32 yEnd = int32(yStart) + int32(roadHeight) + -1;
 
     Bounds.set(int32(-playArea), playArea, yEnd, yStart);
 
@@ -88,7 +89,7 @@ contract RoadSystem is System {
     //spawn all the obstacles
     //spawn all the rocks/resources
 
-    for (int32 y = yStart; y < yStop; y++) {
+    for (int32 y = yStart; y <= yEnd; y++) {
       //SPAWN TERRAIN
       for (int32 x = int32(-playArea); x <= playArea; x++) {
         //set the terrain type to empty

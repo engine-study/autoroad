@@ -16,11 +16,11 @@ public class MotherUI : SPUIInstance {
     public SPActionWheelUI wheel;
     public NameOptionUI playerCreate;
     public SpawningUI spawning;
-    public SPWindowParent gameplay;
 
     [Header("Menu")]
     public MenuUI menu;
     public DebugUI debug;
+    public WorldUI playerInfo;
 
     [Header("Store")]
     public StoreUI store;
@@ -37,8 +37,6 @@ public class MotherUI : SPUIInstance {
 
         Mother = this;
 
-        gameplay.ToggleWindowClose();
-
         gameMenus.Add(store);
         gameMenus.Add(debug);
         gameMenus.Add(menu);
@@ -50,6 +48,8 @@ public class MotherUI : SPUIInstance {
         ToggleLoading(true);
         TogglePlayerCreation(false);
         TogglePlayerSpawning(false);
+
+        ToggleGame(false);
 
         SPEvents.OnServerLoaded += ShowServer;
         SPEvents.OnLocalPlayerSpawn += SpawnPlayer;
@@ -95,6 +95,11 @@ public class MotherUI : SPUIInstance {
     public static void TogglePlayerSpawning(bool toggle) {
         Mother.spawning.ToggleWindow(toggle);
     }
+
+    public static void ToggleGame(bool toggle) {
+        Mother.playerInfo.ToggleWindow(!toggle);
+        Mother.game.ToggleWindow(toggle);
+    }
     
     public void ToggleMenuWindow(SPWindowParent open) {
         open.ToggleWindow();
@@ -107,6 +112,8 @@ public class MotherUI : SPUIInstance {
 
     void SpawnPlayer() {
 
+        ToggleGame(true);
+
         TxManager.OnTransaction += UpdateWheel;
         TxUpdate.OnUpdate += UpdateWheelOptimistic;
 
@@ -115,7 +122,6 @@ public class MotherUI : SPUIInstance {
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
         SPCamera.SetFOVGlobal(5f);
 
-        gameplay.ToggleWindowOpen();
     }
 
 

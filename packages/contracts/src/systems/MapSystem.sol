@@ -8,12 +8,14 @@ import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
 
 contract MapSystem is System {
 
+  //the coordinate exists inside the current and previous miles excluding spawn zone
   function onMap(int32 x, int32 y) public returns (bool) {
     // bound to map
     (int32 left, int32 right, int32 up, int32 down) = Bounds.get();
-    return x >= int32(left) && x <= right && y <= up && y >= down;
+    return x >= int32(left) && x <= right && y <= up && y >= 0;
   }
 
+  //the coordinate exists inside ALL CURRENT AND PREVIOUS MILES and INSIDE THE SPAWN ZONES
   function onWorld(int32 x, int32 y) public returns (bool) {
     (,,int32 up,) = Bounds.get();
     (, int32 spawnWidth) = MapConfig.get();

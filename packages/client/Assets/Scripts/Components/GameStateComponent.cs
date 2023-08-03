@@ -41,6 +41,8 @@ public class GameStateComponent : MUDComponent {
         // Debug.Log("Miles: " + (table.miles != null ? (int)table.miles : "null"));
         // Debug.Log("Players: " + (table.playerCount != null ? (int)table.playerCount : "null"));
 
+        Entity.SetName("WORLD");
+
     }
 
 }
