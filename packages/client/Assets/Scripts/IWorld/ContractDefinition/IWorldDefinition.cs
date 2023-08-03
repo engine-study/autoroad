@@ -126,15 +126,6 @@ namespace IWorld.ContractDefinition
         public virtual int MileNumber { get; set; }
     }
 
-    public partial class DebugMileFunction : DebugMileFunctionBase { }
-
-    [Function("debugMile")]
-    public class DebugMileFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "mile", 1)]
-        public virtual int Mile { get; set; }
-    }
-
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }
 
     [Function("deleteRecord")]
@@ -782,10 +773,10 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Entity { get; set; }
     }
 
-    public partial class SpawnFinishedRoadFunction : SpawnFinishedRoadFunctionBase { }
+    public partial class SpawnFinishedRoadAdminFunction : SpawnFinishedRoadAdminFunctionBase { }
 
-    [Function("spawnFinishedRoad")]
-    public class SpawnFinishedRoadFunctionBase : FunctionMessage
+    [Function("spawnFinishedRoadAdmin")]
+    public class SpawnFinishedRoadAdminFunctionBase : FunctionMessage
     {
         [Parameter("int32", "x", 1)]
         public virtual int X { get; set; }
@@ -793,10 +784,10 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
-    public partial class SpawnShoveledRoadFunction : SpawnShoveledRoadFunctionBase { }
+    public partial class SpawnShoveledRoadAdminFunction : SpawnShoveledRoadAdminFunctionBase { }
 
-    [Function("spawnShoveledRoad")]
-    public class SpawnShoveledRoadFunctionBase : FunctionMessage
+    [Function("spawnShoveledRoadAdmin")]
+    public class SpawnShoveledRoadAdminFunctionBase : FunctionMessage
     {
         [Parameter("int32", "x", 1)]
         public virtual int X { get; set; }
@@ -1056,8 +1047,6 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
-
-
 
 
 

@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, PositionTableId, PositionData, Bounds } from "../codegen/Tables.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, Bounds } from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Tree, Health, Carriage } from "../codegen/Tables.sol";
 import { MoveSystem } from "./MoveSystem.sol";
 import { SpawnSystem } from "./SpawnSystem.sol";
@@ -24,28 +24,37 @@ contract RoadSystem is System {
     return x >= int32(left) && x <= right;
   }
 
-  function debugMile(int32 mile) public {
-    
-    //create a new chunk
-    (int32 playArea, int32 spawnArea) = MapConfig.get();
-    (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
-
-    int32 yStart = mile * int32(roadHeight);
-    int32 yEnd = yStart + 2;
-
-    for (int32 y = yStart; y < yEnd; y++) {
-      //SPAWN TERRAIN
-      for (int32 x = int32(-playArea); x <= playArea; x++) {
-
-        if (x < playArea || y == yStart) {
-          spawnFinishedRoad(x, y);
-        } else {
-          spawnShoveledRoad(x, y);
-        }
-
-      }
-    }
+  function spawnFinishedRoadAdmin(int32 x, int32 y) public {
+    bytes32 entity = keccak256(abi.encode("Road", x, y));
+    Road.set(entity, uint32(RoadState.Paved), entity);
+    Position.set(entity, x, y);
   }
+
+  function spawnShoveledRoadAdmin(int32 x, int32 y) public {
+    bytes32 entity = keccak256(abi.encode("Road", x, y));
+    Road.set(entity, uint32(RoadState.Shoveled), entity);
+    Position.set(entity, x, y);
+  }
+
+  // function debugMile(int32 mile) public {
+  //   //create a new chunk
+  //   (int32 playArea, int32 spawnArea) = MapConfig.get();
+  //   (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
+
+  //   int32 yStart = mile * int32(roadHeight);
+  //   int32 yEnd = yStart + 2;
+
+  //   for (int32 y = yStart; y < yEnd; y++) {
+  //     //SPAWN TERRAIN
+  //     for (int32 x = int32(-playArea); x <= playArea; x++) {
+  //       if (x < playArea || y == yStart) {
+  //         spawnFinishedRoadAdmin(x, y);
+  //       } else {
+  //         spawnShoveledRoadAdmin(x, y);
+  //       }
+  //     }
+  //   }
+  // }
 
   function createMile(int32 mileNumber) public {
     bytes32[] memory atPosition = getKeysWithValue(ChunkTableId, Chunk.encode(true, int32(mileNumber - 1)));
@@ -118,7 +127,7 @@ contract RoadSystem is System {
     //set the chunk of road
     // Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
     Chunk.set(chunkEntity, false, mileNumber);
-    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd+1);
+    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1);
     // console.log("added mile ", mileNumber);
   }
 
@@ -140,16 +149,5 @@ contract RoadSystem is System {
     }
   }
 
-  function spawnFinishedRoad(int32 x, int32 y) public {
-    bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
-    Position.set(roadEntity, x, y);
-    Road.set(roadEntity, uint32(RoadState.Paved), roadEntity);
-    // Position.deleteRecord(roadEntity);
-  }
 
-  function spawnShoveledRoad(int32 x, int32 y) public {
-    bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
-    Position.set(roadEntity, x, y);
-    Road.set(roadEntity, uint32(RoadState.Shoveled), roadEntity);
-  }
 }

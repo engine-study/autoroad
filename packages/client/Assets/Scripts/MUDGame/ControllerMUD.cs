@@ -10,25 +10,34 @@ using ObservableExtensions = UniRx.ObservableExtensions;
 using mud.Client;
 
 public class ControllerMUD : SPController {
-    private Vector3? onchainPos;
-    private Vector3 lastOnchainPos = Vector3.down;
-    Vector3 lookVector;
-    Quaternion lookRotation;
+
+
+
+
+    [Header("MUD")]
     [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject moveMarker;
-    Vector3 markerPos;
     [SerializeField] private SPAnimatorState walkingState;
     [SerializeField] private SPAnimatorState pushState;
+
+    [Header("FX")]
+    [SerializeField] private ParticleSystem fx_teleport;
+    [SerializeField] private AudioClip [] sfx_teleport;
+    [SerializeField] private AudioClip[] sfx_bump;
 
     private System.IDisposable? _disposer;
     private MUDEntity entity;
     private PlayerMUD playerScript;
 
+    private Vector3 onchainPos;
+    private Vector3 lastOnchainPos = Vector3.down;
+    Vector3 lookVector;
+    Quaternion lookRotation;
+    Vector3 markerPos;
     float alive = 0f;
     float rotationSpeed = 720f;
     float distance;
     // [SerializeField] private AudioClip[] pushes;
-    [SerializeField] private AudioClip[] sfx_bump;
     bool entityReady = false;
 
     void Awake() {
@@ -174,7 +183,12 @@ public class ControllerMUD : SPController {
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
 
-            TxManager.Send<MoveFromFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+            UniTask<bool> tx = TxManager.Send<MoveFromFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+
+        }
+
+        if(BoundsComponent.InBounds((int)moveDest.x, (int)moveDest.z) == false) {
+            BoundsComponent.ShowBorder();
         }
 
         markerPos = moveDest;
@@ -191,6 +205,15 @@ public class ControllerMUD : SPController {
             TxManager.Send<TeleportAdminFunction>(updates, System.Convert.ToInt32(position.x), System.Convert.ToInt32(position.z));
         } else {
             TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(position.x), System.Convert.ToInt32(position.z));
+        }
+    }
+
+    async UniTask FollowTx(UniTask<bool> tx) {
+        bool success = await tx;
+        if(success) {
+
+        } else {
+            BoundsComponent.ShowBorder();
         }
     }
 
@@ -222,10 +245,19 @@ public class ControllerMUD : SPController {
     private void ComponentUpdate() {
 
         if (!entityReady) { return; }
-        if (playerScript.Position.UpdateSource == UpdateSource.Revert || playerScript.Position.UpdateType == UpdateType.SetRecord) {
+        //|| playerScript.Position.UpdateType == UpdateType.SetRecord
+        if (playerScript.Position.UpdateSource == UpdateSource.Revert ) {
             Debug.Log("Teleporting", this);
             onchainPos = playerScript.Position.Pos;
             SetPositionInstant(playerScript.Position.Pos);
+        }
+
+        //good chance we teleported (we guess for now)
+        if(playerScript.Position.Pos.x != onchainPos.x && playerScript.Position.Pos.z != onchainPos.z) {
+            fx_teleport.Play();
+            SetPositionInstant(playerScript.Position.Pos);
+            SPAudioSource.Play(playerScript.Position.Pos, sfx_teleport);
+            fx_teleport.Play();
         }
 
         //get the actual onchainposition

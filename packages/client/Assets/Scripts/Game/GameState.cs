@@ -135,8 +135,8 @@ public class GameState : MonoBehaviour {
         //spawn debug road elements
         while(GameStateComponent.PlayerCount == 0) {await UniTask.Delay(500);}
         if(GameStateComponent.PlayerCount == 1) {
-            Debug.Log("Spawning debug road", this);
-            TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
+            // Debug.Log("Spawning debug road", this);
+            // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
         }
     }
 
@@ -162,14 +162,18 @@ public class GameState : MonoBehaviour {
             }
 
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0)) {
-                TxManager.Send<SpawnFinishedRoadFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
+                TxManager.Send<SpawnFinishedRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
                 return;
             }
 
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) {
-                TxManager.Send<SpawnShoveledRoadFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
+                TxManager.Send<SpawnShoveledRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
                 return;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.F)) {
+            Screen.fullScreen = !Screen.fullScreen;
         }
 
         if (SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
