@@ -7,6 +7,8 @@ using DefaultNamespace;
 public class MapConfigComponent : MUDComponent
 {
 
+    public static bool OnMap(int x, int y) {return x >= -SpawnWidth && x <= SpawnWidth && y <= BoundsComponent.Up && y >= 0;}
+
     public static int PlayWidth, SpawnWidth;
     [SerializeField] private int playArea;
     [SerializeField] private int spawnArea;

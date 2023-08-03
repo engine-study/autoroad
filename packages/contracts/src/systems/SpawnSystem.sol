@@ -17,11 +17,12 @@ contract SpawnSystem is System {
   function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
     (bool hasName,,,) = Name.get(entity);
+    
     require(!hasName, "already has name");
     require(firstName < 36, "first name");
     require(middleName < 1025, "middle name");
     require(lastName < 1734, "last name");
-    require(!Player.get(entity), "already spawned");
+    
     Name.set(entity, true, firstName, middleName, lastName);
 
   }
@@ -73,8 +74,6 @@ contract SpawnSystem is System {
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y);
-
-
   }
 
   function destroyPlayerAdmin() public {

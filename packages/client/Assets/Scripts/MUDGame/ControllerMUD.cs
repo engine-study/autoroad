@@ -175,6 +175,9 @@ public class ControllerMUD : SPController {
             updates.Add(TxManager.MakeOptimistic(otherPosition, (int)pushToPos.x, (int)pushToPos.z));
             TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
 
+            if(!MapConfigComponent.OnMap((int)pushToPos.x, (int)pushToPos.z)) {
+                BoundsComponent.ShowBorder();
+            }
         } else {
 
             Debug.Log("WALKING");
@@ -185,11 +188,12 @@ public class ControllerMUD : SPController {
 
             UniTask<bool> tx = TxManager.Send<MoveFromFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
 
+            if(!BoundsComponent.OnBounds((int)moveDest.x, (int)moveDest.z)) {
+                BoundsComponent.ShowBorder();
+            }
         }
 
-        if(BoundsComponent.InBounds((int)moveDest.x, (int)moveDest.z) == false) {
-            BoundsComponent.ShowBorder();
-        }
+
 
         markerPos = moveDest;
     }

@@ -7,7 +7,7 @@ using mud.Client;
 public class BoundsComponent : MUDComponent
 {
 
-    public static bool InBounds(int x, int y) {return x >= Left && x <= Right && y <= Up && y >= Down;}
+    public static bool OnBounds(int x, int y) {return x >= Left && x <= Right && y <= Up && y >= 0;}
     public static int Left, Right, Up, Down;
     public static BoundsComponent Instance;
 
@@ -28,8 +28,8 @@ public class BoundsComponent : MUDComponent
         base.OnDestroy();
         Instance = null;
     }
-    
-    public static void ShowBorder() {if(Instance) Instance.borderVisuals.SetActive(true);}
+
+    public static void ShowBorder() {if(Instance) Instance.borderVisuals.SetActive(false); Instance.borderVisuals.SetActive(true);}
 
     protected override IMudTable GetTable() {return new BoundsTable();}
     protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
