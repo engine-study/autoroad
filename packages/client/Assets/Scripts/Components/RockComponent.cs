@@ -119,7 +119,7 @@ public class RockComponent : MUDComponent {
         float lerp = 0f;
 
         while (lerp < 1f) {
-            lerp += Time.deltaTime * 1.5f;
+            lerp += Time.deltaTime * 2f;
             visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * 1f, lerp);
             yield return null;
         }
@@ -131,8 +131,15 @@ public class RockComponent : MUDComponent {
 
         visualParent.SetActive(false);
 
-        SPCamera.AddShake(Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .2f);
+        SPCamera.AddShake(Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .1f);
+        RoadComponent road = TableManager.FindComponent<RoadComponent>(MUDHelper.Keccak256("Road", (int)posSync.Pos.Pos.x, (int)posSync.Pos.Pos.z));
 
+        if(road == null) {
+            Debug.LogError("Can't find road", this);
+            yield break;
+        }
+
+        road.SetComplete();
     }
 
 

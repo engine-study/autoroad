@@ -6,7 +6,7 @@ using DefaultNamespace;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 
-public enum RoadState { None,Shoveled,Statumen,Rudus,Nucleas,Paved }
+public enum RoadState { None,Shoveled,Statumen,Rudus,Nucleas,Paved, Bones }
 
 public class RoadComponent : MUDComponent {
 
@@ -113,6 +113,13 @@ public class RoadComponent : MUDComponent {
         
         state = newState;
 
+        for (int i = 0; i < stages.Length; i++) {
+            stages[i].SetActive((i == (int)state && i < (int)RoadState.Paved) || (i == (int)RoadState.Shoveled && state >= RoadState.Paved));
+        }
+    }
+
+    public void SetComplete() {
+        state = RoadState.Paved;
         for (int i = 0; i < stages.Length; i++) {
             stages[i].SetActive(i == (int)state);
         }

@@ -227,22 +227,31 @@ public class ControllerMUD : SPController {
     //this lerps the character transform
     public void UpdatePosition() {
 
-        if (playerTransform.position != moveDest) {
-            Vector3 newPosition = Vector3.MoveTowards(playerTransform.position, moveDest, MOVE_SPEED * Time.deltaTime);
-            distance += Vector3.Distance(playerTransform.position, newPosition);
-
-            playerTransform.position = newPosition;
-        }
-
-        // Determine the new rotation
+        //ROTATE
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-
         moveMarker.transform.position = Vector3.Lerp(moveMarker.transform.position, markerPos + Vector3.up * .1f + Vector3.up * Mathf.Sin(Time.time * 5f) * .1f, .2f);
 
+        if(playerTransform.position == moveDest) {
+            return;
+        }
+
+        //MOVE
+        Vector3 newPosition = Vector3.MoveTowards(playerTransform.position, moveDest, MOVE_SPEED * Time.deltaTime);
+        distance += Vector3.Distance(playerTransform.position, newPosition);
+        playerTransform.position = newPosition;
+     
+
+        //STEP FX
         if (alive > 1f && distance > .5f) {
             distance -= .5f;
             player.Resources.sfx.PlaySound(player.Resources.stepSFX);
         }
+
+        //DONE walking/pushing
+        if(playerTransform.position == moveDest) {
+            player?.Animator.PlayClip("Idle");
+        }
+
 
     }
 
