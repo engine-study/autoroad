@@ -159,7 +159,8 @@ public class ControllerMUD : SPController {
         minTime = .75f;
 
         Vector3 direction = (moveDest - playerTransform.position).normalized;
-        MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .25f, .1f);
+        // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .25f, .1f);
+        MUDEntity e = GridMUD.GetEntityAt(playerTransform.position + direction);
         PositionComponent otherPosition = (e != null ? e.GetMUDComponent<PositionComponent>() : null);
         bool push = otherPosition != null;
 
