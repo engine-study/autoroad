@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using mud.Client;
+using mud.Unity;
+using IWorld.ContractDefinition;
 
 public class ActionsMUD : MonoBehaviour
 {
     public SPInteract ShovelAction;
-    public SPInteract MineAction;
-    public SPInteract PushAction;
     public SPInteract WalkAction;
+    public SPInteract WalkBootAction;
+    public SPInteract CarryAction;
+    public SPInteract MeleeAction;
+    public SPInteract PlantAction;
+    public SPInteract FishAction;
 
 
     PlayerMUD player;
@@ -69,6 +75,41 @@ public class ActionsMUD : MonoBehaviour
         }
 
         player.Reciever.ToggleInteractableManual(shovelToggle, ShovelAction);
+    }
+
+
+    public void Melee() {
+        
+    }
+
+    public void Fish() {
+        
+    }
+
+    public void Shovel() {
+        int x = (int)transform.position.x;
+        int y = (int)transform.position.z;
+
+        Debug.Log("Shoveled: " + x + "," + y);
+        
+        //no way of optimistic spawning yet
+        string entity = MUDHelper.Keccak256("Road", x,y);
+        List<TxUpdate> updates = new List<TxUpdate>();
+        updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
+        updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1, NetworkManager.LocalAddress));
+        TxManager.Send<ShovelFunction>(updates, System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
+    }
+
+    public void Walk() {
+
+    }
+
+    public void WalkBoot() {
+
+    }
+
+    public void Plant() {
+
     }
 
 }
