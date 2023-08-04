@@ -87,17 +87,18 @@ public class ActionsMUD : MonoBehaviour
     }
 
     public void Shovel() {
-        int x = (int)transform.position.x;
-        int y = (int)transform.position.z;
+
+        int x = (int)ShovelAction.transform.position.x;
+        int y = (int)ShovelAction.transform.position.z;
 
         Debug.Log("Shoveled: " + x + "," + y);
         
-        //no way of optimistic spawning yet
         string entity = MUDHelper.Keccak256("Road", x,y);
         List<TxUpdate> updates = new List<TxUpdate>();
         updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
         updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1, NetworkManager.LocalAddress));
-        TxManager.Send<ShovelFunction>(updates, System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
+        TxManager.Send<ShovelFunction>(updates, System.Convert.ToInt32(x), System.Convert.ToInt32(y));
+
     }
 
     public void Walk() {
@@ -109,7 +110,16 @@ public class ActionsMUD : MonoBehaviour
     }
 
     public void Plant() {
+        
+        int x = (int)PlantAction.transform.position.x;
+        int y = (int)PlantAction.transform.position.z;
 
+        // string entity = MUDHelper.Keccak256("Terrain", x,y);
+        // List<TxUpdate> updates = new List<TxUpdate>();
+        // updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
+        // updates.Add(TxManager.MakeOptimisticInsert<TreeComponent>(entity, 1, NetworkManager.LocalAddress));
+
+        TxManager.Send<PlantFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y));
     }
 
 }

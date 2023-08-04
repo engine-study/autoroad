@@ -15,6 +15,7 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
 import { randomCoord } from "../utility/random.sol";
 import { MoveSystem } from "./MoveSystem.sol";
+import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
 contract RoadSystem is System {
   //updateRow
@@ -151,8 +152,9 @@ contract RoadSystem is System {
 
   function spawnTerrain(int32 x, int32 y, TerrainType tType) private {
     IWorld world = IWorld(_world());
-
-    bytes32 entity = keccak256(abi.encode("Terrain", x, y));
+    
+    bytes32 entity = getUniqueEntity();
+    // bytes32 entity = keccak256(abi.encode("Terrain", x, y));
     Position.set(entity, x, y);
 
     if (tType == TerrainType.Rock) {

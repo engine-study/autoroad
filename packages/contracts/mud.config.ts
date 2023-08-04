@@ -35,7 +35,7 @@ export default mudConfig({
     },
 
     Stats: {
-      dataStruct:false,
+      dataStruct: false,
       schema: {
         startingMile: "int32",
         kills: "int32",
@@ -126,11 +126,11 @@ export default mudConfig({
     Shovel: "bool",
     Pickaxe: "bool",
     Bones: "bool",
-    Stick : "bool",
-    Robe : "int32",
-    Head : "int32",
-    Scroll : "uint32",
-    Coinage : "int32",
+    Stick: "bool",
+    Robe: "int32",
+    Head: "int32",
+    Scroll: "uint32",
+    Coinage: "int32",
 
     Position: {
       name: "Position",
@@ -167,7 +167,7 @@ export default mudConfig({
         filled: "bytes32",
       },
     },
-    
+
     Carriage: "bool",
 
     // Item: {
@@ -191,10 +191,14 @@ export default mudConfig({
 
   modules: [
     {
+      name: "UniqueEntityModule",
+      root: true,
+    },
+    {
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("Position")],
-    }, 
+    },
     {
       name: "KeysWithValueModule",
       root: true,

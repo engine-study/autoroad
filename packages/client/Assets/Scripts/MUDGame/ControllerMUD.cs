@@ -157,7 +157,7 @@ public class ControllerMUD : SPController {
 
         moveDest += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
   
-        minTime = .75f;
+        minTime = 1.5f;
 
         Vector3 direction = (moveDest - playerTransform.position).normalized;
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .25f, .1f);
