@@ -10,8 +10,8 @@ import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
-import { MapSystem } from "../systems/MapSystem.sol";
-import { RoadSystem } from "../systems/RoadSystem.sol";
+import { MapSubSystem } from "../systems/MapSubSystem.sol";
+import { RoadSubSystem } from "../systems/RoadSubSystem.sol";
 
 contract MoveSystem is System {
   //push

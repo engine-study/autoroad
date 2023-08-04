@@ -6,8 +6,8 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { GameState, GameConfig, MapConfig, RoadConfig } from "../src/codegen/Tables.sol";
 import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
-import { RoadSystem } from "../src/systems/RoadSystem.sol";
-import { MapSystem } from "../src/systems/MapSystem.sol";
+import { RoadSubSystem } from "../src/systems/RoadSubSystem.sol";
+import { MapSubSystem } from "../src/systems/MapSubSystem.sol";
 
 contract PostDeploy is Script {
   function run(address worldAddress) external {

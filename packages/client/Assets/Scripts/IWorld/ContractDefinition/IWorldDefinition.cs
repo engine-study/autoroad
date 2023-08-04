@@ -364,6 +364,15 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Args { get; set; }
     }
 
+    public partial class IsAdminFunction : IsAdminFunctionBase { }
+
+    [Function("isAdmin", "bool")]
+    public class IsAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+    }
+
     public partial class IsStoreFunction : IsStoreFunctionBase { }
 
     [Function("isStore")]
@@ -827,10 +836,32 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Entity { get; set; }
     }
 
+    public partial class SpawnFinishedRoadFunction : SpawnFinishedRoadFunctionBase { }
+
+    [Function("spawnFinishedRoad")]
+    public class SpawnFinishedRoadFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class SpawnFinishedRoadAdminFunction : SpawnFinishedRoadAdminFunctionBase { }
 
     [Function("spawnFinishedRoadAdmin")]
     public class SpawnFinishedRoadAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
+    public partial class SpawnShoveledRoadFunction : SpawnShoveledRoadFunctionBase { }
+
+    [Function("spawnShoveledRoad")]
+    public class SpawnShoveledRoadFunctionBase : FunctionMessage
     {
         [Parameter("int32", "x", 1)]
         public virtual int X { get; set; }
@@ -847,6 +878,19 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class SpawnTerrainFunction : SpawnTerrainFunctionBase { }
+
+    [Function("spawnTerrain")]
+    public class SpawnTerrainFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("uint8", "tType", 3)]
+        public virtual byte TType { get; set; }
     }
 
     public partial class TeleportFunction : TeleportFunctionBase { }
@@ -1213,6 +1257,14 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
+
+
+
+
+
+
 
 
 

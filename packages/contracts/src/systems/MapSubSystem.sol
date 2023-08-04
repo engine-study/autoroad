@@ -6,7 +6,7 @@ import { MapConfig, Bounds, Chunk, Position, PositionTableId, PositionData, Carr
 import { TerrainType, RockType } from "../codegen/Types.sol";
 import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
 
-contract MapSystem is System {
+contract MapSubSystem is System {
 
   //the coordinate exists inside the current and previous miles excluding spawn zone
   function onMap(int32 x, int32 y) public returns (bool) {

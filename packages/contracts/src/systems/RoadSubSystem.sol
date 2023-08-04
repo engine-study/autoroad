@@ -17,7 +17,7 @@ import { randomCoord } from "../utility/random.sol";
 import { MoveSystem } from "./MoveSystem.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
-contract RoadSystem is System {
+contract RoadSubSystem is System {
   //updateRow
   //finishRow
 
@@ -27,13 +27,17 @@ contract RoadSystem is System {
     return x >= int32(left) && x <= right;
   }
 
-  function spawnFinishedRoadAdmin(int32 x, int32 y) public {
+  function spawnFinishedRoad(int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    require(world.onRoad(x, y), "off road");
     bytes32 entity = keccak256(abi.encode("Road", x, y));
     Road.set(entity, uint32(RoadState.Paved), entity);
     Position.set(entity, x, y);
   }
 
-  function spawnShoveledRoadAdmin(int32 x, int32 y) public {
+  function spawnShoveledRoad(int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    require(world.onRoad(x, y), "off road");
     bytes32 entity = keccak256(abi.encode("Road", x, y));
     Road.set(entity, uint32(RoadState.Shoveled), entity);
     Position.set(entity, x, y);
@@ -135,24 +139,9 @@ contract RoadSystem is System {
     // console.log("added mile ", mileNumber);
   }
 
-  function plant(int32 x, int32 y) public {
+  function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
     IWorld world = IWorld(_world());
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(world.canDoStuff(player), "hmm");
-    uint32 seeds = Seeds.get(player);
-    require(seeds > 0, "no seeds");
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-    require(world.canInteractEmpty(player, x, y, atPosition, 1), "bad interact");
 
-    Seeds.set(player, seeds-1);
-    spawnTerrain(x,y, TerrainType.Tree);
-
-  }
-
-
-  function spawnTerrain(int32 x, int32 y, TerrainType tType) private {
-    IWorld world = IWorld(_world());
-    
     bytes32 entity = getUniqueEntity();
     // bytes32 entity = keccak256(abi.encode("Terrain", x, y));
     Position.set(entity, x, y);

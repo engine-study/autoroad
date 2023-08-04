@@ -46,4 +46,19 @@ contract TreeSystem is System {
       Health.set(atPosition[0], health);
     }
   }
+
+  
+  function plant(int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(world.canDoStuff(player), "hmm");
+    uint32 seeds = Seeds.get(player);
+    require(seeds > 0, "no seeds");
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    require(world.canInteractEmpty(player, x, y, atPosition, 1), "bad interact");
+
+    Seeds.set(player, seeds-1);
+    world.spawnTerrain(x,y, TerrainType.Tree);
+
+  }
 }

@@ -4,11 +4,11 @@ export default mudConfig({
 
   systems: {
 
-    MapSystem: {
+    MapSubSystem: {
       name: "map",
       openAccess: false,
     },
-    RoadSystem: {
+    RoadSubSystem: {
       name: "road",
       openAccess: false,
     },

@@ -65,16 +65,24 @@ public class ActionsMUD : MonoBehaviour
     //add actions base on what we encounter on the grid
     void AddGridActions(Vector3 newPos) {
 
-        // distanceToPlayer = Vector3.Distance(newPos, position.Pos);
-        
+        distanceToPlayer = Vector3.Distance(newPos, position.Pos);
+        bool inReach = distanceToPlayer <= 1f;
+
         //add the shovel action next to the player at empty spots
-        bool shovelToggle = RoadConfigComponent.OnRoad((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
-        
+        bool shovelToggle = inReach && RoadConfigComponent.OnRoad((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
         if(shovelToggle) {
             ShovelAction.transform.position = newPos;
         }
 
         player.Reciever.ToggleInteractableManual(shovelToggle, ShovelAction);
+    
+        bool plantToggle = inReach && SeedsComponent.LocalCount > 0 && BoundsComponent.OnBounds((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
+        if(plantToggle) {
+            PlantAction.transform.position = newPos;
+        }
+
+        player.Reciever.ToggleInteractableManual(plantToggle, PlantAction);
+
     }
 
 
