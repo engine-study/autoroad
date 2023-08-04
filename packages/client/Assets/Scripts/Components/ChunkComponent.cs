@@ -103,6 +103,4 @@ public class ChunkComponent : MUDComponent {
         rows[y].SetRoadBlock(entity, x + RoadConfigComponent.Right, c);
     }
 
-
-
 }

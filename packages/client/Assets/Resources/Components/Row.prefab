@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &880637150686276992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8957076020876846820}
+  m_Layer: 0
+  m_Name: CompletedEffects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &8957076020876846820
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880637150686276992}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7565760994550837492}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1781441626408528860
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,8 +98,9 @@ Transform:
   m_Children:
   - {fileID: 7983648423082110296}
   - {fileID: 1589803465067560062}
+  - {fileID: 8957076020876846820}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2423333959318364908
 MonoBehaviour:
@@ -82,18 +114,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380ba819c2b368b4dbc60dc628079f8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents: []
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
-  updateInfo:
-    updateType: 0
-    source: 0
-  networkInfo:
-    updateType: 0
-    source: 0
-  hasInit: 0
-  loaded: 0
+  chunk: {fileID: 0}
   complete: {fileID: 7529481458323921323}
+  completeEffects: {fileID: 880637150686276992}
   roadFiller:
   - {fileID: 4657324174756456592}
   - {fileID: 8248002574198917110}

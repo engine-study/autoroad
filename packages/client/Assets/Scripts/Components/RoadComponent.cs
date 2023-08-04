@@ -62,11 +62,17 @@ public class RoadComponent : MUDComponent {
            
             }
 
-            if(state >= RoadState.Paved) {
-                ToggleComplete(true);
-            } else if(lastStage >= RoadState.Paved) {
-                ToggleComplete(false);
+            //only fire the big gun events if we're confirmed an onchain
+            if(newInfo.UpdateSource == UpdateSource.Onchain) {
+                if(state >= RoadState.Paved) {
+                    ToggleComplete(true);
+                } else if(lastStage >= RoadState.Paved) {
+                    //somehow we reverted, this should not be possible
+                    Debug.LogError("Not complete anymore", this);
+                    ToggleComplete(false);
+                }
             }
+
 
         }
 
@@ -107,22 +113,28 @@ public class RoadComponent : MUDComponent {
             yield return new WaitForSeconds(.1f);
         }
 
+        // parent.
+
     }
 
     public void SetState(RoadState newState) {
         
         state = newState;
 
-        for (int i = 0; i < stages.Length; i++) {
-            stages[i].SetActive((i == (int)state && i < (int)RoadState.Paved) || (i == (int)RoadState.Shoveled && state >= RoadState.Paved));
+        if(Loaded) {
+            for (int i = 0; i < stages.Length; i++) {
+                stages[i].SetActive((i == (int)state && i < (int)RoadState.Paved) || (i == (int)RoadState.Shoveled && state >= RoadState.Paved));
+            }
+        } else  {
+            for (int i = 0; i < stages.Length; i++) {
+                stages[i].SetActive(i == (int)state);
+            }
         }
+
     }
 
     public void SetComplete() {
-        state = RoadState.Paved;
-        for (int i = 0; i < stages.Length; i++) {
-            stages[i].SetActive(i == (int)state);
-        }
+        
     }
 
     public async UniTaskVoid AddToChunk() {
