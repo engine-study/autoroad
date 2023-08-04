@@ -11,6 +11,7 @@ public class GameUI : SPWindowParent
 
     public SPButton coins;
     public SPButton scrolls;
+    public SPButton seeds;
     public SPButton storeButton;
     public SPButton debugButton;
     public SPButton menuButton;
@@ -28,6 +29,7 @@ public class GameUI : SPWindowParent
 
         CoinComponent.OnLocalUpdate += UpdateCoins;
         ScrollComponent.OnLocalUpdate += UpdateScrolls;
+        SeedsComponent.OnLocalUpdate += UpdateSeeds;
     }
 
     protected override void Destroy() {
@@ -35,6 +37,7 @@ public class GameUI : SPWindowParent
 
         CoinComponent.OnLocalUpdate -= UpdateCoins;
         ScrollComponent.OnLocalUpdate -= UpdateScrolls;
+        SeedsComponent.OnLocalUpdate -= UpdateSeeds;
 
     }
 
@@ -46,6 +49,12 @@ public class GameUI : SPWindowParent
         scrolls.UpdateField(ScrollComponent.LocalScrolls.ToString("00"));
         scrolls.ToggleState(ScrollComponent.LocalScrolls > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
     }
+
+     void UpdateSeeds() {
+        seeds.UpdateField(SeedsComponent.LocalCount.ToString("00"));
+        seeds.ToggleState(SeedsComponent.LocalCount > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
+    }
+
 
     public void SendCoin() {
 

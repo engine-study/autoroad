@@ -146,7 +146,8 @@ export default mudConfig({
     State: "StateType",
     Move: "uint32",
     Carrying: "bytes32",
-
+    Boots: "uint32",
+    FishingRod: "bool",
     //properties
     Damage: "int32",
     Health: "int32",

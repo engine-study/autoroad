@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll, Seeds } from "../codegen/Tables.sol";
+import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll, Seeds, Boots } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -311,7 +311,7 @@ contract MoveSystem is System {
     require(startPos.x != x || startPos.y != y, "moving in place");
 
     PositionData memory endPos = PositionData(x, y);
-    require(getDistance(startPos, endPos) == 5, "move distance is not 5");
+    require(getDistance(startPos, endPos) < (Boots.get(player) + 1), "moving too far");
 
     // get all the positions in the line we are walking
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
