@@ -6,13 +6,15 @@ using DefaultNamespace;
 
 public enum MoveType { None, Obstruction, Shovel, Carry, Push } 
 public class MoveComponent : MUDComponent {
-    public MoveType moveType;
+
+
+    public MoveType MoveType;
 
     protected override IMudTable GetTable() { return new MoveTable(); }
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         MoveTable table = (MoveTable)update;
-        moveType = (MoveType)table.value;
+        MoveType = (MoveType)table.value;
 
     }
 }

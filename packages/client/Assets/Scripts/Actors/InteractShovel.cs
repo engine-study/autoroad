@@ -18,8 +18,12 @@ public class InteractShovel : SPInteract
     }
 
     public void Shovel() {
+
         int x = (int)transform.position.x;
         int y = (int)transform.position.z;
+
+        Debug.Log("Shoveled: " + x + "," + y);
+        
         //no way of optimistic spawning yet
         string entity = MUDHelper.Keccak256("Road", x,y);
         List<TxUpdate> updates = new List<TxUpdate>();

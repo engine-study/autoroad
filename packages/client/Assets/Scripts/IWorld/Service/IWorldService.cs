@@ -903,6 +903,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(onWorldFunction, cancellationToken);
         }
 
+        public Task<string> PlantRequestAsync(PlantFunction plantFunction)
+        {
+             return ContractHandler.SendRequestAsync(plantFunction);
+        }
+
+        public Task<TransactionReceipt> PlantRequestAndWaitForReceiptAsync(PlantFunction plantFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(plantFunction, cancellationToken);
+        }
+
+        public Task<string> PlantRequestAsync(int x, int y)
+        {
+            var plantFunction = new PlantFunction();
+                plantFunction.X = x;
+                plantFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(plantFunction);
+        }
+
+        public Task<TransactionReceipt> PlantRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var plantFunction = new PlantFunction();
+                plantFunction.X = x;
+                plantFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(plantFunction, cancellationToken);
+        }
+
         public Task<string> PopFromFieldRequestAsync(PopFromField1Function popFromField1Function)
         {
              return ContractHandler.SendRequestAsync(popFromField1Function);

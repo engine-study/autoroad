@@ -162,10 +162,9 @@ public class ControllerMUD : SPController {
         Vector3 direction = (moveDest - playerTransform.position).normalized;
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .25f, .1f);
         MUDEntity e = GridMUD.GetEntityAt(playerTransform.position + direction);
-        PositionComponent otherPosition = (e != null ? e.GetMUDComponent<PositionComponent>() : null);
-        bool push = otherPosition != null;
+        MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
 
-        if (push) {
+        if (moveType != null && moveType.MoveType == MoveType.Push) {
 
             Debug.Log("PUSHING");
 
@@ -174,12 +173,14 @@ public class ControllerMUD : SPController {
 
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)newPos.x, (int)newPos.z));
-            updates.Add(TxManager.MakeOptimistic(otherPosition, (int)pushToPos.x, (int)pushToPos.z));
+            updates.Add(TxManager.MakeOptimistic(moveType, (int)pushToPos.x, (int)pushToPos.z));
             TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
 
-            if(!MapConfigComponent.OnMap((int)pushToPos.x, (int)pushToPos.z)) {
+            if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
                 BoundsComponent.ShowBorder();
             }
+
+          
         } else {
 
             Debug.Log("WALKING");
@@ -190,7 +191,7 @@ public class ControllerMUD : SPController {
 
             UniTask<bool> tx = TxManager.Send<MoveFromFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
 
-            if(!BoundsComponent.OnBounds((int)moveDest.x, (int)moveDest.z)) {
+            if(!MapConfigComponent.OnMap((int)moveDest.x, (int)moveDest.z)) {
                 BoundsComponent.ShowBorder();
             }
         }

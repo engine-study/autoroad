@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll } from "../codegen/Tables.sol";
+import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll, Seeds } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -161,10 +161,9 @@ contract MoveSystem is System {
     health--;
 
     if (health == 0) {
-      Tree.deleteRecord(atPosition[0]);
       Position.deleteRecord(atPosition[0]);
-      Health.deleteRecord(atPosition[0]);
-      Move.deleteRecord(atPosition[0]);
+      uint32 seedCount = Seeds.get(player);
+      Seeds.set(player, seedCount + 2);
     } else {
       Health.set(atPosition[0], health);
     }
@@ -205,11 +204,12 @@ contract MoveSystem is System {
   }
 
   function shovel(int32 x, int32 y) public {
+
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player), "hmm");
-
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
+    require(withinManhattanDistance(PositionData(x,y), Position.get(player), 1), "too far");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "trying to dig an occupied spot");

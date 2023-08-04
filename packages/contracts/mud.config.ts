@@ -141,6 +141,7 @@ export default mudConfig({
     },
 
     //player state   
+    Active: "bool",
     Player: "bool",
     State: "StateType",
     Move: "uint32",
@@ -152,7 +153,7 @@ export default mudConfig({
 
     //unique objects
     Rock: "uint32",
-    
+    Seeds: "uint32",
 
     Road: {
       name: "Road",

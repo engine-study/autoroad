@@ -143,7 +143,7 @@ contract RoadSystem is System {
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
-      Health.set(entity, 3);
+      Health.set(entity, 1);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Player) {
       world.spawnBotAdmin(x, y, entity);
