@@ -215,6 +215,9 @@ contract MoveSystem is System {
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
+    (uint32 roadState,) = Road.get(roadEntity);
+
+    require(roadState < uint32(RoadState.Paved), "shoveling pavement");
 
     Road.set(roadEntity, uint32(RoadState.Shoveled), player);
     Position.set(roadEntity, x, y);

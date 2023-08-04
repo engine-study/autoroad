@@ -138,6 +138,7 @@ public class ControllerMUD : SPController {
             Vector3 eulerAngles = Quaternion.LookRotation(mouseDir).eulerAngles;
             lookVector = (mouseDir).normalized;
             lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
+
         } else {
             playerScript.Animator.IK.SetLook(null);
         }
