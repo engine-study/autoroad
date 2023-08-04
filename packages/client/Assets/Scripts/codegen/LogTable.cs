@@ -12,32 +12,32 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    public class TokenTableUpdate : TypedRecordUpdate<Tuple<TokenTable?, TokenTable?>> { }
+    public class LogTableUpdate : TypedRecordUpdate<Tuple<LogTable?, LogTable?>> { }
 
-    public class TokenTable : IMudTable
+    public class LogTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Token");
+        public readonly static TableId ID = new("", "Log");
 
         public override TableId GetTableId()
         {
             return ID;
         }
 
-        public System.Numerics.BigInteger? value;
+        public bool? value;
 
         public override Type TableType()
         {
-            return typeof(TokenTable);
+            return typeof(LogTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(TokenTableUpdate);
+            return typeof(LogTableUpdate);
         }
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (System.Numerics.BigInteger)functionParameters[0];
+            value = (bool)functionParameters[0];
         }
 
         public override bool SetValues(IEnumerable<Property> result)
@@ -51,7 +51,7 @@ namespace DefaultNamespace
                 switch (attribute)
                 {
                     case "value":
-                        var valueValue = new System.Numerics.BigInteger((int)value);
+                        var valueValue = (bool)value;
                         value = valueValue;
                         hasValues = true;
                         break;
@@ -67,7 +67,7 @@ namespace DefaultNamespace
                 .Find("?value", "?attribute")
                 .Where(TableId.ToString(), key, "?attribute", "?value");
             var result = NetworkManager.Instance.ds.Query(query);
-            var tokenTable = new TokenTable();
+            var logTable = new LogTable();
             var hasValues = false;
 
             foreach (var record in result)
@@ -78,25 +78,25 @@ namespace DefaultNamespace
                 switch (attribute)
                 {
                     case "value":
-                        var valueValue = new System.Numerics.BigInteger((int)value);
-                        tokenTable.value = valueValue;
+                        var valueValue = (bool)value;
+                        logTable.value = valueValue;
                         hasValues = true;
                         break;
                 }
             }
 
-            return hasValues ? tokenTable : null;
+            return hasValues ? logTable : null;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
-            TokenTableUpdate update = (TokenTableUpdate)tableUpdate;
+            LogTableUpdate update = (LogTableUpdate)tableUpdate;
             return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
         {
-            return new TokenTableUpdate
+            return new LogTableUpdate
             {
                 TableId = newUpdate.TableId,
                 Key = newUpdate.Key,
@@ -105,25 +105,25 @@ namespace DefaultNamespace
             };
         }
 
-        public static Tuple<TokenTable?, TokenTable?> MapUpdates(Tuple<Property?, Property?> value)
+        public static Tuple<LogTable?, LogTable?> MapUpdates(Tuple<Property?, Property?> value)
         {
-            TokenTable? current = null;
-            TokenTable? previous = null;
+            LogTable? current = null;
+            LogTable? previous = null;
 
             if (value.Item1 != null)
             {
                 try
                 {
-                    current = new TokenTable
+                    current = new LogTable
                     {
                         value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (System.Numerics.BigInteger)valueVal
+                            ? (bool)valueVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new TokenTable { value = null, };
+                    current = new LogTable { value = null, };
                 }
             }
 
@@ -131,20 +131,20 @@ namespace DefaultNamespace
             {
                 try
                 {
-                    previous = new TokenTable
+                    previous = new LogTable
                     {
                         value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (System.Numerics.BigInteger)valueVal
+                            ? (bool)valueVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new TokenTable { value = null, };
+                    previous = new LogTable { value = null, };
                 }
             }
 
-            return new Tuple<TokenTable?, TokenTable?>(current, previous);
+            return new Tuple<LogTable?, LogTable?>(current, previous);
         }
     }
 }

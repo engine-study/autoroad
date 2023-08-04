@@ -93,7 +93,7 @@ contract MoveSystem is System {
     // Stats.setCompleted(filler, stat + 1);
   }
 
-  function canDoStuff(bytes32 player) private returns (bool) {
+  function canDoStuff(bytes32 player) public returns (bool) {
     require(Health.get(player) > 0, "we dead");
     return true;
   }
@@ -104,11 +104,29 @@ contract MoveSystem is System {
     int32 y,
     bytes32[] memory entities,
     uint distance
-  ) private returns (bool) {
+  ) public returns (bool) {
     require(entities.length > 0, "empty position");
 
     PositionData memory playerPos = Position.get(player);
     PositionData memory entityPos = Position.get(entities[0]);
+
+    // checks that positions are where they should be, also that the entities actually have positions
+    require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
+
+    return true;
+  }
+
+   function canInteractEmpty(
+    bytes32 player,
+    int32 x,
+    int32 y,
+    bytes32[] memory entities,
+    uint distance
+  ) public returns (bool) {
+    require(entities.length == 0, "not empty");
+
+    PositionData memory playerPos = Position.get(player);
+    PositionData memory entityPos = PositionData(x,y);
 
     // checks that positions are where they should be, also that the entities actually have positions
     require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
@@ -148,27 +166,7 @@ contract MoveSystem is System {
     // Stats.setMined(player, stat + 1);
   }
 
-  function chop(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-    require(canDoStuff(player), "hmm");
-
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
-
-    require(canInteract(player, x, y, atPosition, 1), "bad interact");
-    require(Tree.get(atPosition[0]), "no tree");
-
-    int32 health = Health.get(atPosition[0]);
-    health--;
-
-    if (health == 0) {
-      Position.deleteRecord(atPosition[0]);
-      uint32 seedCount = Seeds.get(player);
-      Seeds.set(player, seedCount + 2);
-    } else {
-      Health.set(atPosition[0], health);
-    }
-  }
-
+  
   function carry(int32 carryX, int32 carryY) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player), "hmm");

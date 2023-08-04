@@ -204,6 +204,100 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(callFunction, cancellationToken);
         }
 
+        public Task<string> CanDoStuffRequestAsync(CanDoStuffFunction canDoStuffFunction)
+        {
+             return ContractHandler.SendRequestAsync(canDoStuffFunction);
+        }
+
+        public Task<TransactionReceipt> CanDoStuffRequestAndWaitForReceiptAsync(CanDoStuffFunction canDoStuffFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canDoStuffFunction, cancellationToken);
+        }
+
+        public Task<string> CanDoStuffRequestAsync(byte[] player)
+        {
+            var canDoStuffFunction = new CanDoStuffFunction();
+                canDoStuffFunction.Player = player;
+            
+             return ContractHandler.SendRequestAsync(canDoStuffFunction);
+        }
+
+        public Task<TransactionReceipt> CanDoStuffRequestAndWaitForReceiptAsync(byte[] player, CancellationTokenSource cancellationToken = null)
+        {
+            var canDoStuffFunction = new CanDoStuffFunction();
+                canDoStuffFunction.Player = player;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canDoStuffFunction, cancellationToken);
+        }
+
+        public Task<string> CanInteractRequestAsync(CanInteractFunction canInteractFunction)
+        {
+             return ContractHandler.SendRequestAsync(canInteractFunction);
+        }
+
+        public Task<TransactionReceipt> CanInteractRequestAndWaitForReceiptAsync(CanInteractFunction canInteractFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canInteractFunction, cancellationToken);
+        }
+
+        public Task<string> CanInteractRequestAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance)
+        {
+            var canInteractFunction = new CanInteractFunction();
+                canInteractFunction.Player = player;
+                canInteractFunction.X = x;
+                canInteractFunction.Y = y;
+                canInteractFunction.Entities = entities;
+                canInteractFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAsync(canInteractFunction);
+        }
+
+        public Task<TransactionReceipt> CanInteractRequestAndWaitForReceiptAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance, CancellationTokenSource cancellationToken = null)
+        {
+            var canInteractFunction = new CanInteractFunction();
+                canInteractFunction.Player = player;
+                canInteractFunction.X = x;
+                canInteractFunction.Y = y;
+                canInteractFunction.Entities = entities;
+                canInteractFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canInteractFunction, cancellationToken);
+        }
+
+        public Task<string> CanInteractEmptyRequestAsync(CanInteractEmptyFunction canInteractEmptyFunction)
+        {
+             return ContractHandler.SendRequestAsync(canInteractEmptyFunction);
+        }
+
+        public Task<TransactionReceipt> CanInteractEmptyRequestAndWaitForReceiptAsync(CanInteractEmptyFunction canInteractEmptyFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canInteractEmptyFunction, cancellationToken);
+        }
+
+        public Task<string> CanInteractEmptyRequestAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance)
+        {
+            var canInteractEmptyFunction = new CanInteractEmptyFunction();
+                canInteractEmptyFunction.Player = player;
+                canInteractEmptyFunction.X = x;
+                canInteractEmptyFunction.Y = y;
+                canInteractEmptyFunction.Entities = entities;
+                canInteractEmptyFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAsync(canInteractEmptyFunction);
+        }
+
+        public Task<TransactionReceipt> CanInteractEmptyRequestAndWaitForReceiptAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance, CancellationTokenSource cancellationToken = null)
+        {
+            var canInteractEmptyFunction = new CanInteractEmptyFunction();
+                canInteractEmptyFunction.Player = player;
+                canInteractEmptyFunction.X = x;
+                canInteractEmptyFunction.Y = y;
+                canInteractEmptyFunction.Entities = entities;
+                canInteractEmptyFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canInteractEmptyFunction, cancellationToken);
+        }
+
         public Task<string> CarryRequestAsync(CarryFunction carryFunction)
         {
              return ContractHandler.SendRequestAsync(carryFunction);
@@ -1909,6 +2003,34 @@ namespace IWorld.Service
                 updateInField1Function.DataToSet = dataToSet;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(updateInField1Function, cancellationToken);
+        }
+
+        public Task<string> WaterRequestAsync(WaterFunction waterFunction)
+        {
+             return ContractHandler.SendRequestAsync(waterFunction);
+        }
+
+        public Task<TransactionReceipt> WaterRequestAndWaitForReceiptAsync(WaterFunction waterFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(waterFunction, cancellationToken);
+        }
+
+        public Task<string> WaterRequestAsync(int x, int y)
+        {
+            var waterFunction = new WaterFunction();
+                waterFunction.X = x;
+                waterFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(waterFunction);
+        }
+
+        public Task<TransactionReceipt> WaterRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var waterFunction = new WaterFunction();
+                waterFunction.X = x;
+                waterFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(waterFunction, cancellationToken);
         }
     }
 }

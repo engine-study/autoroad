@@ -148,13 +148,16 @@ export default mudConfig({
     Carrying: "bytes32",
     Boots: "uint32",
     FishingRod: "bool",
+
     //properties
     Damage: "int32",
     Health: "int32",
+    Seeds: "uint32",
 
     //unique objects
     Rock: "uint32",
-    Seeds: "uint32",
+    Tree: "bool",
+    Log: "bool",
 
     Road: {
       name: "Road",
@@ -166,10 +169,6 @@ export default mudConfig({
     },
     
     Carriage: "bool",
-
-    Tree: "bool",
-
-    Token: "uint256",
 
     // Item: {
     //   dataStruct: false,

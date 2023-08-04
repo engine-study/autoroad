@@ -24,6 +24,7 @@ public class GameUI : SPWindowParent
 
         UpdateCoins();
         UpdateScrolls();
+        UpdateSeeds();
 
         teleportUI.SetActive(false);
 

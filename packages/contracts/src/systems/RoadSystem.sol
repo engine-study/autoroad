@@ -3,9 +3,10 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Position, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Tree, Health, Carriage } from "../codegen/Tables.sol";
-import { MoveSystem } from "./MoveSystem.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Health, Carriage } from "../codegen/Tables.sol";
+import { Position, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
+
 import { SpawnSystem } from "./SpawnSystem.sol";
 import { ChunkTableId } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
@@ -13,6 +14,7 @@ import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/ge
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
 import { randomCoord } from "../utility/random.sol";
+import { MoveSystem } from "./MoveSystem.sol";
 
 contract RoadSystem is System {
   //updateRow
@@ -131,6 +133,21 @@ contract RoadSystem is System {
     Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1);
     // console.log("added mile ", mileNumber);
   }
+
+  function plant(int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(world.canDoStuff(player), "hmm");
+    uint32 seeds = Seeds.get(player);
+    require(seeds > 0, "no seeds");
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    require(world.canInteractEmpty(player, x, y, atPosition, 1), "bad interact");
+
+    Seeds.set(player, seeds-1);
+    spawnTerrain(x,y, TerrainType.Tree);
+
+  }
+
 
   function spawnTerrain(int32 x, int32 y, TerrainType tType) private {
     IWorld world = IWorld(_world());

@@ -86,6 +86,49 @@ namespace IWorld.ContractDefinition
         public virtual byte[] FuncSelectorAndArgs { get; set; }
     }
 
+    public partial class CanDoStuffFunction : CanDoStuffFunctionBase { }
+
+    [Function("canDoStuff", "bool")]
+    public class CanDoStuffFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+    }
+
+    public partial class CanInteractFunction : CanInteractFunctionBase { }
+
+    [Function("canInteract", "bool")]
+    public class CanInteractFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("bytes32[]", "entities", 4)]
+        public virtual List<byte[]> Entities { get; set; }
+        [Parameter("uint256", "distance", 5)]
+        public virtual BigInteger Distance { get; set; }
+    }
+
+    public partial class CanInteractEmptyFunction : CanInteractEmptyFunctionBase { }
+
+    [Function("canInteractEmpty", "bool")]
+    public class CanInteractEmptyFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("bytes32[]", "entities", 4)]
+        public virtual List<byte[]> Entities { get; set; }
+        [Parameter("uint256", "distance", 5)]
+        public virtual BigInteger Distance { get; set; }
+    }
+
     public partial class CarryFunction : CarryFunctionBase { }
 
     [Function("carry")]
@@ -864,6 +907,17 @@ namespace IWorld.ContractDefinition
         public virtual byte[] DataToSet { get; set; }
     }
 
+    public partial class WaterFunction : WaterFunctionBase { }
+
+    [Function("water")]
+    public class WaterFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
 
 
     public partial class StoreDeleteRecordEventDTO : StoreDeleteRecordEventDTOBase { }
@@ -1091,6 +1145,12 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1153,6 +1213,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

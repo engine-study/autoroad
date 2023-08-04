@@ -37,6 +37,7 @@ public class ControllerMUD : SPController {
     float alive = 0f;
     float rotationSpeed = 720f;
     float distance;
+    int moveDistance = 1;
     // [SerializeField] private AudioClip[] pushes;
     bool entityReady = false;
 
@@ -153,7 +154,6 @@ public class ControllerMUD : SPController {
 
 
         // Vector3 moveDest = (Vector3)_destination;
-        float moveDistance = 5f;
 
         moveDest += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
   

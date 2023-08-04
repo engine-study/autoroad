@@ -98,11 +98,11 @@ public class RoadComponent : MUDComponent {
 
         for (int i = 0; i < 5; i++) {
 
-            Coin coin = (Instantiate(Resources.Load("Prefabs/Coin")) as GameObject).GetComponent<Coin>();
+            SPResourceJuicy coin = (Instantiate(Resources.Load("Prefabs/Coin")) as GameObject).GetComponent<SPResourceJuicy>();
 
             coin.transform.position = transform.position + Vector3.up;
             coin.transform.rotation = Random.rotation;
-            coin.TipCoin(player.Root);
+            coin.GiveResource(player.Root);
 
             yield return new WaitForSeconds(.1f);
         }
