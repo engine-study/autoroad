@@ -48,15 +48,28 @@ contract ItemSystem is System {
     int32 price = 0;
 
     //TODO instead have this read from some preset array
+    
+    //stick
     if (id == 0) {
       price = 10;
-    } //stick
+    } 
+    //robe
     if (id == 1) {
-      price = 25;
-    } //robe
+      price = 250;
+    } 
+    //pickelhaube
     if (id == 2) {
       price = 99;
-    } //robe
+    } 
+    //fishing rod
+    if (id == 3) {
+      price = 25;
+    } 
+    //boots
+    if (id == 4) {
+      price = 50;
+    } 
+    
 
     require(price > 0, "no item found");
     require(coins >= price, "need more coins");
