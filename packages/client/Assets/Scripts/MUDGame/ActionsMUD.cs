@@ -33,17 +33,8 @@ public class ActionsMUD : MonoBehaviour
     void Awake() {
 
         player = GetComponentInParent<PlayerMUD>();
-        actor = player.Actor;
-
-        Equipment [] newEquipemnt = GetComponentsInChildren<Equipment>(false);
-
-        foreach(Equipment e in newEquipemnt) {
-            ToggleEquipment(true, e);
-        }
-
-
-
         player.OnPostInit += Init;
+        
     }
 
     public void ToggleEquipment(bool toggle, Equipment newEqipment) {
@@ -59,7 +50,11 @@ public class ActionsMUD : MonoBehaviour
 
     void OnDestroy() {
 
-        player.OnPostInit -= Init;
+        if(player) {
+            player.OnPostInit -= Init;
+            (player.Controller as ControllerMUD).OnFinishedMove -= AddPositionActions;
+        }
+
         CursorMUD.OnGridPosition -= AddGridActions;
 
         if(position) {
@@ -74,12 +69,24 @@ public class ActionsMUD : MonoBehaviour
         if (!player.IsLocalPlayer)
             return;
 
+        
+        //setup player actor references
+        actor = player.Actor;
+
         gameObject.transform.parent = null;
         gameObject.transform.position = Vector3.zero;
 
         position = player.Position;
 
+        //add equipment
+        Equipment [] newEquipemnt = GetComponentsInChildren<Equipment>();
+        foreach(Equipment e in newEquipemnt) {
+            ToggleEquipment(true, e);
+        }
+
+
         position.OnUpdated += AddPositionActions;
+        (player.Controller as ControllerMUD).OnFinishedMove += AddPositionActions;
         CursorMUD.OnGridPosition += AddGridActions;
 
     }

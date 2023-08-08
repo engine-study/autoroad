@@ -12,7 +12,7 @@ using mud.Client;
 public class ControllerMUD : SPController {
 
 
-
+    public System.Action OnFinishedMove;
 
     [Header("MUD")]
     [SerializeField] private Transform playerTransform;
@@ -252,6 +252,7 @@ public class ControllerMUD : SPController {
         //DONE walking/pushing
         if(playerTransform.position == moveDest) {
             player?.Animator.PlayClip("Idle");
+            OnFinishedMove?.Invoke();
         }
 
 
