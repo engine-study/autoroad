@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1512960041292701136}
   - component: {fileID: 3521123712879269700}
+  - component: {fileID: 8408359976461822929}
   m_Layer: 0
   m_Name: MoveBoots
   m_TagString: Untagged
@@ -66,6 +67,19 @@ MonoBehaviour:
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8408359976461822929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91712457200704462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca71dd0ab54e10f42abe08511e4d8a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interact: {fileID: 3521123712879269700}
 --- !u!1 &529906100508260132
 GameObject:
   m_ObjectHideFlags: 0
@@ -5308,13 +5322,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2156452120599045409}
   - component: {fileID: 5916935216422990927}
+  - component: {fileID: 2902068070347510194}
   m_Layer: 0
   m_Name: FishingRod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2156452120599045409
 Transform:
   m_ObjectHideFlags: 0
@@ -5348,22 +5363,23 @@ MonoBehaviour:
   targetGO: {fileID: 1406280839565207205}
   OnStartEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 190895346912483442}
-        m_TargetAssemblyTypeName: ActionsMUD, Assembly-CSharp
-        m_MethodName: Fish
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2902068070347510194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406280839565207205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f82fc371078b4cc4c89fab93ed73dd20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interact: {fileID: 5916935216422990927}
 --- !u!1 &1649011601951813574
 GameObject:
   m_ObjectHideFlags: 0
@@ -5393,14 +5409,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7439667250433199178}
+  - {fileID: 2156452120599045409}
   - {fileID: 2537452241586521742}
   - {fileID: 1379806157842434035}
   - {fileID: 150797922493352345}
   - {fileID: 1512960041292701136}
-  - {fileID: 7439667250433199178}
   - {fileID: 9117189233831577646}
   - {fileID: 5435856561112048151}
-  - {fileID: 2156452120599045409}
   m_Father: {fileID: 2243986332771371095}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5416,13 +5432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c511f87a15eaa8f44914292bfe8cd5db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShovelAction: {fileID: 8394964874783954427}
-  WalkAction: {fileID: 6819035568640496617}
-  WalkBootAction: {fileID: 3521123712879269700}
-  CarryAction: {fileID: 9042560971876792116}
-  MeleeAction: {fileID: 3995134369058425196}
-  PlantAction: {fileID: 4185614968181234515}
-  FishAction: {fileID: 5916935216422990927}
+  equipment: []
 --- !u!1 &1902544159680851214
 GameObject:
   m_ObjectHideFlags: 0
@@ -5465,13 +5475,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2537452241586521742}
   - component: {fileID: 8394964874783954427}
+  - component: {fileID: 1442630704522070475}
   m_Layer: 0
   m_Name: Shovel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2537452241586521742
 Transform:
   m_ObjectHideFlags: 0
@@ -5505,22 +5516,23 @@ MonoBehaviour:
   targetGO: {fileID: 2580249694879215488}
   OnStartEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 190895346912483442}
-        m_TargetAssemblyTypeName: ActionsMUD, Assembly-CSharp
-        m_MethodName: Shovel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1442630704522070475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2580249694879215488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e09af2772515494ea52fa01215be8a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interact: {fileID: 8394964874783954427}
 --- !u!1 &3562155450139694466
 GameObject:
   m_ObjectHideFlags: 0
@@ -5531,13 +5543,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1379806157842434035}
   - component: {fileID: 3995134369058425196}
+  - component: {fileID: 298405710139751867}
   m_Layer: 0
   m_Name: MeleeStick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1379806157842434035
 Transform:
   m_ObjectHideFlags: 0
@@ -5571,22 +5584,23 @@ MonoBehaviour:
   targetGO: {fileID: 3562155450139694466}
   OnStartEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 190895346912483442}
-        m_TargetAssemblyTypeName: ActionsMUD, Assembly-CSharp
-        m_MethodName: Melee
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &298405710139751867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562155450139694466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 166787b93eca79344893642ca5df0817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interact: {fileID: 3995134369058425196}
 --- !u!1 &3749648392518457582
 GameObject:
   m_ObjectHideFlags: 0
@@ -5644,6 +5658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 150797922493352345}
   - component: {fileID: 6819035568640496617}
+  - component: {fileID: 4829872024878976494}
   m_Layer: 0
   m_Name: Move
   m_TagString: Untagged
@@ -5700,6 +5715,19 @@ MonoBehaviour:
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4829872024878976494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3780725568213690077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73fcbe785f4b9e34b93065b5e0258965, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interact: {fileID: 6819035568640496617}
 --- !u!1 &4616459405273496695
 GameObject:
   m_ObjectHideFlags: 0
@@ -10881,13 +10909,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7439667250433199178}
   - component: {fileID: 4185614968181234515}
+  - component: {fileID: 2187446780553583641}
   m_Layer: 0
   m_Name: Plant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7439667250433199178
 Transform:
   m_ObjectHideFlags: 0
@@ -10921,22 +10950,23 @@ MonoBehaviour:
   targetGO: {fileID: 7473744640904159261}
   OnStartEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 190895346912483442}
-        m_TargetAssemblyTypeName: ActionsMUD, Assembly-CSharp
-        m_MethodName: Plant
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2187446780553583641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7473744640904159261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 047834299498b804da584aa01cb21e4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interact: {fileID: 4185614968181234515}
 --- !u!1 &7618585900613904675
 GameObject:
   m_ObjectHideFlags: 0

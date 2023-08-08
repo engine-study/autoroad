@@ -240,6 +240,21 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Data { get; set; }
     }
 
+    public partial class FishFunction : FishFunctionBase { }
+
+    [Function("fish")]
+    public class FishFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "pushX", 3)]
+        public virtual int PushX { get; set; }
+        [Parameter("int32", "pushY", 4)]
+        public virtual int PushY { get; set; }
+    }
+
     public partial class GetFieldFunction : GetFieldFunctionBase { }
 
     [Function("getField", "bytes")]
@@ -421,6 +436,29 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class MoveToFunction : MoveToFunctionBase { }
+
+    [Function("moveTo", "bool")]
+    public class MoveToFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("int32", "x", 3)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 4)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "moveToX", 5)]
+        public virtual int MoveToX { get; set; }
+        [Parameter("int32", "moveToY", 6)]
+        public virtual int MoveToY { get; set; }
+        [Parameter("bytes32[]", "atPosition", 7)]
+        public virtual List<byte[]> AtPosition { get; set; }
+        [Parameter("bytes32[]", "atDestination", 8)]
+        public virtual List<byte[]> AtDestination { get; set; }
     }
 
     public partial class NameFunction : NameFunctionBase { }
@@ -1195,6 +1233,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1257,6 +1297,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

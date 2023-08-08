@@ -14,8 +14,8 @@ import { MapSubSystem } from "../systems/MapSubSystem.sol";
 import { RoadSubSystem } from "../systems/RoadSubSystem.sol";
 
 contract MoveSystem is System {
-  //push
-  function push(int32 x, int32 y, int32 pushX, int32 pushY) public {
+
+  function fish(int32 x, int32 y, int32 pushX, int32 pushY) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player), "hmm");
 
@@ -23,7 +23,7 @@ contract MoveSystem is System {
 
     IWorld world = IWorld(_world());
     require(world.onMap(pushX, pushY), "off grid");
-    require(withinManhattanDistance(PositionData(x, y), PositionData(pushX, pushY), 1), "too far to push");
+    require(withinManhattanDistance(PositionData(x, y), startPos, 3), "too far to push");
 
     bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(x, y));
 
@@ -65,9 +65,66 @@ contract MoveSystem is System {
     // Stats.setPushed(player, stat + 1);
   }
 
+  //push
+  function push(int32 x, int32 y, int32 pushX, int32 pushY) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player), "hmm");
+
+    PositionData memory startPos = Position.get(player);
+
+    IWorld world = IWorld(_world());
+    require(world.onMap(pushX, pushY), "off grid");
+
+    require(withinManhattanDistance(PositionData(x, y), PositionData(pushX, pushY), 1), "too far to push");
+
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+
+    require(canInteract(player, x, y, atPosition, 1), "bad interact");
+
+    uint32 move = Move.get(atPosition[0]);
+    require(move == uint32(MoveType.Push), "pushing a non-pushable object");
+
+    bytes32[] memory atDestination = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
+    
+    bool canMove = moveTo(player, atPosition[0], x,y, pushX, pushY, atPosition, atDestination);
+
+    //move push object before then setting the pusher to the new position
+    if (canMove) {
+      Position.set(player, pushX, pushY);
+    }
+
+    //and then player (which ovewrites where the push object was)
+    Position.set(player, x, y);
+    // int32 stat = Stats.getPushed(player);
+    // Stats.setPushed(player, stat + 1);
+  }
+
+  function moveTo(bytes32 player, bytes32 entity, int32 x, int32 y, int32 moveToX, int32 moveToY, bytes32[] memory atPosition, bytes32[] memory atDestination) public returns(bool) {
+    
+     //check if we are pushing rocks into a road ditch
+    if (atDestination.length > 0) {
+      //check if there is an obstruction
+      bool empty = Move.get(atDestination[0]) == uint32(MoveType.None);
+      require(empty, "pushing into an occupied spot");
+      
+      (uint32 roadInt, ) = Road.get(atDestination[0]);
+
+      //there is a road here
+      if (roadInt != 0) {
+        require(roadInt == uint32(RoadState.Shoveled), "Road not shoveled");
+        //this has now become a fill()
+
+        fill(player, entity, atDestination[0], moveToX, moveToY);
+        return false;
+      } 
+
+    } 
+   
+    return true;
+
+  }
+
   function fill(bytes32 player, bytes32 pushed, bytes32 road, int32 x, int32 y) private {
-
-
     //ROAD COMPLETE!!!
     Position.deleteRecord(road);
 
@@ -80,7 +137,6 @@ contract MoveSystem is System {
     if (isPlayer) {
       Health.set(pushed, -1);
       Road.set(road, uint32(RoadState.Bones), player);
-
     } else {
       Road.set(road, uint32(RoadState.Paved), player);
     }
@@ -116,7 +172,7 @@ contract MoveSystem is System {
     return true;
   }
 
-   function canInteractEmpty(
+  function canInteractEmpty(
     bytes32 player,
     int32 x,
     int32 y,
@@ -126,7 +182,7 @@ contract MoveSystem is System {
     require(entities.length == 0, "not empty");
 
     PositionData memory playerPos = Position.get(player);
-    PositionData memory entityPos = PositionData(x,y);
+    PositionData memory entityPos = PositionData(x, y);
 
     // checks that positions are where they should be, also that the entities actually have positions
     require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
@@ -166,7 +222,6 @@ contract MoveSystem is System {
     // Stats.setMined(player, stat + 1);
   }
 
-  
   function carry(int32 carryX, int32 carryY) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player), "hmm");
@@ -202,18 +257,17 @@ contract MoveSystem is System {
   }
 
   function shovel(int32 x, int32 y) public {
-
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player), "hmm");
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
-    require(withinManhattanDistance(PositionData(x,y), Position.get(player), 1), "too far");
+    require(withinManhattanDistance(PositionData(x, y), Position.get(player), 1), "too far");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
-    (uint32 roadState,) = Road.get(roadEntity);
+    (uint32 roadState, ) = Road.get(roadEntity);
 
     require(roadState < uint32(RoadState.Paved), "shoveling pavement");
 

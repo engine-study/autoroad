@@ -574,6 +574,38 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(emitEphemeralRecordFunction, cancellationToken);
         }
 
+        public Task<string> FishRequestAsync(FishFunction fishFunction)
+        {
+             return ContractHandler.SendRequestAsync(fishFunction);
+        }
+
+        public Task<TransactionReceipt> FishRequestAndWaitForReceiptAsync(FishFunction fishFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
+        }
+
+        public Task<string> FishRequestAsync(int x, int y, int pushX, int pushY)
+        {
+            var fishFunction = new FishFunction();
+                fishFunction.X = x;
+                fishFunction.Y = y;
+                fishFunction.PushX = pushX;
+                fishFunction.PushY = pushY;
+            
+             return ContractHandler.SendRequestAsync(fishFunction);
+        }
+
+        public Task<TransactionReceipt> FishRequestAndWaitForReceiptAsync(int x, int y, int pushX, int pushY, CancellationTokenSource cancellationToken = null)
+        {
+            var fishFunction = new FishFunction();
+                fishFunction.X = x;
+                fishFunction.Y = y;
+                fishFunction.PushX = pushX;
+                fishFunction.PushY = pushY;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
+        }
+
         public Task<byte[]> GetFieldQueryAsync(GetFieldFunction getFieldFunction, BlockParameter blockParameter = null)
         {
             return ContractHandler.QueryAsync<GetFieldFunction, byte[]>(getFieldFunction, blockParameter);
@@ -907,6 +939,46 @@ namespace IWorld.Service
                 moveFromFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFromFunction, cancellationToken);
+        }
+
+        public Task<string> MoveToRequestAsync(MoveToFunction moveToFunction)
+        {
+             return ContractHandler.SendRequestAsync(moveToFunction);
+        }
+
+        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(MoveToFunction moveToFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
+        }
+
+        public Task<string> MoveToRequestAsync(byte[] player, byte[] entity, int x, int y, int moveToX, int moveToY, List<byte[]> atPosition, List<byte[]> atDestination)
+        {
+            var moveToFunction = new MoveToFunction();
+                moveToFunction.Player = player;
+                moveToFunction.Entity = entity;
+                moveToFunction.X = x;
+                moveToFunction.Y = y;
+                moveToFunction.MoveToX = moveToX;
+                moveToFunction.MoveToY = moveToY;
+                moveToFunction.AtPosition = atPosition;
+                moveToFunction.AtDestination = atDestination;
+            
+             return ContractHandler.SendRequestAsync(moveToFunction);
+        }
+
+        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, int x, int y, int moveToX, int moveToY, List<byte[]> atPosition, List<byte[]> atDestination, CancellationTokenSource cancellationToken = null)
+        {
+            var moveToFunction = new MoveToFunction();
+                moveToFunction.Player = player;
+                moveToFunction.Entity = entity;
+                moveToFunction.X = x;
+                moveToFunction.Y = y;
+                moveToFunction.MoveToX = moveToX;
+                moveToFunction.MoveToY = moveToY;
+                moveToFunction.AtPosition = atPosition;
+                moveToFunction.AtDestination = atDestination;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
         }
 
         public Task<string> NameRequestAsync(NameFunction nameFunction)

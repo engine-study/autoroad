@@ -12,6 +12,7 @@ public class CursorMUD : MonoBehaviour {
     public static Vector3 WorldPos { get { return Instance.mousePos; } }
     public static Vector3 GridPos { get { return Instance.gridPos; } }
     public static Entity Entity { get { return Instance.hover; } }
+    public static MUDEntity MUDEntity { get { return Instance.hover as MUDEntity; } }
     public static PositionComponent Position { get { return Instance.pos; } }
     public static SPBase Base { get { return Instance.baseObject; } }
     public static Action<Entity> OnHoverEntity;
