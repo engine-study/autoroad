@@ -30,7 +30,7 @@ public class ActorUI : SPWindowBase {
             position.SetFollow(null);   
         } else {
             nameText.text = entity.Name;
-            position.SetFollow(entity.transform, Vector3.down * .75f);   
+            position.SetFollow(entity.transform);   
         }
 
         gameObject.SetActive(entity != null);

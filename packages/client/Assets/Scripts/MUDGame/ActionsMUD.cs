@@ -26,8 +26,6 @@ public class ActionsMUD : MonoBehaviour
     PositionComponent position;
     SPActor actor;
     float distanceToPlayer = 999f;
-    Vector3 cursorPosition;
-    Vector3 playerPosition;
 
 
     void Awake() {
@@ -93,7 +91,7 @@ public class ActionsMUD : MonoBehaviour
 
     //everytime player updates position we should recalculate the actions
     void AddPositionActions() {
-        AddGridActions(cursorPosition);
+        AddGridActions(CursorMUD.GridPos);
     }
 
     //add actions base on what we encounter on the grid
