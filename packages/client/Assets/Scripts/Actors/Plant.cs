@@ -5,6 +5,7 @@ using mud.Client;
 using mud.Unity;
 using Cysharp.Threading.Tasks;
 using IWorld.ContractDefinition;
+
 public class Plant : Equipment
 {
     
@@ -13,7 +14,7 @@ public class Plant : Equipment
         bool canUse = base.CanUse();
         bool onBounds = BoundsComponent.OnBounds((int)transform.position.x, (int)transform.position.z);
 
-        return canUse && onBounds && CursorMUD.MUDEntity == null;
+        return canUse && SeedsComponent.LocalCount > 0 && onBounds && CursorMUD.MUDEntity == null;
 
     }
 

@@ -42,7 +42,13 @@ public class RecieverMUD : SPReciever
         }
 
         for(int i = 0; i < interacts.Length; i++) {
-            ToggleInteractable(toggle, interacts[i]);
+
+            if(toggle) {
+                bool canDoAction = interacts[i].Action().TryAction(PlayerMUD.LocalPlayer.Actor, interacts[i]);
+                ToggleInteractable(canDoAction, interacts[i]);
+            } else {
+                ToggleInteractable(false, interacts[i]);
+            }
         }
 
     }
