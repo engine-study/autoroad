@@ -49,82 +49,26 @@ namespace DefaultNamespace
             down = (long)(int)functionParameters[3];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "left":
-                        var leftValue = (long)value;
-                        left = leftValue;
-                        hasValues = true;
-                        break;
-                    case "right":
-                        var rightValue = (long)value;
-                        right = rightValue;
-                        hasValues = true;
-                        break;
-                    case "up":
-                        var upValue = (long)value;
-                        up = upValue;
-                        hasValues = true;
-                        break;
-                    case "down":
-                        var downValue = (long)value;
-                        down = downValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var leftValue = (long)table["left"];
 
-            return hasValues;
-        }
+            left = leftValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var boundsTable = new BoundsTable();
-            var hasValues = false;
+            var rightValue = (long)table["right"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            right = rightValue;
 
-                switch (attribute)
-                {
-                    case "left":
-                        var leftValue = (long)value;
-                        boundsTable.left = leftValue;
-                        hasValues = true;
-                        break;
-                    case "right":
-                        var rightValue = (long)value;
-                        boundsTable.right = rightValue;
-                        hasValues = true;
-                        break;
-                    case "up":
-                        var upValue = (long)value;
-                        boundsTable.up = upValue;
-                        hasValues = true;
-                        break;
-                    case "down":
-                        var downValue = (long)value;
-                        boundsTable.down = downValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var upValue = (long)table["up"];
 
-            return hasValues ? boundsTable : null;
+            up = upValue;
+
+            var downValue = (long)table["down"];
+
+            down = downValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

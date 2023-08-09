@@ -41,52 +41,14 @@ namespace DefaultNamespace
             eventType = (string)functionParameters[0];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "eventType":
-                        var eventTypeValue = (string)value;
-                        eventType = eventTypeValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var eventTypeValue = (string)table["eventType"];
 
-            return hasValues;
-        }
-
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var gameEventTable = new GameEventTable();
-            var hasValues = false;
-
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "eventType":
-                        var eventTypeValue = (string)value;
-                        gameEventTable.eventType = eventTypeValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? gameEventTable : null;
+            eventType = eventTypeValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

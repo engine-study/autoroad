@@ -30,9 +30,13 @@ contract RoadSubSystem is System {
   function spawnFinishedRoad(int32 x, int32 y) public {
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
+
     bytes32 entity = keccak256(abi.encode("Road", x, y));
-    Road.set(entity, uint32(RoadState.Paved), entity);
+    
     Position.set(entity, x, y);
+    Road.set(entity, uint32(RoadState.Paved), entity);
+
+    Position.deleteRecord(entity);
   }
 
   function spawnShoveledRoad(int32 x, int32 y) public {

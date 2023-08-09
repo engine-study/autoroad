@@ -44,62 +44,18 @@ namespace DefaultNamespace
             spawnArea = (long)(int)functionParameters[1];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "playArea":
-                        var playAreaValue = (long)value;
-                        playArea = playAreaValue;
-                        hasValues = true;
-                        break;
-                    case "spawnArea":
-                        var spawnAreaValue = (long)value;
-                        spawnArea = spawnAreaValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var playAreaValue = (long)table["playArea"];
 
-            return hasValues;
-        }
+            playArea = playAreaValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var mapConfigTable = new MapConfigTable();
-            var hasValues = false;
+            var spawnAreaValue = (long)table["spawnArea"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "playArea":
-                        var playAreaValue = (long)value;
-                        mapConfigTable.playArea = playAreaValue;
-                        hasValues = true;
-                        break;
-                    case "spawnArea":
-                        var spawnAreaValue = (long)value;
-                        mapConfigTable.spawnArea = spawnAreaValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? mapConfigTable : null;
+            spawnArea = spawnAreaValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

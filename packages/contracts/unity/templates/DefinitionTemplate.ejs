@@ -39,71 +39,29 @@ namespace <%= namespace %>
 			<% } -%>
 		}
 
-		public override bool SetValues(IEnumerable<Property> result)
-		{
-	
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+		public override void RecordToTable(Record record) {
 
-								switch (attribute)
-								{
-									<% for (const field of fields) { -%>
-									case "<%= field.key %>":
-											var <%= field.key %>Value = 
-											<% if (field.type == "System.Numerics.BigInteger") { -%>
-												new System.Numerics.BigInteger((int)value);
-												<% } else { -%>
-												(<%= field.type %>)value;
-												<% } -%>
-											<%= field.key %> = <%= field.key %>Value;	
-											hasValues = true;
-										break;
-									<% } -%>
-								}
-            }
+			var table = record.value;
+			//bool hasValues = false;
 
-            return hasValues; 
-		}
+			<% for (const field of fields) { -%>
+				var <%= field.key %>Value = 
+				<% if (field.type == "System.Numerics.BigInteger") { -%>
+					new System.Numerics.BigInteger((int)value);
+					<% } else { -%>
+					(<%= field.type %>)table["<%= field.key %>"];
+				<% } -%> 
+				<%= field.key %> = <%= field.key %>Value;	
 
-		public override IMudTable GetTableValue(string key)
-		{
-			var query = new Query().Find("?value", "?attribute").Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var <%= tableClassName[0].toLowerCase() + tableClassName.substring(1) %> = new <%= tableClassName %>();
-            var hasValues = false;
+			<% } -%>
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-								switch (attribute)
-								{
-									<% for (const field of fields) { -%>
-									case "<%= field.key %>":
-											var <%= field.key %>Value = 
-											<% if (field.type == "System.Numerics.BigInteger") { -%>
-												new System.Numerics.BigInteger((int)value);
-												<% } else { -%>
-												(<%= field.type %>)value;
-												<% } -%>
-											<%= tableClassName[0].toLowerCase() + tableClassName.substring(1) %>.<%= field.key %> = <%= field.key %>Value;	
-											hasValues = true;
-										break;
-									<% } -%>
-								}
-            }
-
-            return hasValues ? <%= tableClassName[0].toLowerCase() + tableClassName.substring(1) %> : null; 
 		}
 
 		public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate) {
 			<%= tableClassName%>Update update = (<%= tableClassName%>Update)tableUpdate;
 			return update?.TypedValue.Item1;
 		}	
+
 
 		public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
         {

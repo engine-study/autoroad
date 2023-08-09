@@ -43,62 +43,18 @@ namespace DefaultNamespace
             y = (long)(int)functionParameters[1];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "x":
-                        var xValue = (long)value;
-                        x = xValue;
-                        hasValues = true;
-                        break;
-                    case "y":
-                        var yValue = (long)value;
-                        y = yValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var xValue = (long)table["x"];
 
-            return hasValues;
-        }
+            x = xValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var positionTable = new PositionTable();
-            var hasValues = false;
+            var yValue = (long)table["y"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "x":
-                        var xValue = (long)value;
-                        positionTable.x = xValue;
-                        hasValues = true;
-                        break;
-                    case "y":
-                        var yValue = (long)value;
-                        positionTable.y = yValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? positionTable : null;
+            y = yValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

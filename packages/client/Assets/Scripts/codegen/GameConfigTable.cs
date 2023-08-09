@@ -47,72 +47,22 @@ namespace DefaultNamespace
             roadComplete = (bool)functionParameters[2];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "debug":
-                        var debugValue = (bool)value;
-                        debug = debugValue;
-                        hasValues = true;
-                        break;
-                    case "dummyPlayers":
-                        var dummyPlayersValue = (bool)value;
-                        dummyPlayers = dummyPlayersValue;
-                        hasValues = true;
-                        break;
-                    case "roadComplete":
-                        var roadCompleteValue = (bool)value;
-                        roadComplete = roadCompleteValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var debugValue = (bool)table["debug"];
 
-            return hasValues;
-        }
+            debug = debugValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var gameConfigTable = new GameConfigTable();
-            var hasValues = false;
+            var dummyPlayersValue = (bool)table["dummyPlayers"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            dummyPlayers = dummyPlayersValue;
 
-                switch (attribute)
-                {
-                    case "debug":
-                        var debugValue = (bool)value;
-                        gameConfigTable.debug = debugValue;
-                        hasValues = true;
-                        break;
-                    case "dummyPlayers":
-                        var dummyPlayersValue = (bool)value;
-                        gameConfigTable.dummyPlayers = dummyPlayersValue;
-                        hasValues = true;
-                        break;
-                    case "roadComplete":
-                        var roadCompleteValue = (bool)value;
-                        gameConfigTable.roadComplete = roadCompleteValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var roadCompleteValue = (bool)table["roadComplete"];
 
-            return hasValues ? gameConfigTable : null;
+            roadComplete = roadCompleteValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

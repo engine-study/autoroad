@@ -49,82 +49,26 @@ namespace DefaultNamespace
             last = (ulong)(int)functionParameters[3];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "named":
-                        var namedValue = (bool)value;
-                        named = namedValue;
-                        hasValues = true;
-                        break;
-                    case "first":
-                        var firstValue = (ulong)value;
-                        first = firstValue;
-                        hasValues = true;
-                        break;
-                    case "middle":
-                        var middleValue = (ulong)value;
-                        middle = middleValue;
-                        hasValues = true;
-                        break;
-                    case "last":
-                        var lastValue = (ulong)value;
-                        last = lastValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var namedValue = (bool)table["named"];
 
-            return hasValues;
-        }
+            named = namedValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var nameTable = new NameTable();
-            var hasValues = false;
+            var firstValue = (ulong)table["first"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            first = firstValue;
 
-                switch (attribute)
-                {
-                    case "named":
-                        var namedValue = (bool)value;
-                        nameTable.named = namedValue;
-                        hasValues = true;
-                        break;
-                    case "first":
-                        var firstValue = (ulong)value;
-                        nameTable.first = firstValue;
-                        hasValues = true;
-                        break;
-                    case "middle":
-                        var middleValue = (ulong)value;
-                        nameTable.middle = middleValue;
-                        hasValues = true;
-                        break;
-                    case "last":
-                        var lastValue = (ulong)value;
-                        nameTable.last = lastValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var middleValue = (ulong)table["middle"];
 
-            return hasValues ? nameTable : null;
+            middle = middleValue;
+
+            var lastValue = (ulong)table["last"];
+
+            last = lastValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

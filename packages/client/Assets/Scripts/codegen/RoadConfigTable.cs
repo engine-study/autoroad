@@ -50,82 +50,26 @@ namespace DefaultNamespace
             right = (long)(int)functionParameters[3];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "width":
-                        var widthValue = (ulong)value;
-                        width = widthValue;
-                        hasValues = true;
-                        break;
-                    case "height":
-                        var heightValue = (ulong)value;
-                        height = heightValue;
-                        hasValues = true;
-                        break;
-                    case "left":
-                        var leftValue = (long)value;
-                        left = leftValue;
-                        hasValues = true;
-                        break;
-                    case "right":
-                        var rightValue = (long)value;
-                        right = rightValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var widthValue = (ulong)table["width"];
 
-            return hasValues;
-        }
+            width = widthValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var roadConfigTable = new RoadConfigTable();
-            var hasValues = false;
+            var heightValue = (ulong)table["height"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            height = heightValue;
 
-                switch (attribute)
-                {
-                    case "width":
-                        var widthValue = (ulong)value;
-                        roadConfigTable.width = widthValue;
-                        hasValues = true;
-                        break;
-                    case "height":
-                        var heightValue = (ulong)value;
-                        roadConfigTable.height = heightValue;
-                        hasValues = true;
-                        break;
-                    case "left":
-                        var leftValue = (long)value;
-                        roadConfigTable.left = leftValue;
-                        hasValues = true;
-                        break;
-                    case "right":
-                        var rightValue = (long)value;
-                        roadConfigTable.right = rightValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var leftValue = (long)table["left"];
 
-            return hasValues ? roadConfigTable : null;
+            left = leftValue;
+
+            var rightValue = (long)table["right"];
+
+            right = rightValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

@@ -61,122 +61,42 @@ namespace DefaultNamespace
             completed = (long)(int)functionParameters[7];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "startingMile":
-                        var startingMileValue = (long)value;
-                        startingMile = startingMileValue;
-                        hasValues = true;
-                        break;
-                    case "kills":
-                        var killsValue = (long)value;
-                        kills = killsValue;
-                        hasValues = true;
-                        break;
-                    case "deaths":
-                        var deathsValue = (long)value;
-                        deaths = deathsValue;
-                        hasValues = true;
-                        break;
-                    case "moves":
-                        var movesValue = (long)value;
-                        moves = movesValue;
-                        hasValues = true;
-                        break;
-                    case "mined":
-                        var minedValue = (long)value;
-                        mined = minedValue;
-                        hasValues = true;
-                        break;
-                    case "pushed":
-                        var pushedValue = (long)value;
-                        pushed = pushedValue;
-                        hasValues = true;
-                        break;
-                    case "shoveled":
-                        var shoveledValue = (long)value;
-                        shoveled = shoveledValue;
-                        hasValues = true;
-                        break;
-                    case "completed":
-                        var completedValue = (long)value;
-                        completed = completedValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var startingMileValue = (long)table["startingMile"];
 
-            return hasValues;
-        }
+            startingMile = startingMileValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var statsTable = new StatsTable();
-            var hasValues = false;
+            var killsValue = (long)table["kills"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            kills = killsValue;
 
-                switch (attribute)
-                {
-                    case "startingMile":
-                        var startingMileValue = (long)value;
-                        statsTable.startingMile = startingMileValue;
-                        hasValues = true;
-                        break;
-                    case "kills":
-                        var killsValue = (long)value;
-                        statsTable.kills = killsValue;
-                        hasValues = true;
-                        break;
-                    case "deaths":
-                        var deathsValue = (long)value;
-                        statsTable.deaths = deathsValue;
-                        hasValues = true;
-                        break;
-                    case "moves":
-                        var movesValue = (long)value;
-                        statsTable.moves = movesValue;
-                        hasValues = true;
-                        break;
-                    case "mined":
-                        var minedValue = (long)value;
-                        statsTable.mined = minedValue;
-                        hasValues = true;
-                        break;
-                    case "pushed":
-                        var pushedValue = (long)value;
-                        statsTable.pushed = pushedValue;
-                        hasValues = true;
-                        break;
-                    case "shoveled":
-                        var shoveledValue = (long)value;
-                        statsTable.shoveled = shoveledValue;
-                        hasValues = true;
-                        break;
-                    case "completed":
-                        var completedValue = (long)value;
-                        statsTable.completed = completedValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var deathsValue = (long)table["deaths"];
 
-            return hasValues ? statsTable : null;
+            deaths = deathsValue;
+
+            var movesValue = (long)table["moves"];
+
+            moves = movesValue;
+
+            var minedValue = (long)table["mined"];
+
+            mined = minedValue;
+
+            var pushedValue = (long)table["pushed"];
+
+            pushed = pushedValue;
+
+            var shoveledValue = (long)table["shoveled"];
+
+            shoveled = shoveledValue;
+
+            var completedValue = (long)table["completed"];
+
+            completed = completedValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

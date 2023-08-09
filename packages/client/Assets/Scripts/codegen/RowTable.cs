@@ -40,52 +40,14 @@ namespace DefaultNamespace
             segments = (ulong)(int)functionParameters[0];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "segments":
-                        var segmentsValue = (ulong)value;
-                        segments = segmentsValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var segmentsValue = (ulong)table["segments"];
 
-            return hasValues;
-        }
-
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var rowTable = new RowTable();
-            var hasValues = false;
-
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "segments":
-                        var segmentsValue = (ulong)value;
-                        rowTable.segments = segmentsValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? rowTable : null;
+            segments = segmentsValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

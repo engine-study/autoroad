@@ -40,52 +40,14 @@ namespace DefaultNamespace
             value = (long)(int)functionParameters[0];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "value":
-                        var valueValue = (long)value;
-                        value = valueValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var valueValue = (long)table["value"];
 
-            return hasValues;
-        }
-
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var coinageTable = new CoinageTable();
-            var hasValues = false;
-
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "value":
-                        var valueValue = (long)value;
-                        coinageTable.value = valueValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? coinageTable : null;
+            value = valueValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

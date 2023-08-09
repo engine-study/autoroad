@@ -43,62 +43,18 @@ namespace DefaultNamespace
             filled = (string)functionParameters[1];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "state":
-                        var stateValue = (ulong)value;
-                        state = stateValue;
-                        hasValues = true;
-                        break;
-                    case "filled":
-                        var filledValue = (string)value;
-                        filled = filledValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var stateValue = (ulong)table["state"];
 
-            return hasValues;
-        }
+            state = stateValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var roadTable = new RoadTable();
-            var hasValues = false;
+            var filledValue = (string)table["filled"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "state":
-                        var stateValue = (ulong)value;
-                        roadTable.state = stateValue;
-                        hasValues = true;
-                        break;
-                    case "filled":
-                        var filledValue = (string)value;
-                        roadTable.filled = filledValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? roadTable : null;
+            filled = filledValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

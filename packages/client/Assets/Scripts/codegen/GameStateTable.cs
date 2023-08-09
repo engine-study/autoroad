@@ -44,62 +44,18 @@ namespace DefaultNamespace
             playerCount = (long)(int)functionParameters[1];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "miles":
-                        var milesValue = (long)value;
-                        miles = milesValue;
-                        hasValues = true;
-                        break;
-                    case "playerCount":
-                        var playerCountValue = (long)value;
-                        playerCount = playerCountValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var milesValue = (long)table["miles"];
 
-            return hasValues;
-        }
+            miles = milesValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var gameStateTable = new GameStateTable();
-            var hasValues = false;
+            var playerCountValue = (long)table["playerCount"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "miles":
-                        var milesValue = (long)value;
-                        gameStateTable.miles = milesValue;
-                        hasValues = true;
-                        break;
-                    case "playerCount":
-                        var playerCountValue = (long)value;
-                        gameStateTable.playerCount = playerCountValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? gameStateTable : null;
+            playerCount = playerCountValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)

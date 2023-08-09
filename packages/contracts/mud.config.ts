@@ -20,7 +20,7 @@ export default mudConfig({
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
     StateType: ["Idle", "Dead", "Carrying"],
-    MoveType: ["None", "Obstruction", "Shovel", "Carry", "Push"],
+    MoveType: ["None", "Obstruction", "Hole", "Carry", "Push"],
   },
 
   tables: {

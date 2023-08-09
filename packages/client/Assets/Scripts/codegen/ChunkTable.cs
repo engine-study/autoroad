@@ -43,62 +43,18 @@ namespace DefaultNamespace
             mile = (long)(int)functionParameters[1];
         }
 
-        public override bool SetValues(IEnumerable<Property> result)
+        public override void RecordToTable(Record record)
         {
-            var hasValues = false;
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
+            var table = record.value;
+            //bool hasValues = false;
 
-                switch (attribute)
-                {
-                    case "completed":
-                        var completedValue = (bool)value;
-                        completed = completedValue;
-                        hasValues = true;
-                        break;
-                    case "mile":
-                        var mileValue = (long)value;
-                        mile = mileValue;
-                        hasValues = true;
-                        break;
-                }
-            }
+            var completedValue = (bool)table["completed"];
 
-            return hasValues;
-        }
+            completed = completedValue;
 
-        public override IMudTable GetTableValue(string key)
-        {
-            var query = new Query()
-                .Find("?value", "?attribute")
-                .Where(TableId.ToString(), key, "?attribute", "?value");
-            var result = NetworkManager.Instance.ds.Query(query);
-            var chunkTable = new ChunkTable();
-            var hasValues = false;
+            var mileValue = (long)table["mile"];
 
-            foreach (var record in result)
-            {
-                var attribute = record["attribute"].ToString();
-                var value = record["value"];
-
-                switch (attribute)
-                {
-                    case "completed":
-                        var completedValue = (bool)value;
-                        chunkTable.completed = completedValue;
-                        hasValues = true;
-                        break;
-                    case "mile":
-                        var mileValue = (long)value;
-                        chunkTable.mile = mileValue;
-                        hasValues = true;
-                        break;
-                }
-            }
-
-            return hasValues ? chunkTable : null;
+            mile = mileValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
