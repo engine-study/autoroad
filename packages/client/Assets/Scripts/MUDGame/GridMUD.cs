@@ -11,6 +11,7 @@ public class GridMUD : MonoBehaviour {
     public static Dictionary<string, MUDComponent> Grid { get { return Instance.positionDictionary; } }
 
     [Header("Grid")]
+    public bool useQuery = false; 
     [SerializeField] PositionComponent firstComponent;
     [SerializeField] List<MUDComponent> positions;
     [SerializeField] List<PositionComponent> componentsAt;
@@ -69,9 +70,14 @@ public class GridMUD : MonoBehaviour {
     }
 
     public static MUDEntity GetEntityAt(Vector3 newPos) {
-        // MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; 
-        List<PositionComponent> comps = GetComponentsAtPosition((int)newPos.x, (int)newPos.z);
-        return comps.Count > 0 ? comps[0].Entity : null;
+
+        if(Instance.useQuery) {
+            List<PositionComponent> comps = GetComponentsAtPosition((int)newPos.x, (int)newPos.z);
+            return comps.Count > 0 ? comps[0].Entity : null;
+        } else {
+            MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; 
+        }
+
     }
 
 
@@ -105,19 +111,21 @@ public class GridMUD : MonoBehaviour {
             return;
         }
 
-        string position = component.PosLayer.ToString();
+        string newPosition = component.PosInt.ToString();
         string oldPosition = componentDictionary.ContainsKey(component) ? componentDictionary[component] : "";
 
         //Remove the old position from the dictionary
         if(string.IsNullOrEmpty(oldPosition) == false) {
-            componentDictionary[component] = position;
 
-            if(positionDictionary.ContainsKey(oldPosition) && positionDictionary[oldPosition] == component) {
+            if(positionDictionary.ContainsKey(oldPosition)) {
+                Debug.Assert(positionDictionary[oldPosition] == component, "Different component found at old position", component);
                 positionDictionary.Remove(oldPosition);
             }
 
+            componentDictionary[component] = newPosition;
+
         } else {
-            componentDictionary.Add(component, position);
+            componentDictionary.Add(component, newPosition);
         }
 
         //if we deleted the position, do not add it back 
@@ -126,10 +134,10 @@ public class GridMUD : MonoBehaviour {
         }
 
         // Store the position in the dictionary
-        if (positionDictionary.ContainsKey(position)) {
-            positionDictionary[position] = component;
+        if (positionDictionary.ContainsKey(newPosition)) {
+            Debug.Assert(positionDictionary[newPosition] == component, "New position not empty", positionDictionary[newPosition]);
         } else {
-            positionDictionary.Add(position, component);
+            positionDictionary.Add(newPosition, component);
         }
 
     }

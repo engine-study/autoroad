@@ -39,7 +39,7 @@ public class ControllerMUD : SPController {
     float distance;
     int moveDistance = 1;
     // [SerializeField] private AudioClip[] pushes;
-    bool entityReady = false;
+    bool init = false;
 
     void Awake() {
         entity = GetComponentInParent<MUDEntity>();
@@ -52,7 +52,6 @@ public class ControllerMUD : SPController {
         // Debug.Log("Controller Init");
 
         playerScript = GetComponentInParent<PlayerMUD>();
-        entityReady = true;
 
         playerScript.Position.OnUpdated += ComponentUpdate;
 
@@ -68,6 +67,9 @@ public class ControllerMUD : SPController {
 
         onchainPos = playerScript.Position.Pos;
         SetPositionInstant(playerScript.Position.Pos);
+
+        init = true;
+
     }
 
     public void SetPositionInstant(Vector3 newPos) {
@@ -110,7 +112,7 @@ public class ControllerMUD : SPController {
     }
 
     float minTime = 0f;
-    float transactionWait = 1.5f;
+    float transactionWait = 1f;
     float cancelWait = .5f;
     Vector3 moveDest, direction;
     void UpdateInput() {
@@ -177,9 +179,9 @@ public class ControllerMUD : SPController {
             Vector3 pushToPos = new Vector3(Mathf.Round(moveTo.x + direction.x), 0f, Mathf.Round(moveTo.z + direction.z));
 
             MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
-            PositionComponent destinationPos = destinationEntity?.GetMUDComponent<PositionComponent>();
+            MoveComponent destMoveComponent = destinationEntity?.GetMUDComponent<MoveComponent>();
 
-            if(destinationPos != null) {
+            if(destMoveComponent != null && (destMoveComponent.MoveType != MoveType.Hole && destMoveComponent.MoveType != MoveType.None)) {
                 MotherUI.TransactionFailed();
                 player?.Animator.PlayClip("Hit");
                 minTime = cancelWait;
@@ -239,7 +241,7 @@ public class ControllerMUD : SPController {
         }
     }
 
-    public const float MOVE_SPEED = .5f;
+    public const float MOVE_SPEED = .75f;
 
     //this lerps the character transform
     public void UpdatePosition() {
@@ -276,7 +278,7 @@ public class ControllerMUD : SPController {
 
     private void ComponentUpdate() {
 
-        if (!entityReady) { return; }
+        if (!init) { return; }
         //|| playerScript.Position.UpdateType == UpdateType.SetRecord
         if (playerScript.Position.UpdateSource == UpdateSource.Revert ) {
             Debug.Log("Teleporting", this);
@@ -383,7 +385,7 @@ public class ControllerMUD : SPController {
             Gizmos.DrawLine(playerTransform.position + Vector3.up * .25f, playerTransform.position + Vector3.up * .25f + (moveDest - playerTransform.position).normalized);
         }
 
-        if(Application.isPlaying && playerScript.Position) {
+        if(Application.isPlaying && init) {
             Gizmos.DrawLine(playerScript.Position.Pos, playerScript.Position.Pos + direction);
         }
     }

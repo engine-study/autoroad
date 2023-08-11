@@ -105,7 +105,8 @@ contract MoveSystem is System {
      //check if we are pushing rocks into a road ditch
     if (atDestination.length > 0) {
       //check if there is an obstruction
-      bool empty = Move.get(atDestination[0]) == uint32(MoveType.None);
+      MoveType moveType = Move.get(atDestination[0]);
+      bool empty = moveType == uint32(MoveType.None) || moveType == uint32(MoveType.Hole);
       require(empty, "pushing into an occupied spot");
       require(withinManhattanMinimum(from, to,1));
       
@@ -274,6 +275,7 @@ contract MoveSystem is System {
     require(roadState < uint32(RoadState.Paved), "shoveling pavement");
 
     Road.set(roadEntity, uint32(RoadState.Shoveled), player);
+    Move.set(roadEntity, uint32(MoveType.Hole), player);
     Position.set(roadEntity, x, y);
 
     // int32 stat = Stats.getShoveled(player);

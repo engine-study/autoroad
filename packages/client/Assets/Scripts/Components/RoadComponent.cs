@@ -134,7 +134,9 @@ public class RoadComponent : MUDComponent {
     }
 
     public void SetComplete() {
-        
+        for (int i = 0; i < stages.Length; i++) {
+            stages[i].SetActive(i == (int)state);
+        }
     }
 
     public async UniTaskVoid AddToChunk() {
