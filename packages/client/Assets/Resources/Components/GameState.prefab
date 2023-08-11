@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 981588372378251865}
   - component: {fileID: 5650571335107367827}
-  - component: {fileID: 702117180495448203}
   m_Layer: 0
   m_Name: GameState
   m_TagString: Untagged
@@ -58,24 +57,10 @@ MonoBehaviour:
     source: 0
   hasInit: 0
   loaded: 0
-  miles: 0
-  scroll: {fileID: 702117180495448203}
+  scroll: {fileID: 0}
   edge: {fileID: 5751675364159246322}
---- !u!114 &702117180495448203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3261662992255846367}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af69f3eadb05f2a44a628b34207d1fa3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mileHeading: {fileID: 0}
-  maxMile: 0
-  currentMile: -1
+  miles: 0
+  playerCount: 0
 --- !u!1 &6149880832076093903
 GameObject:
   m_ObjectHideFlags: 0

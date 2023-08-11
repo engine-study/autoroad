@@ -913,32 +913,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(mineFunction, cancellationToken);
         }
 
-        public Task<string> MoveFromRequestAsync(MoveFromFunction moveFromFunction)
+        public Task<string> MoveSimpleRequestAsync(MoveSimpleFunction moveSimpleFunction)
         {
-             return ContractHandler.SendRequestAsync(moveFromFunction);
+             return ContractHandler.SendRequestAsync(moveSimpleFunction);
         }
 
-        public Task<TransactionReceipt> MoveFromRequestAndWaitForReceiptAsync(MoveFromFunction moveFromFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveSimpleRequestAndWaitForReceiptAsync(MoveSimpleFunction moveSimpleFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFromFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveSimpleFunction, cancellationToken);
         }
 
-        public Task<string> MoveFromRequestAsync(int x, int y)
+        public Task<string> MoveSimpleRequestAsync(int x, int y)
         {
-            var moveFromFunction = new MoveFromFunction();
-                moveFromFunction.X = x;
-                moveFromFunction.Y = y;
+            var moveSimpleFunction = new MoveSimpleFunction();
+                moveSimpleFunction.X = x;
+                moveSimpleFunction.Y = y;
             
-             return ContractHandler.SendRequestAsync(moveFromFunction);
+             return ContractHandler.SendRequestAsync(moveSimpleFunction);
         }
 
-        public Task<TransactionReceipt> MoveFromRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveSimpleRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
         {
-            var moveFromFunction = new MoveFromFunction();
-                moveFromFunction.X = x;
-                moveFromFunction.Y = y;
+            var moveSimpleFunction = new MoveSimpleFunction();
+                moveSimpleFunction.X = x;
+                moveSimpleFunction.Y = y;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveFromFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveSimpleFunction, cancellationToken);
         }
 
         public Task<string> MoveToRequestAsync(MoveToFunction moveToFunction)
@@ -951,30 +951,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
         }
 
-        public Task<string> MoveToRequestAsync(byte[] player, byte[] entity, int x, int y, int moveToX, int moveToY, List<byte[]> atPosition, List<byte[]> atDestination)
+        public Task<string> MoveToRequestAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination)
         {
             var moveToFunction = new MoveToFunction();
                 moveToFunction.Player = player;
                 moveToFunction.Entity = entity;
-                moveToFunction.X = x;
-                moveToFunction.Y = y;
-                moveToFunction.MoveToX = moveToX;
-                moveToFunction.MoveToY = moveToY;
+                moveToFunction.From = from;
+                moveToFunction.To = to;
                 moveToFunction.AtPosition = atPosition;
                 moveToFunction.AtDestination = atDestination;
             
              return ContractHandler.SendRequestAsync(moveToFunction);
         }
 
-        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, int x, int y, int moveToX, int moveToY, List<byte[]> atPosition, List<byte[]> atDestination, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination, CancellationTokenSource cancellationToken = null)
         {
             var moveToFunction = new MoveToFunction();
                 moveToFunction.Player = player;
                 moveToFunction.Entity = entity;
-                moveToFunction.X = x;
-                moveToFunction.Y = y;
-                moveToFunction.MoveToX = moveToX;
-                moveToFunction.MoveToY = moveToY;
+                moveToFunction.From = from;
+                moveToFunction.To = to;
                 moveToFunction.AtPosition = atPosition;
                 moveToFunction.AtDestination = atDestination;
             
@@ -1199,24 +1195,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(pushFunction, cancellationToken);
         }
 
-        public Task<string> PushRequestAsync(int x, int y, int pushX, int pushY)
+        public Task<string> PushRequestAsync(int x, int y)
         {
             var pushFunction = new PushFunction();
                 pushFunction.X = x;
                 pushFunction.Y = y;
-                pushFunction.PushX = pushX;
-                pushFunction.PushY = pushY;
             
              return ContractHandler.SendRequestAsync(pushFunction);
         }
 
-        public Task<TransactionReceipt> PushRequestAndWaitForReceiptAsync(int x, int y, int pushX, int pushY, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> PushRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var pushFunction = new PushFunction();
                 pushFunction.X = x;
                 pushFunction.Y = y;
-                pushFunction.PushX = pushX;
-                pushFunction.PushY = pushY;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(pushFunction, cancellationToken);
         }

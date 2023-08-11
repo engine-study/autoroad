@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WorldScroll : MonoBehaviour
 {
+    public static WorldScroll Instance;
 
     [Header("World Scroll")]
     public SPHeading mileHeading;
@@ -15,6 +16,14 @@ public class WorldScroll : MonoBehaviour
     public float MileTotal { get { return currentMile * GameStateComponent.MILE_DISTANCE; } }
     public float MileTotalScroll { get { return mileScroll * GameStateComponent.MILE_DISTANCE; } }
 
+    void Awake() {
+        Instance = this;
+    }
+
+    void OnDestroy() {
+        Instance = null;
+    }
+    
     void Start()
     {
         currentMile = -1;

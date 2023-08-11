@@ -32,6 +32,9 @@ public class ChunkComponent : MUDComponent {
 
         // Debug.Log("Chunk: " + eventType.ToString());
 
+        //make sure we are added to world scroll
+        transform.parent = WorldScroll.Instance.transform;
+
         ChunkTable table = (ChunkTable)update;
 
         if (update == null) {

@@ -18,7 +18,7 @@ public class CursorMUD : MonoBehaviour {
     public static Action<Entity> OnHoverEntity;
     public static Action<Entity> OnLeaveEntity;
     public static Action<Vector3> OnGridPosition;
-    public static Action<Vector3> OnUpdateCursor;
+    public static Action<Vector3> OnCursorPosition;
 
     [Header("Cursor")]
     public bool grid;
@@ -68,7 +68,7 @@ public class CursorMUD : MonoBehaviour {
         visuals.position = mousePos;
 
         if (lastPos != rawMousePos) {
-            OnUpdateCursor?.Invoke(rawMousePos);
+            OnCursorPosition?.Invoke(rawMousePos);
         }
 
         if (mousePos != lastPos) {

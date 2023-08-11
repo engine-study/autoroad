@@ -24,13 +24,13 @@ public class CursorUI : MonoBehaviour {
         actor.ToggleWindowClose();
 
         CursorMUD.OnHoverEntity += UpdateHoverEntity;
-        CursorMUD.OnUpdateCursor += OnCursorPosition;
+        CursorMUD.OnGridPosition += OnCursorPosition;
     }
 
     void OnDestroy() {
         Instance = null;
         CursorMUD.OnHoverEntity -= UpdateHoverEntity;
-        CursorMUD.OnUpdateCursor -= OnCursorPosition;
+        CursorMUD.OnGridPosition -= OnCursorPosition;
     }
 
     void OnCursorPosition(Vector3 newPos) {

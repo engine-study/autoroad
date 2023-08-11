@@ -427,10 +427,10 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
-    public partial class MoveFromFunction : MoveFromFunctionBase { }
+    public partial class MoveSimpleFunction : MoveSimpleFunctionBase { }
 
-    [Function("moveFrom")]
-    public class MoveFromFunctionBase : FunctionMessage
+    [Function("moveSimple")]
+    public class MoveSimpleFunctionBase : FunctionMessage
     {
         [Parameter("int32", "x", 1)]
         public virtual int X { get; set; }
@@ -447,17 +447,13 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Player { get; set; }
         [Parameter("bytes32", "entity", 2)]
         public virtual byte[] Entity { get; set; }
-        [Parameter("int32", "x", 3)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 4)]
-        public virtual int Y { get; set; }
-        [Parameter("int32", "moveToX", 5)]
-        public virtual int MoveToX { get; set; }
-        [Parameter("int32", "moveToY", 6)]
-        public virtual int MoveToY { get; set; }
-        [Parameter("bytes32[]", "atPosition", 7)]
+        [Parameter("tuple", "from", 3)]
+        public virtual PositionData From { get; set; }
+        [Parameter("tuple", "to", 4)]
+        public virtual PositionData To { get; set; }
+        [Parameter("bytes32[]", "atPosition", 5)]
         public virtual List<byte[]> AtPosition { get; set; }
-        [Parameter("bytes32[]", "atDestination", 8)]
+        [Parameter("bytes32[]", "atDestination", 6)]
         public virtual List<byte[]> AtDestination { get; set; }
     }
 
@@ -559,10 +555,6 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
-        [Parameter("int32", "pushX", 3)]
-        public virtual int PushX { get; set; }
-        [Parameter("int32", "pushY", 4)]
-        public virtual int PushY { get; set; }
     }
 
     public partial class PushToFieldFunction : PushToFieldFunctionBase { }

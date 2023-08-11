@@ -110,7 +110,7 @@ public class ControllerMUD : SPController {
     }
 
     float minTime = 0f;
-    Vector3 moveDest;
+    Vector3 moveDest, direction;
     void UpdateInput() {
 
         if (!hasInit) {
@@ -150,31 +150,40 @@ public class ControllerMUD : SPController {
         if (!input)
             return;
 
+
         moveDest = (Vector3)onchainPos;
-
-
-        // Vector3 moveDest = (Vector3)_destination;
-
         moveDest += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
   
         minTime = 1.5f;
 
-        Vector3 direction = (moveDest - playerTransform.position).normalized;
-        // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerTransform.position + direction + Vector3.up * .25f, .1f);
-        MUDEntity e = GridMUD.GetEntityAt(playerTransform.position + direction);
+        direction = (moveDest - playerScript.Position.Pos).normalized;
+        // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
+        MUDEntity e = GridMUD.GetEntityAt(playerScript.Position.Pos + direction);
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
 
-        if (moveType != null && moveType.MoveType == MoveType.Push) {
+        if (moveType != null) {
 
             Debug.Log("PUSHING");
 
-            Vector3 newPos = new Vector3(Mathf.Round(playerTransform.position.x + direction.x), 0f, Mathf.Round(playerTransform.position.z + direction.z));
+            if(moveType.MoveType != MoveType.Push) {
+                MotherUI.ActionWheel.UpdateState(ActionEndState.Failed, true);
+                return;
+            }
+            Vector3 newPos = new Vector3(Mathf.Round(playerScript.Position.Pos.x + direction.x), 0f, Mathf.Round(playerScript.Position.Pos.z + direction.z));
             Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
+
+            MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
+            PositionComponent destinationPos = e?.GetMUDComponent<PositionComponent>();
+
+            if(destinationPos != null) {
+                MotherUI.ActionWheel.UpdateState(ActionEndState.Failed, true);
+                return;
+            }
 
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)newPos.x, (int)newPos.z));
             updates.Add(TxManager.MakeOptimistic(moveType, (int)pushToPos.x, (int)pushToPos.z));
-            TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
+            TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z));
 
             if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
                 BoundsComponent.ShowBorder();
@@ -189,14 +198,12 @@ public class ControllerMUD : SPController {
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
 
-            UniTask<bool> tx = TxManager.Send<MoveFromFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+            UniTask<bool> tx = TxManager.Send<MoveSimpleFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
 
             if(!MapConfigComponent.OnMap((int)moveDest.x, (int)moveDest.z)) {
                 BoundsComponent.ShowBorder();
             }
         }
-
-
 
         markerPos = moveDest;
     }
@@ -298,13 +305,13 @@ public class ControllerMUD : SPController {
 
         //raycast to the world
         RaycastHit hit;
-        Vector3 direction = playerTransform.position == moveDest ? player.Root.forward : (moveDest - playerTransform.position).normalized;
-        Vector3 position = playerTransform.position + direction;
+        Vector3 lookDirection = playerTransform.position == moveDest ? player.Root.forward : (moveDest - playerTransform.position).normalized;
+        Vector3 position = playerTransform.position + lookDirection;
 
         MUDEntity entityAtMove = GridMUD.GetEntityAt(position);
         MUDEntity terrainAtMove = GridMUD.GetEntityAt(position + Vector3.down);
 
-        // Physics.Raycast(playerTransform.position + Vector3.up * .25f, direction, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        // Physics.Raycast(playerTransform.position + Vector3.up * .25f, lookDirection, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         // Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
 
         //&& (hit.collider.GetComponentInParent<RockComponent>() != null || hit.collider.GetComponentInParent<PlayerComponent>() != null)
@@ -362,10 +369,14 @@ public class ControllerMUD : SPController {
     }
 
     void OnDrawGizmos() {
+
         if (moveDest != Vector3.zero) {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(playerTransform.position + Vector3.up * .25f, playerTransform.position + Vector3.up * .25f + (moveDest - playerTransform.position).normalized);
+        }
 
+        if(Application.isPlaying && playerScript.Position) {
+            Gizmos.DrawLine(playerScript.Position.Pos, playerScript.Position.Pos + direction);
         }
     }
 

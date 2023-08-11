@@ -40,7 +40,7 @@ public class GameState : MonoBehaviour {
         NetworkManager.OnInitialized += SetupGame;
         NetworkManager.OnInitialized += LoadServer;
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
-
+        GameStateComponent.OnGameStateUpdated += GameStateUpdated;
     }
 
     void Start() {
@@ -147,6 +147,9 @@ public class GameState : MonoBehaviour {
         localPlayer = SPPlayer.LocalPlayer as PlayerMUD;
     }
 
+    void GameStateUpdated() {
+        scroll.SetMaxMile(GameStateComponent.MILE_COUNT);
+    }
 
     void Update() {
         UpdateInput();
