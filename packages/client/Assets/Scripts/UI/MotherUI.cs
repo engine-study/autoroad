@@ -9,8 +9,8 @@ using Cysharp.Threading.Tasks;
 public class MotherUI : SPUIInstance {
 
     public static MotherUI Mother;
-    public static SPActionWheelUI ActionWheel;
-    
+    public static SPActionWheelUI ActionWheel {get { return Mother.wheel; } }
+
     [Header("UI")]
     public GameObject loadingScreen;
     public Image loadingScreenBackground;

@@ -18,11 +18,14 @@ public class GridMUD : MonoBehaviour {
     private Dictionary<string, MUDComponent> positionDictionary = new Dictionary<string, MUDComponent>();
     private Dictionary<MUDComponent, string> componentDictionary = new Dictionary<MUDComponent, string>();
 
-    
     void Awake() {
         Instance = this;
         positions = new List<MUDComponent>();
         TableManager.OnTableToggle += Init;
+        NetworkManager.OnInitialized += Setup;
+    }
+
+    void Setup() {
         CursorMUD.OnGridPosition += UpdateComponents;
     }
 
