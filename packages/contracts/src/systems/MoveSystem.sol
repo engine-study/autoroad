@@ -86,15 +86,16 @@ contract MoveSystem is System {
 
     bytes32[] memory atDestination = getKeysWithValue(PositionTableId, Position.encode(pushTo.x, pushTo.y));
     
-    bool canMove = moveTo(player, atPosition[0],moveFrom, pushTo, atPosition, atDestination);
+    bool canMove = moveTo(player, atPosition[0], moveFrom, pushTo, atPosition, atDestination);
 
     //move push object before then setting the pusher to the new position
     if (canMove) {
-      Position.set(player, pushTo.x, pushTo.y);
+      Position.set(atPosition[0], pushTo.x, pushTo.y);
     }
 
     //and then player (which ovewrites where the push object was)
     Position.set(player, x, y);
+    
     // int32 stat = Stats.getPushed(player);
     // Stats.setPushed(player, stat + 1);
   }

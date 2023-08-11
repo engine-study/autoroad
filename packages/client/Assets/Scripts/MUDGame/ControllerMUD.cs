@@ -160,21 +160,21 @@ public class ControllerMUD : SPController {
 
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
         MUDEntity e = GridMUD.GetEntityAt(moveTo);
-        MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
+        MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
+        PositionComponent posComponent = e?.GetMUDComponent<PositionComponent>();
 
-        if (moveType != null) {
+        if (moveComponent != null) {
 
             Debug.Log("PUSHING");
 
-            if(moveType.MoveType != MoveType.Push) {
+            if(moveComponent.MoveType != MoveType.Push) {
                 MotherUI.TransactionFailed();
                 player?.Animator.PlayClip("Hit");
                 minTime = cancelWait;
                 return;
             }
 
-            Vector3 newPos = new Vector3(Mathf.Round(moveTo.x + direction.x), 0f, Mathf.Round(moveTo.z + direction.z));
-            Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
+            Vector3 pushToPos = new Vector3(Mathf.Round(moveTo.x + direction.x), 0f, Mathf.Round(moveTo.z + direction.z));
 
             MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
             PositionComponent destinationPos = destinationEntity?.GetMUDComponent<PositionComponent>();
@@ -187,9 +187,9 @@ public class ControllerMUD : SPController {
             }
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)newPos.x, (int)newPos.z));
-            updates.Add(TxManager.MakeOptimistic(moveType, (int)pushToPos.x, (int)pushToPos.z));
-            TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveTo.x, (int)moveTo.z));
+            updates.Add(TxManager.MakeOptimistic(posComponent, (int)pushToPos.x, (int)pushToPos.z));
+            TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(moveTo.x), System.Convert.ToInt32(moveTo.z));
 
             if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
                 BoundsComponent.ShowBorder();

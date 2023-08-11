@@ -4,7 +4,7 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public enum MoveType { None, Obstruction, Shovel, Carry, Push } 
+public enum MoveType { None, Obstruction, Hole, Carry, Push } 
 public class MoveComponent : MUDComponent {
 
 
