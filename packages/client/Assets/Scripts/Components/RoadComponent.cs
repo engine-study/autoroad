@@ -95,7 +95,7 @@ public class RoadComponent : MUDComponent {
 
         yield return new WaitForSeconds(1f);
 
-        PlayerMUD player = EntityDictionary.GetEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
+        PlayerMUD player = EntityDictionary.FindEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
 
         if (player == null) {
             Debug.LogError("Couldn't find player", this);

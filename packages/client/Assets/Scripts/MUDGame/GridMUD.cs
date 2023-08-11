@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
+using mud.Unity;
+using IWorld.ContractDefinition;
+using DefaultNamespace;
 
 public class GridMUD : MonoBehaviour {
     public static GridMUD Instance;
@@ -9,11 +12,35 @@ public class GridMUD : MonoBehaviour {
 
     [Header("Grid")]
     [SerializeField] private List<MUDComponent> positions;
+    [SerializeField] List<PositionComponent> componentsAt;
+
     TableManager positionTable;
     private Dictionary<string, MUDComponent> positionDictionary = new Dictionary<string, MUDComponent>();
     private Dictionary<MUDComponent, string> componentDictionary = new Dictionary<MUDComponent, string>();
 
-    public static MUDEntity GetEntityAt(Vector3 newPos) { MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; }
+    List<PositionComponent> GetComponentsAtPosition(int x, int y) {
+
+        var ds = NetworkManager.Instance.ds;
+        var allComponentsAtPosition = new Query().In(PositionTable.ID, new Condition[] { Condition.Has("x", System.Convert.ToInt32(x)), Condition.Has("y", System.Convert.ToInt32(y)) });
+        var recordsWithPosition = ds.RunQuery(allComponentsAtPosition);
+
+        List<PositionComponent> components = new List<PositionComponent>();
+        foreach(Record r in recordsWithPosition) {
+            PositionComponent pos = TableManager.FindComponent<PositionComponent>(r.key);
+
+            if(pos == null) {
+                Debug.LogError("Could not find entity", this);
+                continue;
+            }
+            components.Add(pos);
+        }
+
+        return components;
+    }
+
+    public static MUDEntity GetEntityAt(Vector3 newPos) { 
+        MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; 
+    }
 
     void Awake() {
         Instance = this;
@@ -92,6 +119,20 @@ public class GridMUD : MonoBehaviour {
 
     }
 
+    void OnDrawGizmosSelected() {
+        if(!Application.isPlaying) {
+            return;
+        }
+
+        Debug.Log("Updating gizmo");
+
+        componentsAt = GetComponentsAtPosition((int)CursorMUD.GridPos.x, (int)CursorMUD.GridPos.z);
+
+        foreach(PositionComponent p in componentsAt) {
+            Gizmos.DrawWireSphere(p.Pos, .1f);
+        }
+
+    }
 
 
 }
