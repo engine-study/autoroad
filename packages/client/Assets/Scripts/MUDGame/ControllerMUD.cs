@@ -150,13 +150,10 @@ public class ControllerMUD : SPController {
         if (!input)
             return;
 
-
-        moveDest = (Vector3)onchainPos;
-        moveDest += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
+        Vector3 movePos = (Vector3)onchainPos;
+        movePos += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
   
-        minTime = 1.5f;
-
-        direction = (moveDest - playerScript.Position.Pos).normalized;
+        direction = (movePos - playerScript.Position.Pos).normalized;
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
         MUDEntity e = GridMUD.GetEntityAt(playerScript.Position.Pos + direction);
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
@@ -193,19 +190,21 @@ public class ControllerMUD : SPController {
         } else {
 
             Debug.Log("WALKING");
-            markerPos = moveDest;
+            markerPos = movePos;
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveDest.x, (int)moveDest.z));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)movePos.x, (int)movePos.z));
 
-            UniTask<bool> tx = TxManager.Send<MoveSimpleFunction>(updates, System.Convert.ToInt32(moveDest.x), System.Convert.ToInt32(moveDest.z));
+            UniTask<bool> tx = TxManager.Send<MoveSimpleFunction>(updates, System.Convert.ToInt32(movePos.x), System.Convert.ToInt32(movePos.z));
 
-            if(!MapConfigComponent.OnMap((int)moveDest.x, (int)moveDest.z)) {
+            if(!MapConfigComponent.OnMap((int)movePos.x, (int)movePos.z)) {
                 BoundsComponent.ShowBorder();
             }
         }
 
         markerPos = moveDest;
+        minTime = 1.5f;
+
     }
 
     public void TeleportMUD(Vector3 position, bool admin = false) {
@@ -321,12 +320,12 @@ public class ControllerMUD : SPController {
 
             if (playerTransform.position == moveDest) {
                 //appear tired because we tried to move but our position didn't change (walking into a wall)
-                Debug.Log("Tired", this);
+                Debug.Log("Animation: Tired", this);
                 walkingState.Apply(player.Animator);
                 player.Animator.PlayClip("Hit");
                 player.Resources.sfx.PlaySound(sfx_bump);
             } else {
-                Debug.Log("Pushing", this);
+                Debug.Log("Animation: Pushing", this);
                 pushState.Apply(player.Animator);
                 player.Animator.PlayClip("Push");
                 player.Resources.sfx.PlaySound(sfx_bump);
@@ -337,7 +336,7 @@ public class ControllerMUD : SPController {
 
         } else {
             //remember the idle animation actually has walk functionality in the AnimationController
-            Debug.Log("Walking", this);
+            Debug.Log("Animation: Walking", this);
             player?.Animator.PlayClip("Idle");
             markerPos = moveDest;
         }
