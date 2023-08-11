@@ -12,6 +12,7 @@ public class TreeComponent : MUDComponent {
     public ParticleSystem fx_hit, fx_fall;
     public AudioClip[] sfx_hits, sfx_falls;
     HealthComponent health;
+    PositionComponent pos;
     Rigidbody rb;
 
     [Header("Debug")]
@@ -21,6 +22,8 @@ public class TreeComponent : MUDComponent {
 
     protected override void PostInit() {
         base.PostInit();
+
+        pos = Entity.GetMUDComponent<PositionComponent>();
         health = Entity.GetMUDComponent<HealthComponent>();
         health.OnUpdated += TreeHit;
 
@@ -104,6 +107,7 @@ public class TreeComponent : MUDComponent {
     }
 
     public async void ChopTree(string entity) {
-        await TxManager.Send<ChopFunction>(TxManager.MakeOptimistic(health, (int)Mathf.Clamp(health.Health - 1, 0, Mathf.Infinity)), System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
+        List<TxUpdate> updates = new List<TxUpdate>() { TxManager.MakeOptimistic(health, (int)Mathf.Clamp(health.Health - 1, 0, Mathf.Infinity)), TxManager.MakeOptimisticDelete(pos) };
+        await TxManager.Send<ChopFunction>(updates, System.Convert.ToInt32(transform.position.x), System.Convert.ToInt32(transform.position.z));
     }
 }
