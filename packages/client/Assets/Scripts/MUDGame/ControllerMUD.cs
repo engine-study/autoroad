@@ -239,7 +239,7 @@ public class ControllerMUD : SPController {
         }
     }
 
-    public const float MOVE_SPEED = 1.5f;
+    public const float MOVE_SPEED = .5f;
 
     //this lerps the character transform
     public void UpdatePosition() {
