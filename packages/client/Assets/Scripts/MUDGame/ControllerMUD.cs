@@ -110,6 +110,8 @@ public class ControllerMUD : SPController {
     }
 
     float minTime = 0f;
+    float transactionWait = 1.5f;
+    float cancelWait = .5f;
     Vector3 moveDest, direction;
     void UpdateInput() {
 
@@ -150,12 +152,14 @@ public class ControllerMUD : SPController {
         if (!input)
             return;
 
+
         Vector3 movePos = (Vector3)onchainPos;
         movePos += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
-  
         direction = (movePos - playerScript.Position.Pos).normalized;
+        Vector3 moveTo = playerScript.Position.Pos + direction;
+
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
-        MUDEntity e = GridMUD.GetEntityAt(playerScript.Position.Pos + direction);
+        MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
 
         if (moveType != null) {
@@ -163,17 +167,22 @@ public class ControllerMUD : SPController {
             Debug.Log("PUSHING");
 
             if(moveType.MoveType != MoveType.Push) {
-                MotherUI.ActionWheel.UpdateState(ActionEndState.Failed, true);
+                MotherUI.TransactionFailed();
+                player?.Animator.PlayClip("Hit");
+                minTime = cancelWait;
                 return;
             }
-            Vector3 newPos = new Vector3(Mathf.Round(playerScript.Position.Pos.x + direction.x), 0f, Mathf.Round(playerScript.Position.Pos.z + direction.z));
+
+            Vector3 newPos = new Vector3(Mathf.Round(moveTo.x + direction.x), 0f, Mathf.Round(moveTo.z + direction.z));
             Vector3 pushToPos = new Vector3(Mathf.Round(newPos.x + direction.x), 0f, Mathf.Round(newPos.z + direction.z));
 
             MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
-            PositionComponent destinationPos = e?.GetMUDComponent<PositionComponent>();
+            PositionComponent destinationPos = destinationEntity?.GetMUDComponent<PositionComponent>();
 
             if(destinationPos != null) {
-                MotherUI.ActionWheel.UpdateState(ActionEndState.Failed, true);
+                MotherUI.TransactionFailed();
+                player?.Animator.PlayClip("Hit");
+                minTime = cancelWait;
                 return;
             }
 
@@ -203,7 +212,7 @@ public class ControllerMUD : SPController {
         }
 
         markerPos = moveDest;
-        minTime = 1.5f;
+        minTime = transactionWait;
 
     }
 
