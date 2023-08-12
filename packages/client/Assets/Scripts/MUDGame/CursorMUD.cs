@@ -55,8 +55,6 @@ public class CursorMUD : MonoBehaviour {
         if (grid) {
             gridPos = new Vector3(Mathf.Round(rawMousePos.x), Mathf.Round(rawMousePos.y), Mathf.Round(rawMousePos.z));
             mousePos = gridPos;
-
-
         } else {
             mousePos = Vector3.MoveTowards(visuals.position, rawMousePos, 50f * Time.deltaTime);
         }
@@ -67,21 +65,22 @@ public class CursorMUD : MonoBehaviour {
         
         visuals.position = mousePos;
 
-        if (lastPos != rawMousePos) {
-            OnCursorPosition?.Invoke(rawMousePos);
-        }
-
         if (mousePos != lastPos) {
             UpdateHover();
         }
 
-        if (gridPos != lastGridPos) {
-            OnGridPosition?.Invoke(gridPos);
-        }
+        if (lastPos != rawMousePos) {OnCursorPosition?.Invoke(rawMousePos);}
+        if (gridPos != lastGridPos) {OnGridPosition?.Invoke(gridPos);}
 
         lastGridPos = gridPos;
         lastPos = mousePos;
 
+    }
+
+    public static void ForceCursorUpdate() {
+        Instance.UpdateHover();
+        OnCursorPosition?.Invoke(Instance.rawMousePos);
+        OnGridPosition?.Invoke(Instance.gridPos);
     }
 
     void UpdateHover() {

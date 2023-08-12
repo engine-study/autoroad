@@ -36,15 +36,20 @@ public class RecieverMUD : SPReciever
             return;
         }
 
-        SPInteract [] interacts = m.GetComponentsInChildren<SPInteract>();
+        SPInteract [] interacts = m.GetComponentsInChildren<SPInteract>(true);
         if(interacts == null) {
             return;
         }
 
         for(int i = 0; i < interacts.Length; i++) {
 
+            //these interacts havent init yet
+            if(interacts[i].GameObject() == null) {
+                continue;
+            }
+
             if(toggle) {
-                bool canDoAction = interacts[i].Action().TryAction(PlayerMUD.LocalPlayer.Actor, interacts[i]);
+                bool canDoAction = interacts[i].gameObject.activeInHierarchy && interacts[i].Action().TryAction(PlayerMUD.LocalPlayer.Actor, interacts[i]);
                 ToggleInteractable(canDoAction, interacts[i]);
             } else {
                 ToggleInteractable(false, interacts[i]);

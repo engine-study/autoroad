@@ -25,8 +25,9 @@ public class Shovel : Equipment
         
         string entity = MUDHelper.Keccak256("Road", x,y);
         List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
-        updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1, NetworkManager.LocalAddress));
+        
+        // updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
+        // updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1, NetworkManager.LocalAddress));
          
         return await TxManager.Send<ShovelFunction>(updates, System.Convert.ToInt32(x), System.Convert.ToInt32(y));
     }

@@ -30,13 +30,17 @@ public class PlayerMUD : SPPlayer
 
         cosmetics = new Cosmetic[] {bodyCosmetic, headCosmetic, capeCosmetic, backpackCosmetic};
         for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated += Equip;}
+
     }
+
     void Equip() {SPAudioSource.Play(Root.position, sfx_equip);}
 
     protected override void Destroy()
     {
         base.Destroy();
         Player.OnLoaded -= NetworkInit;
+        Actor.OnActionEnd -= ActionCursorUpdate;
+
         for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
 
     }
@@ -66,6 +70,16 @@ public class PlayerMUD : SPPlayer
             Root.gameObject.SetActive(false);
         }
 
+        
+        if(IsLocalPlayer) {
+            Actor.OnActionEnd += ActionCursorUpdate;
+        }
+
+    }
+
+    //refresh what available actions we have
+    void ActionCursorUpdate(ActionEndState endState) {
+        CursorMUD.ForceCursorUpdate();
     }
 
 
