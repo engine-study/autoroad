@@ -22,7 +22,7 @@ public class GridMUD : MonoBehaviour {
     void Awake() {
         Instance = this;
         positions = new List<MUDComponent>();
-        TableManager.OnTableToggle += Init;
+        TableDictionary.OnTableToggle += Init;
         NetworkManager.OnInitialized += Setup;
     }
 
@@ -32,7 +32,7 @@ public class GridMUD : MonoBehaviour {
 
     void OnDestroy() {
         Instance = null;
-        TableManager.OnTableToggle -= Init;
+        TableDictionary.OnTableToggle -= Init;
         CursorMUD.OnGridPosition -= UpdateComponents;
 
         if (positionTable) {
@@ -57,7 +57,7 @@ public class GridMUD : MonoBehaviour {
 
         List<PositionComponent> components = new List<PositionComponent>();
         foreach(Record r in recordsWithPosition) {
-            PositionComponent pos = TableManager.FindComponent<PositionComponent>(r.key);
+            PositionComponent pos = MUDWorld.FindComponent<PositionComponent>(r.key);
 
             if(pos == null) {
                 Debug.LogError("Could not find entity");

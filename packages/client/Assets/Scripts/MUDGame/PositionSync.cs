@@ -19,11 +19,10 @@ public class PositionSync : ComponentSync
     [SerializeField] private PositionComponent pos;
     [SerializeField] private Vector3 targetPos;
     [SerializeField] private bool moving = false;    
-    public override System.Type TargetComponentType() {return typeof(PositionComponent);}
+    public override MUDComponent TargetComponentType() {return new PositionComponent();}
 
-    protected override void Start() {
-
-        base.Start();
+    protected override void Awake() {
+        base.Awake();
 
         if(targetTransform == null) {
             targetTransform = transform;

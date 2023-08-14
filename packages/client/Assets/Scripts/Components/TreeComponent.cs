@@ -32,7 +32,9 @@ public class TreeComponent : MUDComponent {
 
     protected override void InitDestroy() {
         base.InitDestroy();
-        health.OnUpdated -= TreeHit;
+
+        if(health)
+            health.OnUpdated -= TreeHit;
     }
 
     void TreeHit() {

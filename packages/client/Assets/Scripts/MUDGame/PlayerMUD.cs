@@ -33,18 +33,6 @@ public class PlayerMUD : SPPlayer
 
     }
 
-    void Equip() {SPAudioSource.Play(Root.position, sfx_equip);}
-
-    protected override void Destroy()
-    {
-        base.Destroy();
-        Player.OnLoaded -= NetworkInit;
-        Actor.OnActionEnd -= ActionCursorUpdate;
-
-        for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
-
-    }
-
     protected override void NetworkInit() {
         
         base.NetworkInit();
@@ -76,6 +64,18 @@ public class PlayerMUD : SPPlayer
         }
 
     }
+
+    protected override void Destroy()
+    {
+        base.Destroy();
+        Player.OnLoaded -= NetworkInit;
+        Actor.OnActionEnd -= ActionCursorUpdate;
+
+        for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
+
+    }
+    
+    void Equip() {SPAudioSource.Play(Root.position, sfx_equip);}
 
     //refresh what available actions we have
     void ActionCursorUpdate(ActionEndState endState) {

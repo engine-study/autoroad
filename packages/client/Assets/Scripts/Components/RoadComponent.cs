@@ -144,7 +144,7 @@ public class RoadComponent : MUDComponent {
         //we need the roadconfig info and the road pieces to have spawned to load the chunk
         //lots of waiting
 
-        while (TableManager.FindTable<ChunkComponent>().SpawnedComponents.Count < 1) {
+        while (MUDWorld.FindTable<ChunkComponent>().SpawnedComponents.Count < 1) {
             await UniTask.Delay(500);
         }
 
@@ -157,7 +157,7 @@ public class RoadComponent : MUDComponent {
 
         //infer entity of our chunk and look for it
         string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
-        parent = TableManager.FindComponent<ChunkComponent>(chunkEntity);
+        parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
         chunkPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
 

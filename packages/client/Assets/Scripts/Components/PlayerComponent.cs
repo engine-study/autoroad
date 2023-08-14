@@ -55,7 +55,8 @@ public class PlayerComponent : MUDComponent {
     protected override void InitDestroy() {
         base.InitDestroy();
 
-        health.OnUpdated -= CheckHealth;
+        if(health)
+            health.OnUpdated -= CheckHealth;
 
         if(gameEvent)
             gameEvent.OnUpdated -= PlayerEvent;

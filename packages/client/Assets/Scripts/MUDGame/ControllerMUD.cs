@@ -170,9 +170,7 @@ public class ControllerMUD : SPController {
             Debug.Log("PUSHING");
 
             if(moveComponent.MoveType != MoveType.Push) {
-                MotherUI.TransactionFailed();
-                player?.Animator.PlayClip("Hit");
-                minTime = cancelWait;
+                FailedMove();
                 return;
             }
 
@@ -182,9 +180,7 @@ public class ControllerMUD : SPController {
             MoveComponent destMoveComponent = destinationEntity?.GetMUDComponent<MoveComponent>();
 
             if(destMoveComponent != null && (destMoveComponent.MoveType != MoveType.Hole && destMoveComponent.MoveType != MoveType.None)) {
-                MotherUI.TransactionFailed();
-                player?.Animator.PlayClip("Hit");
-                minTime = cancelWait;
+                FailedMove();
                 return;
             }
 
@@ -216,6 +212,12 @@ public class ControllerMUD : SPController {
         markerPos = moveDest;
         minTime = transactionWait;
 
+    }
+
+    public void FailedMove() {
+        MotherUI.TransactionFailed();
+        player?.Animator.PlayClip("Hit");
+        minTime = cancelWait;
     }
 
     public void TeleportMUD(Vector3 position, bool admin = false) {

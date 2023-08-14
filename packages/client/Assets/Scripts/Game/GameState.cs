@@ -68,8 +68,8 @@ public class GameState : MonoBehaviour {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
 
-        while(TableManager.FindTable<BoundsComponent>().HasInit == false) {await UniTask.Delay(500);}
-        while(TableManager.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
+        while(MUDWorld.FindTable<BoundsComponent>().HasInit == false) {await UniTask.Delay(500);}
+        while(MUDWorld.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
 
         SPEvents.OnServerLoaded?.Invoke();
 
@@ -85,8 +85,8 @@ public class GameState : MonoBehaviour {
         }
 
         //wait for name table
-        while(TableManager.FindTable<NameComponent>().HasInit == false) {await UniTask.Delay(500);}
-        NameTable localName = TableManager.FindValue<NameTable>(NetworkManager.LocalAddress);
+        while(MUDWorld.FindTable<NameComponent>()?.HasInit == false) {await UniTask.Delay(500);}
+        NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalAddress);
 
         //create our player name
         if (localName == null) {
@@ -110,10 +110,10 @@ public class GameState : MonoBehaviour {
         while(NameComponent.LocalName == null) {await UniTask.Delay(500);}
 
         //wait for player table
-        while(TableManager.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
-        while(TableManager.FindTable<HealthComponent>().HasInit == false) {await UniTask.Delay(500);}
-        PlayerTable playerTable = TableManager.FindValue<PlayerTable>(NetworkManager.LocalAddress);
-        HealthComponent healthComponent = TableManager.FindComponent<HealthComponent>(NetworkManager.LocalAddress);
+        while(MUDWorld.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
+        while(MUDWorld.FindTable<HealthComponent>().HasInit == false) {await UniTask.Delay(500);}
+        PlayerTable playerTable = MUDWorld.FindValue<PlayerTable>(NetworkManager.LocalAddress);
+        HealthComponent healthComponent = MUDWorld.FindComponent<HealthComponent>(NetworkManager.LocalAddress);
 
         if (playerTable == null || healthComponent == null || healthComponent.Health < 1) {
 
