@@ -41,7 +41,7 @@ public class TreeComponent : MUDComponent {
 
         if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.Health) {
 
-            if (health.Health == 0) {
+            if (health.Health <= 0) {
                 SPAudioSource.Play(transform.position, sfx_hits);
                 SPAudioSource.Play(transform.position, sfx_falls);
                 fx_hit.Play();
