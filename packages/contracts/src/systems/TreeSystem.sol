@@ -32,12 +32,13 @@ contract TreeSystem is System {
     int32 health = Health.get(atPosition[0]);
     health--;
 
-    if (health == 0) {
-
+    if (health <= 0) {
+      
+      Health.set(atPosition[0], health);
       Position.deleteRecord(atPosition[0]);
+
       uint32 seedCount = Seeds.get(player);
       Seeds.set(player, seedCount + 2);
-
       //randomly spawn a log
       //kill a player if it falls on them
 

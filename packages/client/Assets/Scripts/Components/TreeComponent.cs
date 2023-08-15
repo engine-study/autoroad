@@ -18,7 +18,7 @@ public class TreeComponent : MUDComponent {
     [Header("Debug")]
     public bool treeState;
     bool lastState = false;
-    int lastHealth = -1;
+    int lastHealth = -999;
 
     protected override void PostInit() {
         base.PostInit();
