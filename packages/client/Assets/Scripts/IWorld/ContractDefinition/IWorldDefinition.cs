@@ -129,17 +129,6 @@ namespace IWorld.ContractDefinition
         public virtual BigInteger Distance { get; set; }
     }
 
-    public partial class CarryFunction : CarryFunctionBase { }
-
-    [Function("carry")]
-    public class CarryFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "carryX", 1)]
-        public virtual int CarryX { get; set; }
-        [Parameter("int32", "carryY", 2)]
-        public virtual int CarryY { get; set; }
-    }
-
     public partial class ChopFunction : ChopFunctionBase { }
 
     [Function("chop")]
@@ -207,17 +196,6 @@ namespace IWorld.ContractDefinition
     public class DestroyPlayerAdminFunctionBase : FunctionMessage
     {
 
-    }
-
-    public partial class DropFunction : DropFunctionBase { }
-
-    [Function("drop")]
-    public class DropFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
     }
 
     public partial class EmitEphemeralRecord1Function : EmitEphemeralRecord1FunctionBase { }
@@ -936,6 +914,8 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Pushed { get; set; }
         [Parameter("bytes32", "road", 3)]
         public virtual byte[] Road { get; set; }
+        [Parameter("tuple", "pos", 4)]
+        public virtual PositionData Pos { get; set; }
     }
 
     public partial class SpawnShoveledRoadFunction : SpawnShoveledRoadFunctionBase { }
@@ -1244,10 +1224,6 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
-
-
-
-
 
 
 

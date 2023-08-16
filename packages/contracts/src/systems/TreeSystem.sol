@@ -24,7 +24,7 @@ contract TreeSystem is System {
 
     require(world.canDoStuff(player), "hmm");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
 
     require(world.canInteract(player, x, y, atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]), "no tree");
@@ -55,8 +55,12 @@ contract TreeSystem is System {
     require(world.canDoStuff(player), "hmm");
     uint32 seeds = Seeds.get(player);
     require(seeds > 0, "no seeds");
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+
+    bytes32[] memory atRoad = getKeysWithValue(PositionTableId, Position.encode(x, y, -1));
+    require(atRoad.length == 0, "road here");
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
     require(world.canInteractEmpty(player, x, y, atPosition, 1), "bad interact");
+
 
     Seeds.set(player, seeds-1);
     world.spawnTerrain(x,y, TerrainType.Tree);

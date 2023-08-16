@@ -22,6 +22,8 @@ public class RockComponent : MUDComponent {
     public AudioClip[] sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
     RockType lastStage = RockType._Count;
 
+    public bool HasBeenSunk {get { return posSync.Pos.PosLayer.y < 0; } }
+
     protected override void Awake() {
         base.Awake();
 
@@ -42,17 +44,18 @@ public class RockComponent : MUDComponent {
         base.PostInit();
 
         posSync.Pos.OnUpdatedInfo += UpdatePositionCheck;
-        // posSync.OnMoveComplete += CheckSink;
 
-        if (posSync.Pos.NetworkInfo.UpdateType == UpdateType.DeleteRecord) {
+        if (HasBeenSunk) {
             gameObject.SetActive(false);
         }
     }
 
     protected override void InitDestroy() {
         base.InitDestroy();
-        posSync.Pos.OnUpdatedInfo -= UpdatePositionCheck;
-        // posSync.OnMoveComplete -= CheckSink;
+
+        if(posSync) {
+            posSync.Pos.OnUpdatedInfo -= UpdatePositionCheck;
+        }
     }
 
 
@@ -72,7 +75,13 @@ public class RockComponent : MUDComponent {
 
             //our position component was deleted
             //we got pushed into a hole, when we finish moving to the hole, sink into into 
-            CheckSink();
+
+            if(newInfo.UpdateType == UpdateType.DeleteRecord) {
+                //do crumble animation
+                gameObject.SetActive(false);
+            } else {
+                CheckSink();
+            }
         }
 
         lastPos = pos.Pos;
@@ -82,7 +91,7 @@ public class RockComponent : MUDComponent {
     void CheckSink() {
 
         //we stopped moving, AND we have a deleleted record, lets get pushed into a hole
-        if (posSync.Pos.UpdateType == UpdateType.DeleteRecord && posSync.Pos.UpdateSource == UpdateSource.Onchain) {
+        if (HasBeenSunk && rockType == RockType.Statumen && posSync.Pos.UpdateSource == UpdateSource.Onchain) {
             Sink();
         }
     }

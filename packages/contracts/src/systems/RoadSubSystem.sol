@@ -5,7 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage } from "../codegen/Tables.sol";
-import { Position, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
+import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
 import { SpawnSystem } from "./SpawnSystem.sol";
 import { ChunkTableId } from "../codegen/Tables.sol";
@@ -96,7 +96,7 @@ contract RoadSubSystem is System {
     //set the chunk of road
     // Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
     Chunk.set(chunkEntity, false, mileNumber, 0,0);
-    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1);
+    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1, 0);
     // console.log("added mile ", mileNumber);
   }
 
@@ -105,7 +105,7 @@ contract RoadSubSystem is System {
 
     bytes32 entity = getUniqueEntity();
     // bytes32 entity = keccak256(abi.encode("Terrain", x, y));
-    Position.set(entity, x, y);
+    Position.set(entity, x, y, 0);
 
     if (tType == TerrainType.Rock) {
       Rock.set(entity, uint32(RockType.Raw));
@@ -119,12 +119,13 @@ contract RoadSubSystem is System {
     }
   }
 
-  function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road) public {
-    //ROAD COMPLETE!!!
-    Position.deleteRecord(road);
+  function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
 
-    //set the rock to the position and then delete it
-    Position.deleteRecord(pushed);
+    //ROAD COMPLETE!!! set it underground
+    Position.set(road, pos.x, pos.y, -1);
+
+    //set the rock to the position under the road
+    Position.set(pushed, pos.x, pos.y, -2);
 
     bool isPlayer = Player.get(pushed);
     // bool isRock = Rock.get(atDestination[0]);
@@ -178,10 +179,8 @@ contract RoadSubSystem is System {
     bytes32 entity = keccak256(abi.encode("Road", x, y));
     require(Road.getState(entity) == uint32(RoadState.None), "road");
 
-    Position.set(entity, x, y);
+    Position.set(entity, x, y, -1);
     Road.set(entity, uint32(RoadState.Paved), entity);
-
-    Position.deleteRecord(entity);
 
     updateChunk();
   }
@@ -194,7 +193,7 @@ contract RoadSubSystem is System {
     require(Road.getState(entity) == uint32(RoadState.None), "road");
 
     Road.set(entity, uint32(RoadState.Shoveled), entity);
-    Position.set(entity, x, y);
+    Position.set(entity, x, y, 0);
   }
 
   function debugMile() public {
@@ -212,8 +211,13 @@ contract RoadSubSystem is System {
           continue;
         }
 
-        bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+        bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
         if (atPosition.length > 0) {
+          continue;
+        }
+
+        bytes32[] memory atRoad = getKeysWithValue(PositionTableId, Position.encode(x, y, -1));
+        if (atRoad.length > 0) {
           continue;
         }
 

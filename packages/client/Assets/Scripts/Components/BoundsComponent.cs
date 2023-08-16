@@ -13,7 +13,7 @@ public class BoundsComponent : MUDComponent
 
     [Header("Bounds")]
     [SerializeField] GameObject borderVisuals;
-    [SerializeField] Transform front;
+    [SerializeField] Transform front, back;
     [SerializeField] Transform left, right;
     [SerializeField] private Vector4 boundVector;
 
@@ -43,9 +43,19 @@ public class BoundsComponent : MUDComponent
 
         boundVector = new Vector4(Left, Right, Up, Down);
 
-        front.position = Vector3.forward * (Up + .05f);
-        left.localScale = Vector3.one + Vector3.forward * (Up-.5f);
-        right.localScale = Vector3.one + Vector3.forward * (Up-.5f);
+
+        borderVisuals.transform.position = Vector3.forward * Down;
+
+        front.localPosition = Vector3.forward * (Up + .5f);
+
+        front.localScale = Vector3.one + Vector3.right * (Right-Left);
+        back.localScale = Vector3.one + Vector3.right * (Right-Left);
+
+        left.localPosition = Vector3.right * (Left - .5f) - Vector3.forward * .5f;
+        right.localPosition = Vector3.right * (Right + .5f) - Vector3.forward * .5f;
+
+        left.localScale = Vector3.one + Vector3.forward * (Up);
+        right.localScale = Vector3.one + Vector3.forward * (Up);
 
     }
 }

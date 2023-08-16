@@ -44,6 +44,7 @@ public class ControllerMUD : SPController {
     void Awake() {
         entity = GetComponentInParent<MUDEntity>();
         enabled = false;
+        distance = Random.Range(0f, .25f);
     }
 
     public override void Init() {
@@ -185,9 +186,9 @@ public class ControllerMUD : SPController {
             }
 
             List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)moveTo.x, (int)moveTo.z));
-            updates.Add(TxManager.MakeOptimistic(posComponent, (int)pushToPos.x, (int)pushToPos.z));
-            TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(moveTo.x), System.Convert.ToInt32(moveTo.z));
+            updates.Add(TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(moveTo)));
+            updates.Add(TxManager.MakeOptimistic(posComponent, PositionComponent.PositionToOptimistic(pushToPos)));
+            TxManager.Send<PushFunction>(updates, PositionComponent.PositionToTransaction(moveTo));
 
             if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
                 BoundsComponent.ShowBorder();
@@ -199,10 +200,8 @@ public class ControllerMUD : SPController {
             Debug.Log("WALKING");
             markerPos = movePos;
 
-            List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)movePos.x, (int)movePos.z));
-
-            UniTask<bool> tx = TxManager.Send<MoveSimpleFunction>(updates, System.Convert.ToInt32(movePos.x), System.Convert.ToInt32(movePos.z));
+            TxUpdate update = TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(movePos));
+            UniTask<bool> tx = TxManager.Send<MoveSimpleFunction>(update, PositionComponent.PositionToTransaction(movePos));
 
             if(!MapConfigComponent.OnMap((int)movePos.x, (int)movePos.z)) {
                 BoundsComponent.ShowBorder();
@@ -264,7 +263,7 @@ public class ControllerMUD : SPController {
 
         //STEP FX
         if (alive > 1f && distance > .5f) {
-            distance -= .5f;
+            distance -= Random.Range(.25f, .5f);
             player.Resources.sfx.PlaySound(player.Resources.stepSFX);
         }
 

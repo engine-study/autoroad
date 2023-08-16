@@ -25,6 +25,7 @@ namespace DefaultNamespace
 
         public long? x;
         public long? y;
+        public long? layer;
 
         public override Type TableType()
         {
@@ -41,6 +42,8 @@ namespace DefaultNamespace
             x = (long)(int)functionParameters[0];
 
             y = (long)(int)functionParameters[1];
+
+            layer = (long)(int)functionParameters[2];
         }
 
         public override void RecordToTable(Record record)
@@ -52,6 +55,8 @@ namespace DefaultNamespace
             x = xValue;
             var yValue = (long)table["y"];
             y = yValue;
+            var layerValue = (long)table["layer"];
+            layer = layerValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -86,11 +91,19 @@ namespace DefaultNamespace
                     {
                         x = value.Item1.TryGetValue("x", out var xVal) ? (long)xVal : default,
                         y = value.Item1.TryGetValue("y", out var yVal) ? (long)yVal : default,
+                        layer = value.Item1.TryGetValue("layer", out var layerVal)
+                            ? (long)layerVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new PositionTable { x = null, y = null, };
+                    current = new PositionTable
+                    {
+                        x = null,
+                        y = null,
+                        layer = null,
+                    };
                 }
             }
 
@@ -102,11 +115,19 @@ namespace DefaultNamespace
                     {
                         x = value.Item2.TryGetValue("x", out var xVal) ? (long)xVal : default,
                         y = value.Item2.TryGetValue("y", out var yVal) ? (long)yVal : default,
+                        layer = value.Item2.TryGetValue("layer", out var layerVal)
+                            ? (long)layerVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new PositionTable { x = null, y = null, };
+                    previous = new PositionTable
+                    {
+                        x = null,
+                        y = null,
+                        layer = null,
+                    };
                 }
             }
 

@@ -68,13 +68,13 @@ function lineWalkPositions(PositionData memory start, PositionData memory end) p
   uint32 index = 0;
 
   while (xIndex != end.x + signX && deltaX != 0) {
-    positions[index] = PositionData(xIndex, start.y);
+    positions[index] = PositionData(xIndex, start.y, 0);
     index++;
     xIndex += signX;
   }
 
   while (yIndex != end.y + signY && deltaY != 0) {
-    positions[index] = PositionData(start.x, yIndex);
+    positions[index] = PositionData(start.x, yIndex, 0);
     index++;
     yIndex += signY;
   }

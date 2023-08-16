@@ -42,7 +42,7 @@ contract SpawnSystem is System {
     require(x > playWidth && x <= spawnWidth, "x outside spawn");
     require(y <= up && y >= down, "y outside of spawn");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
     require(atPosition.length < 1, "occupied");
 
     spawnPlayer(x, y, entity, false);
@@ -73,7 +73,7 @@ contract SpawnSystem is System {
 
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
-    Position.set(entity, x, y);
+    Position.set(entity, x, y, 0);
   }
 
   function destroyPlayerAdmin() public {
