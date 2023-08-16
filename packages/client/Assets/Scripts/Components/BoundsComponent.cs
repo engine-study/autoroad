@@ -43,9 +43,9 @@ public class BoundsComponent : MUDComponent
 
         boundVector = new Vector4(Left, Right, Up, Down);
 
-        front.position = Vector3.forward * Up;
-        left.localScale = Vector3.one + Vector3.forward * (Up/GameStateComponent.MILE_DISTANCE);
-        right.localScale = Vector3.one + Vector3.forward * (Up/GameStateComponent.MILE_DISTANCE);
+        front.position = Vector3.forward * (Up + .05f);
+        left.localScale = Vector3.one + Vector3.forward * (Up-.5f);
+        right.localScale = Vector3.one + Vector3.forward * (Up-.5f);
 
     }
 }
