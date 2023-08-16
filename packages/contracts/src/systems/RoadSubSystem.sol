@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Health, Carriage } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage } from "../codegen/Tables.sol";
 import { Position, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
 import { SpawnSystem } from "./SpawnSystem.sol";
@@ -27,50 +27,7 @@ contract RoadSubSystem is System {
     return x >= int32(left) && x <= right;
   }
 
-  function spawnFinishedRoad(int32 x, int32 y) public {
-    IWorld world = IWorld(_world());
-    require(world.onRoad(x, y), "off road");
-
-    bytes32 entity = keccak256(abi.encode("Road", x, y));
-    
-    Position.set(entity, x, y);
-    Road.set(entity, uint32(RoadState.Paved), entity);
-
-    Position.deleteRecord(entity);
-  }
-
-  function spawnShoveledRoad(int32 x, int32 y) public {
-    IWorld world = IWorld(_world());
-    require(world.onRoad(x, y), "off road");
-    bytes32 entity = keccak256(abi.encode("Road", x, y));
-    Road.set(entity, uint32(RoadState.Shoveled), entity);
-    Position.set(entity, x, y);
-  }
-
-  // function debugMile(int32 mile) public {
-  //   //create a new chunk
-  //   (int32 playArea, int32 spawnArea) = MapConfig.get();
-  //   (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
-
-  //   int32 yStart = mile * int32(roadHeight);
-  //   int32 yEnd = yStart + 2;
-
-  //   for (int32 y = yStart; y < yEnd; y++) {
-  //     //SPAWN TERRAIN
-  //     for (int32 x = int32(-playArea); x <= playArea; x++) {
-  //       if (x < playArea || y == yStart) {
-  //         spawnFinishedRoadAdmin(x, y);
-  //       } else {
-  //         spawnShoveledRoadAdmin(x, y);
-  //       }
-  //     }
-  //   }
-  // }
-
   function createMile(int32 mileNumber) public {
-    bytes32[] memory atPosition = getKeysWithValue(ChunkTableId, Chunk.encode(true, int32(mileNumber - 1)));
-    require(mileNumber == 0 || atPosition.length > 0, "cannot create a new mile until the active one is complete");
-
     //create an entity for the chunk itself
     bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
 
@@ -138,7 +95,7 @@ contract RoadSubSystem is System {
 
     //set the chunk of road
     // Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
-    Chunk.set(chunkEntity, false, mileNumber);
+    Chunk.set(chunkEntity, false, mileNumber, 0,0);
     Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1);
     // console.log("added mile ", mileNumber);
   }
@@ -162,5 +119,108 @@ contract RoadSubSystem is System {
     }
   }
 
+  function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road) public {
+    //ROAD COMPLETE!!!
+    Position.deleteRecord(road);
+
+    //set the rock to the position and then delete it
+    Position.deleteRecord(pushed);
+
+    bool isPlayer = Player.get(pushed);
+    // bool isRock = Rock.get(atDestination[0]);
+    if (isPlayer) {
+      Health.set(pushed, -1);
+      Road.set(road, uint32(RoadState.Bones), player);
+    } else {
+      Road.set(road, uint32(RoadState.Paved), player);
+    }
+
+    //reward the player
+    int32 coins = Coinage.get(player);
+    Coinage.set(player, coins + 5);
+
+    updateChunk();
+
+    // int32 stat = Stats.getCompleted(filler);
+    // Stats.setCompleted(filler, stat + 1);
+  }
+
+  function updateChunk() public {
+    (int32 currentMile, ) = GameState.get();
+    bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
+
+    uint32 pieces = Chunk.getPieces(chunk);
+    (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
+
+    pieces++;
+
+    //road complete!
+    if (pieces == (roadWidth * roadHeight)) {
+      finishChunk(chunk, currentMile, pieces);
+    } else {
+      Chunk.set(chunk, false, currentMile, pieces,0);
+    }
+  }
+
+  function finishChunk(bytes32 chunk, int32 currentMile, uint32 pieces) public {
+
+    Chunk.set(chunk, true, currentMile, pieces, block.number);
+
+    //REWARDS
+    createMile(currentMile + 1);
+
+  }
+
+  function spawnFinishedRoad(int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    require(world.onRoad(x, y), "off road");
+
+    bytes32 entity = keccak256(abi.encode("Road", x, y));
+    require(Road.getState(entity) == uint32(RoadState.None), "road");
+
+    Position.set(entity, x, y);
+    Road.set(entity, uint32(RoadState.Paved), entity);
+
+    Position.deleteRecord(entity);
+
+    updateChunk();
+  }
+
+  function spawnShoveledRoad(int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    require(world.onRoad(x, y), "off road");
+
+    bytes32 entity = keccak256(abi.encode("Road", x, y));
+    require(Road.getState(entity) == uint32(RoadState.None), "road");
+
+    Road.set(entity, uint32(RoadState.Shoveled), entity);
+    Position.set(entity, x, y);
+  }
+
+  function debugMile() public {
+    //create a new chunk
+    (, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();
+    int32 currentMile = GameState.getMiles();
+
+    int32 yStart = int32(currentMile * int32(roadHeight));
+    int32 yEnd = yStart + int32(roadHeight);
+
+    for (int32 y = yStart; y < yEnd; y++) {
+      for (int32 x = left; x <= right; x++) {
+        bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
+        if (Road.getState(roadEntity) != uint32(RoadState.None)) {
+          continue;
+        }
+
+        bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y));
+        if (atPosition.length > 0) {
+          continue;
+        }
+
+        spawnFinishedRoad(x, y);
+        
+      }
+    }
+  }
 
 }

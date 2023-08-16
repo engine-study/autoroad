@@ -10,7 +10,7 @@ import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
 import { Bounds, BoundsTableId } from "./tables/Bounds.sol";
 import { RoadConfig, RoadConfigTableId } from "./tables/RoadConfig.sol";
 import { GameState, GameStateTableId } from "./tables/GameState.sol";
-import { Chunk, ChunkData, ChunkTableId } from "./tables/Chunk.sol";
+import { Chunk, ChunkTableId } from "./tables/Chunk.sol";
 import { Row, RowTableId } from "./tables/Row.sol";
 import { Shovel, ShovelTableId } from "./tables/Shovel.sol";
 import { Pickaxe, PickaxeTableId } from "./tables/Pickaxe.sol";

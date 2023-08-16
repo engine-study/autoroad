@@ -105,9 +105,12 @@ export default mudConfig({
     Chunk: {
       name: "Chunk",
       openAccess: false, // it's a subsystem now!
+      dataStruct: false,
       schema: {
         completed: "bool",
         mile: "int32",
+        pieces: "uint32",
+        blockCompleted: "uint256",
         // // dynamic list of people who have helped build the mile
         // entities: "bytes32[]",
         //   //dynamic list of people who have helped build the mile

@@ -119,9 +119,9 @@ public class GameState : MonoBehaviour {
 
             if(SPGlobal.IsDebug) {
                 int x = BoundsComponent.Right + 1;
-                int y = BoundsComponent.Up - 5;
+                int y = BoundsComponent.Up;
                 Debug.Log("Spawning player at " + x + "," + y);
-                while(await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y)) == false)  {await UniTask.Delay(2000);}
+                while(await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y)) == false)  {y--; await UniTask.Delay(2000);}
             } else {
                 Debug.Log("Choosing spawn");
                 MotherUI.TogglePlayerSpawning(true);
@@ -164,6 +164,11 @@ public class GameState : MonoBehaviour {
                 return;
             }
 
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0)) {
+                TxManager.Send<FinishMileAdminFunction>();
+                return;
+            }
+
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0)) {
                 TxManager.Send<SpawnFinishedRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
                 return;
@@ -173,6 +178,7 @@ public class GameState : MonoBehaviour {
                 TxManager.Send<SpawnShoveledRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
                 return;
             }
+
         }
 
         if(Input.GetKeyDown(KeyCode.F)) {

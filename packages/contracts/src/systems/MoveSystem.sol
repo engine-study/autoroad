@@ -114,10 +114,11 @@ contract MoveSystem is System {
 
       //there is a road here
       if (roadInt != 0) {
+
         require(roadInt == uint32(RoadState.Shoveled), "Road not shoveled");
         //this has now become a fill()
 
-        fill(player, entity, atDestination[0]);
+        IWorld(_world()).spawnRoad(player, entity, atDestination[0]);
         return false;
       } 
 
@@ -125,32 +126,6 @@ contract MoveSystem is System {
    
     return true;
 
-  }
-
-  //, PositionData memory fillAt
-
-  function fill(bytes32 player, bytes32 pushed, bytes32 road) private {
-    //ROAD COMPLETE!!!
-    Position.deleteRecord(road);
-
-    //set the rock to the position and then delete it
-    Position.deleteRecord(pushed);
-
-    bool isPlayer = Player.get(pushed);
-    // bool isRock = Rock.get(atDestination[0]);
-    if (isPlayer) {
-      Health.set(pushed, -1);
-      Road.set(road, uint32(RoadState.Bones), player);
-    } else {
-      Road.set(road, uint32(RoadState.Paved), player);
-    }
-
-    //reward the player
-    int32 coins = Coinage.get(player);
-    Coinage.set(player, coins + 5);
-
-    // int32 stat = Stats.getCompleted(filler);
-    // Stats.setCompleted(filler, stat + 1);
   }
 
   function canDoStuff(bytes32 player) public returns (bool) {
@@ -272,9 +247,7 @@ contract MoveSystem is System {
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
-    (uint32 roadState, ) = Road.get(roadEntity);
-
-    require(roadState < uint32(RoadState.Paved), "shoveling pavement");
+    require(Road.getState(roadEntity) == uint32(RoadState.None), "road");
 
     Road.set(roadEntity, uint32(RoadState.Shoveled), player);
     Move.set(roadEntity, uint32(MoveType.Hole));

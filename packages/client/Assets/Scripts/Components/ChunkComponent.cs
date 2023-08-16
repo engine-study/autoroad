@@ -9,11 +9,12 @@ public class ChunkComponent : MUDComponent {
 
     [Header("Position")]
     [SerializeField] protected bool completed;
+    [SerializeField] protected int pieces;
     [SerializeField] protected int mileNumber;
     [SerializeField] protected int mileStartHeight;
     [SerializeField] protected RowComponent[] rows;
     public GameObject activeObjects;
-
+    bool createdChunk = false;
 
     //    completed: "bool",
     //     mileNumber: "uint32",
@@ -32,22 +33,11 @@ public class ChunkComponent : MUDComponent {
 
         // Debug.Log("Chunk: " + eventType.ToString());
 
-        //make sure we are added to world scroll
-        transform.parent = WorldScroll.Instance.transform;
-
         ChunkTable table = (ChunkTable)update;
-
-        if (update == null) {
-            Debug.LogError("Chunk is null", this);
-        }
-        if (table == null) {
-            Debug.LogError("Table is null", this);
-        }
 
         completed = table.completed != null ? (bool)table.completed : completed;
         mileNumber = table.mile != null ? (int)table.mile : mileNumber;
-
-        Entity.SetName("MILE - " + mileNumber);
+        pieces = table.pieces != null ? (int)table.pieces : pieces;
 
         // Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
         // Debug.Log("MileTest " + table.mileNumber, this);
@@ -55,7 +45,7 @@ public class ChunkComponent : MUDComponent {
 
         activeObjects.SetActive(!completed);
 
-        if (newInfo.UpdateType == UpdateType.SetRecord) {
+        if (createdChunk == false) {
             CreateChunk();
         }
 
@@ -63,6 +53,9 @@ public class ChunkComponent : MUDComponent {
     }
 
     public async UniTaskVoid CreateChunk() {
+
+        Entity.SetName("MILE - " + mileNumber);
+        transform.parent = WorldScroll.Instance.transform;
 
         //we need the roadconfig info and the road pieces to have spawned to load the chunk
         //lots of waiting
@@ -100,6 +93,8 @@ public class ChunkComponent : MUDComponent {
             //     }
             // }
         }
+
+        createdChunk = true; 
     }
 
     public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {

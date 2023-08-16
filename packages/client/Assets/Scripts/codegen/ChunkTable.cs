@@ -25,6 +25,8 @@ namespace DefaultNamespace
 
         public bool? completed;
         public long? mile;
+        public ulong? pieces;
+        public System.Numerics.BigInteger? blockCompleted;
 
         public override Type TableType()
         {
@@ -41,6 +43,10 @@ namespace DefaultNamespace
             completed = (bool)functionParameters[0];
 
             mile = (long)(int)functionParameters[1];
+
+            pieces = (ulong)(int)functionParameters[2];
+
+            blockCompleted = (System.Numerics.BigInteger)functionParameters[3];
         }
 
         public override void RecordToTable(Record record)
@@ -55,6 +61,14 @@ namespace DefaultNamespace
             var mileValue = (long)table["mile"];
 
             mile = mileValue;
+
+            var piecesValue = (ulong)table["pieces"];
+
+            pieces = piecesValue;
+
+            var blockCompletedValue = new System.Numerics.BigInteger((int)table["blockCompleted"]);
+
+            blockCompleted = blockCompletedValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -91,11 +105,26 @@ namespace DefaultNamespace
                         mile = value.Item1.TryGetValue("mile", out var mileVal)
                             ? (long)mileVal
                             : default,
+                        pieces = value.Item1.TryGetValue("pieces", out var piecesVal)
+                            ? (ulong)piecesVal
+                            : default,
+                        blockCompleted = value.Item1.TryGetValue(
+                            "blockCompleted",
+                            out var blockCompletedVal
+                        )
+                            ? (System.Numerics.BigInteger)blockCompletedVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new ChunkTable { completed = null, mile = null, };
+                    current = new ChunkTable
+                    {
+                        completed = null,
+                        mile = null,
+                        pieces = null,
+                        blockCompleted = null,
+                    };
                 }
             }
 
@@ -111,11 +140,26 @@ namespace DefaultNamespace
                         mile = value.Item2.TryGetValue("mile", out var mileVal)
                             ? (long)mileVal
                             : default,
+                        pieces = value.Item2.TryGetValue("pieces", out var piecesVal)
+                            ? (ulong)piecesVal
+                            : default,
+                        blockCompleted = value.Item2.TryGetValue(
+                            "blockCompleted",
+                            out var blockCompletedVal
+                        )
+                            ? (System.Numerics.BigInteger)blockCompletedVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new ChunkTable { completed = null, mile = null, };
+                    previous = new ChunkTable
+                    {
+                        completed = null,
+                        mile = null,
+                        pieces = null,
+                        blockCompleted = null,
+                    };
                 }
             }
 

@@ -169,6 +169,14 @@ namespace IWorld.ContractDefinition
         public virtual int MileNumber { get; set; }
     }
 
+    public partial class DebugMileFunction : DebugMileFunctionBase { }
+
+    [Function("debugMile")]
+    public class DebugMileFunctionBase : FunctionMessage
+    {
+
+    }
+
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }
 
     [Function("deleteRecord")]
@@ -238,6 +246,27 @@ namespace IWorld.ContractDefinition
         public virtual List<byte[]> Key { get; set; }
         [Parameter("bytes", "data", 3)]
         public virtual byte[] Data { get; set; }
+    }
+
+    public partial class FinishChunkFunction : FinishChunkFunctionBase { }
+
+    [Function("finishChunk")]
+    public class FinishChunkFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "chunk", 1)]
+        public virtual byte[] Chunk { get; set; }
+        [Parameter("int32", "currentMile", 2)]
+        public virtual int CurrentMile { get; set; }
+        [Parameter("uint32", "pieces", 3)]
+        public virtual uint Pieces { get; set; }
+    }
+
+    public partial class FinishMileAdminFunction : FinishMileAdminFunctionBase { }
+
+    [Function("finishMileAdmin")]
+    public class FinishMileAdminFunctionBase : FunctionMessage
+    {
+
     }
 
     public partial class FishFunction : FishFunctionBase { }
@@ -888,6 +917,27 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class SpawnMileAdminFunction : SpawnMileAdminFunctionBase { }
+
+    [Function("spawnMileAdmin")]
+    public class SpawnMileAdminFunctionBase : FunctionMessage
+    {
+
+    }
+
+    public partial class SpawnRoadFunction : SpawnRoadFunctionBase { }
+
+    [Function("spawnRoad")]
+    public class SpawnRoadFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "pushed", 2)]
+        public virtual byte[] Pushed { get; set; }
+        [Parameter("bytes32", "road", 3)]
+        public virtual byte[] Road { get; set; }
+    }
+
     public partial class SpawnShoveledRoadFunction : SpawnShoveledRoadFunctionBase { }
 
     [Function("spawnShoveledRoad")]
@@ -943,6 +993,14 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class UpdateChunkFunction : UpdateChunkFunctionBase { }
+
+    [Function("updateChunk")]
+    public class UpdateChunkFunctionBase : FunctionMessage
+    {
+
     }
 
     public partial class UpdateInFieldFunction : UpdateInFieldFunctionBase { }
@@ -1227,6 +1285,12 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1289,6 +1353,12 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
+
+
+
+
 
 
 
