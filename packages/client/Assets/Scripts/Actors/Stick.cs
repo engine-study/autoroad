@@ -35,10 +35,10 @@ public class Stick : Equipment
         PositionComponent ourPosition = Sender.GetComponent<PlayerMUD>().Position;
         PositionComponent theirPosition = CursorMUD.MUDEntity.GetMUDComponent<PositionComponent>();
 
-        updates.Add(TxManager.MakeOptimistic(ourPosition, (int)pushObject.x, (int)pushObject.z));
-        updates.Add(TxManager.MakeOptimistic(theirPosition, (int)pushToPos.x, (int)pushToPos.z));
+        updates.Add(TxManager.MakeOptimistic(ourPosition, PositionComponent.PositionToOptimistic(pushObject)));
+        updates.Add(TxManager.MakeOptimistic(theirPosition, PositionComponent.PositionToOptimistic(pushToPos)));
 
-        return await TxManager.Send<PushFunction>(updates, System.Convert.ToInt32(pushObject.x), System.Convert.ToInt32(pushObject.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
+        return await TxManager.Send<PushFunction>(updates, PositionComponent.PositionToTransaction(pushObject), PositionComponent.PositionToTransaction(pushToPos));
     }
     
 }

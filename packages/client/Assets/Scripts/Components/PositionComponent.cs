@@ -17,12 +17,6 @@ public class PositionComponent : MUDComponent {
     [SerializeField] private Vector3Int posInt;
     [SerializeField] private Vector3 position3DLayer;
 
-
-    public void SetLayer(int newLayer) {
-        layer = newLayer;
-        position3DLayer = new Vector3(position2D.x, layer, position2D.y);
-    }
-
     protected override IMudTable GetTable() {return new PositionTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 

@@ -225,11 +225,11 @@ public class ControllerMUD : SPController {
 
         List<TxUpdate> updates = new List<TxUpdate>();
         SetPositionInstant(position);
-        updates.Add(TxManager.MakeOptimistic(playerScript.Position, (int)position.x, (int)position.z));
+        updates.Add(TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(position)));
         if(admin) {
-            TxManager.Send<TeleportAdminFunction>(updates, System.Convert.ToInt32(position.x), System.Convert.ToInt32(position.z));
+            TxManager.Send<TeleportAdminFunction>(updates, PositionComponent.PositionToTransaction(position));
         } else {
-            TxManager.Send<TeleportFunction>(updates, System.Convert.ToInt32(position.x), System.Convert.ToInt32(position.z));
+            TxManager.Send<TeleportFunction>(updates, PositionComponent.PositionToTransaction(position));
         }
     }
 

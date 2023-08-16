@@ -33,9 +33,6 @@ public class RoadComponent : MUDComponent {
 
     protected override void PostInit() {
         base.PostInit();
-
-        Entity.GetMUDComponent<PositionComponent>().SetLayer(-1);
-
         AddToChunk();
     }
 

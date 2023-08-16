@@ -112,7 +112,7 @@ public class RockComponent : MUDComponent {
         Debug.Log("Sinking", this);
 
         while (posSync.Moving) { yield return null; }
-        if (posSync.Pos.NetworkInfo.UpdateType != UpdateType.DeleteRecord) {
+        if (!HasBeenSunk) {
             Debug.LogError("Sunk but we aren't deleleted");
             yield break;
         }
