@@ -46,7 +46,6 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var valueValue = (long)table["value"];
-
             value = valueValue;
         }
 

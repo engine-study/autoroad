@@ -67,35 +67,20 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var startingMileValue = (long)table["startingMile"];
-
             startingMile = startingMileValue;
-
             var killsValue = (long)table["kills"];
-
             kills = killsValue;
-
             var deathsValue = (long)table["deaths"];
-
             deaths = deathsValue;
-
             var movesValue = (long)table["moves"];
-
             moves = movesValue;
-
             var minedValue = (long)table["mined"];
-
             mined = minedValue;
-
             var pushedValue = (long)table["pushed"];
-
             pushed = pushedValue;
-
             var shoveledValue = (long)table["shoveled"];
-
             shoveled = shoveledValue;
-
             var completedValue = (long)table["completed"];
-
             completed = completedValue;
         }
 

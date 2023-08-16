@@ -53,15 +53,10 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var debugValue = (bool)table["debug"];
-
             debug = debugValue;
-
             var dummyPlayersValue = (bool)table["dummyPlayers"];
-
             dummyPlayers = dummyPlayersValue;
-
             var roadCompleteValue = (bool)table["roadComplete"];
-
             roadComplete = roadCompleteValue;
         }
 

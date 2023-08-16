@@ -55,19 +55,12 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var leftValue = (long)table["left"];
-
             left = leftValue;
-
             var rightValue = (long)table["right"];
-
             right = rightValue;
-
             var upValue = (long)table["up"];
-
             up = upValue;
-
             var downValue = (long)table["down"];
-
             down = downValue;
         }
 

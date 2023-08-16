@@ -55,19 +55,12 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var completedValue = (bool)table["completed"];
-
             completed = completedValue;
-
             var mileValue = (long)table["mile"];
-
             mile = mileValue;
-
             var piecesValue = (ulong)table["pieces"];
-
             pieces = piecesValue;
-
-            var blockCompletedValue = new System.Numerics.BigInteger((int)table["blockCompleted"]);
-
+            var blockCompletedValue = (System.Numerics.BigInteger)table["blockCompleted"];
             blockCompleted = blockCompletedValue;
         }
 

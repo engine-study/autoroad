@@ -50,11 +50,8 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var milesValue = (long)table["miles"];
-
             miles = milesValue;
-
             var playerCountValue = (long)table["playerCount"];
-
             playerCount = playerCountValue;
         }
 

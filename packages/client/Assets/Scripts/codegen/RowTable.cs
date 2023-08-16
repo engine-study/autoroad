@@ -46,7 +46,6 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var segmentsValue = (ulong)table["segments"];
-
             segments = segmentsValue;
         }
 

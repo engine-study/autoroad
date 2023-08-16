@@ -49,11 +49,8 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var stateValue = (ulong)table["state"];
-
             state = stateValue;
-
             var filledValue = (string)table["filled"];
-
             filled = filledValue;
         }
 

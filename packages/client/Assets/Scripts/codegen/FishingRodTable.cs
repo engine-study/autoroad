@@ -47,7 +47,6 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var valueValue = (bool)table["value"];
-
             value = valueValue;
         }
 

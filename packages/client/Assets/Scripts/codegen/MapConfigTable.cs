@@ -50,11 +50,8 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var playAreaValue = (long)table["playArea"];
-
             playArea = playAreaValue;
-
             var spawnAreaValue = (long)table["spawnArea"];
-
             spawnArea = spawnAreaValue;
         }
 

@@ -47,7 +47,6 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var eventTypeValue = (string)table["eventType"];
-
             eventType = eventTypeValue;
         }
 

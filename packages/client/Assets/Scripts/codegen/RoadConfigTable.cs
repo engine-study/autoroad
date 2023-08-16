@@ -56,19 +56,12 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var widthValue = (ulong)table["width"];
-
             width = widthValue;
-
             var heightValue = (ulong)table["height"];
-
             height = heightValue;
-
             var leftValue = (long)table["left"];
-
             left = leftValue;
-
             var rightValue = (long)table["right"];
-
             right = rightValue;
         }
 

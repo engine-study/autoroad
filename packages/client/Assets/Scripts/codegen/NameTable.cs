@@ -55,19 +55,12 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var namedValue = (bool)table["named"];
-
             named = namedValue;
-
             var firstValue = (ulong)table["first"];
-
             first = firstValue;
-
             var middleValue = (ulong)table["middle"];
-
             middle = middleValue;
-
             var lastValue = (ulong)table["last"];
-
             last = lastValue;
         }
 

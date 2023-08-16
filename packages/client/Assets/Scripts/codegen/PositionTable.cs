@@ -49,11 +49,8 @@ namespace DefaultNamespace
             //bool hasValues = false;
 
             var xValue = (long)table["x"];
-
             x = xValue;
-
             var yValue = (long)table["y"];
-
             y = yValue;
         }
 
