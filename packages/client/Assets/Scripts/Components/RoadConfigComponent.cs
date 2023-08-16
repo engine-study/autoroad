@@ -6,6 +6,7 @@ using DefaultNamespace;
 
 public class RoadConfigComponent : MUDComponent
 {
+    public static RoadConfigComponent Instance;
     public static int Width;
     public static int Height;
     public static int Left;
@@ -16,6 +17,9 @@ public class RoadConfigComponent : MUDComponent
 
     protected override IMudTable GetTable() {return new RoadConfigTable();}
     protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
+
+        Instance = this;
+        
         RoadConfigTable update = (RoadConfigTable)table;
 
         width = (int)update.width;

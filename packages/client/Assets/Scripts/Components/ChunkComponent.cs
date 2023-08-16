@@ -7,12 +7,23 @@ using Cysharp.Threading.Tasks;
 
 public class ChunkComponent : MUDComponent {
 
-    [Header("Position")]
+
+    [Header("State")]
     [SerializeField] protected bool completed;
     [SerializeField] protected int pieces;
     [SerializeField] protected int mileNumber;
     [SerializeField] protected int mileStartHeight;
     [SerializeField] protected RowComponent[] rows;
+
+    [Header("Reference")]
+    [SerializeField] protected Transform groundParent;
+    [SerializeField] protected Transform groundLeft, groundRight;
+    [SerializeField] protected Transform spawnLeft, spawnRight;
+    [SerializeField] protected RowComponent rowPrefab;
+
+    int rowTotal;
+    int widthSize;
+
     public GameObject activeObjects;
     bool createdChunk = false;
 
@@ -28,6 +39,39 @@ public class ChunkComponent : MUDComponent {
 
         activeObjects.SetActive(false);
     }
+
+    protected override void Start() {
+        base.Start();
+        Init();
+    }
+
+    void Init() {
+
+        rowTotal = RoadConfigComponent.Height;
+        rows = new RowComponent[rowTotal];
+        
+        for (int i = 0; i < rowTotal; i++)
+        {
+            RowComponent newRow = Instantiate(rowPrefab, transform.position + Vector3.forward * i, Quaternion.identity, transform);
+            newRow.chunk = this;
+            newRow.SpawnRoad(RoadConfigComponent.Width);
+
+            rows[i] = newRow;
+        }
+
+        groundParent.localScale = Vector3.one + Vector3.forward * (rowTotal-1);
+
+        groundLeft.localPosition = Vector3.right * (RoadConfigComponent.Left - .5f);
+        groundRight.localPosition = Vector3.right * (RoadConfigComponent.Right + .5f);
+
+        groundLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right);
+        groundRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right);
+
+        spawnLeft.localPosition = Vector3.right * (-MapConfigComponent.PlayWidth - .5f);
+        spawnRight.localPosition = Vector3.right * (MapConfigComponent.PlayWidth + .5f);
+
+    }
+
     protected override IMudTable GetTable() {return new ChunkTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 

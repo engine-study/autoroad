@@ -11,12 +11,9 @@ public class GameStateComponent : MUDComponent {
 
     public static System.Action OnGameStateUpdated;
     public static GameStateComponent Instance;
-    public const float MILE_DISTANCE = 20f;
+    public static float MILE_DISTANCE {get { return RoadConfigComponent.Height; } }
     public static float MILE_COUNT;
     public static int PlayerCount;
-
-    [Header("Game State")]
-    [SerializeField] protected GameObject edge;
 
     [Header("Debug")]
     [SerializeField] protected int currentMile;
@@ -26,6 +23,8 @@ public class GameStateComponent : MUDComponent {
     protected override IMudTable GetTable() {return new GameStateTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
+        Instance = this;
+        
         GameStateTable table = (GameStateTable)update;
 
         currentMile = table.miles != null ? (int)table.miles : currentMile;;
@@ -34,8 +33,6 @@ public class GameStateComponent : MUDComponent {
         playerCount = PlayerCount;
 
         MILE_COUNT = currentMile;
-
-        edge.transform.position = Vector3.forward * (currentMile * MILE_DISTANCE + MILE_DISTANCE);
 
         // Debug.Log("Game State:");
         // Debug.Log("Miles: " + (table.miles != null ? (int)table.miles : "null"));

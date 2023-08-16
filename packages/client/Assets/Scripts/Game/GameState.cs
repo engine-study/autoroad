@@ -25,7 +25,7 @@ public class GameState : MonoBehaviour {
     public RecieverMUD reciever;
     public TableManager playerTable;
     public WorldScroll scroll;
-
+    public TableManager [] tables;
 
     [Header("UI")]
     public GameObject editorObjects;
@@ -64,22 +64,24 @@ public class GameState : MonoBehaviour {
     void LoadServer() {
         LoadMap();
     }
+
     async UniTask LoadMap() {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
+        while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(500);}
 
-        while(MUDWorld.FindTable<BoundsComponent>().HasInit == false) {await UniTask.Delay(500);}
-        while(MUDWorld.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
+        for (int i = 0; i < tables.Length; i++) { tables[i].gameObject.SetActive(true); }
 
         SPEvents.OnServerLoaded?.Invoke();
 
     }
+
     async UniTask GameSetup() {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
 
         //destroy the player if we want to simulate the login sequence
-        if(freshStart) {
+        if (freshStart) {
             await TxManager.Send<DestroyPlayerAdminFunction>();
             //while(player is not null) {}
         }

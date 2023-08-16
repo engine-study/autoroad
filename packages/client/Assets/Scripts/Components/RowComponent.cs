@@ -9,18 +9,37 @@ public class RowComponent : MonoBehaviour
     bool isCompleted = false; 
 
     [Header("Row")]
-    [SerializeField] private ChunkComponent chunk;
     [SerializeField] private GameObject complete;
     [SerializeField] private GameObject completeEffects;
-    [SerializeField] private RoadComponent[] roadFiller;
+
+    [Header("Reference")]
+    [SerializeField] private RoadComponent roadPrefab;
+    [SerializeField] private Transform placeHolderParent;
 
     [Header("Debug")]
+    [SerializeField] public ChunkComponent chunk;
     [SerializeField] private RoadComponent[] spawnedRoads;
+    [SerializeField] private RoadComponent[] roadFiller;
 
 
 
     void Awake() {
-        spawnedRoads = new RoadComponent[5];
+
+    }
+
+    public void SpawnRoad(int width) {
+        roadFiller = new RoadComponent[width];
+        spawnedRoads = new RoadComponent[width];
+
+        int left = Mathf.CeilToInt(-width * .5f);
+        int right = Mathf.FloorToInt(width * .5f);
+        int index = 0;
+        
+        for (int i = left; i <= right; i++) {
+            RoadComponent newRoad = Instantiate(roadPrefab, transform.position + Vector3.right * i, Quaternion.identity, placeHolderParent);
+            roadFiller[index] = newRoad;
+            index++;
+        }
     }
 
     void OnDestroy() {
