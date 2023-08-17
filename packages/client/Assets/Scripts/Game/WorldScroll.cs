@@ -8,6 +8,9 @@ public class WorldScroll : MonoBehaviour
     public static WorldScroll Instance;
 
     [Header("World Scroll")]
+    public SPWindowParent mileUI;
+    public UnityEngine.UI.ScrollRect scrollUI;
+    public UnityEngine.UI.Scrollbar barUI;
     public SPHeading mileHeading;
 
     [Header("Game State")]
@@ -25,13 +28,11 @@ public class WorldScroll : MonoBehaviour
 
     void Awake() {
         Instance = this;
-    }
-
-    void Start() {
+        enabled = false;
         currentMile = -1;
         GameStateComponent.OnGameStateUpdated += UpdateMile;
     }
-    
+
     void OnDestroy() {
         Instance = null;
         GameStateComponent.OnGameStateUpdated -= UpdateMile;
@@ -39,7 +40,10 @@ public class WorldScroll : MonoBehaviour
     
 
     void UpdateMile() {
+        enabled = true;
+
         SetMaxMile(GameStateComponent.MILE_COUNT);
+        SetMile(GameStateComponent.MILE_COUNT);
     }
 
     void Update() {
@@ -52,13 +56,16 @@ public class WorldScroll : MonoBehaviour
         //magnetism, lerp back to current mile
         mileScroll = Mathf.MoveTowards(mileScroll, currentMile, 1f * Time.deltaTime);
 
+        if(maxMile == 0) {barUI.value = Mathf.Lerp(barUI.value, 1f, .1f);} 
+        else {barUI.value = Mathf.Lerp(barUI.value, Mathf.Clamp01(mileScroll/maxMile), .1f);}
+
         //if we're more than halfway to the next mile, magnet over to it
         if (Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileTotal) > GameStateComponent.MILE_DISTANCE * .5f) {
             SetMile(Mathf.RoundToInt(mileScroll));
         }
 
-        if (mileScroll != lastScroll) {
-            SPCamera.SetTarget(Vector3.forward * MileTotalScroll);
+        if (lastScroll != mileScroll) {
+            SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
         }
 
         lastScroll = mileScroll;
@@ -80,12 +87,19 @@ public class WorldScroll : MonoBehaviour
         ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
 
         if(newChunk == null) {
-            newChunk = MUDWorld.FindOrMakeComponent<ChunkComponent>(chunkEntity);
+            // newChunk = MUDWorld.FindOrMakeComponent<ChunkComponent>(chunkEntity);
+            return;
         } else {
             newChunk.gameObject.SetActive(true);
         }
+        
+        mileHeading.UpdateField("Mile " + (int)newMile);
+        mileUI.ToggleWindowOpen();
 
-        // mileHeading.UpdateField("Mile " + newMile);
+        //unlock the camera
+        if(SPCamera.Follow != null) {
+            SPCamera.SetFollow(null);
+        }
 
         currentMile = Mathf.Clamp(newMile, 0f, maxMile);
         SPCamera.SetTarget(Vector3.forward * MileTotal);

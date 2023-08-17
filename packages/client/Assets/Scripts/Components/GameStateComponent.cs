@@ -39,6 +39,7 @@ public class GameStateComponent : MUDComponent {
         // Debug.Log("Players: " + (table.playerCount != null ? (int)table.playerCount : "null"));
 
         Entity.SetName("WORLD");
+        Entity.transform.parent = GameState.Instance.transform;
 
         OnGameStateUpdated?.Invoke();
 
