@@ -7,7 +7,9 @@ using Cysharp.Threading.Tasks;
 
 public class ChunkComponent : MUDComponent {
 
-
+    public static Dictionary<int,ChunkComponent> Chunks;
+    public RowComponent[] Rows {get { return rows; } }
+    
     [Header("State")]
     [SerializeField] protected bool completed;
     [SerializeField] protected int pieces;
@@ -36,6 +38,10 @@ public class ChunkComponent : MUDComponent {
 
     protected override void Awake() {
         base.Awake();
+
+        if(Chunks == null) {
+            Chunks = new Dictionary<int, ChunkComponent>();
+        }
 
         activeObjects.SetActive(false);
                 
@@ -106,40 +112,17 @@ public class ChunkComponent : MUDComponent {
 
         //we need the roadconfig info and the road pieces to have spawned to load the chunk
         //lots of waiting
-        while (RoadConfigComponent.Width == 0) {
-            await UniTask.Delay(500);
-        }
-
-        while (BoundsComponent.Left == 0) {
-            await UniTask.Delay(500);
-        }
+        while (RoadConfigComponent.Width == 0) { await UniTask.Delay(500); }
+        while (BoundsComponent.Left == 0) {  await UniTask.Delay(500); }
 
         mileStartHeight = mileNumber * RoadConfigComponent.Height;
         transform.position = Vector3.forward * mileStartHeight;
 
         if (completed) {
-
-            //create static combined mesh of road
-            for (int i = 0; i < rows.Length; i++) {
-
-            }
-
         } else {
-
-            // //search the table for entities pertaining to the road
-            // for (int y = mileStartHeight; y < mileStartHeight + RoadConfigComponent.Height; y++) {
-            //     for (int x = 0; x < RoadConfigComponent.Width; x++) {
-
-            //         //try to find the road component and add it to the row if one exists
-            //         string entity = MUDHelper.Keccak256("Road", x + RoadConfigComponent.Left, y);
-            //         RoadComponent c = TableManager.FindComponent<RoadComponent>(entity);
-
-            //         int yIndex = y - RoadConfigComponent.Height;
-            //         AddRoadComponent(entity, c, x, y);
-
-            //     }
-            // }
         }
+
+        Chunks.Add(mileNumber, this);
 
         createdChunk = true; 
     }

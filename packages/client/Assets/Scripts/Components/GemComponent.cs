@@ -15,7 +15,7 @@ public class GemComponent : MUDComponent {
     protected override IMudTable GetTable() {return new GemTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
-        CoinageTable table = update as CoinageTable;
+        GemTable table = update as GemTable;
 
         gems = (int)table.value;
 
@@ -24,6 +24,9 @@ public class GemComponent : MUDComponent {
             OnLocalUpdate?.Invoke();
         }
 
+        if(Loaded) {
+            MileComplete.AddGem(this);
+        }
     }
 
 

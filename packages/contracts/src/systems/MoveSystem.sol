@@ -104,7 +104,7 @@ contract MoveSystem is System {
       require(empty, "pushing into an occupied spot");
       require(withinManhattanMinimum(from, to,1));
       
-      (uint32 roadInt, ) = Road.get(atDestination[0]);
+      uint32 roadInt = Road.getState(atDestination[0]);
 
       //there is a road here
       if (roadInt != 0) {
@@ -210,7 +210,7 @@ contract MoveSystem is System {
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
     require(Road.getState(roadEntity) == uint32(RoadState.None), "road");
 
-    Road.set(roadEntity, uint32(RoadState.Shoveled), player);
+    Road.setState(roadEntity, uint32(RoadState.Shoveled));
     Move.set(roadEntity, uint32(MoveType.Hole));
     Position.set(roadEntity, x, y, 0);
 

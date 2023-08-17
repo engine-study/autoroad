@@ -162,7 +162,7 @@ export default mudConfig({
     Health: "int32",
     Seeds: "uint32",
     Gem: "uint32",
-    
+
     //unique objects
     Rock: "uint32",
     Tree: "bool",
@@ -174,6 +174,7 @@ export default mudConfig({
       schema: {
         state: "uint32",
         filled: "bytes32",
+        gem: "bool",
       },
     },
 

@@ -12,6 +12,7 @@ public class RoadComponent : MUDComponent {
 
     public RoadState State {get { return state; } }
     public int Mile {get { return mileNumber; } }
+    public bool Gem {get { return hasGem; } }
 
     [Header("Road")]
     [SerializeField] RoadState state;
@@ -26,6 +27,7 @@ public class RoadComponent : MUDComponent {
     [Header("Debug")]
     [SerializeField] int mileNumber;
     [SerializeField] string creditedPlayer;
+    [SerializeField] bool hasGem;
     [SerializeField] ChunkComponent parent;
     [SerializeField] Vector2Int localChunkPos;
 
@@ -50,6 +52,7 @@ public class RoadComponent : MUDComponent {
         // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
         creditedPlayer = ((string)roadUpdate.filled).ToLower();
+        hasGem = (bool)roadUpdate.gem;
 
         SetState((RoadState)roadUpdate.state);
 

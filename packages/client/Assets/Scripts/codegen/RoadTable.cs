@@ -25,6 +25,7 @@ namespace DefaultNamespace
 
         public ulong? state;
         public string? filled;
+        public bool? gem;
 
         public override Type TableType()
         {
@@ -41,6 +42,8 @@ namespace DefaultNamespace
             state = (ulong)(int)functionParameters[0];
 
             filled = (string)functionParameters[1];
+
+            gem = (bool)functionParameters[2];
         }
 
         public override void RecordToTable(Record record)
@@ -52,6 +55,8 @@ namespace DefaultNamespace
             state = stateValue;
             var filledValue = (string)table["filled"];
             filled = filledValue;
+            var gemValue = (bool)table["gem"];
+            gem = gemValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -88,11 +93,19 @@ namespace DefaultNamespace
                         filled = value.Item1.TryGetValue("filled", out var filledVal)
                             ? (string)filledVal
                             : default,
+                        gem = value.Item1.TryGetValue("gem", out var gemVal)
+                            ? (bool)gemVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new RoadTable { state = null, filled = null, };
+                    current = new RoadTable
+                    {
+                        state = null,
+                        filled = null,
+                        gem = null,
+                    };
                 }
             }
 
@@ -108,11 +121,19 @@ namespace DefaultNamespace
                         filled = value.Item2.TryGetValue("filled", out var filledVal)
                             ? (string)filledVal
                             : default,
+                        gem = value.Item2.TryGetValue("gem", out var gemVal)
+                            ? (bool)gemVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new RoadTable { state = null, filled = null, };
+                    previous = new RoadTable
+                    {
+                        state = null,
+                        filled = null,
+                        gem = null,
+                    };
                 }
             }
 

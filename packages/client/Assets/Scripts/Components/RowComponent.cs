@@ -4,8 +4,9 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public class RowComponent : MonoBehaviour
-{
+public class RowComponent : MonoBehaviour {
+
+    public RoadComponent [] Roads {get { return spawnedRoads; } }
     bool isCompleted = false; 
 
     [Header("Row")]

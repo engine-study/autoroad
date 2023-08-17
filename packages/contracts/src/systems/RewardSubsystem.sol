@@ -11,6 +11,7 @@ contract RewardSubsystem is System {
     bytes32 player = Road.getFilled(road);
     uint32 gems = Gem.get(player) + 1;
     Gem.set(player, gems);
+    Road.setGem(road, true);
   }
 
   function giveCoins(bytes32 player, int32 amount) public {

@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Stats } from "../codegen/Tables.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
 import { SpawnSystem } from "./SpawnSystem.sol";
@@ -29,6 +29,13 @@ contract RoadSubsystem is System {
   }
 
   function createMile(int32 mileNumber) public {
+
+    require(mileNumber != GameState.getMiles(), "creating mile again");
+
+    if(mileNumber > 0) {
+      contemplateMile(mileNumber - 1);
+    }
+
     //create an entity for the chunk itself
     bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
 
@@ -103,13 +110,11 @@ contract RoadSubsystem is System {
       for (int32 x = leftRoad; x <= rightRoad; x++) {
 
         bytes32 road = keccak256(abi.encode("Road", x, y));
-        (uint32 state, bytes32 filled) = Road.get(road);
-        
-        uint noiseCoord = randomCoord(0, 100, x, y);
-
         if(Road.getState(road) < uint32(RoadState.Paved)) {
           continue;
         }
+
+        uint noiseCoord = randomCoord(0, 100, x, y);
 
         if (noiseCoord < 10) {
           IWorld(_world()).giveRoadReward(road);
@@ -146,23 +151,25 @@ contract RoadSubsystem is System {
     //set the rock to the position under the road
     Position.set(pushed, pos.x, pos.y, -2);
 
-    bool isPlayer = Player.get(pushed);
+    bool pushedPlayer = Player.get(pushed);
+
     // bool isRock = Rock.get(atDestination[0]);
-    if (isPlayer) {
+    if (pushedPlayer) {
       Health.set(pushed, -1);
-      Road.set(road, uint32(RoadState.Bones), player);
+      Road.setState(road, uint32(RoadState.Bones));
     } else {
-      Road.set(road, uint32(RoadState.Paved), player);
+      Road.setState(road, uint32(RoadState.Paved));
     }
 
     //reward the player
+    Road.setFilled(road, player);
     int32 coins = Coinage.get(player);
     Coinage.set(player, coins + 5);
 
     updateChunk();
 
-    // int32 stat = Stats.getCompleted(filler);
-    // Stats.setCompleted(filler, stat + 1);
+    int32 stat = Stats.getCompleted(player);
+    Stats.setCompleted(player, stat + 1);
   }
 
   function updateChunk() public {
@@ -190,12 +197,13 @@ contract RoadSubsystem is System {
   }
 
   function spawnFinishedRoad(int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
 
     bytes32 entity = keccak256(abi.encode("Road", x, y));
     Position.set(entity, x, y, -1);
-    Road.set(entity, uint32(RoadState.Paved), entity);
+    Road.set(entity, uint32(RoadState.Paved), player, false);
 
     updateChunk();
   }
@@ -207,7 +215,7 @@ contract RoadSubsystem is System {
     bytes32 entity = keccak256(abi.encode("Road", x, y));
     require(Road.getState(entity) == uint32(RoadState.None), "road");
 
-    Road.set(entity, uint32(RoadState.Shoveled), entity);
+    Road.set(entity, uint32(RoadState.Shoveled), entity, false);
     Position.set(entity, x, y, 0);
   }
 

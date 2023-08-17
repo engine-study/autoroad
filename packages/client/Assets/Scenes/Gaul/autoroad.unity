@@ -1989,7 +1989,7 @@ Transform:
   - {fileID: 749530867}
   - {fileID: 996292674}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &79595256
 GameObject:
@@ -18977,7 +18977,7 @@ GameObject:
   - component: {fileID: 620809089}
   - component: {fileID: 620809090}
   m_Layer: 0
-  m_Name: Menu
+  m_Name: OldMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23234,8 +23234,55 @@ Transform:
   - {fileID: 124801820}
   - {fileID: 660134549}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &758042231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 758042232}
+  - component: {fileID: 758042233}
+  m_Layer: 0
+  m_Name: MileComplete
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &758042232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758042231}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &758042233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758042231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56715a729fa532e489f044ad4fe0db07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mileUI: {fileID: 1566677757}
+  header: {fileID: 1075235000}
+  gems: []
 --- !u!1001 &766850853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33648,6 +33695,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177871982}
   m_Mesh: {fileID: 4300000, guid: 9f7600e8520f60c418f6baeffb901148, type: 3}
+--- !u!114 &1075235000 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7566469646967431386, guid: 715ddf230ca794d4da1d9476220eb826, type: 3}
+  m_PrefabInstance: {fileID: 53762817}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63d11fcdbf9e5a40a85bdabfb376e3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1080322357
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37308,7 +37366,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1196228654
 GameObject:
@@ -42992,7 +43050,7 @@ Transform:
   - {fileID: 2112094894}
   - {fileID: 1265459089}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1327687099
 MonoBehaviour:
@@ -46988,9 +47046,9 @@ RectTransform:
   - {fileID: 440508196}
   - {fileID: 622862814}
   - {fileID: 1958289177}
-  - {fileID: 620809089}
   - {fileID: 1566677758}
   - {fileID: 280852682}
+  - {fileID: 620809089}
   - {fileID: 1470644416}
   m_Father: {fileID: 1925883600}
   m_RootOrder: -1
@@ -47383,7 +47441,7 @@ GameObject:
   - component: {fileID: 1470644416}
   - component: {fileID: 1470644417}
   m_Layer: 0
-  m_Name: DeathScreen
+  m_Name: OldDeathScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50322,7 +50380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1566677758
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58902,7 +58960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7490196}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -60061,7 +60119,7 @@ Transform:
   - {fileID: 1342553621}
   - {fileID: 1605149180}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1832670048
 MonoBehaviour:
@@ -63722,7 +63780,7 @@ Transform:
   m_Children:
   - {fileID: 111116200}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!114 &1921785921
 MonoBehaviour:

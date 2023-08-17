@@ -15,6 +15,7 @@ public class GameStateComponent : MUDComponent {
     public static float MILE_DISTANCE {get { return RoadConfigComponent.Height; } }
     public static float MILE_COUNT;
     public static int PlayerCount;
+    float lastMile = 0;
 
     [Header("Debug")]
     [SerializeField] protected int currentMile;
@@ -44,9 +45,11 @@ public class GameStateComponent : MUDComponent {
 
         OnGameStateUpdated?.Invoke();
 
-        if(Loaded) {
+        if(Loaded && MILE_COUNT != lastMile) {
             OnMileCompleted?.Invoke();
         }
+
+        lastMile = MILE_COUNT;
 
     }
 

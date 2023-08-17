@@ -41,7 +41,6 @@ public class GameState : MonoBehaviour {
         NetworkManager.OnInitialized += LoadServer;
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
-        GameStateComponent.OnMileCompleted += MileCompletion;
     }
 
     void Start() {
@@ -54,7 +53,6 @@ public class GameState : MonoBehaviour {
         NetworkManager.OnInitialized -= LoadServer;
         SPEvents.OnLocalPlayerSpawn -= RecieverPlayer;
         GameStateComponent.OnGameStateUpdated -= GameStateUpdated;
-        GameStateComponent.OnMileCompleted -= MileCompletion;
 
         Instance = null;
     }
@@ -157,7 +155,7 @@ public class GameState : MonoBehaviour {
     }
 
     void MileCompletion() {
-        
+
     }
 
     void Update() {
