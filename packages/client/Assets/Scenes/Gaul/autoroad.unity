@@ -2721,7 +2721,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111116199}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33989,7 +33989,7 @@ Transform:
   m_GameObject: {fileID: 1107404087}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 1, z: 20}
+  m_LocalScale: {x: 20, y: 1, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 781519874}
@@ -46740,6 +46740,8 @@ MonoBehaviour:
   back: {fileID: 1025554694}
   maxMile: 0
   currentMile: -1
+  mileScroll: 0
+  lastScroll: -100
 --- !u!1001 &1468577088
 PrefabInstance:
   m_ObjectHideFlags: 0
