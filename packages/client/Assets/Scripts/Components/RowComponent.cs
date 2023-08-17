@@ -37,6 +37,7 @@ public class RowComponent : MonoBehaviour
         
         for (int i = left; i <= right; i++) {
             RoadComponent newRoad = Instantiate(roadPrefab, transform.position + Vector3.right * i, Quaternion.identity, placeHolderParent);
+            newRoad.name = "Road " + i;
             roadFiller[index] = newRoad;
             index++;
         }

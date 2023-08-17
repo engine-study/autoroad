@@ -18,20 +18,20 @@ public class GameState : MonoBehaviour {
     public static GameState Instance;
 
     [Header("Test")]
-    public bool freshStart = false; 
+    [SerializeField] bool freshStart = false; 
 
     [Header("Game")]
-    public GamePhase phase;
-    public RecieverMUD reciever;
-    public TableManager playerTable;
-    public WorldScroll scroll;
-    public TableManager [] tables;
+    [SerializeField] GamePhase phase;
+    [SerializeField] RecieverMUD reciever;
+    [SerializeField] TableManager playerTable;
+    [SerializeField] WorldScroll scroll;
+    [SerializeField] TableManager [] tables;
 
     [Header("UI")]
-    public GameObject editorObjects;
+    [SerializeField] GameObject editorObjects;
 
     [Header("Debug")]
-    public PlayerMUD localPlayer;
+    [SerializeField] PlayerMUD localPlayer;
 
     void Awake() {
         Instance = this;
@@ -150,7 +150,7 @@ public class GameState : MonoBehaviour {
     }
 
     void GameStateUpdated() {
-        scroll.SetMaxMile(GameStateComponent.MILE_COUNT);
+
     }
 
     void Update() {
@@ -163,6 +163,11 @@ public class GameState : MonoBehaviour {
 
             if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
                 (PlayerMUD.LocalPlayer.Controller as ControllerMUD).TeleportMUD(CursorMUD.GridPos, true);
+                return;
+            }
+
+              if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt) && Input.GetMouseButtonDown(0)) {
+                TxManager.Send<SpawnMileAdminFunction>();
                 return;
             }
 

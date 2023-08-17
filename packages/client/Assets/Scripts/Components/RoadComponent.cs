@@ -21,7 +21,7 @@ public class RoadComponent : MUDComponent {
     public string creditedPlayer;
     public ChunkComponent parent;
     public int mileNumber;
-    public Vector2Int chunkPos;
+    public Vector2Int localChunkPos;
 
     RoadState lastStage = RoadState.None;
 
@@ -153,12 +153,11 @@ public class RoadComponent : MUDComponent {
         mileNumber = Mathf.FloorToInt(transform.position.z / (float)RoadConfigComponent.Height);
 
         //infer entity of our chunk and look for it
+        localChunkPos = new Vector2Int((int)transform.position.x, (int)transform.position.z - mileNumber * RoadConfigComponent.Height);
+
         string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
         parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
-        chunkPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
-
-
-        parent.AddRoadComponent(Entity.Key, this, chunkPos.x, chunkPos.y);
+        parent.AddRoadComponent(Entity.Key, this, localChunkPos.x, localChunkPos.y);
     }
 
 }

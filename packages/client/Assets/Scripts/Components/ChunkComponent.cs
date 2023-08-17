@@ -54,6 +54,7 @@ public class ChunkComponent : MUDComponent {
         {
             RowComponent newRow = Instantiate(rowPrefab, transform.position + Vector3.forward * i, Quaternion.identity, transform);
             newRow.chunk = this;
+            newRow.name = "Row " + i;
             newRow.SpawnRoad(RoadConfigComponent.Width);
 
             rows[i] = newRow;
@@ -64,8 +65,8 @@ public class ChunkComponent : MUDComponent {
         groundLeft.localPosition = Vector3.right * (RoadConfigComponent.Left - .5f);
         groundRight.localPosition = Vector3.right * (RoadConfigComponent.Right + .5f);
 
-        groundLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right);
-        groundRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right);
+        groundLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right - 1f);
+        groundRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right - 1f);
 
         spawnLeft.localPosition = Vector3.right * (-MapConfigComponent.PlayWidth - .5f);
         spawnRight.localPosition = Vector3.right * (MapConfigComponent.PlayWidth + .5f);

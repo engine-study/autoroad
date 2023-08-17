@@ -8,10 +8,18 @@ public class RecieverMUD : SPReciever
     public GameObject EntityGO;
     
     void Start() {
+        SPEvents.OnLocalPlayerSpawn += StartReceiver;
+    }
+
+    void StartReceiver() {
+        SPEvents.OnLocalPlayerSpawn -= StartReceiver;
+        
         CursorMUD.OnHoverEntity += AddActions;
         CursorMUD.OnLeaveEntity += RemoveActions;
     }
+
     void OnDestroy() {
+        SPEvents.OnLocalPlayerSpawn -= StartReceiver;
         CursorMUD.OnHoverEntity -= AddActions;
         CursorMUD.OnLeaveEntity -= RemoveActions;
     }

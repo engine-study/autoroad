@@ -17,29 +17,25 @@ contract AdminSystem is System {
   function spawnMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    int32 currentMile = GameState.getMiles();
-    IWorld world = IWorld(_world());
-    world.createMile(currentMile + 1);
+    int32 nextMile = GameState.getMiles() + 1;
+    IWorld(_world()).createMile(nextMile);
   }
 
   function finishMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld world = IWorld(_world());
-    world.debugMile();
+    IWorld(_world()).debugMile();
   }
 
   function spawnFinishedRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld world = IWorld(_world());
-    world.spawnFinishedRoad(x, y);
+    IWorld(_world()).spawnFinishedRoad(x, y);
   }
 
   function spawnShoveledRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld world = IWorld(_world());
-    world.spawnShoveledRoad(x, y);
+    IWorld(_world()).spawnShoveledRoad(x, y);
   }
 }
