@@ -109,11 +109,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380ba819c2b368b4dbc60dc628079f8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunk: {fileID: 0}
   complete: {fileID: 7529481458323921323}
   completeEffects: {fileID: 880637150686276992}
   roadPrefab: {fileID: 6533145143532920457, guid: f920297f9462d66459360c062b63eb2e, type: 3}
   placeHolderParent: {fileID: 7983648423082110296}
+  leftSide: {fileID: 6469506676307788537}
+  rightSide: {fileID: 2605280307501764736}
+  groundCompletePlane: {fileID: 8845671914703658121}
+  chunk: {fileID: 0}
   spawnedRoads: []
   roadFiller: []
 --- !u!1 &3494296371883104776
@@ -297,7 +300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1589803465067560062
 Transform:
   m_ObjectHideFlags: 0
@@ -311,8 +314,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8845671914703658121}
-  - {fileID: 2605280307501764736}
   - {fileID: 6469506676307788537}
+  - {fileID: 2605280307501764736}
   - {fileID: 2517075984641813660}
   m_Father: {fileID: 7565760994550837492}
   m_RootOrder: -1

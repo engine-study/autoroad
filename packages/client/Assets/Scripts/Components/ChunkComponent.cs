@@ -38,12 +38,11 @@ public class ChunkComponent : MUDComponent {
         base.Awake();
 
         activeObjects.SetActive(false);
+                
+        Init();
+
     }
 
-    protected override void Start() {
-        base.Start();
-        Init();
-    }
 
     void Init() {
 
@@ -94,13 +93,14 @@ public class ChunkComponent : MUDComponent {
             CreateChunk();
         }
 
-
     }
 
     public async UniTaskVoid CreateChunk() {
 
         Entity.SetName("MILE - " + mileNumber);
-        transform.parent = WorldScroll.Instance.transform;
+        Entity.transform.parent = WorldScroll.Instance.transform;
+
+        gameObject.name = "CHUNK - " + mileNumber;
 
         //we need the roadconfig info and the road pieces to have spawned to load the chunk
         //lots of waiting
@@ -143,6 +143,7 @@ public class ChunkComponent : MUDComponent {
     }
 
     public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {
+        Debug.Log("Adding " + x + " " + y + " Rows: " + rows.Length + " Mile: " + c.Mile + " " + mileNumber, c);
         rows[y].SetRoadBlock(entity, x + RoadConfigComponent.Right, c);
     }
 

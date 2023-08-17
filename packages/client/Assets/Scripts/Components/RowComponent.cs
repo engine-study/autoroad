@@ -15,6 +15,10 @@ public class RowComponent : MonoBehaviour
     [Header("Reference")]
     [SerializeField] private RoadComponent roadPrefab;
     [SerializeField] private Transform placeHolderParent;
+    [SerializeField] private Transform leftSide;
+    [SerializeField] private Transform rightSide;
+    [SerializeField] private Transform groundCompletePlane;
+    
 
     [Header("Debug")]
     [SerializeField] public ChunkComponent chunk;
@@ -41,6 +45,10 @@ public class RowComponent : MonoBehaviour
             roadFiller[index] = newRoad;
             index++;
         }
+
+        leftSide.localPosition = Vector3.right * (left - .5f); 
+        rightSide.localPosition = Vector3.right * (right + .5f); 
+        groundCompletePlane.localScale = Vector3.forward + Vector3.up + Vector3.right * width;
     }
 
     void OnDestroy() {
@@ -97,7 +105,7 @@ public class RowComponent : MonoBehaviour
         }
 
         for (int i = 0; i < spawnedRoads.Length; i++) {
-            if (spawnedRoads[i] == null || spawnedRoads[i].state < RoadState.Paved) {
+            if (spawnedRoads[i] == null || spawnedRoads[i].State < RoadState.Paved) {
                 return false;
             }
         }

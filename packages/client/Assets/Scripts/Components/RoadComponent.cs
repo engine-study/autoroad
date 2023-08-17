@@ -10,18 +10,24 @@ public enum RoadState { None,Shoveled,Statumen,Rudus,Nucleas,Paved, Bones }
 
 public class RoadComponent : MUDComponent {
 
+    public RoadState State {get { return state; } }
+    public int Mile {get { return mileNumber; } }
+
     [Header("Road")]
-    public RoadState state;
-    public GameObject[] stages;
-    public ParticleSystem fx_spawn, fx_fill;
-    public AudioClip[] sfx_digs, sfx_fills;
+    [SerializeField] RoadState state;
+    [SerializeField] GameObject[] stages;
+
+    [Header("FX")]
+    [SerializeField] ParticleSystem fx_spawn;
+    [SerializeField] ParticleSystem fx_fill;
+    [SerializeField] AudioClip[] sfx_digs, sfx_fills;
     SPFlashShake flash;
 
     [Header("Debug")]
-    public string creditedPlayer;
-    public ChunkComponent parent;
-    public int mileNumber;
-    public Vector2Int localChunkPos;
+    [SerializeField] int mileNumber;
+    [SerializeField] string creditedPlayer;
+    [SerializeField] ChunkComponent parent;
+    [SerializeField] Vector2Int localChunkPos;
 
     RoadState lastStage = RoadState.None;
 
@@ -47,12 +53,12 @@ public class RoadComponent : MUDComponent {
 
         SetState((RoadState)roadUpdate.state);
 
-        if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != state)) {
+        if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != State)) {
 
             flash = gameObject.GetComponent<SPFlashShake>() ?? gameObject.AddComponent<SPFlashShake>();
-            flash.SetTarget(stages[(int)state]);
+            flash.SetTarget(stages[(int)State]);
             
-            if (state == RoadState.Shoveled) {
+            if (State == RoadState.Shoveled) {
                 fx_spawn.Play();
                 SPAudioSource.Play(transform.position, sfx_digs);
                 
@@ -61,7 +67,7 @@ public class RoadComponent : MUDComponent {
 
             //only fire the big gun events if we're confirmed an onchain
             if(newInfo.UpdateSource == UpdateSource.Onchain) {
-                if(state >= RoadState.Paved) {
+                if(State >= RoadState.Paved) {
                     ToggleComplete(true);
                 } else if(lastStage >= RoadState.Paved) {
                     //somehow we reverted, this should not be possible
@@ -73,7 +79,7 @@ public class RoadComponent : MUDComponent {
 
         }
 
-        lastStage = state;
+        lastStage = State;
 
     }
     
@@ -120,11 +126,11 @@ public class RoadComponent : MUDComponent {
 
         if(Loaded) {
             for (int i = 0; i < stages.Length; i++) {
-                stages[i].SetActive((i == (int)state && i < (int)RoadState.Paved) || (i == (int)RoadState.Shoveled && state >= RoadState.Paved));
+                stages[i].SetActive((i == (int)State && i < (int)RoadState.Paved) || (i == (int)RoadState.Shoveled && State >= RoadState.Paved));
             }
         } else  {
             for (int i = 0; i < stages.Length; i++) {
-                stages[i].SetActive(i == (int)state);
+                stages[i].SetActive(i == (int)State);
             }
         }
 
@@ -132,31 +138,27 @@ public class RoadComponent : MUDComponent {
 
     public void SetComplete() {
         for (int i = 0; i < stages.Length; i++) {
-            stages[i].SetActive(i == (int)state);
+            stages[i].SetActive(i == (int)State);
         }
     }
 
     public async UniTaskVoid AddToChunk() {
 
-        //we need the roadconfig info and the road pieces to have spawned to load the chunk
-        //lots of waiting
-
-        while (MUDWorld.FindTable<ChunkComponent>().SpawnedComponents.Count < 1) {
-            await UniTask.Delay(500);
-        }
-
-        while (RoadConfigComponent.Width == 0) {
-            await UniTask.Delay(500);
-        }
-
         //infer mileNumber;
         mileNumber = Mathf.FloorToInt(transform.position.z / (float)RoadConfigComponent.Height);
+
+        //load mile chunk
+        string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
+        parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
+        
+        while (parent == null) {
+            await UniTask.Delay(500);
+            parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
+        }
 
         //infer entity of our chunk and look for it
         localChunkPos = new Vector2Int((int)transform.position.x, (int)transform.position.z - mileNumber * RoadConfigComponent.Height);
 
-        string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
-        parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
         parent.AddRoadComponent(Entity.Key, this, localChunkPos.x, localChunkPos.y);
     }
 

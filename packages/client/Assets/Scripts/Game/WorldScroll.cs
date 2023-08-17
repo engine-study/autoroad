@@ -44,8 +44,8 @@ public class WorldScroll : MonoBehaviour
 
     void Update() {
 
-        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftAlt)) {
-            mileScroll += Input.mouseScrollDelta.y * .1f;
+        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftShift)) {
+            mileScroll = Mathf.Clamp(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime, -1f, maxMile + 1f);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
 
@@ -87,7 +87,7 @@ public class WorldScroll : MonoBehaviour
 
         // mileHeading.UpdateField("Mile " + newMile);
 
-        currentMile = Mathf.Clamp(newMile,0f, maxMile);
+        currentMile = Mathf.Clamp(newMile, 0f, maxMile);
         SPCamera.SetTarget(Vector3.forward * MileTotal);
 
         front.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height + RoadConfigComponent.Height);
