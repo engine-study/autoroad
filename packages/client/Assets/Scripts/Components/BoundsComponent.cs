@@ -43,9 +43,6 @@ public class BoundsComponent : MUDComponent
 
         boundVector = new Vector4(Left, Right, Up, Down);
 
-
-        borderVisuals.transform.position = Vector3.forward * Down;
-
         front.localPosition = Vector3.forward * (Up + .5f);
 
         front.localScale = Vector3.one + Vector3.right * (Right-Left);
