@@ -45,7 +45,7 @@ public class WorldScroll : MonoBehaviour
     void Update() {
 
         if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftShift)) {
-            mileScroll = Mathf.Clamp(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime, -1f, maxMile + 1f);
+            mileScroll = Mathf.Clamp(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime, -.5f, maxMile + .5f);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
 
