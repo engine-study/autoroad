@@ -1252,13 +1252,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: e0b94e58f777ea8479ca841156e70fa8, type: 2}
+      objectReference: {fileID: 22100000, guid: 6396252a6c8230742b15fa55e826f15d, type: 2}
     - target: {fileID: 13700000, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1266,11 +1262,63 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100038, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4085471412073776841}
   m_SourcePrefab: {fileID: 100100000, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
 --- !u!4 &6099290676696704183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400038, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
+  m_PrefabInstance: {fileID: 6099290676696841745}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6099290676696742103 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100038, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
+  m_PrefabInstance: {fileID: 6099290676696841745}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4085471412073776841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6099290676696742103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f824d610b1659ec4aa3d2a5b0f647960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6099290676704119665}
+  sfx_steps: []
+  grounded: 0
+  crouching: 0
+  speed: 0
+  walkCount: 0.25
+  walkMultiplier: 2
+  walkClamp: 0.1
+  moving: 0
+  jumping: 0
+  hovering: 0
+  dead: 0
+  wasGrounded: 0
+  newLocalPos: {x: 0, y: 0, z: 0}
+  lastLocalPos: {x: 0, y: 0, z: 0}
+  animVelocity: {x: 0, y: 0, z: 0}
+  velocityNoY: {x: 0, y: 0, z: 0}
+  m_ForwardAmount: 0
+  m_StrafeAmount: 0
+  m_JumpAmount: 0
+  velocityMagnitude: 0
+  velocityMagHorizontal: 0
+  walkTime: 0
+  lastWalk: 0
+  turnAnimateVel: 0
+  footstepDistance: 0.25
+  footsteps: []
+--- !u!95 &6099290676704119665 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: 13dc339e98cd43441afa6d390c08c477, type: 3}
   m_PrefabInstance: {fileID: 6099290676696841745}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7778164081555619338

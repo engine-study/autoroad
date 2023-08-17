@@ -11,7 +11,7 @@ import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/ge
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 import { MapSubSystem } from "../systems/MapSubSystem.sol";
-import { RoadSubSystem } from "../systems/RoadSubSystem.sol";
+import { RoadSubsystem } from "../systems/RoadSubsystem.sol";
 
 contract MoveSystem is System {
 

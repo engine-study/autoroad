@@ -3,8 +3,9 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { GameState } from "../codegen/Tables.sol";
-import { RoadSubSystem } from "./RoadSubSystem.sol";
+import { GameState, Coinage } from "../codegen/Tables.sol";
+import { RoadSubsystem } from "./RoadSubsystem.sol";
+import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 contract AdminSystem is System {
@@ -37,5 +38,11 @@ contract AdminSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
     IWorld(_world()).spawnShoveledRoad(x, y);
+  }
+
+  function addCoinsAdmin(int32 amount) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    IWorld(_world()).giveCoins(player, amount);
   }
 }

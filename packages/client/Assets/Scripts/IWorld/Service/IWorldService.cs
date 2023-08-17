@@ -326,6 +326,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(chopFunction, cancellationToken);
         }
 
+        public Task<string> ContemplateMileRequestAsync(ContemplateMileFunction contemplateMileFunction)
+        {
+             return ContractHandler.SendRequestAsync(contemplateMileFunction);
+        }
+
+        public Task<TransactionReceipt> ContemplateMileRequestAndWaitForReceiptAsync(ContemplateMileFunction contemplateMileFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(contemplateMileFunction, cancellationToken);
+        }
+
+        public Task<string> ContemplateMileRequestAsync(int mileNumber)
+        {
+            var contemplateMileFunction = new ContemplateMileFunction();
+                contemplateMileFunction.MileNumber = mileNumber;
+            
+             return ContractHandler.SendRequestAsync(contemplateMileFunction);
+        }
+
+        public Task<TransactionReceipt> ContemplateMileRequestAndWaitForReceiptAsync(int mileNumber, CancellationTokenSource cancellationToken = null)
+        {
+            var contemplateMileFunction = new ContemplateMileFunction();
+                contemplateMileFunction.MileNumber = mileNumber;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(contemplateMileFunction, cancellationToken);
+        }
+
         public Task<string> CreateMapRequestAsync(CreateMapFunction createMapFunction)
         {
              return ContractHandler.SendRequestAsync(createMapFunction);
@@ -729,6 +755,60 @@ namespace IWorld.Service
                 getSchemaFunction.Table = table;
             
             return ContractHandler.QueryAsync<GetSchemaFunction, byte[]>(getSchemaFunction, blockParameter);
+        }
+
+        public Task<string> GiveCoinsRequestAsync(GiveCoinsFunction giveCoinsFunction)
+        {
+             return ContractHandler.SendRequestAsync(giveCoinsFunction);
+        }
+
+        public Task<TransactionReceipt> GiveCoinsRequestAndWaitForReceiptAsync(GiveCoinsFunction giveCoinsFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveCoinsFunction, cancellationToken);
+        }
+
+        public Task<string> GiveCoinsRequestAsync(byte[] player, int amount)
+        {
+            var giveCoinsFunction = new GiveCoinsFunction();
+                giveCoinsFunction.Player = player;
+                giveCoinsFunction.Amount = amount;
+            
+             return ContractHandler.SendRequestAsync(giveCoinsFunction);
+        }
+
+        public Task<TransactionReceipt> GiveCoinsRequestAndWaitForReceiptAsync(byte[] player, int amount, CancellationTokenSource cancellationToken = null)
+        {
+            var giveCoinsFunction = new GiveCoinsFunction();
+                giveCoinsFunction.Player = player;
+                giveCoinsFunction.Amount = amount;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveCoinsFunction, cancellationToken);
+        }
+
+        public Task<string> GiveRoadRewardRequestAsync(GiveRoadRewardFunction giveRoadRewardFunction)
+        {
+             return ContractHandler.SendRequestAsync(giveRoadRewardFunction);
+        }
+
+        public Task<TransactionReceipt> GiveRoadRewardRequestAndWaitForReceiptAsync(GiveRoadRewardFunction giveRoadRewardFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveRoadRewardFunction, cancellationToken);
+        }
+
+        public Task<string> GiveRoadRewardRequestAsync(byte[] road)
+        {
+            var giveRoadRewardFunction = new GiveRoadRewardFunction();
+                giveRoadRewardFunction.Road = road;
+            
+             return ContractHandler.SendRequestAsync(giveRoadRewardFunction);
+        }
+
+        public Task<TransactionReceipt> GiveRoadRewardRequestAndWaitForReceiptAsync(byte[] road, CancellationTokenSource cancellationToken = null)
+        {
+            var giveRoadRewardFunction = new GiveRoadRewardFunction();
+                giveRoadRewardFunction.Road = road;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveRoadRewardFunction, cancellationToken);
         }
 
         public Task<string> GrantAccessRequestAsync(GrantAccessFunction grantAccessFunction)

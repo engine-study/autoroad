@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 
-public class WorldScroll : MonoBehaviour
-{
+public class WorldScroll : MonoBehaviour {
+
+    public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)RoadConfigComponent.Height);}
     public static WorldScroll Instance;
 
     [Header("World Scroll")]

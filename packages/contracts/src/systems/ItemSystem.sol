@@ -16,13 +16,7 @@ contract ItemSystem is System {
 
     GameEvent.emitEphemeral(player, "buy");
   }
-
-  function addCoinsAdmin(int32 amount) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-    int32 coins = Coinage.get(player);
-    Coinage.set(player, coins + amount);
-  }
-
+  
   function sendCoins(int32 amount) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
   }

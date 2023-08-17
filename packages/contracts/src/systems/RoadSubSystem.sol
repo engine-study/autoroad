@@ -15,9 +15,10 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
 import { randomCoord } from "../utility/random.sol";
 import { MoveSystem } from "./MoveSystem.sol";
+import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
-contract RoadSubSystem is System {
+contract RoadSubsystem is System {
   //updateRow
   //finishRow
 
@@ -52,25 +53,16 @@ contract RoadSubSystem is System {
     int32 yEnd = int32(yStart) + int32(roadHeight) + -1;
 
     Bounds.set(int32(-playArea), playArea, yEnd, yStart);
+    GameConfigData memory config = GameConfig.get();
 
     //spawn all the rows
     //spawn all the obstacles
     //spawn all the rocks/resources
-
     for (int32 y = yStart; y <= yEnd; y++) {
       //SPAWN TERRAIN
       for (int32 x = int32(-playArea); x <= playArea; x++) {
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
-        GameConfigData memory config = GameConfig.get();
-
-        // //spawn the road
-        // not doing this anymore, instead players will spawn the road by digging
-        // if (x >= int32(-halfRoad) && x <= halfRoad) {
-        //   bytes32 entity = position3DToEntityKey(x, -1, y);
-        //   Road.set(entity, RoadState.None);
-        //   Position.set(entity, x, y);
-        // }
 
         uint noiseCoord = randomCoord(0, 100, x, y);
 
@@ -92,12 +84,34 @@ contract RoadSubSystem is System {
         spawnTerrain(x, y, terrainType);
       }
     }
+  }
 
-    //set the chunk of road
-    // Chunk.set(chunkEntity, false, mileNumber, entitiesArray, contributorsArray);
-    Chunk.set(chunkEntity, false, mileNumber, 0,0);
-    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1, 0);
-    // console.log("added mile ", mileNumber);
+  function contemplateMile(int32 mileNumber) public {
+
+    GameConfigData memory config = GameConfig.get();
+    (,uint32 roadHeight, int32 leftRoad, int32 rightRoad) = RoadConfig.get();
+    int32 yStart = mileNumber * int32(roadHeight);
+    int32 yEnd = int32(yStart) + int32(roadHeight) + -1;
+
+    for (int32 y = yStart; y <= yEnd; y++) {
+
+      for (int32 x = leftRoad; x <= rightRoad; x++) {
+
+        bytes32 road = keccak256(abi.encode("Road", x, y));
+        (uint32 state, bytes32 filled) = Road.get(road);
+        
+        uint noiseCoord = randomCoord(0, 100, x, y);
+
+        if(Road.getState(road) < uint32(RoadState.Paved)) {
+          continue;
+        }
+
+        if (noiseCoord < 10) {
+          IWorld(_world()).giveRoadReward(road);
+        }
+      }
+    }
+
   }
 
   function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
@@ -119,8 +133,8 @@ contract RoadSubSystem is System {
     }
   }
 
-  function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
 
+  function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
     //ROAD COMPLETE!!! set it underground
     Position.set(road, pos.x, pos.y, -1);
 
@@ -159,17 +173,15 @@ contract RoadSubSystem is System {
     if (pieces == (roadWidth * roadHeight)) {
       finishChunk(chunk, currentMile, pieces);
     } else {
-      Chunk.set(chunk, false, currentMile, pieces,0);
+      Chunk.set(chunk, false, currentMile, pieces, 0);
     }
   }
 
   function finishChunk(bytes32 chunk, int32 currentMile, uint32 pieces) public {
-
     Chunk.set(chunk, true, currentMile, pieces, block.number);
 
     //REWARDS
     createMile(currentMile + 1);
-
   }
 
   function spawnFinishedRoad(int32 x, int32 y) public {
@@ -222,9 +234,7 @@ contract RoadSubSystem is System {
         }
 
         spawnFinishedRoad(x, y);
-        
       }
     }
   }
-
 }

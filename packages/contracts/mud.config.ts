@@ -8,10 +8,14 @@ export default mudConfig({
       name: "map",
       openAccess: false,
     },
-    RoadSubSystem: {
+    RoadSubsystem: {
       name: "road",
       openAccess: false,
     },
+    RewardSubsystem: {
+      name: "reward",
+      openAccess: false,
+    }
 
   },
 
@@ -157,7 +161,8 @@ export default mudConfig({
     Damage: "int32",
     Health: "int32",
     Seeds: "uint32",
-
+    Gem: "uint32",
+    
     //unique objects
     Rock: "uint32",
     Tree: "bool",

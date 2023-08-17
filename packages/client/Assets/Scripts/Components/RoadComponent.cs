@@ -146,7 +146,7 @@ public class RoadComponent : MUDComponent {
     public async UniTaskVoid AddToChunk() {
 
         //infer mileNumber;
-        mileNumber = Mathf.FloorToInt(transform.position.z / (float)RoadConfigComponent.Height);
+        mileNumber = (int)WorldScroll.PositionToMile(transform.position);
 
         //load mile chunk
         string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);

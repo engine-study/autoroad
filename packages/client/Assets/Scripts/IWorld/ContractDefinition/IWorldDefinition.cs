@@ -140,6 +140,15 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class ContemplateMileFunction : ContemplateMileFunctionBase { }
+
+    [Function("contemplateMile")]
+    public class ContemplateMileFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "mileNumber", 1)]
+        public virtual int MileNumber { get; set; }
+    }
+
     public partial class CreateMapFunction : CreateMapFunctionBase { }
 
     [Function("createMap")]
@@ -349,6 +358,26 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "table", 1)]
         public virtual byte[] Table { get; set; }
+    }
+
+    public partial class GiveCoinsFunction : GiveCoinsFunctionBase { }
+
+    [Function("giveCoins")]
+    public class GiveCoinsFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "amount", 2)]
+        public virtual int Amount { get; set; }
+    }
+
+    public partial class GiveRoadRewardFunction : GiveRoadRewardFunctionBase { }
+
+    [Function("giveRoadReward")]
+    public class GiveRoadRewardFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "road", 1)]
+        public virtual byte[] Road { get; set; }
     }
 
     public partial class GrantAccessFunction : GrantAccessFunctionBase { }
@@ -1267,6 +1296,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1329,6 +1360,10 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
+
+
 
 
 

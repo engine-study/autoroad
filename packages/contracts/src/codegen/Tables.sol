@@ -31,6 +31,7 @@ import { FishingRod, FishingRodTableId } from "./tables/FishingRod.sol";
 import { Damage, DamageTableId } from "./tables/Damage.sol";
 import { Health, HealthTableId } from "./tables/Health.sol";
 import { Seeds, SeedsTableId } from "./tables/Seeds.sol";
+import { Gem, GemTableId } from "./tables/Gem.sol";
 import { Rock, RockTableId } from "./tables/Rock.sol";
 import { Tree, TreeTableId } from "./tables/Tree.sol";
 import { Log, LogTableId } from "./tables/Log.sol";
