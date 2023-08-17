@@ -32,6 +32,10 @@ public class RowComponent : MonoBehaviour
     }
 
     public void SpawnRoad(int width) {
+
+        complete.SetActive(false);
+        completeEffects.SetActive(false);
+
         roadFiller = new RoadComponent[width];
         spawnedRoads = new RoadComponent[width];
 
