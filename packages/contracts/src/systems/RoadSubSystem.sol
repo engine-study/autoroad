@@ -84,6 +84,11 @@ contract RoadSubsystem is System {
         spawnTerrain(x, y, terrainType);
       }
     }
+
+    //set the chunk of road
+    Chunk.set(chunkEntity, false, mileNumber, 0,0);
+    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1, 0);
+
   }
 
   function contemplateMile(int32 mileNumber) public {
@@ -189,8 +194,6 @@ contract RoadSubsystem is System {
     require(world.onRoad(x, y), "off road");
 
     bytes32 entity = keccak256(abi.encode("Road", x, y));
-    require(Road.getState(entity) == uint32(RoadState.None), "road");
-
     Position.set(entity, x, y, -1);
     Road.set(entity, uint32(RoadState.Paved), entity);
 
@@ -218,21 +221,6 @@ contract RoadSubsystem is System {
 
     for (int32 y = yStart; y < yEnd; y++) {
       for (int32 x = left; x <= right; x++) {
-        bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
-        if (Road.getState(roadEntity) != uint32(RoadState.None)) {
-          continue;
-        }
-
-        bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-        if (atPosition.length > 0) {
-          continue;
-        }
-
-        bytes32[] memory atRoad = getKeysWithValue(PositionTableId, Position.encode(x, y, -1));
-        if (atRoad.length > 0) {
-          continue;
-        }
-
         spawnFinishedRoad(x, y);
       }
     }

@@ -69,6 +69,8 @@ public class ChunkComponent : MUDComponent {
 
         spawnLeft.localPosition = Vector3.right * (-MapConfigComponent.PlayWidth - .5f);
         spawnRight.localPosition = Vector3.right * (MapConfigComponent.PlayWidth + .5f);
+        spawnLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth - MapConfigComponent.PlayWidth - 1f);
+        spawnRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth - MapConfigComponent.PlayWidth - 1f);
 
     }
 

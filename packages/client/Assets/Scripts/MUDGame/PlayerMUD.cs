@@ -50,14 +50,13 @@ public class PlayerMUD : SPPlayer
 
         // Debug.Log("Player Network Init");
 
-        if(playerComponent.IsLocalPlayer) {
-            SetLocalPlayer(this);
-        }
-
         if(healthComponent.Health < 0) {
             Root.gameObject.SetActive(false);
         }
 
+        if(playerComponent.IsLocalPlayer) {
+            SetLocalPlayer(this);
+        }
         
         if(IsLocalPlayer) {
             Actor.OnActionEnd += ActionCursorUpdate;

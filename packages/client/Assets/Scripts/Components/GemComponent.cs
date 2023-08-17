@@ -12,7 +12,7 @@ public class GemComponent : MUDComponent {
     [Header("Position")]
     [SerializeField] private int gems = 0;
 
-    protected override IMudTable GetTable() {return new CoinageTable();}
+    protected override IMudTable GetTable() {return new GemTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         CoinageTable table = update as CoinageTable;

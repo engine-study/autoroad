@@ -10,6 +10,7 @@ using UniRx;
 public class GameStateComponent : MUDComponent {
 
     public static System.Action OnGameStateUpdated;
+    public static System.Action OnMileCompleted;
     public static GameStateComponent Instance;
     public static float MILE_DISTANCE {get { return RoadConfigComponent.Height; } }
     public static float MILE_COUNT;
@@ -42,6 +43,10 @@ public class GameStateComponent : MUDComponent {
         Entity.transform.parent = GameState.Instance.transform;
 
         OnGameStateUpdated?.Invoke();
+
+        if(Loaded) {
+            OnMileCompleted?.Invoke();
+        }
 
     }
 

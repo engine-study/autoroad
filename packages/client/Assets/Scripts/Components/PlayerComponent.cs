@@ -9,8 +9,12 @@ using System;
 using System.Collections;
 
 public class PlayerComponent : MUDComponent {
+
+    public static PlayerComponent LocalPlayer;
+    public static System.Action OnPlayerSpawn;
     public bool IsLocalPlayer { get { return isLocalPlayer; } }
     public PlayerMUD PlayerScript {get{return playerScript;}}
+
     [Header("Player")]
     [SerializeField] bool spawned;
     [SerializeField] bool isLocalPlayer;
@@ -29,11 +33,16 @@ public class PlayerComponent : MUDComponent {
         base.Init(ourEntity, ourTable);
 
         isLocalPlayer = ourEntity.Key == NetworkManager.LocalAddress;
+        if (IsLocalPlayer) {
+            LocalPlayer = this;
+            OnPlayerSpawn?.Invoke();
+        }
+
     }
 
     protected override IMudTable GetTable() {return new PlayerTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
-        // throw new System.NotImplementedException();
+
     }
 
     protected override void PostInit() {
@@ -67,6 +76,7 @@ public class PlayerComponent : MUDComponent {
     protected override void OnDestroy() {
         base.OnDestroy();
         isLocalPlayer = false;
+        LocalPlayer = null;
     }
 
 
