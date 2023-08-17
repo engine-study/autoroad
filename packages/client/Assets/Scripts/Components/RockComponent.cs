@@ -148,7 +148,6 @@ public class RockComponent : MUDComponent {
             yield break;
         }
 
-        road.SetComplete();
     }
 
 

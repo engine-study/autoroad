@@ -61,8 +61,6 @@ public class RoadComponent : MUDComponent {
             if (State == RoadState.Shoveled) {
                 fx_spawn.Play();
                 SPAudioSource.Play(transform.position, sfx_digs);
-                
-           
             }
 
             //only fire the big gun events if we're confirmed an onchain
@@ -98,12 +96,17 @@ public class RoadComponent : MUDComponent {
 
         yield return new WaitForSeconds(1f);
 
+        SetComplete();
+
+        yield return new WaitForSeconds(1f);
+
         PlayerMUD player = EntityDictionary.FindEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
 
         if (player == null) {
             Debug.LogError("Couldn't find player", this);
             yield break;
         }
+
 
         for (int i = 0; i < 5; i++) {
 
@@ -115,8 +118,6 @@ public class RoadComponent : MUDComponent {
 
             yield return new WaitForSeconds(.1f);
         }
-
-        // parent.
 
     }
 

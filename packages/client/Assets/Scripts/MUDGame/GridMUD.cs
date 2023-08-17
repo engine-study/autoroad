@@ -45,14 +45,16 @@ public class GridMUD : MonoBehaviour {
     }
 
     void UpdateComponents(Vector3 newPos) {
-        componentsAt = GetComponentsAtPosition((int)newPos.x, (int)newPos.z);
+        componentsAt = GetComponentsAtPosition((int)newPos.x, (int)newPos.z, (int)newPos.y);
         firstComponent = componentsAt.Count > 0 ? componentsAt[0] : null;
     }
 
-    static List<PositionComponent> GetComponentsAtPosition(int x, int y) {
+    static List<PositionComponent> GetComponentsAtPosition(int x, int y, int layer) {
 
         var ds = NetworkManager.Instance.ds;
-        var allComponentsAtPosition = new Query().In(PositionTable.ID).In(PositionTable.ID, new Condition[] { Condition.Has("x", System.Convert.ToInt64(x)), Condition.Has("y", System.Convert.ToInt64(y)) });
+
+        Condition[] conditions = new Condition[] { Condition.Has("x", System.Convert.ToInt64(x)), Condition.Has("y", System.Convert.ToInt64(y)), Condition.Has("layer", System.Convert.ToInt64(layer)) };
+        var allComponentsAtPosition = new Query().In(PositionTable.ID).In(PositionTable.ID, conditions );
         var recordsWithPosition = ds.RunQuery(allComponentsAtPosition);
 
         List<PositionComponent> components = new List<PositionComponent>();
@@ -72,7 +74,7 @@ public class GridMUD : MonoBehaviour {
     public static MUDEntity GetEntityAt(Vector3 newPos) {
 
         if(Instance.useQuery) {
-            List<PositionComponent> comps = GetComponentsAtPosition((int)newPos.x, (int)newPos.z);
+            List<PositionComponent> comps = GetComponentsAtPosition((int)newPos.x, (int)newPos.z, (int)newPos.y);
             return comps.Count > 0 ? comps[0].Entity : null;
         } else {
             MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; 

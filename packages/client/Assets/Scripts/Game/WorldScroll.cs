@@ -97,7 +97,7 @@ public class WorldScroll : MonoBehaviour
         mileUI.ToggleWindowOpen();
 
         //unlock the camera
-        if(SPCamera.Follow != null) {
+        if(currentMile != -1 && SPCamera.Follow != null) {
             SPCamera.SetFollow(null);
         }
 
