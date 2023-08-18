@@ -182,8 +182,10 @@ public class ControllerMUD : SPController {
 
                 PositionComponent pos = destinationEntity.GetMUDComponent<PositionComponent>();
                 MoveComponent destMoveComponent = destinationEntity.GetMUDComponent<MoveComponent>();
-                if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction) {
-                    FailedMove();
+                PlayerComponent player = destinationEntity.GetMUDComponent<PlayerComponent>();
+
+                if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction || (player == null && !MapConfigComponent.OnMap(pushToPos+direction))) {
+                    FailedMove(pushToPos);
                     return;
                 }
 
@@ -192,7 +194,6 @@ public class ControllerMUD : SPController {
                 positions.Add(pos);
                 targets.Add(pushToPos);
 
-                pushToPos += direction;
                 destinationEntity = GridMUD.GetEntityAt(pushToPos);
             }
 
@@ -200,11 +201,6 @@ public class ControllerMUD : SPController {
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(moveTo)));
             for (int i = positions.Count-1; i >= 0; i--) { updates.Add(TxManager.MakeOptimistic(positions[i], PositionComponent.PositionToOptimistic(targets[i])));}
             TxManager.Send<PushFunction>(updates, PositionComponent.PositionToTransaction(moveTo));
-
-            if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
-                BoundsComponent.ShowBorder();
-            }
-
           
         } else {
 
@@ -224,7 +220,12 @@ public class ControllerMUD : SPController {
 
     }
 
-    public void FailedMove() {
+    public void FailedMove(Vector3 proposedPosition) {
+        
+        if(!BoundsComponent.OnBounds((int)proposedPosition.x, (int)proposedPosition.z)) {
+            BoundsComponent.ShowBorder();
+        }
+
         MotherUI.TransactionFailed();
         player?.Animator.PlayClip("Hit");
         minTime = cancelWait;

@@ -89,7 +89,7 @@ contract MoveSystem is System {
 
       console.log("loop");
 
-      require(world.onMap(pushPos.x, pushPos.y), "off grid");
+      if(!Player.get(atPos[0])) require(world.onMap(pushPos.x, pushPos.y), "off grid");
       require(count < maxLength, "too many");
       uint32 move = Move.get(atPos[0]);
       require(move != uint32(MoveType.Obstruction), "blocked");

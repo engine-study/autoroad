@@ -8,6 +8,7 @@ public class MapConfigComponent : MUDComponent
 {
 
     public static MapConfigComponent Instance;
+    public static bool OnMap(Vector3 newPos) { return OnMap((int)newPos.x, (int)newPos.z); }
     public static bool OnMap(int x, int y) {return x >= -SpawnWidth && x <= SpawnWidth && y <= BoundsComponent.Up && y >= 0;}
 
     public static int PlayWidth, SpawnWidth;
