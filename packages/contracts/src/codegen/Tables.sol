@@ -34,6 +34,7 @@ import { Health, HealthTableId } from "./tables/Health.sol";
 import { Seeds, SeedsTableId } from "./tables/Seeds.sol";
 import { Gem, GemTableId } from "./tables/Gem.sol";
 import { Rock, RockTableId } from "./tables/Rock.sol";
+import { Boulder, BoulderTableId } from "./tables/Boulder.sol";
 import { Tree, TreeTableId } from "./tables/Tree.sol";
 import { Log, LogTableId } from "./tables/Log.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";

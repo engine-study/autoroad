@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/Tables.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats } from "../codegen/Tables.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
@@ -75,13 +75,18 @@ contract RoadSubsystem is System {
 
         // console.log("noise ", noiseCoord);
 
-        if (noiseCoord < 4) {
+        if (noiseCoord <= 10) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord < 10) {
+        } else if (noiseCoord > 10 && noiseCoord <= 20) {
           terrainType = TerrainType.Rock;
-        } else if (config.dummyPlayers && noiseCoord == 50) {
+        } else if (noiseCoord > 20 && noiseCoord <= 22) {
+          terrainType = TerrainType.HeavyBoy;
+        } else if (noiseCoord > 22 && noiseCoord < 25) {
+          if(IWorld(_world()).onRoad(x, y)) {continue;}
+          terrainType = TerrainType.Obstruction;
+        } else if (config.dummyPlayers && noiseCoord > 98) {
           terrainType = TerrainType.Player;
-        }
+        } 
 
         //don't spawn anything
         if (terrainType == TerrainType.None) {
@@ -135,6 +140,14 @@ contract RoadSubsystem is System {
       Rock.set(entity, uint32(RockType.Raw));
       Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Obstruction));
+    } else if (tType == TerrainType.HeavyBoy) {
+      Boulder.set(entity, true);
+      Weight.set(entity, 3);
+      Move.set(entity, uint32(MoveType.Push));
+    } else if (tType == TerrainType.Obstruction) {
+      Boulder.set(entity, true);
+      Weight.set(entity, 5);
+      Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
       Health.set(entity, 1);
@@ -146,7 +159,7 @@ contract RoadSubsystem is System {
 
 
   function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
-    
+
     //ROAD COMPLETE!!! set it underground
     Position.set(road, pos.x, pos.y, -1);
     //set the rock to the position under the road
