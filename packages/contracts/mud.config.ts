@@ -138,6 +138,7 @@ export default mudConfig({
     Head: "int32",
     Scroll: "uint32",
     Coinage: "int32",
+    Weight: "int32",
 
     Position: {
       name: "Position",

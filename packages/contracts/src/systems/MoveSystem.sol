@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll, Seeds, Boots } from "../codegen/Tables.sol";
+import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll, Seeds, Boots, Weight } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -14,7 +14,6 @@ import { MapSubSystem } from "../systems/MapSubSystem.sol";
 import { RoadSubsystem } from "../systems/RoadSubsystem.sol";
 
 contract MoveSystem is System {
-
   function moveSimple(int32 x, int32 y) public {
     IWorld world = IWorld(_world());
 
@@ -35,7 +34,10 @@ contract MoveSystem is System {
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
     for (uint i = 1; i < positions.length; i++) {
-      bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory atPosition = getKeysWithValue(
+        PositionTableId,
+        Position.encode(positions[i].x, positions[i].y, 0)
+      );
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
@@ -65,64 +67,101 @@ contract MoveSystem is System {
     require(canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
-    PositionData memory playerPos = Position.get(player);
-    PositionData memory moveFrom = PositionData(x, y, 0);
-    PositionData memory pushTo = PositionData(moveFrom.x + moveFrom.x-playerPos.x, moveFrom.y + moveFrom.y-playerPos.y, 0);
+    PositionData memory shoverPos = Position.get(player);
+    PositionData memory pushPos = PositionData(x, y, 0);
 
-    require(world.onMap(pushTo.x, pushTo.y), "off grid");
+    //check initial push is good
+    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
+    require(canInteract(player, x, y, atPos, 1), "bad interact");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    console.log("start push");
 
-    require(canInteract(player, x, y, atPosition, 1), "bad interact");
+    //push everything until we cant
+    int32 totalWeight = Weight.get(player);
+    uint256 count = 0;
+    uint256 maxLength = 16;
+    bytes32[] memory pushArray = new bytes32[](maxLength);
+    PositionData memory pushVector = PositionData(pushPos.x - shoverPos.x, pushPos.y - shoverPos.y, 0);
 
-    uint32 move = Move.get(atPosition[0]);
-    require(move == uint32(MoveType.Push), "pushing a non-pushable object");
+    console.log("start loop");
 
-    bytes32[] memory atDestination = getKeysWithValue(PositionTableId, Position.encode(pushTo.x, pushTo.y, 0));
+    while (atPos.length > 0) {
+
+      console.log("loop");
+
+      require(world.onMap(pushPos.x, pushPos.y), "off grid");
+      require(count < maxLength, "too many");
+      uint32 move = Move.get(atPos[0]);
+      require(move != uint32(MoveType.Obstruction), "blocked");
+
+      pushArray[count] = atPos[0];
+      totalWeight += Weight.get(atPos[0]);
+      pushPos.x += pushVector.x;
+      pushPos.y += pushVector.y;
+      count++;
+
+      atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
+
+      if(move != uint32(MoveType.Push)) { break; }
+
+    }
     
-    bool canMove = moveTo(player, atPosition[0], moveFrom, pushTo, atPosition, atDestination);
+    //go back to the last non empty object
+    count--;
+    require(totalWeight <= 0, "too heavy");
 
-    //move push object before then setting the pusher to the new position
-    if (canMove) {
-      Position.set(atPosition[0], pushTo.x, pushTo.y, 0);
+    //move the FINAL object in the push array first
+    shoverPos.x = pushPos.x -= pushVector.x;
+    shoverPos.y = pushPos.y -= pushVector.y;
+    bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
+    moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos);
+
+    //iterate backwards pushing everything forward one by one with a lighter position set that doesn't check for holes
+    for (int i = int(count) - 1; i >= 0; i--) {
+      pushPos.x -= pushVector.x;
+      pushPos.y -= pushVector.y;
+      Position.set(pushArray[uint(i)], pushPos.x, pushPos.y, 0);
     }
 
-    //and then player (which ovewrites where the push object was)
-    Position.set(player, x, y, 0);
-    
-    // int32 stat = Stats.getPushed(player);
-    // Stats.setPushed(player, stat + 1);
+    //move the FIRST object (the player) 
+    pushPos.x -= pushVector.x;
+    pushPos.y -= pushVector.y;
+    Position.set(player, pushPos.x, pushPos.y, 0);
+
   }
 
-  function moveTo(bytes32 player, bytes32 entity, PositionData memory from, PositionData memory to, bytes32[] memory atPosition, bytes32[] memory atDestination) public returns(bool) {
-    
-     //check if we are pushing rocks into a road ditch
+  function moveTo(
+    bytes32 player,
+    bytes32 entity,
+    PositionData memory from,
+    PositionData memory to,
+    bytes32[] memory atPosition,
+    bytes32[] memory atDestination
+  ) public {
+
+    //check if we are pushing rocks into a road ditch
     if (atDestination.length > 0) {
       //check if there is an obstruction
       MoveType moveType = MoveType(Move.get(atDestination[0]));
       bool empty = moveType == MoveType.None || moveType == MoveType.Hole;
-      require(empty, "pushing into an occupied spot");
-      require(withinManhattanMinimum(from, to,1));
-      
-      uint32 roadInt = Road.getState(atDestination[0]);
+      require(empty, "moving into an occupied spot");
 
-      //there is a road here
-      if (roadInt != 0) {
+      //move into the hole
+      if (moveType == MoveType.Hole) {
+        if(Player.get(entity)) { Health.set(entity, -1);}
+        if(Road.getState(atDestination[0]) == uint32(RoadState.Shoveled)) {
+          IWorld(_world()).spawnRoad(player, entity, atDestination[0], to);
+        }
+      }
 
-        require(roadInt == uint32(RoadState.Shoveled), "Road not shoveled");
-        //this has now become a fill()
-
-        IWorld(_world()).spawnRoad(player, entity, atDestination[0], to);
-        return false;
-      } 
-
-    } 
-   
-    return true;
+    } else {
+      Position.set(entity, to.x, to.y, 0);
+    }
 
   }
 
   function canDoStuff(bytes32 player) public returns (bool) {
+    //TODO add game pausing global
     require(Health.get(player) > 0, "we dead");
     return true;
   }
@@ -135,7 +174,7 @@ contract MoveSystem is System {
     uint distance
   ) public returns (bool) {
     require(entities.length > 0, "empty position");
-
+    //todo check off grid?
     PositionData memory playerPos = Position.get(player);
     PositionData memory entityPos = Position.get(entities[0]);
 
@@ -195,7 +234,6 @@ contract MoveSystem is System {
     // int32 stat = Stats.getMined(player);
     // Stats.setMined(player, stat + 1);
   }
-
 
   function shovel(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
@@ -291,9 +329,6 @@ contract MoveSystem is System {
     Position.set(player, PositionData(x, y, 0));
   }
 
-
-
-  
   // function carry(int32 carryX, int32 carryY) public {
   //   bytes32 player = addressToEntityKey(address(_msgSender()));
   //   require(canDoStuff(player), "hmm");
@@ -328,37 +363,26 @@ contract MoveSystem is System {
   //   }
   // }
 
-  
   function fish(int32 x, int32 y, int32 pushX, int32 pushY) public {
     // bytes32 player = addressToEntityKey(address(_msgSender()));
     // require(canDoStuff(player), "hmm");
-
     // PositionData memory startPos = Position.get(player);
-
     // IWorld world = IWorld(_world());
     // require(world.onMap(pushX, pushY), "off grid");
     // require(withinManhattanDistance(PositionData(x, y), startPos, 3), "too far to push");
-
     // bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-
     // require(atPush.length > 0, "trying to push an empty spot");
     // uint32 move = Move.get(atPush[0]);
     // require(move == uint32(MoveType.Push), "pushing a non-pushable object");
-
     // bytes32[] memory atDestination = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
-
     // assert(atPush.length < 2);
-
     // bool canPush = true;
-
     // //check if we are pushing rocks into a road ditch
     // if (atDestination.length > 0) {
     //   //check if there is an obstruction
     //   bool empty = Move.get(atDestination[0]) == uint32(MoveType.None);
     //   require(empty, "pushing into an occupied spot");
-
     //   (uint32 roadInt, ) = Road.get(atDestination[0]);
-
     //   //there is a road here
     //   if (roadInt != 0) {
     //     require(roadInt == uint32(RoadState.Shoveled), "Road not shoveled");
@@ -367,12 +391,10 @@ contract MoveSystem is System {
     //     fill(player, atPush[0], atDestination[0], pushX, pushY);
     //   }
     // } else {}
-
     // //move push object before then setting the pusher to the new position
     // if (canPush) {
     //   Position.set(atPush[0], pushX, pushY);
     // }
-
     // //and then player (which ovewrites where the push object was)
     // Position.set(player, x, y);
     // // int32 stat = Stats.getPushed(player);

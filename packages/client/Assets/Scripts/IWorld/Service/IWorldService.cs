@@ -2201,6 +2201,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainFunction, cancellationToken);
         }
 
+        public Task<string> SpawnTerrainAdminRequestAsync(SpawnTerrainAdminFunction spawnTerrainAdminFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnTerrainAdminFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnTerrainAdminRequestAndWaitForReceiptAsync(SpawnTerrainAdminFunction spawnTerrainAdminFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainAdminFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnTerrainAdminRequestAsync(int x, int y, byte tType)
+        {
+            var spawnTerrainAdminFunction = new SpawnTerrainAdminFunction();
+                spawnTerrainAdminFunction.X = x;
+                spawnTerrainAdminFunction.Y = y;
+                spawnTerrainAdminFunction.TType = tType;
+            
+             return ContractHandler.SendRequestAsync(spawnTerrainAdminFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnTerrainAdminRequestAndWaitForReceiptAsync(int x, int y, byte tType, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnTerrainAdminFunction = new SpawnTerrainAdminFunction();
+                spawnTerrainAdminFunction.X = x;
+                spawnTerrainAdminFunction.Y = y;
+                spawnTerrainAdminFunction.TType = tType;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainAdminFunction, cancellationToken);
+        }
+
         public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)
         {
              return ContractHandler.SendRequestAsync(teleportFunction);

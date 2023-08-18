@@ -20,6 +20,7 @@ import { Robe, RobeTableId } from "./tables/Robe.sol";
 import { Head, HeadTableId } from "./tables/Head.sol";
 import { Scroll, ScrollTableId } from "./tables/Scroll.sol";
 import { Coinage, CoinageTableId } from "./tables/Coinage.sol";
+import { Weight, WeightTableId } from "./tables/Weight.sol";
 import { Position, PositionData, PositionTableId } from "./tables/Position.sol";
 import { Active, ActiveTableId } from "./tables/Active.sol";
 import { Player, PlayerTableId } from "./tables/Player.sol";

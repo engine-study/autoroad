@@ -48,11 +48,9 @@ public class MileComplete : MonoBehaviour
             for (int x = 0; x < chunk.Rows[y].Roads.Length; x++) {
                 RoadComponent road = chunk.Rows[y].Roads[x];
 
-                if(road.Gem == false) {
+                if(road == null || road.Gem == false) {
                     continue;
-                } 
-
-                
+                }
 
                 yield return new WaitForSeconds(1f);
             }

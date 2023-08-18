@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Move, State, Carrying, Bones, Name, Stats, GameEvent, Coinage } from "../codegen/Tables.sol";
+import { Move, State, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight } from "../codegen/Tables.sol";
 import { PositionTableId } from "../codegen/Tables.sol";
 import { MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -60,6 +60,7 @@ contract SpawnSystem is System {
     if(!playerExists) {
       Player.set(entity, true);
       Coinage.set(entity, 0);
+      Weight.set(entity, -1);
 
       (int32 miles, int32 players) = GameState.get();
       Stats.set(entity, miles, 0, 0, 0, 0, 0, 0, 0);

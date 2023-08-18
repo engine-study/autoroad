@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Stats } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats } from "../codegen/Tables.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
 import { SpawnSystem } from "./SpawnSystem.sol";
@@ -133,6 +133,7 @@ contract RoadSubsystem is System {
 
     if (tType == TerrainType.Rock) {
       Rock.set(entity, uint32(RockType.Raw));
+      Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
@@ -145,17 +146,15 @@ contract RoadSubsystem is System {
 
 
   function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
+    
     //ROAD COMPLETE!!! set it underground
     Position.set(road, pos.x, pos.y, -1);
-
     //set the rock to the position under the road
     Position.set(pushed, pos.x, pos.y, -2);
-
     bool pushedPlayer = Player.get(pushed);
 
     // bool isRock = Rock.get(atDestination[0]);
     if (pushedPlayer) {
-      Health.set(pushed, -1);
       Road.setState(road, uint32(RoadState.Bones));
     } else {
       Road.setState(road, uint32(RoadState.Paved));

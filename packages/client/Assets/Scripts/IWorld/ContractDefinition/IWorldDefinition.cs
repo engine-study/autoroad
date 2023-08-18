@@ -476,7 +476,7 @@ namespace IWorld.ContractDefinition
 
     public partial class MoveToFunction : MoveToFunctionBase { }
 
-    [Function("moveTo", "bool")]
+    [Function("moveTo")]
     public class MoveToFunctionBase : FunctionMessage
     {
         [Parameter("bytes32", "player", 1)]
@@ -982,6 +982,19 @@ namespace IWorld.ContractDefinition
         public virtual byte TType { get; set; }
     }
 
+    public partial class SpawnTerrainAdminFunction : SpawnTerrainAdminFunctionBase { }
+
+    [Function("spawnTerrainAdmin")]
+    public class SpawnTerrainAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("uint8", "tType", 3)]
+        public virtual byte TType { get; set; }
+    }
+
     public partial class TeleportFunction : TeleportFunctionBase { }
 
     [Function("teleport")]
@@ -1360,6 +1373,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 
