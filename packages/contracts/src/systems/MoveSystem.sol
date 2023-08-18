@@ -95,15 +95,15 @@ contract MoveSystem is System {
 
       pushArray[count] = atPos[0];
       totalWeight += Weight.get(atPos[0]);
+
+
       pushPos.x += pushVector.x;
       pushPos.y += pushVector.y;
-      count++;
+      if(Player.get(pushArray[count])) require(world.onWorld(pushPos.x, pushPos.y), "off map");
+      else {require(world.onMap(pushPos.x, pushPos.y), "off world");}
 
       atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
-
-      //make sure nothing we pushes goes off the edge of the world
-      if(Player.get(atPos[0])) require(world.onWorld(pushPos.x, pushPos.y), "off map");
-      else {require(world.onMap(pushPos.x, pushPos.y), "off world");}
+      count++;
 
       //leave loop early if we hit an empty space
       if(move != uint32(MoveType.Push)) { break; }
@@ -112,6 +112,8 @@ contract MoveSystem is System {
     
     //go back to the last non empty object
     count--;
+
+    //WEIGHT
     require(totalWeight <= 0, "too heavy");
 
     //move the FINAL object in the push array first
