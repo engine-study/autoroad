@@ -111,8 +111,8 @@ contract MoveSystem is System {
     require(totalWeight <= 0, "too heavy");
 
     //move the FINAL object in the push array first
-    shoverPos.x = pushPos.x -= pushVector.x;
-    shoverPos.y = pushPos.y -= pushVector.y;
+    shoverPos.x = pushPos.x - pushVector.x;
+    shoverPos.y = pushPos.y - pushVector.y;
     bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
     moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos);
 

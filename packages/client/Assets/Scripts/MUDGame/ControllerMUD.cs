@@ -164,30 +164,41 @@ public class ControllerMUD : SPController {
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
         MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
-        PositionComponent posComponent = e?.GetMUDComponent<PositionComponent>();
 
         if (moveComponent != null) {
 
             Debug.Log("PUSHING");
 
-            if(moveComponent.MoveType != MoveType.Push) {
-                FailedMove();
-                return;
-            }
+            bool weight = false;
+            bool obstruction = false;
 
-            Vector3 pushToPos = new Vector3(Mathf.Round(moveTo.x + direction.x), 0f, Mathf.Round(moveTo.z + direction.z));
+            List<PositionComponent> positions = new List<PositionComponent>();
+            List<Vector3> targets = new List<Vector3>();
 
+            Vector3 pushToPos = moveTo;
             MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
-            MoveComponent destMoveComponent = destinationEntity?.GetMUDComponent<MoveComponent>();
 
-            if(destMoveComponent != null && (destMoveComponent.MoveType != MoveType.Hole && destMoveComponent.MoveType != MoveType.None)) {
-                FailedMove();
-                return;
+            while(destinationEntity != null) {
+
+                PositionComponent pos = destinationEntity.GetMUDComponent<PositionComponent>();
+                MoveComponent destMoveComponent = destinationEntity.GetMUDComponent<MoveComponent>();
+                if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction) {
+                    FailedMove();
+                    return;
+                }
+
+                pushToPos += direction;
+
+                positions.Add(pos);
+                targets.Add(pushToPos);
+
+                pushToPos += direction;
+                destinationEntity = GridMUD.GetEntityAt(pushToPos);
             }
 
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(moveTo)));
-            updates.Add(TxManager.MakeOptimistic(posComponent, PositionComponent.PositionToOptimistic(pushToPos)));
+            for (int i = positions.Count-1; i >= 0; i--) { updates.Add(TxManager.MakeOptimistic(positions[i], PositionComponent.PositionToOptimistic(targets[i])));}
             TxManager.Send<PushFunction>(updates, PositionComponent.PositionToTransaction(moveTo));
 
             if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
