@@ -9,20 +9,23 @@ using IWorld.ContractDefinition;
 public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, _Count }
 public class RockComponent : MUDComponent {
 
+    public RockType RockType {get { return rockType; } }
+
     [Header("Rock")]
-    [SerializeField] protected RockType rockType;
-    [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles, fx_fillExplosion;
     [SerializeField] SPAudioSource source, rockSlide;
     [SerializeField] PositionSync posSync;
-
     [SerializeField] GameObject visualParent;
     [SerializeField] SPBase rockBase;
     [SerializeField] SPFlashShake flash;
     [SerializeField] GameObject[] stages;
-    public AudioClip[] sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
+    [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles, fx_fillExplosion;
+    [SerializeField] AudioClip[] sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
     RockType lastStage = RockType._Count;
 
-    public bool HasBeenSunk {get { return posSync.Pos.PosLayer.y < 0; } }
+    [Header("Debug")]
+    [SerializeField] RockType rockType;
+    [SerializeField] MoveComponent moveComponent;
+
 
     protected override void Awake() {
         base.Awake();
@@ -37,120 +40,24 @@ public class RockComponent : MUDComponent {
         base.Init(ourEntity, ourTable);
 
         Entity.SetName(rockType.ToString());
-
     }
 
     protected override void PostInit() {
         base.PostInit();
 
-        posSync.Pos.OnUpdatedInfo += UpdatePositionCheck;
-
-        if (HasBeenSunk) {
-            gameObject.SetActive(false);
-        }
+        moveComponent = Entity.GetMUDComponent<MoveComponent>();
+        moveComponent.OnMove += MoveRock;
+        moveComponent.OnHole += Sink;
     }
 
     protected override void InitDestroy() {
         base.InitDestroy();
 
-        if(posSync) {
-            posSync.Pos.OnUpdatedInfo -= UpdatePositionCheck;
+        if(moveComponent) {
+            moveComponent.OnMove -= MoveRock;
+            moveComponent.OnHole -= Sink;
         }
     }
-
-
-    Vector3 lastPos;
-    void UpdatePositionCheck(MUDComponent c, UpdateInfo newInfo) {
-
-        PositionComponent pos = c as PositionComponent;
-
-        if (Loaded) {
-
-            if (newInfo.UpdateSource != UpdateSource.Revert && lastPos != pos.Pos) {
-                fx_drag.Play();
-                source.PlaySound(sfx_drag);
-                source.PlaySound(sfx_dragBase);
-                flash.Flash();
-            }
-
-            //our position component was deleted
-            //we got pushed into a hole, when we finish moving to the hole, sink into into 
-
-            if(newInfo.UpdateType == UpdateType.DeleteRecord) {
-                //do crumble animation
-                gameObject.SetActive(false);
-            } else {
-                CheckSink();
-            }
-        }
-
-        lastPos = pos.Pos;
-
-    }
-
-    void CheckSink() {
-
-        //we stopped moving, AND we have a deleleted record, lets get pushed into a hole
-        if (HasBeenSunk && rockType == RockType.Statumen && posSync.Pos.UpdateSource == UpdateSource.Onchain) {
-            Sink();
-        }
-    }
-
-    Coroutine sinkCoroutine;
-    void Sink() {
-
-        if (sinkCoroutine != null) {
-            StopCoroutine(sinkCoroutine);
-        }
-
-        StartCoroutine(SinkCoroutine());
-
-    }
-
-    IEnumerator SinkCoroutine() {
-
-        Debug.Log("Sinking", this);
-
-        while (posSync.Moving) { yield return null; }
-        if (!HasBeenSunk) {
-            Debug.LogError("Sunk but we aren't deleleted");
-            yield break;
-        }
-
-        flash.Flash();
-
-        fx_fillParticles.Play();
-        source.PlaySound(sfx_fillSound);
-
-        rockSlide.Source.Play();
-        rockSlide.Source.time = Random.Range(0f, rockSlide.Source.clip.length);
-
-        float lerp = 0f;
-
-        while (lerp < 1f) {
-            lerp += Time.deltaTime * 2f;
-            visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * 1f, lerp);
-            yield return null;
-        }
-
-        rockSlide.Source.Stop();
-        fx_fillParticles.Emit(10);
-        fx_fillExplosion.Play();
-        source.PlaySound(sfx_finalThump);
-
-        visualParent.SetActive(false);
-
-        SPCamera.AddShake(Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .1f);
-        RoadComponent road = MUDWorld.FindComponent<RoadComponent>(MUDHelper.Keccak256("Road", (int)posSync.Pos.Pos.x, (int)posSync.Pos.Pos.z));
-
-        if(road == null) {
-            Debug.LogError("Can't find road", this);
-            yield break;
-        }
-
-    }
-
-
 
     protected override IMudTable GetTable() { return new RockTable(); }
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
@@ -191,6 +98,63 @@ public class RockComponent : MUDComponent {
         }
 
         lastStage = rockType;
+
+    }
+
+    void MoveRock() {
+        fx_drag.Play();
+        SPAudioSource.Play(transform.position,sfx_drag);
+        SPAudioSource.Play(transform.position,sfx_dragBase);
+        flash.Flash();
+    }
+
+    Coroutine sinkCoroutine;
+    void Sink() {
+
+        if (sinkCoroutine != null) {
+            StopCoroutine(sinkCoroutine);
+        }
+
+        StartCoroutine(SinkCoroutine());
+
+    }
+
+    IEnumerator SinkCoroutine() {
+
+        Debug.Log("Sinking", this);
+
+        while (posSync.Moving) { yield return null; }
+        
+        flash.Flash();
+
+        fx_fillParticles.Play();
+        source.PlaySound(sfx_fillSound);
+
+        rockSlide.Source.Play();
+        rockSlide.Source.time = Random.Range(0f, rockSlide.Source.clip.length);
+
+        float lerp = 0f;
+
+        while (lerp < 1f) {
+            lerp += Time.deltaTime * 2f;
+            visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * 1f, lerp);
+            yield return null;
+        }
+
+        rockSlide.Source.Stop();
+        fx_fillParticles.Emit(10);
+        fx_fillExplosion.Play();
+        source.PlaySound(sfx_finalThump);
+
+        visualParent.SetActive(false);
+
+        SPCamera.AddShake(Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .1f);
+        RoadComponent road = MUDWorld.FindComponent<RoadComponent>(MUDHelper.Keccak256("Road", (int)posSync.Pos.Pos.x, (int)posSync.Pos.Pos.z));
+
+        if(road == null) {
+            Debug.LogError("Can't find road", this);
+            yield break;
+        }
 
     }
 

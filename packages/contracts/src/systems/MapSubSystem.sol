@@ -17,8 +17,8 @@ contract MapSubSystem is System {
 
   //the coordinate exists inside ALL CURRENT AND PREVIOUS MILES and INSIDE THE SPAWN ZONES
   function onWorld(int32 x, int32 y) public returns (bool) {
-    (,,int32 up,) = Bounds.get();
-    (, int32 spawnWidth) = MapConfig.get();
+    int32 up = Bounds.getUp();
+    int32 spawnWidth = MapConfig.getSpawnArea();
     return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up && y >= 0;
   }
 

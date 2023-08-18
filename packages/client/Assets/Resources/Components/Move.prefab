@@ -44,10 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a8d90f0eb720c444817815f6138e5f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tableType: {fileID: 11400000, guid: 0580bc91c113fc940982286a76815d99, type: 2}
-  requiredComponents: []
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
+  requiredComponents:
+  - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  updateInfo:
+    updateType: 0
+    source: 0
+  networkInfo:
+    updateType: 0
+    source: 0
   hasInit: 0
   loaded: 0
-  moveType: 0
+  MoveType: 0
+  pos: {fileID: 0}
+  flash: {fileID: 0}

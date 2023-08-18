@@ -75,15 +75,18 @@ contract RoadSubsystem is System {
 
         // console.log("noise ", noiseCoord);
 
-        if (noiseCoord <= 10) {
+        if (noiseCoord <= 7) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord > 10 && noiseCoord <= 20) {
+        } else if (noiseCoord > 10 && noiseCoord <= 15) {
           terrainType = TerrainType.Rock;
-        } else if (noiseCoord > 20 && noiseCoord <= 22) {
+        } else if (noiseCoord == 15) {
           terrainType = TerrainType.HeavyBoy;
-        } else if (noiseCoord > 22 && noiseCoord < 25) {
+        } else if (noiseCoord == 16) {
           if(IWorld(_world()).onRoad(x, y)) {continue;}
           terrainType = TerrainType.Obstruction;
+        } else if (noiseCoord == 17) {
+          if(IWorld(_world()).onRoad(x, y)) {continue;}
+          terrainType = TerrainType.Pillar;
         } else if (config.dummyPlayers && noiseCoord > 98) {
           terrainType = TerrainType.Player;
         } 
@@ -148,6 +151,10 @@ contract RoadSubsystem is System {
       Boulder.set(entity, true);
       Weight.set(entity, 5);
       Move.set(entity, uint32(MoveType.Push));
+    } else if (tType == TerrainType.Pillar) {
+      Boulder.set(entity, true);
+      Weight.set(entity, 99);
+      Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
       Tree.set(entity, true);
       Health.set(entity, 1);

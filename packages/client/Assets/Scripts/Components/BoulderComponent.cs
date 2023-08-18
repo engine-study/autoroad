@@ -11,9 +11,9 @@ public class BoulderComponent : MUDComponent {
     [Header("Boulder")]
     [SerializeField] private GameObject normal;
     [SerializeField] private GameObject heavy;
+    [SerializeField] private GameObject pillar;
 
     [Header("Debug")]
-    [SerializeField] private bool isBigRock;
     [SerializeField] private WeightComponent weight;
 
     protected override IMudTable GetTable() {return new BoulderTable();}
@@ -25,10 +25,10 @@ public class BoulderComponent : MUDComponent {
         base.PostInit();
 
         weight = Entity.GetMUDComponent<WeightComponent>();
-        isBigRock = weight.Weight > 3;
 
-        normal.SetActive(!isBigRock);
-        heavy.SetActive(isBigRock);
+        normal.SetActive(weight.Weight < 5);
+        heavy.SetActive(weight.Weight == 5);
+        pillar.SetActive(weight.Weight > 5);
 
     }
 

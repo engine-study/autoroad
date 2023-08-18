@@ -3,6 +3,7 @@ using DefaultNamespace;
 using mud.Client;
 
 public class PositionComponent : MUDComponent {
+
     public Vector3Int PosInt { get { return posInt; } }
     public Vector3 Pos { get { return position3D; } }
     public Vector3 PosLayer { get { return position3DLayer; } }
