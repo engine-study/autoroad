@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6335350583050386846}
-  - component: {fileID: 378270646931629764}
   - component: {fileID: 1472302387032795878}
   m_Layer: 0
   m_Name: Gem
@@ -34,30 +33,8 @@ Transform:
   - {fileID: 6921227977265807936}
   - {fileID: 3858918453522234998}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &378270646931629764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 803014217463199009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9df41273829a4ca4595992aee9bf94a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  requiredComponents: []
-  updateInfo:
-    updateType: 0
-    source: 0
-  networkInfo:
-    updateType: 0
-    source: 0
-  hasInit: 0
-  loaded: 0
-  gems: 0
 --- !u!114 &1472302387032795878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872bfe9da31aa864abaf17a2cb5a05da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotation: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 90, z: 0}
   sfx_spawn:
   - {fileID: 8300000, guid: d46c1f4450862af46b718952267977c7, type: 3}
   sfx_recieve:

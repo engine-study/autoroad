@@ -80,7 +80,8 @@ public class GameState : MonoBehaviour {
     async UniTask GameSetup() {
 
         while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
-
+        while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(500);}
+        
         //destroy the player if we want to simulate the login sequence
         if (freshStart) {
             await TxManager.Send<DestroyPlayerAdminFunction>();

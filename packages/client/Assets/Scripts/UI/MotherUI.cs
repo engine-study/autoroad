@@ -100,6 +100,7 @@ public class MotherUI : SPUIInstance {
 
     public static void TogglePlayerSpawning(bool toggle) {
         Mother.spawning.ToggleWindow(toggle);
+        Mother.spawning.ToggleUI(toggle);
     }
 
     public static void ToggleGame(bool toggle) {

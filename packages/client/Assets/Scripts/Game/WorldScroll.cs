@@ -29,6 +29,7 @@ public class WorldScroll : MonoBehaviour {
     [SerializeField] float mileScroll, lastScroll = -100f;
     float playerMile = 0f, lastPlayerMile = -1f;
     bool playerFocus = false;
+    float targetScroll, targetPlayer;
 
     public float MileTotal { get { return currentMile * GameStateComponent.MILE_DISTANCE; } }
     public float MileTotalScroll { get { return mileScroll * GameStateComponent.MILE_DISTANCE; } }
@@ -69,6 +70,8 @@ public class WorldScroll : MonoBehaviour {
         mileUI.ToggleWindowOpen();
 
         SetMile(PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos));
+
+        ToggleCameraOnPlayer(true);
         UpdatePlayerMile();
 
     }
@@ -88,6 +91,9 @@ public class WorldScroll : MonoBehaviour {
         }
         
         if (SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
+            
+            ToggleCameraOnPlayer(false);
+
             if (CursorMUD.Base) {
                 SPCamera.SetFollow(CursorMUD.Base.Root);
             } else {
@@ -97,7 +103,6 @@ public class WorldScroll : MonoBehaviour {
                 SPCamera.SetTarget(new Vector3(x, 0f, z));
             }
 
-            ToggleCameraOnPlayer(false);
         }
 
         if (SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
@@ -106,11 +111,10 @@ public class WorldScroll : MonoBehaviour {
     }
 
     void UpdateScroll() {
+
         //magnetism, lerp back to current mile
         mileScroll = Mathf.MoveTowards(mileScroll, currentMile, 1f * Time.deltaTime);
-
-        float mileLerp = GetMileLerp(mileScroll);
-        barUI.value = Mathf.Lerp(barUI.value, mileLerp, .1f);
+        targetScroll = GetMileLerp(mileScroll);
 
         //if we're more than halfway to the next mile, magnet over to it
         if (Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileTotal) > GameStateComponent.MILE_DISTANCE * .5f) {
@@ -121,13 +125,16 @@ public class WorldScroll : MonoBehaviour {
             SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
         }
 
+        if(barUI.value != targetScroll) { barUI.value = Mathf.MoveTowards(barUI.value, targetScroll, 5f * Time.deltaTime); }
+        if (playerUI.value != targetPlayer) { playerUI.value = Mathf.MoveTowards(playerUI.value, targetPlayer, 5f * Time.deltaTime); }
+
         lastScroll = mileScroll;
     }
 
     void UpdatePlayerMile() {
 
         playerMile = PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos);
-        playerUI.value = GetMileLerp(playerMile);
+        targetPlayer = GetMileLerp(playerMile);
 
         if(playerMile != lastPlayerMile) {
             mileHeading.UpdateField("Mile " + (int)(playerMile+1));

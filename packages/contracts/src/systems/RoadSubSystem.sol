@@ -235,6 +235,7 @@ contract RoadSubsystem is System {
     Road.set(entity, uint32(RoadState.Shoveled), entity, false);
     Position.set(entity, x, y, 0);
   }
+  
 
   function debugMile(bytes32 credit) public {
     (, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();

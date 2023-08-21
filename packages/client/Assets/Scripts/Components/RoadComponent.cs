@@ -119,7 +119,8 @@ public class RoadComponent : MUDComponent {
 
 
         for (int i = 0; i < 5; i++) {
-            SPResourceJuicy.GiveResource("Prefabs/Coin", player.Root, transform.position + Vector3.up, Random.rotation);
+            SPResourceJuicy coin = SPResourceJuicy.SpawnResource("Prefabs/Coin", player.Root, transform.position + Vector3.up, Random.rotation);
+            coin.SendResource();
             yield return new WaitForSeconds(.1f);
         }
 

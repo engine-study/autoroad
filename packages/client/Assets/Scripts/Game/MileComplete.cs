@@ -38,7 +38,7 @@ public class MileComplete : MonoBehaviour
 
     void SetCameraToMile(int mile) {
         SPCamera.SetFollow(null);
-        SPCamera.SetTarget(Vector3.forward * mile * GameStateComponent.MILE_DISTANCE * .5f);
+        SPCamera.SetTarget(Vector3.forward * ((mile * GameStateComponent.MILE_DISTANCE) + (GameStateComponent.MILE_DISTANCE * .5f)));
         SPCamera.SetFOVGlobal(10f);
     }
     IEnumerator MileEndCoroutine(int mile) {
@@ -83,13 +83,14 @@ public class MileComplete : MonoBehaviour
         yield return new WaitForSeconds(.25f);
 
         PlayerMUD player = road.FilledBy.PlayerScript;
-        SPResourceJuicy gem = SPResourceJuicy.GiveResource("Prefabs/Gem", player.transform, road.transform.position + Vector3.up, Quaternion.identity);
+        SPResourceJuicy gem = SPResourceJuicy.SpawnResource("Prefabs/Gem", player.transform, road.transform.position + Vector3.up, Quaternion.identity);
         SPCamera.SetFollow(gem.transform);
 
+        yield return new WaitForSeconds(1f);
+        gem.SendResource();
         while (gem != null) { yield return null; }
 
         SPCamera.SetFollow(player.headCosmetic.bodyParent);
-
         yield return new WaitForSeconds(.5f);
 
     }

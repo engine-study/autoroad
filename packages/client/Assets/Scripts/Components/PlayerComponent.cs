@@ -100,7 +100,6 @@ public class PlayerComponent : MUDComponent {
             return;
         }
 
-
         if(health.Health != lastHealth) {
                     
             if(health.Health < 1) {

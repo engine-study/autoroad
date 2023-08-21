@@ -103,18 +103,15 @@ public class RockComponent : MUDComponent {
 
     void MoveRock() {
         fx_drag.Play();
+        flash.Flash();
         SPAudioSource.Play(transform.position,sfx_drag);
         SPAudioSource.Play(transform.position,sfx_dragBase);
-        flash.Flash();
     }
 
     Coroutine sinkCoroutine;
     void Sink() {
 
-        if (sinkCoroutine != null) {
-            StopCoroutine(sinkCoroutine);
-        }
-
+        if (sinkCoroutine != null) { StopCoroutine(sinkCoroutine); }
         StartCoroutine(SinkCoroutine());
 
     }

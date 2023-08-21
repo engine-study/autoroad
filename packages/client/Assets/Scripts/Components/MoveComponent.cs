@@ -28,6 +28,8 @@ public class MoveComponent : MUDComponent {
     protected override void PostInit() {
         base.PostInit();
 
+        pos = Entity.GetMUDComponent<PositionComponent>();
+
         if(pos == null) {
             return;
         }

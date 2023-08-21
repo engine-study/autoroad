@@ -77,6 +77,7 @@ contract SpawnSystem is System {
     Position.set(entity, x, y, 0);
   }
 
+  //TODO create proper debug
   function destroyPlayerAdmin() public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
 
