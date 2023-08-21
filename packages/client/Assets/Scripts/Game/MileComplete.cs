@@ -11,7 +11,7 @@ public class MileComplete : MonoBehaviour
     [SerializeField] GameObject mileUI;
     [SerializeField] SPHeading header;
     [SerializeField] List<GemComponent> gems;
-    Coroutine coroutine;
+    static Coroutine coroutine;
     public static void AddGem(GemComponent gem) {
         Instance.gems.Add(gem);
     }
@@ -27,31 +27,30 @@ public class MileComplete : MonoBehaviour
         GameStateComponent.OnMileCompleted -= PlayMileRewardSequence;
     }
 
-    public void PlayMileRewardSequence() {
-
-        if(GameStateComponent.MILE_COUNT == 0) {
-            return;
-        }
-
-        PlayMileRewardSequence((int)GameStateComponent.MILE_COUNT - 1);
+    public static void PlayMileRewardSequence() {
+        PlayMileRewardSequence((int)WorldScroll.Mile);
     }
 
-    void PlayMileRewardSequence(int mile) {
-        if(coroutine != null) StopCoroutine(coroutine);
-        coroutine = StartCoroutine(MileEndCoroutine());
+    public static void PlayMileRewardSequence(int mile) {
+        if(coroutine != null) Instance.StopCoroutine(coroutine);
+        coroutine = Instance.StartCoroutine(Instance.MileEndCoroutine(mile));
     }
 
+    void SetCameraToMile(int mile) {
+        SPCamera.SetFollow(null);
+        SPCamera.SetTarget(Vector3.forward * mile * GameStateComponent.MILE_DISTANCE * .5f);
+        SPCamera.SetFOVGlobal(10f);
+    }
+    IEnumerator MileEndCoroutine(int mile) {
 
-    IEnumerator MileEndCoroutine() {
-
-        int completedMile = (int)GameStateComponent.MILE_COUNT - 1;
+        SetCameraToMile(mile);
 
         mileUI.SetActive(true);
         yield return new WaitForSeconds(1f);
         mileUI.SetActive(false);
 
 
-        ChunkComponent chunk = ChunkComponent.Chunks[completedMile];
+        ChunkComponent chunk = ChunkComponent.Chunks[mile];
 
         for (int y = 0; y < chunk.Rows.Length; y++) {
             for (int x = 0; x < chunk.Rows[y].Roads.Length; x++) {
@@ -67,6 +66,8 @@ public class MileComplete : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        SetCameraToMile(mile);
+
     }
 
     IEnumerator PresentReward(RoadComponent road) {
@@ -78,15 +79,18 @@ public class MileComplete : MonoBehaviour
 
         SPCamera.SetFollow(road.transform);
 
-        yield return new WaitForSeconds(2f);
+        while (SPCamera.I.transform.position != road.transform.position) { yield return null; }
+        yield return new WaitForSeconds(.25f);
 
         PlayerMUD player = road.FilledBy.PlayerScript;
         SPResourceJuicy gem = SPResourceJuicy.GiveResource("Prefabs/Gem", player.transform, road.transform.position + Vector3.up, Quaternion.identity);
         SPCamera.SetFollow(gem.transform);
 
-        while (gem.gameObject.activeInHierarchy) { yield return null; }
+        while (gem != null) { yield return null; }
 
-        yield return new WaitForSeconds(2f);
+        SPCamera.SetFollow(player.headCosmetic.bodyParent);
+
+        yield return new WaitForSeconds(.5f);
 
     }
 }

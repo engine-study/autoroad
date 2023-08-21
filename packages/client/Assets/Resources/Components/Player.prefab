@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca71dd0ab54e10f42abe08511e4d8a63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canUse: 0
   interact: {fileID: 3521123712879269700}
 --- !u!1 &529906100508260132
 GameObject:
@@ -5089,6 +5090,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 175f58b3995444942bc5a66f5a281b48, type: 3}
   positionComponent: {fileID: 0}
   healthComponent: {fileID: 0}
+  gemComponent: {fileID: 0}
 --- !u!114 &5348944994237342613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5105,8 +5107,6 @@ MonoBehaviour:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   - {fileID: 887154974638645543, guid: a34254a59a3dd7845b586282bc8292e2, type: 3}
   - {fileID: 77022645062805081, guid: 219b049c5faf436428e270937e831a80, type: 3}
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
@@ -5379,6 +5379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82fc371078b4cc4c89fab93ed73dd20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canUse: 0
   interact: {fileID: 5916935216422990927}
 --- !u!1 &1649011601951813574
 GameObject:
@@ -5532,6 +5533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e09af2772515494ea52fa01215be8a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canUse: 0
   interact: {fileID: 8394964874783954427}
 --- !u!1 &3562155450139694466
 GameObject:
@@ -5600,6 +5602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166787b93eca79344893642ca5df0817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canUse: 0
   interact: {fileID: 3995134369058425196}
 --- !u!1 &3749648392518457582
 GameObject:
@@ -5727,6 +5730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73fcbe785f4b9e34b93065b5e0258965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canUse: 0
   interact: {fileID: 6819035568640496617}
 --- !u!1 &4616459405273496695
 GameObject:
@@ -10935,6 +10939,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047834299498b804da584aa01cb21e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canUse: 0
   interact: {fileID: 4185614968181234515}
 --- !u!1 &7618585900613904675
 GameObject:

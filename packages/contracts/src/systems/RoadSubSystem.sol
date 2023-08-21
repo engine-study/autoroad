@@ -201,7 +201,7 @@ contract RoadSubsystem is System {
     pieces++;
 
     //road complete!
-    if (pieces == (roadWidth * roadHeight)) {
+    if (pieces >= (roadWidth * roadHeight)) {
       finishChunk(chunk, currentMile, pieces);
     } else {
       Chunk.set(chunk, false, currentMile, pieces, 0);
@@ -236,10 +236,7 @@ contract RoadSubsystem is System {
     Position.set(entity, x, y, 0);
   }
 
-  function debugMile() public {
-    //create a new chunk
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-
+  function debugMile(bytes32 credit) public {
     (, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();
     int32 currentMile = GameState.getMiles();
 
@@ -248,7 +245,7 @@ contract RoadSubsystem is System {
 
     for (int32 y = yStart; y < yEnd; y++) {
       for (int32 x = left; x <= right; x++) {
-        spawnFinishedRoad(player, x, y);
+        spawnFinishedRoad(credit, x, y);
       }
     }
   }

@@ -172,7 +172,8 @@ namespace IWorld.ContractDefinition
     [Function("debugMile")]
     public class DebugMileFunctionBase : FunctionMessage
     {
-
+        [Parameter("bytes32", "credit", 1)]
+        public virtual byte[] Credit { get; set; }
     }
 
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }

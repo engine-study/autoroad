@@ -31,7 +31,7 @@ contract AdminSystem is System {
   function finishMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).debugMile();
+    IWorld(_world()).debugMile(player);
   }
 
   function spawnFinishedRoadAdmin(int32 x, int32 y) public {

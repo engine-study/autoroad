@@ -5,10 +5,12 @@ using mud.Client;
 using DefaultNamespace;
 using Cysharp.Threading.Tasks;
 
-public class ChunkComponent : MUDComponent {
+public class ChunkComponent : MUDComponent
+{
 
-    public static Dictionary<int,ChunkComponent> Chunks;
-    public RowComponent[] Rows {get { return rows; } }
+    public static Dictionary<int, ChunkComponent> Chunks;
+    public RowComponent[] Rows { get { return rows; } }
+    public bool Completed {get{return completed;}}
     
     [Header("State")]
     [SerializeField] protected bool completed;
