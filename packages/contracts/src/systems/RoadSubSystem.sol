@@ -124,7 +124,7 @@ contract RoadSubsystem is System {
 
         uint noiseCoord = randomCoord(0, 100, x, y);
 
-        if (noiseCoord < 10) {
+        if (noiseCoord < 5) {
           IWorld(_world()).giveRoadReward(road);
         }
       }
@@ -210,19 +210,17 @@ contract RoadSubsystem is System {
 
   function finishChunk(bytes32 chunk, int32 currentMile, uint32 pieces) public {
     Chunk.set(chunk, true, currentMile, pieces, block.number);
-
-    //REWARDS
     createMile(currentMile + 1);
   }
 
-  function spawnFinishedRoad(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function spawnFinishedRoad(bytes32 credit, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
 
     bytes32 entity = keccak256(abi.encode("Road", x, y));
     Position.set(entity, x, y, -1);
-    Road.set(entity, uint32(RoadState.Paved), player, false);
+    bool giveReward = randomCoord(0,100, x, y) > 90;
+    Road.set(entity, uint32(RoadState.Paved), credit, giveReward);
 
     updateChunk();
   }
@@ -240,6 +238,8 @@ contract RoadSubsystem is System {
 
   function debugMile() public {
     //create a new chunk
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+
     (, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();
     int32 currentMile = GameState.getMiles();
 
@@ -248,7 +248,7 @@ contract RoadSubsystem is System {
 
     for (int32 y = yStart; y < yEnd; y++) {
       for (int32 x = left; x <= right; x++) {
-        spawnFinishedRoad(x, y);
+        spawnFinishedRoad(player, x, y);
       }
     }
   }

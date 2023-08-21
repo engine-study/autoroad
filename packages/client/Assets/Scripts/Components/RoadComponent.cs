@@ -11,6 +11,7 @@ public enum RoadState { None,Shoveled,Statumen,Rudus,Nucleas,Paved, Bones }
 public class RoadComponent : MUDComponent {
 
     public RoadState State {get { return state; } }
+    public PlayerComponent FilledBy {get { return filledBy; } }
     public int Mile {get { return mileNumber; } }
     public bool Gem {get { return hasGem; } }
 
@@ -27,8 +28,10 @@ public class RoadComponent : MUDComponent {
     [Header("Debug")]
     [SerializeField] int mileNumber;
     [SerializeField] string creditedPlayer;
+    [SerializeField] string creditedPlayerDebug;
     [SerializeField] bool hasGem;
     [SerializeField] ChunkComponent parent;
+    [SerializeField] PlayerComponent filledBy;
     [SerializeField] Vector2Int localChunkPos;
 
     RoadState lastStage = RoadState.None;
@@ -53,6 +56,8 @@ public class RoadComponent : MUDComponent {
 
         creditedPlayer = ((string)roadUpdate.filled).ToLower();
         hasGem = (bool)roadUpdate.gem;
+
+        filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
 
         SetState((RoadState)roadUpdate.state);
 
@@ -79,6 +84,8 @@ public class RoadComponent : MUDComponent {
 
 
         }
+
+        creditedPlayerDebug = MUDWorld.FindValue<RoadTable>(Entity.Key).filled;
 
         lastStage = State;
 
@@ -112,13 +119,7 @@ public class RoadComponent : MUDComponent {
 
 
         for (int i = 0; i < 5; i++) {
-
-            SPResourceJuicy coin = (Instantiate(Resources.Load("Prefabs/Coin")) as GameObject).GetComponent<SPResourceJuicy>();
-
-            coin.transform.position = transform.position + Vector3.up;
-            coin.transform.rotation = Random.rotation;
-            coin.GiveResource(player.Root);
-
+            SPResourceJuicy.GiveResource("Prefabs/Coin", player.Root, transform.position + Vector3.up, Random.rotation);
             yield return new WaitForSeconds(.1f);
         }
 

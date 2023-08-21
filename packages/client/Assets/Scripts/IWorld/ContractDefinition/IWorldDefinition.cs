@@ -907,9 +907,11 @@ namespace IWorld.ContractDefinition
     [Function("spawnFinishedRoad")]
     public class SpawnFinishedRoadFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
+        [Parameter("bytes32", "credit", 1)]
+        public virtual byte[] Credit { get; set; }
+        [Parameter("int32", "x", 2)]
         public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
+        [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
     }
 

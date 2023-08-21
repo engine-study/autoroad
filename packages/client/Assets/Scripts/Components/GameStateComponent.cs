@@ -10,12 +10,12 @@ using UniRx;
 public class GameStateComponent : MUDComponent {
 
     public static System.Action OnGameStateUpdated;
-    public static System.Action OnMileCompleted;
+    public static System.Action<int> OnMileCompleted;
     public static GameStateComponent Instance;
     public static float MILE_DISTANCE {get { return RoadConfigComponent.Height; } }
     public static float MILE_COUNT;
     public static int PlayerCount;
-    float lastMile = 0;
+    float lastMile = -1;
 
     [Header("Debug")]
     [SerializeField] protected int currentMile;
@@ -45,8 +45,8 @@ public class GameStateComponent : MUDComponent {
 
         OnGameStateUpdated?.Invoke();
 
-        if(Loaded && MILE_COUNT != lastMile) {
-            OnMileCompleted?.Invoke();
+        if(Loaded && MILE_COUNT != lastMile && lastMile != -1) {
+            OnMileCompleted?.Invoke((int)lastMile);
         }
 
         lastMile = MILE_COUNT;

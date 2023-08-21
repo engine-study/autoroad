@@ -37,7 +37,7 @@ contract AdminSystem is System {
   function spawnFinishedRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnFinishedRoad(x, y);
+    IWorld(_world()).spawnFinishedRoad(player, x, y);
   }
 
   function spawnShoveledRoadAdmin(int32 x, int32 y) public {

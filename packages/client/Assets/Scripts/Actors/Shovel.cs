@@ -10,11 +10,7 @@ public class Shovel : Equipment
 {
     public override bool CanUse() {
         bool canUse = base.CanUse();
-
-        //add the shovel action next to the player at empty spots
-        bool shovelToggle = RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
-
-        return canUse && shovelToggle;
+        return canUse && GridMUD.GetEntityAt(CursorMUD.GridPos - Vector3.up) == null && RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
     }
 
     public override async UniTask<bool> Use() {

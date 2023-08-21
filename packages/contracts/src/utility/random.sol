@@ -7,7 +7,7 @@ pragma solidity >=0.8.0;
 //   return randomNumber;
 // }
 
-function random(uint maxNumber,uint minNumber) view returns (uint amount) {
+function random(uint minNumber,uint maxNumber) view returns (uint amount) {
      amount = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, block.number))) % (maxNumber-minNumber);
      amount = amount + minNumber;
      return amount;

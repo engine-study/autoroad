@@ -20,6 +20,7 @@ public class PlayerMUD : SPPlayer
     [Header("Debug")]
     [SerializeField] private PositionComponent positionComponent;
     [SerializeField] private HealthComponent healthComponent;
+    [SerializeField] private GemComponent gemComponent;
 
     public override void Init() {
         base.Init();
@@ -45,6 +46,7 @@ public class PlayerMUD : SPPlayer
         transform.position = positionComponent.Pos;
 
         healthComponent = playerComponent.Entity.GetMUDComponent<HealthComponent>();
+        gemComponent = playerComponent.Entity.GetMUDComponent<GemComponent>();
 
         baseName = MUDHelper.TruncateHash(playerComponent.Entity.Key);
 

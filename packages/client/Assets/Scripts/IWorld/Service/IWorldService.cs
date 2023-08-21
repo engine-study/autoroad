@@ -2017,18 +2017,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFinishedRoadFunction, cancellationToken);
         }
 
-        public Task<string> SpawnFinishedRoadRequestAsync(int x, int y)
+        public Task<string> SpawnFinishedRoadRequestAsync(byte[] credit, int x, int y)
         {
             var spawnFinishedRoadFunction = new SpawnFinishedRoadFunction();
+                spawnFinishedRoadFunction.Credit = credit;
                 spawnFinishedRoadFunction.X = x;
                 spawnFinishedRoadFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(spawnFinishedRoadFunction);
         }
 
-        public Task<TransactionReceipt> SpawnFinishedRoadRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnFinishedRoadRequestAndWaitForReceiptAsync(byte[] credit, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var spawnFinishedRoadFunction = new SpawnFinishedRoadFunction();
+                spawnFinishedRoadFunction.Credit = credit;
                 spawnFinishedRoadFunction.X = x;
                 spawnFinishedRoadFunction.Y = y;
             
