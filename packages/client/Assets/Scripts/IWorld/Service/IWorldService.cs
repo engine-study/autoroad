@@ -570,34 +570,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(emitEphemeralRecordFunction, cancellationToken);
         }
 
-        public Task<string> FinishChunkRequestAsync(FinishChunkFunction finishChunkFunction)
+        public Task<string> FinishMileRequestAsync(FinishMileFunction finishMileFunction)
         {
-             return ContractHandler.SendRequestAsync(finishChunkFunction);
+             return ContractHandler.SendRequestAsync(finishMileFunction);
         }
 
-        public Task<TransactionReceipt> FinishChunkRequestAndWaitForReceiptAsync(FinishChunkFunction finishChunkFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> FinishMileRequestAndWaitForReceiptAsync(FinishMileFunction finishMileFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(finishChunkFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(finishMileFunction, cancellationToken);
         }
 
-        public Task<string> FinishChunkRequestAsync(byte[] chunk, int currentMile, uint pieces)
+        public Task<string> FinishMileRequestAsync(byte[] chunk, int currentMile, uint pieces)
         {
-            var finishChunkFunction = new FinishChunkFunction();
-                finishChunkFunction.Chunk = chunk;
-                finishChunkFunction.CurrentMile = currentMile;
-                finishChunkFunction.Pieces = pieces;
+            var finishMileFunction = new FinishMileFunction();
+                finishMileFunction.Chunk = chunk;
+                finishMileFunction.CurrentMile = currentMile;
+                finishMileFunction.Pieces = pieces;
             
-             return ContractHandler.SendRequestAsync(finishChunkFunction);
+             return ContractHandler.SendRequestAsync(finishMileFunction);
         }
 
-        public Task<TransactionReceipt> FinishChunkRequestAndWaitForReceiptAsync(byte[] chunk, int currentMile, uint pieces, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> FinishMileRequestAndWaitForReceiptAsync(byte[] chunk, int currentMile, uint pieces, CancellationTokenSource cancellationToken = null)
         {
-            var finishChunkFunction = new FinishChunkFunction();
-                finishChunkFunction.Chunk = chunk;
-                finishChunkFunction.CurrentMile = currentMile;
-                finishChunkFunction.Pieces = pieces;
+            var finishMileFunction = new FinishMileFunction();
+                finishMileFunction.Chunk = chunk;
+                finishMileFunction.CurrentMile = currentMile;
+                finishMileFunction.Pieces = pieces;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(finishChunkFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(finishMileFunction, cancellationToken);
         }
 
         public Task<string> FinishMileAdminRequestAsync(FinishMileAdminFunction finishMileAdminFunction)

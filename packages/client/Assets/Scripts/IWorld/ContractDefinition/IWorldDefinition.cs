@@ -236,10 +236,10 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Data { get; set; }
     }
 
-    public partial class FinishChunkFunction : FinishChunkFunctionBase { }
+    public partial class FinishMileFunction : FinishMileFunctionBase { }
 
-    [Function("finishChunk")]
-    public class FinishChunkFunctionBase : FunctionMessage
+    [Function("finishMile")]
+    public class FinishMileFunctionBase : FunctionMessage
     {
         [Parameter("bytes32", "chunk", 1)]
         public virtual byte[] Chunk { get; set; }

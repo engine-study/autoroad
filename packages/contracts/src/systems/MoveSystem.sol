@@ -252,7 +252,7 @@ contract MoveSystem is System {
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
-    require(Road.getState(roadEntity) == uint32(RoadState.None), "road");
+    require(Road.getState(roadEntity) == uint32(RoadState.None), "road already here");
 
     Road.setState(roadEntity, uint32(RoadState.Shoveled));
     Move.set(roadEntity, uint32(MoveType.Hole));

@@ -62,12 +62,13 @@ contract SpawnSystem is System {
       Coinage.set(entity, 0);
       Weight.set(entity, -1);
 
-      (int32 miles, int32 players) = GameState.get();
-      Stats.set(entity, miles, 0, 0, 0, 0, 0, 0, 0);
+      int32 players = GameState.getPlayerCount() + 1;
+      int32 mileJoined = GameState.getMiles();
+
+      Stats.setStartingMile(entity, mileJoined);
 
       if(!isBot) {
-        GameState.set(miles, players+1);
-        // GameState.setPlayerCount(playerCount + 1);
+        // GameState.setPlayerCount(players+1);
       }
 
     }

@@ -93,6 +93,8 @@ public class ChunkComponent : MUDComponent
         mileNumber = table.mile != null ? (int)table.mile : mileNumber;
         pieces = table.pieces != null ? (int)table.pieces : pieces;
 
+        Debug.Log("Chunk " + mileNumber + " Pieces: " + pieces + " Completed: " + completed.ToString());
+
         // Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
         // Debug.Log("MileTest " + table.mileNumber, this);
         // Debug.Log("Mile " + mileNumber, this);

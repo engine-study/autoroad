@@ -74,6 +74,8 @@ public class WorldScroll : MonoBehaviour {
         ToggleCameraOnPlayer(true);
         UpdatePlayerMile();
 
+        mileScroll = playerMile;
+
     }
         
     
@@ -91,7 +93,7 @@ public class WorldScroll : MonoBehaviour {
         }
         
         if (SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
-            
+
             ToggleCameraOnPlayer(false);
 
             if (CursorMUD.Base) {
@@ -149,6 +151,9 @@ public class WorldScroll : MonoBehaviour {
             return;
         }
 
+        //set the scroll back to the player
+        mileScroll = playerMile;
+        SetMile(playerMile);
         ToggleCameraOnPlayer(true);
     }
 

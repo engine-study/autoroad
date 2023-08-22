@@ -24,9 +24,6 @@ public class GemComponent : MUDComponent {
             OnLocalUpdate?.Invoke();
         }
 
-        if(Loaded) {
-            MileComplete.AddGem(this);
-        }
     }
 
 

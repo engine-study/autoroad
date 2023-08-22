@@ -30,11 +30,14 @@ contract RoadSubsystem is System {
 
   function createMile(int32 mileNumber) public {
 
-    require(mileNumber != GameState.getMiles(), "creating mile again");
+    int32 currentMile = GameState.getMiles();
 
-    if(mileNumber > 0) {
-      contemplateMile(mileNumber - 1);
-    }
+    console.log("create mile");
+    console.logInt(mileNumber);
+    console.log("current mile");
+    console.logInt(currentMile);
+
+    require(mileNumber > currentMile, "creating mile again");
 
     //create an entity for the chunk itself
     bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
@@ -61,6 +64,10 @@ contract RoadSubsystem is System {
 
     Bounds.set(int32(-playArea), playArea, yEnd, yStart);
     GameConfigData memory config = GameConfig.get();
+
+    //set the chunk of road
+    Chunk.set(chunkEntity, false, mileNumber, 0,0);
+    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1, 0);
 
     //spawn all the rows
     //spawn all the obstacles
@@ -99,10 +106,6 @@ contract RoadSubsystem is System {
         spawnTerrain(x, y, terrainType);
       }
     }
-
-    //set the chunk of road
-    Chunk.set(chunkEntity, false, mileNumber, 0,0);
-    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1, 0);
 
   }
 
@@ -191,6 +194,7 @@ contract RoadSubsystem is System {
     Stats.setCompleted(player, stat + 1);
   }
 
+  //TODO fix this horrible thing,make it more robust
   function updateChunk() public {
     (int32 currentMile, ) = GameState.get();
     bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
@@ -202,27 +206,65 @@ contract RoadSubsystem is System {
 
     //road complete!
     if (pieces >= (roadWidth * roadHeight)) {
-      finishChunk(chunk, currentMile, pieces);
+      finishMile(chunk, currentMile, pieces);
     } else {
       Chunk.set(chunk, false, currentMile, pieces, 0);
     }
   }
 
-  function finishChunk(bytes32 chunk, int32 currentMile, uint32 pieces) public {
+  function finishMile(bytes32 chunk, int32 currentMile, uint32 pieces) public {
+
+    console.log("finish chunk");
+    console.logInt(currentMile);
+
     Chunk.set(chunk, true, currentMile, pieces, block.number);
-    createMile(currentMile + 1);
+    contemplateMile(currentMile);
+
+    currentMile += 1;
+
+    createMile(currentMile);
   }
 
+
+  function debugMile(bytes32 credit) public {
+
+    (uint32 roadWidth, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();
+    int32 currentMile = GameState.getMiles();
+
+    int32 yStart = int32(currentMile * int32(roadHeight));
+    int32 yEnd = yStart + int32(roadHeight);
+
+    console.log("debug mile");
+    console.logInt(currentMile);
+    console.log("from");
+    console.logInt(yStart);
+    console.log("to");
+    console.logInt(yEnd);
+
+    for (int32 y = yStart; y < yEnd; y++) {
+      for (int32 x = left; x <= right; x++) {
+        spawnFinishedRoad(credit, x, y);
+      }
+    }
+
+    bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
+    uint32 pieces = roadWidth * roadHeight;
+
+    finishMile(chunk, currentMile, pieces);
+
+  }
+
+  
   function spawnFinishedRoad(bytes32 credit, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
 
     bytes32 entity = keccak256(abi.encode("Road", x, y));
-    Position.set(entity, x, y, -1);
     bool giveReward = randomCoord(0,100, x, y) > 90;
+
+    Position.set(entity, x, y, -1);
     Road.set(entity, uint32(RoadState.Paved), credit, giveReward);
 
-    updateChunk();
   }
 
   function spawnShoveledRoad(int32 x, int32 y) public {
@@ -237,17 +279,4 @@ contract RoadSubsystem is System {
   }
   
 
-  function debugMile(bytes32 credit) public {
-    (, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();
-    int32 currentMile = GameState.getMiles();
-
-    int32 yStart = int32(currentMile * int32(roadHeight));
-    int32 yEnd = yStart + int32(roadHeight);
-
-    for (int32 y = yStart; y < yEnd; y++) {
-      for (int32 x = left; x <= right; x++) {
-        spawnFinishedRoad(credit, x, y);
-      }
-    }
-  }
 }
