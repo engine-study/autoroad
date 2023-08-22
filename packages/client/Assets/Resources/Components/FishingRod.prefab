@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4804594667757243883}
-  - component: {fileID: 5092984460783743861}
+  - component: {fileID: 2189738813310324464}
   m_Layer: 0
-  m_Name: Stick
+  m_Name: FishingRod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,11 +29,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7418124727897020915}
+  - {fileID: 8272519444004648024}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5092984460783743861
+--- !u!114 &2189738813310324464
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6548323407892955302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4fc588021e32094485dc6131ab31b16, type: 3}
+  m_Script: {fileID: 11500000, guid: 2cbc1677a57be504698e453bd380818f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   requiredComponents:
@@ -55,8 +55,8 @@ MonoBehaviour:
     source: 0
   hasInit: 0
   loaded: 0
-  propPrefab: {fileID: 1031855484760851385}
---- !u!1001 &8770958513568721214
+  propPrefab: {fileID: 1380931024518563946}
+--- !u!1001 &3239962518990284994
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -64,67 +64,63 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4804594667757243883}
     m_Modifications:
-    - target: {fileID: 1441466082036820599, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
-      propertyPath: m_Name
-      value: StickProp
-      objectReference: {fileID: 0}
-    - target: {fileID: 1441466082036820599, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_RootOrder
       value: -1
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7264731011502917816, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
+      propertyPath: m_Name
+      value: FishingProp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
---- !u!114 &1031855484760851385 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
+--- !u!114 &1380931024518563946 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8640533380527958663, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
-  m_PrefabInstance: {fileID: 8770958513568721214}
+  m_CorrespondingSourceObject: {fileID: 4601735223216971944, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
+  m_PrefabInstance: {fileID: 3239962518990284994}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -132,8 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e53af09817f4144ad4b943239cca78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &7418124727897020915 stripped
+--- !u!4 &8272519444004648024 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
-  m_PrefabInstance: {fileID: 8770958513568721214}
+  m_CorrespondingSourceObject: {fileID: 6790104582783917210, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
+  m_PrefabInstance: {fileID: 3239962518990284994}
   m_PrefabAsset: {fileID: 0}

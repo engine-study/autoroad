@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7264731011502917816
+--- !u!1 &6689353134125608476
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3774599616287364722}
-  - component: {fileID: 1444949574962551401}
+  - component: {fileID: 6790104582783917210}
+  - component: {fileID: 4601735223216971944}
   m_Layer: 0
   m_Name: FishingProp
   m_TagString: Untagged
@@ -17,29 +17,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3774599616287364722
+--- !u!4 &6790104582783917210
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7264731011502917816}
+  m_GameObject: {fileID: 6689353134125608476}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5051893485559668002}
+  - {fileID: 5093946114572174452}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1444949574962551401
+--- !u!114 &4601735223216971944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7264731011502917816}
+  m_GameObject: {fileID: 6689353134125608476}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1e53af09817f4144ad4b943239cca78, type: 3}
@@ -48,15 +48,15 @@ MonoBehaviour:
   fx: {fileID: 0}
   sfx: []
   bodyParent: 2
-  bodyProp: {fileID: 3774599616287364722}
+  bodyProp: {fileID: 6790104582783917210}
   hasInit: 0
---- !u!1001 &4724653307347974857
+--- !u!1001 &4700610661576811423
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3774599616287364722}
+    m_TransformParent: {fileID: 6790104582783917210}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
       propertyPath: m_RootOrder
@@ -88,23 +88,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.3799283
+      value: -0.2988362
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.3799283
+      value: -0.2988362
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5963678
+      value: 0.64085644
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.5963678
+      value: 0.64085644
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -25
+      value: -140
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -131,8 +131,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
---- !u!4 &5051893485559668002 stripped
+--- !u!4 &5093946114572174452 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c94ff9eacbe3ed4ba99c021c11ad191, type: 3}
-  m_PrefabInstance: {fileID: 4724653307347974857}
+  m_PrefabInstance: {fileID: 4700610661576811423}
   m_PrefabAsset: {fileID: 0}
