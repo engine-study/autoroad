@@ -53,7 +53,7 @@ public class WorldScroll : MonoBehaviour {
         SPEvents.OnLocalPlayerSpawn -= InitPlayer;
 
         if(PlayerMUD.LocalPlayer)
-            (PlayerMUD.LocalPlayer as PlayerMUD).Position.OnUpdated -= UpdatePlayerMile;
+            (PlayerMUD.LocalPlayer as PlayerMUD).Position.OnUpdated -= UpdatePlayerPosition;
     }
 
     void Init() {
@@ -64,7 +64,7 @@ public class WorldScroll : MonoBehaviour {
 
         enabled = true;
 
-        (PlayerMUD.LocalPlayer as PlayerMUD).Position.OnUpdated += UpdatePlayerMile;
+        (PlayerMUD.LocalPlayer as PlayerMUD).Position.OnUpdated += UpdatePlayerPosition;
         
         playerUI.gameObject.SetActive(true);
         mileUI.ToggleWindowOpen();
@@ -72,7 +72,7 @@ public class WorldScroll : MonoBehaviour {
         SetMile(PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos));
 
         ToggleCameraOnPlayer(true);
-        UpdatePlayerMile();
+        SetToPlayerMile();
 
         mileScroll = playerMile;
 
@@ -83,7 +83,7 @@ public class WorldScroll : MonoBehaviour {
 
         UpdateInput();
         UpdateScroll();
-
+        UpdateUI();
     }
 
     void UpdateInput() {
@@ -96,6 +96,7 @@ public class WorldScroll : MonoBehaviour {
 
             ToggleCameraOnPlayer(false);
 
+            //focus on whatever we select
             if (CursorMUD.Base) {
                 SPCamera.SetFollow(CursorMUD.Base.Root);
             } else {
@@ -120,41 +121,53 @@ public class WorldScroll : MonoBehaviour {
 
         //if we're more than halfway to the next mile, magnet over to it
         if (Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileTotal) > GameStateComponent.MILE_DISTANCE * .5f) {
-            SetMile(Mathf.RoundToInt(mileScroll));
+            SetToScrollMile();
         }
 
-        if (lastScroll != mileScroll) {
+        if (!playerFocus && lastScroll != mileScroll) {
             SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
         }
-
-        if(barUI.value != targetScroll) { barUI.value = Mathf.MoveTowards(barUI.value, targetScroll, 5f * Time.deltaTime); }
-        if (playerUI.value != targetPlayer) { playerUI.value = Mathf.MoveTowards(playerUI.value, targetPlayer, 5f * Time.deltaTime); }
 
         lastScroll = mileScroll;
     }
 
-    void UpdatePlayerMile() {
+    void UpdateUI() {
+        
+        if(barUI.value != targetScroll) { barUI.value = Mathf.MoveTowards(barUI.value, targetScroll, 5f * Time.deltaTime); }
+        if (playerUI.value != targetPlayer) { playerUI.value = Mathf.MoveTowards(playerUI.value, targetPlayer, 5f * Time.deltaTime); }
+    }
 
+    void UpdatePlayerPosition() {
         playerMile = PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos);
         targetPlayer = GetMileLerp(playerMile);
-
-        if(playerMile != lastPlayerMile) {
-            mileHeading.UpdateField("Mile " + (int)(playerMile+1));
-            mileUI.ToggleWindowOpen();
+        if (playerMile != lastPlayerMile) {
+            SetToPlayerMile();
         }
 
         lastPlayerMile = playerMile;
+
+    }
+
+    void SetToScrollMile() {
+        SetMile(Mathf.RoundToInt(mileScroll));
+        ToggleCameraOnPlayer(false);
+    }
+
+    void SetToPlayerMile() {
+
+        playerFocus = true;
+        mileScroll = playerMile;
+
+        SetMile(playerMile);
+        mileHeading.UpdateField("Mile " + (int)(playerMile+1));
+        mileUI.ToggleWindowOpen();
+        
+        ToggleCameraOnPlayer(true);
     }
 
     public void ResetCameraToPlayer() {
-        if (PlayerComponent.LocalPlayer == null) {
-            return;
-        }
-
-        //set the scroll back to the player
-        mileScroll = playerMile;
-        SetMile(playerMile);
-        ToggleCameraOnPlayer(true);
+        if (PlayerComponent.LocalPlayer == null) { return; }
+        SetToPlayerMile();
     }
 
     public void ToggleCameraOnPlayer(bool toggle) {
@@ -164,7 +177,6 @@ public class WorldScroll : MonoBehaviour {
 
         if(toggle) {
             SPCamera.SetFollow(PlayerComponent.LocalPlayer.PlayerScript.Root);
-            UpdatePlayerMile();
         } else {
             SPCamera.SetFollow(null);
         }
@@ -196,13 +208,8 @@ public class WorldScroll : MonoBehaviour {
         mileUI.ToggleWindowOpen();
         recapButton.ToggleWindow(newChunk.Completed);
 
-        //unlock the camera
-        if(currentMile != -1 && SPCamera.Follow != null) {
-            ToggleCameraOnPlayer(false);
-        }
 
         currentMile = Mathf.Clamp(newMile, 0f, maxMile);
-        SPCamera.SetTarget(Vector3.forward * MileTotal);
 
         front.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height + RoadConfigComponent.Height);
         back.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height - RoadConfigComponent.Height);

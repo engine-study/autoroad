@@ -80,7 +80,7 @@ public class MileComplete : MonoBehaviour
                 if(road == null || road.Gem == false) { continue; }
                 if(road.FilledBy == null) { Debug.LogError("No player credited?", road); continue; }
                 PlayerMUD player = road.FilledBy.PlayerScript;
-                SPResourceJuicy gem = SPResourceJuicy.SpawnResource("Prefabs/Gem", player.transform, road.transform.position + Vector3.up, Quaternion.identity);
+                SPResourceJuicy gem = SPResourceJuicy.SpawnResource("Prefabs/Gem", player.headCosmetic.bodyParent, road.transform.position + Vector3.up, Quaternion.identity);
 
                 players.Add(player);
                 roads.Add(road);

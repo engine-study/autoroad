@@ -243,6 +243,9 @@ contract RoadSubsystem is System {
 
     for (int32 y = yStart; y < yEnd; y++) {
       for (int32 x = left; x <= right; x++) {
+        console.log("spawn");
+        console.logInt(x);
+        console.logInt(y);
         spawnFinishedRoad(credit, x, y);
       }
     }
