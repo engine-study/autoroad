@@ -47,8 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents:
   - {fileID: 5348944994237342613, guid: 9476fa914b9acad42b5792396d5e2ccd, type: 3}
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
@@ -69,6 +67,10 @@ PrefabInstance:
     - target: {fileID: 1441466082036820599, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
       propertyPath: m_Name
       value: StickProp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1441466082036820599, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2254840440968999117, guid: 3fe3761b174880b43b8a3b2756237858, type: 3}
       propertyPath: m_RootOrder

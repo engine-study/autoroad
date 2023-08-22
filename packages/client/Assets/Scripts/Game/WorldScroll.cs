@@ -24,27 +24,29 @@ public class WorldScroll : MonoBehaviour {
     [SerializeField] private GameObject back;
 
     [Header("Debug")]
+    [SerializeField] bool playerFocus = false;
     [SerializeField] float maxMile = 0f;
-    [SerializeField] float currentMile = -1f;
+    [SerializeField] int currentMile = -1;
     [SerializeField] float mileScroll, lastScroll = -100f;
     float playerMile = 0f, lastPlayerMile = -1f;
-    bool playerFocus = false;
     float targetScroll, targetPlayer;
 
-    public float MileTotal { get { return currentMile * GameStateComponent.MILE_DISTANCE; } }
+    public float MileDistance { get { return currentMile * GameStateComponent.MILE_DISTANCE; } }
     public float MileTotalScroll { get { return mileScroll * GameStateComponent.MILE_DISTANCE; } }
     public static float GetMileLerp(float newMile) {return GameStateComponent.MILE_COUNT == 0 ? 1f : Mathf.Clamp01(newMile/GameStateComponent.MILE_COUNT);}
 
     void Awake() {
 
         Instance = this;
-        enabled = false;
         currentMile = -1;
         playerUI.gameObject.SetActive(false);
         mileUI.ToggleWindowClose();
 
         GameStateComponent.OnGameStateUpdated += Init;
         SPEvents.OnLocalPlayerSpawn += InitPlayer;
+
+        enabled = false;
+
     }
 
     void OnDestroy() {
@@ -57,7 +59,7 @@ public class WorldScroll : MonoBehaviour {
     }
 
     void Init() {
-        SetMaxMile(GameStateComponent.MILE_COUNT);
+        SetMaxMile((int)GameStateComponent.MILE_COUNT);
     }
 
     void InitPlayer() {
@@ -69,13 +71,7 @@ public class WorldScroll : MonoBehaviour {
         playerUI.gameObject.SetActive(true);
         mileUI.ToggleWindowOpen();
 
-        SetMile(PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos));
-
-        ToggleCameraOnPlayer(true);
-        SetToPlayerMile();
-
-        mileScroll = playerMile;
-
+        UpdatePlayerPosition();
     }
         
     
@@ -119,8 +115,10 @@ public class WorldScroll : MonoBehaviour {
         mileScroll = Mathf.MoveTowards(mileScroll, currentMile, 1f * Time.deltaTime);
         targetScroll = GetMileLerp(mileScroll);
 
+        bool isInNewMile = Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileDistance) > GameStateComponent.MILE_DISTANCE * .5f;
+        int newMile = Mathf.RoundToInt(mileScroll);
         //if we're more than halfway to the next mile, magnet over to it
-        if (Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileTotal) > GameStateComponent.MILE_DISTANCE * .5f) {
+        if (isInNewMile && newMile != currentMile) {
             SetToScrollMile();
         }
 
@@ -149,20 +147,23 @@ public class WorldScroll : MonoBehaviour {
     }
 
     void SetToScrollMile() {
-        SetMile(Mathf.RoundToInt(mileScroll));
+        Debug.Log("SCROLL: Scroll", this);
         ToggleCameraOnPlayer(false);
+        SetMile(Mathf.RoundToInt(mileScroll));
     }
 
     void SetToPlayerMile() {
 
-        playerFocus = true;
+        Debug.Log("SCROLL: Player", this);
+
         mileScroll = playerMile;
 
-        SetMile(playerMile);
+        ToggleCameraOnPlayer(true);
+        SetMile((int)playerMile);
+
         mileHeading.UpdateField("Mile " + (int)(playerMile+1));
         mileUI.ToggleWindowOpen();
         
-        ToggleCameraOnPlayer(true);
     }
 
     public void ResetCameraToPlayer() {
@@ -183,36 +184,45 @@ public class WorldScroll : MonoBehaviour {
 
     }
 
-    public void SetMaxMile(float newMaxMile) {
+    public void SetMaxMile(int newMaxMile) {
         maxMile = newMaxMile;
     }
 
-    public void SetMile(float newMile) {
+    public void SetMile(int newMile) {
+
+        Debug.Log("WORLD: (" + currentMile + ") " + (int)newMile + " / " + (int)maxMile, this);
 
         //out of range
-        if(newMile > maxMile || newMile < 0f) {
+        if(newMile == currentMile || newMile > maxMile || newMile < 0f) {
+            Debug.LogError("Not valid: " + (int)newMile + " / " + (int)maxMile, this);
             return;
         }
 
+        LoadMile(newMile);
+
+        mileHeading.UpdateField("Mile " + (int)(newMile+1));
+        mileUI.ToggleWindowOpen();
+
+        currentMile = newMile;
+
+        front.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height + RoadConfigComponent.Height);
+        back.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height - RoadConfigComponent.Height);
+
+    }
+
+    public void LoadMile(int newMile) {
+        
         string chunkEntity = MUDHelper.Keccak256("Chunk", (int)newMile);
         ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
 
         if(newChunk == null) {
-            // newChunk = MUDWorld.FindOrMakeComponent<ChunkComponent>(chunkEntity);
             return;
-        } else {
-            newChunk.gameObject.SetActive(true);
         }
-        
-        mileHeading.UpdateField("Mile " + (int)(newMile+1));
-        mileUI.ToggleWindowOpen();
+           
+        newChunk.gameObject.SetActive(true);
         recapButton.ToggleWindow(newChunk.Completed);
 
 
-        currentMile = Mathf.Clamp(newMile, 0f, maxMile);
-
-        front.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height + RoadConfigComponent.Height);
-        back.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height - RoadConfigComponent.Height);
 
     }
 

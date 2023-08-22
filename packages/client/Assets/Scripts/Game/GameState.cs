@@ -24,7 +24,6 @@ public class GameState : MonoBehaviour {
     [SerializeField] GamePhase phase;
     [SerializeField] RecieverMUD reciever;
     [SerializeField] TableManager playerTable;
-    [SerializeField] WorldScroll scroll;
     [SerializeField] TableManager [] tables;
 
     [Header("UI")]
