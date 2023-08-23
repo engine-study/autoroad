@@ -10852,8 +10852,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
@@ -10862,11 +10860,6 @@ MonoBehaviour:
     source: 0
   hasInit: 0
   loaded: 0
-  rockType: 0
-  fx_break: {fileID: 2375352521298061233}
-  fx_drag: {fileID: 3347394206648939041}
-  fx_fillParticles: {fileID: 6048572632352566504}
-  fx_fillExplosion: {fileID: 5416060074575888529}
   source: {fileID: 5250168534217083149}
   rockSlide: {fileID: 2517442970918158014}
   posSync: {fileID: 7201583706257857126}
@@ -10880,6 +10873,10 @@ MonoBehaviour:
   - {fileID: 2038648478203521220}
   - {fileID: 2907592411520737818}
   - {fileID: 7828551211673465645}
+  fx_break: {fileID: 2375352521298061233}
+  fx_drag: {fileID: 3347394206648939041}
+  fx_fillParticles: {fileID: 6048572632352566504}
+  fx_fillExplosion: {fileID: 5416060074575888529}
   sfx_drag:
   - {fileID: 8300000, guid: 197e3d752d8af704eb7d6c20a8fc8dda, type: 3}
   - {fileID: 8300000, guid: 1f5545c1ecdc8e447838beebf04c382b, type: 3}
@@ -10901,6 +10898,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 11569f3c07bff774aa707e655b3e0177, type: 3}
   - {fileID: 8300000, guid: aa44c37f59d56d64ea5e08ea74bbbb5e, type: 3}
   - {fileID: 8300000, guid: 1d62fed449b594e49a5b41bc065e5e32, type: 3}
+  rockType: 0
+  moveComponent: {fileID: 0}
 --- !u!114 &5672806480608959983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10947,7 +10946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee193c86faf2e145926df25a0cded22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncType: 1
+  syncType: 0
   synced: 0
   targetComponent: {fileID: 0}
   targetTransform: {fileID: 0}

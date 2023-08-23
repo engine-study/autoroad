@@ -11,15 +11,17 @@ public class PositionSync : ComponentSync
     public bool Moving {get{return moving;}}
 
     [Header("Optional")]
-    [SerializeField] private Transform targetTransform;
-    [SerializeField] private bool hideIfNoPosition = true;    
-    // [SerializeField] protected float speed = 1f;
+    [SerializeField] Transform targetTransform;
+    [SerializeField] public bool hideIfNoPosition = true;    
+    [SerializeField] public bool rotateToFace = false;
+    [SerializeField] float speed = 1f;
+    [SerializeField] float rotationSpeed = 720f;
     
     [Header("Debug")]
-    [SerializeField] private PositionComponent pos;
-    [SerializeField] private Vector3 targetPos;
-    [SerializeField] private bool moving = false;    
-    public override MUDComponent TargetComponentType() {return new PositionComponent();}
+    [SerializeField] PositionComponent pos;
+    [SerializeField] Vector3 targetPos;
+    [SerializeField] bool moving = false;    
+    public override MUDComponent SyncedComponent() {return new PositionComponent();}
 
     protected override void Awake() {
         base.Awake();
@@ -74,8 +76,23 @@ public class PositionSync : ComponentSync
 
     protected override void UpdateLerp() {
         
-        targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, ControllerMUD.MOVE_SPEED * Time.deltaTime);
+        if(rotateToFace) {
+
+        Quaternion lookRotation = targetTransform.rotation;
+
+        var lookAt = targetPos;
+        lookAt.y = targetTransform.position.y;
+
+        if (lookAt != targetTransform.position) {
+            lookRotation = Quaternion.LookRotation(lookAt - targetTransform.position);
+        }
+
+        //ROTATE
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+        }
         
+        targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
+
         //turn off for efficiency until next update
         if(targetTransform.position == targetPos) {
             EndMove();

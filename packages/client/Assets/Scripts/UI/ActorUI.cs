@@ -11,6 +11,8 @@ public class ActorUI : SPWindowBase {
     public StatUI healthStat;
     public StatUI attackStat;
     public TextMeshProUGUI nameText;
+    public MoveTypeUI move;
+
     public void UpdateInfo(Entity newEntity) {
 
         if (entity != newEntity) {
@@ -24,13 +26,15 @@ public class ActorUI : SPWindowBase {
         }
 
         entity = (MUDEntity)newEntity;
+        move.UpdateInfo(entity);
 
         if (entity == null) {
             nameText.text = "";
             position.SetFollow(null);   
         } else {
             nameText.text = entity.Name;
-            position.SetFollow(entity.transform);   
+            PositionComponent pos = entity.GetMUDComponent<PositionComponent>();
+            position.SetFollow(pos?.transform);   
         }
 
         gameObject.SetActive(entity != null);

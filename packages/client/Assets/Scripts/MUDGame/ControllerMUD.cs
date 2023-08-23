@@ -53,11 +53,9 @@ public class ControllerMUD : SPController {
         // Debug.Log("Controller Init");
 
         playerScript = GetComponentInParent<PlayerMUD>();
-
         playerScript.Position.OnUpdated += ComponentUpdate;
 
         moveMarker.SetActive(false);
-
         controller.enabled = false;
 
         playerTransform = transform;
@@ -77,6 +75,7 @@ public class ControllerMUD : SPController {
 
         playerTransform.position = newPos;
         moveDest = newPos;
+        lastOnchainPos = newPos;
 
     }
 
@@ -156,7 +155,7 @@ public class ControllerMUD : SPController {
             return;
 
 
-        Vector3 movePos = (Vector3)onchainPos;
+        Vector3 movePos = onchainPos;
         movePos += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
         direction = (movePos - playerScript.Position.Pos).normalized;
         Vector3 moveTo = playerScript.Position.Pos + direction;
@@ -167,7 +166,7 @@ public class ControllerMUD : SPController {
 
         if (moveComponent != null) {
 
-            Debug.Log("PUSHING");
+            Debug.Log("Push Tx");
 
             bool weight = false;
             bool obstruction = false;
@@ -204,7 +203,7 @@ public class ControllerMUD : SPController {
           
         } else {
 
-            Debug.Log("WALKING");
+            Debug.Log("Walk TX");
             markerPos = movePos;
 
             TxUpdate update = TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(movePos));
@@ -226,6 +225,7 @@ public class ControllerMUD : SPController {
             BoundsComponent.ShowBorder();
         }
 
+        Debug.Log("Push Tx Canceled");
         MotherUI.TransactionFailed();
         player?.Animator.PlayClip("Hit");
         minTime = cancelWait;
@@ -295,7 +295,6 @@ public class ControllerMUD : SPController {
         //|| playerScript.Position.UpdateType == UpdateType.SetRecord
         if (playerScript.Position.UpdateSource == UpdateSource.Revert ) {
             Debug.Log("Teleporting", this);
-            onchainPos = playerScript.Position.Pos;
             SetPositionInstant(playerScript.Position.Pos);
         }
 
@@ -315,11 +314,15 @@ public class ControllerMUD : SPController {
 
         //our onchain position didn't change, either because we got an update that was already made optimistically
         //or because we literally didn't move
-        if (playerScript.Position.UpdateType == UpdateType.SetField && (Vector3)onchainPos == lastOnchainPos) {
+        //TODO everything is setfield ?? playerScript.Position.UpdateType == UpdateType.SetField 
+        if (onchainPos == lastOnchainPos) {
+            Debug.Log("SKIP STATE");
             return;
         }
 
         UpdateState();
+
+        lastOnchainPos = onchainPos;
 
     }
 
@@ -381,7 +384,6 @@ public class ControllerMUD : SPController {
             playerScript.Animator.IK.SetLook(null);
         }
 
-        lastOnchainPos = (Vector3)onchainPos;
     }
 
 

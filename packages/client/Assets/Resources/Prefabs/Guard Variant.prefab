@@ -146,7 +146,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8386148194981491489, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8201557326088588851, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
@@ -155,8 +156,60 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6970333473016158960, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
       insertIndex: -1
       addedObject: {fileID: 192673685668852294}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1778542097137655899, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6416838735736705227}
   m_SourcePrefab: {fileID: 100100000, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
+--- !u!1 &801813816114531513 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1778542097137655899, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
+  m_PrefabInstance: {fileID: 1409129669088128226}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6416838735736705227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801813816114531513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f824d610b1659ec4aa3d2a5b0f647960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1251381844897932620}
+  sfx_steps: []
+  grounded: 0
+  crouching: 0
+  speed: 0
+  walkCount: 0.25
+  walkMultiplier: 2
+  walkClamp: 0.1
+  moving: 0
+  jumping: 0
+  hovering: 0
+  dead: 0
+  wasGrounded: 0
+  newLocalPos: {x: 0, y: 0, z: 0}
+  lastLocalPos: {x: 0, y: 0, z: 0}
+  animVelocity: {x: 0, y: 0, z: 0}
+  velocityNoY: {x: 0, y: 0, z: 0}
+  m_ForwardAmount: 0
+  m_StrafeAmount: 0
+  m_JumpAmount: 0
+  velocityMagnitude: 0
+  velocityMagHorizontal: 0
+  walkTime: 0
+  lastWalk: 0
+  turnAnimateVel: 0
+  footstepDistance: 0.25
+  footsteps: []
+--- !u!95 &1251381844897932620 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 203777849020484014, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
+  m_PrefabInstance: {fileID: 1409129669088128226}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7088651626851164881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8201557326088588851, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}

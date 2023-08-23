@@ -193,7 +193,7 @@ public class WorldScroll : MonoBehaviour {
         Debug.Log("WORLD: (" + currentMile + ") " + (int)newMile + " / " + (int)maxMile, this);
 
         //out of range
-        if(newMile == currentMile || newMile > maxMile || newMile < 0f) {
+        if(newMile > maxMile || newMile < 0f) {
             Debug.LogError("Not valid: " + (int)newMile + " / " + (int)maxMile, this);
             return;
         }

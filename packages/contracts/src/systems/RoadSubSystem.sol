@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/Tables.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder, Ox, Militia } from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats } from "../codegen/Tables.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
@@ -94,6 +94,10 @@ contract RoadSubsystem is System {
         } else if (noiseCoord == 17) {
           if(IWorld(_world()).onRoad(x, y)) {continue;}
           terrainType = TerrainType.Pillar;
+        } else if (noiseCoord == 18) {
+          terrainType = TerrainType.Ox;
+        } else if (noiseCoord == 19) {
+          terrainType = TerrainType.Militia;
         } else if (config.dummyPlayers && noiseCoord > 98) {
           terrainType = TerrainType.Player;
         } 
@@ -146,7 +150,13 @@ contract RoadSubsystem is System {
       Rock.set(entity, uint32(RockType.Raw));
       Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Obstruction));
-    } else if (tType == TerrainType.HeavyBoy) {
+    } else if (tType == TerrainType.Tree) {
+      Tree.set(entity, true);
+      Health.set(entity, 1);
+      Move.set(entity, uint32(MoveType.Obstruction));
+    } else if (tType == TerrainType.Player) {
+      world.spawnBotAdmin(x, y, entity);
+    }else if (tType == TerrainType.HeavyBoy) {
       Boulder.set(entity, true);
       Weight.set(entity, 3);
       Move.set(entity, uint32(MoveType.Push));
@@ -158,13 +168,15 @@ contract RoadSubsystem is System {
       Boulder.set(entity, true);
       Weight.set(entity, 99);
       Move.set(entity, uint32(MoveType.Obstruction));
-    } else if (tType == TerrainType.Tree) {
-      Tree.set(entity, true);
-      Health.set(entity, 1);
-      Move.set(entity, uint32(MoveType.Obstruction));
-    } else if (tType == TerrainType.Player) {
-      world.spawnBotAdmin(x, y, entity);
-    }
+    } else if (tType == TerrainType.Ox) {
+      Ox.set(entity, true);
+      Weight.set(entity, -10);
+      Move.set(entity, uint32(MoveType.Push));
+    } else if (tType == TerrainType.Militia) {
+      Militia.set(entity, true);
+      Weight.set(entity, 1);
+      Move.set(entity, uint32(MoveType.Push));
+    } 
   }
 
 

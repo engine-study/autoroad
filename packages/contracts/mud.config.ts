@@ -20,7 +20,7 @@ export default mudConfig({
   },
 
   enums: {
-    TerrainType: ["None", "Rock", "Mine", "Tree", "Player", "HeavyBoy", "Obstruction", "Pillar"],
+    TerrainType: ["None", "Rock", "Mine", "Tree", "Player", "HeavyBoy", "Obstruction", "Pillar", "Ox", "Militia"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
     StateType: ["Idle", "Dead", "Carrying"],
@@ -169,6 +169,8 @@ export default mudConfig({
     Boulder: "bool",
     Tree: "bool",
     Log: "bool",
+    Ox: "bool",
+    Militia: "bool",
 
     Road: {
       name: "Road",

@@ -37,6 +37,8 @@ import { Rock, RockTableId } from "./tables/Rock.sol";
 import { Boulder, BoulderTableId } from "./tables/Boulder.sol";
 import { Tree, TreeTableId } from "./tables/Tree.sol";
 import { Log, LogTableId } from "./tables/Log.sol";
+import { Ox, OxTableId } from "./tables/Ox.sol";
+import { Militia, MilitiaTableId } from "./tables/Militia.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Carriage, CarriageTableId } from "./tables/Carriage.sol";
 import { GameEvent, GameEventTableId } from "./tables/GameEvent.sol";

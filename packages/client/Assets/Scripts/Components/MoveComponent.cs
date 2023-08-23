@@ -8,6 +8,7 @@ public enum MoveType { None, Obstruction, Hole, Carry, Push }
 public class MoveComponent : MUDComponent {
 
     public bool HasBeenSunk {get { return pos.PosLayer.y < 0; } }
+    public PositionComponent Pos {get { return pos; } }
     public System.Action OnMove, OnPush, OnHole;
     public System.Action<MUDComponent, UpdateInfo> OnPositionUpdate;
     
