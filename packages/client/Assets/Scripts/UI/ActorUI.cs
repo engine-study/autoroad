@@ -10,6 +10,7 @@ public class ActorUI : SPWindowBase {
     public MUDEntity entity;
     public StatUI healthStat;
     public StatUI attackStat;
+    public SPRawText nameRawText;
     public TextMeshProUGUI nameText;
     public MoveTypeUI move;
 
@@ -32,6 +33,7 @@ public class ActorUI : SPWindowBase {
             nameText.text = "";
             position.SetFollow(null);   
         } else {
+            nameRawText.UpdateField(entity.Name);
             nameText.text = entity.Name;
             PositionComponent pos = entity.GetMUDComponent<PositionComponent>();
             position.SetFollow(pos?.transform);   

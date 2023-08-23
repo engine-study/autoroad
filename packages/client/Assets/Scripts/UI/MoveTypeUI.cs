@@ -40,6 +40,7 @@ public class MoveTypeUI : SPWindow
 
             if(moveComponent.MoveType == MoveType.Obstruction) {
                 button = obstacle;
+                obstacle.ToggleWindowClose();
             } else if(moveComponent.MoveType == MoveType.Push) {
                 button = weightComponent.Weight < 0 ? strength : weight;
                 button.UpdateField(((int)Mathf.Abs(weightComponent.Weight)).ToString());
