@@ -140,6 +140,8 @@ public class RoadComponent : MUDComponent {
             }
         }
 
+        Entity.SetName(newState == RoadState.Shoveled ? "Ditch" : "Road");
+
     }
 
     public void SetComplete() {

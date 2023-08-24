@@ -652,6 +652,52 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
         }
 
+        public Task<string> GetCarriageEntityRequestAsync(GetCarriageEntityFunction getCarriageEntityFunction)
+        {
+             return ContractHandler.SendRequestAsync(getCarriageEntityFunction);
+        }
+
+        public Task<string> GetCarriageEntityRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<GetCarriageEntityFunction>();
+        }
+
+        public Task<TransactionReceipt> GetCarriageEntityRequestAndWaitForReceiptAsync(GetCarriageEntityFunction getCarriageEntityFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(getCarriageEntityFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> GetCarriageEntityRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<GetCarriageEntityFunction>(null, cancellationToken);
+        }
+
+        public Task<string> GetChunkEntityRequestAsync(GetChunkEntityFunction getChunkEntityFunction)
+        {
+             return ContractHandler.SendRequestAsync(getChunkEntityFunction);
+        }
+
+        public Task<TransactionReceipt> GetChunkEntityRequestAndWaitForReceiptAsync(GetChunkEntityFunction getChunkEntityFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(getChunkEntityFunction, cancellationToken);
+        }
+
+        public Task<string> GetChunkEntityRequestAsync(int mile)
+        {
+            var getChunkEntityFunction = new GetChunkEntityFunction();
+                getChunkEntityFunction.Mile = mile;
+            
+             return ContractHandler.SendRequestAsync(getChunkEntityFunction);
+        }
+
+        public Task<TransactionReceipt> GetChunkEntityRequestAndWaitForReceiptAsync(int mile, CancellationTokenSource cancellationToken = null)
+        {
+            var getChunkEntityFunction = new GetChunkEntityFunction();
+                getChunkEntityFunction.Mile = mile;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(getChunkEntityFunction, cancellationToken);
+        }
+
         public Task<byte[]> GetFieldQueryAsync(GetFieldFunction getFieldFunction, BlockParameter blockParameter = null)
         {
             return ContractHandler.QueryAsync<GetFieldFunction, byte[]>(getFieldFunction, blockParameter);
@@ -747,6 +793,34 @@ namespace IWorld.Service
                 getRecordFunction.Key = key;
             
             return ContractHandler.QueryAsync<GetRecordFunction, byte[]>(getRecordFunction, blockParameter);
+        }
+
+        public Task<string> GetRoadEntityRequestAsync(GetRoadEntityFunction getRoadEntityFunction)
+        {
+             return ContractHandler.SendRequestAsync(getRoadEntityFunction);
+        }
+
+        public Task<TransactionReceipt> GetRoadEntityRequestAndWaitForReceiptAsync(GetRoadEntityFunction getRoadEntityFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(getRoadEntityFunction, cancellationToken);
+        }
+
+        public Task<string> GetRoadEntityRequestAsync(int x, int y)
+        {
+            var getRoadEntityFunction = new GetRoadEntityFunction();
+                getRoadEntityFunction.X = x;
+                getRoadEntityFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(getRoadEntityFunction);
+        }
+
+        public Task<TransactionReceipt> GetRoadEntityRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var getRoadEntityFunction = new GetRoadEntityFunction();
+                getRoadEntityFunction.X = x;
+                getRoadEntityFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(getRoadEntityFunction, cancellationToken);
         }
 
         public Task<byte[]> GetSchemaQueryAsync(GetSchemaFunction getSchemaFunction, BlockParameter blockParameter = null)
@@ -2013,34 +2087,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnBotAdminFunction, cancellationToken);
         }
 
-        public Task<string> SpawnFinishedRoadRequestAsync(SpawnFinishedRoadFunction spawnFinishedRoadFunction)
+        public Task<string> SpawnDebugRoadRequestAsync(SpawnDebugRoadFunction spawnDebugRoadFunction)
         {
-             return ContractHandler.SendRequestAsync(spawnFinishedRoadFunction);
+             return ContractHandler.SendRequestAsync(spawnDebugRoadFunction);
         }
 
-        public Task<TransactionReceipt> SpawnFinishedRoadRequestAndWaitForReceiptAsync(SpawnFinishedRoadFunction spawnFinishedRoadFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnDebugRoadRequestAndWaitForReceiptAsync(SpawnDebugRoadFunction spawnDebugRoadFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFinishedRoadFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnDebugRoadFunction, cancellationToken);
         }
 
-        public Task<string> SpawnFinishedRoadRequestAsync(byte[] credit, int x, int y)
+        public Task<string> SpawnDebugRoadRequestAsync(byte[] credit, int x, int y)
         {
-            var spawnFinishedRoadFunction = new SpawnFinishedRoadFunction();
-                spawnFinishedRoadFunction.Credit = credit;
-                spawnFinishedRoadFunction.X = x;
-                spawnFinishedRoadFunction.Y = y;
+            var spawnDebugRoadFunction = new SpawnDebugRoadFunction();
+                spawnDebugRoadFunction.Credit = credit;
+                spawnDebugRoadFunction.X = x;
+                spawnDebugRoadFunction.Y = y;
             
-             return ContractHandler.SendRequestAsync(spawnFinishedRoadFunction);
+             return ContractHandler.SendRequestAsync(spawnDebugRoadFunction);
         }
 
-        public Task<TransactionReceipt> SpawnFinishedRoadRequestAndWaitForReceiptAsync(byte[] credit, int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnDebugRoadRequestAndWaitForReceiptAsync(byte[] credit, int x, int y, CancellationTokenSource cancellationToken = null)
         {
-            var spawnFinishedRoadFunction = new SpawnFinishedRoadFunction();
-                spawnFinishedRoadFunction.Credit = credit;
-                spawnFinishedRoadFunction.X = x;
-                spawnFinishedRoadFunction.Y = y;
+            var spawnDebugRoadFunction = new SpawnDebugRoadFunction();
+                spawnDebugRoadFunction.Credit = credit;
+                spawnDebugRoadFunction.X = x;
+                spawnDebugRoadFunction.Y = y;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFinishedRoadFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnDebugRoadFunction, cancellationToken);
         }
 
         public Task<string> SpawnFinishedRoadAdminRequestAsync(SpawnFinishedRoadAdminFunction spawnFinishedRoadAdminFunction)
@@ -2101,26 +2175,58 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnRoadFunction, cancellationToken);
         }
 
-        public Task<string> SpawnRoadRequestAsync(byte[] player, byte[] pushed, byte[] road, PositionData pos)
+        public Task<string> SpawnRoadRequestAsync(int x, int y, byte state, byte[] playerCredit)
         {
             var spawnRoadFunction = new SpawnRoadFunction();
-                spawnRoadFunction.Player = player;
-                spawnRoadFunction.Pushed = pushed;
-                spawnRoadFunction.Road = road;
-                spawnRoadFunction.Pos = pos;
+                spawnRoadFunction.X = x;
+                spawnRoadFunction.Y = y;
+                spawnRoadFunction.State = state;
+                spawnRoadFunction.PlayerCredit = playerCredit;
             
              return ContractHandler.SendRequestAsync(spawnRoadFunction);
         }
 
-        public Task<TransactionReceipt> SpawnRoadRequestAndWaitForReceiptAsync(byte[] player, byte[] pushed, byte[] road, PositionData pos, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnRoadRequestAndWaitForReceiptAsync(int x, int y, byte state, byte[] playerCredit, CancellationTokenSource cancellationToken = null)
         {
             var spawnRoadFunction = new SpawnRoadFunction();
-                spawnRoadFunction.Player = player;
-                spawnRoadFunction.Pushed = pushed;
-                spawnRoadFunction.Road = road;
-                spawnRoadFunction.Pos = pos;
+                spawnRoadFunction.X = x;
+                spawnRoadFunction.Y = y;
+                spawnRoadFunction.State = state;
+                spawnRoadFunction.PlayerCredit = playerCredit;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnRoadFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnRoadFromPlayerRequestAsync(SpawnRoadFromPlayerFunction spawnRoadFromPlayerFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnRoadFromPlayerFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnRoadFromPlayerRequestAndWaitForReceiptAsync(SpawnRoadFromPlayerFunction spawnRoadFromPlayerFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnRoadFromPlayerFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnRoadFromPlayerRequestAsync(byte[] player, byte[] pushed, byte[] road, PositionData pos)
+        {
+            var spawnRoadFromPlayerFunction = new SpawnRoadFromPlayerFunction();
+                spawnRoadFromPlayerFunction.Player = player;
+                spawnRoadFromPlayerFunction.Pushed = pushed;
+                spawnRoadFromPlayerFunction.Road = road;
+                spawnRoadFromPlayerFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAsync(spawnRoadFromPlayerFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnRoadFromPlayerRequestAndWaitForReceiptAsync(byte[] player, byte[] pushed, byte[] road, PositionData pos, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnRoadFromPlayerFunction = new SpawnRoadFromPlayerFunction();
+                spawnRoadFromPlayerFunction.Player = player;
+                spawnRoadFromPlayerFunction.Pushed = pushed;
+                spawnRoadFromPlayerFunction.Road = road;
+                spawnRoadFromPlayerFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnRoadFromPlayerFunction, cancellationToken);
         }
 
         public Task<string> SpawnShoveledRoadRequestAsync(SpawnShoveledRoadFunction spawnShoveledRoadFunction)

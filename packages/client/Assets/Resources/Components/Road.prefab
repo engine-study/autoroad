@@ -6076,8 +6076,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
@@ -6105,10 +6103,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d366feb3545048848b439c471946ec36, type: 3}
   - {fileID: 8300000, guid: b1cccf5e485b3c94aa478201110db913, type: 3}
   - {fileID: 8300000, guid: 716941ed1f33ed049b9d77dc5585e561, type: 3}
-  creditedPlayer: 
-  parent: {fileID: 0}
   mileNumber: 0
-  chunkPos: {x: 0, y: 0}
+  creditedPlayer: 
+  creditedPlayerDebug: 
+  hasGem: 0
+  parent: {fileID: 0}
+  filledBy: {fileID: 0}
+  localChunkPos: {x: 0, y: 0}
 --- !u!114 &7716071489878174150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6125,7 +6126,11 @@ MonoBehaviour:
   synced: 0
   targetComponent: {fileID: 0}
   targetTransform: {fileID: 0}
-  hideIfNoPosition: 0
+  hideIfNoPosition: 1
+  hideIfBelowGround: 0
+  rotateToFace: 0
+  speed: 1
+  rotationSpeed: 720
   pos: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
   moving: 0

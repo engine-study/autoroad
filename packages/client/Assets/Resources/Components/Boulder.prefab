@@ -74,11 +74,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee193c86faf2e145926df25a0cded22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncType: 1
+  syncType: 0
   synced: 0
   targetComponent: {fileID: 0}
   targetTransform: {fileID: 0}
   hideIfNoPosition: 1
+  rotateToFace: 0
+  speed: 1
+  rotationSpeed: 720
   pos: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
   moving: 0

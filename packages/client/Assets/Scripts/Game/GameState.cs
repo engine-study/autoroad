@@ -164,37 +164,13 @@ public class GameState : MonoBehaviour {
 
     void UpdateInput() {
 
-        if(SPGlobal.IsDebug) {
-
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0)) {
-                (PlayerMUD.LocalPlayer.Controller as ControllerMUD).TeleportMUD(CursorMUD.GridPos, true);
-                return;
-            }
-
-              if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt) && Input.GetMouseButtonDown(0)) {
-                TxManager.Send<SpawnMileAdminFunction>();
-                return;
-            }
-
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0)) {
-                TxManager.Send<FinishMileAdminFunction>();
-                return;
-            }
-
-            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0)) {
-                TxManager.Send<SpawnFinishedRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
-                return;
-            }
-
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) {
-                TxManager.Send<SpawnShoveledRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z));
-                return;
-            }
-
-        }
-
         if(Input.GetKeyDown(KeyCode.F)) {
-            Screen.fullScreen = !Screen.fullScreen;
+
+            if(Screen.fullScreen) {
+                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            } else {
+                Screen.SetResolution(Screen.resolutions[0].width, Screen.resolutions[0].height, FullScreenMode.FullScreenWindow);
+            }
         }
 
     }

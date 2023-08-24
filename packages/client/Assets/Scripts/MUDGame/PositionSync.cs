@@ -13,6 +13,7 @@ public class PositionSync : ComponentSync
     [Header("Optional")]
     [SerializeField] Transform targetTransform;
     [SerializeField] public bool hideIfNoPosition = true;    
+    [SerializeField] public bool hideIfBelowGround = true;    
     [SerializeField] public bool rotateToFace = false;
     [SerializeField] float speed = 1f;
     [SerializeField] float rotationSpeed = 720f;
@@ -45,8 +46,13 @@ public class PositionSync : ComponentSync
         targetTransform.position = pos.Pos;
         targetPos = pos.Pos;
 
+        IsVisible();
+
+    }
+
+    public void IsVisible() {
         //hide us if we don't have a position
-        if(pos.UpdateType == UpdateType.DeleteRecord && hideIfNoPosition) {
+        if((pos.UpdateType == UpdateType.DeleteRecord && hideIfNoPosition) || (pos.PosLayer.y < 0 && hideIfBelowGround)) {
             gameObject.SetActive(false);
         }
     }

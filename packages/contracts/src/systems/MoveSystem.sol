@@ -83,38 +83,34 @@ contract MoveSystem is System {
     bytes32[] memory pushArray = new bytes32[](maxLength);
     PositionData memory pushVector = PositionData(pushPos.x - shoverPos.x, pushPos.y - shoverPos.y, 0);
 
-    console.log("start loop");
-
     while (atPos.length > 0) {
-
-      console.log("loop");
 
       require(count < maxLength, "too many");
       uint32 move = Move.get(atPos[0]);
+
+      //leave loop early if we get blocked or finally reach an empty space
       require(move != uint32(MoveType.Obstruction), "blocked");
+      if(move != uint32(MoveType.Push)) { break; }
 
       pushArray[count] = atPos[0];
+
+      //we are always able to push whatever is in front of us
       totalWeight += Weight.get(atPos[0]);
+      require(totalWeight < 1, "too heavy");
 
-
+      //increment push and check the destination is on map
       pushPos.x += pushVector.x;
       pushPos.y += pushVector.y;
       if(Player.get(pushArray[count])) require(world.onWorld(pushPos.x, pushPos.y), "off map");
       else {require(world.onMap(pushPos.x, pushPos.y), "off world");}
 
+      //next space
       atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
       count++;
-
-      //leave loop early if we hit an empty space
-      if(move != uint32(MoveType.Push)) { break; }
-
     }
     
     //go back to the last non empty object
     count--;
-
-    //WEIGHT
-    require(totalWeight <= 0, "too heavy");
 
     //move the FINAL object in the push array first
     shoverPos.x = pushPos.x - pushVector.x;
@@ -156,7 +152,7 @@ contract MoveSystem is System {
       if (moveType == MoveType.Hole) {
         if(Player.get(entity)) { Health.set(entity, -1);}
         if(Road.getState(atDestination[0]) == uint32(RoadState.Shoveled)) {
-          IWorld(_world()).spawnRoad(player, entity, atDestination[0], to);
+          IWorld(_world()).spawnRoadFromPlayer(player, entity, atDestination[0], to);
         }
       }
 
@@ -248,20 +244,8 @@ contract MoveSystem is System {
     require(world.onRoad(x, y), "off road");
     require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-    require(atPosition.length < 1, "trying to dig an occupied spot");
+    world.spawnShoveledRoad(x,y);
 
-    bytes32 roadEntity = keccak256(abi.encode("Road", x, y));
-    require(Road.getState(roadEntity) == uint32(RoadState.None), "road already here");
-
-    //TODO setState
-    // Road.setState(roadEntity, uint32(RoadState.Shoveled));
-    Road.set(roadEntity, uint32(RoadState.Shoveled), player, false);
-    Move.set(roadEntity, uint32(MoveType.Hole));
-    Position.set(roadEntity, x, y, 0);
-
-    // int32 stat = Stats.getShoveled(player);
-    // Stats.setShoveled(player, stat + 1);
   }
 
   function melee(int32 x, int32 y) public {

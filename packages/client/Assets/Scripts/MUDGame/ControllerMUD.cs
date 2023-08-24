@@ -166,6 +166,11 @@ public class ControllerMUD : SPController {
 
         if (moveComponent != null) {
 
+            if(moveComponent.MoveType != MoveType.Push) {
+                FailedMove(moveTo);
+                return;
+            }
+
             Debug.Log("Push Tx");
 
             bool weight = false;
@@ -186,6 +191,8 @@ public class ControllerMUD : SPController {
                 if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction || (player == null && !MapConfigComponent.OnMap(pushToPos+direction))) {
                     FailedMove(pushToPos);
                     return;
+                } else if(destMoveComponent.MoveType != MoveType.Push) {
+                    break;
                 }
 
                 pushToPos += direction;
@@ -315,7 +322,7 @@ public class ControllerMUD : SPController {
         //our onchain position didn't change, either because we got an update that was already made optimistically
         //or because we literally didn't move
         //TODO everything is setfield ?? playerScript.Position.UpdateType == UpdateType.SetField 
-        if (onchainPos == lastOnchainPos) {
+        if (onchainPos == lastOnchainPos && playerScript.Position.UpdateSource != UpdateSource.Revert ) {
             Debug.Log("SKIP STATE");
             return;
         }
@@ -347,10 +354,10 @@ public class ControllerMUD : SPController {
 
             if (playerTransform.position == moveDest) {
                 //appear tired because we tried to move but our position didn't change (walking into a wall)
-                Debug.Log("Animation: Tired", this);
+                Debug.Log("Animation: Rejected", this);
                 walkingState.Apply(player.Animator);
                 player.Animator.PlayClip("Hit");
-                player.Resources.sfx.PlaySound(sfx_bump);
+                // player.Resources.sfx.PlaySound(sfx_bump);
             } else {
                 Debug.Log("Animation: Pushing", this);
                 pushState.Apply(player.Animator);

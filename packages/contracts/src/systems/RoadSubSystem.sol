@@ -29,7 +29,6 @@ contract RoadSubsystem is System {
   }
 
   function createMile(int32 mileNumber) public {
-
     int32 currentMile = GameState.getMiles();
 
     console.log("create mile");
@@ -40,7 +39,7 @@ contract RoadSubsystem is System {
     require(mileNumber > currentMile, "creating mile again");
 
     //create an entity for the chunk itself
-    bytes32 chunkEntity = keccak256(abi.encode("Chunk", mileNumber));
+    bytes32 chunkEntity = getChunkEntity(mileNumber);
 
     (, int32 players) = GameState.get();
     GameState.set(mileNumber, players);
@@ -66,8 +65,8 @@ contract RoadSubsystem is System {
     GameConfigData memory config = GameConfig.get();
 
     //set the chunk of road
-    Chunk.set(chunkEntity, false, mileNumber, 0,0);
-    Position.set(keccak256(abi.encode("Carriage")), 0, yEnd + 1, 0);
+    Chunk.set(chunkEntity, false, mileNumber, 0, 0);
+    Position.set(getCarriageEntity(), 0, yEnd + 1, 0);
 
     //spawn all the rows
     //spawn all the obstacles
@@ -86,21 +85,25 @@ contract RoadSubsystem is System {
           terrainType = TerrainType.Tree;
         } else if (noiseCoord > 10 && noiseCoord <= 15) {
           terrainType = TerrainType.Rock;
-        } else if (noiseCoord == 15) {
-          terrainType = TerrainType.HeavyBoy;
         } else if (noiseCoord == 16) {
-          if(IWorld(_world()).onRoad(x, y)) {continue;}
-          terrainType = TerrainType.Obstruction;
+          terrainType = TerrainType.HeavyBoy;
         } else if (noiseCoord == 17) {
-          if(IWorld(_world()).onRoad(x, y)) {continue;}
-          terrainType = TerrainType.Pillar;
+          if (IWorld(_world()).onRoad(x, y)) {
+            continue;
+          }
+          terrainType = TerrainType.HeavyHeavyBoy;
         } else if (noiseCoord == 18) {
-          terrainType = TerrainType.Ox;
+          if (IWorld(_world()).onRoad(x, y)) {
+            continue;
+          }
+          terrainType = TerrainType.Pillar;
         } else if (noiseCoord == 19) {
+          terrainType = TerrainType.Ox;
+        } else if (noiseCoord == 20) {
           terrainType = TerrainType.Militia;
         } else if (config.dummyPlayers && noiseCoord > 98) {
           terrainType = TerrainType.Player;
-        } 
+        }
 
         //don't spawn anything
         if (terrainType == TerrainType.None) {
@@ -110,22 +113,22 @@ contract RoadSubsystem is System {
         spawnTerrain(x, y, terrainType);
       }
     }
-
   }
 
-  function contemplateMile(int32 mileNumber) public {
+  function getRoadEntity(int32 x, int32 y) public returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
+  function getChunkEntity(int32 mile) public returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
+  function getCarriageEntity() public returns(bytes32) {return keccak256(abi.encode("Carriage"));}
 
+  function contemplateMile(int32 mileNumber) public {
     GameConfigData memory config = GameConfig.get();
-    (,uint32 roadHeight, int32 leftRoad, int32 rightRoad) = RoadConfig.get();
+    (, uint32 roadHeight, int32 leftRoad, int32 rightRoad) = RoadConfig.get();
     int32 yStart = mileNumber * int32(roadHeight);
     int32 yEnd = int32(yStart) + int32(roadHeight) + -1;
 
     for (int32 y = yStart; y <= yEnd; y++) {
-
       for (int32 x = leftRoad; x <= rightRoad; x++) {
-
-        bytes32 road = keccak256(abi.encode("Road", x, y));
-        if(Road.getState(road) < uint32(RoadState.Paved)) {
+        bytes32 road = getRoadEntity(x,y);
+        if (Road.getState(road) < uint32(RoadState.Paved)) {
           continue;
         }
 
@@ -136,7 +139,6 @@ contract RoadSubsystem is System {
         }
       }
     }
-
   }
 
   function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
@@ -156,11 +158,11 @@ contract RoadSubsystem is System {
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Player) {
       world.spawnBotAdmin(x, y, entity);
-    }else if (tType == TerrainType.HeavyBoy) {
+    } else if (tType == TerrainType.HeavyBoy) {
       Boulder.set(entity, true);
       Weight.set(entity, 3);
       Move.set(entity, uint32(MoveType.Push));
-    } else if (tType == TerrainType.Obstruction) {
+    } else if (tType == TerrainType.HeavyHeavyBoy) {
       Boulder.set(entity, true);
       Weight.set(entity, 5);
       Move.set(entity, uint32(MoveType.Push));
@@ -176,34 +178,40 @@ contract RoadSubsystem is System {
       Militia.set(entity, true);
       Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Push));
-    } 
+    } else if (tType == TerrainType.Road) {
+      spawnRoad(x,y,RoadState.Paved, entity);
+    } else if (tType == TerrainType.Ditch) {
+      spawnShoveledRoad(x,y);
+    }
   }
 
+  function spawnRoadFromPlayer(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
 
-  function spawnRoad(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
+    bool pushedPlayer = Player.get(pushed);
+    RoadState state = pushedPlayer ? RoadState.Bones : RoadState.Paved;
+    spawnRoad(pos.x,pos.y, state, pushed);
 
-    //ROAD COMPLETE!!! set it underground
-    Position.set(road, pos.x, pos.y, -1);
     //set the rock to the position under the road
     Position.set(pushed, pos.x, pos.y, -2);
-    bool pushedPlayer = Player.get(pushed);
-
-    // bool isRock = Rock.get(atDestination[0]);
-    if (pushedPlayer) {
-      Road.setState(road, uint32(RoadState.Bones));
-    } else {
-      Road.setState(road, uint32(RoadState.Paved));
-    }
 
     //reward the player
-    Road.setFilled(road, player);
     int32 coins = Coinage.get(player);
     Coinage.set(player, coins + 5);
 
     updateChunk();
 
-    int32 stat = Stats.getCompleted(player);
-    Stats.setCompleted(player, stat + 1);
+  }
+
+  function spawnRoad(int32 x, int32 y, RoadState state, bytes32 playerCredit) public {
+    IWorld world = IWorld(_world());
+    require(world.onRoad(x, y), "off road");
+
+    bytes32 road = getRoadEntity(x,y);
+    Position.set(road, x, y, -1);
+    //TODO setfilled to save gas
+    // Road.setFilled(road, player);
+    Road.set(road, uint32(state), playerCredit, false);
+    Move.set(road, uint32(MoveType.None));
   }
 
   //TODO fix this horrible thing,make it more robust
@@ -225,7 +233,6 @@ contract RoadSubsystem is System {
   }
 
   function finishMile(bytes32 chunk, int32 currentMile, uint32 pieces) public {
-
     console.log("finish chunk");
     console.logInt(currentMile);
 
@@ -237,9 +244,7 @@ contract RoadSubsystem is System {
     createMile(currentMile);
   }
 
-
   function debugMile(bytes32 credit) public {
-
     (uint32 roadWidth, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();
     int32 currentMile = GameState.getMiles();
 
@@ -258,40 +263,36 @@ contract RoadSubsystem is System {
         console.log("spawn");
         console.logInt(x);
         console.logInt(y);
-        spawnFinishedRoad(credit, x, y);
+        spawnDebugRoad(credit, x, y);
       }
     }
 
-    bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
+    bytes32 chunk = getChunkEntity(currentMile);
     uint32 pieces = roadWidth * roadHeight;
 
     finishMile(chunk, currentMile, pieces);
-
-  }
-
-  
-  function spawnFinishedRoad(bytes32 credit, int32 x, int32 y) public {
-    IWorld world = IWorld(_world());
-    require(world.onRoad(x, y), "off road");
-
-    bytes32 entity = keccak256(abi.encode("Road", x, y));
-    bool giveReward = randomCoord(0,100, x, y) > 90;
-
-    Position.set(entity, x, y, -1);
-    Road.set(entity, uint32(RoadState.Paved), credit, giveReward);
-
   }
 
   function spawnShoveledRoad(int32 x, int32 y) public {
-    IWorld world = IWorld(_world());
-    require(world.onRoad(x, y), "off road");
 
-    bytes32 entity = keccak256(abi.encode("Road", x, y));
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    require(atPosition.length < 1, "trying to dig an occupied spot");
+
+    bytes32 entity = getRoadEntity(x,y);
     require(Road.getState(entity) == uint32(RoadState.None), "road");
 
-    Road.set(entity, uint32(RoadState.Shoveled), entity, false);
+    //TODO setState
+    // Road.setState(entity, uint32(RoadState.Shoveled));
+    Road.set(entity, uint32(RoadState.Shoveled), 0, false);
+    Move.set(entity, uint32(MoveType.Hole));
     Position.set(entity, x, y, 0);
   }
-  
 
+  
+  function spawnDebugRoad(bytes32 credit, int32 x, int32 y) public {
+    bytes32 entity = getRoadEntity(x,y);
+    bool giveReward = randomCoord(0, 100, x, y) > 90;
+    Position.set(entity, x, y, -1);
+    Road.set(entity, uint32(RoadState.Paved), credit, giveReward);
+  }
 }

@@ -29,17 +29,22 @@ public class ActorUI : SPWindowBase {
         entity = (MUDEntity)newEntity;
         move.UpdateInfo(entity);
 
-        if (entity == null) {
-            nameText.text = "";
-            position.SetFollow(null);   
-        } else {
+        if (entity) {
             nameRawText.UpdateField(entity.Name);
             nameText.text = entity.Name;
             PositionComponent pos = entity.GetMUDComponent<PositionComponent>();
             position.SetFollow(pos?.transform);   
+        } else {
+            nameText.text = "";
+            position.SetFollow(null);   
         }
 
         gameObject.SetActive(entity != null);
+
+        if(gameObject.activeInHierarchy)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(Rect);
+            
+        // Canvas.ForceUpdateCanvases();
     }
 
     void Refresh() {
