@@ -39,10 +39,10 @@ public class GaulDebug : MonoBehaviour
             actionName.UpdateField("Finish Current Mile");
             if (Input.GetMouseButtonDown(0)) { TxManager.Send<FinishMileAdminFunction>(); }
             return;
-        } else if (Input.GetKey(KeyCode.LeftShift)) {
+        } else if (Input.GetKey(KeyCode.LeftAlt)) {
             actionName.UpdateField("Teleport");
             if (Input.GetMouseButtonDown(0)) {(PlayerMUD.LocalPlayer.Controller as ControllerMUD).TeleportMUD(CursorMUD.GridPos, true);}
-        } else if (Input.GetKey(KeyCode.LeftAlt)) {
+        } else if (Input.GetKey(KeyCode.LeftShift)) {
 
             if(Input.GetKey(KeyCode.Alpha1)) {
                 terrain = 0;
@@ -64,11 +64,18 @@ public class GaulDebug : MonoBehaviour
                 terrain = 8;
             } else if (Input.GetKey(KeyCode.Alpha0)) {
                 terrain = 9;
+            } else {
+                terrain = -1;
             }
 
-            actionName.UpdateField("Spawn " + (TerrainType)terrain);
+            if(terrain == -1) {
+                actionName.UpdateField("LMB: Spawn [1-9] | RMB: Delete");
+            } else {
+                actionName.UpdateField("Spawn " + (TerrainType)terrain);
+            }
 
-            if (Input.GetMouseButtonDown(0)) { TxManager.Send<SpawnTerrainAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToUInt32(terrain)); }
+            if (Input.GetMouseButtonDown(0) && terrain > -1) { TxManager.Send<SpawnTerrainAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((TerrainType)terrain)); }
+            else if (Input.GetMouseButtonDown(1)) { TxManager.Send<DeleteAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToInt32(0)); }
         }
 
         // if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) {

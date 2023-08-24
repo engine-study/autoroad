@@ -83,12 +83,13 @@ public class WorldScroll : MonoBehaviour {
     }
 
     void UpdateInput() {
+        
         if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftShift)) {
             mileScroll = Mathf.Clamp(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime, -.5f, maxMile + .5f);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
         
-        if (SPUIBase.CanInput && Input.GetMouseButtonDown(1)) {
+        if (SPUIBase.CanInput && !SPInput.ModifierKey && Input.GetMouseButtonDown(1)) {
 
             ToggleCameraOnPlayer(false);
 

@@ -176,6 +176,32 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Credit { get; set; }
     }
 
+    public partial class DeleteAdminFunction : DeleteAdminFunctionBase { }
+
+    [Function("deleteAdmin")]
+    public class DeleteAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "layer", 3)]
+        public virtual int Layer { get; set; }
+    }
+
+    public partial class DeleteAtFunction : DeleteAtFunctionBase { }
+
+    [Function("deleteAt")]
+    public class DeleteAtFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "layer", 3)]
+        public virtual int Layer { get; set; }
+    }
+
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }
 
     [Function("deleteRecord")]
@@ -1312,6 +1338,10 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "system", 1)]
         public virtual string System { get; set; }
     }
+
+
+
+
 
 
 

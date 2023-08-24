@@ -430,6 +430,66 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(debugMileFunction, cancellationToken);
         }
 
+        public Task<string> DeleteAdminRequestAsync(DeleteAdminFunction deleteAdminFunction)
+        {
+             return ContractHandler.SendRequestAsync(deleteAdminFunction);
+        }
+
+        public Task<TransactionReceipt> DeleteAdminRequestAndWaitForReceiptAsync(DeleteAdminFunction deleteAdminFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAdminFunction, cancellationToken);
+        }
+
+        public Task<string> DeleteAdminRequestAsync(int x, int y, int layer)
+        {
+            var deleteAdminFunction = new DeleteAdminFunction();
+                deleteAdminFunction.X = x;
+                deleteAdminFunction.Y = y;
+                deleteAdminFunction.Layer = layer;
+            
+             return ContractHandler.SendRequestAsync(deleteAdminFunction);
+        }
+
+        public Task<TransactionReceipt> DeleteAdminRequestAndWaitForReceiptAsync(int x, int y, int layer, CancellationTokenSource cancellationToken = null)
+        {
+            var deleteAdminFunction = new DeleteAdminFunction();
+                deleteAdminFunction.X = x;
+                deleteAdminFunction.Y = y;
+                deleteAdminFunction.Layer = layer;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAdminFunction, cancellationToken);
+        }
+
+        public Task<string> DeleteAtRequestAsync(DeleteAtFunction deleteAtFunction)
+        {
+             return ContractHandler.SendRequestAsync(deleteAtFunction);
+        }
+
+        public Task<TransactionReceipt> DeleteAtRequestAndWaitForReceiptAsync(DeleteAtFunction deleteAtFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtFunction, cancellationToken);
+        }
+
+        public Task<string> DeleteAtRequestAsync(int x, int y, int layer)
+        {
+            var deleteAtFunction = new DeleteAtFunction();
+                deleteAtFunction.X = x;
+                deleteAtFunction.Y = y;
+                deleteAtFunction.Layer = layer;
+            
+             return ContractHandler.SendRequestAsync(deleteAtFunction);
+        }
+
+        public Task<TransactionReceipt> DeleteAtRequestAndWaitForReceiptAsync(int x, int y, int layer, CancellationTokenSource cancellationToken = null)
+        {
+            var deleteAtFunction = new DeleteAtFunction();
+                deleteAtFunction.X = x;
+                deleteAtFunction.Y = y;
+                deleteAtFunction.Layer = layer;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtFunction, cancellationToken);
+        }
+
         public Task<string> DeleteRecordRequestAsync(DeleteRecordFunction deleteRecordFunction)
         {
              return ContractHandler.SendRequestAsync(deleteRecordFunction);

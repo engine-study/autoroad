@@ -21,6 +21,12 @@ contract AdminSystem is System {
     IWorld(_world()).spawnTerrain(x,y,tType);
   }
 
+  function deleteAdmin(int32 x, int32 y, int32 layer) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    IWorld(_world()).deleteAt(x,y, layer);
+  }
+
   function spawnMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");

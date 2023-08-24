@@ -185,6 +185,12 @@ contract RoadSubsystem is System {
     }
   }
 
+  function deleteAt(int32 x, int32 y, int32 layer) public {
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, layer));
+    require(atPosition.length > 0, "empty");
+    Position.deleteRecord(atPosition[0]);
+  }
+
   function spawnRoadFromPlayer(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
 
     bool pushedPlayer = Player.get(pushed);
