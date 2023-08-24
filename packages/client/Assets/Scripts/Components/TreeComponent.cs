@@ -19,12 +19,14 @@ public class TreeComponent : MUDComponent {
     public bool treeState;
     bool lastState = false;
     int lastHealth = -999;
-
+    UpdateType lastPosUpdateType;
     protected override void PostInit() {
         base.PostInit();
 
         pos = Entity.GetMUDComponent<PositionComponent>();
         health = Entity.GetMUDComponent<HealthComponent>();
+
+        pos.OnUpdated += TreeDead;
         health.OnUpdated += TreeHit;
 
         Entity.SetName("Tree");
@@ -33,43 +35,47 @@ public class TreeComponent : MUDComponent {
     protected override void InitDestroy() {
         base.InitDestroy();
 
-        if(health)
-            health.OnUpdated -= TreeHit;
+        if(health) health.OnUpdated -= TreeHit;
+        if(pos) pos.OnUpdated -= TreeDead;
+    }
+
+    void TreeDead() {
+
+        if (health.UpdateSource != UpdateSource.Revert && pos.UpdateType == UpdateType.DeleteRecord && Loaded && pos.UpdateType != lastPosUpdateType) {
+            SPAudioSource.Play(transform.position, sfx_hits);
+            SPAudioSource.Play(transform.position, sfx_falls);
+            fx_fall.Play(true);
+            flash.Flash();
+            fallCoroutine = StartCoroutine(FallCoroutine());
+
+        } else {
+
+            //if we reverted to an alive state, fix
+            if (fallCoroutine != null) {
+                StopCoroutine(fallCoroutine);
+            }
+
+            if (rb) {
+                rb.isKinematic = true;
+            }
+
+            treeRoot.transform.localPosition = Vector3.zero;
+            treeRoot.transform.localRotation = Quaternion.identity;
+            
+        }
+
+        lastPosUpdateType = pos.UpdateType;
+
     }
 
     void TreeHit() {
 
         if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.Health) {
 
-            if (health.Health <= 0) {
-                SPAudioSource.Play(transform.position, sfx_hits);
-                SPAudioSource.Play(transform.position, sfx_falls);
-                fx_hit.Play();
-                fx_fall.Play(true);
-                flash.Flash();
-
-                fallCoroutine = StartCoroutine(FallCoroutine());
-
-            } else {
-                SPAudioSource.Play(transform.position, sfx_hits);
-                fx_hit.Play();
-                flash.Flash();
-            }
-        } else if (health.UpdateSource == UpdateSource.Revert) {
-
-            //if we reverted to an alive state, fix
-            if(health.Health > 0) {
-                if (fallCoroutine != null) {
-                    StopCoroutine(fallCoroutine);
-                }
-
-                if (rb) {
-                    rb.isKinematic = true;
-                }
-
-                treeRoot.transform.localPosition = Vector3.zero;
-                treeRoot.transform.localRotation = Quaternion.identity;
-            }
+            SPAudioSource.Play(transform.position, sfx_hits);
+            fx_hit.Play();
+            flash.Flash();
+            
         }
 
         lastHealth = health.Health;

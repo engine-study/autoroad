@@ -37,7 +37,7 @@ public class ControllerMUD : SPController {
     float alive = 0f;
     float rotationSpeed = 720f;
     float distance;
-    int moveDistance = 1;
+    int moveDistance = 3;
     // [SerializeField] private AudioClip[] pushes;
     bool init = false;
 
@@ -155,8 +155,7 @@ public class ControllerMUD : SPController {
             return;
 
 
-        Vector3 movePos = onchainPos;
-        movePos += Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
+        Vector3 movePos = onchainPos + Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
         direction = (movePos - playerScript.Position.Pos).normalized;
         Vector3 moveTo = playerScript.Position.Pos + direction;
 

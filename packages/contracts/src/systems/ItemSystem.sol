@@ -91,7 +91,7 @@ contract ItemSystem is System {
       FishingRod.set(player, true);
     }
     if (id == 4) {
-      Boots.set(player, 1);
+      Boots.set(player, 1, 3);
     }
   }
 

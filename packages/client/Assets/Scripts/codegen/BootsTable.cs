@@ -23,7 +23,8 @@ namespace DefaultNamespace
             return ID;
         }
 
-        public ulong? value;
+        public long? minMove;
+        public long? maxMove;
 
         public override Type TableType()
         {
@@ -37,7 +38,9 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (ulong)(int)functionParameters[0];
+            minMove = (long)(int)functionParameters[0];
+
+            maxMove = (long)(int)functionParameters[1];
         }
 
         public override void RecordToTable(Record record)
@@ -45,8 +48,10 @@ namespace DefaultNamespace
             var table = record.value;
             //bool hasValues = false;
 
-            var valueValue = (ulong)table["value"];
-            value = valueValue;
+            var minMoveValue = (long)table["minMove"];
+            minMove = minMoveValue;
+            var maxMoveValue = (long)table["maxMove"];
+            maxMove = maxMoveValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -77,14 +82,17 @@ namespace DefaultNamespace
                 {
                     current = new BootsTable
                     {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
+                        minMove = value.Item1.TryGetValue("minMove", out var minMoveVal)
+                            ? (long)minMoveVal
+                            : default,
+                        maxMove = value.Item1.TryGetValue("maxMove", out var maxMoveVal)
+                            ? (long)maxMoveVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new BootsTable { value = null, };
+                    current = new BootsTable { minMove = null, maxMove = null, };
                 }
             }
 
@@ -94,14 +102,17 @@ namespace DefaultNamespace
                 {
                     previous = new BootsTable
                     {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
+                        minMove = value.Item2.TryGetValue("minMove", out var minMoveVal)
+                            ? (long)minMoveVal
+                            : default,
+                        maxMove = value.Item2.TryGetValue("maxMove", out var maxMoveVal)
+                            ? (long)maxMoveVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new BootsTable { value = null, };
+                    previous = new BootsTable { minMove = null, maxMove = null, };
                 }
             }
 

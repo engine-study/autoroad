@@ -26,7 +26,8 @@ contract MoveSystem is System {
     require(startPos.x != x || startPos.y != y, "moving in place");
 
     PositionData memory endPos = PositionData(x, y, 0);
-    require(getDistance(startPos, endPos) <= (Boots.get(player) + 1), "moving too far");
+    int distance = int(getDistance(startPos, endPos));
+    require(Boots.getMinMove(player) >= distance && Boots.getMaxMove(player) <= distance, "bad boots");
 
     // get all the positions in the line we are walking
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
