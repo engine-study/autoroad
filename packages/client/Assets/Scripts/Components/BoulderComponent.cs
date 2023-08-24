@@ -30,6 +30,15 @@ public class BoulderComponent : MUDComponent {
         heavy.SetActive(weight.Weight == 5);
         pillar.SetActive(weight.Weight > 5);
 
+        if(weight.Weight < 5) {
+            Entity.SetName("Lapis");
+        } else if(weight.Weight == 5) {
+            Entity.SetName("Saxum");
+        } else if(weight.Weight > 5) {
+            Entity.SetName("Columna");
+        }
+
+
     }
 
 }

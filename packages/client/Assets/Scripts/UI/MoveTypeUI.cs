@@ -38,21 +38,19 @@ public class MoveTypeUI : SPWindow
             strength.ToggleWindowClose();
             obstacle.ToggleWindowClose();
 
-            if(moveComponent.MoveType == MoveType.Obstruction) {
-                button = obstacle;
-                obstacle.ToggleWindowClose();
-            } else if(moveComponent.MoveType == MoveType.Push) {
+            if(moveComponent.MoveType == MoveType.Push) {
                 button = weightComponent.Weight < 0 ? strength : weight;
                 button.UpdateField(((int)Mathf.Abs(weightComponent.Weight)).ToString());
-            } 
-
-            if(button == null) {
-                ToggleWindowClose();
-            } else {
                 button.ToggleWindowOpen();
+            } else if(moveComponent.MoveType == MoveType.Obstruction) {
+                // button = obstacle;
+                // button.ToggleWindowOpen();
+            } else {
+
             }
 
-            ToggleWindowOpen();
+            ToggleWindow(button != null);
+            
 
         } else {
             ToggleWindowClose();
