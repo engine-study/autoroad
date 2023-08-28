@@ -5,6 +5,10 @@ using DefaultNamespace;
 using IWorld.ContractDefinition;
 using mud.Client;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public enum TerrainType {None, Rock, Mine, Tree, Player, HeavyBoy, HeavyHeavyBoy, Pillar, Ox, Militia, Road, Ditch}
 public class GaulDebug : MonoBehaviour
 {
@@ -40,8 +44,15 @@ public class GaulDebug : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) { TxManager.Send<FinishMileAdminFunction>(); }
             return;
         } else if (Input.GetKey(KeyCode.LeftAlt)) {
-            actionName.UpdateField("Teleport");
-            if (Input.GetMouseButtonDown(0)) {(PlayerMUD.LocalPlayer.Controller as ControllerMUD).TeleportMUD(CursorMUD.GridPos, true);}
+            actionName.UpdateField("LMB: Select \nRMB: Teleport");
+
+            if (Input.GetMouseButtonDown(0)) {
+                #if UNITY_EDITOR
+                Selection.activeGameObject = CursorMUD.Entity?.gameObject;
+                #endif
+            }
+            if (Input.GetMouseButtonDown(1)) {(PlayerMUD.LocalPlayer.Controller as ControllerMUD).TeleportMUD(CursorMUD.GridPos, true);}
+            
         } else if (Input.GetKey(KeyCode.LeftShift)) {
 
             if(Input.GetKey(KeyCode.Alpha1)) {
@@ -69,7 +80,7 @@ public class GaulDebug : MonoBehaviour
             }
 
             if(terrain == -1) {
-                actionName.UpdateField("LMB: Spawn [1-9] | RMB: Delete");
+                actionName.UpdateField("LMB: Spawn [1-9] \nRMB: Delete");
             } else {
                 actionName.UpdateField("Spawn " + (TerrainType)terrain);
             }
@@ -89,7 +100,4 @@ public class GaulDebug : MonoBehaviour
         // }
     }
 
-    void UpdateCursor() {
-
-    }
 }

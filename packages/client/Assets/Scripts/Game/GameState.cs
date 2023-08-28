@@ -88,7 +88,7 @@ public class GameState : MonoBehaviour {
         }
 
         //wait for name table
-        while(MUDWorld.FindTable<NameComponent>()?.HasInit == false) {await UniTask.Delay(500);}
+        while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
         NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalAddress);
 
         //create our player name
@@ -113,8 +113,8 @@ public class GameState : MonoBehaviour {
         while(NameComponent.LocalName == null) {await UniTask.Delay(500);}
 
         //wait for player table
-        while(MUDWorld.FindTable<PlayerComponent>().HasInit == false) {await UniTask.Delay(500);}
-        while(MUDWorld.FindTable<HealthComponent>().HasInit == false) {await UniTask.Delay(500);}
+        while(MUDWorld.FindTable<PlayerComponent>().Loaded == false) {await UniTask.Delay(500);}
+        while(MUDWorld.FindTable<HealthComponent>().Loaded == false) {await UniTask.Delay(500);}
         PlayerTable playerTable = MUDWorld.FindValue<PlayerTable>(NetworkManager.LocalAddress);
         HealthComponent healthComponent = MUDWorld.FindComponent<HealthComponent>(NetworkManager.LocalAddress);
 

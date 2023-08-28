@@ -12,7 +12,7 @@ public class RockComponent : MUDComponent {
     public RockType RockType {get { return rockType; } }
 
     [Header("Rock")]
-    [SerializeField] SPAudioSource source, rockSlide;
+    [SerializeField] SPAudioSource rockSlide;
     [SerializeField] PositionSync posSync;
     [SerializeField] GameObject visualParent;
     [SerializeField] SPBase rockBase;
@@ -36,8 +36,9 @@ public class RockComponent : MUDComponent {
 
     }
 
-    protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
-        base.Init(ourEntity, ourTable);
+
+    protected override void Init(SpawnInfo newSpawnInfo) {
+        base.Init(newSpawnInfo);
 
         Entity.SetName(rockType.ToString());
     }
@@ -85,11 +86,11 @@ public class RockComponent : MUDComponent {
 
         if (Loaded && lastStage != rockType) {
 
-            if (newInfo.UpdateType == UpdateType.SetField || newInfo.UpdateSource == UpdateSource.Optimistic) {
+            if (newInfo.UpdateType == UpdateType.SetField || newInfo.Source == UpdateSource.Optimistic) {
                 if (lastStage < RockType.Rudus) {
-                    source.PlaySound(sfx_bigBreaks);
+                    SPAudioSource.Play(transform.position, sfx_bigBreaks);
                 } else {
-                    source.PlaySound(sfx_smallBreaks);
+                    SPAudioSource.Play(transform.position, sfx_smallBreaks);
                 }
 
                 flash.Flash();
@@ -125,7 +126,7 @@ public class RockComponent : MUDComponent {
         flash.Flash();
 
         fx_fillParticles.Play();
-        source.PlaySound(sfx_fillSound);
+        SPAudioSource.Play(transform.position, sfx_fillSound);
 
         rockSlide.Source.Play();
         rockSlide.Source.time = Random.Range(0f, rockSlide.Source.clip.length);
@@ -141,7 +142,7 @@ public class RockComponent : MUDComponent {
         rockSlide.Source.Stop();
         fx_fillParticles.Emit(10);
         fx_fillExplosion.Play();
-        source.PlaySound(sfx_finalThump);
+        SPAudioSource.Play(transform.position, sfx_finalThump);
 
         visualParent.SetActive(false);
 

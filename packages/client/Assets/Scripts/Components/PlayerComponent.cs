@@ -29,10 +29,10 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] GameEventComponent gameEvent;
     int lastHealth;
 
-    protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
-        base.Init(ourEntity, ourTable);
+    protected override void Init(SpawnInfo newSpawnInfo) {
+        base.Init(newSpawnInfo);
 
-        isLocalPlayer = ourEntity.Key == NetworkManager.LocalAddress;
+        isLocalPlayer = Entity.Key == NetworkManager.LocalAddress;
         if (IsLocalPlayer) {
             LocalPlayer = this;
             OnPlayerSpawn?.Invoke();
@@ -125,7 +125,7 @@ public class PlayerComponent : MUDComponent {
 
         if(IsLocalPlayer) {
             Debug.Log("Died, showing Spawn UI", this);
-            MotherUI.TogglePlayerSpawning(health.Health <= 0 || health.UpdateType == UpdateType.DeleteRecord);
+            MotherUI.TogglePlayerSpawning(health.Health <= 0 || health.UpdateInfo.UpdateType == UpdateType.DeleteRecord);
         }
 
         lastHealth = health.Health;

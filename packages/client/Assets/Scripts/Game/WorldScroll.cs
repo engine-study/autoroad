@@ -82,10 +82,14 @@ public class WorldScroll : MonoBehaviour {
         UpdateUI();
     }
 
+    float GetClampedMile(float newMile) {
+        return Mathf.Clamp(newMile, 0f, maxMile);
+    }
+
     void UpdateInput() {
         
         if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftShift)) {
-            mileScroll = Mathf.Clamp(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime, -.5f, maxMile + .5f);
+            mileScroll = GetClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
         
@@ -137,8 +141,10 @@ public class WorldScroll : MonoBehaviour {
     }
 
     void UpdatePlayerPosition() {
-        playerMile = PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos);
+
+        playerMile = GetClampedMile(PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos));
         targetPlayer = GetMileLerp(playerMile);
+
         if (playerMile != lastPlayerMile) {
             SetToPlayerMile();
         }

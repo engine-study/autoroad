@@ -26,7 +26,9 @@ public class TreeComponent : MUDComponent {
         pos = Entity.GetMUDComponent<PositionComponent>();
         health = Entity.GetMUDComponent<HealthComponent>();
 
-        pos.OnUpdated += TreeDead;
+        pos.OnStaleUpdate += TreeVisibility;
+        pos.OnRichUpdate += TreeSpawnAnimation;
+
         health.OnUpdated += TreeHit;
 
         Entity.SetName("Tree");
@@ -36,51 +38,9 @@ public class TreeComponent : MUDComponent {
         base.InitDestroy();
 
         if(health) health.OnUpdated -= TreeHit;
-        if(pos) pos.OnUpdated -= TreeDead;
+        if(pos) pos.OnUpdated -= TreeSpawnAnimation;
     }
-
-    void TreeDead() {
-
-        if (health.UpdateSource != UpdateSource.Revert && pos.UpdateType == UpdateType.DeleteRecord && Loaded && pos.UpdateType != lastPosUpdateType) {
-            SPAudioSource.Play(transform.position, sfx_hits);
-            SPAudioSource.Play(transform.position, sfx_falls);
-            fx_fall.Play(true);
-            flash.Flash();
-            fallCoroutine = StartCoroutine(FallCoroutine());
-
-        } else {
-
-            //if we reverted to an alive state, fix
-            if (fallCoroutine != null) {
-                StopCoroutine(fallCoroutine);
-            }
-
-            if (rb) {
-                rb.isKinematic = true;
-            }
-
-            treeRoot.transform.localPosition = Vector3.zero;
-            treeRoot.transform.localRotation = Quaternion.identity;
-            
-        }
-
-        lastPosUpdateType = pos.UpdateType;
-
-    }
-
-    void TreeHit() {
-
-        if (health.UpdateSource != UpdateSource.Revert && Loaded && lastHealth != health.Health) {
-
-            SPAudioSource.Play(transform.position, sfx_hits);
-            fx_hit.Play();
-            flash.Flash();
-            
-        }
-
-        lastHealth = health.Health;
-    }
-
+    
     protected override IMudTable GetTable() {return new TreeTable();}
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
@@ -95,6 +55,66 @@ public class TreeComponent : MUDComponent {
         lastState = treeState;
 
     }
+
+    protected override void UpdateComponentInstant() { 
+
+    }
+    protected override void UpdateComponentRich() { 
+        if(UpdateInfo.UpdateType == UpdateType.SetRecord) {
+
+        } else if(UpdateInfo.UpdateType == UpdateType.DeleteRecord) {
+
+        }
+    }
+
+    void TreeVisibility() {
+
+        
+
+    }
+
+    void TreeSpawnAnimation() {
+
+        // if (health.UpdateSource != UpdateSource.Revert && pos.UpdateType == UpdateType.DeleteRecord && Loaded && pos.UpdateType != lastPosUpdateType) {
+        //     SPAudioSource.Play(transform.position, sfx_hits);
+        //     SPAudioSource.Play(transform.position, sfx_falls);
+        //     fx_fall.Play(true);
+        //     flash.Flash();
+        //     fallCoroutine = StartCoroutine(FallCoroutine());
+
+        // } else {
+
+        //     //if we reverted to an alive state, fix
+        //     if (fallCoroutine != null) {
+        //         StopCoroutine(fallCoroutine);
+        //     }
+
+        //     if (rb) {
+        //         rb.isKinematic = true;
+        //     }
+
+        //     treeRoot.transform.localPosition = Vector3.zero;
+        //     treeRoot.transform.localRotation = Quaternion.identity;
+            
+        // }
+
+        lastPosUpdateType = pos.UpdateInfo.UpdateType;
+
+    }
+
+    void TreeHit() {
+
+        if (health.UpdateInfo.Source != UpdateSource.Revert && Loaded && lastHealth != health.Health) {
+
+            SPAudioSource.Play(transform.position, sfx_hits);
+            fx_hit.Play();
+            flash.Flash();
+            
+        }
+
+        lastHealth = health.Health;
+    }
+
 
     Coroutine fallCoroutine;
     IEnumerator FallCoroutine() {

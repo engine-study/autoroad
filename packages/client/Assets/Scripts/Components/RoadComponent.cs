@@ -61,7 +61,7 @@ public class RoadComponent : MUDComponent {
 
         SetState((RoadState)roadUpdate.state);
 
-        if (newInfo.UpdateSource == UpdateSource.Optimistic || (Loaded && lastStage != State)) {
+        if (newInfo.Source == UpdateSource.Optimistic || (Loaded && lastStage != State)) {
 
             flash = gameObject.GetComponent<SPFlashShake>() ?? gameObject.AddComponent<SPFlashShake>();
             flash.SetTarget(stages[(int)State]);
@@ -72,7 +72,7 @@ public class RoadComponent : MUDComponent {
             }
 
             //only fire the big gun events if we're confirmed an onchain
-            if(newInfo.UpdateSource == UpdateSource.Onchain) {
+            if(newInfo.Source == UpdateSource.Onchain) {
                 if(State >= RoadState.Paved) {
                     ToggleComplete(true);
                 } else if(lastStage >= RoadState.Paved) {

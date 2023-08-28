@@ -299,7 +299,7 @@ public class ControllerMUD : SPController {
 
         if (!init) { return; }
         //|| playerScript.Position.UpdateType == UpdateType.SetRecord
-        if (playerScript.Position.UpdateSource == UpdateSource.Revert ) {
+        if (playerScript.Position.UpdateInfo.Source == UpdateSource.Revert ) {
             Debug.Log("Teleporting", this);
             SetPositionInstant(playerScript.Position.Pos);
         }
@@ -321,7 +321,7 @@ public class ControllerMUD : SPController {
         //our onchain position didn't change, either because we got an update that was already made optimistically
         //or because we literally didn't move
         //TODO everything is setfield ?? playerScript.Position.UpdateType == UpdateType.SetField 
-        if (onchainPos == lastOnchainPos && playerScript.Position.UpdateSource != UpdateSource.Revert ) {
+        if (onchainPos == lastOnchainPos && playerScript.Position.UpdateInfo.Source != UpdateSource.Revert ) {
             Debug.Log("SKIP STATE");
             return;
         }
@@ -375,7 +375,7 @@ public class ControllerMUD : SPController {
         }
 
         //UPDATE ROTATION
-        if (playerScript.Position.UpdateSource != UpdateSource.Revert) {
+        if (playerScript.Position.UpdateInfo.Source != UpdateSource.Revert) {
             var _lookY = moveDest;
             _lookY.y = playerTransform.position.y;
 

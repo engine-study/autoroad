@@ -72,7 +72,7 @@ public class MotherUI : SPUIInstance {
 
 
     void UpdateWheelOptimistic(TxUpdate update) {
-        if (update.Info.UpdateSource == UpdateSource.Optimistic) {
+        if (update.Info.Source == UpdateSource.Optimistic) {
             wheel.UpdateState(ActionEndState.Success, true);
         }
     }

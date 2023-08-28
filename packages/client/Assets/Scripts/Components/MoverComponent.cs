@@ -8,8 +8,8 @@ public abstract class MoverComponent : MUDComponent {
 
     SPAnimationMover anim;
     PositionSync sync;
-    protected override void Init(MUDEntity ourEntity, TableManager ourTable) {
-        base.Init(ourEntity, ourTable);
+    protected override void Init(SpawnInfo newSpawnInfo) {
+        base.Init(newSpawnInfo);
         sync = gameObject.AddComponent<PositionSync>();
         sync.rotateToFace = true;
         anim = GetComponentInChildren<SPAnimationMover>();

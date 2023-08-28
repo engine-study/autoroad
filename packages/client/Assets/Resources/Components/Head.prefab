@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5209224381163900232}
   - component: {fileID: 6232110463889642377}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,16 +51,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents:
   - {fileID: 5348944994237342613, guid: 9476fa914b9acad42b5792396d5e2ccd, type: 3}
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
   updateInfo:
     updateType: 0
     source: 0
   networkInfo:
     updateType: 0
     source: 0
-  hasInit: 0
-  loaded: 0
   body: {fileID: 2832211998390807966}
 --- !u!1001 &1910277118990725677
 PrefabInstance:
@@ -117,6 +115,10 @@ PrefabInstance:
     - target: {fileID: 4605902311421998161, guid: 8a4f1e0f099eded4dab5c52af4727c9b, type: 3}
       propertyPath: m_Name
       value: Hat03
+      objectReference: {fileID: 0}
+    - target: {fileID: 4605902311421998161, guid: 8a4f1e0f099eded4dab5c52af4727c9b, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4605902311421998161, guid: 8a4f1e0f099eded4dab5c52af4727c9b, type: 3}
       propertyPath: m_IsActive
@@ -187,6 +189,10 @@ PrefabInstance:
     - target: {fileID: 679670859626968109, guid: a4dd3f23b61cc3e4fadd82a35e1ad335, type: 3}
       propertyPath: m_Name
       value: Hat10
+      objectReference: {fileID: 0}
+    - target: {fileID: 679670859626968109, guid: a4dd3f23b61cc3e4fadd82a35e1ad335, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 679670859626968109, guid: a4dd3f23b61cc3e4fadd82a35e1ad335, type: 3}
       propertyPath: m_IsActive
@@ -261,6 +267,10 @@ PrefabInstance:
     - target: {fileID: 1772212295123086835, guid: 355b41d28469ae540b204aedc3daba94, type: 3}
       propertyPath: m_Name
       value: Hat11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1772212295123086835, guid: 355b41d28469ae540b204aedc3daba94, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1772212295123086835, guid: 355b41d28469ae540b204aedc3daba94, type: 3}
       propertyPath: m_IsActive
@@ -338,6 +348,10 @@ PrefabInstance:
       value: Hat08
       objectReference: {fileID: 0}
     - target: {fileID: 723326783639358502, guid: b858bb1b878c94e44a8d962e4ab1c22e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 723326783639358502, guid: b858bb1b878c94e44a8d962e4ab1c22e, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -362,6 +376,10 @@ PrefabInstance:
     - target: {fileID: 8431428084990774834, guid: 53c19dad35689734498dcb3c4b92c695, type: 3}
       propertyPath: m_Name
       value: Hat09
+      objectReference: {fileID: 0}
+    - target: {fileID: 8431428084990774834, guid: 53c19dad35689734498dcb3c4b92c695, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8431428084990774834, guid: 53c19dad35689734498dcb3c4b92c695, type: 3}
       propertyPath: m_IsActive

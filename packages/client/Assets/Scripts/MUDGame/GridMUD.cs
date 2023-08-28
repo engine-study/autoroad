@@ -36,7 +36,7 @@ public class GridMUD : MonoBehaviour {
         CursorMUD.OnGridPosition -= UpdateComponents;
 
         if (positionTable) {
-            positionTable.OnComponentToggle -= AddPosition;
+            positionTable.OnComponentSpawned -= AddPosition;
         }
 
         for (int i = 0; i < positions.Count; i++) {
@@ -86,17 +86,13 @@ public class GridMUD : MonoBehaviour {
     void Init(bool toggle, TableManager newTable) {
         if (toggle && newTable.ComponentType == typeof(PositionComponent)) {
             positionTable = newTable;
-            positionTable.OnComponentToggle += AddPosition;
+            positionTable.OnComponentSpawned += AddPosition;
         }
     }
 
-    void AddPosition(bool toggle, MUDComponent newPos) {
-        if (toggle) {
-            positions.Add(newPos);
-            newPos.OnUpdatedInfo += UpdatePosition;
-        } else {
-
-        }
+    void AddPosition(MUDComponent newPos) {
+        positions.Add(newPos);
+        newPos.OnUpdatedInfo += UpdatePosition;
     }
     
     void UpdatePosition(MUDComponent c, UpdateInfo info) {
@@ -109,7 +105,7 @@ public class GridMUD : MonoBehaviour {
         }
 
         //only listen to onchain updates
-        if(info.UpdateSource != UpdateSource.Onchain) {
+        if(info.Source != UpdateSource.Onchain) {
             return;
         }
 

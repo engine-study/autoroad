@@ -6,6 +6,7 @@ import { Damage, Position, PositionTableId, Player, PositionData, Health } from 
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 contract AttackSystem is System {
+  
   function attack(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     

@@ -62,11 +62,11 @@ public class MoveComponent : MUDComponent {
                 gameObject.SetActive(false);
             }
 
-            if (newInfo.UpdateSource != UpdateSource.Revert && lastPos != pos.Pos) {
+            if (newInfo.Source != UpdateSource.Revert && lastPos != pos.Pos) {
                 OnMove?.Invoke();
             }
 
-            if (HasBeenSunk && pos.UpdateSource == UpdateSource.Onchain) {
+            if (HasBeenSunk && pos.UpdateInfo.Source == UpdateSource.Onchain) {
                 OnHole?.Invoke();
             }
 

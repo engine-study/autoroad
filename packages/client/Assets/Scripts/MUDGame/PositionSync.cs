@@ -14,6 +14,7 @@ public class PositionSync : ComponentSync
     [SerializeField] Transform targetTransform;
     [SerializeField] public bool hideIfNoPosition = true;    
     [SerializeField] public bool hideIfBelowGround = true;    
+    [SerializeField] public bool hideAfterLoaded = true;    
     [SerializeField] public bool rotateToFace = false;
     [SerializeField] float speed = 1f;
     [SerializeField] float rotationSpeed = 720f;
@@ -46,21 +47,21 @@ public class PositionSync : ComponentSync
         targetTransform.position = pos.Pos;
         targetPos = pos.Pos;
 
-        IsVisible();
+        gameObject.SetActive(IsVisible());
 
     }
 
-    public void IsVisible() {
+    public bool IsVisible() {
         //hide us if we don't have a position
-        if((pos.UpdateType == UpdateType.DeleteRecord && hideIfNoPosition) || (pos.PosLayer.y < 0 && hideIfBelowGround)) {
-            gameObject.SetActive(false);
-        }
+        return !(pos.UpdateInfo.UpdateType == UpdateType.DeleteRecord && hideIfNoPosition) && !(pos.PosLayer.y < 0 && hideIfBelowGround);
     }
+
+
 
     protected override void UpdateSync() {
         base.UpdateSync();
 
-        if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateSource == UpdateSource.Revert)
+        if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert)
         {
             targetTransform.position = pos.Pos;
             targetPos = pos.Pos;
@@ -76,6 +77,10 @@ public class PositionSync : ComponentSync
             if(transform.position != targetPos) {
                 StartMove();
             }
+        }
+
+        if(hideAfterLoaded && gameObject.activeInHierarchy != IsVisible()) {
+            gameObject.SetActive(IsVisible());
         }
 
     }
