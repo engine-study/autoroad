@@ -53,6 +53,7 @@ contract TreeSystem is System {
     IWorld world = IWorld(_world());
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(world.canDoStuff(player), "hmm");
+    require(!world.onRoad(x, y), "on road");
     uint32 seeds = Seeds.get(player);
     require(seeds > 0, "no seeds");
 
