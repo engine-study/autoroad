@@ -48,6 +48,36 @@ namespace IWorld.Service
             ContractHandler = web3.Eth.GetContractHandler(contractAddress);
         }
 
+        public Task<string> ActionRequestAsync(ActionFunction actionFunction)
+        {
+             return ContractHandler.SendRequestAsync(actionFunction);
+        }
+
+        public Task<TransactionReceipt> ActionRequestAndWaitForReceiptAsync(ActionFunction actionFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(actionFunction, cancellationToken);
+        }
+
+        public Task<string> ActionRequestAsync(byte newState, int x, int y)
+        {
+            var actionFunction = new ActionFunction();
+                actionFunction.NewState = newState;
+                actionFunction.X = x;
+                actionFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(actionFunction);
+        }
+
+        public Task<TransactionReceipt> ActionRequestAndWaitForReceiptAsync(byte newState, int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var actionFunction = new ActionFunction();
+                actionFunction.NewState = newState;
+                actionFunction.X = x;
+                actionFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(actionFunction, cancellationToken);
+        }
+
         public Task<string> AddCoinsAdminRequestAsync(AddCoinsAdminFunction addCoinsAdminFunction)
         {
              return ContractHandler.SendRequestAsync(addCoinsAdminFunction);
@@ -630,6 +660,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(emitEphemeralRecordFunction, cancellationToken);
         }
 
+        public Task<string> EnterStateRequestAsync(EnterStateFunction enterStateFunction)
+        {
+             return ContractHandler.SendRequestAsync(enterStateFunction);
+        }
+
+        public Task<TransactionReceipt> EnterStateRequestAndWaitForReceiptAsync(EnterStateFunction enterStateFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(enterStateFunction, cancellationToken);
+        }
+
+        public Task<string> EnterStateRequestAsync(byte newState)
+        {
+            var enterStateFunction = new EnterStateFunction();
+                enterStateFunction.NewState = newState;
+            
+             return ContractHandler.SendRequestAsync(enterStateFunction);
+        }
+
+        public Task<TransactionReceipt> EnterStateRequestAndWaitForReceiptAsync(byte newState, CancellationTokenSource cancellationToken = null)
+        {
+            var enterStateFunction = new EnterStateFunction();
+                enterStateFunction.NewState = newState;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(enterStateFunction, cancellationToken);
+        }
+
         public Task<string> FinishMileRequestAsync(FinishMileFunction finishMileFunction)
         {
              return ContractHandler.SendRequestAsync(finishMileFunction);
@@ -690,24 +746,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
         }
 
-        public Task<string> FishRequestAsync(int x, int y, int pushX, int pushY)
+        public Task<string> FishRequestAsync(int x, int y)
         {
             var fishFunction = new FishFunction();
                 fishFunction.X = x;
                 fishFunction.Y = y;
-                fishFunction.PushX = pushX;
-                fishFunction.PushY = pushY;
             
              return ContractHandler.SendRequestAsync(fishFunction);
         }
 
-        public Task<TransactionReceipt> FishRequestAndWaitForReceiptAsync(int x, int y, int pushX, int pushY, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> FishRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var fishFunction = new FishFunction();
                 fishFunction.X = x;
                 fishFunction.Y = y;
-                fishFunction.PushX = pushX;
-                fishFunction.PushY = pushY;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
         }
@@ -2403,6 +2455,34 @@ namespace IWorld.Service
                 spawnTerrainAdminFunction.TType = tType;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainAdminFunction, cancellationToken);
+        }
+
+        public Task<string> StickRequestAsync(StickFunction stickFunction)
+        {
+             return ContractHandler.SendRequestAsync(stickFunction);
+        }
+
+        public Task<TransactionReceipt> StickRequestAndWaitForReceiptAsync(StickFunction stickFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(stickFunction, cancellationToken);
+        }
+
+        public Task<string> StickRequestAsync(int x, int y)
+        {
+            var stickFunction = new StickFunction();
+                stickFunction.X = x;
+                stickFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(stickFunction);
+        }
+
+        public Task<TransactionReceipt> StickRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var stickFunction = new StickFunction();
+                stickFunction.X = x;
+                stickFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(stickFunction, cancellationToken);
         }
 
         public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)

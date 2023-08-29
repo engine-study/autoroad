@@ -7,6 +7,7 @@ using IWorld.ContractDefinition;
 using Nethereum.Contracts;
 using Cysharp.Threading.Tasks;
 
+public enum StateType {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant}
 public class ActionsMUD : MonoBehaviour
 {
     [Header("Equipment")]

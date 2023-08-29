@@ -281,7 +281,7 @@ public class ControllerMUD : SPController {
 
         //STEP FX
         if (alive > 1f && distance > .5f) {
-            distance -= Random.Range(.25f, .5f);
+            distance -= Random.Range(.5f, .75f);
             player.Resources.sfx.PlaySound(player.Resources.stepSFX);
         }
 

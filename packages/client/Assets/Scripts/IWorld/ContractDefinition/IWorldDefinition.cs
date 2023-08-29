@@ -27,6 +27,19 @@ namespace IWorld.ContractDefinition
 
     }
 
+    public partial class ActionFunction : ActionFunctionBase { }
+
+    [Function("action")]
+    public class ActionFunctionBase : FunctionMessage
+    {
+        [Parameter("uint8", "newState", 1)]
+        public virtual byte NewState { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class AddCoinsAdminFunction : AddCoinsAdminFunctionBase { }
 
     [Function("addCoinsAdmin")]
@@ -262,6 +275,15 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Data { get; set; }
     }
 
+    public partial class EnterStateFunction : EnterStateFunctionBase { }
+
+    [Function("enterState")]
+    public class EnterStateFunctionBase : FunctionMessage
+    {
+        [Parameter("uint8", "newState", 1)]
+        public virtual byte NewState { get; set; }
+    }
+
     public partial class FinishMileFunction : FinishMileFunctionBase { }
 
     [Function("finishMile")]
@@ -292,10 +314,6 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
-        [Parameter("int32", "pushX", 3)]
-        public virtual int PushX { get; set; }
-        [Parameter("int32", "pushY", 4)]
-        public virtual int PushY { get; set; }
     }
 
     public partial class GetCarriageEntityFunction : GetCarriageEntityFunctionBase { }
@@ -1067,6 +1085,17 @@ namespace IWorld.ContractDefinition
         public virtual byte TType { get; set; }
     }
 
+    public partial class StickFunction : StickFunctionBase { }
+
+    [Function("stick")]
+    public class StickFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class TeleportFunction : TeleportFunctionBase { }
 
     [Function("teleport")]
@@ -1391,6 +1420,10 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1455,6 +1488,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

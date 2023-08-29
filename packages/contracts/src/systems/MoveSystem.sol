@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, GameEvent, Coinage, Scroll, Seeds, Boots, Weight } from "../codegen/Tables.sol";
+import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, Coinage, Scroll, Seeds, Boots, Weight } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
@@ -249,7 +249,7 @@ contract MoveSystem is System {
 
   }
 
-  function melee(int32 x, int32 y) public {
+  function stick(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player), "hmm");
 
@@ -261,7 +261,26 @@ contract MoveSystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
-    GameEvent.emitEphemeral(player, "melee");
+    health--;
+
+    if (health <= 0) {
+      kill(player, atPosition[0], pos);
+    } else {
+      Health.set(atPosition[0], health);
+    }
+  }
+
+  function melee(int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(canDoStuff(player), "hmm");
+
+    PositionData memory pos = PositionData(x, y, 0);
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    require(atPosition.length > 0, "attacking an empty spot");
+    require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
+
+    int32 health = Health.get(atPosition[0]);
+    require(health > 0, "this thing on?");
 
     health--;
 
@@ -356,7 +375,7 @@ contract MoveSystem is System {
   //   }
   // }
 
-  function fish(int32 x, int32 y, int32 pushX, int32 pushY) public {
+  function fish(int32 x, int32 y) public {
     // bytes32 player = addressToEntityKey(address(_msgSender()));
     // require(canDoStuff(player), "hmm");
     // PositionData memory startPos = Position.get(player);

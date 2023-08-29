@@ -10,7 +10,7 @@ public class EnableDisableMUD : SPEnableDisable
     [SerializeField] bool hasInit = false;
     [SerializeField] MUDComponent component;
 
-    public override bool CanPlay(SPEffects effect) { return base.CanPlay(effect) && hasInit && component.Loaded && component.SpawnInfo.Source == SpawnSource.InGame;}
+    public override bool CanPlay(bool enable, SPEffects effect) { return base.CanPlay(enable, effect) && hasInit && component.Loaded && (!enable || hasPlayed || (!hasPlayed && component.SpawnInfo.Source != SpawnSource.Load));}
 
     protected override void Awake() {
         base.Awake();
@@ -30,5 +30,7 @@ public class EnableDisableMUD : SPEnableDisable
 
         hasInit = true;
     }   
+
+
 
 }

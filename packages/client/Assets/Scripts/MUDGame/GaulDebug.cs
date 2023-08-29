@@ -31,20 +31,20 @@ public class GaulDebug : MonoBehaviour
 
     }
 
+    string debugString;
     void UpdateDebug() {
 
-        actionName.UpdateField("");
+
+        debugString = "";
 
         if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt)) {
-            actionName.UpdateField("Spawn Mile");
+            debugString += "Spawn Mile";
             if( Input.GetMouseButtonDown(0)) { TxManager.Send<SpawnMileAdminFunction>();}
-            return;
         } else if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt)) {
-            actionName.UpdateField("Finish Current Mile");
+            debugString += "Finish Current Mile";
             if (Input.GetMouseButtonDown(0)) { TxManager.Send<FinishMileAdminFunction>(); }
-            return;
         } else if (Input.GetKey(KeyCode.LeftAlt)) {
-            actionName.UpdateField("LMB: Select \nRMB: Teleport");
+            debugString += "LMB: Select \nRMB: Teleport";
 
             if (Input.GetMouseButtonDown(0)) {
                 #if UNITY_EDITOR
@@ -75,19 +75,35 @@ public class GaulDebug : MonoBehaviour
                 terrain = 8;
             } else if (Input.GetKey(KeyCode.Alpha0)) {
                 terrain = 9;
+            } else if (Input.GetKey(KeyCode.F1)) {
+                terrain = 10;
+            } else if (Input.GetKey(KeyCode.F2)) {
+                terrain = 11;
             } else {
                 terrain = -1;
             }
 
             if(terrain == -1) {
-                actionName.UpdateField("LMB: Spawn [1-9] \nRMB: Delete");
+                debugString += "LMB: Spawn [1-9] \nRMB: Delete";
             } else {
-                actionName.UpdateField("Spawn " + (TerrainType)terrain);
+                debugString += "Spawn " + (TerrainType)terrain;
             }
 
             if (Input.GetMouseButtonDown(0) && terrain > -1) { TxManager.Send<SpawnTerrainAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((TerrainType)terrain)); }
             else if (Input.GetMouseButtonDown(1)) { TxManager.Send<DeleteAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToInt32(0)); }
         }
+
+
+        if(CursorMUD.Entity is MUDEntity) {
+            MUDEntity m = (MUDEntity)CursorMUD.Entity;
+            PlayerComponent player = m.GetMUDComponent<PlayerComponent>();
+            // if(player) {debugString += "\n" + playerCom}
+
+            StateComponent state = m.GetMUDComponent<StateComponent>();
+            if (state) { debugString += "\n" + state.State; }
+        }
+
+        actionName.UpdateField(debugString);
 
         // if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) {
         //     actionName.UpdateField("Spawn Shoveled Road");

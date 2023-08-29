@@ -23,7 +23,7 @@ export default mudConfig({
     TerrainType: ["None", "Rock", "Mine", "Tree", "Player", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Ox", "Militia", "Road", "Ditch"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
-    StateType: ["Idle", "Dead", "Carrying"],
+    StateType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push"],
   },
 
@@ -152,7 +152,6 @@ export default mudConfig({
     //player state   
     Active: "bool",
     Player: "bool",
-    State: "StateType",
     Move: "uint32",
     Carrying: "bytes32",
     FishingRod: "bool",
@@ -192,6 +191,13 @@ export default mudConfig({
     //     equipped: "bool",
     //   },
     // },
+
+    State: {
+      ephemeral: true,
+      schema: {
+        state: "uint32",
+      },
+    },
 
     GameEvent: {
       ephemeral: true,

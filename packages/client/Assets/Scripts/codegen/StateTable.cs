@@ -23,7 +23,7 @@ namespace DefaultNamespace
             return ID;
         }
 
-        public byte? value;
+        public ulong? state;
 
         public override Type TableType()
         {
@@ -37,7 +37,7 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (byte)functionParameters[0];
+            state = (ulong)(int)functionParameters[0];
         }
 
         public override void RecordToTable(Record record)
@@ -45,8 +45,8 @@ namespace DefaultNamespace
             var table = record.value;
             //bool hasValues = false;
 
-            var valueValue = (byte)table["value"];
-            value = valueValue;
+            var stateValue = (ulong)table["state"];
+            state = stateValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -77,14 +77,14 @@ namespace DefaultNamespace
                 {
                     current = new StateTable
                     {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (byte)valueVal
+                        state = value.Item1.TryGetValue("state", out var stateVal)
+                            ? (ulong)stateVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new StateTable { value = null, };
+                    current = new StateTable { state = null, };
                 }
             }
 
@@ -94,14 +94,14 @@ namespace DefaultNamespace
                 {
                     previous = new StateTable
                     {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (byte)valueVal
+                        state = value.Item2.TryGetValue("state", out var stateVal)
+                            ? (ulong)stateVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new StateTable { value = null, };
+                    previous = new StateTable { state = null, };
                 }
             }
 

@@ -146,7 +146,6 @@ contract RoadSubsystem is System {
 
     bytes32 entity = getUniqueEntity();
     // bytes32 entity = keccak256(abi.encode("Terrain", x, y));
-    Position.set(entity, x, y, 0);
 
     if (tType == TerrainType.Rock) {
       Rock.set(entity, uint32(RockType.Raw));
@@ -183,6 +182,10 @@ contract RoadSubsystem is System {
     } else if (tType == TerrainType.Ditch) {
       spawnShoveledRoad(x,y);
     }
+
+    if(tType != TerrainType.None && tType != TerrainType.Road && tType != TerrainType.Ditch)
+      Position.set(entity, x, y, 0);
+
   }
 
   function deleteAt(int32 x, int32 y, int32 layer) public {
@@ -195,7 +198,7 @@ contract RoadSubsystem is System {
 
     bool pushedPlayer = Player.get(pushed);
     RoadState state = pushedPlayer ? RoadState.Bones : RoadState.Paved;
-    spawnRoad(pos.x,pos.y, state, pushed);
+    spawnRoad(pos.x,pos.y, state, player);
 
     //set the rock to the position under the road
     Position.set(pushed, pos.x, pos.y, -2);

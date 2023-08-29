@@ -26,6 +26,7 @@ public class PlayerComponent : MUDComponent {
 
     [Header("Debug")]
     [SerializeField] HealthComponent health;
+    [SerializeField] PositionComponent position;
     [SerializeField] GameEventComponent gameEvent;
     int lastHealth;
 
@@ -49,8 +50,11 @@ public class PlayerComponent : MUDComponent {
         base.PostInit();
 
         health = Entity.GetMUDComponent<HealthComponent>();
-        
         health.OnUpdated += CheckHealth;
+
+        position = Entity.GetMUDComponent<PositionComponent>();
+        position.OnUpdated += CheckPosition;
+
         meleeInteract.OnInteractToggle += Meleed;
 
     }
@@ -64,8 +68,13 @@ public class PlayerComponent : MUDComponent {
     protected override void InitDestroy() {
         base.InitDestroy();
 
-        if(health)
+        if(health) {
             health.OnUpdated -= CheckHealth;
+        }
+
+        if(position) {
+            position.OnUpdated -= CheckPosition;
+        }
 
         if(gameEvent)
             gameEvent.OnUpdated -= PlayerEvent;
@@ -92,8 +101,6 @@ public class PlayerComponent : MUDComponent {
         playerScript.Resources.fx_spawn.Play();
     }
 
-    Coroutine dieCoroutine;
-
     void CheckHealth() {
 
         if(!Loaded) {
@@ -103,17 +110,8 @@ public class PlayerComponent : MUDComponent {
         if(health.Health != lastHealth) {
                     
             if(health.Health < 1) {
-                //we are dead
-                playerScript.Kill();
-                fx_death.Play();
-                killCoroutine = StartCoroutine(KillCoroutine());
 
             } else if(lastHealth < 1) {
-                if(killCoroutine != null) {StopCoroutine(killCoroutine);}
-                //we are alive again after being dead
-                playerScript.Respawn(transform.position);
-                playerScript.Root.gameObject.SetActive(true);
-                playerScript.Animator.PlayClip("Idle");
 
             } else {
                 //normal hit
@@ -129,6 +127,26 @@ public class PlayerComponent : MUDComponent {
         }
 
         lastHealth = health.Health;
+    }
+
+    void CheckPosition() {
+
+        bool isAlive = position.UpdateInfo.UpdateType != UpdateType.DeleteRecord;
+
+        //we are dead
+        if(isAlive) {
+            if(killCoroutine != null) {StopCoroutine(killCoroutine);}
+            //we are alive again after being dead
+            playerScript.Respawn(transform.position);
+            playerScript.Root.gameObject.SetActive(isAlive);
+            playerScript.Animator.PlayClip("Idle");
+        } else {
+            playerScript.Kill();
+            fx_death.Play();
+            killCoroutine = StartCoroutine(KillCoroutine());
+        }
+
+
     }
 
     Coroutine killCoroutine;

@@ -113,7 +113,7 @@ public class RoadComponent : MUDComponent {
         PlayerMUD player = EntityDictionary.FindEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
 
         if (player == null) {
-            Debug.LogError("Couldn't find player", this);
+            Debug.LogError("Couldn't find player " + creditedPlayer, this);
             yield break;
         }
 
