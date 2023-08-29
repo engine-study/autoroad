@@ -24,7 +24,8 @@ public class MoveBoots : Equipment
 
         //can try optimistic
 
-        return await TxManager.Send<PlantFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y));
+        return await ActionsMUD.DoAction(null, StateType.Walking, new Vector3(x,0,y));
+
     }
 
 }

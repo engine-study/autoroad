@@ -35,6 +35,8 @@ contract ActionSystem is System {
         world.push(player, x, y);
     } else if(newState == StateType.Teleport) {
         world.teleportScroll(player, x, y);
+    } else if(newState == StateType.Melee) {
+        world.melee(player, x, y);
     } 
 
     enterState(player, newState, x, y);

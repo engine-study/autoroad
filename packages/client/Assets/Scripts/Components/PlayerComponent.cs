@@ -7,6 +7,7 @@ using IWorld.ContractDefinition;
 using System.Numerics;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerComponent : MUDComponent {
 
@@ -177,8 +178,8 @@ public class PlayerComponent : MUDComponent {
         Debug.Log("Meleed", this);
 
         string targetAddress = otherPlayer.Entity.Key;
-        TxUpdate update = TxManager.MakeOptimistic(health, health.Health == 1 ? -1 : health.Health - 1);
-        TxManager.Send<MeleeFunction>(update, System.Convert.ToInt32(playerScript.Position.Pos.x), System.Convert.ToInt32(playerScript.Position.Pos.z));
+        List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(health, health.Health == 1 ? -1 : health.Health - 1) };
+        ActionsMUD.DoAction(update, StateType.Melee, playerScript.Position.Pos);
 
     }
 

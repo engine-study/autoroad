@@ -204,15 +204,15 @@ public class ControllerMUD : SPController {
             List<TxUpdate> updates = new List<TxUpdate>();
             updates.Add(TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(moveTo)));
             for (int i = positions.Count-1; i >= 0; i--) { updates.Add(TxManager.MakeOptimistic(positions[i], PositionComponent.PositionToOptimistic(targets[i])));}
-            TxManager.Send<PushFunction>(updates, PositionComponent.PositionToTransaction(moveTo));
+            ActionsMUD.DoAction(updates, StateType.Push, moveTo);
           
         } else {
 
             Debug.Log("Walk TX");
             markerPos = movePos;
 
-            TxUpdate update = TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(movePos));
-            UniTask<bool> tx = TxManager.Send<MoveSimpleFunction>(update, PositionComponent.PositionToTransaction(movePos));
+            List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(movePos)) };
+            ActionsMUD.DoAction(update, StateType.Walking, movePos);
 
             if(!MapConfigComponent.OnMap((int)movePos.x, (int)movePos.z)) {
                 BoundsComponent.ShowBorder();
@@ -246,7 +246,7 @@ public class ControllerMUD : SPController {
         if(admin) {
             TxManager.Send<TeleportAdminFunction>(updates, PositionComponent.PositionToTransaction(position));
         } else {
-            TxManager.Send<TeleportFunction>(updates, PositionComponent.PositionToTransaction(position));
+            ActionsMUD.DoAction(updates, StateType.Teleport, position);
         }
     }
 

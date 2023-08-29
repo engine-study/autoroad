@@ -38,7 +38,7 @@ public class Stick : Equipment
         updates.Add(TxManager.MakeOptimistic(ourPosition, PositionComponent.PositionToOptimistic(pushObject)));
         updates.Add(TxManager.MakeOptimistic(theirPosition, PositionComponent.PositionToOptimistic(pushToPos)));
 
-        return await TxManager.Send<PushFunction>(updates, PositionComponent.PositionToTransaction(pushObject), PositionComponent.PositionToTransaction(pushToPos));
+        return await ActionsMUD.DoAction(updates, StateType.Stick, pushObject);
     }
     
 }

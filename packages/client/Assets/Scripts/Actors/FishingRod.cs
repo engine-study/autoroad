@@ -37,7 +37,7 @@ public class FishingRod : Equipment
 
         updates.Add(TxManager.MakeOptimistic(theirPosition, (int)pushToPos.x, (int)pushToPos.z));
 
-        return await TxManager.Send<FishFunction>(updates, System.Convert.ToInt32(pushObject.x), System.Convert.ToInt32(pushObject.z), System.Convert.ToInt32(pushToPos.x), System.Convert.ToInt32(pushToPos.z));
+        return await ActionsMUD.DoAction(updates, StateType.Fishing, pushToPos);
     }
 
     

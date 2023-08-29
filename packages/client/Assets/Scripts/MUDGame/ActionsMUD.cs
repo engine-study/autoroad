@@ -7,11 +7,13 @@ using IWorld.ContractDefinition;
 using Nethereum.Contracts;
 using Cysharp.Threading.Tasks;
 
-public enum StateType {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant}
+public enum StateType {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee}
 public class ActionsMUD : MonoBehaviour
 {
-    [Header("Equipment")]
     [EnumNamedArray( typeof(StateType) )]
+    [SerializeField] List<Equipment> baseEquipment;
+
+    [Header("Equipment")]
     [SerializeField] List<Equipment> equipment;
 
     // [Header("Interactable")]
@@ -26,7 +28,6 @@ public class ActionsMUD : MonoBehaviour
 
     PlayerMUD player;
     PositionComponent position;
-    SPActor actor;
     float distanceToPlayer = 999f;
 
 
@@ -37,13 +38,13 @@ public class ActionsMUD : MonoBehaviour
         
     }
 
-    public void ToggleEquipment(bool toggle, Equipment newEqipment) {
+    public void ToggleEquipment(bool toggle, Equipment newEquipment) {
 
-        if(toggle) {
-            equipment.Add(newEqipment);
-            newEqipment.SetSender(actor);
+        if(toggle && !equipment.Contains(newEquipment)) {
+            newEquipment.SetActor(player.Actor);
+            equipment.Add(newEquipment);
         } else {
-            equipment.Remove(newEqipment);
+            equipment.Remove(newEquipment);
         }
 
     }
@@ -62,28 +63,24 @@ public class ActionsMUD : MonoBehaviour
         }
     }
 
-    void Init()
-    {
-        gameObject.SetActive(player.IsLocalPlayer);
+    void Init() {
+
+        //add equipment
+        foreach(Equipment e in baseEquipment) {
+            if (e == null) { continue; }
+            ToggleEquipment(true, e);
+        }
+
+        // gameObject.SetActive(player.IsLocalPlayer);
+
 
         if (!player.IsLocalPlayer)
             return;
-
-        
-        //setup player actor references
-        actor = player.Actor;
 
         gameObject.transform.parent = null;
         gameObject.transform.position = Vector3.zero;
 
         position = player.Position;
-
-        //add equipment
-        Equipment [] newEquipemnt = GetComponentsInChildren<Equipment>();
-        foreach(Equipment e in newEquipemnt) {
-            ToggleEquipment(true, e);
-        }
-
 
         position.OnUpdated += AddPositionActions;
         (player.Controller as ControllerMUD).OnFinishedMove += AddPositionActions;
@@ -99,7 +96,6 @@ public class ActionsMUD : MonoBehaviour
     //add actions base on what we encounter on the grid
     void AddGridActions(Vector3 newPos) {
         for(int i = 0; i < equipment.Count; i++) {
-            if(equipment[i] == null) continue;
             equipment[i].transform.position = newPos;
             player.Reciever.ToggleInteractableManual(equipment[i].CanUse(), equipment[i].Interact);
         }
@@ -111,12 +107,18 @@ public class ActionsMUD : MonoBehaviour
         ((ControllerMUD)player.Controller).SetLookRotation(position);
         
         //do some work to find the action here
-        Equipment stateEquipment = equipment[(int)newState];
+        Equipment stateEquipment = baseEquipment[(int)newState];
 
         if(stateEquipment != null) {
-            stateEquipment.UseState(true);
+            stateEquipment.UseState(true, player.Actor);
         }
 
     }
+    
+    public static UniTask<bool> DoAction(List<TxUpdate> updates, StateType newState, Vector3 newPos) {
+        return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionTx(newState, newPos));
+    }
+    
+    public static object[] ActionTx(StateType newState, Vector3 newPos) { return new object[] { System.Convert.ToByte((int)newState), System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
 
 }

@@ -27,6 +27,13 @@ contract SpawnSystem is System {
 
   }
 
+  
+  //TODO hide this
+  function spawnBotAdmin(int32 x, int32 y, bytes32 entity) public {
+    Name.set(entity, true, uint32(randomCoord(0, 35, x,y)), uint32(randomCoord(0, 1024, x,y+1)), uint32(randomCoord(0, 1733, x,y+2) ));  
+    spawnPlayer(x,y,entity, true);
+  }
+
   function spawn(int32 x, int32 y) public {
 
     bytes32 entity = addressToEntityKey(address(_msgSender()));
@@ -48,10 +55,6 @@ contract SpawnSystem is System {
     spawnPlayer(x, y, entity, false);
   }
 
-  function spawnBotAdmin(int32 x, int32 y, bytes32 entity) public {
-    Name.set(entity, true, uint32(randomCoord(0, 35, x,y)), uint32(randomCoord(0, 1024, x,y+1)), uint32(randomCoord(0, 1733, x,y+2) ));  
-    spawnPlayer(x,y,entity, true);
-  }
 
   function spawnPlayer(int32 x, int32 y, bytes32 entity, bool isBot) private {
 

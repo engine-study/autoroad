@@ -27,7 +27,7 @@ export default mudConfig({
     TerrainType: ["None", "Rock", "Mine", "Tree", "Player", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Ox", "Militia", "Road", "Ditch"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
-    StateType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport"],
+    StateType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push"],
   },
 
