@@ -11,7 +11,7 @@ public class PositionComponent : MUDComponent {
     public static object[] PositionToOptimistic(Vector3 newPos) { return new object[] { System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(newPos.y) }; }
     public static object[] PositionToTransaction(Vector3 newPos) { return new object[] { System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
 
-    [Header("Position")]
+    [Header("Debug")]
     [SerializeField] private int layer = 0;
     [SerializeField] private Vector2 position2D;
     [SerializeField] private Vector3 position3D;

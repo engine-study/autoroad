@@ -19,6 +19,12 @@ public class PositionSync : ComponentSync
     [SerializeField] float speed = 1f;
     [SerializeField] float rotationSpeed = 720f;
     
+    [Header("Line")]
+    [SerializeField] private bool useLine;
+    [SerializeField] private bool parentTransformToEntity;
+    private LineRenderer line;
+    
+    
     [Header("Debug")]
     [SerializeField] PositionComponent pos;
     [SerializeField] Vector3 targetPos;
@@ -31,14 +37,19 @@ public class PositionSync : ComponentSync
         if(targetTransform == null) {
             targetTransform = transform;
         }
-
     }
 
     protected override void InitComponents() {
         base.InitComponents();
 
         pos = SyncComponent as PositionComponent;
+
+        if(parentTransformToEntity) {
+            targetTransform.parent = pos.Entity.transform;
+        }
+
     }
+
 
     protected override void InitialSync() {
         base.InitialSync();
@@ -46,6 +57,10 @@ public class PositionSync : ComponentSync
         //set up our side of the compnents BEFORE 
         targetTransform.position = pos.Pos;
         targetPos = pos.Pos;
+
+        if(useLine) {
+            line = ((GameObject)(Instantiate(Resources.Load("Prefabs/LinePosition"), transform))).GetComponent<LineRenderer>();
+        }
 
         gameObject.SetActive(IsVisible());
 
@@ -61,17 +76,14 @@ public class PositionSync : ComponentSync
     protected override void UpdateSync() {
         base.UpdateSync();
 
-        if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert)
-        {
+        if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
             targetTransform.position = pos.Pos;
             targetPos = pos.Pos;
 
             if(transform.position != targetPos) {
                 EndMove();
             }
-        }
-        else if (syncType == ComponentSyncType.Lerp)
-        {
+        } else if (syncType == ComponentSyncType.Lerp) {
             targetPos = pos.Pos;
 
             if(transform.position != targetPos) {
@@ -89,20 +101,26 @@ public class PositionSync : ComponentSync
         
         if(rotateToFace) {
 
-        Quaternion lookRotation = targetTransform.rotation;
+            Quaternion lookRotation = targetTransform.rotation;
 
-        var lookAt = targetPos;
-        lookAt.y = targetTransform.position.y;
+            var lookAt = targetPos;
+            lookAt.y = targetTransform.position.y;
 
-        if (lookAt != targetTransform.position) {
-            lookRotation = Quaternion.LookRotation(lookAt - targetTransform.position);
-        }
+            if (lookAt != targetTransform.position) {
+                lookRotation = Quaternion.LookRotation(lookAt - targetTransform.position);
+            }
 
-        //ROTATE
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            //ROTATE
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
         
         targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
+
+        if(useLine) {
+            Vector3[] positions = new Vector3[] { targetTransform.position + Vector3.up * .05f, targetPos + Vector3.up * .05f, targetPos };
+            line.SetPositions(positions);
+        }
+
 
         //turn off for efficiency until next update
         if(targetTransform.position == targetPos) {
@@ -113,11 +131,16 @@ public class PositionSync : ComponentSync
     void StartMove() {
         enabled = true;
         moving = true;
+
+        if(line) line.enabled = useLine;
+
     }
 
     void EndMove() {
         enabled = false;
         moving = false;
+
+        if(line) line.enabled = false;
 
         OnMoveComplete?.Invoke();
     }

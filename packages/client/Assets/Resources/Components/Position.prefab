@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5291061610992434520
 MonoBehaviour:
@@ -44,11 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7893dc13d78eea64e936553ae595b4f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tableType: {fileID: 11400000, guid: b31094f9ac072de42a61ee1d4416d400, type: 2}
   requiredComponents: []
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
   hasInit: 0
   loaded: 0
+  spawnInfo:
+    entity: {fileID: 0}
+    source: 0
+    table: {fileID: 0}
+  updateInfo:
+    updateType: 0
+    source: 0
+  networkInfo:
+    updateType: 0
+    source: 0
+  layer: 0
   position2D: {x: 0, y: 0}
   position3D: {x: 0, y: 0, z: 0}
+  posInt: {x: 0, y: 0, z: 0}
+  position3DLayer: {x: 0, y: 0, z: 0}
