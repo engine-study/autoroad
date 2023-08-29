@@ -77,18 +77,18 @@ public class PositionSync : ComponentSync
         base.UpdateSync();
 
         if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
+
             targetTransform.position = pos.Pos;
             targetPos = pos.Pos;
+            EndMove();
 
-            if(transform.position != targetPos) {
-                EndMove();
-            }
         } else if (syncType == ComponentSyncType.Lerp) {
-            targetPos = pos.Pos;
 
-            if(transform.position != targetPos) {
+            targetPos = pos.Pos;
+            if(targetTransform.position != targetPos) {
                 StartMove();
             }
+
         }
 
         if(hideAfterLoaded && gameObject.activeInHierarchy != IsVisible()) {
@@ -111,7 +111,7 @@ public class PositionSync : ComponentSync
             }
 
             //ROTATE
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            targetTransform.rotation = Quaternion.RotateTowards(targetTransform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
         
         targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
