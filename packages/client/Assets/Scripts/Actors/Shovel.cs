@@ -25,8 +25,8 @@ public class Shovel : Equipment
         // updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
         // updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1, NetworkManager.LocalAddress));
          
-        return await TxManager.Send<ActionFunction>(updates, System.Convert.ToByte((int)StateType.Shoveling));
-        return await TxManager.Send<ShovelFunction>(updates, System.Convert.ToInt32(x), System.Convert.ToInt32(y));
+        return await TxManager.Send<ActionFunction>(updates, System.Convert.ToByte((int)StateType.Shoveling), System.Convert.ToInt32(x), System.Convert.ToInt32(y));
+        // return await TxManager.Send<ShovelFunction>(updates);
     }
 
 }

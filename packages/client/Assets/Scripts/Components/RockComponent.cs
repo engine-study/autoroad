@@ -161,7 +161,9 @@ public class RockComponent : MUDComponent {
     }
 
     public async void MineRock(int x, int y) {
-        await TxManager.Send<MineFunction>(TxManager.MakeOptimistic(this, Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Nucleus)), x, y);
+        TxUpdate update = TxManager.MakeOptimistic(this, Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Nucleus));
+        await TxManager.Send<ActionFunction>(update, System.Convert.ToByte((int)StateType.Mining), x, y);
+        // await TxManager.Send<MineFunction>(TxManager.MakeOptimistic(this, Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Nucleus)), x, y);
     }
 
 }

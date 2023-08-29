@@ -14,7 +14,7 @@ import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/ge
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
 import { randomCoord } from "../utility/random.sol";
-import { MoveSystem } from "./MoveSystem.sol";
+import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 

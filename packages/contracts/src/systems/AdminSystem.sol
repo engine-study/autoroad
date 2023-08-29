@@ -57,4 +57,10 @@ contract AdminSystem is System {
     require(isAdmin(player), "not admin");
     IWorld(_world()).giveCoins(player, amount);
   }
+
+  function teleportAdmin(int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    IWorld(_world()).teleport(player, x, y);
+  }
 }

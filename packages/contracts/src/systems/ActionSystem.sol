@@ -6,38 +6,42 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { State } from "../codegen/Tables.sol";
 import { StateType } from "../codegen/Types.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { MoveSystem } from "../systems/MoveSystem.sol";
+import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 contract ActionSystem is System {
 
   function action(StateType newState, int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
 
     if(newState == StateType.Idle) {
         
     } else if(newState == StateType.Mining) {
-        world.mine(x,y);
+        world.mine(player, x, y);
     } else if(newState == StateType.Shoveling) {
-        world.shovel(x,y);
+        world.shovel(player, x, y);
     } else if(newState == StateType.Stick) {
-        world.stick(x,y);
+        world.stick(player, x, y);
     } else if(newState == StateType.Fishing) {
-        world.fish(x,y);
+        world.fish(player, x, y);
     } else if(newState == StateType.Walking) {
-        world.moveSimple(x,y);
+        world.moveSimple(player, x, y);
     } else if(newState == StateType.Buy) {
 
     } else if(newState == StateType.Plant) {
-        world.plant(x,y);
-    }
+        world.plant(player, x, y);
+    } else if(newState == StateType.Push) {
+        world.push(player, x, y);
+    } else if(newState == StateType.Teleport) {
+        world.teleportScroll(player, x, y);
+    } 
 
-    enterState(newState);
+    enterState(player, newState, x, y);
 
   }
 
-  function enterState(StateType newState) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-    State.emitEphemeral(player, uint32(newState));
+  function enterState(bytes32 player, StateType newState, int32 x, int32 y) private {
+    State.emitEphemeral(player, uint32(newState),x,y);
   }
 }

@@ -24,6 +24,8 @@ namespace DefaultNamespace
         }
 
         public ulong? state;
+        public long? x;
+        public long? y;
 
         public override Type TableType()
         {
@@ -38,6 +40,10 @@ namespace DefaultNamespace
         public override void SetValues(params object[] functionParameters)
         {
             state = (ulong)(int)functionParameters[0];
+
+            x = (long)(int)functionParameters[1];
+
+            y = (long)(int)functionParameters[2];
         }
 
         public override void RecordToTable(Record record)
@@ -47,6 +53,10 @@ namespace DefaultNamespace
 
             var stateValue = (ulong)table["state"];
             state = stateValue;
+            var xValue = (long)table["x"];
+            x = xValue;
+            var yValue = (long)table["y"];
+            y = yValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -80,11 +90,18 @@ namespace DefaultNamespace
                         state = value.Item1.TryGetValue("state", out var stateVal)
                             ? (ulong)stateVal
                             : default,
+                        x = value.Item1.TryGetValue("x", out var xVal) ? (long)xVal : default,
+                        y = value.Item1.TryGetValue("y", out var yVal) ? (long)yVal : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new StateTable { state = null, };
+                    current = new StateTable
+                    {
+                        state = null,
+                        x = null,
+                        y = null,
+                    };
                 }
             }
 
@@ -97,11 +114,18 @@ namespace DefaultNamespace
                         state = value.Item2.TryGetValue("state", out var stateVal)
                             ? (ulong)stateVal
                             : default,
+                        x = value.Item2.TryGetValue("x", out var xVal) ? (long)xVal : default,
+                        y = value.Item2.TryGetValue("y", out var yVal) ? (long)yVal : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new StateTable { state = null, };
+                    previous = new StateTable
+                    {
+                        state = null,
+                        x = null,
+                        y = null,
+                    };
                 }
             }
 

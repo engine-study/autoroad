@@ -9,7 +9,7 @@ import { TerrainType } from "../codegen/Types.sol";
 
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { MoveSystem } from "./MoveSystem.sol";
+import { MoveSubsystem } from "./MoveSubsystem.sol";
 
 contract TreeSystem is System {
 
@@ -18,10 +18,8 @@ contract TreeSystem is System {
 
   }
 
-  function chop(int32 x, int32 y) public {
+  function chop(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-
     require(world.canDoStuff(player), "hmm");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
@@ -49,9 +47,8 @@ contract TreeSystem is System {
   }
 
   
-  function plant(int32 x, int32 y) public {
+  function plant(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    bytes32 player = addressToEntityKey(address(_msgSender()));
     require(world.canDoStuff(player), "hmm");
     require(!world.onRoad(x, y), "on road");
     uint32 seeds = Seeds.get(player);

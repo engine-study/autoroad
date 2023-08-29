@@ -11,6 +11,7 @@ public enum StateType {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, B
 public class ActionsMUD : MonoBehaviour
 {
     [Header("Equipment")]
+    [EnumNamedArray( typeof(StateType) )]
     [SerializeField] List<Equipment> equipment;
 
     // [Header("Interactable")]
@@ -97,29 +98,24 @@ public class ActionsMUD : MonoBehaviour
 
     //add actions base on what we encounter on the grid
     void AddGridActions(Vector3 newPos) {
-
         for(int i = 0; i < equipment.Count; i++) {
+            if(equipment[i] == null) continue;
             equipment[i].transform.position = newPos;
             player.Reciever.ToggleInteractableManual(equipment[i].CanUse(), equipment[i].Interact);
         }
+    }
 
-        // distanceToPlayer = Vector3.Distance(newPos, position.Pos);
-        // bool inReach = distanceToPlayer <= 1f;
+    public void StateToAction(StateType newState, Vector3 position) {
 
-        // //add the shovel action next to the player at empty spots
-        // bool shovelToggle = inReach && RoadConfigComponent.OnRoad((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
-        // if(shovelToggle) {
-        //     ShovelAction.transform.position = newPos;
-        // }
+        //turn player to face position
+        ((ControllerMUD)player.Controller).SetLookRotation(position);
+        
+        //do some work to find the action here
+        Equipment stateEquipment = equipment[(int)newState];
 
-        // player.Reciever.ToggleInteractableManual(shovelToggle, ShovelAction);
-    
-        // bool plantToggle = inReach && SeedsComponent.LocalCount > 0 && BoundsComponent.OnBounds((int)newPos.x, (int)newPos.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
-        // if(plantToggle) {
-        //     PlantAction.transform.position = newPos;
-        // }
-
-        // player.Reciever.ToggleInteractableManual(plantToggle, PlantAction);
+        if(stateEquipment != null) {
+            stateEquipment.UseState(true);
+        }
 
     }
 

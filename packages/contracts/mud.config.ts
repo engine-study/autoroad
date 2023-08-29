@@ -8,6 +8,10 @@ export default mudConfig({
       name: "map",
       openAccess: false,
     },
+    MoveSubsystem: {
+      name: "move",
+      openAccess: false,
+    },
     RoadSubsystem: {
       name: "road",
       openAccess: false,
@@ -23,7 +27,7 @@ export default mudConfig({
     TerrainType: ["None", "Rock", "Mine", "Tree", "Player", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Ox", "Militia", "Road", "Ditch"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
-    StateType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant"],
+    StateType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push"],
   },
 
@@ -194,8 +198,11 @@ export default mudConfig({
 
     State: {
       ephemeral: true,
+      dataStruct: false,
       schema: {
         state: "uint32",
+        x: "int32",
+        y: "int32",
       },
     },
 

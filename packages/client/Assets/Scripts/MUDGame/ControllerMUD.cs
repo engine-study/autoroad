@@ -94,6 +94,7 @@ public class ControllerMUD : SPController {
         controller.enabled = false;
 
         //WE ARE ALWAYS ENABLED, BUT OUR CONTROLLER IS NOT
+        //TODO, do not always be enabled
         enabled = true;
     }
 
@@ -140,9 +141,7 @@ public class ControllerMUD : SPController {
         if (playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > .5f) {
 
             playerScript.Animator.IK.SetLook(CursorMUD.LookTarget);
-            Vector3 eulerAngles = Quaternion.LookRotation(mouseDir).eulerAngles;
-            lookVector = (mouseDir).normalized;
-            lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
+            SetLookRotation(playerTransform.position + mouseDir);
 
         } else {
             playerScript.Animator.IK.SetLook(null);
@@ -294,6 +293,17 @@ public class ControllerMUD : SPController {
 
     }
 
+    public void SetLookRotation(Vector3 newLookAt) {
+       var _lookY = newLookAt;
+        _lookY.y = playerTransform.position.y;
+
+        if (_lookY != playerTransform.position) {
+            Vector3 eulerAngles = Quaternion.LookRotation(_lookY - playerTransform.position).eulerAngles;
+            lookVector = (_lookY - playerTransform.position).normalized;
+            lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
+        }
+    }
+
 
     private void ComponentUpdate() {
 
@@ -376,13 +386,8 @@ public class ControllerMUD : SPController {
 
         //UPDATE ROTATION
         if (playerScript.Position.UpdateInfo.Source != UpdateSource.Revert) {
-            var _lookY = moveDest;
-            _lookY.y = playerTransform.position.y;
-
-            if (_lookY != playerTransform.position) {
-                lookRotation = Quaternion.LookRotation(_lookY - playerTransform.position);
-                lookVector = (_lookY - playerTransform.position).normalized;
-            }
+            SetLookRotation(moveDest);
+            
         }
 
         if (playerScript.IsLocalPlayer) {

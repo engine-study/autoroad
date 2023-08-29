@@ -28,7 +28,9 @@ public abstract class Equipment : MonoBehaviour
         sender = newActor;
     }
     
-
+    public void UseState(bool toggle) {
+        ((SPActionPlayer)interact.Action()).ToggleCastState(true, sender, interact);
+    }
 
     public virtual bool CanUse() {
         return gameObject.activeInHierarchy && interact.Action().TryAction(sender, interact);

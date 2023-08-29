@@ -13,11 +13,9 @@ import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDis
 import { MapSubSystem } from "../systems/MapSubSystem.sol";
 import { RoadSubsystem } from "../systems/RoadSubsystem.sol";
 
-contract MoveSystem is System {
-  function moveSimple(int32 x, int32 y) public {
+contract MoveSubsystem is System {
+  function moveSimple(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-
-    bytes32 player = addressToEntityKey(address(_msgSender()));
     require(canDoStuff(player), "hmm");
 
     PositionData memory startPos = Position.get(player);
@@ -63,8 +61,7 @@ contract MoveSystem is System {
   }
 
   //push
-  function push(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function push(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
@@ -206,8 +203,7 @@ contract MoveSystem is System {
     return true;
   }
 
-  function mine(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function mine(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
@@ -238,8 +234,7 @@ contract MoveSystem is System {
     // Stats.setMined(player, stat + 1);
   }
 
-  function shovel(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function shovel(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
@@ -249,8 +244,7 @@ contract MoveSystem is System {
 
   }
 
-  function stick(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function stick(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
 
     PositionData memory pos = PositionData(x, y, 0);
@@ -270,8 +264,7 @@ contract MoveSystem is System {
     }
   }
 
-  function melee(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function melee(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
 
     PositionData memory pos = PositionData(x, y, 0);
@@ -310,27 +303,19 @@ contract MoveSystem is System {
     // Move.set(bonesEntity, uint32(MoveType.Push));
   }
 
-  function teleport(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function teleportScroll(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
-
-    IWorld world = IWorld(_world());
-    require(world.onWorld(x, y), "offworld");
-
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-    require(atPosition.length < 1, "occupied");
 
     //remove scrolls
     uint32 scrolls = Scroll.get(player);
     require(scrolls > uint32(0), "not enough scrolls");
     Scroll.set(player, scrolls - 1);
 
-    //set position
-    Position.set(player, PositionData(x, y, 0));
+    teleport(player, x, y);
+
   }
 
-  function teleportAdmin(int32 x, int32 y) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
+  function teleport(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
@@ -375,7 +360,7 @@ contract MoveSystem is System {
   //   }
   // }
 
-  function fish(int32 x, int32 y) public {
+  function fish(bytes32 player, int32 x, int32 y) public {
     // bytes32 player = addressToEntityKey(address(_msgSender()));
     // require(canDoStuff(player), "hmm");
     // PositionData memory startPos = Position.get(player);

@@ -338,18 +338,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(chopFunction, cancellationToken);
         }
 
-        public Task<string> ChopRequestAsync(int x, int y)
+        public Task<string> ChopRequestAsync(byte[] player, int x, int y)
         {
             var chopFunction = new ChopFunction();
+                chopFunction.Player = player;
                 chopFunction.X = x;
                 chopFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(chopFunction);
         }
 
-        public Task<TransactionReceipt> ChopRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> ChopRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var chopFunction = new ChopFunction();
+                chopFunction.Player = player;
                 chopFunction.X = x;
                 chopFunction.Y = y;
             
@@ -660,32 +662,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(emitEphemeralRecordFunction, cancellationToken);
         }
 
-        public Task<string> EnterStateRequestAsync(EnterStateFunction enterStateFunction)
-        {
-             return ContractHandler.SendRequestAsync(enterStateFunction);
-        }
-
-        public Task<TransactionReceipt> EnterStateRequestAndWaitForReceiptAsync(EnterStateFunction enterStateFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(enterStateFunction, cancellationToken);
-        }
-
-        public Task<string> EnterStateRequestAsync(byte newState)
-        {
-            var enterStateFunction = new EnterStateFunction();
-                enterStateFunction.NewState = newState;
-            
-             return ContractHandler.SendRequestAsync(enterStateFunction);
-        }
-
-        public Task<TransactionReceipt> EnterStateRequestAndWaitForReceiptAsync(byte newState, CancellationTokenSource cancellationToken = null)
-        {
-            var enterStateFunction = new EnterStateFunction();
-                enterStateFunction.NewState = newState;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(enterStateFunction, cancellationToken);
-        }
-
         public Task<string> FinishMileRequestAsync(FinishMileFunction finishMileFunction)
         {
              return ContractHandler.SendRequestAsync(finishMileFunction);
@@ -746,18 +722,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
         }
 
-        public Task<string> FishRequestAsync(int x, int y)
+        public Task<string> FishRequestAsync(byte[] player, int x, int y)
         {
             var fishFunction = new FishFunction();
+                fishFunction.Player = player;
                 fishFunction.X = x;
                 fishFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(fishFunction);
         }
 
-        public Task<TransactionReceipt> FishRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> FishRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var fishFunction = new FishFunction();
+                fishFunction.Player = player;
                 fishFunction.X = x;
                 fishFunction.Y = y;
             
@@ -1153,18 +1131,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(meleeFunction, cancellationToken);
         }
 
-        public Task<string> MeleeRequestAsync(int x, int y)
+        public Task<string> MeleeRequestAsync(byte[] player, int x, int y)
         {
             var meleeFunction = new MeleeFunction();
+                meleeFunction.Player = player;
                 meleeFunction.X = x;
                 meleeFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(meleeFunction);
         }
 
-        public Task<TransactionReceipt> MeleeRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MeleeRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var meleeFunction = new MeleeFunction();
+                meleeFunction.Player = player;
                 meleeFunction.X = x;
                 meleeFunction.Y = y;
             
@@ -1181,18 +1161,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(mineFunction, cancellationToken);
         }
 
-        public Task<string> MineRequestAsync(int x, int y)
+        public Task<string> MineRequestAsync(byte[] player, int x, int y)
         {
             var mineFunction = new MineFunction();
+                mineFunction.Player = player;
                 mineFunction.X = x;
                 mineFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(mineFunction);
         }
 
-        public Task<TransactionReceipt> MineRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MineRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var mineFunction = new MineFunction();
+                mineFunction.Player = player;
                 mineFunction.X = x;
                 mineFunction.Y = y;
             
@@ -1209,18 +1191,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveSimpleFunction, cancellationToken);
         }
 
-        public Task<string> MoveSimpleRequestAsync(int x, int y)
+        public Task<string> MoveSimpleRequestAsync(byte[] player, int x, int y)
         {
             var moveSimpleFunction = new MoveSimpleFunction();
+                moveSimpleFunction.Player = player;
                 moveSimpleFunction.X = x;
                 moveSimpleFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(moveSimpleFunction);
         }
 
-        public Task<TransactionReceipt> MoveSimpleRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveSimpleRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var moveSimpleFunction = new MoveSimpleFunction();
+                moveSimpleFunction.Player = player;
                 moveSimpleFunction.X = x;
                 moveSimpleFunction.Y = y;
             
@@ -1387,18 +1371,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(plantFunction, cancellationToken);
         }
 
-        public Task<string> PlantRequestAsync(int x, int y)
+        public Task<string> PlantRequestAsync(byte[] player, int x, int y)
         {
             var plantFunction = new PlantFunction();
+                plantFunction.Player = player;
                 plantFunction.X = x;
                 plantFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(plantFunction);
         }
 
-        public Task<TransactionReceipt> PlantRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> PlantRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var plantFunction = new PlantFunction();
+                plantFunction.Player = player;
                 plantFunction.X = x;
                 plantFunction.Y = y;
             
@@ -1481,18 +1467,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(pushFunction, cancellationToken);
         }
 
-        public Task<string> PushRequestAsync(int x, int y)
+        public Task<string> PushRequestAsync(byte[] player, int x, int y)
         {
             var pushFunction = new PushFunction();
+                pushFunction.Player = player;
                 pushFunction.X = x;
                 pushFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(pushFunction);
         }
 
-        public Task<TransactionReceipt> PushRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> PushRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var pushFunction = new PushFunction();
+                pushFunction.Player = player;
                 pushFunction.X = x;
                 pushFunction.Y = y;
             
@@ -2123,18 +2111,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(shovelFunction, cancellationToken);
         }
 
-        public Task<string> ShovelRequestAsync(int x, int y)
+        public Task<string> ShovelRequestAsync(byte[] player, int x, int y)
         {
             var shovelFunction = new ShovelFunction();
+                shovelFunction.Player = player;
                 shovelFunction.X = x;
                 shovelFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(shovelFunction);
         }
 
-        public Task<TransactionReceipt> ShovelRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> ShovelRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var shovelFunction = new ShovelFunction();
+                shovelFunction.Player = player;
                 shovelFunction.X = x;
                 shovelFunction.Y = y;
             
@@ -2467,18 +2457,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(stickFunction, cancellationToken);
         }
 
-        public Task<string> StickRequestAsync(int x, int y)
+        public Task<string> StickRequestAsync(byte[] player, int x, int y)
         {
             var stickFunction = new StickFunction();
+                stickFunction.Player = player;
                 stickFunction.X = x;
                 stickFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(stickFunction);
         }
 
-        public Task<TransactionReceipt> StickRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> StickRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var stickFunction = new StickFunction();
+                stickFunction.Player = player;
                 stickFunction.X = x;
                 stickFunction.Y = y;
             
@@ -2495,18 +2487,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportFunction, cancellationToken);
         }
 
-        public Task<string> TeleportRequestAsync(int x, int y)
+        public Task<string> TeleportRequestAsync(byte[] player, int x, int y)
         {
             var teleportFunction = new TeleportFunction();
+                teleportFunction.Player = player;
                 teleportFunction.X = x;
                 teleportFunction.Y = y;
             
              return ContractHandler.SendRequestAsync(teleportFunction);
         }
 
-        public Task<TransactionReceipt> TeleportRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> TeleportRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
         {
             var teleportFunction = new TeleportFunction();
+                teleportFunction.Player = player;
                 teleportFunction.X = x;
                 teleportFunction.Y = y;
             
@@ -2539,6 +2533,36 @@ namespace IWorld.Service
                 teleportAdminFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportAdminFunction, cancellationToken);
+        }
+
+        public Task<string> TeleportScrollRequestAsync(TeleportScrollFunction teleportScrollFunction)
+        {
+             return ContractHandler.SendRequestAsync(teleportScrollFunction);
+        }
+
+        public Task<TransactionReceipt> TeleportScrollRequestAndWaitForReceiptAsync(TeleportScrollFunction teleportScrollFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportScrollFunction, cancellationToken);
+        }
+
+        public Task<string> TeleportScrollRequestAsync(byte[] player, int x, int y)
+        {
+            var teleportScrollFunction = new TeleportScrollFunction();
+                teleportScrollFunction.Player = player;
+                teleportScrollFunction.X = x;
+                teleportScrollFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(teleportScrollFunction);
+        }
+
+        public Task<TransactionReceipt> TeleportScrollRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var teleportScrollFunction = new TeleportScrollFunction();
+                teleportScrollFunction.Player = player;
+                teleportScrollFunction.X = x;
+                teleportScrollFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportScrollFunction, cancellationToken);
         }
 
         public Task<string> UpdateChunkRequestAsync(UpdateChunkFunction updateChunkFunction)
