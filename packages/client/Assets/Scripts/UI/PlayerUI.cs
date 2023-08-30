@@ -9,7 +9,8 @@ public class PlayerUI : MonoBehaviour
     public SPBar slider;
     void Awake() {
         SPEvents.OnLocalPlayerSpawn += SetupPlayer;
-        XPComponent.OnLocalUpdate += UpdateXP;
+        XPComponent.OnXPUpdate += UpdateXP;
+        XPComponent.OnLevelUp += UpdateLevel;
 
         slider.SetFill(0f);
         xp.UpdateField("0");
@@ -17,7 +18,9 @@ public class PlayerUI : MonoBehaviour
 
     void OnDestroy() {
         SPEvents.OnLocalPlayerSpawn -= SetupPlayer;
-        XPComponent.OnLocalUpdate -= UpdateXP;
+        XPComponent.OnXPUpdate -= UpdateXP;
+        XPComponent.OnLevelUp -= UpdateLevel;
+
     }
 
     void SetupPlayer() {
@@ -29,8 +32,13 @@ public class PlayerUI : MonoBehaviour
 
 
     void UpdateXP() {
-        xp.UpdateField(XPComponent.LocalLevel.ToString());
         slider.SetFill(XPComponent.XPToLevelProgress(XPComponent.LocalXP));
+        SPStrobeUI.ToggleStrobe(slider);
     }
     
+    void UpdateLevel() {
+        xp.UpdateField(XPComponent.LocalLevel.ToString());
+        slider.SetFill(XPComponent.XPToLevelProgress(XPComponent.LocalXP));
+        SPStrobeUI.ToggleStrobe(slider);
+    }
 }

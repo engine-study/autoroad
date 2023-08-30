@@ -44,16 +44,19 @@ public class GameUI : SPWindowParent
 
     void UpdateCoins() {
         coins.UpdateField(CoinComponent.LocalCoins.ToString("00"));
+        SPStrobeUI.ToggleStrobe(coins);
     }
 
     void UpdateScrolls() {
         scrolls.UpdateField(ScrollComponent.LocalScrolls.ToString("00"));
         scrolls.ToggleState(ScrollComponent.LocalScrolls > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
+        SPStrobeUI.ToggleStrobe(scrolls);
     }
 
      void UpdateSeeds() {
         seeds.UpdateField(SeedsComponent.LocalCount.ToString("00"));
         seeds.ToggleState(SeedsComponent.LocalCount > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
+        SPStrobeUI.ToggleStrobe(seeds);
     }
 
 

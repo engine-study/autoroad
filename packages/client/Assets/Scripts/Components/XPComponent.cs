@@ -5,26 +5,42 @@ using mud.Unity;
 
 public class XPComponent : MUDComponent {
 
-    public int Count { get { return count; } }
+    public int Count { get { return xp; } }
     public static int LocalXP;
     public static int LocalLevel;
-    public static System.Action OnLocalUpdate;
+    public static System.Action OnXPUpdate;
+    public static System.Action OnLevelUp;
 
-    public int count;
-    public int level;
+    [SerializeField] int xp;
+    [SerializeField] int level = -1;
+    [SerializeField] int lastLevel = -1;
+
+    protected override void Awake() {
+        base.Awake();
+
+        xp = -1;
+        level = -1;
+    }
 
     protected override IMudTable GetTable() {return new XPTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         XPTable table = update as XPTable;
-        count = (int)table.value;
-        level = XPToLevel(count);
+
+        xp = (int)table.value;
+        level = XPToLevel(xp);
+
+        if(lastLevel != -1 && level != lastLevel) {
+            OnLevelUp?.Invoke();
+        }
 
         if(Entity.Key == NetworkManager.LocalAddress) {
-            LocalXP = count;
+            LocalXP = xp;
             LocalLevel = level;
-            OnLocalUpdate?.Invoke();
+            OnXPUpdate?.Invoke();
         }
+
+        lastLevel = level;
 
     }
 
