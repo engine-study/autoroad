@@ -11,7 +11,15 @@ public class DebugUI : SPWindowParent
     }
 
     public void GiveCoins() {
-        TxManager.Send<AddCoinsAdminFunction>(25);
+        TxManager.Send<AddCoinsAdminFunction>(100);
+    }
+
+    public void GiveXP() {
+        TxManager.Send<AddXPAdminFunction>(new System.Numerics.BigInteger(15));
+    }
+
+    public void GiveGems() {
+        TxManager.Send<AddGemXPFunction>(5);
     }
 
 }

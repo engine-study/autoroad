@@ -209,14 +209,17 @@ public class ControllerMUD : SPController {
         } else {
 
             Debug.Log("Walk TX");
+
+            if(!MapConfigComponent.OnMap((int)movePos.x, (int)movePos.z)) {
+                BoundsComponent.ShowBorder();
+                return;
+            }
+            
             markerPos = movePos;
 
             List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(movePos)) };
             ActionsMUD.DoAction(update, StateType.Walking, movePos);
 
-            if(!MapConfigComponent.OnMap((int)movePos.x, (int)movePos.z)) {
-                BoundsComponent.ShowBorder();
-            }
         }
 
         markerPos = moveDest;

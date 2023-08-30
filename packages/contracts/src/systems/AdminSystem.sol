@@ -49,13 +49,25 @@ contract AdminSystem is System {
   function spawnShoveledRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnShoveledRoad(x, y);
+    IWorld(_world()).spawnShoveledRoad(player, x, y);
   }
 
   function addCoinsAdmin(int32 amount) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
     IWorld(_world()).giveCoins(player, amount);
+  }
+  
+  function addXPAdmin(uint256 amount) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    IWorld(_world()).giveXP(player, amount);
+  }
+
+  function addGemXP(uint32 amount) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    IWorld(_world()).giveGem(player, amount);
   }
 
   function teleportAdmin(int32 x, int32 y) public {

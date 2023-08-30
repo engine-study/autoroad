@@ -6,10 +6,11 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Position, PositionTableId, GameEvent } from "../codegen/Tables.sol";
 import { Player, Health, Tree, Seeds } from "../codegen/Tables.sol";
 import { TerrainType } from "../codegen/Types.sol";
+import { MoveSubsystem } from "./MoveSubsystem.sol";
 
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { MoveSubsystem } from "./MoveSubsystem.sol";
+import { randomSeed } from "../utility/random.sol";
 
 contract FloraSubsystem is System {
 
@@ -36,7 +37,11 @@ contract FloraSubsystem is System {
       Position.deleteRecord(atPosition[0]);
 
       uint32 seedCount = Seeds.get(player);
-      Seeds.set(player, seedCount + 2);
+      uint32 newSeeds = uint32(randomSeed(0,1,uint(seedCount)));
+      if(newSeeds > 0) {
+        Seeds.set(player, seedCount + newSeeds);
+      }
+
       //randomly spawn a log
       //kill a player if it falls on them
 

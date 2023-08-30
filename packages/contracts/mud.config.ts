@@ -178,6 +178,8 @@ export default mudConfig({
     Log: "bool",
     Ox: "bool",
     Militia: "bool",
+    Conscription: "bool",
+    XP: "uint256",
 
     Road: {
       name: "Road",

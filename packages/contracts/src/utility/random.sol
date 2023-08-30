@@ -13,8 +13,20 @@ function random(uint minNumber,uint maxNumber) view returns (uint amount) {
      return amount;
 } 
 
+function randomSeed(uint minNumber,uint maxNumber, uint seed) view returns (uint amount) {
+     amount = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, block.number, seed))) % (maxNumber-minNumber);
+     amount = amount + minNumber;
+     return amount;
+} 
+
 function randomCoord(uint minNumber, uint maxNumber, int32 x, int32 y) view returns (uint amount) {
      amount = uint(keccak256(abi.encodePacked(x, y, block.timestamp, msg.sender, block.number))) % (maxNumber-minNumber);
+     amount = amount + minNumber;
+     return amount;
+} 
+
+function randomCoordSeed(uint minNumber, uint maxNumber, int32 x, int32 y, uint seed) view returns (uint amount) {
+     amount = uint(keccak256(abi.encodePacked(x, y, block.timestamp, msg.sender, block.number, seed))) % (maxNumber-minNumber);
      amount = amount + minNumber;
      return amount;
 } 

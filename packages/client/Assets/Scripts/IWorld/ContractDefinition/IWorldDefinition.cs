@@ -49,6 +49,24 @@ namespace IWorld.ContractDefinition
         public virtual int Amount { get; set; }
     }
 
+    public partial class AddGemXPFunction : AddGemXPFunctionBase { }
+
+    [Function("addGemXP")]
+    public class AddGemXPFunctionBase : FunctionMessage
+    {
+        [Parameter("uint32", "amount", 1)]
+        public virtual uint Amount { get; set; }
+    }
+
+    public partial class AddXPAdminFunction : AddXPAdminFunctionBase { }
+
+    [Function("addXPAdmin")]
+    public class AddXPAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("uint256", "amount", 1)]
+        public virtual BigInteger Amount { get; set; }
+    }
+
     public partial class AttackFunction : AttackFunctionBase { }
 
     [Function("attack")]
@@ -439,6 +457,26 @@ namespace IWorld.ContractDefinition
         public virtual int Amount { get; set; }
     }
 
+    public partial class GiveGemFunction : GiveGemFunctionBase { }
+
+    [Function("giveGem")]
+    public class GiveGemFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("uint32", "amount", 2)]
+        public virtual uint Amount { get; set; }
+    }
+
+    public partial class GiveRoadFilledRewardFunction : GiveRoadFilledRewardFunctionBase { }
+
+    [Function("giveRoadFilledReward")]
+    public class GiveRoadFilledRewardFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+    }
+
     public partial class GiveRoadRewardFunction : GiveRoadRewardFunctionBase { }
 
     [Function("giveRoadReward")]
@@ -446,6 +484,26 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "road", 1)]
         public virtual byte[] Road { get; set; }
+    }
+
+    public partial class GiveRoadShoveledRewardFunction : GiveRoadShoveledRewardFunctionBase { }
+
+    [Function("giveRoadShoveledReward")]
+    public class GiveRoadShoveledRewardFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+    }
+
+    public partial class GiveXPFunction : GiveXPFunctionBase { }
+
+    [Function("giveXP")]
+    public class GiveXPFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("uint256", "amount", 2)]
+        public virtual BigInteger Amount { get; set; }
     }
 
     public partial class GrantAccessFunction : GrantAccessFunctionBase { }
@@ -1049,9 +1107,11 @@ namespace IWorld.ContractDefinition
     [Function("spawnShoveledRoad")]
     public class SpawnShoveledRoadFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
         public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
+        [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
     }
 
@@ -1446,6 +1506,10 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1510,6 +1574,14 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
+
+
+
+
+
+
 
 
 

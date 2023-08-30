@@ -38,6 +38,8 @@ import { Tree, TreeTableId } from "./tables/Tree.sol";
 import { Log, LogTableId } from "./tables/Log.sol";
 import { Ox, OxTableId } from "./tables/Ox.sol";
 import { Militia, MilitiaTableId } from "./tables/Militia.sol";
+import { Conscription, ConscriptionTableId } from "./tables/Conscription.sol";
+import { XP, XPTableId } from "./tables/XP.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Carriage, CarriageTableId } from "./tables/Carriage.sol";
 import { State, StateTableId } from "./tables/State.sol";

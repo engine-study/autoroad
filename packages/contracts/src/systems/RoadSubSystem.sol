@@ -143,7 +143,7 @@ contract RoadSubsystem is System {
 
   function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
     IWorld world = IWorld(_world());
-
+    bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32 entity = getUniqueEntity();
     // bytes32 entity = keccak256(abi.encode("Terrain", x, y));
 
@@ -178,9 +178,9 @@ contract RoadSubsystem is System {
       Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.Road) {
-      spawnRoad(x,y,RoadState.Paved, entity);
+      spawnRoad(x,y,RoadState.Paved, player);
     } else if (tType == TerrainType.Ditch) {
-      spawnShoveledRoad(x,y);
+      spawnShoveledRoad(player, x, y);
     }
 
     if(tType != TerrainType.None && tType != TerrainType.Road && tType != TerrainType.Ditch)
@@ -204,9 +204,7 @@ contract RoadSubsystem is System {
     Position.set(pushed, pos.x, pos.y, -2);
 
     //reward the player
-    int32 coins = Coinage.get(player);
-    Coinage.set(player, coins + 5);
-
+    IWorld(_world()).giveRoadFilledReward(player);
     updateChunk();
 
   }
@@ -282,7 +280,7 @@ contract RoadSubsystem is System {
     finishMile(chunk, currentMile, pieces);
   }
 
-  function spawnShoveledRoad(int32 x, int32 y) public {
+  function spawnShoveledRoad(bytes32 player, int32 x, int32 y) public {
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
     require(atPosition.length < 1, "trying to dig an occupied spot");
@@ -295,6 +293,8 @@ contract RoadSubsystem is System {
     Road.set(entity, uint32(RoadState.Shoveled), 0, false);
     Move.set(entity, uint32(MoveType.Hole));
     Position.set(entity, x, y, 0);
+
+    IWorld(_world()).giveRoadShoveledReward(player);
   }
 
   

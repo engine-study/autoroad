@@ -240,7 +240,7 @@ contract MoveSubsystem is System {
     require(world.onRoad(x, y), "off road");
     require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
 
-    world.spawnShoveledRoad(x,y);
+    world.spawnShoveledRoad(player, x,y);
 
   }
 
@@ -327,7 +327,6 @@ contract MoveSubsystem is System {
   }
 
   // function carry(int32 carryX, int32 carryY) public {
-  //   bytes32 player = addressToEntityKey(address(_msgSender()));
   //   require(canDoStuff(player), "hmm");
 
   //   bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(carryX, carryY, 0));
@@ -361,7 +360,6 @@ contract MoveSubsystem is System {
   // }
 
   function fish(bytes32 player, int32 x, int32 y) public {
-    // bytes32 player = addressToEntityKey(address(_msgSender()));
     // require(canDoStuff(player), "hmm");
     // PositionData memory startPos = Position.get(player);
     // IWorld world = IWorld(_world());
