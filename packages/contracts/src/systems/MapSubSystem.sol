@@ -7,17 +7,17 @@ import { TerrainType, RockType } from "../codegen/Types.sol";
 import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
 import { RoadSubsystem } from "./RoadSubsystem.sol";
 
-contract MapSubSystem is System {
+contract MapSubsystem is System {
 
   //the coordinate exists inside the current and previous miles excluding spawn zone
-  function onMap(int32 x, int32 y) public returns (bool) {
+  function onMap(int32 x, int32 y) public view returns (bool) {
     // bound to map
     (int32 left, int32 right, int32 up, int32 down) = Bounds.get();
     return x >= int32(left) && x <= right && y <= up && y >= 0;
   }
 
   //the coordinate exists inside ALL CURRENT AND PREVIOUS MILES and INSIDE THE SPAWN ZONES
-  function onWorld(int32 x, int32 y) public returns (bool) {
+  function onWorld(int32 x, int32 y) public view returns (bool) {
     int32 up = Bounds.getUp();
     int32 spawnWidth = MapConfig.getSpawnArea();
     return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up && y >= 0;

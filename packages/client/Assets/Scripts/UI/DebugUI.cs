@@ -19,7 +19,7 @@ public class DebugUI : SPWindowParent
     }
 
     public void GiveGems() {
-        TxManager.Send<AddGemXPFunction>(5);
+        TxManager.Send<AddGemXPFunction>(System.Convert.ToUInt32(5));
     }
 
 }

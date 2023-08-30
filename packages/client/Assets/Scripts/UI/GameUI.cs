@@ -43,7 +43,7 @@ public class GameUI : SPWindowParent
     }
 
     void UpdateCoins() {
-        coins.UpdateField(CoinComponent.LocalCoins.ToString("00"));
+        coins.UpdateField(CoinComponent.LocalCoins.ToString("000"));
         SPStrobeUI.ToggleStrobe(coins);
     }
 

@@ -66,7 +66,7 @@ contract FloraSubsystem is System {
 
 
     Seeds.set(player, seeds-1);
-    world.spawnTerrain(x,y, TerrainType.Tree);
+    world.spawnTerrain(player, x, y, TerrainType.Tree);
 
   }
 }

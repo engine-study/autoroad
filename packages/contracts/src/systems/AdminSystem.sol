@@ -11,14 +11,14 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 contract AdminSystem is System {
   //TODO, SET ADMIN
-  function isAdmin(bytes32 player) public returns (bool) {
+  function isAdmin(bytes32 player) public pure returns (bool) {
     return true;
   }
 
   function spawnTerrainAdmin(int32 x, int32 y, TerrainType tType) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnTerrain(x,y,tType);
+    IWorld(_world()).spawnTerrain(player, x, y, tType);
   }
 
   function deleteAdmin(int32 x, int32 y, int32 layer) public {

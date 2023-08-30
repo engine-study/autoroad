@@ -110,7 +110,7 @@ contract RoadSubsystem is System {
           continue;
         }
 
-        spawnTerrain(x, y, terrainType);
+        spawnTerrain(chunkEntity, x, y, terrainType);
       }
     }
   }
@@ -141,9 +141,8 @@ contract RoadSubsystem is System {
     }
   }
 
-  function spawnTerrain(int32 x, int32 y, TerrainType tType) public {
+  function spawnTerrain(bytes32 player, int32 x, int32 y, TerrainType tType) public {
     IWorld world = IWorld(_world());
-    bytes32 player = addressToEntityKey(address(_msgSender()));
     bytes32 entity = getUniqueEntity();
     // bytes32 entity = keccak256(abi.encode("Terrain", x, y));
 
@@ -178,7 +177,7 @@ contract RoadSubsystem is System {
       Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.Road) {
-      spawnRoad(x,y,RoadState.Paved, player);
+      spawnRoadFromPlayer(player, 0, getRoadEntity(x,y), PositionData(x,y,0));
     } else if (tType == TerrainType.Ditch) {
       spawnShoveledRoad(player, x, y);
     }
@@ -198,9 +197,10 @@ contract RoadSubsystem is System {
 
     bool pushedPlayer = Player.get(pushed);
     RoadState state = pushedPlayer ? RoadState.Bones : RoadState.Paved;
-    spawnRoad(pos.x,pos.y, state, player);
 
-    //set the rock to the position under the road
+    spawnRoad(player, pos.x, pos.y, state);
+
+    //hack for making objects push into the road
     Position.set(pushed, pos.x, pos.y, -2);
 
     //reward the player
@@ -209,7 +209,7 @@ contract RoadSubsystem is System {
 
   }
 
-  function spawnRoad(int32 x, int32 y, RoadState state, bytes32 playerCredit) public {
+  function spawnRoad(bytes32 player, int32 x, int32 y, RoadState state) public {
     IWorld world = IWorld(_world());
     require(world.onRoad(x, y), "off road");
 
@@ -217,7 +217,7 @@ contract RoadSubsystem is System {
     Position.set(road, x, y, -1);
     //TODO setfilled to save gas
     // Road.setFilled(road, player);
-    Road.set(road, uint32(state), playerCredit, false);
+    Road.set(road, uint32(state), player, false);
     Move.set(road, uint32(MoveType.None));
   }
 

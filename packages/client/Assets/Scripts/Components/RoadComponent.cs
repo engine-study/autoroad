@@ -90,40 +90,27 @@ public class RoadComponent : MUDComponent {
         lastStage = State;
 
     }
+
     
-    Coroutine coinsCoroutine = null;
+    Coroutine completeCoroutine = null;
     void ToggleComplete(bool toggle) {
         if(toggle) {
-            coinsCoroutine = StartCoroutine(SpawnCoins());
+            completeCoroutine = StartCoroutine(SpawnCoins());
         } else {
-            if(coinsCoroutine != null) {
-                StopCoroutine(coinsCoroutine);
+            if(completeCoroutine != null) {
+                StopCoroutine(completeCoroutine);
             }
         }
     }
 
     IEnumerator SpawnCoins() {
-
         yield return new WaitForSeconds(1f);
-
+        // PlayerMUD player = EntityDictionary.FindEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
+        // if (player == null) {
+        //     Debug.LogError("Couldn't find player " + creditedPlayer, this);
+        //     yield break;
+        // }
         SetComplete();
-
-        yield return new WaitForSeconds(1f);
-
-        PlayerMUD player = EntityDictionary.FindEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
-
-        if (player == null) {
-            Debug.LogError("Couldn't find player " + creditedPlayer, this);
-            yield break;
-        }
-
-
-        for (int i = 0; i < 5; i++) {
-            SPResourceJuicy coin = SPResourceJuicy.SpawnResource("Prefabs/Coin", player.Root, transform.position + Vector3.up, Random.rotation);
-            coin.SendResource();
-            yield return new WaitForSeconds(.1f);
-        }
-
     }
 
     public void SetState(RoadState newState) {

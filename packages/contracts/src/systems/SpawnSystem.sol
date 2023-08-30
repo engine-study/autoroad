@@ -9,7 +9,7 @@ import { PositionTableId } from "../codegen/Tables.sol";
 import { MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { MapSubSystem } from "../systems/MapSubSystem.sol";
+import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { randomCoord } from "../utility/random.sol";
 
 contract SpawnSystem is System {

@@ -1227,30 +1227,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(installRootModuleFunction, cancellationToken);
         }
 
-        public Task<string> IsAdminRequestAsync(IsAdminFunction isAdminFunction)
+        public Task<bool> IsAdminQueryAsync(IsAdminFunction isAdminFunction, BlockParameter blockParameter = null)
         {
-             return ContractHandler.SendRequestAsync(isAdminFunction);
+            return ContractHandler.QueryAsync<IsAdminFunction, bool>(isAdminFunction, blockParameter);
         }
 
-        public Task<TransactionReceipt> IsAdminRequestAndWaitForReceiptAsync(IsAdminFunction isAdminFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(isAdminFunction, cancellationToken);
-        }
-
-        public Task<string> IsAdminRequestAsync(byte[] player)
+        
+        public Task<bool> IsAdminQueryAsync(byte[] player, BlockParameter blockParameter = null)
         {
             var isAdminFunction = new IsAdminFunction();
                 isAdminFunction.Player = player;
             
-             return ContractHandler.SendRequestAsync(isAdminFunction);
+            return ContractHandler.QueryAsync<IsAdminFunction, bool>(isAdminFunction, blockParameter);
         }
 
-        public Task<TransactionReceipt> IsAdminRequestAndWaitForReceiptAsync(byte[] player, CancellationTokenSource cancellationToken = null)
+        public Task<bool> IsPushableOrEmptyQueryAsync(IsPushableOrEmptyFunction isPushableOrEmptyFunction, BlockParameter blockParameter = null)
         {
-            var isAdminFunction = new IsAdminFunction();
-                isAdminFunction.Player = player;
+            return ContractHandler.QueryAsync<IsPushableOrEmptyFunction, bool>(isPushableOrEmptyFunction, blockParameter);
+        }
+
+        
+        public Task<bool> IsPushableOrEmptyQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
+        {
+            var isPushableOrEmptyFunction = new IsPushableOrEmptyFunction();
+                isPushableOrEmptyFunction.At = at;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(isAdminFunction, cancellationToken);
+            return ContractHandler.QueryAsync<IsPushableOrEmptyFunction, bool>(isPushableOrEmptyFunction, blockParameter);
         }
 
 
@@ -1437,32 +1439,19 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(nameFunction, cancellationToken);
         }
 
-        public Task<string> OnMapRequestAsync(OnMapFunction onMapFunction)
+        public Task<bool> OnMapQueryAsync(OnMapFunction onMapFunction, BlockParameter blockParameter = null)
         {
-             return ContractHandler.SendRequestAsync(onMapFunction);
+            return ContractHandler.QueryAsync<OnMapFunction, bool>(onMapFunction, blockParameter);
         }
 
-        public Task<TransactionReceipt> OnMapRequestAndWaitForReceiptAsync(OnMapFunction onMapFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(onMapFunction, cancellationToken);
-        }
-
-        public Task<string> OnMapRequestAsync(int x, int y)
+        
+        public Task<bool> OnMapQueryAsync(int x, int y, BlockParameter blockParameter = null)
         {
             var onMapFunction = new OnMapFunction();
                 onMapFunction.X = x;
                 onMapFunction.Y = y;
             
-             return ContractHandler.SendRequestAsync(onMapFunction);
-        }
-
-        public Task<TransactionReceipt> OnMapRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
-        {
-            var onMapFunction = new OnMapFunction();
-                onMapFunction.X = x;
-                onMapFunction.Y = y;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(onMapFunction, cancellationToken);
+            return ContractHandler.QueryAsync<OnMapFunction, bool>(onMapFunction, blockParameter);
         }
 
         public Task<string> OnRoadRequestAsync(OnRoadFunction onRoadFunction)
@@ -1493,32 +1482,19 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(onRoadFunction, cancellationToken);
         }
 
-        public Task<string> OnWorldRequestAsync(OnWorldFunction onWorldFunction)
+        public Task<bool> OnWorldQueryAsync(OnWorldFunction onWorldFunction, BlockParameter blockParameter = null)
         {
-             return ContractHandler.SendRequestAsync(onWorldFunction);
+            return ContractHandler.QueryAsync<OnWorldFunction, bool>(onWorldFunction, blockParameter);
         }
 
-        public Task<TransactionReceipt> OnWorldRequestAndWaitForReceiptAsync(OnWorldFunction onWorldFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(onWorldFunction, cancellationToken);
-        }
-
-        public Task<string> OnWorldRequestAsync(int x, int y)
+        
+        public Task<bool> OnWorldQueryAsync(int x, int y, BlockParameter blockParameter = null)
         {
             var onWorldFunction = new OnWorldFunction();
                 onWorldFunction.X = x;
                 onWorldFunction.Y = y;
             
-             return ContractHandler.SendRequestAsync(onWorldFunction);
-        }
-
-        public Task<TransactionReceipt> OnWorldRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
-        {
-            var onWorldFunction = new OnWorldFunction();
-                onWorldFunction.X = x;
-                onWorldFunction.Y = y;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(onWorldFunction, cancellationToken);
+            return ContractHandler.QueryAsync<OnWorldFunction, bool>(onWorldFunction, blockParameter);
         }
 
         public Task<string> PlantRequestAsync(PlantFunction plantFunction)
@@ -2015,6 +1991,12 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(registerTableHookFunction, cancellationToken);
         }
 
+
+
+
+
+
+
         public Task<string> RevokeAccessRequestAsync(RevokeAccessFunction revokeAccessFunction)
         {
              return ContractHandler.SendRequestAsync(revokeAccessFunction);
@@ -2437,24 +2419,24 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnRoadFunction, cancellationToken);
         }
 
-        public Task<string> SpawnRoadRequestAsync(int x, int y, byte state, byte[] playerCredit)
+        public Task<string> SpawnRoadRequestAsync(byte[] player, int x, int y, byte state)
         {
             var spawnRoadFunction = new SpawnRoadFunction();
+                spawnRoadFunction.Player = player;
                 spawnRoadFunction.X = x;
                 spawnRoadFunction.Y = y;
                 spawnRoadFunction.State = state;
-                spawnRoadFunction.PlayerCredit = playerCredit;
             
              return ContractHandler.SendRequestAsync(spawnRoadFunction);
         }
 
-        public Task<TransactionReceipt> SpawnRoadRequestAndWaitForReceiptAsync(int x, int y, byte state, byte[] playerCredit, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnRoadRequestAndWaitForReceiptAsync(byte[] player, int x, int y, byte state, CancellationTokenSource cancellationToken = null)
         {
             var spawnRoadFunction = new SpawnRoadFunction();
+                spawnRoadFunction.Player = player;
                 spawnRoadFunction.X = x;
                 spawnRoadFunction.Y = y;
                 spawnRoadFunction.State = state;
-                spawnRoadFunction.PlayerCredit = playerCredit;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnRoadFunction, cancellationToken);
         }
@@ -2559,9 +2541,10 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainFunction, cancellationToken);
         }
 
-        public Task<string> SpawnTerrainRequestAsync(int x, int y, byte tType)
+        public Task<string> SpawnTerrainRequestAsync(byte[] player, int x, int y, byte tType)
         {
             var spawnTerrainFunction = new SpawnTerrainFunction();
+                spawnTerrainFunction.Player = player;
                 spawnTerrainFunction.X = x;
                 spawnTerrainFunction.Y = y;
                 spawnTerrainFunction.TType = tType;
@@ -2569,9 +2552,10 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(spawnTerrainFunction);
         }
 
-        public Task<TransactionReceipt> SpawnTerrainRequestAndWaitForReceiptAsync(int x, int y, byte tType, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SpawnTerrainRequestAndWaitForReceiptAsync(byte[] player, int x, int y, byte tType, CancellationTokenSource cancellationToken = null)
         {
             var spawnTerrainFunction = new SpawnTerrainFunction();
+                spawnTerrainFunction.Player = player;
                 spawnTerrainFunction.X = x;
                 spawnTerrainFunction.Y = y;
                 spawnTerrainFunction.TType = tType;

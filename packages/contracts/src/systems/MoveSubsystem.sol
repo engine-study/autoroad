@@ -10,7 +10,7 @@ import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
-import { MapSubSystem } from "../systems/MapSubSystem.sol";
+import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { RoadSubsystem } from "../systems/RoadSubsystem.sol";
 
 contract MoveSubsystem is System {
@@ -60,6 +60,32 @@ contract MoveSubsystem is System {
     return x >= 0 ? x : -x;
   }
 
+
+  function requirePushable(bytes32[] memory at) public view {
+    require(at.length > 0, "empty");
+    uint32 move = Move.get(at[0]);
+    require(move == uint32(MoveType.Push), "not push");
+  }
+
+  function requireEmptyOrHole(bytes32[] memory at) public view {
+    if(at.length == 0) return;
+    uint32 move = Move.get(at[0]);
+    require(move == uint32(MoveType.None) || move == uint32(MoveType.Hole), "blocked");
+  }
+
+  function requireOnMap(bytes32[] memory at, PositionData memory pos) public view {
+    IWorld world = IWorld(_world());
+    if(at.length > 0 && Player.get(at[0])) require(world.onWorld(pos.x, pos.y), "off world");
+    else {require(world.onMap(pos.x, pos.y), "off map");}
+  }
+
+  function isPushableOrEmpty(bytes32[] memory at) public view returns(bool) {
+    if(at.length == 0) return false;
+    uint32 move = Move.get(at[0]);
+    require(move != uint32(MoveType.Obstruction), "blocked");
+    return move == uint32(MoveType.Push);
+  }
+
   //push
   function push(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
@@ -79,16 +105,16 @@ contract MoveSubsystem is System {
     uint256 count = 0;
     uint256 maxLength = 16;
     bytes32[] memory pushArray = new bytes32[](maxLength);
-    PositionData memory pushVector = PositionData(pushPos.x - shoverPos.x, pushPos.y - shoverPos.y, 0);
+    PositionData memory vector = PositionData(pushPos.x - shoverPos.x, pushPos.y - shoverPos.y, 0);
 
     while (atPos.length > 0) {
 
       require(count < maxLength, "too many");
-      uint32 move = Move.get(atPos[0]);
 
-      //leave loop early if we get blocked or finally reach an empty space
-      require(move != uint32(MoveType.Obstruction), "blocked");
-      if(move != uint32(MoveType.Push)) { break; }
+      //leave loop early if we get blocked or finally reach a non-pushable space (empty or hole)
+      if(isPushableOrEmpty(atPos) == false) {
+        break;
+      }
 
       pushArray[count] = atPos[0];
 
@@ -97,10 +123,10 @@ contract MoveSubsystem is System {
       require(totalWeight < 1, "too heavy");
 
       //increment push and check the destination is on map
-      pushPos.x += pushVector.x;
-      pushPos.y += pushVector.y;
-      if(Player.get(pushArray[count])) require(world.onWorld(pushPos.x, pushPos.y), "off map");
-      else {require(world.onMap(pushPos.x, pushPos.y), "off world");}
+      pushPos.x += vector.x;
+      pushPos.y += vector.y;
+
+      requireOnMap(atPos, pushPos);
 
       //next space
       atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
@@ -111,21 +137,21 @@ contract MoveSubsystem is System {
     count--;
 
     //move the FINAL object in the push array first
-    shoverPos.x = pushPos.x - pushVector.x;
-    shoverPos.y = pushPos.y - pushVector.y;
+    shoverPos.x = pushPos.x - vector.x;
+    shoverPos.y = pushPos.y - vector.y;
     bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
     moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos);
 
     //iterate backwards pushing everything forward one by one with a lighter position set that doesn't check for holes
     for (int i = int(count) - 1; i >= 0; i--) {
-      pushPos.x -= pushVector.x;
-      pushPos.y -= pushVector.y;
+      pushPos.x -= vector.x;
+      pushPos.y -= vector.y;
       Position.set(pushArray[uint(i)], pushPos.x, pushPos.y, 0);
     }
 
     //move the FIRST object (the player) 
-    pushPos.x -= pushVector.x;
-    pushPos.y -= pushVector.y;
+    pushPos.x -= vector.x;
+    pushPos.y -= vector.y;
     Position.set(player, pushPos.x, pushPos.y, 0);
 
   }
@@ -360,39 +386,24 @@ contract MoveSubsystem is System {
   // }
 
   function fish(bytes32 player, int32 x, int32 y) public {
-    // require(canDoStuff(player), "hmm");
-    // PositionData memory startPos = Position.get(player);
-    // IWorld world = IWorld(_world());
-    // require(world.onMap(pushX, pushY), "off grid");
-    // require(withinManhattanDistance(PositionData(x, y), startPos, 3), "too far to push");
-    // bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-    // require(atPush.length > 0, "trying to push an empty spot");
-    // uint32 move = Move.get(atPush[0]);
-    // require(move == uint32(MoveType.Push), "pushing a non-pushable object");
-    // bytes32[] memory atDestination = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
-    // assert(atPush.length < 2);
-    // bool canPush = true;
-    // //check if we are pushing rocks into a road ditch
-    // if (atDestination.length > 0) {
-    //   //check if there is an obstruction
-    //   bool empty = Move.get(atDestination[0]) == uint32(MoveType.None);
-    //   require(empty, "pushing into an occupied spot");
-    //   (uint32 roadInt, ) = Road.get(atDestination[0]);
-    //   //there is a road here
-    //   if (roadInt != 0) {
-    //     require(roadInt == uint32(RoadState.Shoveled), "Road not shoveled");
-    //     //this has now become a fill()
-    //     canPush = false;
-    //     fill(player, atPush[0], atDestination[0], pushX, pushY);
-    //   }
-    // } else {}
-    // //move push object before then setting the pusher to the new position
-    // if (canPush) {
-    //   Position.set(atPush[0], pushX, pushY);
-    // }
-    // //and then player (which ovewrites where the push object was)
-    // Position.set(player, x, y);
-    // // int32 stat = Stats.getPushed(player);
-    // // Stats.setPushed(player, stat + 1);
+    require(canDoStuff(player), "hmm");
+    IWorld world = IWorld(_world());
+
+    PositionData memory startPos = Position.get(player);
+    PositionData memory fishPos = PositionData(x, y, 0);
+
+    //check initial push is good
+    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(fishPos.x, fishPos.y, 0));
+    require(canInteract(player, x, y, atPos, 1), "bad interact");
+
+    PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
+    PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
+    bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(endPos.x, endPos.y, 0));
+
+    requirePushable(atPos);
+    requireOnMap(atDest, endPos);
+    requireEmptyOrHole(atDest);
+    moveTo(player, atPos[0], startPos, endPos, atPos, atDest);
+
   }
 }

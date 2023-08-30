@@ -7,7 +7,7 @@ import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { GameState, GameConfig, MapConfig, RoadConfig } from "../src/codegen/Tables.sol";
 import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
 import { RoadSubsystem } from "../src/systems/RoadSubsystem.sol";
-import { MapSubSystem } from "../src/systems/MapSubSystem.sol";
+import { MapSubsystem } from "../src/systems/MapSubsystem.sol";
 
 contract PostDeploy is Script {
   function run(address worldAddress) external {

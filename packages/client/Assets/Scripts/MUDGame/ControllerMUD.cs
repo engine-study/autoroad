@@ -162,6 +162,13 @@ public class ControllerMUD : SPController {
         MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
 
+        Vector3 moveMinimum = onchainPos + direction;
+        if(!MapConfigComponent.OnMap((int)moveMinimum.x, (int)moveMinimum.z)) {
+            BoundsComponent.ShowBorder();
+            return;
+        }
+        
+
         if (moveComponent != null) {
 
             if(moveComponent.MoveType != MoveType.Push) {
@@ -210,11 +217,6 @@ public class ControllerMUD : SPController {
 
             Debug.Log("Walk TX");
 
-            if(!MapConfigComponent.OnMap((int)movePos.x, (int)movePos.z)) {
-                BoundsComponent.ShowBorder();
-                return;
-            }
-            
             markerPos = movePos;
 
             List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(movePos)) };

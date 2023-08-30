@@ -4,7 +4,7 @@ export default mudConfig({
 
   systems: {
 
-    MapSubSystem: {
+    MapSubsystem: {
       name: "map",
       openAccess: false,
     },

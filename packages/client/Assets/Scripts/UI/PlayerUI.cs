@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     public SPActionUI actions;
-    public SPButton xp;
+    public SPButton level;
     public SPBar slider;
     void Awake() {
         SPEvents.OnLocalPlayerSpawn += SetupPlayer;
@@ -13,7 +13,7 @@ public class PlayerUI : MonoBehaviour
         XPComponent.OnLevelUp += UpdateLevel;
 
         slider.SetFill(0f);
-        xp.UpdateField("0");
+        level.UpdateField("0");
     }
 
     void OnDestroy() {
@@ -32,13 +32,17 @@ public class PlayerUI : MonoBehaviour
 
 
     void UpdateXP() {
+        slider.ToggleWindowOpen();
         slider.SetFill(XPComponent.XPToLevelProgress(XPComponent.LocalXP));
         SPStrobeUI.ToggleStrobe(slider);
     }
     
     void UpdateLevel() {
-        xp.UpdateField(XPComponent.LocalLevel.ToString());
-        slider.SetFill(XPComponent.XPToLevelProgress(XPComponent.LocalXP));
-        SPStrobeUI.ToggleStrobe(slider);
+
+        UpdateXP();
+
+        level.ToggleWindowOpen();
+        level.UpdateField(XPComponent.LocalLevel.ToString());
+        SPStrobeUI.ToggleStrobe(level);
     }
 }

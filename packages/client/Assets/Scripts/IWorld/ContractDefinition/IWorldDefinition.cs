@@ -550,6 +550,15 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Player { get; set; }
     }
 
+    public partial class IsPushableOrEmptyFunction : IsPushableOrEmptyFunctionBase { }
+
+    [Function("isPushableOrEmpty", "bool")]
+    public class IsPushableOrEmptyFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32[]", "at", 1)]
+        public virtual List<byte[]> At { get; set; }
+    }
+
     public partial class IsStoreFunction : IsStoreFunctionBase { }
 
     [Function("isStore")]
@@ -893,6 +902,35 @@ namespace IWorld.ContractDefinition
         public virtual string Hook { get; set; }
     }
 
+    public partial class RequireEmptyOrHoleFunction : RequireEmptyOrHoleFunctionBase { }
+
+    [Function("requireEmptyOrHole")]
+    public class RequireEmptyOrHoleFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32[]", "at", 1)]
+        public virtual List<byte[]> At { get; set; }
+    }
+
+    public partial class RequireOnMapFunction : RequireOnMapFunctionBase { }
+
+    [Function("requireOnMap")]
+    public class RequireOnMapFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32[]", "at", 1)]
+        public virtual List<byte[]> At { get; set; }
+        [Parameter("tuple", "pos", 2)]
+        public virtual PositionData Pos { get; set; }
+    }
+
+    public partial class RequirePushableFunction : RequirePushableFunctionBase { }
+
+    [Function("requirePushable")]
+    public class RequirePushableFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32[]", "at", 1)]
+        public virtual List<byte[]> At { get; set; }
+    }
+
     public partial class RevokeAccessFunction : RevokeAccessFunctionBase { }
 
     [Function("revokeAccess")]
@@ -1077,14 +1115,14 @@ namespace IWorld.ContractDefinition
     [Function("spawnRoad")]
     public class SpawnRoadFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
         public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
+        [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
-        [Parameter("uint8", "state", 3)]
+        [Parameter("uint8", "state", 4)]
         public virtual byte State { get; set; }
-        [Parameter("bytes32", "playerCredit", 4)]
-        public virtual byte[] PlayerCredit { get; set; }
     }
 
     public partial class SpawnRoadFromPlayerFunction : SpawnRoadFromPlayerFunctionBase { }
@@ -1131,11 +1169,13 @@ namespace IWorld.ContractDefinition
     [Function("spawnTerrain")]
     public class SpawnTerrainFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
         public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
+        [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
-        [Parameter("uint8", "tType", 3)]
+        [Parameter("uint8", "tType", 4)]
         public virtual byte TType { get; set; }
     }
 
@@ -1593,6 +1633,23 @@ namespace IWorld.ContractDefinition
 
 
 
+    public partial class IsAdminOutputDTO : IsAdminOutputDTOBase { }
+
+    [FunctionOutput]
+    public class IsAdminOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
+
+    public partial class IsPushableOrEmptyOutputDTO : IsPushableOrEmptyOutputDTOBase { }
+
+    [FunctionOutput]
+    public class IsPushableOrEmptyOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
 
 
 
@@ -1608,6 +1665,25 @@ namespace IWorld.ContractDefinition
 
 
 
+    public partial class OnMapOutputDTO : OnMapOutputDTOBase { }
+
+    [FunctionOutput]
+    public class OnMapOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
+
+
+
+    public partial class OnWorldOutputDTO : OnWorldOutputDTOBase { }
+
+    [FunctionOutput]
+    public class OnWorldOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
 
 
 
