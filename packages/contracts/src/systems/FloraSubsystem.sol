@@ -11,7 +11,7 @@ import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/ge
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 
-contract TreeSystem is System {
+contract FloraSubsystem is System {
 
  
   function water(int32 x, int32 y) public {

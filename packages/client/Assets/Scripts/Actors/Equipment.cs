@@ -28,8 +28,8 @@ public abstract class Equipment : MonoBehaviour
         sender = newActor;
     }
     
-    public void UseState(bool toggle, SPActor newActor) {
-        ((SPActionPlayer)interact.Action()).ToggleCastState(true, newActor, interact);
+    public void UseState(bool toggle) {
+        ((SPActionPlayer)interact.Action()).ToggleCastState(toggle, sender, interact);
     }
 
     public virtual bool CanUse() {

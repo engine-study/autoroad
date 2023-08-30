@@ -19,7 +19,11 @@ export default mudConfig({
     RewardSubsystem: {
       name: "reward",
       openAccess: false,
-    }
+    },
+    FloraSubsystem: {
+      name: "flora",
+      openAccess: false,
+    },
 
   },
 

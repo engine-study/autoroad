@@ -7,6 +7,7 @@ import { State } from "../codegen/Tables.sol";
 import { StateType } from "../codegen/Types.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
+import { FloraSubsystem } from "../systems/FloraSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 contract ActionSystem is System {
@@ -33,6 +34,8 @@ contract ActionSystem is System {
         world.plant(player, x, y);
     } else if(newState == StateType.Push) {
         world.push(player, x, y);
+    } else if(newState == StateType.Chop) {
+        world.chop(player, x, y);
     } else if(newState == StateType.Teleport) {
         world.teleportScroll(player, x, y);
     } else if(newState == StateType.Melee) {

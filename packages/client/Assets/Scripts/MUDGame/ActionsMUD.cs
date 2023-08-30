@@ -72,7 +72,12 @@ public class ActionsMUD : MonoBehaviour
         }
 
         // gameObject.SetActive(player.IsLocalPlayer);
-
+        if(!player.IsLocalPlayer) {
+            foreach(Equipment e in baseEquipment) {
+                if (e == null) { continue; }
+                e.gameObject.SetActive(false);
+            }
+        }
 
         if (!player.IsLocalPlayer)
             return;
@@ -101,24 +106,37 @@ public class ActionsMUD : MonoBehaviour
         }
     }
 
+    
     public void StateToAction(StateType newState, Vector3 position) {
 
         //turn player to face position
         ((ControllerMUD)player.Controller).SetLookRotation(position);
         
         //do some work to find the action here
-        Equipment stateEquipment = baseEquipment[(int)newState];
+        Equipment e = baseEquipment[(int)newState];
 
-        if(stateEquipment != null) {
-            stateEquipment.UseState(true, player.Actor);
+        if (e == null){
+            return;
         }
+
+        e.UseState(true);
+    
+        if (action != null) { StopCoroutine(action); }
+        action = StartCoroutine(ActionCoroutine(e));
+
+    }
+
+    Coroutine action;
+    IEnumerator ActionCoroutine(Equipment equipment) {
+        yield return new WaitForSeconds(2f);
+        equipment.UseState(false);
 
     }
     
     public static UniTask<bool> DoAction(List<TxUpdate> updates, StateType newState, Vector3 newPos) {
         return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionTx(newState, newPos));
     }
-    
+
     public static object[] ActionTx(StateType newState, Vector3 newPos) { return new object[] { System.Convert.ToByte((int)newState), System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
 
 }
