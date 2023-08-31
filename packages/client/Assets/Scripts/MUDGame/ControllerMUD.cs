@@ -24,7 +24,7 @@ public class ControllerMUD : SPController {
     [SerializeField] private AudioClip[] sfx_bump;
 
     private System.IDisposable? _disposer;
-    private MUDEntity entity;
+    private MUDEntity mudEntity;
     private PlayerMUD playerScript;
 
     private Vector3 onchainPos;
@@ -40,7 +40,7 @@ public class ControllerMUD : SPController {
     bool init = false;
 
     void Awake() {
-        entity = GetComponentInParent<MUDEntity>();
+        mudEntity = GetComponentInParent<MUDEntity>();
         enabled = false;
         distance = Random.Range(0f, .25f);
     }
@@ -206,19 +206,13 @@ public class ControllerMUD : SPController {
                 destinationEntity = GridMUD.GetEntityAt(pushToPos);
             }
 
-            List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(moveTo)));
-            for (int i = positions.Count-1; i >= 0; i--) { updates.Add(TxManager.MakeOptimistic(positions[i], PositionComponent.PositionToOptimistic(targets[i])));}
-            ActionsMUD.DoAction(updates, StateType.Push, moveTo);
+            for (int i = positions.Count-1; i >= 0; i--) {  MoveTX(targets[i], positions[i].Entity, StateType.Walking, AnimationType.Walk, false);}
+            MoveTX(moveTo, mudEntity, StateType.Push, AnimationType.Walk);
           
         } else {
 
             Debug.Log("Walk TX");
-
-            markerPos = movePos;
-
-            List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(movePos)) };
-            ActionsMUD.DoAction(update, StateType.Walking, movePos);
+            MoveTX(movePos, mudEntity, StateType.Walking, AnimationType.Walk);
 
         }
 
@@ -239,17 +233,27 @@ public class ControllerMUD : SPController {
         minTime = cancelWait;
     }
 
+    public void MoveTX(Vector3 newPos, MUDEntity entity, StateType moveState, AnimationType moveType, bool sendTX = true) {
+
+        AnimationComponent anim = MUDWorld.FindOrMakeComponent<AnimationComponent>(entity.Key);
+        PositionComponent pos = MUDWorld.FindOrMakeComponent<PositionComponent>(entity.Key);
+
+        List<TxUpdate> updates = new List<TxUpdate>();
+        updates.Add(TxManager.MakeOptimistic(anim, moveType)); 
+        updates.Add(TxManager.MakeOptimistic(pos, PositionComponent.PositionToOptimistic(newPos)));
+
+        if (sendTX) { ActionsMUD.DoAction(updates, moveState, newPos); }
+    }
+
     public void TeleportMUD(Vector3 position, bool admin = false) {
 
         moveDest = position;
-
-        List<TxUpdate> updates = new List<TxUpdate>();
-        SetPositionInstant(position);
-        updates.Add(TxManager.MakeOptimistic(playerScript.Position, PositionComponent.PositionToOptimistic(position)));
-        if(admin) {
-            TxManager.Send<TeleportAdminFunction>(updates, PositionComponent.PositionToTransaction(position));
-        } else {
-            ActionsMUD.DoAction(updates, StateType.Teleport, position);
+        
+        if(admin) { 
+            TxManager.Send<TeleportAdminFunction>(PositionComponent.PositionToTransaction(position));
+            MoveTX(position, mudEntity, StateType.Teleport, AnimationType.Teleport, false); 
+        } else { 
+            MoveTX(position, mudEntity, StateType.Teleport, AnimationType.Teleport); 
         }
     }
 

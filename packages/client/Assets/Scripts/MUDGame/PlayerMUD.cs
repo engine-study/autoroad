@@ -7,10 +7,12 @@ public class PlayerMUD : SPPlayer
 {
     public PlayerComponent Player{get{return playerComponent;}}
     public PositionComponent Position{get{return positionComponent;}}
+    public PositionSync Sync{get{return positionSync;}}
     public ActionsMUD Actions{get{return actions;}}
 
     [Header("MUD")]
     [SerializeField] private PlayerComponent playerComponent;
+    [SerializeField] private PositionSync positionSync;
     [SerializeField] private ActionsMUD actions;
     [SerializeField] public Cosmetic bodyCosmetic;
     [SerializeField] public Cosmetic headCosmetic;

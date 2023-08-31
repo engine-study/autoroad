@@ -46,7 +46,19 @@ public class AnimationComponent : MUDComponent {
     }
 
     public void PlayAnimation() {
-
+        Debug.Log("Animation: " + animType.ToString());
+        for (int i = 0; i < effects.Length; i++) {
+            if(i == (int)animType) {
+                if(effects[i].gameObject.activeInHierarchy) {
+                    effects[i].PlayEnabled();
+                } else {
+                    effects[i].gameObject.SetActive(true);
+                }
+            } else {
+                effects[i].gameObject.SetActive(false);
+            }
+        }
+        
     }
 
 

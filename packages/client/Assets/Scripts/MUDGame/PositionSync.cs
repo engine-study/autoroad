@@ -86,19 +86,14 @@ public class PositionSync : ComponentSync
             if (anim) { anim.transform.parent = targetTransform; anim.transform.localPosition = Vector3.zero; anim.transform.localRotation = Quaternion.identity; }
         }
 
-        if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
+        Vector3 newPos = pos.Pos;
+        targetPos = pos.Pos;
 
+        if (syncType == ComponentSyncType.Lerp) {
+            if(targetTransform.position != targetPos) {StartMove();}
+        } else if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
             targetTransform.position = pos.Pos;
-            targetPos = pos.Pos;
             EndMove();
-
-        } else if (syncType == ComponentSyncType.Lerp) {
-
-            targetPos = pos.Pos;
-            if(targetTransform.position != targetPos) {
-                StartMove();
-            }
-
         }
 
         if(hideAfterLoaded && gameObject.activeInHierarchy != IsVisible()) {
@@ -109,13 +104,13 @@ public class PositionSync : ComponentSync
 
 
     void StartMove() {
+
         enabled = true;
         moving = true;
 
-        if(anim) {
-            anim.PlayAnimation();
-        }
+        Debug.Log("PositionSync: Start");
 
+        if(anim) {anim.PlayAnimation();}
         if(line) line.enabled = useLine;
     }
 
@@ -161,6 +156,7 @@ public class PositionSync : ComponentSync
             targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
         } else if (anim.Anim == AnimationType.Teleport) {
             targetTransform.position = targetPos;
+            if(anim) {anim.PlayAnimation();}
         }
     }
 
@@ -169,6 +165,8 @@ public class PositionSync : ComponentSync
     void EndMove() {
         enabled = false;
         moving = false;
+
+        Debug.Log("PositionSync: End");
 
         if(line) line.enabled = false;
 
