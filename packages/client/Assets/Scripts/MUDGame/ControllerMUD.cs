@@ -21,8 +21,6 @@ public class ControllerMUD : SPController {
     [SerializeField] private SPAnimatorState pushState;
 
     [Header("FX")]
-    [SerializeField] private ParticleSystem fx_teleport;
-    [SerializeField] private AudioClip [] sfx_teleport;
     [SerializeField] private AudioClip[] sfx_bump;
 
     private System.IDisposable? _disposer;
@@ -295,7 +293,7 @@ public class ControllerMUD : SPController {
             OnFinishedMove?.Invoke();
         }
 
-        
+        lastPos = playerTransform.position;
 
     }
 
@@ -318,14 +316,6 @@ public class ControllerMUD : SPController {
         if (playerScript.Position.UpdateInfo.Source == UpdateSource.Revert ) {
             Debug.Log("Teleporting", this);
             SetPositionInstant(playerScript.Position.Pos);
-        }
-
-        //good chance we teleported (we guess for now)
-        if(playerScript.Position.Pos.x != onchainPos.x && playerScript.Position.Pos.z != onchainPos.z) {
-            fx_teleport.Play();
-            SetPositionInstant(playerScript.Position.Pos);
-            SPAudioSource.Play(playerScript.Position.Pos, sfx_teleport);
-            fx_teleport.Play();
         }
 
         //get the actual onchainposition

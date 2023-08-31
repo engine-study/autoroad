@@ -8,13 +8,25 @@ public enum AnimationType {Walk, Hop, Teleport}
 
 public class AnimationComponent : MUDComponent {
 
-    public AnimationType State {get { return animType; } }
+    public AnimationType Anim {get { return animType; } }
 
     [Header("State")]
-    [SerializeField] private AnimationType animType;
-    [SerializeField] private PositionComponent pos;
+    [SerializeField] AnimationType animType;
+    [SerializeField] PositionComponent pos;
+
+    [EnumNamedArray( typeof(AnimationType) )]
+    [SerializeField] SPLerpCurve [] lerpType;
+
+    [EnumNamedArray( typeof(AnimationType) )]
+    [SerializeField] SPEnableDisable [] effects;
 
 
+    protected override void Awake() {
+        base.Awake();
+        for (int i = 0; i < effects.Length; i++) {
+            effects[i].gameObject.SetActive(false);
+        }
+    }
     protected override void PostInit() {
         base.PostInit();
 
@@ -29,8 +41,13 @@ public class AnimationComponent : MUDComponent {
         AnimationTable table = update as AnimationTable;
         animType = (AnimationType)table.state;
 
+        // PlayAnimation();
+
     }
 
+    public void PlayAnimation() {
+
+    }
 
 
 }

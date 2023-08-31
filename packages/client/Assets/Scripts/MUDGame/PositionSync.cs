@@ -8,6 +8,7 @@ public class PositionSync : ComponentSync
 {
     public Action OnMoveComplete;
     public PositionComponent Pos {get{return pos;}}
+    public AnimationComponent Anim {get{return anim;}}
     public Transform Target {get{return targetTransform;}}
     public bool Moving {get{return moving;}}
 
@@ -24,12 +25,15 @@ public class PositionSync : ComponentSync
     [SerializeField] private bool useLine;
     [SerializeField] private bool parentTransformToEntity;
     private LineRenderer line;
-    
+    SPLerpCurve lerp;
+
     
     [Header("Debug")]
     [SerializeField] PositionComponent pos;
+    [SerializeField] AnimationComponent anim;
     [SerializeField] Vector3 targetPos;
     [SerializeField] bool moving = false;    
+
     public override MUDComponent SyncedComponent() {return new PositionComponent();}
 
     protected override void Awake() {
@@ -77,6 +81,11 @@ public class PositionSync : ComponentSync
     protected override void UpdateSync() {
         base.UpdateSync();
 
+        if (anim == null) { 
+            anim = pos.Entity.GetMUDComponent<AnimationComponent>();
+            if (anim) { anim.transform.parent = targetTransform; anim.transform.localPosition = Vector3.zero; anim.transform.localRotation = Quaternion.identity; }
+        }
+
         if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
 
             targetTransform.position = pos.Pos;
@@ -98,6 +107,18 @@ public class PositionSync : ComponentSync
 
     }
 
+
+    void StartMove() {
+        enabled = true;
+        moving = true;
+
+        if(anim) {
+            anim.PlayAnimation();
+        }
+
+        if(line) line.enabled = useLine;
+    }
+
     protected override void UpdateLerp() {
         
         if(rotateToFace) {
@@ -115,7 +136,11 @@ public class PositionSync : ComponentSync
             targetTransform.rotation = Quaternion.RotateTowards(targetTransform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
         
-        targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
+        if(anim) {
+            UpdateAnim();
+        } else {
+            targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
+        }
 
         if(useLine) {
             Vector3[] positions = new Vector3[] { targetTransform.position + Vector3.up * .05f, targetPos + Vector3.up * .05f, targetPos };
@@ -129,12 +154,17 @@ public class PositionSync : ComponentSync
         }
     }
 
-    void StartMove() {
-        enabled = true;
-        moving = true;
-
-        if(line) line.enabled = useLine;
+    void UpdateAnim() {
+        if(anim.Anim == AnimationType.Walk) {
+            targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
+        } else if (anim.Anim == AnimationType.Hop) {
+            targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
+        } else if (anim.Anim == AnimationType.Teleport) {
+            targetTransform.position = targetPos;
+        }
     }
+
+
 
     void EndMove() {
         enabled = false;
