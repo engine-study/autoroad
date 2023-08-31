@@ -31,7 +31,7 @@ public class ControllerMUD : SPController {
 
     private Vector3 onchainPos;
     private Vector3 lastOnchainPos = Vector3.down;
-    Vector3 lookVector;
+    Vector3 lastPos, lookVector;
     Quaternion lookRotation;
     Vector3 markerPos;
     float alive = 0f;
@@ -278,9 +278,9 @@ public class ControllerMUD : SPController {
         }
 
         //MOVE
-        Vector3 newPosition = Vector3.MoveTowards(playerTransform.position, moveDest, MOVE_SPEED * Time.deltaTime);
-        distance += Vector3.Distance(playerTransform.position, newPosition);
-        playerTransform.position = newPosition;
+        // Vector3 newPosition = Vector3.MoveTowards(playerTransform.position, moveDest, MOVE_SPEED * Time.deltaTime);
+        distance += Vector3.Distance(playerTransform.position, lastPos);
+        // playerTransform.position = newPosition;
      
 
         //STEP FX
@@ -295,6 +295,7 @@ public class ControllerMUD : SPController {
             OnFinishedMove?.Invoke();
         }
 
+        
 
     }
 

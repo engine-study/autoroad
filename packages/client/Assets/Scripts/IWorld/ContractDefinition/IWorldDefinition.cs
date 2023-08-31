@@ -643,6 +643,8 @@ namespace IWorld.ContractDefinition
         public virtual List<byte[]> AtPosition { get; set; }
         [Parameter("bytes32[]", "atDestination", 6)]
         public virtual List<byte[]> AtDestination { get; set; }
+        [Parameter("uint8", "animation", 7)]
+        public virtual byte Animation { get; set; }
     }
 
     public partial class NameFunction : NameFunctionBase { }

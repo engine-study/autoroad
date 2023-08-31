@@ -141,7 +141,7 @@ contract MoveSubsystem is System {
     shoverPos.x = pushPos.x - vector.x;
     shoverPos.y = pushPos.y - vector.y;
     bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
-    moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos);
+    moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos, AnimationType.Walk);
 
     //iterate backwards pushing everything forward one by one with a lighter position set that doesn't check for holes
     for (int i = int(count) - 1; i >= 0; i--) {
@@ -163,7 +163,8 @@ contract MoveSubsystem is System {
     PositionData memory from,
     PositionData memory to,
     bytes32[] memory atPosition,
-    bytes32[] memory atDestination
+    bytes32[] memory atDestination,
+    AnimationType animation
   ) public {
 
     //check if we are pushing rocks into a road ditch
@@ -182,7 +183,7 @@ contract MoveSubsystem is System {
       }
 
     } else {
-      setPositionRaw(entity, to.x, to.y, 0);
+      setPosition(entity, to.x, to.y, 0, animation);
     }
 
   }
@@ -404,11 +405,8 @@ contract MoveSubsystem is System {
     requirePushable(atPos);
     requireOnMap(atDest, endPos);
     requireEmptyOrHole(atDest);
-    moveTo(player, atPos[0], startPos, endPos, atPos, atDest);
-    animation(player, AnimationType.Hop);
+    moveTo(player, atPos[0], startPos, endPos, atPos, atDest, AnimationType.Hop);
   }
-
-
 
   function setPositionData(bytes32 player, PositionData memory pos, AnimationType animType) public {
     setPosition(player, pos.x, pos.y, pos.layer, animType);

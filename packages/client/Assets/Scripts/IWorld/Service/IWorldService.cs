@@ -1411,7 +1411,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
         }
 
-        public Task<string> MoveToRequestAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination)
+        public Task<string> MoveToRequestAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination, byte animation)
         {
             var moveToFunction = new MoveToFunction();
                 moveToFunction.Player = player;
@@ -1420,11 +1420,12 @@ namespace IWorld.Service
                 moveToFunction.To = to;
                 moveToFunction.AtPosition = atPosition;
                 moveToFunction.AtDestination = atDestination;
+                moveToFunction.Animation = animation;
             
              return ContractHandler.SendRequestAsync(moveToFunction);
         }
 
-        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination, byte animation, CancellationTokenSource cancellationToken = null)
         {
             var moveToFunction = new MoveToFunction();
                 moveToFunction.Player = player;
@@ -1433,6 +1434,7 @@ namespace IWorld.Service
                 moveToFunction.To = to;
                 moveToFunction.AtPosition = atPosition;
                 moveToFunction.AtDestination = atDestination;
+                moveToFunction.Animation = animation;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
         }
