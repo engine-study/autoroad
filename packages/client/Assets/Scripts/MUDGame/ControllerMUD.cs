@@ -348,10 +348,10 @@ public class ControllerMUD : SPController {
         //raycast to the world
         RaycastHit hit;
         Vector3 lookDirection = playerTransform.position == moveDest ? player.Root.forward : (moveDest - playerTransform.position).normalized;
-        Vector3 position = playerTransform.position + lookDirection;
+        Vector3 inFrontOf = playerTransform.position + lookDirection;
 
-        MUDEntity entityAtMove = GridMUD.GetEntityAt(position);
-        MUDEntity terrainAtMove = GridMUD.GetEntityAt(position + Vector3.down);
+        MUDEntity entityAtMove = GridMUD.GetEntityAt(inFrontOf);
+        MUDEntity terrainAtMove = GridMUD.GetEntityAt(inFrontOf + Vector3.down);
 
         // Physics.Raycast(playerTransform.position + Vector3.up * .25f, lookDirection, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         // Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));

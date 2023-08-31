@@ -9,11 +9,11 @@ public class PositionSync : ComponentSync
     public Action OnMoveComplete;
     public PositionComponent Pos {get{return pos;}}
     public AnimationComponent Anim {get{return anim;}}
-    public Transform Target {get{return targetTransform;}}
+    public Transform Target {get{return target;}}
     public bool Moving {get{return moving;}}
 
     [Header("Optional")]
-    [SerializeField] Transform targetTransform;
+    [SerializeField] Transform target;
     [SerializeField] public bool hideIfNoPosition = true;    
     [SerializeField] public bool hideIfBelowGround = true;    
     [SerializeField] public bool hideAfterLoaded = true;    
@@ -31,16 +31,18 @@ public class PositionSync : ComponentSync
     [Header("Debug")]
     [SerializeField] PositionComponent pos;
     [SerializeField] AnimationComponent anim;
+    [SerializeField] Vector3 startPos;
     [SerializeField] Vector3 targetPos;
     [SerializeField] bool moving = false;    
+    [SerializeField] float moveLerp = 0f;
 
     public override MUDComponent SyncedComponent() {return new PositionComponent();}
 
     protected override void Awake() {
         base.Awake();
 
-        if(targetTransform == null) {
-            targetTransform = transform;
+        if(target == null) {
+            target = transform;
         }
     }
 
@@ -50,7 +52,7 @@ public class PositionSync : ComponentSync
         pos = SyncComponent as PositionComponent;
 
         if(parentTransformToEntity) {
-            targetTransform.parent = pos.Entity.transform;
+            target.parent = pos.Entity.transform;
         }
 
     }
@@ -60,7 +62,8 @@ public class PositionSync : ComponentSync
         base.InitialSync();
 
         //set up our side of the compnents BEFORE 
-        targetTransform.position = pos.Pos;
+        target.position = pos.Pos;
+        startPos = pos.Pos;
         targetPos = pos.Pos;
 
         if(useLine) {
@@ -83,17 +86,18 @@ public class PositionSync : ComponentSync
 
         if (anim == null) { 
             anim = pos.Entity.GetMUDComponent<AnimationComponent>();
-            if (anim) { anim.transform.parent = targetTransform; anim.transform.localPosition = Vector3.zero; anim.transform.localRotation = Quaternion.identity; }
+            if (anim) { anim.transform.parent = target; anim.transform.localPosition = Vector3.zero; anim.transform.localRotation = Quaternion.identity; }
         }
 
         Vector3 newPos = pos.Pos;
-        targetPos = pos.Pos;
 
         if (syncType == ComponentSyncType.Lerp) {
-            if(targetTransform.position != targetPos) {StartMove();}
+            if(target.position != newPos && targetPos != newPos) {StartMove();}
         } else if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
-            targetTransform.position = pos.Pos;
-            EndMove();
+            target.position = pos.Pos;
+            if(moving) {
+                EndMove();
+            }
         }
 
         if(hideAfterLoaded && gameObject.activeInHierarchy != IsVisible()) {
@@ -102,74 +106,88 @@ public class PositionSync : ComponentSync
 
     }
 
-
     void StartMove() {
 
         enabled = true;
         moving = true;
 
+        moveLerp = 0f;
+        startPos = target.position;
+        targetPos = pos.Pos;
+
         Debug.Log("PositionSync: Start");
 
-        if(anim) {anim.PlayAnimation();}
+        if(anim) {anim.PlayAnimation(true);}
         if(line) line.enabled = useLine;
     }
-
-    protected override void UpdateLerp() {
-        
-        if(rotateToFace) {
-
-            Quaternion lookRotation = targetTransform.rotation;
-
-            var lookAt = targetPos;
-            lookAt.y = targetTransform.position.y;
-
-            if (lookAt != targetTransform.position) {
-                lookRotation = Quaternion.LookRotation(lookAt - targetTransform.position);
-            }
-
-            //ROTATE
-            targetTransform.rotation = Quaternion.RotateTowards(targetTransform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-        }
-        
-        if(anim) {
-            UpdateAnim();
-        } else {
-            targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
-        }
-
-        if(useLine) {
-            Vector3[] positions = new Vector3[] { targetTransform.position + Vector3.up * .05f, targetPos + Vector3.up * .05f, targetPos };
-            line.SetPositions(positions);
-        }
-
-
-        //turn off for efficiency until next update
-        if(targetTransform.position == targetPos) {
-            EndMove();
-        }
-    }
-
-    void UpdateAnim() {
-        if(anim.Anim == AnimationType.Walk) {
-            targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
-        } else if (anim.Anim == AnimationType.Hop) {
-            targetTransform.position = Vector3.MoveTowards(targetTransform.position, targetPos, speed * Time.deltaTime);
-        } else if (anim.Anim == AnimationType.Teleport) {
-            targetTransform.position = targetPos;
-            if(anim) {anim.PlayAnimation();}
-        }
-    }
-
-
-
+    
     void EndMove() {
         enabled = false;
         moving = false;
+        targetPos = pos.Pos;
+        target.position = pos.Pos;
 
         Debug.Log("PositionSync: End");
 
+        if(anim) {anim.PlayAnimation(false);}
         if(line) line.enabled = false;
 
         OnMoveComplete?.Invoke();
     }
+
+    protected override void UpdateLerp() {
+
+        UpdateRotation();
+        UpdateMovement();
+        UpdateState();
+
+    }
+
+    void UpdateRotation() {
+        if(rotateToFace) {
+
+            Quaternion lookRotation = target.rotation;
+
+            var lookAt = targetPos;
+            lookAt.y = target.position.y;
+
+            if (lookAt != target.position) {
+                lookRotation = Quaternion.LookRotation(lookAt - target.position);
+            }
+
+            //ROTATE
+            target.rotation = Quaternion.RotateTowards(target.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    void UpdateMovement() {
+
+        if(anim) {
+            if(anim.Anim == AnimationType.Walk) {
+                target.position = Vector3.MoveTowards(target.position, targetPos, speed * Time.deltaTime);
+            } else if (anim.Anim == AnimationType.Hop) {
+                moveLerp += Time.deltaTime * 1.5f;
+                Vector3 vertical = Vector3.up * 2f * Mathf.Sin(Mathf.PI * moveLerp);
+                target.position = Vector3.LerpUnclamped(startPos + vertical, targetPos + vertical, anim.Evaluate(moveLerp));
+            } else if (anim.Anim == AnimationType.Teleport) {
+                target.position = targetPos;
+            }
+        } else {
+            target.position = Vector3.MoveTowards(target.position, targetPos, speed * Time.deltaTime);
+        }
+     
+    }
+
+    void UpdateState() {
+        if(useLine) {
+            Vector3[] positions = new Vector3[] { target.position + Vector3.up * .05f, targetPos + Vector3.up * .05f, targetPos };
+            line.SetPositions(positions);
+        }
+
+        //turn off for efficiency until next update
+        if(target.position == targetPos || moveLerp >= 1f) {
+            EndMove();
+        }
+    }
+
 }

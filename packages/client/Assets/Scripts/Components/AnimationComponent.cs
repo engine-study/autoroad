@@ -9,7 +9,8 @@ public enum AnimationType {Walk, Hop, Teleport}
 public class AnimationComponent : MUDComponent {
 
     public AnimationType Anim {get { return animType; } }
-
+    public float Evaluate(float t) {return lerpType[(int)animType].Evaluate(t); }
+    
     [Header("State")]
     [SerializeField] AnimationType animType;
     [SerializeField] PositionComponent pos;
@@ -45,12 +46,16 @@ public class AnimationComponent : MUDComponent {
 
     }
 
-    public void PlayAnimation() {
+    public void PlayAnimation(bool start) {
         Debug.Log("Animation: " + animType.ToString());
         for (int i = 0; i < effects.Length; i++) {
             if(i == (int)animType) {
                 if(effects[i].gameObject.activeInHierarchy) {
-                    effects[i].PlayEnabled();
+                    if(start) {
+                        effects[i].PlayEnabled();
+                    } else {
+                        effects[i].PlayDisabled();
+                    }
                 } else {
                     effects[i].gameObject.SetActive(true);
                 }

@@ -33,7 +33,7 @@ Transform:
   - {fileID: 6894833331505166516}
   - {fileID: 3431277828345311841}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2266982653958715323
 MonoBehaviour:
@@ -65,12 +65,12 @@ MonoBehaviour:
   pos: {fileID: 0}
   lerpType:
   - {fileID: 11400000, guid: 953a806a29200e64383d844db43632e7, type: 2}
-  - {fileID: 11400000, guid: 953a806a29200e64383d844db43632e7, type: 2}
+  - {fileID: 11400000, guid: 12bdb738cf151b6458e12b7c4d42050a, type: 2}
   - {fileID: 11400000, guid: 953a806a29200e64383d844db43632e7, type: 2}
   effects:
-  - {fileID: 5398420543076371304}
-  - {fileID: 5626361152429549866}
-  - {fileID: 4762496341060966814}
+  - {fileID: 2605816773892634409}
+  - {fileID: 8075874469575267851}
+  - {fileID: 4047110346639849465}
 --- !u!1 &273849454337984666
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +128,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3705096632299874705}
-  - component: {fileID: 5398420543076371304}
   - component: {fileID: 2605816773892634409}
   m_Layer: 0
   m_Name: Walk
@@ -154,20 +153,6 @@ Transform:
   m_Father: {fileID: 4525890752781277187}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5398420543076371304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 580406880114726418}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7749277b8040ea748b1e7ddfd13aff93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEffects: {fileID: 1257030179202064199}
-  offEffects: {fileID: 1643766830436805170}
 --- !u!114 &2605816773892634409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10033,7 +10018,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6894833331505166516}
-  - component: {fileID: 5626361152429549866}
   - component: {fileID: 8075874469575267851}
   m_Layer: 0
   m_Name: Hop
@@ -10059,20 +10043,6 @@ Transform:
   m_Father: {fileID: 4525890752781277187}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5626361152429549866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2887506391994595633}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7749277b8040ea748b1e7ddfd13aff93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEffects: {fileID: 2772327061154037835}
-  offEffects: {fileID: 1111810324788486066}
 --- !u!114 &8075874469575267851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10098,7 +10068,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3431277828345311841}
-  - component: {fileID: 4762496341060966814}
   - component: {fileID: 4047110346639849465}
   m_Layer: 0
   m_Name: Teleport
@@ -10123,20 +10092,6 @@ Transform:
   m_Father: {fileID: 4525890752781277187}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4762496341060966814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3019640004196368837}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7749277b8040ea748b1e7ddfd13aff93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEffects: {fileID: 6461785844598069045}
-  offEffects: {fileID: 0}
 --- !u!114 &4047110346639849465
 MonoBehaviour:
   m_ObjectHideFlags: 0
