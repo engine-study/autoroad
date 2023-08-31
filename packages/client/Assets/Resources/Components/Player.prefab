@@ -5172,7 +5172,6 @@ GameObject:
   - component: {fileID: 5306756710540495996}
   - component: {fileID: 6984225282729251515}
   - component: {fileID: 2202057137487621039}
-  - component: {fileID: 3634309432361816979}
   - component: {fileID: 7552157436396032579}
   m_Layer: 6
   m_Name: Player
@@ -5265,7 +5264,6 @@ MonoBehaviour:
   spawned: 0
   isLocalPlayer: 0
   playerScript: {fileID: 592219380604067791}
-  meleeInteract: {fileID: 3634309432361816979}
   fx_death: {fileID: 7870833097456127378}
   sfx_hitSound:
   - {fileID: 8300000, guid: 8f423d80a2384a84ebf4fa459c4e2916, type: 3}
@@ -5438,28 +5436,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &3634309432361816979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 677262704773998369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: b0530f009882d4745b843783cf964d06, type: 2}
-  state: {fileID: 0}
-  interacting: 0
-  targetGO: {fileID: 0}
-  OnStartEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEndEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &7552157436396032579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5475,15 +5451,15 @@ MonoBehaviour:
   syncType: 0
   synced: 0
   targetComponent: {fileID: 0}
-  targetTransform: {fileID: 5222077416139517752}
+  targetTransform: {fileID: 2243986332771371095}
   hideIfNoPosition: 1
   hideIfBelowGround: 1
   hideAfterLoaded: 1
   rotateToFace: 0
   speed: 1
   rotationSpeed: 720
-  useLine: 1
-  parentTransformToEntity: 1
+  useLine: 0
+  parentTransformToEntity: 0
   pos: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
   moving: 0

@@ -134,7 +134,6 @@ public class PositionSync : ComponentSync
         moving = true;
 
         if(line) line.enabled = useLine;
-
     }
 
     void EndMove() {

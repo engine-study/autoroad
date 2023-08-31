@@ -32,6 +32,7 @@ export default mudConfig({
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
     StateType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee"],
+    AnimationType: ["Walk", "Hop", "Teleport"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push"],
   },
 
@@ -209,6 +210,14 @@ export default mudConfig({
         state: "uint32",
         x: "int32",
         y: "int32",
+      },
+    },
+
+    Animation: {
+      ephemeral: true,
+      dataStruct: false,
+      schema: {
+        state: "uint32",
       },
     },
 

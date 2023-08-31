@@ -156,6 +156,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(addXPAdminFunction, cancellationToken);
         }
 
+        public Task<string> AnimationRequestAsync(AnimationFunction animationFunction)
+        {
+             return ContractHandler.SendRequestAsync(animationFunction);
+        }
+
+        public Task<TransactionReceipt> AnimationRequestAndWaitForReceiptAsync(AnimationFunction animationFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(animationFunction, cancellationToken);
+        }
+
+        public Task<string> AnimationRequestAsync(byte[] player, byte anim)
+        {
+            var animationFunction = new AnimationFunction();
+                animationFunction.Player = player;
+                animationFunction.Anim = anim;
+            
+             return ContractHandler.SendRequestAsync(animationFunction);
+        }
+
+        public Task<TransactionReceipt> AnimationRequestAndWaitForReceiptAsync(byte[] player, byte anim, CancellationTokenSource cancellationToken = null)
+        {
+            var animationFunction = new AnimationFunction();
+                animationFunction.Player = player;
+                animationFunction.Anim = anim;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(animationFunction, cancellationToken);
+        }
+
         public Task<string> AttackRequestAsync(AttackFunction attackFunction)
         {
              return ContractHandler.SendRequestAsync(attackFunction);
@@ -2179,6 +2207,102 @@ namespace IWorld.Service
                 setMetadataFunction.FieldNames = fieldNames;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setMetadataFunction, cancellationToken);
+        }
+
+        public Task<string> SetPositionRequestAsync(SetPositionFunction setPositionFunction)
+        {
+             return ContractHandler.SendRequestAsync(setPositionFunction);
+        }
+
+        public Task<TransactionReceipt> SetPositionRequestAndWaitForReceiptAsync(SetPositionFunction setPositionFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionFunction, cancellationToken);
+        }
+
+        public Task<string> SetPositionRequestAsync(byte[] player, int x, int y, int layer, byte animType)
+        {
+            var setPositionFunction = new SetPositionFunction();
+                setPositionFunction.Player = player;
+                setPositionFunction.X = x;
+                setPositionFunction.Y = y;
+                setPositionFunction.Layer = layer;
+                setPositionFunction.AnimType = animType;
+            
+             return ContractHandler.SendRequestAsync(setPositionFunction);
+        }
+
+        public Task<TransactionReceipt> SetPositionRequestAndWaitForReceiptAsync(byte[] player, int x, int y, int layer, byte animType, CancellationTokenSource cancellationToken = null)
+        {
+            var setPositionFunction = new SetPositionFunction();
+                setPositionFunction.Player = player;
+                setPositionFunction.X = x;
+                setPositionFunction.Y = y;
+                setPositionFunction.Layer = layer;
+                setPositionFunction.AnimType = animType;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionFunction, cancellationToken);
+        }
+
+        public Task<string> SetPositionDataRequestAsync(SetPositionDataFunction setPositionDataFunction)
+        {
+             return ContractHandler.SendRequestAsync(setPositionDataFunction);
+        }
+
+        public Task<TransactionReceipt> SetPositionDataRequestAndWaitForReceiptAsync(SetPositionDataFunction setPositionDataFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionDataFunction, cancellationToken);
+        }
+
+        public Task<string> SetPositionDataRequestAsync(byte[] player, PositionData pos, byte animType)
+        {
+            var setPositionDataFunction = new SetPositionDataFunction();
+                setPositionDataFunction.Player = player;
+                setPositionDataFunction.Pos = pos;
+                setPositionDataFunction.AnimType = animType;
+            
+             return ContractHandler.SendRequestAsync(setPositionDataFunction);
+        }
+
+        public Task<TransactionReceipt> SetPositionDataRequestAndWaitForReceiptAsync(byte[] player, PositionData pos, byte animType, CancellationTokenSource cancellationToken = null)
+        {
+            var setPositionDataFunction = new SetPositionDataFunction();
+                setPositionDataFunction.Player = player;
+                setPositionDataFunction.Pos = pos;
+                setPositionDataFunction.AnimType = animType;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionDataFunction, cancellationToken);
+        }
+
+        public Task<string> SetPositionRawRequestAsync(SetPositionRawFunction setPositionRawFunction)
+        {
+             return ContractHandler.SendRequestAsync(setPositionRawFunction);
+        }
+
+        public Task<TransactionReceipt> SetPositionRawRequestAndWaitForReceiptAsync(SetPositionRawFunction setPositionRawFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionRawFunction, cancellationToken);
+        }
+
+        public Task<string> SetPositionRawRequestAsync(byte[] player, int x, int y, int layer)
+        {
+            var setPositionRawFunction = new SetPositionRawFunction();
+                setPositionRawFunction.Player = player;
+                setPositionRawFunction.X = x;
+                setPositionRawFunction.Y = y;
+                setPositionRawFunction.Layer = layer;
+            
+             return ContractHandler.SendRequestAsync(setPositionRawFunction);
+        }
+
+        public Task<TransactionReceipt> SetPositionRawRequestAndWaitForReceiptAsync(byte[] player, int x, int y, int layer, CancellationTokenSource cancellationToken = null)
+        {
+            var setPositionRawFunction = new SetPositionRawFunction();
+                setPositionRawFunction.Player = player;
+                setPositionRawFunction.X = x;
+                setPositionRawFunction.Y = y;
+                setPositionRawFunction.Layer = layer;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionRawFunction, cancellationToken);
         }
 
         public Task<string> SetRecordRequestAsync(SetRecord1Function setRecord1Function)

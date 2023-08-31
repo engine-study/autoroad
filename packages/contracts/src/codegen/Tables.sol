@@ -43,4 +43,5 @@ import { XP, XPTableId } from "./tables/XP.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Carriage, CarriageTableId } from "./tables/Carriage.sol";
 import { State, StateTableId } from "./tables/State.sol";
+import { Animation, AnimationTableId } from "./tables/Animation.sol";
 import { GameEvent, GameEventTableId } from "./tables/GameEvent.sol";

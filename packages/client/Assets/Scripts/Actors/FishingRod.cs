@@ -11,13 +11,12 @@ public class FishingRod : Equipment
     public override bool CanUse() {
         bool canUse = base.CanUse();
 
-        MUDEntity e = GridMUD.GetEntityAt(transform.position);
+        MUDEntity e = CursorMUD.MUDEntity;
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
-        PlayerComponent player = e?.GetMUDComponent<PlayerComponent>();
 
-        bool onBounds = BoundsComponent.OnBounds((int)transform.position.x, (int)transform.position.z);
+        bool onBounds = BoundsComponent.OnBounds(CursorMUD.GridPos);
 
-        return canUse && onBounds && player != null && player.IsLocalPlayer == false && moveType != null && moveType.MoveType == MoveType.Push;
+        return canUse && onBounds && moveType != null && moveType.MoveType == MoveType.Push;
     }
     
     public override async UniTask<bool> Use() {
@@ -25,7 +24,7 @@ public class FishingRod : Equipment
         Debug.Log("PUSHING");
 
         Vector3 pushObject = transform.position;
-        Vector3 pushToPos = transform.position + (Sender.transform.position - transform.position).normalized;
+        Vector3 pushToPos = Sender.transform.position - (transform.position - Sender.transform.position).normalized;
 
         if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
             BoundsComponent.ShowBorder();
@@ -35,9 +34,9 @@ public class FishingRod : Equipment
         List<TxUpdate> updates = new List<TxUpdate>();
         PositionComponent theirPosition = CursorMUD.MUDEntity.GetMUDComponent<PositionComponent>();
 
-        updates.Add(TxManager.MakeOptimistic(theirPosition, (int)pushToPos.x, (int)pushToPos.z));
+        updates.Add(TxManager.MakeOptimistic(theirPosition, PositionComponent.PositionToOptimistic(pushToPos)));
 
-        return await ActionsMUD.DoAction(updates, StateType.Fishing, pushToPos);
+        return await ActionsMUD.DoAction(updates, StateType.Fishing, pushObject);
     }
 
     

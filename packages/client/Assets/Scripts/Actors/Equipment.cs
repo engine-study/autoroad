@@ -33,7 +33,7 @@ public abstract class Equipment : MonoBehaviour
     }
 
     public virtual bool CanUse() {
-        return gameObject.activeInHierarchy && interact.Action().TryAction(sender, interact);
+        return gameObject.activeInHierarchy && CursorMUD.MUDEntity != PlayerComponent.LocalPlayer.Entity && interact.Action().TryAction(sender, interact);
     }
 
     public abstract UniTask<bool> Use();

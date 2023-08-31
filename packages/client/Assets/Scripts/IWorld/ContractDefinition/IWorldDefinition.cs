@@ -67,6 +67,17 @@ namespace IWorld.ContractDefinition
         public virtual BigInteger Amount { get; set; }
     }
 
+    public partial class AnimationFunction : AnimationFunctionBase { }
+
+    [Function("animation")]
+    public class AnimationFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("uint8", "anim", 2)]
+        public virtual byte Anim { get; set; }
+    }
+
     public partial class AttackFunction : AttackFunctionBase { }
 
     [Function("attack")]
@@ -1013,6 +1024,51 @@ namespace IWorld.ContractDefinition
         public virtual List<string> FieldNames { get; set; }
     }
 
+    public partial class SetPositionFunction : SetPositionFunctionBase { }
+
+    [Function("setPosition")]
+    public class SetPositionFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "layer", 4)]
+        public virtual int Layer { get; set; }
+        [Parameter("uint8", "animType", 5)]
+        public virtual byte AnimType { get; set; }
+    }
+
+    public partial class SetPositionDataFunction : SetPositionDataFunctionBase { }
+
+    [Function("setPositionData")]
+    public class SetPositionDataFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("tuple", "pos", 2)]
+        public virtual PositionData Pos { get; set; }
+        [Parameter("uint8", "animType", 3)]
+        public virtual byte AnimType { get; set; }
+    }
+
+    public partial class SetPositionRawFunction : SetPositionRawFunctionBase { }
+
+    [Function("setPositionRaw")]
+    public class SetPositionRawFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "layer", 4)]
+        public virtual int Layer { get; set; }
+    }
+
     public partial class SetRecord1Function : SetRecord1FunctionBase { }
 
     [Function("setRecord")]
@@ -1550,6 +1606,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1684,6 +1742,12 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
+
+
+
+
 
 
 

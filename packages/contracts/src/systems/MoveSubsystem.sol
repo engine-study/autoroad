@@ -4,9 +4,9 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, Coinage, Scroll, Seeds, Boots, Weight } from "../codegen/Tables.sol";
+import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, Coinage, Scroll, Seeds, Boots, Weight, Animation } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { RoadState, RockType, MoveType, StateType } from "../codegen/Types.sol";
+import { RoadState, RockType, MoveType, StateType, AnimationType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
@@ -14,6 +14,7 @@ import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { RoadSubsystem } from "../systems/RoadSubsystem.sol";
 
 contract MoveSubsystem is System {
+
   function moveSimple(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
     require(canDoStuff(player), "hmm");
@@ -42,10 +43,10 @@ contract MoveSubsystem is System {
       //if we hit an object or at the end of our walk, move to that position
       if (atPosition.length > 0 || world.onWorld(positions[i].x, positions[i].y) == false) {
         require(i > 1, "nowhere to move");
-        Position.set(player, positions[i - 1]);
+        setPositionData(player, positions[i - 1], AnimationType.Walk);
         return;
       } else if (i == positions.length - 1) {
-        Position.set(player, positions[i]);
+        setPositionData(player, positions[i], AnimationType.Walk);
         return;
       }
     }
@@ -146,13 +147,13 @@ contract MoveSubsystem is System {
     for (int i = int(count) - 1; i >= 0; i--) {
       pushPos.x -= vector.x;
       pushPos.y -= vector.y;
-      Position.set(pushArray[uint(i)], pushPos.x, pushPos.y, 0);
+      setPosition(pushArray[uint(i)], pushPos.x, pushPos.y, 0, AnimationType.Walk);
     }
 
     //move the FIRST object (the player) 
     pushPos.x -= vector.x;
     pushPos.y -= vector.y;
-    Position.set(player, pushPos.x, pushPos.y, 0);
+    setPosition(player, pushPos.x, pushPos.y, 0, AnimationType.Walk);
 
   }
 
@@ -181,7 +182,7 @@ contract MoveSubsystem is System {
       }
 
     } else {
-      Position.set(entity, to.x, to.y, 0);
+      setPositionRaw(entity, to.x, to.y, 0);
     }
 
   }
@@ -349,7 +350,7 @@ contract MoveSubsystem is System {
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
     require(atPosition.length < 1, "occupied");
-    Position.set(player, PositionData(x, y, 0));
+    setPosition(player, x, y, 0, AnimationType.Teleport);
   }
 
   // function carry(int32 carryX, int32 carryY) public {
@@ -404,6 +405,25 @@ contract MoveSubsystem is System {
     requireOnMap(atDest, endPos);
     requireEmptyOrHole(atDest);
     moveTo(player, atPos[0], startPos, endPos, atPos, atDest);
+    animation(player, AnimationType.Hop);
+  }
 
+
+
+  function setPositionData(bytes32 player, PositionData memory pos, AnimationType animType) public {
+    setPosition(player, pos.x, pos.y, pos.layer, animType);
+  }
+
+  function setPosition(bytes32 player, int32 x, int32 y, int32 layer, AnimationType animType) public {
+    animation(player, animType);
+    setPositionRaw(player, x, y, layer);
+  }
+
+  function setPositionRaw(bytes32 player, int32 x, int32 y, int32 layer) public {
+    Position.set(player, x, y, layer);
+  }
+
+  function animation(bytes32 player, AnimationType anim) public {
+    Animation.emitEphemeral(player, uint32(anim));
   }
 }

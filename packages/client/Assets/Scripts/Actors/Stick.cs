@@ -11,7 +11,7 @@ public class Stick : Equipment
     public override bool CanUse() {
         bool canUse = base.CanUse();
 
-        MUDEntity e = GridMUD.GetEntityAt(transform.position);
+        MUDEntity e = CursorMUD.MUDEntity;
         PlayerComponent player = e?.GetMUDComponent<PlayerComponent>();
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
         bool onBounds = BoundsComponent.OnBounds((int)transform.position.x, (int)transform.position.z);

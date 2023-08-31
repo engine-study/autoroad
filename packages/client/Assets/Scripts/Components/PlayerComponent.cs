@@ -20,7 +20,6 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] bool spawned;
     [SerializeField] bool isLocalPlayer;
     [SerializeField] PlayerMUD playerScript;
-    [SerializeField] SPInteract meleeInteract;
     [SerializeField] ParticleSystem fx_death;    
     [SerializeField] AudioClip [] sfx_hitSound;
     [SerializeField] AudioClip [] sfx_deathSound;
@@ -56,8 +55,6 @@ public class PlayerComponent : MUDComponent {
         position = Entity.GetMUDComponent<PositionComponent>();
         position.OnUpdated += CheckPosition;
 
-        meleeInteract.OnInteractToggle += Meleed;
-
     }
 
     void AddGameEvents() {
@@ -87,12 +84,6 @@ public class PlayerComponent : MUDComponent {
         base.OnDestroy();
         isLocalPlayer = false;
         LocalPlayer = null;
-    }
-
-
-    //we got meleed
-    public void Meleed() {
-
     }
 
 

@@ -7,6 +7,7 @@ using mud.Client;
 public class BoundsComponent : MUDComponent
 {
 
+    public static bool OnBounds(Vector3 pos) { return OnBounds(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z)); }
     public static bool OnBounds(int x, int y) {return x >= Left && x <= Right && y <= Up && y >= 0;}
     public static int Left, Right, Up, Down;
     public static BoundsComponent Instance;

@@ -49,4 +49,5 @@ contract ActionSystem is System {
   function enterState(bytes32 player, StateType newState, int32 x, int32 y) private {
     State.emitEphemeral(player, uint32(newState),x,y);
   }
+  
 }
