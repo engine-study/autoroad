@@ -218,8 +218,7 @@ public class ControllerMUD : SPController {
         } else {
 
             Debug.Log("Walk TX");
-            List<TxUpdate> updates = new List<TxUpdate>();
-            updates.Add(ActionsMUD.PositionOptimistic(mudEntity, movePos));
+            List<TxUpdate> updates = new List<TxUpdate>() { ActionsMUD.PositionOptimistic(mudEntity, movePos) };
             ActionsMUD.ActionTx(mudEntity, ActionName.Walking, movePos, updates);
 
         }
@@ -246,10 +245,10 @@ public class ControllerMUD : SPController {
         moveDest = position;
 
         List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Teleport, position));
         updates.Add(ActionsMUD.PositionOptimistic(mudEntity, position));
 
         if(admin) {
+            updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Teleport, position));
             TxManager.Send<TeleportAdminFunction>(updates, PositionComponent.PositionToTransaction(position));
         } else { 
             ActionsMUD.ActionTx(mudEntity, ActionName.Teleport, position, updates); 
@@ -319,6 +318,11 @@ public class ControllerMUD : SPController {
         if (playerScript.Position.UpdateInfo.Source == UpdateSource.Revert ) {
             Debug.Log("Teleporting", this);
             SetPositionInstant(playerScript.Position.Pos);
+        } else {
+            //UPDATE ROTATION 
+            if (playerTransform.position != playerScript.Position.Pos) {
+                ((ControllerMUD)playerScript.Controller).SetLookRotation(playerScript.Position.Pos);
+            }
         }
 
         //get the actual onchainposition
@@ -327,22 +331,10 @@ public class ControllerMUD : SPController {
         //update our moveDestination, we must always observe the current onchain state
         moveDest = playerScript.Position.Pos;
 
-        //our onchain position didn't change, either because we got an update that was already made optimistically
-        //or because we literally didn't move
-        //TODO everything is setfield ?? playerScript.Position.UpdateType == UpdateType.SetField 
-        if (onchainPos == lastOnchainPos && playerScript.Position.UpdateInfo.Source != UpdateSource.Revert ) {
-            Debug.Log("SKIP STATE");
-            return;
-        }
+      
 
         lastOnchainPos = onchainPos;
 
-    }
-
-    Vector3 ChainPosToEngine(Vector3 chainPos) {
-        RaycastHit hit;
-        Physics.Raycast(chainPos + Vector3.up * 100f, Vector3.down, out hit, 200f, SPLayers.InvertMaskPlayers, QueryTriggerInteraction.Ignore);
-        return hit.point;
     }
 
     void OnDrawGizmos() {

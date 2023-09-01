@@ -30,7 +30,9 @@ public class AnimationMUD : MonoBehaviour
         Animator = GetComponentInChildren<SPAnimator>();
         entity = GetComponentInParent<MUDEntity>();
         PositionSync = GetComponentInParent<PositionSync>();
-        actionData = Instantiate(actionData, transform.position, transform.rotation, transform);
+
+        if(actionData == null)
+            actionData = Instantiate(Resources.Load("Prefabs/ActionBible") as ActionData, transform.position, transform.rotation, transform);
         if(target == null) target = transform;
         
         if(entity.HasInit) Init();
@@ -39,7 +41,7 @@ public class AnimationMUD : MonoBehaviour
 
     void Init() {
         actionComponent = entity.GetMUDComponent<ActionComponent>();
-        if (actionComponent == null) { Debug.LogError("No action component"); return; }
+        if (actionComponent == null) { Debug.LogError("No action component", this); return; }
 
         actionComponent.OnRichUpdate += UpdateAction;
     }
@@ -61,7 +63,7 @@ public class AnimationMUD : MonoBehaviour
         //turn off old action
         if (actionEffect != null && newAction != action) { ToggleAction(false, actionEffect); }
 
-        Debug.Log("Action: " + newAction.ToString());
+        Debug.Log("Action: " + newAction.ToString(), this);
 
         action = newAction;
         actionEffect = actionData.effects[(int)action];

@@ -16,11 +16,6 @@ public class AnimationPlayerMUD : AnimationMUD
     public override void ToggleAction(bool toggle, ActionEffect newAction) {
         base.ToggleAction(toggle, newAction);
 
-        //UPDATE ROTATION 
-        if (playerScript.Position.UpdateInfo.Source != UpdateSource.Revert) {
-            ((ControllerMUD)playerScript.Controller).SetLookRotation(playerScript.Position.Pos);
-        }
-
         // if (playerScript.IsLocalPlayer) {
         //     //stop the player from looking at the cursor when theyre moving
         //     playerScript.Animator.IK.SetLook(null);
