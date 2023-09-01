@@ -99,8 +99,10 @@ public class GaulDebug : MonoBehaviour
             PlayerComponent player = m.GetMUDComponent<PlayerComponent>();
             // if(player) {debugString += "\n" + playerCom}
 
-            StateComponent state = m.GetMUDComponent<StateComponent>();
-            if (state) { debugString += "\n" + state.State; }
+            ActionComponent state = m.GetMUDComponent<ActionComponent>();
+            if (state) { debugString += "\nAction: " + state.Action; }
+            // AnimationComponent anim = m.GetMUDComponent<AnimationComponent>();
+            // if (anim) { debugString += "\nAnim: " + anim.Anim; }
         }
 
         actionName.UpdateField(debugString);

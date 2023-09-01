@@ -6,10 +6,12 @@ using mud.Client;
 
 public class PositionSync : ComponentSync
 {
-    public Action OnMoveComplete;
+    public Action OnMoveStart, OnMoveComplete;
+    public Action OnMoveUpdate;
     public PositionComponent Pos {get{return pos;}}
-    public AnimationComponent Anim {get{return anim;}}
+    // public AnimationComponent Anim {get{return anim;}}
     public Transform Target {get{return target;}}
+    public float MoveLerp {get{return moveLerp;}}
     public bool Moving {get{return moving;}}
 
     [Header("Optional")]
@@ -30,7 +32,7 @@ public class PositionSync : ComponentSync
     
     [Header("Debug")]
     [SerializeField] PositionComponent pos;
-    [SerializeField] AnimationComponent anim;
+    [SerializeField] MoverMUD movement;
     [SerializeField] Vector3 startPos;
     [SerializeField] Vector3 targetPos;
     [SerializeField] bool moving = false;    
@@ -50,7 +52,7 @@ public class PositionSync : ComponentSync
         base.InitComponents();
 
         pos = SyncComponent as PositionComponent;
-
+                
         if(parentTransformToEntity) {
             target.parent = pos.Entity.transform;
         }
@@ -74,6 +76,10 @@ public class PositionSync : ComponentSync
 
     }
 
+    public void SetMovement(MoverMUD newMove) {
+        movement = newMove;
+    }
+
     public bool IsVisible() {
         //hide us if we don't have a position
         return !(pos.UpdateInfo.UpdateType == UpdateType.DeleteRecord && hideIfNoPosition) && !(pos.PosLayer.y < 0 && hideIfBelowGround);
@@ -83,11 +89,6 @@ public class PositionSync : ComponentSync
 
     protected override void UpdateSync() {
         base.UpdateSync();
-
-        if (anim == null) { 
-            anim = pos.Entity.GetMUDComponent<AnimationComponent>();
-            if (anim) { anim.transform.parent = target; anim.transform.localPosition = Vector3.zero; anim.transform.localRotation = Quaternion.identity; }
-        }
 
         Vector3 newPos = pos.Pos;
 
@@ -100,13 +101,11 @@ public class PositionSync : ComponentSync
             }
         }
 
-        if(hideAfterLoaded && gameObject.activeInHierarchy != IsVisible()) {
-            gameObject.SetActive(IsVisible());
-        }
-
     }
 
     void StartMove() {
+
+        bool wasMoving = moving;
 
         enabled = true;
         moving = true;
@@ -117,11 +116,16 @@ public class PositionSync : ComponentSync
 
         Debug.Log("PositionSync: Start");
 
-        if(anim) {anim.PlayAnimation(true);}
+        // if(action && !wasMoving) {action.PlayAnimation(true);}
         if(line) line.enabled = useLine;
+
+        OnMoveStart?.Invoke();
     }
     
     void EndMove() {
+
+        bool wasMoving = moving;
+
         enabled = false;
         moving = false;
         targetPos = pos.Pos;
@@ -129,8 +133,12 @@ public class PositionSync : ComponentSync
 
         Debug.Log("PositionSync: End");
 
-        if(anim) {anim.PlayAnimation(false);}
+        // if(action && wasMoving) {action.PlayAnimation(false);}
         if(line) line.enabled = false;
+
+        if(hideAfterLoaded && gameObject.activeInHierarchy != IsVisible()) {
+            gameObject.SetActive(IsVisible());
+        }
 
         OnMoveComplete?.Invoke();
     }
@@ -139,13 +147,16 @@ public class PositionSync : ComponentSync
 
         UpdateRotation();
         UpdateMovement();
+
+        OnMoveUpdate?.Invoke();
+
         UpdateState();
 
     }
 
     void UpdateRotation() {
-        if(rotateToFace) {
 
+        if(rotateToFace) {
             Quaternion lookRotation = target.rotation;
 
             var lookAt = targetPos;
@@ -159,22 +170,18 @@ public class PositionSync : ComponentSync
             target.rotation = Quaternion.RotateTowards(target.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
     }
+    
 
     void UpdateMovement() {
 
-        if(anim) {
-            if(anim.Anim == AnimationType.Walk) {
-                target.position = Vector3.MoveTowards(target.position, targetPos, speed * Time.deltaTime);
-            } else if (anim.Anim == AnimationType.Hop) {
-                moveLerp += Time.deltaTime * 1.5f;
-                Vector3 vertical = Vector3.up * 2f * Mathf.Sin(Mathf.PI * moveLerp);
-                target.position = Vector3.LerpUnclamped(startPos + vertical, targetPos + vertical, anim.Evaluate(moveLerp));
-            } else if (anim.Anim == AnimationType.Teleport) {
-                target.position = targetPos;
-            }
-        } else {
+        moveLerp = Mathf.Clamp01(moveLerp + Time.deltaTime);
+
+        if(movement == null) {
             target.position = Vector3.MoveTowards(target.position, targetPos, speed * Time.deltaTime);
+            return;
         }
+
+        target.position = movement.Move(startPos, targetPos, moveLerp);
      
     }
 

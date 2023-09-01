@@ -42,6 +42,6 @@ import { Conscription, ConscriptionTableId } from "./tables/Conscription.sol";
 import { XP, XPTableId } from "./tables/XP.sol";
 import { Road, RoadTableId } from "./tables/Road.sol";
 import { Carriage, CarriageTableId } from "./tables/Carriage.sol";
-import { State, StateTableId } from "./tables/State.sol";
+import { Action, ActionTableId } from "./tables/Action.sol";
 import { Animation, AnimationTableId } from "./tables/Animation.sol";
 import { GameEvent, GameEventTableId } from "./tables/GameEvent.sol";

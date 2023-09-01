@@ -5173,6 +5173,7 @@ GameObject:
   - component: {fileID: 6984225282729251515}
   - component: {fileID: 2202057137487621039}
   - component: {fileID: 7552157436396032579}
+  - component: {fileID: 4442232486771419755}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -5223,6 +5224,7 @@ MonoBehaviour:
   animator: {fileID: 5770678829304191941}
   resources: {fileID: 6317482249733295959}
   playerComponent: {fileID: 5348944994237342613}
+  positionSync: {fileID: 0}
   actions: {fileID: 190895346912483442}
   bodyCosmetic: {fileID: 5181854128524553352}
   headCosmetic: {fileID: 36518779380506948}
@@ -5272,6 +5274,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 48e57600f3c0a3f439b4a8a06696b757, type: 3}
   health: {fileID: 0}
   position: {fileID: 0}
+  state: {fileID: 0}
   gameEvent: {fileID: 0}
 --- !u!114 &1902969769342666736
 MonoBehaviour:
@@ -5327,11 +5330,6 @@ MonoBehaviour:
   detectCollisions: 1
   playerTransform: {fileID: 0}
   moveMarker: {fileID: 1902544159680851214}
-  walkingState: {fileID: 11400000, guid: 719f9ecaa85e40d438978cbf3451c71e, type: 2}
-  pushState: {fileID: 11400000, guid: 719f9ecaa85e40d438978cbf3451c71e, type: 2}
-  fx_teleport: {fileID: 4976941573751028274}
-  sfx_teleport:
-  - {fileID: 8300000, guid: 58b3cacfc2ab0654e99724bccd98e633, type: 3}
   sfx_bump:
   - {fileID: 8300000, guid: 27a774bfddb203942a5100d641d37384, type: 3}
   - {fileID: 8300000, guid: 4b2e7ac8ee2f22a409eaadbf7a337909, type: 3}
@@ -5451,7 +5449,7 @@ MonoBehaviour:
   syncType: 0
   synced: 0
   targetComponent: {fileID: 0}
-  targetTransform: {fileID: 2243986332771371095}
+  target: {fileID: 5222077416139517752}
   hideIfNoPosition: 1
   hideIfBelowGround: 1
   hideAfterLoaded: 1
@@ -5459,10 +5457,29 @@ MonoBehaviour:
   speed: 1
   rotationSpeed: 720
   useLine: 0
-  parentTransformToEntity: 0
+  parentTransformToEntity: 1
   pos: {fileID: 0}
+  startPos: {x: 0, y: 0, z: 0}
   targetPos: {x: 0, y: 0, z: 0}
   moving: 0
+  moveLerp: 0
+--- !u!114 &4442232486771419755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677262704773998369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ba76f97fcfe0f7458e9acf3587f66bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionData: {fileID: 5731531675932081003, guid: 456f1ea6baaa91946b944c03eae5df99, type: 3}
+  action: 0
+  actionEffect: {fileID: 0}
+  entity: {fileID: 0}
+  actionComponent: {fileID: 0}
 --- !u!1 &1007400376755907874
 GameObject:
   m_ObjectHideFlags: 0
@@ -5670,6 +5687,7 @@ MonoBehaviour:
   - {fileID: 1109723294861298092}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   equipment: []
 --- !u!1 &1902544159680851214
 GameObject:
@@ -5782,7 +5800,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5222077416139517752}
   m_Layer: 6
-  m_Name: PosSync
+  m_Name: Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

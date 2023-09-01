@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4658851127762766373}
   - component: {fileID: 3471065316492532668}
   m_Layer: 0
-  m_Name: State
+  m_Name: Action
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,4 +58,7 @@ MonoBehaviour:
   networkInfo:
     updateType: 0
     source: 0
-  stateType: 0
+  actionType: 0
+  targetPos: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  position: {fileID: 0}

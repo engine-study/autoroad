@@ -21,7 +21,7 @@ public class FishingRod : Equipment
     
     public override async UniTask<bool> Use() {
         
-        Debug.Log("PUSHING");
+        Debug.Log("Fishing");
 
         Vector3 pushObject = transform.position;
         Vector3 pushToPos = Sender.transform.position - (transform.position - Sender.transform.position).normalized;
@@ -34,9 +34,8 @@ public class FishingRod : Equipment
         List<TxUpdate> updates = new List<TxUpdate>();
         PositionComponent theirPosition = CursorMUD.MUDEntity.GetMUDComponent<PositionComponent>();
 
-        updates.Add(TxManager.MakeOptimistic(theirPosition, PositionComponent.PositionToOptimistic(pushToPos)));
+        return await ActionsMUD.ActionTx(pushToPos, CursorMUD.MUDEntity, ActionName.Hop, ActionName.Fishing);
 
-        return await ActionsMUD.DoAction(updates, StateType.Fishing, pushObject);
     }
 
     

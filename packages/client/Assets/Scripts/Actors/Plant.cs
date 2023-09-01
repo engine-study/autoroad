@@ -27,7 +27,7 @@ public class Plant : Equipment
 
         //can try optimistic
 
-        return await ActionsMUD.DoAction(null, StateType.Plant, new Vector3(x, 0, y));
+        return await ActionsMUD.DoAction(null, ActionName.Plant, new Vector3(x, 0, y));
     }
 
 }

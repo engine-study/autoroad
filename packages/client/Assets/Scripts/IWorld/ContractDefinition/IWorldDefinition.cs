@@ -32,8 +32,8 @@ namespace IWorld.ContractDefinition
     [Function("action")]
     public class ActionFunctionBase : FunctionMessage
     {
-        [Parameter("uint8", "newState", 1)]
-        public virtual byte NewState { get; set; }
+        [Parameter("uint8", "newAction", 1)]
+        public virtual byte NewAction { get; set; }
         [Parameter("int32", "x", 2)]
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
@@ -65,17 +65,6 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("uint256", "amount", 1)]
         public virtual BigInteger Amount { get; set; }
-    }
-
-    public partial class AnimationFunction : AnimationFunctionBase { }
-
-    [Function("animation")]
-    public class AnimationFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "player", 1)]
-        public virtual byte[] Player { get; set; }
-        [Parameter("uint8", "anim", 2)]
-        public virtual byte Anim { get; set; }
     }
 
     public partial class AttackFunction : AttackFunctionBase { }
@@ -966,6 +955,21 @@ namespace IWorld.ContractDefinition
         public virtual int Amount { get; set; }
     }
 
+    public partial class SetActionFunction : SetActionFunctionBase { }
+
+    [Function("setAction")]
+    public class SetActionFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("uint8", "newAction", 2)]
+        public virtual byte NewAction { get; set; }
+        [Parameter("int32", "x", 3)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 4)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class SetFieldFunction : SetFieldFunctionBase { }
 
     [Function("setField")]
@@ -1039,8 +1043,8 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
         [Parameter("int32", "layer", 4)]
         public virtual int Layer { get; set; }
-        [Parameter("uint8", "animType", 5)]
-        public virtual byte AnimType { get; set; }
+        [Parameter("uint8", "action", 5)]
+        public virtual byte Action { get; set; }
     }
 
     public partial class SetPositionDataFunction : SetPositionDataFunctionBase { }
@@ -1052,8 +1056,8 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Player { get; set; }
         [Parameter("tuple", "pos", 2)]
         public virtual PositionData Pos { get; set; }
-        [Parameter("uint8", "animType", 3)]
-        public virtual byte AnimType { get; set; }
+        [Parameter("uint8", "action", 3)]
+        public virtual byte Action { get; set; }
     }
 
     public partial class SetPositionRawFunction : SetPositionRawFunctionBase { }
@@ -1608,8 +1612,6 @@ namespace IWorld.ContractDefinition
 
 
 
-
-
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1744,6 +1746,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

@@ -12,34 +12,34 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    public class StateTableUpdate : TypedRecordUpdate<Tuple<StateTable?, StateTable?>> { }
+    public class ActionTableUpdate : TypedRecordUpdate<Tuple<ActionTable?, ActionTable?>> { }
 
-    public class StateTable : IMudTable
+    public class ActionTable : IMudTable
     {
-        public readonly static TableId ID = new("", "State");
+        public readonly static TableId ID = new("", "Action");
 
         public override TableId GetTableId()
         {
             return ID;
         }
 
-        public ulong? state;
+        public ulong? action;
         public long? x;
         public long? y;
 
         public override Type TableType()
         {
-            return typeof(StateTable);
+            return typeof(ActionTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(StateTableUpdate);
+            return typeof(ActionTableUpdate);
         }
 
         public override void SetValues(params object[] functionParameters)
         {
-            state = (ulong)(int)functionParameters[0];
+            action = (ulong)(int)functionParameters[0];
 
             x = (long)(int)functionParameters[1];
 
@@ -51,8 +51,8 @@ namespace DefaultNamespace
             var table = record.value;
             //bool hasValues = false;
 
-            var stateValue = (ulong)table["state"];
-            state = stateValue;
+            var actionValue = (ulong)table["action"];
+            action = actionValue;
             var xValue = (long)table["x"];
             x = xValue;
             var yValue = (long)table["y"];
@@ -61,13 +61,13 @@ namespace DefaultNamespace
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
-            StateTableUpdate update = (StateTableUpdate)tableUpdate;
+            ActionTableUpdate update = (ActionTableUpdate)tableUpdate;
             return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
         {
-            return new StateTableUpdate
+            return new ActionTableUpdate
             {
                 TableId = newUpdate.TableId,
                 Key = newUpdate.Key,
@@ -76,19 +76,21 @@ namespace DefaultNamespace
             };
         }
 
-        public static Tuple<StateTable?, StateTable?> MapUpdates(Tuple<Property?, Property?> value)
+        public static Tuple<ActionTable?, ActionTable?> MapUpdates(
+            Tuple<Property?, Property?> value
+        )
         {
-            StateTable? current = null;
-            StateTable? previous = null;
+            ActionTable? current = null;
+            ActionTable? previous = null;
 
             if (value.Item1 != null)
             {
                 try
                 {
-                    current = new StateTable
+                    current = new ActionTable
                     {
-                        state = value.Item1.TryGetValue("state", out var stateVal)
-                            ? (ulong)stateVal
+                        action = value.Item1.TryGetValue("action", out var actionVal)
+                            ? (ulong)actionVal
                             : default,
                         x = value.Item1.TryGetValue("x", out var xVal) ? (long)xVal : default,
                         y = value.Item1.TryGetValue("y", out var yVal) ? (long)yVal : default,
@@ -96,9 +98,9 @@ namespace DefaultNamespace
                 }
                 catch (InvalidCastException)
                 {
-                    current = new StateTable
+                    current = new ActionTable
                     {
-                        state = null,
+                        action = null,
                         x = null,
                         y = null,
                     };
@@ -109,10 +111,10 @@ namespace DefaultNamespace
             {
                 try
                 {
-                    previous = new StateTable
+                    previous = new ActionTable
                     {
-                        state = value.Item2.TryGetValue("state", out var stateVal)
-                            ? (ulong)stateVal
+                        action = value.Item2.TryGetValue("action", out var actionVal)
+                            ? (ulong)actionVal
                             : default,
                         x = value.Item2.TryGetValue("x", out var xVal) ? (long)xVal : default,
                         y = value.Item2.TryGetValue("y", out var yVal) ? (long)yVal : default,
@@ -120,16 +122,16 @@ namespace DefaultNamespace
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new StateTable
+                    previous = new ActionTable
                     {
-                        state = null,
+                        action = null,
                         x = null,
                         y = null,
                     };
                 }
             }
 
-            return new Tuple<StateTable?, StateTable?>(current, previous);
+            return new Tuple<ActionTable?, ActionTable?>(current, previous);
         }
     }
 }

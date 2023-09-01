@@ -27,11 +27,14 @@ public class PlayerComponent : MUDComponent {
     [Header("Debug")]
     [SerializeField] HealthComponent health;
     [SerializeField] PositionComponent position;
+    [SerializeField] ActionComponent state;
     [SerializeField] GameEventComponent gameEvent;
     int lastHealth;
 
     protected override void Init(SpawnInfo newSpawnInfo) {
         base.Init(newSpawnInfo);
+
+        state = MUDWorld.FindOrMakeComponent<ActionComponent>(newSpawnInfo.Entity.Key);
 
         isLocalPlayer = Entity.Key == NetworkManager.LocalAddress;
         if (IsLocalPlayer) {
@@ -170,7 +173,7 @@ public class PlayerComponent : MUDComponent {
 
         string targetAddress = otherPlayer.Entity.Key;
         List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(health, health.Health == 1 ? -1 : health.Health - 1) };
-        ActionsMUD.DoAction(update, StateType.Melee, playerScript.Position.Pos);
+        ActionsMUD.DoAction(update, ActionName.Melee, playerScript.Position.Pos);
 
     }
 

@@ -136,6 +136,6 @@ public class TreeComponent : MUDComponent {
 
     public async void ChopTree(string entity) {
         List<TxUpdate> updates = new List<TxUpdate>() { TxManager.MakeOptimistic(health, (int)Mathf.Clamp(health.Health - 1, 0, Mathf.Infinity)), TxManager.MakeOptimisticDelete(pos) };
-        await ActionsMUD.DoAction(updates, StateType.Chop, transform.position);
+        await ActionsMUD.DoAction(updates, ActionName.Chop, transform.position);
     }
 }

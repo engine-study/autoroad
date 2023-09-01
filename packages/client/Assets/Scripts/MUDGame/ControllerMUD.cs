@@ -17,8 +17,6 @@ public class ControllerMUD : SPController {
     [Header("MUD")]
     [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject moveMarker;
-    [SerializeField] private SPAnimatorState walkingState;
-    [SerializeField] private SPAnimatorState pushState;
 
     [Header("FX")]
     [SerializeField] private AudioClip[] sfx_bump;
@@ -78,9 +76,7 @@ public class ControllerMUD : SPController {
     }
 
     private void OnDestroy() {
-        if (playerScript) {
-            playerScript.Position.OnUpdated -= ComponentUpdate;
-        }
+        if (playerScript) { playerScript.Position.OnUpdated -= ComponentUpdate; }
 
         _disposer?.Dispose();
     }
@@ -136,7 +132,7 @@ public class ControllerMUD : SPController {
         //update rotation based on mouseInput
         // Determine the new rotation
         Vector3 mouseDir = SPInput.MousePlanePos - playerTransform.position;
-        if (playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > .5f) {
+        if ( mouseDir.magnitude > .5f) { //playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > .5f
 
             playerScript.Animator.IK.SetLook(CursorMUD.LookTarget);
             SetLookRotation(playerTransform.position + mouseDir);
@@ -145,8 +141,8 @@ public class ControllerMUD : SPController {
             playerScript.Animator.IK.SetLook(null);
         }
 
-        bool reverseInput = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.LeftShift);
-        bool input = !reverseInput && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
+        bool noModifiers = !SPInput.ModifierKey;
+        bool input = noModifiers && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
 
         if (!input)
             return;
@@ -206,13 +202,13 @@ public class ControllerMUD : SPController {
                 destinationEntity = GridMUD.GetEntityAt(pushToPos);
             }
 
-            for (int i = positions.Count-1; i >= 0; i--) {  MoveTX(targets[i], positions[i].Entity, StateType.Walking, AnimationType.Walk, false);}
-            MoveTX(moveTo, mudEntity, StateType.Push, AnimationType.Walk);
+            for (int i = positions.Count-1; i >= 0; i--) { ActionsMUD.ActionTx(targets[i], positions[i].Entity, ActionName.Push, ActionName.Push, false);}
+            ActionsMUD.ActionTx(moveTo, mudEntity, ActionName.Push, ActionName.Push);
           
         } else {
 
             Debug.Log("Walk TX");
-            MoveTX(movePos, mudEntity, StateType.Walking, AnimationType.Walk);
+            ActionsMUD.ActionTx(movePos, mudEntity, ActionName.Walking, ActionName.Walking);
 
         }
 
@@ -233,27 +229,15 @@ public class ControllerMUD : SPController {
         minTime = cancelWait;
     }
 
-    public void MoveTX(Vector3 newPos, MUDEntity entity, StateType moveState, AnimationType moveType, bool sendTX = true) {
-
-        AnimationComponent anim = MUDWorld.FindOrMakeComponent<AnimationComponent>(entity.Key);
-        PositionComponent pos = MUDWorld.FindOrMakeComponent<PositionComponent>(entity.Key);
-
-        List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(TxManager.MakeOptimistic(anim, moveType)); 
-        updates.Add(TxManager.MakeOptimistic(pos, PositionComponent.PositionToOptimistic(newPos)));
-
-        if (sendTX) { ActionsMUD.DoAction(updates, moveState, newPos); }
-    }
-
     public void TeleportMUD(Vector3 position, bool admin = false) {
 
         moveDest = position;
         
         if(admin) { 
             TxManager.Send<TeleportAdminFunction>(PositionComponent.PositionToTransaction(position));
-            MoveTX(position, mudEntity, StateType.Teleport, AnimationType.Teleport, false); 
+            ActionsMUD.ActionTx(position, mudEntity, ActionName.Teleport, ActionName.Teleport, false); 
         } else { 
-            MoveTX(position, mudEntity, StateType.Teleport, AnimationType.Teleport); 
+            ActionsMUD.ActionTx(position, mudEntity, ActionName.Teleport, ActionName.Teleport); 
         }
     }
 
@@ -336,67 +320,9 @@ public class ControllerMUD : SPController {
             return;
         }
 
-        UpdateState();
-
         lastOnchainPos = onchainPos;
 
     }
-
-
-    private void UpdateState() {
-
-        //raycast to the world
-        RaycastHit hit;
-        Vector3 lookDirection = playerTransform.position == moveDest ? player.Root.forward : (moveDest - playerTransform.position).normalized;
-        Vector3 inFrontOf = playerTransform.position + lookDirection;
-
-        MUDEntity entityAtMove = GridMUD.GetEntityAt(inFrontOf);
-        MUDEntity terrainAtMove = GridMUD.GetEntityAt(inFrontOf + Vector3.down);
-
-        // Physics.Raycast(playerTransform.position + Vector3.up * .25f, lookDirection, out hit, 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
-        // Debug.Log("Hit: " + (hit.collider ? hit.collider.gameObject.name : "No"));
-
-        //&& (hit.collider.GetComponentInParent<RockComponent>() != null || hit.collider.GetComponentInParent<PlayerComponent>() != null)
-        if (entityAtMove) {
-            //pushing animation
-            // Debug.Log("PUSHING");
-
-            if (playerTransform.position == moveDest) {
-                //appear tired because we tried to move but our position didn't change (walking into a wall)
-                Debug.Log("Animation: Rejected", this);
-                walkingState.Apply(player.Animator);
-                player.Animator.PlayClip("Hit");
-                // player.Resources.sfx.PlaySound(sfx_bump);
-            } else {
-                Debug.Log("Animation: Pushing", this);
-                pushState.Apply(player.Animator);
-                player.Animator.PlayClip("Push");
-                player.Resources.sfx.PlaySound(sfx_bump);
-
-            }
-
-            // markerPos = hitGrid;
-
-        } else {
-            //remember the idle animation actually has walk functionality in the AnimationController
-            Debug.Log("Animation: Walking", this);
-            player?.Animator.PlayClip("Idle");
-            markerPos = moveDest;
-        }
-
-        //UPDATE ROTATION
-        if (playerScript.Position.UpdateInfo.Source != UpdateSource.Revert) {
-            SetLookRotation(moveDest);
-            
-        }
-
-        if (playerScript.IsLocalPlayer) {
-            //stop the player from looking at the cursor when theyre moving
-            playerScript.Animator.IK.SetLook(null);
-        }
-
-    }
-
 
     Vector3 ChainPosToEngine(Vector3 chainPos) {
         RaycastHit hit;

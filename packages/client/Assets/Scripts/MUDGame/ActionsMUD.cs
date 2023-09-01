@@ -7,24 +7,14 @@ using IWorld.ContractDefinition;
 using Nethereum.Contracts;
 using Cysharp.Threading.Tasks;
 
-public enum StateType {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee}
+public enum ActionName {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop}
 public class ActionsMUD : MonoBehaviour
 {
-    [EnumNamedArray( typeof(StateType) )]
+    [EnumNamedArray( typeof(ActionName) )]
     [SerializeField] List<Equipment> baseEquipment;
 
     [Header("Equipment")]
     [SerializeField] List<Equipment> equipment;
-
-    // [Header("Interactable")]
-    // public SPInteract ShovelAction;
-    // public SPInteract WalkAction;
-    // public SPInteract WalkBootAction;
-    // public SPInteract CarryAction;
-    // public SPInteract MeleeAction;
-    // public SPInteract PlantAction;
-    // public SPInteract FishAction;
-
 
     PlayerMUD player;
     PositionComponent position;
@@ -107,11 +97,13 @@ public class ActionsMUD : MonoBehaviour
     }
 
     
-    public void StateToAction(StateType newState, Vector3 position) {
+    public void ActionToActionProp(ActionName newState, Vector3 position) {
 
         //turn player to face position
         ((ControllerMUD)player.Controller).SetLookRotation(position);
-        
+
+        if (baseEquipment.Count - 1 < (int)newState) { Debug.LogError(newState.ToString(), this); }
+
         //do some work to find the action here
         Equipment e = baseEquipment[(int)newState];
 
@@ -132,11 +124,33 @@ public class ActionsMUD : MonoBehaviour
         equipment.UseState(false);
 
     }
+
     
-    public static UniTask<bool> DoAction(List<TxUpdate> updates, StateType newState, Vector3 newPos) {
+    public static UniTask<bool> ActionTx(Vector3 newPos, MUDEntity entity, ActionName targetAction, ActionName txAction, bool sendTX = true) {
+
+        // AnimationComponent anim = MUDWorld.FindOrMakeComponent<AnimationComponent>(entity.Key);
+        ActionComponent actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
+        PositionComponent posComponent = MUDWorld.FindOrMakeComponent<PositionComponent>(entity.Key);
+
+        List<TxUpdate> updates = new List<TxUpdate>();
+        updates.Add(TxManager.MakeOptimistic(actionComponent, targetAction, (int)newPos.x, (int)newPos.z)); 
+        updates.Add(TxManager.MakeOptimistic(posComponent, PositionComponent.PositionToOptimistic(newPos)));
+
+        if (sendTX) { 
+            //set our local state to the Tx
+            updates.Add(TxManager.MakeOptimistic(ActionComponent.LocalState, txAction, (int)newPos.x, (int)newPos.z)); 
+
+            //send Tx
+            return ActionsMUD.DoAction(updates, txAction, newPos); 
+        } else {
+            return new UniTask<bool>();
+        }
+    }
+    
+    public static UniTask<bool> DoAction(List<TxUpdate> updates, ActionName newState, Vector3 newPos) {
         return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionTx(newState, newPos));
     }
 
-    public static object[] ActionTx(StateType newState, Vector3 newPos) { return new object[] { System.Convert.ToByte((int)newState), System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
+    public static object[] ActionTx(ActionName newState, Vector3 newPos) { return new object[] { System.Convert.ToByte((int)newState), System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
 
 }

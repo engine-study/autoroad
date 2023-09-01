@@ -22,7 +22,7 @@ public class Mining : Equipment
         string entity = MUDHelper.Keccak256("Road", x,y);
         
         List<TxUpdate> updates = new List<TxUpdate>();
-        return await ActionsMUD.DoAction(updates, StateType.Mining, new Vector3(x, 0, y));
+        return await ActionsMUD.DoAction(updates, ActionName.Mining, new Vector3(x, 0, y));
     }
 
 }

@@ -4,7 +4,7 @@ using mud.Client;
 using mud.Unity;
 using System;
 
-public enum AnimationType {Walk, Hop, Teleport}
+public enum AnimationType {Walk, Hop, Teleport, Pushing}
 
 public class AnimationComponent : MUDComponent {
 
@@ -42,29 +42,8 @@ public class AnimationComponent : MUDComponent {
         AnimationTable table = update as AnimationTable;
         animType = (AnimationType)table.state;
 
-        // PlayAnimation();
-
     }
 
-    public void PlayAnimation(bool start) {
-        Debug.Log("Animation: " + animType.ToString());
-        for (int i = 0; i < effects.Length; i++) {
-            if(i == (int)animType) {
-                if(effects[i].gameObject.activeInHierarchy) {
-                    if(start) {
-                        effects[i].PlayEnabled();
-                    } else {
-                        effects[i].PlayDisabled();
-                    }
-                } else {
-                    effects[i].gameObject.SetActive(true);
-                }
-            } else {
-                effects[i].gameObject.SetActive(false);
-            }
-        }
-        
-    }
 
 
 }

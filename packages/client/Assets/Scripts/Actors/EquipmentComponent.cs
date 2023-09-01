@@ -10,7 +10,7 @@ using System;
 public class EquipmentComponent : Equipment
 {
     [Header("MUD Equipment")]
-    public StateType action;
+    public ActionName action;
     public MUDComponent prefab;
     // public List<MUDComponent> prefab;
     

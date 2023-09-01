@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Move, State, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots } from "../codegen/Tables.sol";
+import { Move, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots } from "../codegen/Tables.sol";
 import { PositionTableId } from "../codegen/Tables.sol";
 import { MoveType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";

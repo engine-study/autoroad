@@ -4,9 +4,9 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, State, Carrying, Rock, Tree, Bones, Name, Stats, Coinage, Scroll, Seeds, Boots, Weight, Animation } from "../codegen/Tables.sol";
+import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Stats, Coinage, Scroll, Seeds, Boots, Weight, Animation } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { RoadState, RockType, MoveType, StateType, AnimationType } from "../codegen/Types.sol";
+import { RoadState, RockType, MoveType, ActionType, AnimationType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
@@ -43,10 +43,10 @@ contract MoveSubsystem is System {
       //if we hit an object or at the end of our walk, move to that position
       if (atPosition.length > 0 || world.onWorld(positions[i].x, positions[i].y) == false) {
         require(i > 1, "nowhere to move");
-        setPositionData(player, positions[i - 1], AnimationType.Walk);
+        setPositionData(player, positions[i - 1], ActionType.Walking);
         return;
       } else if (i == positions.length - 1) {
-        setPositionData(player, positions[i], AnimationType.Walk);
+        setPositionData(player, positions[i], ActionType.Walking);
         return;
       }
     }
@@ -141,19 +141,19 @@ contract MoveSubsystem is System {
     shoverPos.x = pushPos.x - vector.x;
     shoverPos.y = pushPos.y - vector.y;
     bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
-    moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos, AnimationType.Walk);
+    moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos, ActionType.Push);
 
     //iterate backwards pushing everything forward one by one with a lighter position set that doesn't check for holes
     for (int i = int(count) - 1; i >= 0; i--) {
       pushPos.x -= vector.x;
       pushPos.y -= vector.y;
-      setPosition(pushArray[uint(i)], pushPos.x, pushPos.y, 0, AnimationType.Walk);
+      setPosition(pushArray[uint(i)], pushPos.x, pushPos.y, 0, ActionType.Push);
     }
 
     //move the FIRST object (the player) 
     pushPos.x -= vector.x;
     pushPos.y -= vector.y;
-    setPosition(player, pushPos.x, pushPos.y, 0, AnimationType.Walk);
+    setPosition(player, pushPos.x, pushPos.y, 0, ActionType.Push);
 
   }
 
@@ -164,7 +164,7 @@ contract MoveSubsystem is System {
     PositionData memory to,
     bytes32[] memory atPosition,
     bytes32[] memory atDestination,
-    AnimationType animation
+    ActionType animation
   ) public {
 
     //check if we are pushing rocks into a road ditch
@@ -351,7 +351,7 @@ contract MoveSubsystem is System {
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
     require(atPosition.length < 1, "occupied");
-    setPosition(player, x, y, 0, AnimationType.Teleport);
+    setPosition(player, x, y, 0, ActionType.Teleport);
   }
 
   // function carry(int32 carryX, int32 carryY) public {
@@ -405,15 +405,15 @@ contract MoveSubsystem is System {
     requirePushable(atPos);
     requireOnMap(atDest, endPos);
     requireEmptyOrHole(atDest);
-    moveTo(player, atPos[0], startPos, endPos, atPos, atDest, AnimationType.Hop);
+    moveTo(player, atPos[0], startPos, endPos, atPos, atDest, ActionType.Hop);
   }
 
-  function setPositionData(bytes32 player, PositionData memory pos, AnimationType animType) public {
-    setPosition(player, pos.x, pos.y, pos.layer, animType);
+  function setPositionData(bytes32 player, PositionData memory pos, ActionType action) public {
+    setPosition(player, pos.x, pos.y, pos.layer, action);
   }
 
-  function setPosition(bytes32 player, int32 x, int32 y, int32 layer, AnimationType animType) public {
-    animation(player, animType);
+  function setPosition(bytes32 player, int32 x, int32 y, int32 layer, ActionType action) public {
+    IWorld(_world()).setAction(player, action, x, y);
     setPositionRaw(player, x, y, layer);
   }
 
@@ -421,7 +421,8 @@ contract MoveSubsystem is System {
     Position.set(player, x, y, layer);
   }
 
-  function animation(bytes32 player, AnimationType anim) public {
-    Animation.emitEphemeral(player, uint32(anim));
-  }
+  // function animation(bytes32 player, AnimationType anim) public {
+  //   Animation.emitEphemeral(player, uint32(anim));
+  // }
+
 }
