@@ -21,10 +21,10 @@ public class AnimationPlayerMUD : AnimationMUD
             ((ControllerMUD)playerScript.Controller).SetLookRotation(playerScript.Position.Pos);
         }
 
-        if (playerScript.IsLocalPlayer) {
-            //stop the player from looking at the cursor when theyre moving
-            playerScript.Animator.IK.SetLook(null);
-        }
+        // if (playerScript.IsLocalPlayer) {
+        //     //stop the player from looking at the cursor when theyre moving
+        //     playerScript.Animator.IK.SetLook(null);
+        // }
 
         if(!playerScript.IsLocalPlayer) {
             playerScript.Actions.ActionToActionProp(Action, ActionComponent.Position);

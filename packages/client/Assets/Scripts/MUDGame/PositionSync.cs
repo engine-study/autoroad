@@ -6,7 +6,7 @@ using mud.Client;
 
 public class PositionSync : ComponentSync
 {
-    public Action OnMoveStart, OnMoveComplete;
+    public Action OnMoveStart, OnMoveEnd;
     public Action OnMoveUpdate;
     public PositionComponent Pos {get{return pos;}}
     // public AnimationComponent Anim {get{return anim;}}
@@ -33,10 +33,12 @@ public class PositionSync : ComponentSync
     [Header("Debug")]
     [SerializeField] PositionComponent pos;
     [SerializeField] MoverMUD movement;
-    [SerializeField] Vector3 startPos;
-    [SerializeField] Vector3 targetPos;
+    [SerializeField] Vector3 StartPos;
+    [SerializeField] Vector3 TargetPos => pos.Pos; 
     [SerializeField] bool moving = false;    
     [SerializeField] float moveLerp = 0f;
+    [SerializeField] float distanceMoved = 0f;
+    [SerializeField] float distance = 0f;
 
     public override MUDComponent SyncedComponent() {return new PositionComponent();}
 
@@ -65,8 +67,7 @@ public class PositionSync : ComponentSync
 
         //set up our side of the compnents BEFORE 
         target.position = pos.Pos;
-        startPos = pos.Pos;
-        targetPos = pos.Pos;
+        StartPos = pos.Pos;
 
         if(useLine) {
             line = ((GameObject)(Instantiate(Resources.Load("Prefabs/LinePosition"), transform))).GetComponent<LineRenderer>();
@@ -90,10 +91,15 @@ public class PositionSync : ComponentSync
     protected override void UpdateSync() {
         base.UpdateSync();
 
-        Vector3 newPos = pos.Pos;
-
         if (syncType == ComponentSyncType.Lerp) {
-            if(target.position != newPos && targetPos != newPos) {StartMove();}
+           
+            if(target.position != TargetPos) {
+
+                StartMove();
+                // if (moving) { StartModifiedMove(); }
+                // else { StartMove(); }
+            }
+
         } else if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
             target.position = pos.Pos;
             if(moving) {
@@ -111,8 +117,10 @@ public class PositionSync : ComponentSync
         moving = true;
 
         moveLerp = 0f;
-        startPos = target.position;
-        targetPos = pos.Pos;
+        distanceMoved = 0f;
+        StartPos = target.position;
+
+        distance = Vector3.Distance(StartPos, TargetPos);
 
         Debug.Log("PositionSync: Start");
 
@@ -121,6 +129,10 @@ public class PositionSync : ComponentSync
 
         OnMoveStart?.Invoke();
     }
+
+    void StartModifiedMove() {
+        distance = Vector3.Distance(StartPos, TargetPos);
+    }
     
     void EndMove() {
 
@@ -128,7 +140,6 @@ public class PositionSync : ComponentSync
 
         enabled = false;
         moving = false;
-        targetPos = pos.Pos;
         target.position = pos.Pos;
 
         Debug.Log("PositionSync: End");
@@ -140,7 +151,7 @@ public class PositionSync : ComponentSync
             gameObject.SetActive(IsVisible());
         }
 
-        OnMoveComplete?.Invoke();
+        OnMoveEnd?.Invoke();
     }
 
     protected override void UpdateLerp() {
@@ -159,7 +170,7 @@ public class PositionSync : ComponentSync
         if(rotateToFace) {
             Quaternion lookRotation = target.rotation;
 
-            var lookAt = targetPos;
+            var lookAt = TargetPos;
             lookAt.y = target.position.y;
 
             if (lookAt != target.position) {
@@ -174,25 +185,26 @@ public class PositionSync : ComponentSync
 
     void UpdateMovement() {
 
-        moveLerp = Mathf.Clamp01(moveLerp + Time.deltaTime);
+        distanceMoved = distanceMoved + speed * Time.deltaTime;
+        moveLerp = Mathf.Clamp01(distanceMoved / distance);
 
-        if(movement == null) {
-            target.position = Vector3.MoveTowards(target.position, targetPos, speed * Time.deltaTime);
-            return;
+        if(movement) {
+            target.position = movement.Move(StartPos, TargetPos, moveLerp);
+        } else {
+            target.position = Vector3.MoveTowards(target.position, TargetPos, speed * Time.deltaTime);
         }
 
-        target.position = movement.Move(startPos, targetPos, moveLerp);
      
     }
 
     void UpdateState() {
         if(useLine) {
-            Vector3[] positions = new Vector3[] { target.position + Vector3.up * .05f, targetPos + Vector3.up * .05f, targetPos };
+            Vector3[] positions = new Vector3[] { target.position + Vector3.up * .05f, TargetPos + Vector3.up * .05f, TargetPos };
             line.SetPositions(positions);
         }
 
         //turn off for efficiency until next update
-        if(target.position == targetPos || moveLerp >= 1f) {
+        if(target.position == TargetPos || moveLerp >= 1f) {
             EndMove();
         }
     }

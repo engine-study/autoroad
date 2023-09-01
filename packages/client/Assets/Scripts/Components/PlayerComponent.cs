@@ -172,8 +172,8 @@ public class PlayerComponent : MUDComponent {
         Debug.Log("Meleed", this);
 
         string targetAddress = otherPlayer.Entity.Key;
-        List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(health, health.Health == 1 ? -1 : health.Health - 1) };
-        ActionsMUD.DoAction(update, ActionName.Melee, playerScript.Position.Pos);
+        // List<TxUpdate> update = new List<TxUpdate>() { TxManager.MakeOptimistic(health, health.Health == 1 ? -1 : health.Health - 1) };
+        // ActionsMUD.ActionTx(update, ActionName.Melee, playerScript.Position.Pos);
 
     }
 

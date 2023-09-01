@@ -24,7 +24,7 @@ public class MoveNoBoots : Equipment
 
         //can try optimistic
 
-        return await ActionsMUD.DoAction(null, ActionName.Walking, new Vector3(x, 0, y));
+        return await ActionsMUD.ActionTx(null, ActionName.Walking, new Vector3(x, 0, y));
     }
 
 }

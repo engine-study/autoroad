@@ -14,15 +14,16 @@ public class Mining : Equipment
     }
 
     public override async UniTask<bool> Use() {
-        int x = (int)transform.position.x;
-        int y = (int)transform.position.z;
+        return await new UniTask<bool>();
+        // int x = (int)transform.position.x;
+        // int y = (int)transform.position.z;
 
-        Debug.Log("Shoveled: " + x + "," + y);
-        
-        string entity = MUDHelper.Keccak256("Road", x,y);
-        
-        List<TxUpdate> updates = new List<TxUpdate>();
-        return await ActionsMUD.DoAction(updates, ActionName.Mining, new Vector3(x, 0, y));
+        // Debug.Log("Shoveled: " + x + "," + y);
+
+        // string entity = MUDHelper.Keccak256("Road", x,y);
+
+        // List<TxUpdate> updates = new List<TxUpdate>();
+        // return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Mining, new Vector3(x, 0, y));
     }
 
 }

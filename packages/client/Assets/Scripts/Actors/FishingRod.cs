@@ -31,10 +31,13 @@ public class FishingRod : Equipment
             return false;
         }
 
-        List<TxUpdate> updates = new List<TxUpdate>();
         PositionComponent theirPosition = CursorMUD.MUDEntity.GetMUDComponent<PositionComponent>();
 
-        return await ActionsMUD.ActionTx(pushToPos, CursorMUD.MUDEntity, ActionName.Hop, ActionName.Fishing);
+        List<TxUpdate> updates = new List<TxUpdate>();
+        updates.Add(ActionsMUD.ActionOptimistic(CursorMUD.MUDEntity, ActionName.Hop, pushToPos));
+        updates.Add(ActionsMUD.PositionOptimistic(CursorMUD.MUDEntity, pushToPos));
+        
+        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Fishing, CursorMUD.GridPos);
 
     }
 

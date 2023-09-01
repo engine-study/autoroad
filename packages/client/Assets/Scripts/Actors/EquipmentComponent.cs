@@ -12,8 +12,14 @@ public class EquipmentComponent : Equipment
     [Header("MUD Equipment")]
     public ActionName action;
     public MUDComponent prefab;
+    MUDEntity entity;
     // public List<MUDComponent> prefab;
-    
+
+    protected override void Awake() {
+        base.Awake();
+        entity = GetComponentInParent<MUDEntity>();
+    }
+
     public override bool CanUse() {
         bool canUse = base.CanUse();
         bool hasExpectedPrefab = (prefab == null && CursorMUD.MUDEntity == null) || (CursorMUD.MUDEntity != null && CursorMUD.MUDEntity.ExpectedComponents.Contains(prefab));
@@ -26,8 +32,7 @@ public class EquipmentComponent : Equipment
 
         Debug.Log(action.ToString() + ": " + x + "," + y);
                 
-        List<TxUpdate> updates = new List<TxUpdate>();
-        return await ActionsMUD.DoAction(updates, action, new Vector3(x, 0, y));
+        return await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity, action, new Vector3(x, 0, y));
     }
 
 }

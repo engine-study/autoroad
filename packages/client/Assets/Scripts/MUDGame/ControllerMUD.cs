@@ -202,13 +202,25 @@ public class ControllerMUD : SPController {
                 destinationEntity = GridMUD.GetEntityAt(pushToPos);
             }
 
-            for (int i = positions.Count-1; i >= 0; i--) { ActionsMUD.ActionTx(targets[i], positions[i].Entity, ActionName.Push, ActionName.Push, false);}
-            ActionsMUD.ActionTx(moveTo, mudEntity, ActionName.Push, ActionName.Push);
-          
+            List<TxUpdate> updates = new List<TxUpdate>();
+
+            //update everyones action and position
+            for (int i = positions.Count-1; i >= 0; i--) { 
+                updates.Add(ActionsMUD.ActionOptimistic(positions[i].Entity, ActionName.Push, targets[i] + direction));
+                updates.Add(ActionsMUD.PositionOptimistic(positions[i].Entity, targets[i]));
+            }
+
+            //update our own position
+            updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Push, moveTo + direction));
+            updates.Add(ActionsMUD.PositionOptimistic(mudEntity, moveTo));
+            ActionsMUD.ActionTx(mudEntity, ActionName.Push, moveTo, updates);
+
         } else {
 
             Debug.Log("Walk TX");
-            ActionsMUD.ActionTx(movePos, mudEntity, ActionName.Walking, ActionName.Walking);
+            List<TxUpdate> updates = new List<TxUpdate>();
+            updates.Add(ActionsMUD.PositionOptimistic(mudEntity, movePos));
+            ActionsMUD.ActionTx(mudEntity, ActionName.Walking, movePos, updates);
 
         }
 
@@ -232,12 +244,15 @@ public class ControllerMUD : SPController {
     public void TeleportMUD(Vector3 position, bool admin = false) {
 
         moveDest = position;
-        
-        if(admin) { 
-            TxManager.Send<TeleportAdminFunction>(PositionComponent.PositionToTransaction(position));
-            ActionsMUD.ActionTx(position, mudEntity, ActionName.Teleport, ActionName.Teleport, false); 
+
+        List<TxUpdate> updates = new List<TxUpdate>();
+        updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Teleport, position));
+        updates.Add(ActionsMUD.PositionOptimistic(mudEntity, position));
+
+        if(admin) {
+            TxManager.Send<TeleportAdminFunction>(updates, PositionComponent.PositionToTransaction(position));
         } else { 
-            ActionsMUD.ActionTx(position, mudEntity, ActionName.Teleport, ActionName.Teleport); 
+            ActionsMUD.ActionTx(mudEntity, ActionName.Teleport, position, updates); 
         }
     }
 

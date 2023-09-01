@@ -125,32 +125,28 @@ public class ActionsMUD : MonoBehaviour
 
     }
 
-    
-    public static UniTask<bool> ActionTx(Vector3 newPos, MUDEntity entity, ActionName targetAction, ActionName txAction, bool sendTX = true) {
-
-        // AnimationComponent anim = MUDWorld.FindOrMakeComponent<AnimationComponent>(entity.Key);
-        ActionComponent actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
+    public static TxUpdate PositionOptimistic(MUDEntity entity, Vector3 atPos) {
         PositionComponent posComponent = MUDWorld.FindOrMakeComponent<PositionComponent>(entity.Key);
-
-        List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(TxManager.MakeOptimistic(actionComponent, targetAction, (int)newPos.x, (int)newPos.z)); 
-        updates.Add(TxManager.MakeOptimistic(posComponent, PositionComponent.PositionToOptimistic(newPos)));
-
-        if (sendTX) { 
-            //set our local state to the Tx
-            updates.Add(TxManager.MakeOptimistic(ActionComponent.LocalState, txAction, (int)newPos.x, (int)newPos.z)); 
-
-            //send Tx
-            return ActionsMUD.DoAction(updates, txAction, newPos); 
-        } else {
-            return new UniTask<bool>();
-        }
+        return TxManager.MakeOptimistic(posComponent, PositionComponent.PositionToOptimistic(atPos));
     }
+
+    public static TxUpdate ActionOptimistic(MUDEntity entity, ActionName action, Vector3 atPos) {
+        ActionComponent actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
+        return TxManager.MakeOptimistic(actionComponent, action, (int)atPos.x, (int)atPos.z); 
+    }
+
     
-    public static UniTask<bool> DoAction(List<TxUpdate> updates, ActionName newState, Vector3 newPos) {
-        return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionTx(newState, newPos));
+    public static UniTask<bool> ActionTx(MUDEntity entity, ActionName action, Vector3 atPos, List<TxUpdate> updates = null) {
+
+        //add the senders optimistic update
+        updates.Add(ActionOptimistic(entity, action, atPos));
+
+        //send Tx
+        if (updates != null) { return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionParameters(action, atPos)); }
+        else { return TxManager.Send<ActionFunction>(ActionsMUD.ActionParameters(action, atPos)); }
+
     }
 
-    public static object[] ActionTx(ActionName newState, Vector3 newPos) { return new object[] { System.Convert.ToByte((int)newState), System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
+    public static object[] ActionParameters(ActionName newState, Vector3 newPos) { return new object[] { System.Convert.ToByte((int)newState), System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
 
 }

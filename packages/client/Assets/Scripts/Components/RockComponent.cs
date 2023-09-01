@@ -162,7 +162,7 @@ public class RockComponent : MUDComponent {
 
     public async void MineRock(int x, int y) {
         List<TxUpdate> updates = new List<TxUpdate>() { TxManager.MakeOptimistic(this, Mathf.Clamp((int)rockType + 1, 0, (int)RockType.Nucleus)) };
-        await ActionsMUD.DoAction(updates, ActionName.Mining, new Vector3(x, 0, y));
+        await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity,  ActionName.Mining, new Vector3(x, 0, y), updates);
     }
 
 }

@@ -10,11 +10,13 @@ public abstract class Equipment : MonoBehaviour
     public SPInteract Interact {get{return interact;}}
 
     [Header("Debug")]
+    public MUDComponent ourComponent;
     public bool canUse = false;
     SPActor sender;
     [SerializeField] SPInteract interact;
 
-    void Awake() {
+    protected virtual void Awake() {
+        ourComponent = GetComponentInParent<MUDComponent>();
         Interact.OnInteractToggle += UseEquipment;
     }
 
