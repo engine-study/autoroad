@@ -26,7 +26,7 @@ public class TreeComponent : MUDComponent {
         pos = Entity.GetMUDComponent<PositionComponent>();
         health = Entity.GetMUDComponent<HealthComponent>();
 
-        pos.OnStaleUpdate += TreeVisibility;
+        pos.OnInstantUpdate += TreeVisibility;
         pos.OnRichUpdate += TreeSpawnAnimation;
 
         health.OnUpdated += TreeHit;
@@ -68,12 +68,12 @@ public class TreeComponent : MUDComponent {
     }
 
     void TreeVisibility() {
-
-        
-
+        gameObject.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
     }
 
     void TreeSpawnAnimation() {
+
+        gameObject.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
 
         // if (health.UpdateSource != UpdateSource.Revert && pos.UpdateType == UpdateType.DeleteRecord && Loaded && pos.UpdateType != lastPosUpdateType) {
         //     SPAudioSource.Play(transform.position, sfx_hits);

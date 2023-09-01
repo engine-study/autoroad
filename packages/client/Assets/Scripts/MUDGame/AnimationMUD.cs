@@ -5,7 +5,6 @@ using mud.Client;
 
 public class AnimationMUD : MonoBehaviour
 {
-
     public ActionName Action {get{return action;}}
     public ActionComponent ActionComponent {get{return actionComponent;}}
     public PositionSync PositionSync { get; private set; }
@@ -13,8 +12,8 @@ public class AnimationMUD : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] Transform target;
-    [SerializeField] ActionData actionData;
-    
+    Dictionary<string, ActionEffect> effects = new Dictionary<string, ActionEffect>();
+
     [Header("Debug")]
     [SerializeField] ActionName action;
     [SerializeField] ActionEffect actionEffect;
@@ -31,8 +30,6 @@ public class AnimationMUD : MonoBehaviour
         entity = GetComponentInParent<MUDEntity>();
         PositionSync = GetComponentInParent<PositionSync>();
 
-        if(actionData == null)
-            actionData = Instantiate(Resources.Load("Prefabs/ActionBible") as ActionData, transform.position, transform.rotation, transform);
         if(target == null) target = transform;
         
         if(entity.HasInit) Init();
@@ -66,12 +63,30 @@ public class AnimationMUD : MonoBehaviour
         Debug.Log("Action: " + newAction.ToString(), this);
 
         action = newAction;
-        actionEffect = actionData.effects[(int)action];
+        actionEffect = LoadAction(action.ToString());
 
         //play new action
         if(actionEffect) { ToggleAction(true, actionEffect);}
 
     }   
+
+    ActionEffect LoadAction(string action) {
+
+        effects.TryGetValue(action, out ActionEffect newAction);
+        
+        if(newAction == null) {
+
+            object resource = Resources.Load("Action/" + action);
+            if(resource == null) return null;
+
+            newAction = Instantiate((resource as GameObject), transform.position, transform.rotation, transform).GetComponent<ActionEffect>();
+            effects.Add(action, newAction);
+        }
+
+        return newAction;
+    }
+
+    
 
     public virtual void ToggleAction(bool toggle, ActionEffect newAction) {
         actionEffect.Toggle(toggle, this);

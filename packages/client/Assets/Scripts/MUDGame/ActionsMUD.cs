@@ -139,11 +139,10 @@ public class ActionsMUD : MonoBehaviour
     public static UniTask<bool> ActionTx(MUDEntity entity, ActionName action, Vector3 atPos, List<TxUpdate> updates = null) {
 
         //add the senders optimistic update
+        if (updates == null) { updates = new List<TxUpdate>(); }
         updates.Add(ActionOptimistic(entity, action, atPos));
 
-        //send Tx
-        if (updates != null) { return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionParameters(action, atPos)); }
-        else { return TxManager.Send<ActionFunction>(ActionsMUD.ActionParameters(action, atPos)); }
+        return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionParameters(action, atPos)); 
 
     }
 
