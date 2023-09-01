@@ -397,6 +397,8 @@ contract MoveSubsystem is System {
     //check initial push is good
     bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(fishPos.x, fishPos.y, 0));
     require(canInteract(player, x, y, atPos, 1), "bad interact");
+    require(Weight.get(atPos[0]) <= 0, "too heavy");
+    
 
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);

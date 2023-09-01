@@ -13,10 +13,12 @@ public class FishingRod : Equipment
 
         MUDEntity e = CursorMUD.MUDEntity;
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
+        WeightComponent weight = e?.GetMUDComponent<WeightComponent>();
 
-        bool onBounds = BoundsComponent.OnBounds(CursorMUD.GridPos);
+        bool startOnBounds = BoundsComponent.OnWorld(e,CursorMUD.GridPos);
+        bool endOnBounds = BoundsComponent.OnWorld(e,CursorMUD.GridPos);
 
-        return canUse && onBounds && moveType != null && moveType.MoveType == MoveType.Push;
+        return canUse && startOnBounds && endOnBounds && moveType != null && moveType.MoveType == MoveType.Push && (weight == null || weight.Weight <= 0);
     }
     
     public override async UniTask<bool> Use() {
