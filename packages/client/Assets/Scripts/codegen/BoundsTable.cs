@@ -38,6 +38,33 @@ namespace DefaultNamespace
             return typeof(BoundsTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            BoundsTable other = (BoundsTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (left != other.left)
+            {
+                return false;
+            }
+            if (right != other.right)
+            {
+                return false;
+            }
+            if (up != other.up)
+            {
+                return false;
+            }
+            if (down != other.down)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             left = (long)(int)functionParameters[0];

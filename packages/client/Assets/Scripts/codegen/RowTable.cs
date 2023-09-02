@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(RowTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            RowTable other = (RowTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (segments != other.segments)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             segments = (ulong)(int)functionParameters[0];

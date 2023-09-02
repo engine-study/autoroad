@@ -38,6 +38,33 @@ namespace DefaultNamespace
             return typeof(NameTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            NameTable other = (NameTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (named != other.named)
+            {
+                return false;
+            }
+            if (first != other.first)
+            {
+                return false;
+            }
+            if (middle != other.middle)
+            {
+                return false;
+            }
+            if (last != other.last)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             named = (bool)functionParameters[0];

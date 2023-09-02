@@ -38,6 +38,33 @@ namespace DefaultNamespace
             return typeof(ChunkTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            ChunkTable other = (ChunkTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (completed != other.completed)
+            {
+                return false;
+            }
+            if (mile != other.mile)
+            {
+                return false;
+            }
+            if (pieces != other.pieces)
+            {
+                return false;
+            }
+            if (blockCompleted != other.blockCompleted)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             completed = (bool)functionParameters[0];

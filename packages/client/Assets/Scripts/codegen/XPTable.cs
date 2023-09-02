@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(XPTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            XPTable other = (XPTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (System.Numerics.BigInteger)functionParameters[0];

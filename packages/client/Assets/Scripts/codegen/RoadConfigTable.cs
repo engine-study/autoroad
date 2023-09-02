@@ -39,6 +39,33 @@ namespace DefaultNamespace
             return typeof(RoadConfigTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            RoadConfigTable other = (RoadConfigTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (width != other.width)
+            {
+                return false;
+            }
+            if (height != other.height)
+            {
+                return false;
+            }
+            if (left != other.left)
+            {
+                return false;
+            }
+            if (right != other.right)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             width = (ulong)(int)functionParameters[0];

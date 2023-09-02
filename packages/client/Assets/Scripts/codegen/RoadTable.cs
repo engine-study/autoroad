@@ -37,6 +37,29 @@ namespace DefaultNamespace
             return typeof(RoadTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            RoadTable other = (RoadTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (state != other.state)
+            {
+                return false;
+            }
+            if (filled != other.filled)
+            {
+                return false;
+            }
+            if (gem != other.gem)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             state = (ulong)(int)functionParameters[0];

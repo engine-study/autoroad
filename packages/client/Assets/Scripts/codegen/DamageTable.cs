@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(DamageTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            DamageTable other = (DamageTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (long)(int)functionParameters[0];

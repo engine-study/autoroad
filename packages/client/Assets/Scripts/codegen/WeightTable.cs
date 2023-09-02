@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(WeightTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            WeightTable other = (WeightTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (long)(int)functionParameters[0];

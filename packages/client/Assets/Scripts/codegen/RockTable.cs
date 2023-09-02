@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(RockTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            RockTable other = (RockTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (ulong)(int)functionParameters[0];

@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(CarriageTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            CarriageTable other = (CarriageTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (bool)functionParameters[0];

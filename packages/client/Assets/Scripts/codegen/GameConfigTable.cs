@@ -38,6 +38,29 @@ namespace DefaultNamespace
             return typeof(GameConfigTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            GameConfigTable other = (GameConfigTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (debug != other.debug)
+            {
+                return false;
+            }
+            if (dummyPlayers != other.dummyPlayers)
+            {
+                return false;
+            }
+            if (roadComplete != other.roadComplete)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             debug = (bool)functionParameters[0];

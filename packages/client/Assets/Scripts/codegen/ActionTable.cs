@@ -37,6 +37,29 @@ namespace DefaultNamespace
             return typeof(ActionTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            ActionTable other = (ActionTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (action != other.action)
+            {
+                return false;
+            }
+            if (x != other.x)
+            {
+                return false;
+            }
+            if (y != other.y)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             action = (ulong)(int)functionParameters[0];

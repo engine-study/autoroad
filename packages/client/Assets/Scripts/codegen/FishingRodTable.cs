@@ -36,6 +36,21 @@ namespace DefaultNamespace
             return typeof(FishingRodTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            FishingRodTable other = (FishingRodTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (bool)functionParameters[0];

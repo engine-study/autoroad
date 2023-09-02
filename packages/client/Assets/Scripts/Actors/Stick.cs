@@ -12,6 +12,8 @@ public class Stick : Equipment
         bool canUse = base.CanUse();
 
         MUDEntity e = CursorMUD.MUDEntity;
+        if(e == null) return false;
+        
         PlayerComponent player = e?.GetMUDComponent<PlayerComponent>();
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
         bool onBounds = BoundsComponent.OnBounds((int)transform.position.x, (int)transform.position.z);

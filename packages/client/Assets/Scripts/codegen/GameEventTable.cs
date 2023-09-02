@@ -36,6 +36,21 @@ namespace DefaultNamespace
             return typeof(GameEventTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            GameEventTable other = (GameEventTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (eventType != other.eventType)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             eventType = (string)functionParameters[0];

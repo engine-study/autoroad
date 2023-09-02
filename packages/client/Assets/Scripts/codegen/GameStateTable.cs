@@ -37,6 +37,25 @@ namespace DefaultNamespace
             return typeof(GameStateTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            GameStateTable other = (GameStateTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (miles != other.miles)
+            {
+                return false;
+            }
+            if (playerCount != other.playerCount)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             miles = (long)(int)functionParameters[0];

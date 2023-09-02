@@ -36,6 +36,25 @@ namespace DefaultNamespace
             return typeof(BootsTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            BootsTable other = (BootsTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (minMove != other.minMove)
+            {
+                return false;
+            }
+            if (maxMove != other.maxMove)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             minMove = (long)(int)functionParameters[0];

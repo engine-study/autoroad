@@ -36,6 +36,21 @@ namespace DefaultNamespace
             return typeof(AnimationTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            AnimationTable other = (AnimationTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (state != other.state)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             state = (ulong)(int)functionParameters[0];

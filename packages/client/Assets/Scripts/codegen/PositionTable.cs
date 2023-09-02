@@ -37,6 +37,29 @@ namespace DefaultNamespace
             return typeof(PositionTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            PositionTable other = (PositionTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (x != other.x)
+            {
+                return false;
+            }
+            if (y != other.y)
+            {
+                return false;
+            }
+            if (layer != other.layer)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             x = (long)(int)functionParameters[0];

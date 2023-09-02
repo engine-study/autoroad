@@ -12,6 +12,9 @@ public class FishingRod : Equipment
         bool canUse = base.CanUse();
 
         MUDEntity e = CursorMUD.MUDEntity;
+
+        if(e == null) return false;
+        
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
         WeightComponent weight = e?.GetMUDComponent<WeightComponent>();
 

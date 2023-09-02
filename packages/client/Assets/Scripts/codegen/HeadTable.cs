@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(HeadTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            HeadTable other = (HeadTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (long)(int)functionParameters[0];

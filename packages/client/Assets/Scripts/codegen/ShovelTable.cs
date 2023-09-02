@@ -35,6 +35,21 @@ namespace DefaultNamespace
             return typeof(ShovelTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            ShovelTable other = (ShovelTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (value != other.value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             value = (bool)functionParameters[0];

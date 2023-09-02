@@ -25,7 +25,7 @@ public class Shovel : Equipment
         // updates.Add(TxManager.MakeOptimisticInsert<PositionComponent>(entity, x,y));
         // updates.Add(TxManager.MakeOptimisticInsert<RoadComponent>(entity, 1, NetworkManager.LocalAddress));
         
-        return await ActionsMUD.ActionTx(null, ActionName.Shoveling, new Vector3(x,0,y));
+        return await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity, ActionName.Shoveling, new Vector3(x,0,y));
     }
 
 }

@@ -42,6 +42,49 @@ namespace DefaultNamespace
             return typeof(StatsTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            StatsTable other = (StatsTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (startingMile != other.startingMile)
+            {
+                return false;
+            }
+            if (kills != other.kills)
+            {
+                return false;
+            }
+            if (deaths != other.deaths)
+            {
+                return false;
+            }
+            if (moves != other.moves)
+            {
+                return false;
+            }
+            if (mined != other.mined)
+            {
+                return false;
+            }
+            if (pushed != other.pushed)
+            {
+                return false;
+            }
+            if (shoveled != other.shoveled)
+            {
+                return false;
+            }
+            if (completed != other.completed)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             startingMile = (long)(int)functionParameters[0];

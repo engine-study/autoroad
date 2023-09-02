@@ -85,11 +85,14 @@ public class WorldScroll : MonoBehaviour {
     float GetClampedMile(float newMile) {
         return Mathf.Clamp(newMile, 0f, maxMile);
     }
+    float GetSoftClampedMile(float newMile) {
+        return Mathf.Clamp(newMile, -.5f, maxMile+.5f);
+    }
 
     void UpdateInput() {
         
         if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftShift)) {
-            mileScroll = GetClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
+            mileScroll = GetSoftClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
         

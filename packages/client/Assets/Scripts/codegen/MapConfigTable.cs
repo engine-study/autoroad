@@ -37,6 +37,25 @@ namespace DefaultNamespace
             return typeof(MapConfigTableUpdate);
         }
 
+        public override bool Equals(object? obj)
+        {
+            MapConfigTable other = (MapConfigTable)obj;
+
+            if (other == null)
+            {
+                return false;
+            }
+            if (playArea != other.playArea)
+            {
+                return false;
+            }
+            if (spawnArea != other.spawnArea)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override void SetValues(params object[] functionParameters)
         {
             playArea = (long)(int)functionParameters[0];
