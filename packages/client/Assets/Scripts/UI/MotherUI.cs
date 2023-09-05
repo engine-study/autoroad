@@ -66,7 +66,7 @@ public class MotherUI : SPUIInstance {
         SPEvents.OnLocalPlayerSpawn -= SpawnPlayer;
 
         TxManager.OnTransaction -= UpdateWheel;
-        TxUpdate.OnUpdate -= UpdateWheelOptimistic;
+        TxUpdate.OnUpdated -= UpdateWheelOptimistic;
 
     }
 
@@ -122,7 +122,7 @@ public class MotherUI : SPUIInstance {
         ToggleGame(true);
 
         TxManager.OnTransaction += UpdateWheel;
-        TxUpdate.OnUpdate += UpdateWheelOptimistic;
+        TxUpdate.OnUpdated += UpdateWheelOptimistic;
 
         SPUIBase.PlaySound(sfx_spawn);
 
