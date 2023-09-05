@@ -27,14 +27,11 @@ public class PlayerComponent : MUDComponent {
     [Header("Debug")]
     [SerializeField] HealthComponent health;
     [SerializeField] PositionComponent position;
-    [SerializeField] ActionComponent state;
     [SerializeField] GameEventComponent gameEvent;
     int lastHealth;
 
     protected override void Init(SpawnInfo newSpawnInfo) {
         base.Init(newSpawnInfo);
-
-        state = MUDWorld.FindOrMakeComponent<ActionComponent>(newSpawnInfo.Entity.Key);
 
         isLocalPlayer = Entity.Key == NetworkManager.LocalAddress;
         if (IsLocalPlayer) {

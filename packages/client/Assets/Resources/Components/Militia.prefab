@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2697586234055374659}
   - component: {fileID: 2224159141207559923}
+  - component: {fileID: 4551743638741576257}
   m_Layer: 0
   m_Name: Militia
   m_TagString: Untagged
@@ -46,17 +47,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredComponents: []
+  hasInit: 0
+  loaded: 0
+  spawnInfo:
+    entity: {fileID: 0}
+    source: 0
+    table: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
   networkInfo:
     updateType: 0
     source: 0
-  hasInit: 0
-  loaded: 0
-  MoveType: 0
-  pos: {fileID: 0}
-  flash: {fileID: 0}
+--- !u!114 &4551743638741576257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4904230719414751080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e77e591581519b408d5dd1e1635b5e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2697586234055374659}
+  action: 0
+  actionEffect: {fileID: 0}
+  entity: {fileID: 0}
+  actionComponent: {fileID: 0}
 --- !u!1001 &7003436069144657907
 PrefabInstance:
   m_ObjectHideFlags: 0

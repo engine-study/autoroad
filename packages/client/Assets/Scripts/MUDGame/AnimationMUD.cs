@@ -21,13 +21,13 @@ public class AnimationMUD : MonoBehaviour
     [SerializeField] ActionComponent actionComponent;
 
     protected virtual void Awake() {
-      
+        entity = GetComponentInParent<MUDEntity>();
     }
 
     protected virtual void Start() {
-        
+
+        actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
         Animator = GetComponentInChildren<SPAnimator>();
-        entity = GetComponentInParent<MUDEntity>();
         PositionSync = GetComponentInParent<PositionSync>();
 
         if(target == null) target = transform;

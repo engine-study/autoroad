@@ -166,48 +166,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(aggroFunction, cancellationToken);
         }
 
-        public Task<string> AggroRequestAsync(byte[] entity)
+        public Task<string> AggroRequestAsync(byte[] player, byte[] entity, PositionData playerPos, PositionData entityPos)
         {
             var aggroFunction = new AggroFunction();
+                aggroFunction.Player = player;
                 aggroFunction.Entity = entity;
+                aggroFunction.PlayerPos = playerPos;
+                aggroFunction.EntityPos = entityPos;
             
              return ContractHandler.SendRequestAsync(aggroFunction);
         }
 
-        public Task<TransactionReceipt> AggroRequestAndWaitForReceiptAsync(byte[] entity, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> AggroRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, PositionData playerPos, PositionData entityPos, CancellationTokenSource cancellationToken = null)
         {
             var aggroFunction = new AggroFunction();
+                aggroFunction.Player = player;
                 aggroFunction.Entity = entity;
+                aggroFunction.PlayerPos = playerPos;
+                aggroFunction.EntityPos = entityPos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(aggroFunction, cancellationToken);
-        }
-
-        public Task<string> AttackRequestAsync(AttackFunction attackFunction)
-        {
-             return ContractHandler.SendRequestAsync(attackFunction);
-        }
-
-        public Task<TransactionReceipt> AttackRequestAndWaitForReceiptAsync(AttackFunction attackFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(attackFunction, cancellationToken);
-        }
-
-        public Task<string> AttackRequestAsync(int x, int y)
-        {
-            var attackFunction = new AttackFunction();
-                attackFunction.X = x;
-                attackFunction.Y = y;
-            
-             return ContractHandler.SendRequestAsync(attackFunction);
-        }
-
-        public Task<TransactionReceipt> AttackRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
-        {
-            var attackFunction = new AttackFunction();
-                attackFunction.X = x;
-                attackFunction.Y = y;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(attackFunction, cancellationToken);
         }
 
         public Task<string> BuyRequestAsync(BuyFunction buyFunction)
@@ -1313,6 +1291,36 @@ namespace IWorld.Service
 
 
 
+        public Task<string> KillRequestAsync(KillFunction killFunction)
+        {
+             return ContractHandler.SendRequestAsync(killFunction);
+        }
+
+        public Task<TransactionReceipt> KillRequestAndWaitForReceiptAsync(KillFunction killFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(killFunction, cancellationToken);
+        }
+
+        public Task<string> KillRequestAsync(byte[] attacker, byte[] target, PositionData pos)
+        {
+            var killFunction = new KillFunction();
+                killFunction.Attacker = attacker;
+                killFunction.Target = target;
+                killFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAsync(killFunction);
+        }
+
+        public Task<TransactionReceipt> KillRequestAndWaitForReceiptAsync(byte[] attacker, byte[] target, PositionData pos, CancellationTokenSource cancellationToken = null)
+        {
+            var killFunction = new KillFunction();
+                killFunction.Attacker = attacker;
+                killFunction.Target = target;
+                killFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(killFunction, cancellationToken);
+        }
+
         public Task<string> ManifestRequestAsync(ManifestFunction manifestFunction)
         {
              return ContractHandler.SendRequestAsync(manifestFunction);
@@ -1495,6 +1503,34 @@ namespace IWorld.Service
                 nameFunction.LastName = lastName;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(nameFunction, cancellationToken);
+        }
+
+        public Task<NeumanNeighborhoodOutputDTO> NeumanNeighborhoodQueryAsync(NeumanNeighborhoodFunction neumanNeighborhoodFunction, BlockParameter blockParameter = null)
+        {
+            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodFunction, NeumanNeighborhoodOutputDTO>(neumanNeighborhoodFunction, blockParameter);
+        }
+
+        public Task<NeumanNeighborhoodOutputDTO> NeumanNeighborhoodQueryAsync(PositionData center, int distance, BlockParameter blockParameter = null)
+        {
+            var neumanNeighborhoodFunction = new NeumanNeighborhoodFunction();
+                neumanNeighborhoodFunction.Center = center;
+                neumanNeighborhoodFunction.Distance = distance;
+            
+            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodFunction, NeumanNeighborhoodOutputDTO>(neumanNeighborhoodFunction, blockParameter);
+        }
+
+        public Task<NeumanNeighborhoodOuterOutputDTO> NeumanNeighborhoodOuterQueryAsync(NeumanNeighborhoodOuterFunction neumanNeighborhoodOuterFunction, BlockParameter blockParameter = null)
+        {
+            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodOuterFunction, NeumanNeighborhoodOuterOutputDTO>(neumanNeighborhoodOuterFunction, blockParameter);
+        }
+
+        public Task<NeumanNeighborhoodOuterOutputDTO> NeumanNeighborhoodOuterQueryAsync(PositionData center, int distance, BlockParameter blockParameter = null)
+        {
+            var neumanNeighborhoodOuterFunction = new NeumanNeighborhoodOuterFunction();
+                neumanNeighborhoodOuterFunction.Center = center;
+                neumanNeighborhoodOuterFunction.Distance = distance;
+            
+            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodOuterFunction, NeumanNeighborhoodOuterOutputDTO>(neumanNeighborhoodOuterFunction, blockParameter);
         }
 
         public Task<bool> OnMapQueryAsync(OnMapFunction onMapFunction, BlockParameter blockParameter = null)
@@ -2903,17 +2939,19 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);
         }
 
-        public Task<string> TriggerEntitiesRequestAsync(PositionData center)
+        public Task<string> TriggerEntitiesRequestAsync(byte[] player, PositionData center)
         {
             var triggerEntitiesFunction = new TriggerEntitiesFunction();
+                triggerEntitiesFunction.Player = player;
                 triggerEntitiesFunction.Center = center;
             
              return ContractHandler.SendRequestAsync(triggerEntitiesFunction);
         }
 
-        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(PositionData center, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(byte[] player, PositionData center, CancellationTokenSource cancellationToken = null)
         {
             var triggerEntitiesFunction = new TriggerEntitiesFunction();
+                triggerEntitiesFunction.Player = player;
                 triggerEntitiesFunction.Center = center;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);

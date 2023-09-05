@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6583147691545111805
+--- !u!1 &3886129426995369941
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,54 +8,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4658851127762766373}
-  - component: {fileID: 3471065316492532668}
+  - component: {fileID: 6589919977404771493}
+  - component: {fileID: 72944959468843034}
   m_Layer: 0
-  m_Name: Action
+  m_Name: Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4658851127762766373
+--- !u!4 &6589919977404771493
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6583147691545111805}
+  m_GameObject: {fileID: 3886129426995369941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.64319193, y: 5.5400267, z: -2.3090513}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3471065316492532668
+--- !u!114 &72944959468843034
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6583147691545111805}
+  m_GameObject: {fileID: 3886129426995369941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a25dad8db2c44240b4795bc636d0101, type: 3}
+  m_Script: {fileID: 11500000, guid: 2802861c5b056254181b195745e73d2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents: []
-  hasInit: 0
-  loaded: 0
-  spawnInfo:
-    entity: {fileID: 0}
-    source: 0
-    table: {fileID: 0}
-  updateInfo:
-    updateType: 0
-    source: 0
-  networkInfo:
-    updateType: 0
-    source: 0
-  actionType: 0
-  targetPos: {x: 0, y: 0, z: 0}
+  movement: {fileID: 0}
+  effect: {fileID: 0}
+  moveEffect: {fileID: 0}
+  action: {fileID: 11400000, guid: b0530f009882d4745b843783cf964d06, type: 2}
+  actionClip: Attack
+  movementClip: 

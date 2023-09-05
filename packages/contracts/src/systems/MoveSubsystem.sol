@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Damage, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
+import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
 import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Stats, Coinage, Scroll, Seeds, Boots, Weight, Animation } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, ActionType, AnimationType } from "../codegen/Types.sol";
@@ -313,7 +313,7 @@ contract MoveSubsystem is System {
     }
   }
 
-  function kill(bytes32 attacker, bytes32 target, PositionData memory pos) private {
+  function kill(bytes32 attacker, bytes32 target, PositionData memory pos) public {
     //credit attacker with kill
     // int32 stat = Stats.getKills(attacker);
     // Stats.setKills(attacker, stat + 1);
@@ -424,7 +424,7 @@ contract MoveSubsystem is System {
     Position.set(player, pos);
 
     //we have to be careful not to infinite loop here
-    IWorld(_world()).triggerEntities(pos);
+    IWorld(_world()).triggerEntities(player, pos);
   }
 
   // function animation(bytes32 player, AnimationType anim) public {

@@ -72,19 +72,14 @@ namespace IWorld.ContractDefinition
     [Function("aggro")]
     public class AggroFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "entity", 1)]
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "entity", 2)]
         public virtual byte[] Entity { get; set; }
-    }
-
-    public partial class AttackFunction : AttackFunctionBase { }
-
-    [Function("attack")]
-    public class AttackFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
+        [Parameter("tuple", "playerPos", 3)]
+        public virtual PositionData PlayerPos { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
     }
 
     public partial class BuyFunction : BuyFunctionBase { }
@@ -589,6 +584,19 @@ namespace IWorld.ContractDefinition
 
     }
 
+    public partial class KillFunction : KillFunctionBase { }
+
+    [Function("kill")]
+    public class KillFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "attacker", 1)]
+        public virtual byte[] Attacker { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "pos", 3)]
+        public virtual PositionData Pos { get; set; }
+    }
+
     public partial class ManifestFunction : ManifestFunctionBase { }
 
     [Function("manifest", "bool")]
@@ -669,6 +677,28 @@ namespace IWorld.ContractDefinition
         public virtual uint MiddleName { get; set; }
         [Parameter("uint32", "lastName", 3)]
         public virtual uint LastName { get; set; }
+    }
+
+    public partial class NeumanNeighborhoodFunction : NeumanNeighborhoodFunctionBase { }
+
+    [Function("neumanNeighborhood", typeof(NeumanNeighborhoodOutputDTO))]
+    public class NeumanNeighborhoodFunctionBase : FunctionMessage
+    {
+        [Parameter("tuple", "center", 1)]
+        public virtual PositionData Center { get; set; }
+        [Parameter("int32", "distance", 2)]
+        public virtual int Distance { get; set; }
+    }
+
+    public partial class NeumanNeighborhoodOuterFunction : NeumanNeighborhoodOuterFunctionBase { }
+
+    [Function("neumanNeighborhoodOuter", typeof(NeumanNeighborhoodOuterOutputDTO))]
+    public class NeumanNeighborhoodOuterFunctionBase : FunctionMessage
+    {
+        [Parameter("tuple", "center", 1)]
+        public virtual PositionData Center { get; set; }
+        [Parameter("int32", "distance", 2)]
+        public virtual int Distance { get; set; }
     }
 
     public partial class OnMapFunction : OnMapFunctionBase { }
@@ -1327,7 +1357,9 @@ namespace IWorld.ContractDefinition
     [Function("triggerEntities")]
     public class TriggerEntitiesFunctionBase : FunctionMessage
     {
-        [Parameter("tuple", "center", 1)]
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("tuple", "center", 2)]
         public virtual PositionData Center { get; set; }
     }
 
@@ -1641,8 +1673,6 @@ namespace IWorld.ContractDefinition
 
 
 
-
-
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1757,6 +1787,26 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+    public partial class NeumanNeighborhoodOutputDTO : NeumanNeighborhoodOutputDTOBase { }
+
+    [FunctionOutput]
+    public class NeumanNeighborhoodOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("tuple[]", "", 1)]
+        public virtual List<PositionData> ReturnValue1 { get; set; }
+    }
+
+    public partial class NeumanNeighborhoodOuterOutputDTO : NeumanNeighborhoodOuterOutputDTOBase { }
+
+    [FunctionOutput]
+    public class NeumanNeighborhoodOuterOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("tuple[]", "", 1)]
+        public virtual List<PositionData> ReturnValue1 { get; set; }
+    }
 
     public partial class OnMapOutputDTO : OnMapOutputDTOBase { }
 
