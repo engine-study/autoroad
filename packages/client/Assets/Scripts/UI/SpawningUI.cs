@@ -27,7 +27,8 @@ public class SpawningUI : SPWindowParent
         
     }
 
-    public void ToggleUI(bool toggle) {
+    public override void ToggleWindow(bool toggle) {
+        base.ToggleWindow(toggle);
 
         if(toggle) {
             SPCamera.SetFollow(null);
@@ -61,7 +62,7 @@ public class SpawningUI : SPWindowParent
     }
 
     void Update() {
-        if(!spawning && Input.GetMouseButtonDown(0) && goodSpawn) {
+        if(!spawning && Input.GetMouseButtonDown(0) && goodSpawn && !SPUIBase.IsPointerOverUIElement) {
             Spawn();
         }
     }

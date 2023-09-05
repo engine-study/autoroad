@@ -3,10 +3,10 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
+import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
 import { Move, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots } from "../codegen/Tables.sol";
-import { PositionTableId } from "../codegen/Tables.sol";
-import { MoveType } from "../codegen/Types.sol";
+import { Position, PositionTableId } from "../codegen/Tables.sol";
+import { MoveType, ActionType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { MapSubsystem } from "../systems/MapSubsystem.sol";
@@ -80,6 +80,8 @@ contract SpawnSystem is System {
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y, 0);
+    IWorld(_world()).setAction(entity, ActionType.Spawn, x, y);
+
   }
 
   //TODO create proper debug

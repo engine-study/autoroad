@@ -96,8 +96,9 @@ public class ActionsMUD : MonoBehaviour
         }
     }
 
-    
-    public void ActionToActionProp(ActionName newState, Vector3 position) {
+
+    public void ActionToActionProp(ActionName newState, Vector3 position)
+    {
 
         //turn player to face position
         ((ControllerMUD)player.Controller).SetLookRotation(position);
@@ -107,21 +108,12 @@ public class ActionsMUD : MonoBehaviour
         //do some work to find the action here
         Equipment e = baseEquipment[(int)newState];
 
-        if (e == null){
+        if (e == null)
+        {
             return;
         }
 
         e.UseState(true);
-    
-        if (action != null) { StopCoroutine(action); }
-        action = StartCoroutine(ActionCoroutine(e));
-
-    }
-
-    Coroutine action;
-    IEnumerator ActionCoroutine(Equipment equipment) {
-        yield return new WaitForSeconds(2f);
-        equipment.UseState(false);
 
     }
 

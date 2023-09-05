@@ -19,7 +19,7 @@ public class AnimationMUD : MonoBehaviour
     [SerializeField] ActionEffect actionEffect;
     [SerializeField] MUDEntity entity;
     [SerializeField] ActionComponent actionComponent;
-
+    SPLooker looker;
     protected virtual void Awake() {
         entity = GetComponentInParent<MUDEntity>();
     }
@@ -31,7 +31,9 @@ public class AnimationMUD : MonoBehaviour
         PositionSync = GetComponentInParent<PositionSync>();
 
         if(target == null) target = transform;
-        
+
+        looker = target.gameObject.AddComponent<SPLooker>();
+
         if(entity.HasInit) Init();
         else entity.OnInit += Init;
     }
@@ -64,12 +66,33 @@ public class AnimationMUD : MonoBehaviour
 
         action = newAction;
         actionEffect = LoadAction(action.ToString());
+        looker.SetLookRotation(actionComponent.Position);
 
-        //play new action
-        if(actionEffect) { ToggleAction(true, actionEffect);}
+        //play new action if it exists
+        if(actionEffect == null) return;
+        
+        ToggleAction(true, actionEffect);
+
+        //start coroutine
+        if (actionCoroutine != null) { StopCoroutine(actionCoroutine); }
+        actionCoroutine = StartCoroutine(ActionCoroutine(actionEffect));
+        
 
     }   
 
+    public virtual void ToggleAction(bool toggle, ActionEffect newAction) {
+        actionEffect.Toggle(toggle, this);
+    }
+
+    Coroutine actionCoroutine;
+    IEnumerator ActionCoroutine(ActionEffect newAction) {
+        yield return new WaitForSeconds(2f);
+        ToggleAction(false, newAction);
+
+    }
+    
+    
+    //load from resources folder
     ActionEffect LoadAction(string action) {
 
         effects.TryGetValue(action, out ActionEffect newAction);
@@ -85,11 +108,6 @@ public class AnimationMUD : MonoBehaviour
 
         return newAction;
     }
+  
 
-    
-
-    public virtual void ToggleAction(bool toggle, ActionEffect newAction) {
-        actionEffect.Toggle(toggle, this);
-    }
-    
 }

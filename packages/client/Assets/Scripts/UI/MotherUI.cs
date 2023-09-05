@@ -17,6 +17,7 @@ public class MotherUI : SPUIInstance {
     public SPActionWheelUI wheel;
     public NameOptionUI playerCreate;
     public SpawningUI spawning;
+    public RespawnUI respawn;
 
     [Header("Menu")]
     public MenuUI menu;
@@ -49,6 +50,7 @@ public class MotherUI : SPUIInstance {
         ToggleLoading(true);
         TogglePlayerCreation(false);
         TogglePlayerSpawning(false);
+        ToggleRespawn(false);
 
         ToggleGame(false);
 
@@ -98,9 +100,13 @@ public class MotherUI : SPUIInstance {
         Mother.playerCreate.ToggleWindow(toggle);
     }
 
+
+    public static void ToggleRespawn(bool toggle) {
+        Mother.respawn.ToggleWindow(toggle);
+    }
+
     public static void TogglePlayerSpawning(bool toggle) {
         Mother.spawning.ToggleWindow(toggle);
-        Mother.spawning.ToggleUI(toggle);
     }
 
     public static void ToggleGame(bool toggle) {

@@ -115,7 +115,7 @@ public class PlayerComponent : MUDComponent {
 
         if(IsLocalPlayer) {
             Debug.Log("Died, showing Spawn UI", this);
-            MotherUI.TogglePlayerSpawning(health.Health <= 0 || health.UpdateInfo.UpdateType == UpdateType.DeleteRecord);
+            MotherUI.ToggleRespawn(health.Health <= 0 || health.UpdateInfo.UpdateType == UpdateType.DeleteRecord);
         }
 
         lastHealth = health.Health;

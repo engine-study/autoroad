@@ -314,16 +314,11 @@ contract MoveSubsystem is System {
   }
 
   function kill(bytes32 attacker, bytes32 target, PositionData memory pos) public {
-    //credit attacker with kill
-    // int32 stat = Stats.getKills(attacker);
-    // Stats.setKills(attacker, stat + 1);
 
     //kill target
     Health.set(target, -1);
     Position.deleteRecord(target);
-
-    // int32 stat2 = Stats.getDeaths(target);
-    // Stats.setDeaths(target, stat2 + 1);
+    IWorld(_world()).setAction(target, ActionType.Dead, pos.x, pos.y);
 
     //spawn bones
     // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
