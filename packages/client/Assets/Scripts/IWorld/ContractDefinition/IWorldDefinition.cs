@@ -67,6 +67,15 @@ namespace IWorld.ContractDefinition
         public virtual BigInteger Amount { get; set; }
     }
 
+    public partial class AggroFunction : AggroFunctionBase { }
+
+    [Function("aggro")]
+    public class AggroFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "entity", 1)]
+        public virtual byte[] Entity { get; set; }
+    }
+
     public partial class AttackFunction : AttackFunctionBase { }
 
     [Function("attack")]
@@ -180,6 +189,19 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("int32", "mileNumber", 1)]
         public virtual int MileNumber { get; set; }
+    }
+
+    public partial class CreateEntitiesFunction : CreateEntitiesFunctionBase { }
+
+    [Function("createEntities")]
+    public class CreateEntitiesFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "chunkEntity", 1)]
+        public virtual byte[] ChunkEntity { get; set; }
+        [Parameter("int32", "playArea", 2)]
+        public virtual int PlayArea { get; set; }
+        [Parameter("uint32", "roadHeight", 3)]
+        public virtual uint RoadHeight { get; set; }
     }
 
     public partial class CreateMapFunction : CreateMapFunctionBase { }
@@ -1067,12 +1089,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
-        [Parameter("int32", "x", 2)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 3)]
-        public virtual int Y { get; set; }
-        [Parameter("int32", "layer", 4)]
-        public virtual int Layer { get; set; }
+        [Parameter("tuple", "pos", 2)]
+        public virtual PositionData Pos { get; set; }
     }
 
     public partial class SetRecord1Function : SetRecord1FunctionBase { }
@@ -1302,6 +1320,15 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class TriggerEntitiesFunction : TriggerEntitiesFunctionBase { }
+
+    [Function("triggerEntities")]
+    public class TriggerEntitiesFunctionBase : FunctionMessage
+    {
+        [Parameter("tuple", "center", 1)]
+        public virtual PositionData Center { get; set; }
     }
 
     public partial class UpdateChunkFunction : UpdateChunkFunctionBase { }
@@ -1612,6 +1639,10 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1746,6 +1777,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

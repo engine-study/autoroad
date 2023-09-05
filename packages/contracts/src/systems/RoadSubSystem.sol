@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder, Ox, Militia } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities } from "../codegen/Tables.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
 import { SpawnSystem } from "./SpawnSystem.sol";
@@ -16,6 +16,7 @@ import { positionToEntityKey, position3DToEntityKey } from "../utility/positionT
 import { randomCoord } from "../utility/random.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
+import { EntitySubsystem } from "./EntitySubsystem.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
 contract RoadSubsystem is System {
@@ -29,6 +30,7 @@ contract RoadSubsystem is System {
   }
 
   function createMile(int32 mileNumber) public {
+    IWorld world = IWorld(_world());
     int32 currentMile = GameState.getMiles();
 
     console.log("create mile");
@@ -45,13 +47,6 @@ contract RoadSubsystem is System {
     GameState.set(mileNumber, players);
     // GameState.setMiles(mileNumber);
 
-    // MyTable.pushFooArray(keccak256("some.key"), 4242); // adds 4242 at end of fooArray
-    // MyTable.popFooArray(keccak256("some.key")); // pop fooArray
-    // MyTable.setItemFooArray(keccak256("some.key"), 0, 123); // set fooArray[0] to 123
-
-    bytes32[] memory entitiesArray = new bytes32[](0);
-    bytes32[] memory contributorsArray = new bytes32[](0);
-
     //create a new chunk
     (int32 playArea, int32 spawnArea) = MapConfig.get();
     (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
@@ -63,6 +58,8 @@ contract RoadSubsystem is System {
 
     Bounds.set(int32(-playArea), playArea, yEnd, yStart);
     GameConfigData memory config = GameConfig.get();
+
+    world.createEntities(chunkEntity, playArea, roadHeight);
 
     //set the chunk of road
     Chunk.set(chunkEntity, false, mileNumber, 0, 0);
@@ -88,12 +85,12 @@ contract RoadSubsystem is System {
         } else if (noiseCoord == 16) {
           terrainType = TerrainType.HeavyBoy;
         } else if (noiseCoord == 17) {
-          if (IWorld(_world()).onRoad(x, y)) {
+          if (world.onRoad(x, y)) {
             continue;
           }
           terrainType = TerrainType.HeavyHeavyBoy;
         } else if (noiseCoord == 18) {
-          if (IWorld(_world()).onRoad(x, y)) {
+          if (world.onRoad(x, y)) {
             continue;
           }
           terrainType = TerrainType.Pillar;

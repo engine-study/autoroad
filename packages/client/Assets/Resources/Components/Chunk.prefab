@@ -291,7 +291,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0e8bab46b176c38489a5ac88c94731db, type: 2}
+  - {fileID: 2100000, guid: 05784ef5db47a2c44a0ed44d1a97dc06, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -457,7 +457,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0e8bab46b176c38489a5ac88c94731db, type: 2}
+  - {fileID: 2100000, guid: 05784ef5db47a2c44a0ed44d1a97dc06, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -514,7 +514,7 @@ Transform:
   - {fileID: 8612434091250168614}
   - {fileID: 4829532424458616739}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7101948436885318763
 MonoBehaviour:
@@ -529,16 +529,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredComponents: []
-  entity: {fileID: 0}
-  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
+  spawnInfo:
+    entity: {fileID: 0}
+    source: 0
+    table: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
   networkInfo:
     updateType: 0
     source: 0
-  hasInit: 0
-  loaded: 0
   completed: 0
   pieces: 0
   mileNumber: 0

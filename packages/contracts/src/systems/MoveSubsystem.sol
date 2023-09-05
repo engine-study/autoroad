@@ -10,8 +10,9 @@ import { RoadState, RockType, MoveType, ActionType, AnimationType } from "../cod
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
-import { MapSubsystem } from "../systems/MapSubsystem.sol";
-import { RoadSubsystem } from "../systems/RoadSubsystem.sol";
+import { MapSubsystem } from "./MapSubsystem.sol";
+import { RoadSubsystem } from "./RoadSubsystem.sol";
+import { EntitySubsystem } from "./EntitySubsystem.sol";
 
 contract MoveSubsystem is System {
 
@@ -410,17 +411,20 @@ contract MoveSubsystem is System {
     moveTo(player, atPos[0], startPos, endPos, atPos, atDest, ActionType.Hop);
   }
 
-  function setPositionData(bytes32 player, PositionData memory pos, ActionType action) public {
-    setPosition(player, pos.x, pos.y, pos.layer, action);
-  }
-
   function setPosition(bytes32 player, int32 x, int32 y, int32 layer, ActionType action) public {
-    IWorld(_world()).setAction(player, action, x, y);
-    setPositionRaw(player, x, y, layer);
+    setPositionData(player, PositionData(x, y, layer), action);
   }
 
-  function setPositionRaw(bytes32 player, int32 x, int32 y, int32 layer) public {
-    Position.set(player, x, y, layer);
+  function setPositionData(bytes32 player, PositionData memory pos, ActionType action) public {
+    IWorld(_world()).setAction(player, action, pos.x, pos.y);
+    setPositionRaw(player, pos);
+  }
+
+  function setPositionRaw(bytes32 player, PositionData memory pos) public {
+    Position.set(player, pos);
+
+    //we have to be careful not to infinite loop here
+    IWorld(_world()).triggerEntities(pos);
   }
 
   // function animation(bytes32 player, AnimationType anim) public {

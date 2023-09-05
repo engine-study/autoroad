@@ -5640,6 +5640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0504cc0f4638db41a51576555488a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  active: 1
   onEffects: {fileID: 8545061092677230838}
   offEffects: {fileID: 0}
   hasInit: 0
@@ -5743,7 +5744,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b59063aba75e98e43a6c3ebeb7c2445e, type: 2}
+  - {fileID: 2100000, guid: 1a44b1744d2fa314cbf57ecc044a61fe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6197,16 +6198,22 @@ MonoBehaviour:
   syncType: 0
   synced: 0
   targetComponent: {fileID: 0}
-  targetTransform: {fileID: 0}
+  target: {fileID: 0}
   hideIfNoPosition: 1
   hideIfBelowGround: 0
   hideAfterLoaded: 1
   rotateToFace: 0
   speed: 1
   rotationSpeed: 720
+  useLine: 0
+  parentTransformToEntity: 0
   pos: {fileID: 0}
-  targetPos: {x: 0, y: 0, z: 0}
+  movement: {fileID: 0}
+  StartPos: {x: 0, y: 0, z: 0}
   moving: 0
+  moveLerp: 0
+  distanceMoved: 0
+  distance: 0
 --- !u!114 &6007097598830730531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6504,7 +6511,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b59063aba75e98e43a6c3ebeb7c2445e, type: 2}
+  - {fileID: 2100000, guid: 1a44b1744d2fa314cbf57ecc044a61fe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

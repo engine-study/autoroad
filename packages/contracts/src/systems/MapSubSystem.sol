@@ -9,6 +9,8 @@ import { RoadSubsystem } from "./RoadSubsystem.sol";
 
 contract MapSubsystem is System {
 
+  //TODO switch to position data so we have maps accessed through bytes32
+  
   //the coordinate exists inside the current and previous miles excluding spawn zone
   function onMap(int32 x, int32 y) public view returns (bool) {
     // bound to map

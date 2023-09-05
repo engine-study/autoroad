@@ -12,6 +12,10 @@ export default mudConfig({
       name: "move",
       openAccess: false,
     },
+    MilitiaSubsystem: {
+      name: "militia",
+      openAccess: false,
+    },
     RoadSubsystem: {
       name: "road",
       openAccess: false,
@@ -22,6 +26,10 @@ export default mudConfig({
     },
     FloraSubsystem: {
       name: "flora",
+      openAccess: false,
+    },
+    EntitySubsystem: {
+      name: "entities",
       openAccess: false,
     },
 
@@ -128,6 +136,14 @@ export default mudConfig({
         // entities: "bytes32[]",
         //   //dynamic list of people who have helped build the mile
         // contributors: "bytes32[]",
+      },
+    },
+
+    Entities: {
+      dataStruct: false,
+      schema: {
+        width: "bytes32[]",
+        height: "bytes32[]",
       },
     },
 

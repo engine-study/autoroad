@@ -156,6 +156,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(addXPAdminFunction, cancellationToken);
         }
 
+        public Task<string> AggroRequestAsync(AggroFunction aggroFunction)
+        {
+             return ContractHandler.SendRequestAsync(aggroFunction);
+        }
+
+        public Task<TransactionReceipt> AggroRequestAndWaitForReceiptAsync(AggroFunction aggroFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(aggroFunction, cancellationToken);
+        }
+
+        public Task<string> AggroRequestAsync(byte[] entity)
+        {
+            var aggroFunction = new AggroFunction();
+                aggroFunction.Entity = entity;
+            
+             return ContractHandler.SendRequestAsync(aggroFunction);
+        }
+
+        public Task<TransactionReceipt> AggroRequestAndWaitForReceiptAsync(byte[] entity, CancellationTokenSource cancellationToken = null)
+        {
+            var aggroFunction = new AggroFunction();
+                aggroFunction.Entity = entity;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(aggroFunction, cancellationToken);
+        }
+
         public Task<string> AttackRequestAsync(AttackFunction attackFunction)
         {
              return ContractHandler.SendRequestAsync(attackFunction);
@@ -434,6 +460,36 @@ namespace IWorld.Service
                 contemplateMileFunction.MileNumber = mileNumber;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(contemplateMileFunction, cancellationToken);
+        }
+
+        public Task<string> CreateEntitiesRequestAsync(CreateEntitiesFunction createEntitiesFunction)
+        {
+             return ContractHandler.SendRequestAsync(createEntitiesFunction);
+        }
+
+        public Task<TransactionReceipt> CreateEntitiesRequestAndWaitForReceiptAsync(CreateEntitiesFunction createEntitiesFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
+        }
+
+        public Task<string> CreateEntitiesRequestAsync(byte[] chunkEntity, int playArea, uint roadHeight)
+        {
+            var createEntitiesFunction = new CreateEntitiesFunction();
+                createEntitiesFunction.ChunkEntity = chunkEntity;
+                createEntitiesFunction.PlayArea = playArea;
+                createEntitiesFunction.RoadHeight = roadHeight;
+            
+             return ContractHandler.SendRequestAsync(createEntitiesFunction);
+        }
+
+        public Task<TransactionReceipt> CreateEntitiesRequestAndWaitForReceiptAsync(byte[] chunkEntity, int playArea, uint roadHeight, CancellationTokenSource cancellationToken = null)
+        {
+            var createEntitiesFunction = new CreateEntitiesFunction();
+                createEntitiesFunction.ChunkEntity = chunkEntity;
+                createEntitiesFunction.PlayArea = playArea;
+                createEntitiesFunction.RoadHeight = roadHeight;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
         }
 
         public Task<string> CreateMapRequestAsync(CreateMapFunction createMapFunction)
@@ -2289,24 +2345,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionRawFunction, cancellationToken);
         }
 
-        public Task<string> SetPositionRawRequestAsync(byte[] player, int x, int y, int layer)
+        public Task<string> SetPositionRawRequestAsync(byte[] player, PositionData pos)
         {
             var setPositionRawFunction = new SetPositionRawFunction();
                 setPositionRawFunction.Player = player;
-                setPositionRawFunction.X = x;
-                setPositionRawFunction.Y = y;
-                setPositionRawFunction.Layer = layer;
+                setPositionRawFunction.Pos = pos;
             
              return ContractHandler.SendRequestAsync(setPositionRawFunction);
         }
 
-        public Task<TransactionReceipt> SetPositionRawRequestAndWaitForReceiptAsync(byte[] player, int x, int y, int layer, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SetPositionRawRequestAndWaitForReceiptAsync(byte[] player, PositionData pos, CancellationTokenSource cancellationToken = null)
         {
             var setPositionRawFunction = new SetPositionRawFunction();
                 setPositionRawFunction.Player = player;
-                setPositionRawFunction.X = x;
-                setPositionRawFunction.Y = y;
-                setPositionRawFunction.Layer = layer;
+                setPositionRawFunction.Pos = pos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionRawFunction, cancellationToken);
         }
@@ -2839,6 +2891,32 @@ namespace IWorld.Service
                 teleportScrollFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportScrollFunction, cancellationToken);
+        }
+
+        public Task<string> TriggerEntitiesRequestAsync(TriggerEntitiesFunction triggerEntitiesFunction)
+        {
+             return ContractHandler.SendRequestAsync(triggerEntitiesFunction);
+        }
+
+        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(TriggerEntitiesFunction triggerEntitiesFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);
+        }
+
+        public Task<string> TriggerEntitiesRequestAsync(PositionData center)
+        {
+            var triggerEntitiesFunction = new TriggerEntitiesFunction();
+                triggerEntitiesFunction.Center = center;
+            
+             return ContractHandler.SendRequestAsync(triggerEntitiesFunction);
+        }
+
+        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(PositionData center, CancellationTokenSource cancellationToken = null)
+        {
+            var triggerEntitiesFunction = new TriggerEntitiesFunction();
+                triggerEntitiesFunction.Center = center;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);
         }
 
         public Task<string> UpdateChunkRequestAsync(UpdateChunkFunction updateChunkFunction)
