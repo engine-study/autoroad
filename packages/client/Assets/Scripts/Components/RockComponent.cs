@@ -64,16 +64,9 @@ public class RockComponent : MUDComponent {
     protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
 
         RockTable rockUpdate = (RockTable)update;
-        // Debug.Log("Rock: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
-        if (rockUpdate == null) {
-            Debug.LogError("No rockUpdate", this);
-        } else {
-            // rockType = rockUpdate.value != null ? (RockType)rockUpdate.value : RockType._Count;
-            rockType = (RockType)rockUpdate.value;
-        }
-
-        // Debug.Log(rockType.ToString());
+        if (rockUpdate == null) { Debug.LogError("No rockUpdate", this);
+        } else { rockType = (RockType)rockUpdate.value;}
 
         rockBase.baseName = rockType.ToString();
         Entity.SetName(rockType.ToString());
@@ -82,22 +75,22 @@ public class RockComponent : MUDComponent {
             stages[i].SetActive(i == (int)rockType);
         }
 
+    }
+
+    protected override void UpdateComponentRich() {
+        base.UpdateComponentRich();
+
         flash.SetTarget(stages[(int)rockType].GetComponent<RandomSelector>()?.ActiveChild);
 
-        if (Loaded && lastStage != rockType) {
-
-            if (newInfo.UpdateType == UpdateType.SetField || newInfo.Source == UpdateSource.Optimistic) {
-                if (lastStage < RockType.Rudus) {
-                    SPAudioSource.Play(transform.position, sfx_bigBreaks);
-                } else {
-                    SPAudioSource.Play(transform.position, sfx_smallBreaks);
-                }
-
-                flash.Flash();
-                fx_break.Play();
-            }
+        if (lastStage < RockType.Rudus) {
+            SPAudioSource.Play(transform.position, sfx_bigBreaks);
+        } else {
+            SPAudioSource.Play(transform.position, sfx_smallBreaks);
         }
 
+        flash.Flash();
+        fx_break.Play();
+            
         lastStage = rockType;
 
     }

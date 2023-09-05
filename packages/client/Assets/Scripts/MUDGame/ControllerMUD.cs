@@ -211,7 +211,7 @@ public class ControllerMUD : SPController {
             }
 
             //update our own position
-            updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Push, moveTo + direction));
+            // updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Push, moveTo + direction));
             updates.Add(ActionsMUD.PositionOptimistic(mudEntity, moveTo));
             ActionsMUD.ActionTx(mudEntity, ActionName.Push, moveTo, updates);
 
