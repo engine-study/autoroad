@@ -45,7 +45,7 @@ contract ItemSystem is System {
     
     //stick
     if (id == 0) {
-      price = 10;
+      price = 100;
     } 
     //robe
     if (id == 1) {
@@ -57,7 +57,7 @@ contract ItemSystem is System {
     } 
     //fishing rod
     if (id == 3) {
-      price = 25;
+      price = 50;
     } 
     //boots
     if (id == 4) {

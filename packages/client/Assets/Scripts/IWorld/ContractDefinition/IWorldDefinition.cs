@@ -589,10 +589,10 @@ namespace IWorld.ContractDefinition
     [Function("kill")]
     public class KillFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "attacker", 1)]
-        public virtual byte[] Attacker { get; set; }
-        [Parameter("bytes32", "target", 2)]
+        [Parameter("bytes32", "target", 1)]
         public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "attacker", 2)]
+        public virtual byte[] Attacker { get; set; }
         [Parameter("tuple", "pos", 3)]
         public virtual PositionData Pos { get; set; }
     }

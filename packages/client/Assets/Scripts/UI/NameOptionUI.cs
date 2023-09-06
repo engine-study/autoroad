@@ -98,7 +98,7 @@ public class NameOptionUI : SPWindowParent {
     }
     
     public async UniTask<bool> SpawnTx() {
-        return await TxManager.Send<NameFunction>(System.Convert.ToUInt32(Name.first), System.Convert.ToUInt32(Name.second), System.Convert.ToUInt32(Name.third));
+        return await TxManager.SendDirect<NameFunction>(System.Convert.ToUInt32(Name.first), System.Convert.ToUInt32(Name.second), System.Convert.ToUInt32(Name.third));
     }
 
     public void Selected(int newSelection) {

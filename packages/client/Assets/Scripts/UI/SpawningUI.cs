@@ -91,12 +91,11 @@ public class SpawningUI : SPWindowParent
         spawnZone.SetActive(false);
 
         spawning = true; 
-        bool success = await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(x),System.Convert.ToInt32(y));
+        bool success = await TxManager.SendDirect<SpawnFunction>(System.Convert.ToInt32(x),System.Convert.ToInt32(y));
         spawning = false;
 
         if(success) {
             ToggleWindowClose();
-            MotherUI.FollowPlayer();
         } else { 
             scene.SetActive(true);
             cursor.SetActive(true);

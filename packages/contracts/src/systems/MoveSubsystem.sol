@@ -175,9 +175,10 @@ contract MoveSubsystem is System {
       bool empty = moveType == MoveType.None || moveType == MoveType.Hole;
       require(empty, "moving into an occupied spot");
 
-      //move into the hole
+      //move into the hole, possibly make this its own function
       if (moveType == MoveType.Hole) {
-        if(Player.get(entity)) { Health.set(entity, -1);}
+        //kill if it was a player
+        if(Player.get(entity)) { kill(entity, player, to);}
         if(Road.getState(atDestination[0]) == uint32(RoadState.Shoveled)) {
           IWorld(_world()).spawnRoadFromPlayer(player, entity, atDestination[0], to);
         }
@@ -287,7 +288,7 @@ contract MoveSubsystem is System {
     health--;
 
     if (health <= 0) {
-      kill(player, atPosition[0], pos);
+      kill(atPosition[0], player, pos);
     } else {
       Health.set(atPosition[0], health);
     }
@@ -307,17 +308,19 @@ contract MoveSubsystem is System {
     health--;
 
     if (health <= 0) {
-      kill(player, atPosition[0], pos);
+      kill(atPosition[0], player, pos);
     } else {
       Health.set(atPosition[0], health);
     }
   }
 
-  function kill(bytes32 attacker, bytes32 target, PositionData memory pos) public {
+  function kill(bytes32 target, bytes32 attacker, PositionData memory pos) public {
 
     //kill target
     Health.set(target, -1);
     Position.deleteRecord(target);
+
+    //set to dead
     IWorld(_world()).setAction(target, ActionType.Dead, pos.x, pos.y);
 
     //spawn bones

@@ -75,22 +75,23 @@ public class RockComponent : MUDComponent {
             stages[i].SetActive(i == (int)rockType);
         }
 
+        gameObject.SetActive(rockType < RockType.Rudus);
+
     }
 
     protected override void UpdateComponentRich() {
         base.UpdateComponentRich();
 
         flash.SetTarget(stages[(int)rockType].GetComponent<RandomSelector>()?.ActiveChild);
+        flash.Flash();
+        fx_break.Play();
 
-        if (lastStage < RockType.Rudus) {
+        if (rockType < RockType.Rudus) {
             SPAudioSource.Play(transform.position, sfx_bigBreaks);
         } else {
             SPAudioSource.Play(transform.position, sfx_smallBreaks);
         }
 
-        flash.Flash();
-        fx_break.Play();
-            
         lastStage = rockType;
 
     }

@@ -1301,21 +1301,21 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(killFunction, cancellationToken);
         }
 
-        public Task<string> KillRequestAsync(byte[] attacker, byte[] target, PositionData pos)
+        public Task<string> KillRequestAsync(byte[] target, byte[] attacker, PositionData pos)
         {
             var killFunction = new KillFunction();
-                killFunction.Attacker = attacker;
                 killFunction.Target = target;
+                killFunction.Attacker = attacker;
                 killFunction.Pos = pos;
             
              return ContractHandler.SendRequestAsync(killFunction);
         }
 
-        public Task<TransactionReceipt> KillRequestAndWaitForReceiptAsync(byte[] attacker, byte[] target, PositionData pos, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> KillRequestAndWaitForReceiptAsync(byte[] target, byte[] attacker, PositionData pos, CancellationTokenSource cancellationToken = null)
         {
             var killFunction = new KillFunction();
-                killFunction.Attacker = attacker;
                 killFunction.Target = target;
+                killFunction.Attacker = attacker;
                 killFunction.Pos = pos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(killFunction, cancellationToken);

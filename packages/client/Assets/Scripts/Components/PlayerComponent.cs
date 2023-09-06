@@ -27,6 +27,7 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] PositionComponent position;
     [SerializeField] GameEventComponent gameEvent;
     int lastHealth;
+    bool wasAlive = false;
 
     protected override void Init(SpawnInfo newSpawnInfo) {
         base.Init(newSpawnInfo);

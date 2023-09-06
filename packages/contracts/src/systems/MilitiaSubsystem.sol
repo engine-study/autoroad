@@ -22,7 +22,7 @@ contract MilitiaSubsystem is System {
     if(health == 0) return;
 
     world.setAction(entity, ActionType.Melee, playerPos.x, playerPos.y);
-    world.kill(entity, player, playerPos);
+    world.kill(player, entity, playerPos);
   }
   
 }

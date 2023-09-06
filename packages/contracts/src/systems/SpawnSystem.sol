@@ -94,5 +94,6 @@ contract SpawnSystem is System {
     Position.deleteRecord(entity);
     Health.set(entity, -1);
     Move.deleteRecord(entity);
+    
   }
 }

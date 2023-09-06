@@ -33,9 +33,12 @@ public class ActionEffect : MonoBehaviour {
             
         }
 
-        setup.PositionSync.SetMovement(movement);
 
         if(toggle) {
+            
+            //set the movement, LET THIS LINGER, states without movement use the last movement given
+            setup.PositionSync.SetMovement(movement);
+
             if(setup.PositionSync.Moving) {
                 //play movement animation
                 ToggleMoveAnimation(true);
