@@ -20,9 +20,7 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] bool spawned;
     [SerializeField] bool isLocalPlayer;
     [SerializeField] PlayerMUD playerScript;
-    [SerializeField] ParticleSystem fx_death;    
     [SerializeField] AudioClip [] sfx_hitSound;
-    [SerializeField] AudioClip [] sfx_deathSound;
 
     [Header("Debug")]
     [SerializeField] HealthComponent health;
@@ -82,8 +80,10 @@ public class PlayerComponent : MUDComponent {
     
     protected override void OnDestroy() {
         base.OnDestroy();
-        isLocalPlayer = false;
-        LocalPlayer = null;
+
+        if(isLocalPlayer) {
+            LocalPlayer = null;
+        }
     }
 
 
@@ -125,16 +125,16 @@ public class PlayerComponent : MUDComponent {
 
         bool isAlive = position.UpdateInfo.UpdateType != UpdateType.DeleteRecord;
 
-        //we are dead
         if(isAlive) {
             if(killCoroutine != null) {StopCoroutine(killCoroutine);}
             //we are alive again after being dead
             playerScript.Respawn(transform.position);
             playerScript.Root.gameObject.SetActive(isAlive);
             playerScript.Animator.PlayClip("Idle");
+            
         } else {
+            //we are dead
             playerScript.Kill();
-            fx_death.Play();
             killCoroutine = StartCoroutine(KillCoroutine());
         }
 
@@ -143,7 +143,7 @@ public class PlayerComponent : MUDComponent {
 
     Coroutine killCoroutine;
     IEnumerator KillCoroutine() {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(2f);
         playerScript.Root.gameObject.SetActive(false);
 
     }

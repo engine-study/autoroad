@@ -7,7 +7,7 @@ using IWorld.ContractDefinition;
 using Nethereum.Contracts;
 using Cysharp.Threading.Tasks;
 
-public enum ActionName {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop}
+public enum ActionName {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn}
 public class ActionsMUD : MonoBehaviour
 {
     [EnumNamedArray( typeof(ActionName) )]
@@ -103,15 +103,12 @@ public class ActionsMUD : MonoBehaviour
         //turn player to face position
         ((ControllerMUD)player.Controller).SetLookRotation(position);
 
-        if (baseEquipment.Count - 1 < (int)newState) { Debug.LogError(newState.ToString(), this); }
+        if ((int)newState >= baseEquipment.Count) { Debug.LogError(newState.ToString(), this); return; }
 
         //do some work to find the action here
         Equipment e = baseEquipment[(int)newState];
 
-        if (e == null)
-        {
-            return;
-        }
+        if (e == null) { return;}
 
         e.UseState(true);
 

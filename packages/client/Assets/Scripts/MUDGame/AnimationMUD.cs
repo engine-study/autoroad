@@ -60,9 +60,15 @@ public class AnimationMUD : MonoBehaviour
     public virtual void EnterState(ActionName newAction) {
 
         //turn off old action
-        if (actionEffect != null && newAction != action) { ToggleAction(false, actionEffect); }
+        if (actionEffect != null && newAction != action) { 
+            if (actionCoroutine != null) { StopCoroutine(actionCoroutine); }
+            ToggleAction(false, actionEffect); 
+        }
 
-        Debug.Log("Action: " + newAction.ToString(), this);
+        Debug.Log("ACTIONSET", this);
+        Debug.Log(newAction.ToString(), this);
+        Debug.Log(((int)actionComponent.Position.x).ToString(), this);
+        Debug.Log(((int)actionComponent.Position.z).ToString(), this);
 
         action = newAction;
         actionEffect = LoadAction(action.ToString());
@@ -70,14 +76,10 @@ public class AnimationMUD : MonoBehaviour
 
         //play new action if it exists
         if(actionEffect == null) return;
-        
+
         ToggleAction(true, actionEffect);
-
-        //start coroutine
-        if (actionCoroutine != null) { StopCoroutine(actionCoroutine); }
-        actionCoroutine = StartCoroutine(ActionCoroutine(actionEffect));
+        // actionCoroutine = StartCoroutine(ActionCoroutine(actionEffect));
         
-
     }   
 
     public virtual void ToggleAction(bool toggle, ActionEffect newAction) {
@@ -86,6 +88,9 @@ public class AnimationMUD : MonoBehaviour
 
     Coroutine actionCoroutine;
     IEnumerator ActionCoroutine(ActionEffect newAction) {
+        yield return null;
+        ToggleAction(true, newAction);
+
         yield return new WaitForSeconds(2f);
         ToggleAction(false, newAction);
 

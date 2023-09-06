@@ -24,27 +24,19 @@ public class ActionEffect : MonoBehaviour {
 
         //first time setup
         if (active != toggle) {
-
-            if (setup.PositionSync) {
-                if (toggle) {
-                    setup.PositionSync.OnMoveStart += OnMoveStart;
-                    setup.PositionSync.OnMoveEnd += OnMoveEnd;
-                    setup.PositionSync.SetMovement(movement);
-                }  else {
-                    setup.PositionSync.OnMoveStart -= OnMoveStart;
-                    setup.PositionSync.OnMoveEnd -= OnMoveEnd;
-                }
-            }
+            if (toggle) {
+            } else {}
+            
         }
 
-        //play state animation
-        ToggleActionAnimation(toggle);
+        setup.PositionSync.SetMovement(movement);
 
-        //play movement animation
-        if(setup.PositionSync) {
-            if(setup.PositionSync.Moving) {
-                PlayAnimation(movementClip);
-            }
+        if(setup.PositionSync.Moving) {
+            //play movement animation
+            ToggleMoveAnimation(true);
+        } else {
+            //play state animation
+            ToggleActionAnimation(toggle);
         }
 
         active = toggle;
@@ -53,11 +45,36 @@ public class ActionEffect : MonoBehaviour {
 
     }
 
+    
+    public void OnMoveStart() {
+        ToggleMoveAnimation(true);
+    }   
+
+    public void OnMoveEnd() {
+        ToggleMoveAnimation(false);
+    }
+
+
+    void ToggleMoveAnimation(bool toggle) {
+
+        if(toggle) {
+            moveEffect?.PlayEnabled();
+            PlayAnimation(movementClip);
+        } else {
+            moveEffect?.PlayDisabled();
+            ToggleActionAnimation(true);
+    
+        }
+
+    }
+
     void ToggleActionAnimation(bool toggle) {
 
         if(toggle) {
+
             PlayAnimation(actionClip);
-            //ugly hack
+
+            //move to AnimationPlayerMUD later
             if(action) {
                 if(action is SPActionPlayer) {
                     SPActionPlayer actionPlayer = action as SPActionPlayer;
@@ -74,16 +91,6 @@ public class ActionEffect : MonoBehaviour {
         if(setup.Animator == null) { return; }
         if (string.IsNullOrEmpty(clipName)) { return; }
         setup.Animator.PlayClip(clipName);
-    }
-
-    public void OnMoveStart() {
-        moveEffect?.PlayEnabled();
-        PlayAnimation(movementClip);
-    }   
-
-    public void OnMoveEnd() {
-        moveEffect?.PlayDisabled();
-        PlayAnimation(actionClip);
     }
 
 }

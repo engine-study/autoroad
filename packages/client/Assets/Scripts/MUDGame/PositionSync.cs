@@ -185,21 +185,18 @@ public class PositionSync : ComponentSync
 
     void UpdateMovement() {
 
-
-
         if(movement) {
 
-            distanceMoved = distanceMoved + movement.Speed * Time.deltaTime;
             moveLerp = Mathf.Clamp01(distanceMoved / distance);
-
             target.position = movement.Move(StartPos, TargetPos, moveLerp);
+            distanceMoved = distanceMoved + movement.Speed * Time.deltaTime;
 
         } else {        
 
-            distanceMoved = distanceMoved + speed * Time.deltaTime;
             moveLerp = Mathf.Clamp01(distanceMoved / distance);
-
             target.position = Vector3.MoveTowards(target.position, TargetPos, speed * Time.deltaTime);
+            distanceMoved = distanceMoved + speed * Time.deltaTime;
+
         }
 
      
