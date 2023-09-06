@@ -65,10 +65,10 @@ public class AnimationMUD : MonoBehaviour
             ToggleAction(false, actionEffect); 
         }
 
-        Debug.Log("ACTIONSET", this);
-        Debug.Log(newAction.ToString(), this);
-        Debug.Log(((int)actionComponent.Position.x).ToString(), this);
-        Debug.Log(((int)actionComponent.Position.z).ToString(), this);
+        // Debug.Log("ACTIONSET", this);
+        // Debug.Log(newAction.ToString(), this);
+        // Debug.Log(((int)actionComponent.Position.x).ToString(), this);
+        // Debug.Log(((int)actionComponent.Position.z).ToString(), this);
 
         action = newAction;
         actionEffect = LoadAction(action.ToString());

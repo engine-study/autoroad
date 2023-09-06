@@ -122,7 +122,7 @@ public class PositionSync : ComponentSync
 
         distance = Vector3.Distance(StartPos, TargetPos);
 
-        Debug.Log("PositionSync: Start", this);
+        // Debug.Log("PositionSync: Start", this);
 
         // if(action && !wasMoving) {action.PlayAnimation(true);}
         if(line) line.enabled = useLine;
@@ -142,7 +142,7 @@ public class PositionSync : ComponentSync
         moving = false;
         target.position = pos.Pos;
 
-        Debug.Log("PositionSync: End", this);
+        // Debug.Log("PositionSync: End", this);
 
         // if(action && wasMoving) {action.PlayAnimation(false);}
         if(line) line.enabled = false;
