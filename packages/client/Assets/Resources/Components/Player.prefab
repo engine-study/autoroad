@@ -338,8 +338,9 @@ MonoBehaviour:
   animator: {fileID: 5770678829304191941}
   resources: {fileID: 6317482249733295959}
   playerComponent: {fileID: 5348944994237342613}
-  positionSync: {fileID: 0}
+  positionSync: {fileID: 7552157436396032579}
   actions: {fileID: 190895346912483442}
+  animMud: {fileID: 4442232486771419755}
   bodyCosmetic: {fileID: 5181854128524553352}
   headCosmetic: {fileID: 36518779380506948}
   capeCosmetic: {fileID: 3494347568107372112}
@@ -349,6 +350,7 @@ MonoBehaviour:
   positionComponent: {fileID: 0}
   healthComponent: {fileID: 0}
   gemComponent: {fileID: 0}
+  action: {fileID: 0}
 --- !u!114 &5348944994237342613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,12 +382,8 @@ MonoBehaviour:
   spawned: 0
   isLocalPlayer: 0
   playerScript: {fileID: 592219380604067791}
-  fx_death: {fileID: 0}
   sfx_hitSound:
   - {fileID: 8300000, guid: 8f423d80a2384a84ebf4fa459c4e2916, type: 3}
-  sfx_deathSound:
-  - {fileID: 8300000, guid: 00077265487bfa44d9a2c504d0c151c1, type: 3}
-  - {fileID: 8300000, guid: 48e57600f3c0a3f439b4a8a06696b757, type: 3}
   health: {fileID: 0}
   position: {fileID: 0}
   gameEvent: {fileID: 0}

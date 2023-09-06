@@ -9,6 +9,7 @@ public class AnimationMUD : MonoBehaviour
     public ActionComponent ActionComponent {get{return actionComponent;}}
     public PositionSync PositionSync { get; private set; }
     public SPAnimator Animator { get; private set; }
+    public SPLooker Look {get{return looker;}}
 
     [Header("Animation")]
     [SerializeField] Transform target;

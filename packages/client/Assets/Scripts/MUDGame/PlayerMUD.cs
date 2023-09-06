@@ -9,11 +9,13 @@ public class PlayerMUD : SPPlayer
     public PositionComponent Position{get{return positionComponent;}}
     public PositionSync Sync{get{return positionSync;}}
     public ActionsMUD Actions{get{return actions;}}
+    public AnimationMUD AnimationMUD{get{return animMud;}}
 
     [Header("MUD")]
     [SerializeField] private PlayerComponent playerComponent;
     [SerializeField] private PositionSync positionSync;
     [SerializeField] private ActionsMUD actions;
+    [SerializeField] private AnimationMUD animMud;
     [SerializeField] public Cosmetic bodyCosmetic;
     [SerializeField] public Cosmetic headCosmetic;
     [SerializeField] public Cosmetic capeCosmetic;
@@ -25,6 +27,7 @@ public class PlayerMUD : SPPlayer
     [SerializeField] private PositionComponent positionComponent;
     [SerializeField] private HealthComponent healthComponent;
     [SerializeField] private GemComponent gemComponent;
+    [SerializeField] private ActionComponent action;
 
     public override void Init() {
         base.Init();
@@ -49,6 +52,7 @@ public class PlayerMUD : SPPlayer
         positionComponent = playerComponent.Entity.GetMUDComponent<PositionComponent>();
         transform.position = positionComponent.Pos;
 
+        action = MUDWorld.FindOrMakeComponent<ActionComponent>(playerComponent.Entity);
         healthComponent = playerComponent.Entity.GetMUDComponent<HealthComponent>();
         gemComponent = playerComponent.Entity.GetMUDComponent<GemComponent>();
 
@@ -88,7 +92,6 @@ public class PlayerMUD : SPPlayer
     }
 
 
-
     protected override void UpdateInput() {
         base.UpdateInput();
 
@@ -96,7 +99,21 @@ public class PlayerMUD : SPPlayer
             Actor.InputClick(0, Reciever.TargetInteract);
         }
 
+        if(Sync.Moving == false && action.Action == ActionName.Idle) {
+            //update rotation based on mouseInput
+            // Determine the new rotation
+            Vector3 mouseDir = SPInput.MousePlanePos - transform.position;
+            if ( mouseDir.magnitude > .5f) { //playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > .5f
+                Animator.IK.SetLook(CursorMUD.LookTarget);
+                animMud.Look.SetLookRotation(transform.position + mouseDir);
+            } 
+        } else {
+            Animator.IK.SetLook(null);
+        }
+
     }
+
+    
     
     public override void Kill() {
         base.Kill();

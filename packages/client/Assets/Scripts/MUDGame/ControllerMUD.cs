@@ -129,18 +129,6 @@ public class ControllerMUD : SPController {
             return;
         }
 
-        //update rotation based on mouseInput
-        // Determine the new rotation
-        Vector3 mouseDir = SPInput.MousePlanePos - playerTransform.position;
-        if ( mouseDir.magnitude > .5f) { //playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > .5f
-
-            playerScript.Animator.IK.SetLook(CursorMUD.LookTarget);
-            SetLookRotation(playerTransform.position + mouseDir);
-
-        } else {
-            playerScript.Animator.IK.SetLook(null);
-        }
-
         bool noModifiers = !SPInput.ModifierKey;
         bool input = noModifiers && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
 
@@ -299,17 +287,6 @@ public class ControllerMUD : SPController {
 
     }
 
-    public void SetLookRotation(Vector3 newLookAt) {
-       var _lookY = newLookAt;
-        _lookY.y = playerTransform.position.y;
-
-        if (_lookY != playerTransform.position) {
-            Vector3 eulerAngles = Quaternion.LookRotation(_lookY - playerTransform.position).eulerAngles;
-            lookVector = (_lookY - playerTransform.position).normalized;
-            lookRotation = Quaternion.Euler(eulerAngles.x, (int)Mathf.Round(eulerAngles.y / 90) * 90, eulerAngles.z);
-        }
-    }
-
 
     private void ComponentUpdate() {
 
@@ -321,7 +298,7 @@ public class ControllerMUD : SPController {
         } else {
             //UPDATE ROTATION 
             if (playerTransform.position != playerScript.Position.Pos) {
-                ((ControllerMUD)playerScript.Controller).SetLookRotation(playerScript.Position.Pos);
+                playerScript.AnimationMUD.Look.SetLookRotation(playerScript.Position.Pos);
             }
         }
 

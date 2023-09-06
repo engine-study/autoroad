@@ -31,12 +31,16 @@ public class ActionEffect : MonoBehaviour {
 
         setup.PositionSync.SetMovement(movement);
 
-        if(setup.PositionSync.Moving) {
-            //play movement animation
-            ToggleMoveAnimation(true);
+        if(toggle) {
+            if(setup.PositionSync.Moving) {
+                //play movement animation
+                ToggleMoveAnimation(true);
+            } else {
+                //play state animation
+                ToggleActionAnimation(true);
+            }
         } else {
-            //play state animation
-            ToggleActionAnimation(toggle);
+            ToggleActionAnimation(false);
         }
 
         active = toggle;

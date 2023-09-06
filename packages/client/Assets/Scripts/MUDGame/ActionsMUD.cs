@@ -101,7 +101,7 @@ public class ActionsMUD : MonoBehaviour
     {
 
         //turn player to face position
-        ((ControllerMUD)player.Controller).SetLookRotation(position);
+        player.AnimationMUD.Look.SetLookRotation(position);
 
         if ((int)newState >= baseEquipment.Count) { Debug.LogError(newState.ToString(), this); return; }
 
