@@ -25,7 +25,11 @@ public class ActionEffect : MonoBehaviour {
         //first time setup
         if (active != toggle) {
             if (toggle) {
-            } else {}
+                setup.PositionSync.OnMoveEnd += OnMoveEnd;
+                setup.PositionSync.SetMovement(movement);
+            }  else {
+                setup.PositionSync.OnMoveEnd -= OnMoveEnd;
+            }
             
         }
 
@@ -46,9 +50,7 @@ public class ActionEffect : MonoBehaviour {
         active = toggle;
         gameObject.SetActive(toggle);
 
-
     }
-
     
     public void OnMoveStart() {
         ToggleMoveAnimation(true);

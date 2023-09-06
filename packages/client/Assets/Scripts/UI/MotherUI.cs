@@ -132,11 +132,14 @@ public class MotherUI : SPUIInstance {
 
         SPUIBase.PlaySound(sfx_spawn);
 
-        SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
-        SPCamera.SetFOVGlobal(5f);
+        FollowPlayer();
 
     }
 
+    public static void FollowPlayer() {
+        SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
+        SPCamera.SetFOVGlobal(5f);
+    }
 
     void ShowServer() {
         StartCoroutine(ServerCoroutine());

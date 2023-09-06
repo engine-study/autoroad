@@ -22,7 +22,10 @@ public class AnimationMUD : MonoBehaviour
     [SerializeField] ActionComponent actionComponent;
     SPLooker looker;
     protected virtual void Awake() {
+        if(target == null) target = transform;
+
         entity = GetComponentInParent<MUDEntity>();
+        looker = target.gameObject.AddComponent<SPLooker>();
     }
 
     protected virtual void Start() {
@@ -30,10 +33,6 @@ public class AnimationMUD : MonoBehaviour
         actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
         Animator = GetComponentInChildren<SPAnimator>();
         PositionSync = GetComponentInParent<PositionSync>();
-
-        if(target == null) target = transform;
-
-        looker = target.gameObject.AddComponent<SPLooker>();
 
         if(entity.HasInit) Init();
         else entity.OnInit += Init;

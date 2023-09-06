@@ -96,6 +96,7 @@ public class SpawningUI : SPWindowParent
 
         if(success) {
             ToggleWindowClose();
+            MotherUI.FollowPlayer();
         } else { 
             scene.SetActive(true);
             cursor.SetActive(true);
