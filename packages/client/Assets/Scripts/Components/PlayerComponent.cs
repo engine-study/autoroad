@@ -115,8 +115,7 @@ public class PlayerComponent : MUDComponent {
         }
 
         if(IsLocalPlayer) {
-            Debug.Log("Died, showing Spawn UI", this);
-            MotherUI.ToggleRespawn(health.Health <= 0 || health.UpdateInfo.UpdateType == UpdateType.DeleteRecord);
+            MotherUI.ToggleRespawn(health.IsDead);
         }
 
         lastHealth = health.Health;
@@ -124,22 +123,28 @@ public class PlayerComponent : MUDComponent {
 
     void CheckPosition() {
 
-        bool isAlive = position.UpdateInfo.UpdateType != UpdateType.DeleteRecord;
+        // DeathCheck();
+
+    }
+
+    void DeathCheck() {
+         bool isAlive = position.UpdateInfo.UpdateType != UpdateType.DeleteRecord;
 
         if(isAlive) {
             if(killCoroutine != null) {StopCoroutine(killCoroutine);}
+
             //we are alive again after being dead
-            playerScript.Respawn(transform.position);
-            playerScript.Root.gameObject.SetActive(isAlive);
-            playerScript.Animator.PlayClip("Idle");
+            if(HasInit) {
+                playerScript.Respawn(transform.position);
+                playerScript.Root.gameObject.SetActive(isAlive);
+                playerScript.Animator.PlayClip("Idle");
+            }
             
         } else {
             //we are dead
             playerScript.Kill();
             killCoroutine = StartCoroutine(KillCoroutine());
         }
-
-
     }
 
     Coroutine killCoroutine;
