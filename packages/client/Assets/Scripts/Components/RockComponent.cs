@@ -12,14 +12,13 @@ public class RockComponent : MUDComponent {
     public RockType RockType {get { return rockType; } }
 
     [Header("Rock")]
-    [SerializeField] SPAudioSource rockSlide;
     [SerializeField] PositionSync posSync;
     [SerializeField] GameObject visualParent;
     [SerializeField] SPBase rockBase;
     [SerializeField] SPFlashShake flash;
     [SerializeField] GameObject[] stages;
     [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles, fx_fillExplosion;
-    [SerializeField] AudioClip[] sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
+    [SerializeField] AudioClip[] sfx_slide, sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
     RockType lastStage = RockType._Count;
 
     [Header("Debug")]
@@ -120,10 +119,9 @@ public class RockComponent : MUDComponent {
         flash.Flash();
 
         fx_fillParticles.Play();
-        SPAudioSource.Play(transform.position, sfx_fillSound);
 
-        rockSlide.Source.Play();
-        rockSlide.Source.time = Random.Range(0f, rockSlide.Source.clip.length);
+        SPAudioSource.Play(transform.position, sfx_slide);
+        SPAudioSource.Play(transform.position, sfx_fillSound);
 
         float lerp = 0f;
 
@@ -133,7 +131,6 @@ public class RockComponent : MUDComponent {
             yield return null;
         }
 
-        rockSlide.Source.Stop();
         fx_fillParticles.Emit(10);
         fx_fillExplosion.Play();
         SPAudioSource.Play(transform.position, sfx_finalThump);

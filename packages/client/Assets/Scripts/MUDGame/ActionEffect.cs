@@ -15,6 +15,7 @@ public class ActionEffect : MonoBehaviour {
     bool active = false; 
 
     void Awake() {
+        if(effect) effect.active = false;
         if(moveEffect) moveEffect.active = false;
     }
     
@@ -81,6 +82,7 @@ public class ActionEffect : MonoBehaviour {
 
         if(toggle) {
 
+            effect?.PlayEnabled();
             PlayAnimation(actionClip);
 
             //move to AnimationPlayerMUD later
@@ -92,7 +94,9 @@ public class ActionEffect : MonoBehaviour {
             }
 
         } else {
-            PlayAnimation("");
+        
+            effect?.PlayDisabled();
+            // PlayAnimation("");
         }
     }
 
