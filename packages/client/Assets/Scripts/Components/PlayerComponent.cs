@@ -123,27 +123,37 @@ public class PlayerComponent : MUDComponent {
 
     void CheckPosition() {
 
-        // DeathCheck();
+        DeathCheck();
 
     }
 
     void DeathCheck() {
-         bool isAlive = position.UpdateInfo.UpdateType != UpdateType.DeleteRecord;
+
+        if(!HasInit) {
+            return;
+        }
+
+        bool isAlive = position.UpdateInfo.UpdateType != UpdateType.DeleteRecord;
 
         if(isAlive) {
+
             if(killCoroutine != null) {StopCoroutine(killCoroutine);}
+            playerScript.Root.gameObject.SetActive(isAlive);
 
             //we are alive again after being dead
             if(HasInit) {
-                playerScript.Respawn(transform.position);
-                playerScript.Root.gameObject.SetActive(isAlive);
-                playerScript.Animator.PlayClip("Idle");
+                playerScript.gameObject.SetActive(isAlive);
+
+                // playerScript.Respawn(transform.position);
+                // playerScript.Root.gameObject.SetActive(isAlive);
+                // playerScript.Animator.PlayClip("Idle");
             }
             
         } else {
             //we are dead
-            playerScript.Kill();
-            killCoroutine = StartCoroutine(KillCoroutine());
+            //no, let death action state do this
+            // playerScript.Kill();
+            // killCoroutine = StartCoroutine(KillCoroutine());
         }
     }
 

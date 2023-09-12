@@ -107,7 +107,10 @@ public class AnimationMUD : MonoBehaviour
             object resource = Resources.Load("Action/" + action);
             if(resource == null) return null;
 
-            newAction = Instantiate((resource as GameObject), transform.position, transform.rotation, transform).GetComponent<ActionEffect>();
+            newAction = Instantiate((resource as GameObject), transform).GetComponent<ActionEffect>();
+            newAction.transform.localPosition = Vector3.zero;
+            newAction.transform.localRotation = Quaternion.identity;
+            
             effects.Add(action, newAction);
         }
 
