@@ -30,6 +30,7 @@ public class StoreUI : SPWindowParent
             itemInfo.Add(newItemInfo);
 
             StoreItemUI newItem = Instantiate(itemPrefab.gameObject, transform).GetComponent<StoreItemUI>();
+            newItem.store = this;
             items.Add(newItem);
 
             newItem.SetItem(newItemInfo);
@@ -45,6 +46,12 @@ public class StoreUI : SPWindowParent
         CoinComponent.OnLocalUpdate -= UpdateStore;
     }
 
+    public void Buy(GaulItem buyItem) {
+        if (buyItem == null) { Debug.LogError("No item"); return; }
+        if (buyItem.ID < 0) { Debug.LogError("No item index"); return; }
+
+        BuyItem(buyItem.ID);
+    }
 
     void UpdateStore() {
         for (int i = 0; i < items.Count; i++) {
@@ -52,13 +59,9 @@ public class StoreUI : SPWindowParent
         }
     }
 
-    public void BuyScroll() {
-        TxManager.Send<BuyScrollFunction>();
-        BuyFX();
-    }    
-
     public void BuyItem(int itemID) {
-        TxManager.Send<BuyCosmeticFunction>(System.Convert.ToUInt32(itemID));
+        // ActionsMUD.ActionOptimistic(PlayerComponent.LocalPlayer.Entity, ActionName.Buy, PlayerComponent.LocalPlayer.transform.position);
+        TxManager.SendSafe<BuyCosmeticFunction>(System.Convert.ToUInt32(itemID));
         BuyFX();
     }
 

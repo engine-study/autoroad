@@ -3,34 +3,17 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
+import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action } from "../codegen/Tables.sol";
 import { Coinage, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/Tables.sol";
-import { GameEvent } from "../codegen/Tables.sol";
+import { ActionType } from "../codegen/Types.sol";
 // import { Item } from "../codegen/Tables.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 contract ItemSystem is System {
-  function buy(uint32 item) public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-
-    GameEvent.emitEphemeral(player, "buy");
-  }
   
   function sendCoins(int32 amount) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
-  }
-
-  function buyScroll() public {
-    bytes32 player = addressToEntityKey(address(_msgSender()));
-    int32 coins = Coinage.get(player);
-
-    require(coins >= 5, "not enough coins");
-
-    withdraw(player, coins, 5);
-
-    uint32 scrolls = Scroll.get(player);
-    Scroll.set(player, scrolls + 1);
   }
 
   function buyCosmetic(uint32 id) public {
@@ -63,6 +46,10 @@ contract ItemSystem is System {
     if (id == 4) {
       price = 50;
     } 
+    //scroll
+    if (id == 5) {
+      price = 5;
+    } 
     
 
     require(price > 0, "no item found");
@@ -93,6 +80,14 @@ contract ItemSystem is System {
     if (id == 4) {
       Boots.set(player, 1, 3);
     }
+    if (id == 5) {
+      uint32 scrolls = Scroll.get(player);
+      Scroll.set(player, scrolls + 1);
+    }
+
+    PositionData memory pos = Position.get(player);
+    IWorld(_world()).setAction(player, ActionType.Buy, pos.x, pos.y);
+
   }
 
   function manifest(uint32 item) public returns (bool) {

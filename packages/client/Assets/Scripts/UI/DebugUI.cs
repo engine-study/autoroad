@@ -7,19 +7,19 @@ using IWorld.ContractDefinition;
 public class DebugUI : SPWindowParent
 {
     public void RespawnPlayer() {
-        TxManager.Send<DestroyPlayerAdminFunction>();
+        TxManager.SendSafe<DestroyPlayerAdminFunction>();
     }
 
     public void GiveCoins() {
-        TxManager.Send<AddCoinsAdminFunction>(100);
+        TxManager.SendSafe<AddCoinsAdminFunction>(100);
     }
 
     public void GiveXP() {
-        TxManager.Send<AddXPAdminFunction>(new System.Numerics.BigInteger(15));
+        TxManager.SendSafe<AddXPAdminFunction>(new System.Numerics.BigInteger(15));
     }
 
     public void GiveGems() {
-        TxManager.Send<AddGemXPFunction>(System.Convert.ToUInt32(5));
+        TxManager.SendSafe<AddGemXPFunction>(System.Convert.ToUInt32(5));
     }
 
 }

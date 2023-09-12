@@ -7,6 +7,8 @@ public class GaulItem : ScriptableObject
 {
 
     public string itemName = "Item";
+    public int ID = -1;
+
     [TextArea(1,5)]
     public string itemDescription = "";
     public ItemType itemType;

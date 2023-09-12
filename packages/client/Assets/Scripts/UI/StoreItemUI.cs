@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StoreItemUI : SPWindow
 {
+    [HideInInspector] public StoreUI store;
     [SerializeField] GaulItem item;
     [SerializeField] SPInputField itemText;
     [SerializeField] SPButton buyButton;
@@ -14,6 +15,10 @@ public class StoreItemUI : SPWindow
         itemText.UpdateField(item.itemName);
         buyButton.UpdateField(item.price.ToString("000"));
         CanBuy();
+    }
+
+    public void Buy() {
+        store.Buy(item);
     }
 
     public void CanBuy() {

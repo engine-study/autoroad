@@ -83,7 +83,7 @@ public class GameState : MonoBehaviour {
         
         //destroy the player if we want to simulate the login sequence
         if (freshStart) {
-            await TxManager.Send<DestroyPlayerAdminFunction>();
+            await TxManager.SendSafe<DestroyPlayerAdminFunction>();
             //while(player is not null) {}
         }
 
@@ -124,7 +124,7 @@ public class GameState : MonoBehaviour {
                 int x = BoundsComponent.Right + 1;
                 int y = BoundsComponent.Up;
                 Debug.Log("Spawning player at " + x + "," + y);
-                while(await TxManager.Send<SpawnFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y)) == false)  {y--; await UniTask.Delay(2000);}
+                while(await TxManager.SendSafe<SpawnFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y)) == false)  {y--; await UniTask.Delay(2000);}
             } else {
                 Debug.Log("Choosing spawn");
                 MotherUI.TogglePlayerSpawning(true);
