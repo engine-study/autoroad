@@ -17,6 +17,7 @@ import { randomCoord } from "../utility/random.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
+import { FloraSubsystem } from "./FloraSubsystem.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
 contract RoadSubsystem is System {
@@ -59,7 +60,7 @@ contract RoadSubsystem is System {
     Bounds.set(int32(-playArea), playArea, yEnd, yStart);
     GameConfigData memory config = GameConfig.get();
 
-    world.createEntities(chunkEntity, playArea, roadHeight);
+    // world.createEntities(chunkEntity, playArea, roadHeight);
 
     //set the chunk of road
     Chunk.set(chunkEntity, false, mileNumber, 0, 0);
@@ -78,7 +79,7 @@ contract RoadSubsystem is System {
 
         // console.log("noise ", noiseCoord);
 
-        if (noiseCoord <= 7) {
+        if (noiseCoord <= 10) {
           terrainType = TerrainType.Tree;
         } else if (noiseCoord > 10 && noiseCoord <= 15) {
           terrainType = TerrainType.Rock;
@@ -148,9 +149,7 @@ contract RoadSubsystem is System {
       Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
-      Tree.set(entity, true);
-      Health.set(entity, 1);
-      Move.set(entity, uint32(MoveType.Obstruction));
+      world.spawnFlora(player, entity, x, y);
     } else if (tType == TerrainType.Player) {
       world.spawnBotAdmin(x, y, entity);
     } else if (tType == TerrainType.HeavyBoy) {

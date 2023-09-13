@@ -41,7 +41,8 @@ export default mudConfig({
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
     ActionType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn"],
     AnimationType: ["Walk", "Hop", "Teleport", "Push"],
-    MoveType: ["None", "Obstruction", "Hole", "Carry", "Push"],
+    MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
+    FloraType: ["None", "Tree", "OldTree", "Bramble"],
   },
 
   tables: {
@@ -191,7 +192,7 @@ export default mudConfig({
     //unique objects
     Rock: "uint32",
     Boulder: "bool",
-    Tree: "bool",
+    Tree: "uint32",
     Log: "bool",
     Ox: "bool",
     Militia: "bool",

@@ -41,9 +41,16 @@ contract MoveSubsystem is System {
       bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
       assert(atPosition.length < 2);
 
+      bool stopWalk = world.onWorld(positions[i].x, positions[i].y) == false;
+      if(!stopWalk && atPosition.length > 0) {
+        //we can't walk into holes on purpose, only traps
+        MoveType move = MoveType(Move.get(atPosition[0]));
+        stopWalk = move == MoveType.Obstruction || move == MoveType.Hole;
+      }
+      
       //if we hit an object or at the end of our walk, move to that position
-      if (atPosition.length > 0 || world.onWorld(positions[i].x, positions[i].y) == false) {
-        require(i > 1, "nowhere to move");
+      if (stopWalk) {
+        require(i > 1, "Nowhere to move");
         walkSpaces = i-1;
         break;
       }
@@ -78,10 +85,10 @@ contract MoveSubsystem is System {
     require(move == uint32(MoveType.Push), "not push");
   }
 
-  function requireEmptyOrHole(bytes32[] memory at) public view {
+  function requireCanPlaceOn(bytes32[] memory at) public view {
     if(at.length == 0) return;
     uint32 move = Move.get(at[0]);
-    require(move == uint32(MoveType.None) || move == uint32(MoveType.Hole), "blocked");
+    require(move == uint32(MoveType.None) || move == uint32(MoveType.Hole) || move == uint32(MoveType.Trap), "blocked");
   }
 
   function requireOnMap(bytes32[] memory at, PositionData memory pos) public view {
@@ -182,32 +189,26 @@ contract MoveSubsystem is System {
   }
 
   function moveTo(
-    bytes32 player,
+    bytes32 moveCausedBy,
     bytes32 entity,
     PositionData memory from,
     PositionData memory to,
-    bytes32[] memory atDestination,
+    bytes32[] memory atDest,
     ActionType animation
   ) public {
 
-    //check if we are pushing rocks into a road ditch
-    if (atDestination.length > 0) {
+    //there is an entity at our destination
+    if (atDest.length > 0) {
 
       //check if there is an obstruction
-      MoveType moveType = MoveType(Move.get(atDestination[0]));
-      bool empty = moveType == MoveType.None || moveType == MoveType.Hole;
-      require(empty, "moving into an occupied spot");
+      requireCanPlaceOn(atDest);
 
-      //MOVE
-      setPositionData(entity, to, animation);
+      //handle the move on first
+      moveOn(moveCausedBy, entity, to, atDest);
 
-      //move into the hole
-      if (moveType == MoveType.Hole) {
-        //kill if it was a player
-        if(Player.get(entity)) { kill(entity, player, to);}
-        if(Road.getState(atDestination[0]) == uint32(RoadState.Shoveled)) {
-          IWorld(_world()).spawnRoadFromPlayer(player, entity, atDestination[0], to);
-        }
+      //if we're still alive, move into the position (this will trigger an entity update too)
+      if(canDoStuff(entity)) {
+        setPositionData(entity, to, animation);
       }
 
     } else {
@@ -216,6 +217,20 @@ contract MoveSubsystem is System {
       setPositionData(entity, to, animation);
 
     }
+
+  }
+
+  function moveOn(bytes32 moveCausedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDestination) public {
+
+      //kill the player if they move onto a hole or trap
+      MoveType moveType = MoveType(Move.get(atDestination[0]));
+      if (moveType == MoveType.Hole || moveType == MoveType.Trap) {
+        //kill if it was a player
+        if(Player.get(entity)) { kill(entity, moveCausedBy, to);}
+        if(Road.getState(atDestination[0]) == uint32(RoadState.Shoveled)) {
+          IWorld(_world()).spawnRoadFromPlayer(moveCausedBy, entity, atDestination[0], to);
+        }
+      }
 
   }
 
@@ -439,7 +454,7 @@ contract MoveSubsystem is System {
 
     requirePushable(atPos);
     requireOnMap(atDest, endPos);
-    requireEmptyOrHole(atDest);
+    requireCanPlaceOn(atDest);
     moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
   }
 

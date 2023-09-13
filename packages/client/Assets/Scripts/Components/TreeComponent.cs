@@ -4,6 +4,8 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
+
+public enum FloraType {None, Tree, OldTree, Bramble}
 public class TreeComponent : MUDComponent {
 
     [Header("Tree")]
@@ -16,8 +18,8 @@ public class TreeComponent : MUDComponent {
     Rigidbody rb;
 
     [Header("Debug")]
-    public bool treeState;
-    bool lastState = false;
+    public FloraType treeState;
+    FloraType lastState = FloraType.None;
     int lastHealth = -999;
     UpdateType lastPosUpdateType;
     protected override void PostInit() {
@@ -46,7 +48,7 @@ public class TreeComponent : MUDComponent {
 
         TreeTable treeUpdate = (TreeTable)update;
 
-        treeState = treeUpdate.value != null ? (bool)treeUpdate.value : false;
+        treeState = treeUpdate.value != null ? (FloraType)(int)treeUpdate.value : treeState;
 
         // if(newInfo.UpdateType == UpdateType.DeleteRecord) {
         //     gameObject.SetActive(false);

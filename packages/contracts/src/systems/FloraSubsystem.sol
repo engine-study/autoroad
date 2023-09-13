@@ -4,17 +4,42 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Position, PositionTableId, GameEvent } from "../codegen/Tables.sol";
-import { Player, Health, Tree, Seeds } from "../codegen/Tables.sol";
-import { TerrainType } from "../codegen/Types.sol";
+import { Player, Health, Tree, Seeds, Move } from "../codegen/Tables.sol";
+import { TerrainType, FloraType, MoveType } from "../codegen/Types.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { randomSeed } from "../utility/random.sol";
+import { randomSeed, randomCoord} from "../utility/random.sol";
+import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
 contract FloraSubsystem is System {
 
- 
+  function spawnFlora(bytes32 player, bytes32 entity, int32 x, int32 y) public {
+
+    uint noiseCoord = randomCoord(0, 100, x, y);
+    // console.log("noise ", noiseCoord);
+
+    FloraType floraType = FloraType.None;
+
+    if (noiseCoord < 5) {
+      floraType = FloraType.Bramble;
+      Health.set(entity, 1);
+      Move.set(entity, uint32(MoveType.Trap));
+    } else if (noiseCoord >= 5 && noiseCoord < 10) {
+      floraType = FloraType.OldTree;
+      Health.set(entity, 3);
+      Move.set(entity, uint32(MoveType.Obstruction));
+    } else {
+      floraType = FloraType.Tree;
+      Health.set(entity, 1);
+      Move.set(entity, uint32(MoveType.Obstruction));
+    } 
+
+    Tree.set(entity, uint32(floraType));
+
+  }
+
   function water(int32 x, int32 y) public {
 
   }
@@ -26,7 +51,7 @@ contract FloraSubsystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
 
     require(world.canInteract(player, x, y, atPosition, 1), "bad interact");
-    require(Tree.get(atPosition[0]), "no tree");
+    require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
 
     int32 health = Health.get(atPosition[0]);
     health--;
