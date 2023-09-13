@@ -22,12 +22,12 @@ contract MoveSubsystem is System {
 
     PositionData memory startPos = Position.get(player);
     PositionData memory endPos = PositionData(x, y, 0);
-    int distance = int(getDistance(startPos, endPos));
-    int minDistance = Boots.getMinMove(player);
-    int maxDistance = Boots.getMaxMove(player);
+    uint distance = getDistance(startPos, endPos);
+    uint minDistance = uint(uint32(Boots.getMinMove(player)));
+    uint maxDistance = uint(uint32(Boots.getMaxMove(player)));
 
     require(distance >= minDistance && distance <= maxDistance, "Boots out of range");
-    require(isLegalMove(player,x,y,maxDistance), "Bad move");
+    require(requireLegalMove(player, startPos, endPos, maxDistance), "Bad move");
 
     // get all the positions in the line we are walking (including starting position)
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
@@ -199,7 +199,7 @@ contract MoveSubsystem is System {
       require(empty, "moving into an occupied spot");
 
       //MOVE
-      setPosition(entity, to.x, to.y, 0, animation);
+      setPositionData(entity, to, animation);
 
       //move into the hole
       if (moveType == MoveType.Hole) {
@@ -213,7 +213,7 @@ contract MoveSubsystem is System {
     } else {
 
       //MOVE
-      setPosition(entity, to.x, to.y, 0, animation);
+      setPositionData(entity, to, animation);
 
     }
 
@@ -237,15 +237,15 @@ contract MoveSubsystem is System {
     PositionData memory playerPos = Position.get(player);
     PositionData memory entityPos = Position.get(entities[0]);
     
-    require(isLegalMove(player, x, y, distance), "Bad move");
+    require(requireLegalMove(player, playerPos, entityPos, distance), "Bad move");
 
     return true;
   }
 
-  function isLegalMove(bytes32 player, int32 x, int32 y, uint distance) public {
+  function requireLegalMove(bytes32 player, PositionData memory from, PositionData memory to, uint distance) public returns(bool) {
     // checks that the position is below the min and maximum distance and is not diagonal
-    require(playerPos.x == entityPos.x || playerPos.y == entityPos.y, "cannot move diagonally ");
-    require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
+    require(from.x == to.x || from.y == to.y, "cannot move diagonally ");
+    require(withinManhattanMinimum(to, from, distance), "too far or too close");
     return true;
   }
 
