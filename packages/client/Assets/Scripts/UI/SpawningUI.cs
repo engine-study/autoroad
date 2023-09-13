@@ -7,7 +7,9 @@ using DefaultNamespace;
 
 public class SpawningUI : SPWindowParent
 {
-    [SerializeField] private SPButton nameButton, spawnButton;
+    [Header("Spawning")]
+    [SerializeField] private SPButton nameButton;
+    [SerializeField] private SPButton spawnButton;
     bool spawning;
     int x;
     int y;

@@ -21,13 +21,13 @@ contract MoveSubsystem is System {
     require(canDoStuff(player), "hmm");
 
     PositionData memory startPos = Position.get(player);
-
-    require(startPos.x == x || startPos.y == y, "cannot move diagonally ");
-    require(startPos.x != x || startPos.y != y, "moving in place");
-
     PositionData memory endPos = PositionData(x, y, 0);
     int distance = int(getDistance(startPos, endPos));
-    require(Boots.getMinMove(player) >= distance && Boots.getMaxMove(player) <= distance, "bad boots");
+    int minDistance = Boots.getMinMove(player);
+    int maxDistance = Boots.getMaxMove(player);
+
+    require(distance >= minDistance && distance <= maxDistance, "Boots out of range");
+    require(isLegalMove(player,x,y,maxDistance), "Bad move");
 
     // get all the positions in the line we are walking (including starting position)
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
@@ -236,12 +236,16 @@ contract MoveSubsystem is System {
     //todo check off grid?
     PositionData memory playerPos = Position.get(player);
     PositionData memory entityPos = Position.get(entities[0]);
-    require(playerPos.x == entityPos.x || playerPos.y == entityPos.y, "cannot move diagonally ");
-    require(playerPos.x != entityPos.x || playerPos.y != entityPos.y, "moving in place");
-    // checks that positions are where they should be, also that the entities actually have positions
-    // require(player != entities[0], "???");
-    require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
+    
+    require(isLegalMove(player, x, y, distance), "Bad move");
 
+    return true;
+  }
+
+  function isLegalMove(bytes32 player, int32 x, int32 y, uint distance) public {
+    // checks that the position is below the min and maximum distance and is not diagonal
+    require(playerPos.x == entityPos.x || playerPos.y == entityPos.y, "cannot move diagonally ");
+    require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
     return true;
   }
 
