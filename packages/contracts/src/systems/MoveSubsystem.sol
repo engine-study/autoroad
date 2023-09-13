@@ -81,7 +81,7 @@ contract MoveSubsystem is System {
     else {require(world.onMap(pos.x, pos.y), "off map");}
   }
 
-  function isPushableOrEmpty(bytes32[] memory at) public view returns(bool) {
+  function requirePushableOrEmpty(bytes32[] memory at) public view returns(bool) {
     if(at.length == 0) return false;
     uint32 move = Move.get(at[0]);
     require(move != uint32(MoveType.Obstruction), "blocked");
@@ -97,64 +97,74 @@ contract MoveSubsystem is System {
     PositionData memory pushPos = PositionData(x, y, 0);
 
     //check initial push is good
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
-    require(canInteract(player, x, y, atPos, 1), "bad interact");
+    require(canInteract(player, x, y, getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0)), 1), "bad interact");
 
     console.log("start push");
 
-    //push everything until we cant
-    int32 totalWeight = Weight.get(player);
-    uint256 count = 0;
-    uint256 maxLength = 16;
+    //push everything until we cant, starting at the beginning
+    int32 totalWeight = 0;
+    uint index = 0;
+    uint maxLength = 16;
     bytes32[] memory pushArray = new bytes32[](maxLength);
     PositionData memory vector = PositionData(pushPos.x - shoverPos.x, pushPos.y - shoverPos.y, 0);
+    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
 
-    while (atPos.length > 0) {
-
-      require(count < maxLength, "too many");
+    //continue push loop as long as there is something to push
+    while (atPos.length > uint(0)) {
+      console.logUint(index);
 
       //leave loop early if we get blocked or finally reach a non-pushable space (empty or hole)
-      if(isPushableOrEmpty(atPos) == false) {
+      if(requirePushableOrEmpty(atPos) == false) {
         break;
       }
 
-      pushArray[count] = atPos[0];
+      //add the shover to the push array
+      require(index < maxLength, "too many");
+      pushArray[index] = atPos[0];
 
-      //we are always able to push whatever is in front of us
+      //weight always must be pushable, else we fail
       totalWeight += Weight.get(atPos[0]);
       require(totalWeight < 1, "too heavy");
-
-      //increment push and check the destination is on map
-      pushPos.x += vector.x;
-      pushPos.y += vector.y;
 
       requireOnMap(atPos, pushPos);
 
       //next space
       atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
-      count++;
+
+      //increment push and check the destination is on map
+      index++;
+      shoverPos.x += vector.x;
+      shoverPos.y += vector.y;
+      pushPos.x += vector.x;
+      pushPos.y += vector.y;
+
     }
+
+    require(index > uint(1), "no pushable object");
     
     //go back to the last non empty object
-    count--;
-
-    //move the FINAL object in the push array first
-    shoverPos.x = pushPos.x - vector.x;
-    shoverPos.y = pushPos.y - vector.y;
-    bytes32[] memory atPush = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
-    moveTo(player, pushArray[count], shoverPos, pushPos, atPush, atPos, ActionType.Push);
+    index--;
 
     //iterate backwards pushing everything forward one by one with a lighter position set that doesn't check for holes
-    for (int i = int(count) - 1; i >= 0; i--) {
+    //DONT iterate to the 0 index (so we don't get -1 index lookup)
+    for (uint i = index; i > 0; i--) {
+
+      bytes32 shover = pushArray[i-1];
+      bytes32 pushed = pushArray[i];
+
+      moveTo(shover, pushed, shoverPos, pushPos, atPos, ActionType.Push);
+
       pushPos.x -= vector.x;
       pushPos.y -= vector.y;
-      setPosition(pushArray[uint(i)], pushPos.x, pushPos.y, 0, ActionType.Push);
+      shoverPos.x -= vector.x;
+      shoverPos.y -= vector.y;
+
+      atPos = new bytes32[](0);
+
     }
 
-    //move the FIRST object (the player) 
-    pushPos.x -= vector.x;
-    pushPos.y -= vector.y;
-    setPosition(player, pushPos.x, pushPos.y, 0, ActionType.Push);
+    //first player to do the push pushes themselves
+    moveTo(player, player, shoverPos, pushPos, atPos, ActionType.Push);
 
   }
 
@@ -163,19 +173,22 @@ contract MoveSubsystem is System {
     bytes32 entity,
     PositionData memory from,
     PositionData memory to,
-    bytes32[] memory atPosition,
     bytes32[] memory atDestination,
     ActionType animation
   ) public {
 
     //check if we are pushing rocks into a road ditch
     if (atDestination.length > 0) {
+
       //check if there is an obstruction
       MoveType moveType = MoveType(Move.get(atDestination[0]));
       bool empty = moveType == MoveType.None || moveType == MoveType.Hole;
       require(empty, "moving into an occupied spot");
 
-      //move into the hole, possibly make this its own function
+      //MOVE
+      setPosition(entity, to.x, to.y, 0, animation);
+
+      //move into the hole
       if (moveType == MoveType.Hole) {
         //kill if it was a player
         if(Player.get(entity)) { kill(entity, player, to);}
@@ -185,7 +198,10 @@ contract MoveSubsystem is System {
       }
 
     } else {
+
+      //MOVE
       setPosition(entity, to.x, to.y, 0, animation);
+
     }
 
   }
@@ -207,7 +223,8 @@ contract MoveSubsystem is System {
     //todo check off grid?
     PositionData memory playerPos = Position.get(player);
     PositionData memory entityPos = Position.get(entities[0]);
-
+    require(playerPos.x == entityPos.x || playerPos.y == entityPos.y, "cannot move diagonally ");
+    require(playerPos.x != entityPos.x || playerPos.y != entityPos.y, "moving in place");
     // checks that positions are where they should be, also that the entities actually have positions
     // require(player != entities[0], "???");
     require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
@@ -406,7 +423,7 @@ contract MoveSubsystem is System {
     requirePushable(atPos);
     requireOnMap(atDest, endPos);
     requireEmptyOrHole(atDest);
-    moveTo(player, atPos[0], startPos, endPos, atPos, atDest, ActionType.Hop);
+    moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
   }
 
   function setPosition(bytes32 player, int32 x, int32 y, int32 layer, ActionType action) public {
