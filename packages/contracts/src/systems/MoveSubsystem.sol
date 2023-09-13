@@ -29,33 +29,42 @@ contract MoveSubsystem is System {
     int distance = int(getDistance(startPos, endPos));
     require(Boots.getMinMove(player) >= distance && Boots.getMaxMove(player) <= distance, "bad boots");
 
-    // get all the positions in the line we are walking
+    // get all the positions in the line we are walking (including starting position)
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
 
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
+
+    uint walkSpaces = 0;
     for (uint i = 1; i < positions.length; i++) {
-      bytes32[] memory atPosition = getKeysWithValue(
-        PositionTableId,
-        Position.encode(positions[i].x, positions[i].y, 0)
-      );
+      
+      bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
       assert(atPosition.length < 2);
 
       //if we hit an object or at the end of our walk, move to that position
       if (atPosition.length > 0 || world.onWorld(positions[i].x, positions[i].y) == false) {
         require(i > 1, "nowhere to move");
-        setPositionData(player, positions[i - 1], ActionType.Walking);
-        return;
-      } else if (i == positions.length - 1) {
-        setPositionData(player, positions[i], ActionType.Walking);
+        walkSpaces = i-1;
+        break;
+      }
+
+    }
+
+    //we walked the full distance without getting stopped
+    if(walkSpaces == 0) {
+      walkSpaces = positions.length-1;
+    }
+
+    for (uint i = 1; i <= walkSpaces; i++) {
+      bytes32[] memory atPosTemp = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      moveTo(player, player, positions[i-1], positions[i], atPosTemp, ActionType.Walking);
+
+      //if we die while moving we must stop
+      if(canDoStuff(player) == false) {
         return;
       }
     }
 
-    require(false, "No available place to move");
-
-    // int32 stat = Stats.getMoves(player);
-    // Stats.setMoves(player, stat + 1);
   }
 
   function abs(int x) private pure returns (int) {
@@ -144,6 +153,10 @@ contract MoveSubsystem is System {
     
     //go back to the last non empty object
     index--;
+    pushPos.x -= vector.x;
+    pushPos.y -= vector.y;
+    shoverPos.x -= vector.x;
+    shoverPos.y -= vector.y;
 
     //iterate backwards pushing everything forward one by one with a lighter position set that doesn't check for holes
     //DONT iterate to the 0 index (so we don't get -1 index lookup)
@@ -208,7 +221,7 @@ contract MoveSubsystem is System {
 
   function canDoStuff(bytes32 player) public returns (bool) {
     //TODO add game pausing global
-    require(Health.get(player) > 0, "we dead");
+    if(Health.get(player) < 1) return false;
     return true;
   }
 
