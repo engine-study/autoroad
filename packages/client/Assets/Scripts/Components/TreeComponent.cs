@@ -5,11 +5,12 @@ using mud.Client;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 
-public enum FloraType {None, Tree, OldTree, Bramble}
+public enum FloraType {None, Tree, Oak, Bramble}
 public class TreeComponent : MUDComponent {
 
     [Header("Tree")]
     public GameObject treeRoot;
+    public GameObject [] types;
     public SPFlashShake flash;
     public ParticleSystem fx_hit, fx_fall;
     public AudioClip[] sfx_hits, sfx_falls;
@@ -33,7 +34,6 @@ public class TreeComponent : MUDComponent {
 
         health.OnUpdated += TreeHit;
 
-        Entity.SetName("Tree");
     }
 
     protected override void InitDestroy() {
@@ -56,6 +56,11 @@ public class TreeComponent : MUDComponent {
 
         lastState = treeState;
 
+        Entity.SetName(treeState.ToString());
+        
+        for(int i = 0; i < types.Length; i++) {
+            types[i].SetActive(i == (int)treeState);
+        }
     }
 
     protected override void UpdateComponentInstant() { 
