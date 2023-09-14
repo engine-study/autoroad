@@ -42,7 +42,7 @@ export default mudConfig({
     ActionType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn"],
     AnimationType: ["Walk", "Hop", "Teleport", "Push"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
-    FloraType: ["None", "Tree", "OldTree", "Bramble"],
+    FloraType: ["None", "Tree", "Oak", "Bramble"],
   },
 
   tables: {

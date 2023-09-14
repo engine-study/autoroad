@@ -4,7 +4,7 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public enum MoveType { None, Obstruction, Hole, Carry, Push } 
+public enum MoveType { None, Obstruction, Hole, Carry, Push, Trap } 
 public class MoveComponent : MUDComponent {
 
     public bool HasBeenSunk {get { return pos.PosLayer.y < 0; } }

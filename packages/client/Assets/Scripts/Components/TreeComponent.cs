@@ -11,8 +11,9 @@ public class TreeComponent : MUDComponent {
     [Header("Tree")]
     public GameObject treeRoot;
     public GameObject [] types;
+    public GameObject [] oakStages;
     public SPFlashShake flash;
-    public ParticleSystem fx_hit, fx_fall;
+    public ParticleSystem fx_hit, fx_branchFall;
     public AudioClip[] sfx_hits, sfx_falls;
     HealthComponent health;
     PositionComponent pos;
@@ -33,6 +34,8 @@ public class TreeComponent : MUDComponent {
         pos.OnRichUpdate += TreeSpawnAnimation;
 
         health.OnUpdated += TreeHit;
+
+        TreeVisibility();
 
     }
 
@@ -61,6 +64,8 @@ public class TreeComponent : MUDComponent {
         for(int i = 0; i < types.Length; i++) {
             types[i].SetActive(i == (int)treeState);
         }
+
+        flash.SetTarget(types[(int)treeState]);
     }
 
     protected override void UpdateComponentInstant() { 
@@ -71,6 +76,12 @@ public class TreeComponent : MUDComponent {
 
         } else if(UpdateInfo.UpdateType == UpdateType.DeleteRecord) {
 
+        }
+    }
+
+    void TreeHealthInstant() {
+        for(int i = 0; i < oakStages.Length; i++) {
+            oakStages[i].SetActive(i < health.Health);
         }
     }
 
@@ -111,13 +122,19 @@ public class TreeComponent : MUDComponent {
 
     void TreeHit() {
 
-        if (health.UpdateInfo.Source != UpdateSource.Revert && Loaded && lastHealth != health.Health) {
+        if ( Loaded && health.UpdateInfo.Source != UpdateSource.Revert && lastHealth != health.Health) {
 
             SPAudioSource.Play(transform.position, sfx_hits);
             fx_hit.Play();
             flash.Flash();
+
+            if(treeState == FloraType.Oak) {
+                fx_branchFall.Play();
+            }
             
         }
+
+        TreeHealthInstant();
 
         lastHealth = health.Health;
     }
@@ -144,8 +161,11 @@ public class TreeComponent : MUDComponent {
     public async void ChopTree(MUDEntity entity) {
         List<TxUpdate> updates = new List<TxUpdate>();
         
-        updates.Add(TxManager.MakeOptimistic(health, (int)Mathf.Clamp(health.Health - 1, 0, Mathf.Infinity)));
-        updates.Add(TxManager.MakeOptimisticDelete(pos) );
+        updates.Add(TxManager.MakeOptimistic(health, health.Health - 1));
+
+        if(health.Health - 1 <= 0) {
+            updates.Add(TxManager.MakeOptimisticDelete(pos) );
+        }
 
         await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity, ActionName.Chop, transform.position, updates);
     }

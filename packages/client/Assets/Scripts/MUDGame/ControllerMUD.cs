@@ -151,12 +151,7 @@ public class ControllerMUD : SPController {
         }
         
 
-        if (moveComponent != null) {
-
-            if(moveComponent.MoveType != MoveType.Push) {
-                FailedMove(moveTo);
-                return;
-            }
+        if (moveComponent != null && moveComponent.MoveType == MoveType.Push) {
 
             Debug.Log("Push Tx");
 
@@ -204,6 +199,13 @@ public class ControllerMUD : SPController {
             ActionsMUD.ActionTx(mudEntity, ActionName.Push, moveTo, updates);
 
         } else {
+
+            if(moveComponent != null && (moveComponent.MoveType == MoveType.Obstruction || moveComponent.MoveType == MoveType.Hole)) {
+                FailedMove(moveTo);
+                return;
+            }
+
+            
 
             Debug.Log("Walk TX");
             List<TxUpdate> updates = new List<TxUpdate>() { ActionsMUD.PositionOptimistic(mudEntity, movePos) };

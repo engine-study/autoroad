@@ -22,12 +22,12 @@ contract FloraSubsystem is System {
 
     FloraType floraType = FloraType.None;
 
-    if (noiseCoord < 5) {
+    if (noiseCoord < 10) {
       floraType = FloraType.Bramble;
       Health.set(entity, 1);
       Move.set(entity, uint32(MoveType.Trap));
-    } else if (noiseCoord >= 5 && noiseCoord < 10) {
-      floraType = FloraType.OldTree;
+    } else if (noiseCoord >= 10 && noiseCoord < 20) {
+      floraType = FloraType.Oak;
       Health.set(entity, 3);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else {
