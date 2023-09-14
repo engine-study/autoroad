@@ -21,16 +21,20 @@ import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/T
 //   return positions;
 // }
 
-function addPosition(PositionData memory start, PositionData memory end) pure returns (PositionData memory) {
-  return PositionData(start.x + end.x, start.y + end.y, end.layer);
+function addPosition(PositionData memory pos, PositionData memory add) pure returns (PositionData memory) {
+  return PositionData(pos.x + add.x, pos.y + add.y, add.layer);
+}
+function subtractPosition(PositionData memory pos, PositionData memory minus) pure returns (PositionData memory) {
+  return PositionData(pos.x - minus.x, pos.y - minus.y, minus.layer);
 }
 
 function getVectorNormalized(PositionData memory start, PositionData memory end) pure returns (PositionData memory) {
 
   //get the sign of the delta (positive or negative)
-  int32 signX = (end.x - start.x) >= 0 ? int32(1) : int32(-1);
-  int32 signY = (end.y - start.y) >= 0 ? int32(1) : int32(-1);
-  return PositionData(signX, signY, end.layer);
+  PositionData memory vector = subtractPosition(end, start);
+  vector.x = vector.x == 0 ? int32(0) : (vector.x > 0 ? int32(1) : int32(-1));
+  vector.y = vector.y == 0 ? int32(0) : (vector.y > 0 ? int32(1) : int32(-1));
+  return vector;
 
 }
 
