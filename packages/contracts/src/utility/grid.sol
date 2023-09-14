@@ -21,6 +21,18 @@ import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/T
 //   return positions;
 // }
 
+function addPosition(PositionData memory start, PositionData memory end) pure returns (PositionData memory) {
+  return PositionData(start.x + end.x, start.y + end.y, end.layer);
+}
+
+function getVectorNormalized(PositionData memory start, PositionData memory end) pure returns (PositionData memory) {
+
+  //get the sign of the delta (positive or negative)
+  int32 signX = (end.x - start.x) >= 0 ? int32(1) : int32(-1);
+  int32 signY = (end.y - start.y) >= 0 ? int32(1) : int32(-1);
+  return PositionData(signX, signY, end.layer);
+
+}
 
 function withinManhattanMinimum(PositionData memory start, PositionData memory end, uint distance) pure returns (bool) {
   distance += 1;

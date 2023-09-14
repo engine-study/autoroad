@@ -35,34 +35,34 @@ contract MoveSubsystem is System {
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
 
-    uint walkSpaces = 0;
+    uint walkLength = 0;
     for (uint i = 1; i < positions.length; i++) {
       
       bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
       assert(atPosition.length < 2);
 
-      bool stopWalk = world.onWorld(positions[i].x, positions[i].y) == false;
-      if(!stopWalk && atPosition.length > 0) {
+      bool continueWalk = world.onWorld(positions[i].x, positions[i].y);
+      if(continueWalk && atPosition.length > 0) {
         //we can't walk into holes on purpose, only traps
-        MoveType move = MoveType(Move.get(atPosition[0]));
-        stopWalk = move == MoveType.Obstruction || move == MoveType.Hole;
+        continueWalk = canWalkOn(atPosition);
       }
       
       //if we hit an object or at the end of our walk, move to that position
-      if (stopWalk) {
+      if (continueWalk == false) {
         require(i > 1, "Nowhere to move");
-        walkSpaces = i-1;
+        walkLength = i-1;
         break;
       }
 
     }
 
     //we walked the full distance without getting stopped
-    if(walkSpaces == 0) {
-      walkSpaces = positions.length-1;
+    if(walkLength == 0) {
+      walkLength = positions.length-1;
     }
 
-    for (uint i = 1; i <= walkSpaces; i++) {
+    //walk all the spaces (remember the 0 index is our original position, start at index 1)
+    for (uint i = 1; i <= walkLength; i++) {
       bytes32[] memory atPosTemp = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
       moveTo(player, player, positions[i-1], positions[i], atPosTemp, ActionType.Walking);
 
@@ -85,10 +85,20 @@ contract MoveSubsystem is System {
     require(move == uint32(MoveType.Push), "not push");
   }
 
+
+  function canWalkOn(bytes32[] memory at) public view returns(bool) {
+    uint32 move = Move.get(at[0]);
+    return(move == uint32(MoveType.None) || move == uint32(MoveType.Trap));
+  }
+  function canPlaceOn(bytes32[] memory at) public view returns(bool) {
+    uint32 move = Move.get(at[0]);
+    return(move == uint32(MoveType.None) || move == uint32(MoveType.Hole) || move == uint32(MoveType.Trap));
+  }
+
   function requireCanPlaceOn(bytes32[] memory at) public view {
     if(at.length == 0) return;
     uint32 move = Move.get(at[0]);
-    require(move == uint32(MoveType.None) || move == uint32(MoveType.Hole) || move == uint32(MoveType.Trap), "blocked");
+    require(canPlaceOn(at), "cannot place on");
   }
 
   function requireOnMap(bytes32[] memory at, PositionData memory pos) public view {
@@ -201,7 +211,7 @@ contract MoveSubsystem is System {
     if (atDest.length > 0) {
 
       //check if there is an obstruction
-      requireCanPlaceOn(atDest);
+      if(canPlaceOn(atDest) == false) { return; }
 
       //handle the move on first
       moveOn(moveCausedBy, entity, to, atDest);
@@ -220,7 +230,7 @@ contract MoveSubsystem is System {
 
   }
 
-  function moveOn(bytes32 moveCausedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDestination) public {
+  function moveOn(bytes32 moveCausedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDestination) private {
 
       //kill the player if they move onto a hole or trap
       MoveType moveType = MoveType(Move.get(atDestination[0]));

@@ -18,39 +18,29 @@ contract EntitySubsystem is System {
     Entities.set(chunkEntity, width, height);
   }
 
-  function triggerEntities(bytes32 player, PositionData memory center) public {
+  function triggerEntities(bytes32 player, PositionData memory pos) public {
     console.log("triggerEntities");
 
     //if we are off the map we don't trigger NPCs
-    if (IWorld(_world()).onMap(center.x, center.y) == false) { return;}
+    if (IWorld(_world()).onMap(pos.x, pos.y) == false) { return;}
 
-    PositionData[] memory positions = neumanNeighborhoodOuter(center, 1);
+    PositionData[] memory positions = neumanNeighborhoodOuter(pos, 2);
     bytes32[] memory entities = activeEntities(positions);
 
+    //TODO gas golf
     for (uint i = 0; i < positions.length; i++) {
-      if (entities[i] == bytes32(0)) {
-        continue;
-      }
-      bytes32 entity = entities[i];
-      IWorld(_world()).aggro(player, entity, center, positions[i]);
+      if (entities[i] == bytes32(0)) {continue;}
+      IWorld(_world()).aggro(player, entities[i], pos, positions[i]);
     }
   }
 
   function activeEntities(PositionData[] memory positions) internal returns (bytes32[] memory) {
     console.log("activeEntities");
-
-    uint256 index = 0;
-
     bytes32[] memory neighbors = new bytes32[](positions.length);
-
     for (uint i = 0; i < positions.length; i++) {
-
-      bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
-      if (atPos.length > 0) {
-        neighbors[index] = atPos[0];
-      }
+      bytes32[] memory entities = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      neighbors[i] = entities.length > 0 ? entities[0] : bytes32(0);
     }
-
     return neighbors;
   }
 

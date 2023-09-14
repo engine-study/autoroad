@@ -147,6 +147,24 @@ namespace IWorld.ContractDefinition
         public virtual BigInteger Distance { get; set; }
     }
 
+    public partial class CanPlaceOnFunction : CanPlaceOnFunctionBase { }
+
+    [Function("canPlaceOn", "bool")]
+    public class CanPlaceOnFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32[]", "at", 1)]
+        public virtual List<byte[]> At { get; set; }
+    }
+
+    public partial class CanWalkOnFunction : CanWalkOnFunctionBase { }
+
+    [Function("canWalkOn", "bool")]
+    public class CanWalkOnFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32[]", "at", 1)]
+        public virtual List<byte[]> At { get; set; }
+    }
+
     public partial class ChopFunction : ChopFunctionBase { }
 
     [Function("chop")]
@@ -550,15 +568,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Player { get; set; }
     }
 
-    public partial class IsPushableOrEmptyFunction : IsPushableOrEmptyFunctionBase { }
-
-    [Function("isPushableOrEmpty", "bool")]
-    public class IsPushableOrEmptyFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32[]", "at", 1)]
-        public virtual List<byte[]> At { get; set; }
-    }
-
     public partial class IsStoreFunction : IsStoreFunctionBase { }
 
     [Function("isStore")]
@@ -633,19 +642,17 @@ namespace IWorld.ContractDefinition
     [Function("moveTo")]
     public class MoveToFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
-        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "moveCausedBy", 1)]
+        public virtual byte[] MoveCausedBy { get; set; }
         [Parameter("bytes32", "entity", 2)]
         public virtual byte[] Entity { get; set; }
         [Parameter("tuple", "from", 3)]
         public virtual PositionData From { get; set; }
         [Parameter("tuple", "to", 4)]
         public virtual PositionData To { get; set; }
-        [Parameter("bytes32[]", "atPosition", 5)]
-        public virtual List<byte[]> AtPosition { get; set; }
-        [Parameter("bytes32[]", "atDestination", 6)]
-        public virtual List<byte[]> AtDestination { get; set; }
-        [Parameter("uint8", "animation", 7)]
+        [Parameter("bytes32[]", "atDest", 5)]
+        public virtual List<byte[]> AtDest { get; set; }
+        [Parameter("uint8", "animation", 6)]
         public virtual byte Animation { get; set; }
     }
 
@@ -939,13 +946,28 @@ namespace IWorld.ContractDefinition
         public virtual string Hook { get; set; }
     }
 
-    public partial class RequireEmptyOrHoleFunction : RequireEmptyOrHoleFunctionBase { }
+    public partial class RequireCanPlaceOnFunction : RequireCanPlaceOnFunctionBase { }
 
-    [Function("requireEmptyOrHole")]
-    public class RequireEmptyOrHoleFunctionBase : FunctionMessage
+    [Function("requireCanPlaceOn")]
+    public class RequireCanPlaceOnFunctionBase : FunctionMessage
     {
         [Parameter("bytes32[]", "at", 1)]
         public virtual List<byte[]> At { get; set; }
+    }
+
+    public partial class RequireLegalMoveFunction : RequireLegalMoveFunctionBase { }
+
+    [Function("requireLegalMove", "bool")]
+    public class RequireLegalMoveFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("tuple", "from", 2)]
+        public virtual PositionData From { get; set; }
+        [Parameter("tuple", "to", 3)]
+        public virtual PositionData To { get; set; }
+        [Parameter("uint256", "distance", 4)]
+        public virtual BigInteger Distance { get; set; }
     }
 
     public partial class RequireOnMapFunction : RequireOnMapFunctionBase { }
@@ -963,6 +985,15 @@ namespace IWorld.ContractDefinition
 
     [Function("requirePushable")]
     public class RequirePushableFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32[]", "at", 1)]
+        public virtual List<byte[]> At { get; set; }
+    }
+
+    public partial class RequirePushableOrEmptyFunction : RequirePushableOrEmptyFunctionBase { }
+
+    [Function("requirePushableOrEmpty", "bool")]
+    public class RequirePushableOrEmptyFunctionBase : FunctionMessage
     {
         [Parameter("bytes32[]", "at", 1)]
         public virtual List<byte[]> At { get; set; }
@@ -1195,6 +1226,21 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class SpawnFloraFunction : SpawnFloraFunctionBase { }
+
+    [Function("spawnFlora")]
+    public class SpawnFloraFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("int32", "x", 3)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 4)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class SpawnMileAdminFunction : SpawnMileAdminFunctionBase { }
 
     [Function("spawnMileAdmin")]
@@ -1342,8 +1388,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
-        [Parameter("tuple", "center", 2)]
-        public virtual PositionData Center { get; set; }
+        [Parameter("tuple", "pos", 2)]
+        public virtual PositionData Pos { get; set; }
     }
 
     public partial class UpdateChunkFunction : UpdateChunkFunctionBase { }
@@ -1616,6 +1662,24 @@ namespace IWorld.ContractDefinition
 
 
 
+    public partial class CanPlaceOnOutputDTO : CanPlaceOnOutputDTOBase { }
+
+    [FunctionOutput]
+    public class CanPlaceOnOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
+
+    public partial class CanWalkOnOutputDTO : CanWalkOnOutputDTOBase { }
+
+    [FunctionOutput]
+    public class CanWalkOnOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
+
 
 
 
@@ -1744,15 +1808,6 @@ namespace IWorld.ContractDefinition
         public virtual bool ReturnValue1 { get; set; }
     }
 
-    public partial class IsPushableOrEmptyOutputDTO : IsPushableOrEmptyOutputDTOBase { }
-
-    [FunctionOutput]
-    public class IsPushableOrEmptyOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("bool", "", 1)]
-        public virtual bool ReturnValue1 { get; set; }
-    }
-
 
 
 
@@ -1842,6 +1897,19 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
+
+    public partial class RequirePushableOrEmptyOutputDTO : RequirePushableOrEmptyOutputDTOBase { }
+
+    [FunctionOutput]
+    public class RequirePushableOrEmptyOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
 
 
 

@@ -338,6 +338,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(canInteractEmptyFunction, cancellationToken);
         }
 
+        public Task<bool> CanPlaceOnQueryAsync(CanPlaceOnFunction canPlaceOnFunction, BlockParameter blockParameter = null)
+        {
+            return ContractHandler.QueryAsync<CanPlaceOnFunction, bool>(canPlaceOnFunction, blockParameter);
+        }
+
+        
+        public Task<bool> CanPlaceOnQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
+        {
+            var canPlaceOnFunction = new CanPlaceOnFunction();
+                canPlaceOnFunction.At = at;
+            
+            return ContractHandler.QueryAsync<CanPlaceOnFunction, bool>(canPlaceOnFunction, blockParameter);
+        }
+
+        public Task<bool> CanWalkOnQueryAsync(CanWalkOnFunction canWalkOnFunction, BlockParameter blockParameter = null)
+        {
+            return ContractHandler.QueryAsync<CanWalkOnFunction, bool>(canWalkOnFunction, blockParameter);
+        }
+
+        
+        public Task<bool> CanWalkOnQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
+        {
+            var canWalkOnFunction = new CanWalkOnFunction();
+                canWalkOnFunction.At = at;
+            
+            return ContractHandler.QueryAsync<CanWalkOnFunction, bool>(canWalkOnFunction, blockParameter);
+        }
+
         public Task<string> ChopRequestAsync(ChopFunction chopFunction)
         {
              return ContractHandler.SendRequestAsync(chopFunction);
@@ -1229,20 +1257,6 @@ namespace IWorld.Service
             return ContractHandler.QueryAsync<IsAdminFunction, bool>(isAdminFunction, blockParameter);
         }
 
-        public Task<bool> IsPushableOrEmptyQueryAsync(IsPushableOrEmptyFunction isPushableOrEmptyFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryAsync<IsPushableOrEmptyFunction, bool>(isPushableOrEmptyFunction, blockParameter);
-        }
-
-        
-        public Task<bool> IsPushableOrEmptyQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
-        {
-            var isPushableOrEmptyFunction = new IsPushableOrEmptyFunction();
-                isPushableOrEmptyFunction.At = at;
-            
-            return ContractHandler.QueryAsync<IsPushableOrEmptyFunction, bool>(isPushableOrEmptyFunction, blockParameter);
-        }
-
 
 
         public Task<string> KillRequestAsync(KillFunction killFunction)
@@ -1401,29 +1415,27 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
         }
 
-        public Task<string> MoveToRequestAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination, byte animation)
+        public Task<string> MoveToRequestAsync(byte[] moveCausedBy, byte[] entity, PositionData from, PositionData to, List<byte[]> atDest, byte animation)
         {
             var moveToFunction = new MoveToFunction();
-                moveToFunction.Player = player;
+                moveToFunction.MoveCausedBy = moveCausedBy;
                 moveToFunction.Entity = entity;
                 moveToFunction.From = from;
                 moveToFunction.To = to;
-                moveToFunction.AtPosition = atPosition;
-                moveToFunction.AtDestination = atDestination;
+                moveToFunction.AtDest = atDest;
                 moveToFunction.Animation = animation;
             
              return ContractHandler.SendRequestAsync(moveToFunction);
         }
 
-        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, PositionData from, PositionData to, List<byte[]> atPosition, List<byte[]> atDestination, byte animation, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] moveCausedBy, byte[] entity, PositionData from, PositionData to, List<byte[]> atDest, byte animation, CancellationTokenSource cancellationToken = null)
         {
             var moveToFunction = new MoveToFunction();
-                moveToFunction.Player = player;
+                moveToFunction.MoveCausedBy = moveCausedBy;
                 moveToFunction.Entity = entity;
                 moveToFunction.From = from;
                 moveToFunction.To = to;
-                moveToFunction.AtPosition = atPosition;
-                moveToFunction.AtDestination = atDestination;
+                moveToFunction.AtDest = atDest;
                 moveToFunction.Animation = animation;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
@@ -2041,9 +2053,55 @@ namespace IWorld.Service
 
 
 
+        public Task<string> RequireLegalMoveRequestAsync(RequireLegalMoveFunction requireLegalMoveFunction)
+        {
+             return ContractHandler.SendRequestAsync(requireLegalMoveFunction);
+        }
+
+        public Task<TransactionReceipt> RequireLegalMoveRequestAndWaitForReceiptAsync(RequireLegalMoveFunction requireLegalMoveFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(requireLegalMoveFunction, cancellationToken);
+        }
+
+        public Task<string> RequireLegalMoveRequestAsync(byte[] player, PositionData from, PositionData to, BigInteger distance)
+        {
+            var requireLegalMoveFunction = new RequireLegalMoveFunction();
+                requireLegalMoveFunction.Player = player;
+                requireLegalMoveFunction.From = from;
+                requireLegalMoveFunction.To = to;
+                requireLegalMoveFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAsync(requireLegalMoveFunction);
+        }
+
+        public Task<TransactionReceipt> RequireLegalMoveRequestAndWaitForReceiptAsync(byte[] player, PositionData from, PositionData to, BigInteger distance, CancellationTokenSource cancellationToken = null)
+        {
+            var requireLegalMoveFunction = new RequireLegalMoveFunction();
+                requireLegalMoveFunction.Player = player;
+                requireLegalMoveFunction.From = from;
+                requireLegalMoveFunction.To = to;
+                requireLegalMoveFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(requireLegalMoveFunction, cancellationToken);
+        }
 
 
 
+
+
+        public Task<bool> RequirePushableOrEmptyQueryAsync(RequirePushableOrEmptyFunction requirePushableOrEmptyFunction, BlockParameter blockParameter = null)
+        {
+            return ContractHandler.QueryAsync<RequirePushableOrEmptyFunction, bool>(requirePushableOrEmptyFunction, blockParameter);
+        }
+
+        
+        public Task<bool> RequirePushableOrEmptyQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
+        {
+            var requirePushableOrEmptyFunction = new RequirePushableOrEmptyFunction();
+                requirePushableOrEmptyFunction.At = at;
+            
+            return ContractHandler.QueryAsync<RequirePushableOrEmptyFunction, bool>(requirePushableOrEmptyFunction, blockParameter);
+        }
 
         public Task<string> RevokeAccessRequestAsync(RevokeAccessFunction revokeAccessFunction)
         {
@@ -2561,6 +2619,38 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFinishedRoadAdminFunction, cancellationToken);
         }
 
+        public Task<string> SpawnFloraRequestAsync(SpawnFloraFunction spawnFloraFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnFloraFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnFloraRequestAndWaitForReceiptAsync(SpawnFloraFunction spawnFloraFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFloraFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnFloraRequestAsync(byte[] player, byte[] entity, int x, int y)
+        {
+            var spawnFloraFunction = new SpawnFloraFunction();
+                spawnFloraFunction.Player = player;
+                spawnFloraFunction.Entity = entity;
+                spawnFloraFunction.X = x;
+                spawnFloraFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(spawnFloraFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnFloraRequestAndWaitForReceiptAsync(byte[] player, byte[] entity, int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnFloraFunction = new SpawnFloraFunction();
+                spawnFloraFunction.Player = player;
+                spawnFloraFunction.Entity = entity;
+                spawnFloraFunction.X = x;
+                spawnFloraFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnFloraFunction, cancellationToken);
+        }
+
         public Task<string> SpawnMileAdminRequestAsync(SpawnMileAdminFunction spawnMileAdminFunction)
         {
              return ContractHandler.SendRequestAsync(spawnMileAdminFunction);
@@ -2893,20 +2983,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);
         }
 
-        public Task<string> TriggerEntitiesRequestAsync(byte[] player, PositionData center)
+        public Task<string> TriggerEntitiesRequestAsync(byte[] player, PositionData pos)
         {
             var triggerEntitiesFunction = new TriggerEntitiesFunction();
                 triggerEntitiesFunction.Player = player;
-                triggerEntitiesFunction.Center = center;
+                triggerEntitiesFunction.Pos = pos;
             
              return ContractHandler.SendRequestAsync(triggerEntitiesFunction);
         }
 
-        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(byte[] player, PositionData center, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(byte[] player, PositionData pos, CancellationTokenSource cancellationToken = null)
         {
             var triggerEntitiesFunction = new TriggerEntitiesFunction();
                 triggerEntitiesFunction.Player = player;
-                triggerEntitiesFunction.Center = center;
+                triggerEntitiesFunction.Pos = pos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);
         }

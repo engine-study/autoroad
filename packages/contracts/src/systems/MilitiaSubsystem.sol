@@ -9,6 +9,8 @@ import { Position, PositionTableId, PositionData, Health, Action, Militia } from
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { ActionSystem } from "./ActionSystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+import { getDistance, getVectorNormalized, addPosition } from "../utility/grid.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract MilitiaSubsystem is System {
 
@@ -21,8 +23,18 @@ contract MilitiaSubsystem is System {
     int32 health = Health.get(player);
     if(health == 0) return;
 
-    world.setAction(entity, ActionType.Melee, playerPos.x, playerPos.y);
-    world.kill(player, entity, playerPos);
+    uint distance = getDistance(playerPos, entityPos);
+
+    if(distance == 1) {
+      //kill player
+      world.setAction(entity, ActionType.Melee, playerPos.x, playerPos.y);
+      world.kill(player, entity, playerPos);
+    } else if(distance == 2) {
+      //walk towards player
+      PositionData memory walkPos = addPosition(entityPos,getVectorNormalized(entityPos,playerPos));
+      bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(walkPos.x, walkPos.y, 0));
+      world.moveTo(player, entity, entityPos, walkPos, atDest, ActionType.Walking);
+    }
   }
   
 }
