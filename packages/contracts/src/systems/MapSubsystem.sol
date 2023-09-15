@@ -29,8 +29,7 @@ contract MapSubsystem is System {
     int32 up = Bounds.getUp();
     int32 down = Bounds.getDown();
     (int32 playWidth, int32 spawnWidth) = MapConfig.get();
-    require(x > playWidth && x <= spawnWidth, "x outside spawn");
-    require(y <= up && y >= down, "y outside of spawn");
+    return (x > playWidth && x <= spawnWidth) && (y <= up && y >= down);
   }
   function createMap(address worldAddress) public {
 
