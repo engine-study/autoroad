@@ -10,8 +10,8 @@ public class InfoUI : SPWindow
     MUDEntity entity;
 
     [Header("Info")]
-    public SPHeading header;
-    public SPHeading playerName, coordinate;
+    public SPButton header;
+    public SPButton playerName, coordinate;
     public SPRawText text;
 
     protected override void Awake() {

@@ -12,6 +12,7 @@ public class MotherUI : SPUIInstance {
     public static SPActionWheelUI ActionWheel {get { return Mother.wheel; } }
 
     [Header("UI")]
+    public bool freshInstall;
     public GameObject loadingScreen;
     public Image loadingScreenBackground;
     public SPActionWheelUI wheel;
