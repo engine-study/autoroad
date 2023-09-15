@@ -59,6 +59,9 @@ MonoBehaviour:
   networkInfo:
     updateType: 0
     source: 0
+  lastInfo:
+    updateType: 0
+    source: 0
 --- !u!1001 &5229763133071544933
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -157,21 +160,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Muscle
       objectReference: {fileID: 0}
+    - target: {fileID: 703160982159948759, guid: 171dd39897821b94cb8611525d501993, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 703160982159948759, guid: 171dd39897821b94cb8611525d501993, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 703160982159948759, guid: 171dd39897821b94cb8611525d501993, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 5270335384962568705, guid: 171dd39897821b94cb8611525d501993, type: 3}
       propertyPath: m_RootOrder
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5270335384962568705, guid: 171dd39897821b94cb8611525d501993, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5270335384962568705, guid: 171dd39897821b94cb8611525d501993, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5270335384962568705, guid: 171dd39897821b94cb8611525d501993, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5270335384962568705, guid: 171dd39897821b94cb8611525d501993, type: 3}
       propertyPath: m_LocalPosition.x
