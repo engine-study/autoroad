@@ -10,6 +10,7 @@ public class PlayerMUD : SPPlayer
     public PositionSync Sync{get{return positionSync;}}
     public ActionsMUD Actions{get{return actions;}}
     public AnimationMUD AnimationMUD{get{return animMud;}}
+    public static bool CanInput {get{return LocalPlayer && LocalPlayer.HasInit && !PlayerComponent.LocalPlayer.IsDead;}}
 
     [Header("MUD")]
     [SerializeField] private PlayerComponent playerComponent;

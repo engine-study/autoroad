@@ -84,12 +84,7 @@ public class ControllerMUD : SPController {
 
     public override void ToggleController(bool toggle) {
         base.ToggleController(toggle);
-
         controller.enabled = false;
-
-        //WE ARE ALWAYS ENABLED, BUT OUR CONTROLLER IS NOT
-        //TODO, do not always be enabled
-        enabled = true;
     }
 
 
@@ -116,7 +111,7 @@ public class ControllerMUD : SPController {
             return;
         }
 
-        if (!player.IsLocalPlayer)
+        if (!PlayerMUD.CanInput)
             return;
 
         minTime -= Time.deltaTime;

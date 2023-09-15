@@ -14,6 +14,7 @@ public class PlayerComponent : MUDComponent {
     public static PlayerComponent LocalPlayer;
     public static System.Action OnPlayerSpawn;
     public bool IsLocalPlayer { get { return isLocalPlayer; } }
+    public bool IsDead {get{return health.IsDead;}}
     public PlayerMUD PlayerScript {get{return playerScript;}}
 
     [Header("Player")]
