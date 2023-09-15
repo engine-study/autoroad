@@ -9,7 +9,6 @@ contract RewardSubsystem is System {
 
   function giveRoadReward(bytes32 road) public {
 
-  
     //TODO revert after unimud fix
     uint32 roadstate = Road.getState(road);
     bytes32 player = Road.getFilled(road);
@@ -20,6 +19,14 @@ contract RewardSubsystem is System {
     giveCoins(player, 25);
     giveXP(player, 25);
 
+  }
+
+  function giveKilledBarbarianReward(bytes32 player) public {
+
+    int32 amount = Conscription.get(player) ? int32(30) : int32(20);
+    giveCoins(player, amount);
+    giveXP(player, 50);
+    
   }
 
   

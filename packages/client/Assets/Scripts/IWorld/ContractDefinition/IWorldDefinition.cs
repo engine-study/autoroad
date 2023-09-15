@@ -72,13 +72,15 @@ namespace IWorld.ContractDefinition
     [Function("aggro")]
     public class AggroFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
         public virtual byte[] Player { get; set; }
-        [Parameter("bytes32", "entity", 2)]
+        [Parameter("bytes32", "entity", 3)]
         public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "playerPos", 3)]
+        [Parameter("tuple", "playerPos", 4)]
         public virtual PositionData PlayerPos { get; set; }
-        [Parameter("tuple", "entityPos", 4)]
+        [Parameter("tuple", "entityPos", 5)]
         public virtual PositionData EntityPos { get; set; }
     }
 
@@ -486,6 +488,15 @@ namespace IWorld.ContractDefinition
         public virtual uint Amount { get; set; }
     }
 
+    public partial class GiveKilledBarbarianRewardFunction : GiveKilledBarbarianRewardFunctionBase { }
+
+    [Function("giveKilledBarbarianReward")]
+    public class GiveKilledBarbarianRewardFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+    }
+
     public partial class GiveRoadFilledRewardFunction : GiveRoadFilledRewardFunctionBase { }
 
     [Function("giveRoadFilledReward")]
@@ -581,11 +592,13 @@ namespace IWorld.ContractDefinition
     [Function("kill")]
     public class KillFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "target", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
         public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "attacker", 2)]
+        [Parameter("bytes32", "attacker", 3)]
         public virtual byte[] Attacker { get; set; }
-        [Parameter("tuple", "pos", 3)]
+        [Parameter("tuple", "pos", 4)]
         public virtual PositionData Pos { get; set; }
     }
 
@@ -642,8 +655,8 @@ namespace IWorld.ContractDefinition
     [Function("moveTo")]
     public class MoveToFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "moveCausedBy", 1)]
-        public virtual byte[] MoveCausedBy { get; set; }
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
         [Parameter("bytes32", "entity", 2)]
         public virtual byte[] Entity { get; set; }
         [Parameter("tuple", "from", 3)]
@@ -1028,13 +1041,15 @@ namespace IWorld.ContractDefinition
     [Function("seek")]
     public class SeekFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
         public virtual byte[] Player { get; set; }
-        [Parameter("bytes32", "entity", 2)]
+        [Parameter("bytes32", "entity", 3)]
         public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "playerPos", 3)]
+        [Parameter("tuple", "playerPos", 4)]
         public virtual PositionData PlayerPos { get; set; }
-        [Parameter("tuple", "entityPos", 4)]
+        [Parameter("tuple", "entityPos", 5)]
         public virtual PositionData EntityPos { get; set; }
     }
 
@@ -1127,15 +1142,17 @@ namespace IWorld.ContractDefinition
     [Function("setPosition")]
     public class SetPositionFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
         public virtual byte[] Player { get; set; }
-        [Parameter("int32", "x", 2)]
+        [Parameter("int32", "x", 3)]
         public virtual int X { get; set; }
-        [Parameter("int32", "y", 3)]
+        [Parameter("int32", "y", 4)]
         public virtual int Y { get; set; }
-        [Parameter("int32", "layer", 4)]
+        [Parameter("int32", "layer", 5)]
         public virtual int Layer { get; set; }
-        [Parameter("uint8", "action", 5)]
+        [Parameter("uint8", "action", 6)]
         public virtual byte Action { get; set; }
     }
 
@@ -1144,11 +1161,13 @@ namespace IWorld.ContractDefinition
     [Function("setPositionData")]
     public class SetPositionDataFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
         public virtual byte[] Player { get; set; }
-        [Parameter("tuple", "pos", 2)]
+        [Parameter("tuple", "pos", 3)]
         public virtual PositionData Pos { get; set; }
-        [Parameter("uint8", "action", 3)]
+        [Parameter("uint8", "action", 4)]
         public virtual byte Action { get; set; }
     }
 
@@ -1157,9 +1176,11 @@ namespace IWorld.ContractDefinition
     [Function("setPositionRaw")]
     public class SetPositionRawFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
         public virtual byte[] Player { get; set; }
-        [Parameter("tuple", "pos", 2)]
+        [Parameter("tuple", "pos", 3)]
         public virtual PositionData Pos { get; set; }
     }
 
@@ -1455,13 +1476,15 @@ namespace IWorld.ContractDefinition
     [Function("tickBehaviour")]
     public class TickBehaviourFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
         public virtual byte[] Player { get; set; }
-        [Parameter("bytes32", "entity", 2)]
+        [Parameter("bytes32", "entity", 3)]
         public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "playerPos", 3)]
+        [Parameter("tuple", "playerPos", 4)]
         public virtual PositionData PlayerPos { get; set; }
-        [Parameter("tuple", "entityPos", 4)]
+        [Parameter("tuple", "entityPos", 5)]
         public virtual PositionData EntityPos { get; set; }
     }
 
@@ -1470,9 +1493,11 @@ namespace IWorld.ContractDefinition
     [Function("triggerEntities")]
     public class TriggerEntitiesFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
         public virtual byte[] Player { get; set; }
-        [Parameter("tuple", "pos", 2)]
+        [Parameter("tuple", "pos", 3)]
         public virtual PositionData Pos { get; set; }
     }
 
@@ -1864,6 +1889,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

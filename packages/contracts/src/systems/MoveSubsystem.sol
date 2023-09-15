@@ -4,14 +4,15 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Stats, Coinage, Scroll, Seeds, Boots, Weight, Animation } from "../codegen/Tables.sol";
+import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Scroll, Seeds, Boots, Weight, Animation, NPC } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { RoadState, RockType, MoveType, ActionType, AnimationType } from "../codegen/Types.sol";
+import { RoadState, RockType, MoveType, ActionType, AnimationType, NPCType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
+import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
 
 contract MoveSubsystem is System {
@@ -199,7 +200,7 @@ contract MoveSubsystem is System {
   }
 
   function moveTo(
-    bytes32 moveCausedBy,
+    bytes32 causedBy,
     bytes32 entity,
     PositionData memory from,
     PositionData memory to,
@@ -214,31 +215,31 @@ contract MoveSubsystem is System {
       if(canPlaceOn(atDest) == false) { return; }
 
       //handle the move on first
-      moveOn(moveCausedBy, entity, to, atDest);
+      moveOn(causedBy, entity, to, atDest);
 
       //if we're still alive, move into the position (this will trigger an entity update too)
       if(canDoStuff(entity)) {
-        setPositionData(entity, to, animation);
+        setPositionData(causedBy, entity, to, animation);
       }
 
     } else {
 
       //MOVE
-      setPositionData(entity, to, animation);
+      setPositionData(causedBy, entity, to, animation);
 
     }
 
   }
 
-  function moveOn(bytes32 moveCausedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDestination) private {
+  function moveOn(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDestination) private {
 
       //kill the player if they move onto a hole or trap
       MoveType moveType = MoveType(Move.get(atDestination[0]));
       if (moveType == MoveType.Hole || moveType == MoveType.Trap) {
         //kill if it was a player
-        if(Player.get(entity)) { kill(entity, moveCausedBy, to);}
+        if(Player.get(entity)) { kill(causedBy, entity, causedBy, to);}
         if(Road.getState(atDestination[0]) == uint32(RoadState.Shoveled)) {
-          IWorld(_world()).spawnRoadFromPlayer(moveCausedBy, entity, atDestination[0], to);
+          IWorld(_world()).spawnRoadFromPlayer(causedBy, entity, atDestination[0], to);
         }
       }
 
@@ -319,8 +320,6 @@ contract MoveSubsystem is System {
       // Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
 
-    // int32 stat = Stats.getMined(player);
-    // Stats.setMined(player, stat + 1);
   }
 
   function shovel(bytes32 player, int32 x, int32 y) public {
@@ -347,7 +346,7 @@ contract MoveSubsystem is System {
     health--;
 
     if (health <= 0) {
-      kill(atPosition[0], player, pos);
+      kill(player, atPosition[0], player, pos);
     } else {
       Health.set(atPosition[0], health);
     }
@@ -367,20 +366,34 @@ contract MoveSubsystem is System {
     health--;
 
     if (health <= 0) {
-      kill(atPosition[0], player, pos);
+      kill(player, atPosition[0], player, pos);
     } else {
       Health.set(atPosition[0], health);
     }
   }
 
-  function kill(bytes32 target, bytes32 attacker, PositionData memory pos) public {
+  function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
+    IWorld world = IWorld(_world());
 
     //kill target
     Health.set(target, -1);
     Position.deleteRecord(target);
 
     //set to dead
-    IWorld(_world()).setAction(target, ActionType.Dead, pos.x, pos.y);
+    world.setAction(target, ActionType.Dead, pos.x, pos.y);
+
+    //reward the Player and NPC for their actions
+    uint32 npcType = NPC.get(attacker);
+    if(npcType > uint32(NPCType.Player) ) {
+
+      //reward the player possibly for their actions
+      if(Player.get(causedBy)) {
+        world.giveKilledBarbarianReward(causedBy);
+      }
+
+      world.giveKilledBarbarianReward(attacker);
+
+    }
 
     //spawn bones
     // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
@@ -409,7 +422,7 @@ contract MoveSubsystem is System {
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
     require(atPosition.length < 1, "occupied");
-    setPosition(player, x, y, 0, ActionType.Teleport);
+    setPosition(player, player, x, y, 0, ActionType.Teleport);
   }
 
   // function carry(int32 carryX, int32 carryY) public {
@@ -468,20 +481,20 @@ contract MoveSubsystem is System {
     moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
   }
 
-  function setPosition(bytes32 player, int32 x, int32 y, int32 layer, ActionType action) public {
-    setPositionData(player, PositionData(x, y, layer), action);
+  function setPosition(bytes32 causedBy, bytes32 player, int32 x, int32 y, int32 layer, ActionType action) public {
+    setPositionData(causedBy, player, PositionData(x, y, layer), action);
   }
 
-  function setPositionData(bytes32 player, PositionData memory pos, ActionType action) public {
+  function setPositionData(bytes32 causedBy, bytes32 player, PositionData memory pos, ActionType action) public {
     IWorld(_world()).setAction(player, action, pos.x, pos.y);
-    setPositionRaw(player, pos);
+    setPositionRaw(causedBy, player, pos);
   }
 
-  function setPositionRaw(bytes32 player, PositionData memory pos) public {
+  function setPositionRaw(bytes32 causedBy, bytes32 player, PositionData memory pos) public {
     Position.set(player, pos);
 
     //we have to be careful not to infinite loop here
-    IWorld(_world()).triggerEntities(player, pos);
+    IWorld(_world()).triggerEntities(causedBy, player, pos);
   }
 
   // function animation(bytes32 player, AnimationType anim) public {

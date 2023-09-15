@@ -180,6 +180,11 @@ export default mudConfig({
     Coinage: "int32",
     Weight: "int32",
 
+    //puzzle components try to be moved onto triggers (ie. Miliarli )
+    Miliarium: "bool",
+    Puzzle: "bytes32",
+    Trigger: "bytes32",
+
     Position: {
       name: "Position",
       schema: {

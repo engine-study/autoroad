@@ -30,9 +30,13 @@ public class AnimationMUD : MonoBehaviour
 
     protected virtual void Start() {
 
-        actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
+        
         Animator = GetComponentInChildren<SPAnimator>();
         PositionSync = GetComponentInParent<PositionSync>();
+
+        if(entity == null) return;
+        
+        actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
 
         if(entity.HasInit) Init();
         else entity.OnInit += Init;

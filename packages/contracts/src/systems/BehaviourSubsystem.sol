@@ -13,7 +13,7 @@ import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/ge
 
 contract BehaviourSubsystem is System {
 
-  function tickBehaviour(bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+  function tickBehaviour(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
 
     console.log("tickBehaviour");
 
@@ -28,27 +28,27 @@ contract BehaviourSubsystem is System {
     uint distance = getDistance(playerPos, entityPos);
 
     if(Seeker.get(entity) == distance) {
-      seek(player, entity, playerPos, entityPos);
+      seek(causedBy, player, entity, playerPos, entityPos);
     } 
     
     if(Aggro.get(entity) == distance) {
-      aggro(player, entity, playerPos, entityPos);
+      aggro(causedBy, player, entity, playerPos, entityPos);
     }
   }
   
-  function seek(bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+  function seek(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
     IWorld world = IWorld(_world());
     //walk towards player
     PositionData memory walkPos = addPosition(entityPos,getVectorNormalized(entityPos,playerPos));
     bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(walkPos.x, walkPos.y, 0));
-    world.moveTo(player, entity, entityPos, walkPos, atDest, ActionType.Walking);
+    world.moveTo(causedBy, entity, entityPos, walkPos, atDest, ActionType.Walking);
   }
 
-  function aggro(bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+  function aggro(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
     IWorld world = IWorld(_world());
     //kill player
     world.setAction(entity, ActionType.Melee, playerPos.x, playerPos.y);
-    world.kill(player, entity, playerPos);
+    world.kill(causedBy, player, entity, playerPos);
   }
 
 }

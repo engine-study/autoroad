@@ -48,10 +48,37 @@ public class CoinComponent : MUDComponent {
         spawnCoroutine = StartCoroutine(SpawnCoins(amount));
     }
 
+    
+
     IEnumerator SpawnCoins(int amount) {
 
-        for (int i = 0; i < amount; i++) {
-            SPResourceJuicy coin = SPResourceJuicy.SpawnResource("Prefabs/Coin", position.Target, position.Target.position + Vector3.up, Random.rotation);
+        int remainder = amount;
+
+        int quarters = 0;
+
+        if(amount > 50) {
+            quarters = amount / 25;
+            remainder %= 25;
+        }
+
+        int dimes = amount / 10;
+        remainder %= 10;
+
+        int nickels = remainder / 5;
+        remainder %= 5;
+
+        int pennies = remainder;
+
+        for (int i = 0; i < dimes+nickels+pennies; i++) {
+
+            string prefab = "";
+
+            if(i < quarters) prefab = "Prefabs/CoinQuarter";
+            else if(i < dimes) prefab = "Prefabs/CoinDime";
+            else if(i < dimes+nickels) prefab = "Prefabs/CoinNickel";
+            else prefab = "Prefabs/CoinPenny";
+
+            SPResourceJuicy coin = SPResourceJuicy.SpawnResource(prefab, position.Target, position.Target.position + Vector3.up, Random.rotation);
             coin.SendResource();
             yield return new WaitForSeconds(.1f);
         }

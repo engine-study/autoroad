@@ -20,21 +20,22 @@ contract EntitySubsystem is System {
     Entities.set(chunkEntity, width, height);
   }
 
-  function triggerEntities(bytes32 player, PositionData memory pos) public {
+  function triggerEntities(bytes32 causedBy, bytes32 player, PositionData memory pos) public {
     console.log("triggerEntities");
 
     //only NPC movements trigger entity ticks
     if(NPC.get(player) == uint32(NPCType.None)) {return;}
+
     //if we are off the map we don't trigger NPCs
     if (IWorld(_world()).onMap(pos.x, pos.y) == false) { return;}
 
+    //TODO gas golf
     PositionData[] memory positions = neumanNeighborhoodOuter(pos, 2);
     bytes32[] memory entities = activeEntities(positions);
 
-    //TODO gas golf
     for (uint i = 0; i < positions.length; i++) {
       if (entities[i] == bytes32(0)) {continue;}
-      IWorld(_world()).tickBehaviour(player, entities[i], pos, positions[i]);
+      IWorld(_world()).tickBehaviour(causedBy, player, entities[i], pos, positions[i]);
     }
   }
 
