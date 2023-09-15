@@ -83,7 +83,7 @@ public class MotherUI : SPUIInstance {
     }
 
     public static void TransactionFailed() {
-        SPCamera.AddShake(.05f);
+        SPCamera.AddShakeGlobal(.1f);
         ActionWheel.UpdateState(ActionEndState.Failed, true);
     }
 
