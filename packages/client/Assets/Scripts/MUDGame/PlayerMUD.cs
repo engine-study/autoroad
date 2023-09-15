@@ -80,7 +80,6 @@ public class PlayerMUD : SPPlayer
         base.Destroy();
         Player.OnComponentsLoaded -= NetworkInit;
         Actor.OnActionEnd -= ActionCursorUpdate;
-
         for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
 
     }

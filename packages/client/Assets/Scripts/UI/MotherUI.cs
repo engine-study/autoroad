@@ -19,6 +19,7 @@ public class MotherUI : SPUIInstance {
     public NameOptionUI playerCreate;
     public SpawningUI spawning;
     public RespawnUI respawn;
+    public TutorialUI tutorial;
 
     [Header("Menu")]
     public MenuUI menu;
@@ -52,6 +53,7 @@ public class MotherUI : SPUIInstance {
         TogglePlayerCreation(false);
         TogglePlayerSpawning(false);
         ToggleRespawn(false);
+        tutorial.ToggleWindowClose();
 
         ToggleGame(false);
 
