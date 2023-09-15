@@ -5,7 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { MapConfig, Bounds, Chunk, Position, PositionTableId, PositionData, Carriage } from "../codegen/Tables.sol";
 import { TerrainType, RockType } from "../codegen/Types.sol";
 import { positionToEntityKey } from "../utility/positionToEntityKey.sol";
-import { RoadSubsystem } from "./RoadSubsystem.sol";
+import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 
 contract MapSubsystem is System {
 
@@ -25,6 +25,13 @@ contract MapSubsystem is System {
     return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up && y >= 0;
   }
 
+  function onSpawn(int32 x, int32 y) public view returns (bool) {
+    int32 up = Bounds.getUp();
+    int32 down = Bounds.getDown();
+    (int32 playWidth, int32 spawnWidth) = MapConfig.get();
+    require(x > playWidth && x <= spawnWidth, "x outside spawn");
+    require(y <= up && y >= down, "y outside of spawn");
+  }
   function createMap(address worldAddress) public {
 
     IWorld world = IWorld(worldAddress);

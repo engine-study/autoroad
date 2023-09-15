@@ -4,12 +4,14 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
-import { Player, Position, PositionTableId, PositionData, Entities } from "../codegen/Tables.sol";
+import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/Tables.sol";
+import { NPCType } from "../codegen/Types.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { MilitiaSubsystem } from "./MilitiaSubsystem.sol";
+import { BehaviourSubsystem } from "./BehaviourSubsystem.sol";
 import { MapSubsystem } from "./MapSubsystem.sol";
 
 contract EntitySubsystem is System {
+
   function createEntities(bytes32 chunkEntity, int32 playArea, uint32 roadHeight) public {
     //set entities arrays
     uint256 totalWidth = uint256(uint32(playArea) + uint32(playArea) + 1);
@@ -21,6 +23,8 @@ contract EntitySubsystem is System {
   function triggerEntities(bytes32 player, PositionData memory pos) public {
     console.log("triggerEntities");
 
+    //only NPC movements trigger entity ticks
+    if(NPC.get(player) == uint32(NPCType.None)) {return;}
     //if we are off the map we don't trigger NPCs
     if (IWorld(_world()).onMap(pos.x, pos.y) == false) { return;}
 
@@ -30,7 +34,7 @@ contract EntitySubsystem is System {
     //TODO gas golf
     for (uint i = 0; i < positions.length; i++) {
       if (entities[i] == bytes32(0)) {continue;}
-      IWorld(_world()).aggro(player, entities[i], pos, positions[i]);
+      IWorld(_world()).tickBehaviour(player, entities[i], pos, positions[i]);
     }
   }
 

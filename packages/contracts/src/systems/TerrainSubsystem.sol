@@ -3,13 +3,11 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder, Ox, Militia } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities } from "../codegen/Tables.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/Tables.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/Tables.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
 
-import { SpawnSystem } from "./SpawnSystem.sol";
-import { ChunkTableId } from "../codegen/Tables.sol";
-import { TerrainType, RockType, RoadState, MoveType } from "../codegen/Types.sol";
+import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
@@ -18,9 +16,12 @@ import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
 import { FloraSubsystem } from "./FloraSubsystem.sol";
+import { NPCSubsystem } from "./NPCSubsystem.sol";
+import { SpawnSubsystem } from "./SpawnSubsystem.sol";
+
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
-contract RoadSubsystem is System {
+contract TerrainSubsystem is System {
   //updateRow
   //finishRow
 
@@ -74,41 +75,44 @@ contract RoadSubsystem is System {
       for (int32 x = int32(-playArea); x <= playArea; x++) {
         //set the terrain type to empty
         TerrainType terrainType = TerrainType.None;
+        NPCType npcType = NPCType.None;
 
-        uint noiseCoord = randomCoord(0, 100, x, y);
+        uint noiseCoord = randomCoord(0, 1000, x, y);
 
         // console.log("noise ", noiseCoord);
 
-        if (noiseCoord <= 10) {
+        //TERRAIN
+        if (noiseCoord <= 100) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord > 10 && noiseCoord <= 15) {
+        } else if (noiseCoord > 100 && noiseCoord <= 200) {
           terrainType = TerrainType.Rock;
-        } else if (noiseCoord == 16) {
+        } else if (noiseCoord > 200 && noiseCoord <= 225) {
           terrainType = TerrainType.HeavyBoy;
-        } else if (noiseCoord == 17) {
-          if (world.onRoad(x, y)) {
-            continue;
-          }
+        } else if (noiseCoord > 225 && noiseCoord <= 250) {
+          if (world.onRoad(x, y)) { continue;}
           terrainType = TerrainType.HeavyHeavyBoy;
-        } else if (noiseCoord == 18) {
-          if (world.onRoad(x, y)) {
-            continue;
-          }
+        } else if (noiseCoord > 300 && noiseCoord <= 325) {
+          if (world.onRoad(x, y)) { continue;}
           terrainType = TerrainType.Pillar;
-        } else if (noiseCoord == 19) {
-          terrainType = TerrainType.Ox;
-        } else if (noiseCoord == 20) {
-          terrainType = TerrainType.Militia;
-        } else if (config.dummyPlayers && noiseCoord > 98) {
-          terrainType = TerrainType.Player;
+        } 
+        
+        //NPCS
+        else if (noiseCoord > 1000 && noiseCoord <= 1025) {
+          npcType = NPCType.Ox;
+        } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
+          npcType = NPCType.Soldier;
+        } else if (noiseCoord > 1150 && noiseCoord < 1200) {
+          npcType = NPCType.Barbarian;
+        } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
+          npcType = NPCType.Player;
         }
 
-        //don't spawn anything
-        if (terrainType == TerrainType.None) {
-          continue;
+        if(npcType != NPCType.None) {
+          world.spawnNPC(chunkEntity, x, y, npcType);
+        } else if(terrainType != TerrainType.None) {
+          spawnTerrain(chunkEntity, x, y, terrainType);
         }
 
-        spawnTerrain(chunkEntity, x, y, terrainType);
       }
     }
   }
@@ -140,9 +144,9 @@ contract RoadSubsystem is System {
   }
 
   function spawnTerrain(bytes32 player, int32 x, int32 y, TerrainType tType) public {
+    
     IWorld world = IWorld(_world());
     bytes32 entity = getUniqueEntity();
-    // bytes32 entity = keccak256(abi.encode("Terrain", x, y));
 
     if (tType == TerrainType.Rock) {
       Rock.set(entity, uint32(RockType.Raw));
@@ -150,8 +154,6 @@ contract RoadSubsystem is System {
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
       world.spawnFlora(player, entity, x, y);
-    } else if (tType == TerrainType.Player) {
-      world.spawnBotAdmin(x, y, entity);
     } else if (tType == TerrainType.HeavyBoy) {
       Boulder.set(entity, true);
       Weight.set(entity, 3);
@@ -164,21 +166,14 @@ contract RoadSubsystem is System {
       Boulder.set(entity, true);
       Weight.set(entity, 99);
       Move.set(entity, uint32(MoveType.Obstruction));
-    } else if (tType == TerrainType.Ox) {
-      Ox.set(entity, true);
-      Weight.set(entity, -10);
-      Move.set(entity, uint32(MoveType.Push));
-    } else if (tType == TerrainType.Militia) {
-      Militia.set(entity, true);
-      Weight.set(entity, 1);
-      Move.set(entity, uint32(MoveType.Push));
-    } else if (tType == TerrainType.Road) {
+    }else if (tType == TerrainType.Road) {
       spawnRoadFromPlayer(player, 0, getRoadEntity(x,y), PositionData(x,y,0));
-    } else if (tType == TerrainType.Ditch) {
+    } else if (tType == TerrainType.Hole) {
       spawnShoveledRoad(player, x, y);
-    }
+    } 
 
-    if(tType != TerrainType.None && tType != TerrainType.Road && tType != TerrainType.Ditch)
+    //get rid of this hack pls
+    if(tType != TerrainType.None && tType != TerrainType.Road && tType != TerrainType.Hole)
       Position.set(entity, x, y, 0);
 
   }

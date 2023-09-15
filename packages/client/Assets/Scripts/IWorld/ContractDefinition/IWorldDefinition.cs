@@ -713,6 +713,17 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class OnSpawnFunction : OnSpawnFunctionBase { }
+
+    [Function("onSpawn", "bool")]
+    public class OnSpawnFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class OnWorldFunction : OnWorldFunctionBase { }
 
     [Function("onWorld", "bool")]
@@ -1012,6 +1023,21 @@ namespace IWorld.ContractDefinition
         public virtual string Grantee { get; set; }
     }
 
+    public partial class SeekFunction : SeekFunctionBase { }
+
+    [Function("seek")]
+    public class SeekFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "playerPos", 3)]
+        public virtual PositionData PlayerPos { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
+    }
+
     public partial class SendCoinsFunction : SendCoinsFunctionBase { }
 
     [Function("sendCoins")]
@@ -1189,19 +1215,6 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
-    public partial class SpawnBotAdminFunction : SpawnBotAdminFunctionBase { }
-
-    [Function("spawnBotAdmin")]
-    public class SpawnBotAdminFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
-        [Parameter("bytes32", "entity", 3)]
-        public virtual byte[] Entity { get; set; }
-    }
-
     public partial class SpawnDebugRoadFunction : SpawnDebugRoadFunctionBase { }
 
     [Function("spawnDebugRoad")]
@@ -1247,6 +1260,62 @@ namespace IWorld.ContractDefinition
     public class SpawnMileAdminFunctionBase : FunctionMessage
     {
 
+    }
+
+    public partial class SpawnNPCFunction : SpawnNPCFunctionBase { }
+
+    [Function("spawnNPC")]
+    public class SpawnNPCFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "spawner", 1)]
+        public virtual byte[] Spawner { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("uint8", "npcType", 4)]
+        public virtual byte NpcType { get; set; }
+    }
+
+    public partial class SpawnNPCAdminFunction : SpawnNPCAdminFunctionBase { }
+
+    [Function("spawnNPCAdmin")]
+    public class SpawnNPCAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("uint8", "npcType", 3)]
+        public virtual byte NpcType { get; set; }
+    }
+
+    public partial class SpawnPlayerFunction : SpawnPlayerFunctionBase { }
+
+    [Function("spawnPlayer")]
+    public class SpawnPlayerFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "entity", 1)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("bool", "isBot", 4)]
+        public virtual bool IsBot { get; set; }
+    }
+
+    public partial class SpawnPlayerNPCFunction : SpawnPlayerNPCFunctionBase { }
+
+    [Function("spawnPlayerNPC")]
+    public class SpawnPlayerNPCFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "entity", 1)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
     }
 
     public partial class SpawnRoadFunction : SpawnRoadFunctionBase { }
@@ -1327,8 +1396,8 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
-        [Parameter("uint8", "tType", 3)]
-        public virtual byte TType { get; set; }
+        [Parameter("uint8", "terrainType", 3)]
+        public virtual byte TerrainType { get; set; }
     }
 
     public partial class StickFunction : StickFunctionBase { }
@@ -1379,6 +1448,21 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class TickBehaviourFunction : TickBehaviourFunctionBase { }
+
+    [Function("tickBehaviour")]
+    public class TickBehaviourFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "playerPos", 3)]
+        public virtual PositionData PlayerPos { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
     }
 
     public partial class TriggerEntitiesFunction : TriggerEntitiesFunctionBase { }
@@ -1853,6 +1937,15 @@ namespace IWorld.ContractDefinition
 
 
 
+    public partial class OnSpawnOutputDTO : OnSpawnOutputDTOBase { }
+
+    [FunctionOutput]
+    public class OnSpawnOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
+
     public partial class OnWorldOutputDTO : OnWorldOutputDTOBase { }
 
     [FunctionOutput]
@@ -1910,6 +2003,16 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
+
+
+
+
+
+
+
+
 
 
 

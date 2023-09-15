@@ -12,11 +12,12 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    public class MilitiaTableUpdate : TypedRecordUpdate<Tuple<MilitiaTable?, MilitiaTable?>> { }
+    public class BarbarianTableUpdate
+        : TypedRecordUpdate<Tuple<BarbarianTable?, BarbarianTable?>> { }
 
-    public class MilitiaTable : IMudTable
+    public class BarbarianTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Militia");
+        public readonly static TableId ID = new("", "Barbarian");
 
         public override TableId GetTableId()
         {
@@ -27,17 +28,17 @@ namespace DefaultNamespace
 
         public override Type TableType()
         {
-            return typeof(MilitiaTable);
+            return typeof(BarbarianTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(MilitiaTableUpdate);
+            return typeof(BarbarianTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            MilitiaTable other = (MilitiaTable)obj;
+            BarbarianTable other = (BarbarianTable)obj;
 
             if (other == null)
             {
@@ -66,13 +67,13 @@ namespace DefaultNamespace
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
         {
-            MilitiaTableUpdate update = (MilitiaTableUpdate)tableUpdate;
+            BarbarianTableUpdate update = (BarbarianTableUpdate)tableUpdate;
             return update?.TypedValue.Item1;
         }
 
         public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
         {
-            return new MilitiaTableUpdate
+            return new BarbarianTableUpdate
             {
                 TableId = newUpdate.TableId,
                 Key = newUpdate.Key,
@@ -81,18 +82,18 @@ namespace DefaultNamespace
             };
         }
 
-        public static Tuple<MilitiaTable?, MilitiaTable?> MapUpdates(
+        public static Tuple<BarbarianTable?, BarbarianTable?> MapUpdates(
             Tuple<Property?, Property?> value
         )
         {
-            MilitiaTable? current = null;
-            MilitiaTable? previous = null;
+            BarbarianTable? current = null;
+            BarbarianTable? previous = null;
 
             if (value.Item1 != null)
             {
                 try
                 {
-                    current = new MilitiaTable
+                    current = new BarbarianTable
                     {
                         value = value.Item1.TryGetValue("value", out var valueVal)
                             ? (bool)valueVal
@@ -101,7 +102,7 @@ namespace DefaultNamespace
                 }
                 catch (InvalidCastException)
                 {
-                    current = new MilitiaTable { value = null, };
+                    current = new BarbarianTable { value = null, };
                 }
             }
 
@@ -109,7 +110,7 @@ namespace DefaultNamespace
             {
                 try
                 {
-                    previous = new MilitiaTable
+                    previous = new BarbarianTable
                     {
                         value = value.Item2.TryGetValue("value", out var valueVal)
                             ? (bool)valueVal
@@ -118,11 +119,11 @@ namespace DefaultNamespace
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new MilitiaTable { value = null, };
+                    previous = new BarbarianTable { value = null, };
                 }
             }
 
-            return new Tuple<MilitiaTable?, MilitiaTable?>(current, previous);
+            return new Tuple<BarbarianTable?, BarbarianTable?>(current, previous);
         }
     }
 }

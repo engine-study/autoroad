@@ -4,12 +4,12 @@ using UnityEngine;
 using mud.Client;
 using DefaultNamespace;
 
-public class MilitiaComponent : MoverComponent
+public class SoldierComponent : MoverComponent
 {
     protected override void PostInit() {
         base.PostInit();
-        Entity.SetName("Militia");
+        Entity.SetName("Soldier");
     }
-    protected override IMudTable GetTable() {return new MilitiaTable();}
+    protected override IMudTable GetTable() {return new SoldierTable();}
 
 }

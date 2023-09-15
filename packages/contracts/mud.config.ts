@@ -12,12 +12,12 @@ export default mudConfig({
       name: "move",
       openAccess: false,
     },
-    MilitiaSubsystem: {
-      name: "militia",
+    BehaviourSubsystem: {
+      name: "behaviour",
       openAccess: false,
     },
-    RoadSubsystem: {
-      name: "road",
+    TerrainSubsystem: {
+      name: "terrain",
       openAccess: false,
     },
     RewardSubsystem: {
@@ -32,14 +32,22 @@ export default mudConfig({
       name: "entities",
       openAccess: false,
     },
-
+    NPCSubsystem: {
+      name: "npc",
+      openAccess: false,
+    },
+    SpawnSubsystem: {
+      name: "spawn",
+      openAccess: false,
+    },
   },
 
   enums: {
-    TerrainType: ["None", "Rock", "Mine", "Tree", "Player", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Ox", "Militia", "Road", "Ditch"],
+    ActionType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn"],
+    TerrainType: ["None", "Rock", "Mine", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole"],
+    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
-    ActionType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn"],
     AnimationType: ["Walk", "Hop", "Teleport", "Push"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
@@ -123,7 +131,6 @@ export default mudConfig({
       },
     },
 
-
     Chunk: {
       name: "Chunk",
       openAccess: false, // it's a subsystem now!
@@ -154,6 +161,13 @@ export default mudConfig({
         segments: "uint32",
       },
     },
+
+    //units
+    NPC: "uint32",
+    Soldier: "bool",
+    Barbarian: "bool",
+    Seeker: "uint32",
+    Aggro: "uint32",
 
     //items
     Shovel: "bool",
@@ -195,9 +209,11 @@ export default mudConfig({
     Tree: "uint32",
     Log: "bool",
     Ox: "bool",
-    Militia: "bool",
     Conscription: "bool",
     XP: "uint256",
+
+    //Behaviour 
+    //Flee: "bool", (this will probably cause infinite loops) if a seeker chases a fleer
 
     Road: {
       name: "Road",

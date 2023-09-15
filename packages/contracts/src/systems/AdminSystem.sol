@@ -3,9 +3,10 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { GameState, Coinage } from "../codegen/Tables.sol";
-import { TerrainType } from "../codegen/Types.sol";
-import { RoadSubsystem } from "./RoadSubsystem.sol";
+import { Player, Position, Health, Move, GameState, Coinage } from "../codegen/Tables.sol";
+import { TerrainType, NPCType } from "../codegen/Types.sol";
+import { TerrainSubsystem } from "./TerrainSubsystem.sol";
+import { NPCSubsystem } from "./TerrainSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
@@ -15,10 +16,27 @@ contract AdminSystem is System {
     return true;
   }
 
-  function spawnTerrainAdmin(int32 x, int32 y, TerrainType tType) public {
+  function spawnTerrainAdmin(int32 x, int32 y, TerrainType terrainType) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnTerrain(player, x, y, tType);
+    IWorld(_world()).spawnTerrain(player, x, y, terrainType);
+  }
+
+  function spawnNPCAdmin(int32 x, int32 y, NPCType npcType) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    IWorld(_world()).spawnNPC(player, x, y, npcType);
+  }
+
+  function destroyPlayerAdmin() public {
+    bytes32 entity = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(entity), "not admin");
+    require(Player.get(entity), "already destroyed");
+
+    Player.deleteRecord(entity);
+    Position.deleteRecord(entity);
+    Health.set(entity, -1);
+    Move.deleteRecord(entity);
   }
 
   function deleteAdmin(int32 x, int32 y, int32 layer) public {
