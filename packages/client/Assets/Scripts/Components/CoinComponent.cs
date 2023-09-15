@@ -61,7 +61,7 @@ public class CoinComponent : MUDComponent {
             remainder %= 25;
         }
 
-        int dimes = amount / 10;
+        int dimes = remainder / 10;
         remainder %= 10;
 
         int nickels = remainder / 5;
@@ -69,13 +69,13 @@ public class CoinComponent : MUDComponent {
 
         int pennies = remainder;
 
-        for (int i = 0; i < dimes+nickels+pennies; i++) {
+        for (int i = 0; i < quarters+dimes+nickels+pennies; i++) {
 
             string prefab = "";
 
             if(i < quarters) prefab = "Prefabs/CoinQuarter";
-            else if(i < dimes) prefab = "Prefabs/CoinDime";
-            else if(i < dimes+nickels) prefab = "Prefabs/CoinNickel";
+            else if(i < quarters+dimes) prefab = "Prefabs/CoinDime";
+            else if(i < quarters+dimes+nickels) prefab = "Prefabs/CoinNickel";
             else prefab = "Prefabs/CoinPenny";
 
             SPResourceJuicy coin = SPResourceJuicy.SpawnResource(prefab, position.Target, position.Target.position + Vector3.up, Random.rotation);
