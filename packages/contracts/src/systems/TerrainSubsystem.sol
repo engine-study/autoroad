@@ -77,7 +77,7 @@ contract TerrainSubsystem is System {
         TerrainType terrainType = TerrainType.None;
         NPCType npcType = NPCType.None;
 
-        uint noiseCoord = randomCoord(0, 1000, x, y);
+        uint noiseCoord = randomCoord(0, 2000, x, y);
 
         // console.log("noise ", noiseCoord);
 

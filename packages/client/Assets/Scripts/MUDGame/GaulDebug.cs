@@ -9,7 +9,7 @@ using mud.Client;
 using UnityEditor;
 #endif
 
-public enum TerrainType {None, Rock, Mine, Tree, Player, HeavyBoy, HeavyHeavyBoy, Pillar, Ox, Militia, Road, Ditch}
+public enum TerrainType {None, Rock, Mine, Tree, HeavyBoy, HeavyHeavyBoy, Pillar, Road, Hole}
 public class GaulDebug : MonoBehaviour
 {
 
@@ -18,6 +18,7 @@ public class GaulDebug : MonoBehaviour
     public SPHeading actionName;
 
     int terrain = 0;
+    int npc = 0;
 
     void Start() {
         debugParent.SetActive(SPGlobal.IsDebug);
@@ -56,40 +57,56 @@ public class GaulDebug : MonoBehaviour
         } else if (Input.GetKey(KeyCode.LeftShift)) {
 
             if(Input.GetKey(KeyCode.Alpha1)) {
+                npc = 0;
                 terrain = 0;
             } else if (Input.GetKey(KeyCode.Alpha2)) {
+                npc = 1;
                 terrain = 1;
             } else if (Input.GetKey(KeyCode.Alpha3)) {
+                npc = 2;
                 terrain = 2;
             } else if (Input.GetKey(KeyCode.Alpha4)) {
+                npc = 3;
                 terrain = 3;
             } else if (Input.GetKey(KeyCode.Alpha5)) {
+                npc = 4;
                 terrain = 4;
             } else if (Input.GetKey(KeyCode.Alpha6)) {
+                npc = 5;
                 terrain = 5;
             } else if (Input.GetKey(KeyCode.Alpha7)) {
+                npc = 6;
                 terrain = 6;
             } else if (Input.GetKey(KeyCode.Alpha8)) {
+                npc = 7;
                 terrain = 7;
             } else if (Input.GetKey(KeyCode.Alpha9)) {
+                npc = 8;
                 terrain = 8;
             } else if (Input.GetKey(KeyCode.Alpha0)) {
+                npc = 9;
                 terrain = 9;
             } else if (Input.GetKey(KeyCode.F1)) {
+                npc = 10;
                 terrain = 10;
             } else if (Input.GetKey(KeyCode.F2)) {
+                npc = 11;
                 terrain = 11;
             } else {
+                npc = -1;
                 terrain = -1;
             }
 
             if(terrain == -1) {
                 debugString += "LMB: Spawn [1-9] \nRMB: Delete";
             } else {
-                debugString += "Spawn " + (TerrainType)terrain;
+                if(Input.GetKey(KeyCode.Tab)) debugString += "Spawn " + (NPCType)npc;
+                else debugString += "Spawn " + (TerrainType)terrain;
+               
             }
 
-            if (Input.GetMouseButtonDown(0) && terrain > -1) { TxManager.SendSafe<SpawnTerrainAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((TerrainType)terrain)); }
+            if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.Tab) && npc > -1) { TxManager.SendSafe<SpawnNPCAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((NPCType)npc)); }
+            else if (Input.GetMouseButtonDown(0) && terrain > -1) { TxManager.SendSafe<SpawnTerrainAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((TerrainType)terrain)); }
             else if (Input.GetMouseButtonDown(1)) { TxManager.SendSafe<DeleteAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToInt32(0)); }
         }
 
