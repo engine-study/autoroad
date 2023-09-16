@@ -13,7 +13,7 @@ public class TriggerComponent : MUDComponent {
 
     protected override void PostInit() {
         base.PostInit();
-        Entity.SetName("Miliarium Puzzle");
+        Entity.SetName("Milliarium Puzzle");
     }
     
     protected override IMudTable GetTable() {return new TriggerTable();}

@@ -290,6 +290,7 @@ GameObject:
   - component: {fileID: 2202057137487621039}
   - component: {fileID: 7552157436396032579}
   - component: {fileID: 4442232486771419755}
+  - component: {fileID: 5778510077542902211}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -313,7 +314,7 @@ Transform:
   - {fileID: 1469008974362436549}
   - {fileID: 7784753608082169161}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &592219380604067791
 MonoBehaviour:
@@ -376,6 +377,9 @@ MonoBehaviour:
     updateType: 0
     source: 0
   networkInfo:
+    updateType: 0
+    source: 0
+  lastInfo:
     updateType: 0
     source: 0
   spawned: 0
@@ -592,6 +596,35 @@ MonoBehaviour:
   actionEffect: {fileID: 0}
   entity: {fileID: 0}
   actionComponent: {fileID: 0}
+--- !u!114 &5778510077542902211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677262704773998369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c41f965c6d36a4bacaedeeb46b34dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomType: 0
+  seed: 0
+  randomizeChildren: 0
+  objects: []
+  activeChild: {fileID: 0}
+  useRotation: 1
+  rotateY: 1
+  rotationRound: 90
+  useScale: 0
+  range: {x: 1, y: 1}
+  usePos: 0
+  minPos: {x: 0, y: 0, z: 0}
+  maxPos: {x: 0, y: 0, z: 0}
+  child: -1
+  rotate: -1
+  scale: -1
+  position: -1
 --- !u!1 &1007400376755907874
 GameObject:
   m_ObjectHideFlags: 0

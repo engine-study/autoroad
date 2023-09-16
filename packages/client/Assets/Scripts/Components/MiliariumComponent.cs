@@ -13,7 +13,7 @@ public class MiliariumComponent : MUDComponent {
 
     protected override void PostInit() {
         base.PostInit();
-        Entity.SetName("Miliarium");
+        Entity.SetName("Milliarium");
     }
     
     protected override IMudTable GetTable() {return new MiliariumTable();}
