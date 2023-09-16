@@ -73,48 +73,53 @@ contract TerrainSubsystem is System {
     for (int32 y = yStart; y <= yEnd; y++) {
       //SPAWN TERRAIN
       for (int32 x = int32(-playArea); x <= playArea; x++) {
-        //set the terrain type to empty
-        TerrainType terrainType = TerrainType.None;
-        NPCType npcType = NPCType.None;
 
         uint noiseCoord = randomCoord(0, 2000, x, y);
 
         // console.log("noise ", noiseCoord);
 
-        //TERRAIN
-        if (noiseCoord <= 100) {
-          terrainType = TerrainType.Tree;
-        } else if (noiseCoord > 100 && noiseCoord <= 200) {
-          terrainType = TerrainType.Rock;
-        } else if (noiseCoord > 200 && noiseCoord <= 225) {
-          terrainType = TerrainType.HeavyBoy;
-        } else if (noiseCoord > 225 && noiseCoord <= 250) {
-          if (world.onRoad(x, y)) { continue;}
-          terrainType = TerrainType.HeavyHeavyBoy;
-        } else if (noiseCoord > 300 && noiseCoord <= 325) {
-          if (world.onRoad(x, y)) { continue;}
-          terrainType = TerrainType.Pillar;
-        } 
-        
-        //NPCS
-        else if (noiseCoord > 1000 && noiseCoord <= 1025) {
-          npcType = NPCType.Ox;
-        } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
-          npcType = NPCType.Soldier;
-        } else if (noiseCoord > 1150 && noiseCoord < 1200) {
-          npcType = NPCType.Barbarian;
-        } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
-          npcType = NPCType.Player;
-        }
+        if(noiseCoord < 1000) {
+          //TERRAIN
+          TerrainType terrainType = TerrainType.None;
 
-        if(npcType != NPCType.None) {
-          world.spawnNPC(chunkEntity, x, y, npcType);
-        } else if(terrainType != TerrainType.None) {
-          spawnTerrain(chunkEntity, x, y, terrainType);
-        }
+          if (noiseCoord <= 100) {
+            terrainType = TerrainType.Tree;
+          } else if (noiseCoord > 100 && noiseCoord <= 200) {
+            terrainType = TerrainType.Rock;
+          } else if (noiseCoord > 200 && noiseCoord <= 225) {
+            terrainType = TerrainType.HeavyBoy;
+          } else if (noiseCoord > 225 && noiseCoord <= 250) {
+            if (world.onRoad(x, y)) { continue;}
+            terrainType = TerrainType.HeavyHeavyBoy;
+          } else if (noiseCoord > 300 && noiseCoord <= 325) {
+            if (world.onRoad(x, y)) { continue;}
+            terrainType = TerrainType.Pillar;
+          } 
+          if(terrainType != TerrainType.None) {
+            spawnTerrain(chunkEntity, x, y, terrainType);
+          }
+        } else {
+          //NPCS
+          NPCType npcType = NPCType.None;
 
+          if (noiseCoord > 1000 && noiseCoord <= 1025) {
+            npcType = NPCType.Ox;
+          } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
+            npcType = NPCType.Soldier;
+          } else if (noiseCoord > 1150 && noiseCoord < 1200) {
+            npcType = NPCType.Barbarian;
+          } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
+            npcType = NPCType.Player;
+          }
+
+          if(npcType != NPCType.None) {
+            world.spawnNPC(chunkEntity, x, y, npcType);
+          }
+        }
+      
       }
     }
+
   }
 
   function getRoadEntity(int32 x, int32 y) public returns(bytes32) {return keccak256(abi.encode("Road", x, y));}

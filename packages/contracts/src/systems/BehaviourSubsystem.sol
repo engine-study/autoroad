@@ -19,24 +19,22 @@ contract BehaviourSubsystem is System {
 
     //can't tick non-npcs
     NPCType npcType = NPCType(NPC.get(entity));
-    if(npcType != NPCType.None) return; 
+    if(npcType == NPCType.None) return; 
 
-    IWorld world = IWorld(_world());
+    //check player is still alive
     int32 health = Health.get(player);
     if(health == 0) return;
 
-    uint distance = getDistance(playerPos, entityPos);
-
-    if(Seeker.get(entity) == distance) {
-      seek(causedBy, player, entity, playerPos, entityPos);
-    } 
-    
-    if(Aggro.get(entity) == distance) {
-      aggro(causedBy, player, entity, playerPos, entityPos);
-    }
+    //activate all behaviours
+    IWorld world = IWorld(_world());
+    uint32 distance = uint32(getDistance(playerPos, entityPos));
+    if(Seeker.get(entity) == distance) { seek(causedBy, player, entity, playerPos, entityPos);} 
+    if(Aggro.get(entity) == distance) {aggro(causedBy, player, entity, playerPos, entityPos);}
   }
   
   function seek(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+    console.log("seek");
+
     IWorld world = IWorld(_world());
     //walk towards player
     PositionData memory walkPos = addPosition(entityPos,getVectorNormalized(entityPos,playerPos));
@@ -45,6 +43,8 @@ contract BehaviourSubsystem is System {
   }
 
   function aggro(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+    console.log("aggro");
+
     IWorld world = IWorld(_world());
     //kill player
     world.setAction(entity, ActionType.Melee, playerPos.x, playerPos.y);
