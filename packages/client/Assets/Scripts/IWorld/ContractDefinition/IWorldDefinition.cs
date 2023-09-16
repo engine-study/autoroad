@@ -602,6 +602,19 @@ namespace IWorld.ContractDefinition
         public virtual PositionData Pos { get; set; }
     }
 
+    public partial class KillRewardsFunction : KillRewardsFunctionBase { }
+
+    [Function("killRewards")]
+    public class KillRewardsFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "attacker", 3)]
+        public virtual byte[] Attacker { get; set; }
+    }
+
     public partial class ManifestFunction : ManifestFunctionBase { }
 
     [Function("manifest", "bool")]
@@ -1918,6 +1931,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

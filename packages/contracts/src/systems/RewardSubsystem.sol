@@ -2,10 +2,24 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { GameState, Road, Coinage, Gem, Conscription, XP} from "../codegen/Tables.sol";
+import { Player, GameState, Road, Coinage, Gem, Conscription, XP, NPC, Soldier, Barbarian} from "../codegen/Tables.sol";
+import { NPCType } from "../codegen/Types.sol";
 import { ItemSystem } from "./ItemSystem.sol";
 
 contract RewardSubsystem is System {
+
+  function killRewards(bytes32 causedBy, bytes32 target, bytes32 attacker) public {
+    IWorld world = IWorld(_world());
+
+    //reward the Player and NPC for their actions
+    uint32 attackerType = NPC.get(attacker);
+    uint32 targetType = NPC.get(target);
+
+    if(targetType == uint32(NPCType.Barbarian)) {
+      if(Player.get(causedBy)) { world.giveKilledBarbarianReward(causedBy);}
+      if(attackerType == uint32(NPCType.Soldier)) world.giveKilledBarbarianReward(attacker);
+    }
+  }
 
   function giveRoadReward(bytes32 road) public {
 
@@ -23,10 +37,10 @@ contract RewardSubsystem is System {
 
   function giveKilledBarbarianReward(bytes32 player) public {
 
-    int32 amount = Conscription.get(player) ? int32(30) : int32(20);
+    int32 amount = Conscription.get(player) ? int32(20) : int32(10);
     giveCoins(player, amount);
     giveXP(player, 50);
-    
+
   }
 
   

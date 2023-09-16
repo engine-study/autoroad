@@ -381,19 +381,7 @@ contract MoveSubsystem is System {
 
     //set to dead
     world.setAction(target, ActionType.Dead, pos.x, pos.y);
-
-    //reward the Player and NPC for their actions
-    uint32 npcType = NPC.get(attacker);
-    if(npcType > uint32(NPCType.Player) ) {
-
-      //reward the player possibly for their actions
-      if(Player.get(causedBy)) {
-        world.giveKilledBarbarianReward(causedBy);
-      }
-
-      world.giveKilledBarbarianReward(attacker);
-
-    }
+    world.killRewards(causedBy, target, attacker);
 
     //spawn bones
     // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));

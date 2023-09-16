@@ -1319,6 +1319,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(killFunction, cancellationToken);
         }
 
+        public Task<string> KillRewardsRequestAsync(KillRewardsFunction killRewardsFunction)
+        {
+             return ContractHandler.SendRequestAsync(killRewardsFunction);
+        }
+
+        public Task<TransactionReceipt> KillRewardsRequestAndWaitForReceiptAsync(KillRewardsFunction killRewardsFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(killRewardsFunction, cancellationToken);
+        }
+
+        public Task<string> KillRewardsRequestAsync(byte[] causedBy, byte[] target, byte[] attacker)
+        {
+            var killRewardsFunction = new KillRewardsFunction();
+                killRewardsFunction.CausedBy = causedBy;
+                killRewardsFunction.Target = target;
+                killRewardsFunction.Attacker = attacker;
+            
+             return ContractHandler.SendRequestAsync(killRewardsFunction);
+        }
+
+        public Task<TransactionReceipt> KillRewardsRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, byte[] attacker, CancellationTokenSource cancellationToken = null)
+        {
+            var killRewardsFunction = new KillRewardsFunction();
+                killRewardsFunction.CausedBy = causedBy;
+                killRewardsFunction.Target = target;
+                killRewardsFunction.Attacker = attacker;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(killRewardsFunction, cancellationToken);
+        }
+
         public Task<string> ManifestRequestAsync(ManifestFunction manifestFunction)
         {
              return ContractHandler.SendRequestAsync(manifestFunction);
