@@ -61,7 +61,7 @@ public class StoreUI : SPWindowParent
 
     public void BuyItem(int itemID) {
         // ActionsMUD.ActionOptimistic(PlayerComponent.LocalPlayer.Entity, ActionName.Buy, PlayerComponent.LocalPlayer.transform.position);
-        TxManager.SendSafe<BuyCosmeticFunction>(System.Convert.ToUInt32(itemID));
+        TxManager.SendQueue<BuyCosmeticFunction>(System.Convert.ToUInt32(itemID));
         BuyFX();
     }
 

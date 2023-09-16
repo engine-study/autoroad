@@ -220,6 +220,15 @@ namespace IWorld.ContractDefinition
         public virtual int MileNumber { get; set; }
     }
 
+    public partial class CreateMileTerrainFunction : CreateMileTerrainFunctionBase { }
+
+    [Function("createMileTerrain")]
+    public class CreateMileTerrainFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+    }
+
     public partial class CreateTerrainFunction : CreateTerrainFunctionBase { }
 
     [Function("createTerrain")]
@@ -1462,6 +1471,14 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class SummonMapFunction : SummonMapFunctionBase { }
+
+    [Function("summonMap")]
+    public class SummonMapFunctionBase : FunctionMessage
+    {
+
+    }
+
     public partial class TeleportFunction : TeleportFunctionBase { }
 
     [Function("teleport")]
@@ -1855,6 +1872,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -2062,6 +2081,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

@@ -27,6 +27,7 @@ namespace DefaultNamespace
         public long? mile;
         public ulong? pieces;
         public System.Numerics.BigInteger? blockCompleted;
+        public bool? spawned;
 
         public override Type TableType()
         {
@@ -62,6 +63,10 @@ namespace DefaultNamespace
             {
                 return false;
             }
+            if (spawned != other.spawned)
+            {
+                return false;
+            }
             return true;
         }
 
@@ -74,6 +79,8 @@ namespace DefaultNamespace
             pieces = (ulong)(int)functionParameters[2];
 
             blockCompleted = (System.Numerics.BigInteger)functionParameters[3];
+
+            spawned = (bool)functionParameters[4];
         }
 
         public override void RecordToTable(Record record)
@@ -89,6 +96,8 @@ namespace DefaultNamespace
             pieces = piecesValue;
             var blockCompletedValue = (System.Numerics.BigInteger)table["blockCompleted"];
             blockCompleted = blockCompletedValue;
+            var spawnedValue = (bool)table["spawned"];
+            spawned = spawnedValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -134,6 +143,9 @@ namespace DefaultNamespace
                         )
                             ? (System.Numerics.BigInteger)blockCompletedVal
                             : default,
+                        spawned = value.Item1.TryGetValue("spawned", out var spawnedVal)
+                            ? (bool)spawnedVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
@@ -144,6 +156,7 @@ namespace DefaultNamespace
                         mile = null,
                         pieces = null,
                         blockCompleted = null,
+                        spawned = null,
                     };
                 }
             }
@@ -169,6 +182,9 @@ namespace DefaultNamespace
                         )
                             ? (System.Numerics.BigInteger)blockCompletedVal
                             : default,
+                        spawned = value.Item2.TryGetValue("spawned", out var spawnedVal)
+                            ? (bool)spawnedVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
@@ -179,6 +195,7 @@ namespace DefaultNamespace
                         mile = null,
                         pieces = null,
                         blockCompleted = null,
+                        spawned = null,
                     };
                 }
             }

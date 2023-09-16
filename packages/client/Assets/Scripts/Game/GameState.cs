@@ -67,10 +67,13 @@ public class GameState : MonoBehaviour {
 
     async UniTask LoadMap() {
 
-        while(TableSpawner.Loaded == false) {await UniTask.Delay(500);}
-        while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(500);}
+        while(TableSpawner.Loaded == false) {await UniTask.Delay(100);}
+        while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(100);}
 
         for (int i = 0; i < tables.Length; i++) { tables[i].gameObject.SetActive(true); }
+
+        while(ChunkComponent.ActiveChunk == null) {await UniTask.Delay(100);}
+        if(ChunkComponent.ActiveChunk.Spawned == false) { if(await TxManager.SendUntilPasses<SummonMapFunction>() == false) Debug.LogError("Could not summon map.");}
 
         SPEvents.OnServerLoaded?.Invoke();
 
@@ -83,7 +86,7 @@ public class GameState : MonoBehaviour {
         
         //destroy the player if we want to simulate the login sequence
         if (freshStart) {
-            await TxManager.SendSafe<DestroyPlayerAdminFunction>();
+            await TxManager.SendQueue<DestroyPlayerAdminFunction>();
             //while(player is not null) {}
         }
 
@@ -124,7 +127,8 @@ public class GameState : MonoBehaviour {
                 int x = BoundsComponent.Right + 1;
                 int y = BoundsComponent.Up;
                 Debug.Log("Spawning player at " + x + "," + y);
-                while(await TxManager.SendSafe<SpawnFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y)) == false)  {y--; await UniTask.Delay(2000);}
+                if (await TxManager.SendUntilPasses<SpawnFunction>( PositionComponent.PositionToTransaction(new Vector3(x,0,y)) ) == false) { Debug.LogError("Couldn't spawn"); }
+
             } else {
                 Debug.Log("Choosing spawn");
                 MotherUI.TogglePlayerSpawning(true);

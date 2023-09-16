@@ -8,12 +8,17 @@ using Cysharp.Threading.Tasks;
 public class ChunkComponent : MUDComponent
 {
 
+    public static ChunkComponent ActiveChunk;
+    public static ChunkComponent GetChunk(int mile) {Chunks.TryGetValue(mile, out var chunk); return chunk; }
     public static Dictionary<int, ChunkComponent> Chunks;
+
     public RowComponent[] Rows { get { return rows; } }
     public bool Completed {get{return completed;}}
+    public bool Spawned {get{return spawned;}}
     
     [Header("State")]
     [SerializeField] protected bool completed;
+    [SerializeField] protected bool spawned;
     [SerializeField] protected int pieces;
     [SerializeField] protected int mileNumber;
     [SerializeField] protected int mileStartHeight;
@@ -46,14 +51,18 @@ public class ChunkComponent : MUDComponent
         }
 
         activeObjects.SetActive(false);
-                
         Init();
 
     }
 
-
     void Init() {
 
+        //IMPORTANT
+        //we must have loaded MapConfigComponent and RoadConfigComponent before we set up chunks
+        //IMPORTANT 
+
+        if (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { Debug.LogError("Can't setup chunk"); return; }
+        
         rowTotal = MapConfigComponent.Height;
         rows = new RowComponent[rowTotal];
         
@@ -86,7 +95,6 @@ public class ChunkComponent : MUDComponent
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         // Debug.Log("Chunk: " + eventType.ToString());
-
         ChunkTable table = (ChunkTable)update;
 
         completed = table.completed != null ? (bool)table.completed : completed;
@@ -109,15 +117,17 @@ public class ChunkComponent : MUDComponent
 
     public async UniTaskVoid CreateChunk() {
 
+        if (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { Debug.LogError("Can't setup chunk"); return; }
+
+        if(Chunks.ContainsKey(mileNumber)) {
+            Debug.LogError("Chunk " + mileNumber + " already exists", this);
+            return;
+        }
+
         Entity.SetName("MILE - " + mileNumber);
         Entity.transform.parent = WorldScroll.Instance.transform;
 
         gameObject.name = "CHUNK - " + mileNumber;
-
-        //we need the roadconfig info and the road pieces to have spawned to load the chunk
-        //lots of waiting
-        while (RoadConfigComponent.Width == 0) { await UniTask.Delay(500); }
-        while (BoundsComponent.Left == 0) {  await UniTask.Delay(500); }
 
         mileStartHeight = mileNumber * MapConfigComponent.Height;
         transform.position = Vector3.forward * mileStartHeight;
@@ -126,9 +136,11 @@ public class ChunkComponent : MUDComponent
         } else {
         }
 
-        Chunks.Add(mileNumber, this);
 
-        createdChunk = true; 
+        createdChunk = true;
+
+        Chunks.Add(mileNumber, this);
+        if (mileNumber == GameStateComponent.MILE_COUNT) { ActiveChunk = this; }
     }
 
     public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {

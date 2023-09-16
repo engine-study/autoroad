@@ -31,10 +31,13 @@ contract MapSubsystem is System {
     (int32 playWidth, , int32 spawnWidth) = MapConfig.get();
     return (x > playWidth && x <= spawnWidth) && (y <= up && y >= down);
   }
+
+  //create any entity that exists always 
   function createMap(address worldAddress) public {
 
     IWorld world = IWorld(worldAddress);
     Carriage.set(world.getCarriageEntity(), true);
-    // MapConfig.set(world, width, height, terrain);
+
   }
+
 }

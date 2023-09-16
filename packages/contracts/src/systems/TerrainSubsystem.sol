@@ -49,26 +49,41 @@ contract TerrainSubsystem is System {
     GameState.set(mileNumber, players);
     // GameState.setMiles(mileNumber);
 
-    //create a new chunk
+    //create the chunk
+    Chunk.set(chunkEntity, false, mileNumber, 0, 0, false);
+
+  }
+
+  function createMileTerrain(bytes32 causedBy) public {
+
+    //check if chunk is already spawned
+    int32 mileNumber = GameState.getMiles();
+    bytes32 chunkEntity = getChunkEntity(mileNumber);
+    require(Chunk.getSpawned(chunkEntity) == false, "already spawned");
+
+
     int32 playWidth = MapConfig.getPlayWidth();
     int32 playHeight = MapConfig.getPlayHeight();
-
-    //the start of the curret mile
     int32 yStart = mileNumber * playHeight;
     int32 yEnd = int32(yStart) + playHeight + -1;
 
+    //spawn the area
+    IWorld world = IWorld(_world());
+    world.createTerrain(causedBy, playWidth, yStart, yEnd);
+    
     //set new game area
+    //todo set single setters
+    Chunk.set(chunkEntity, false, mileNumber, 0, 0, true);
     Bounds.set(int32(-playWidth), playWidth, yEnd, yStart);
-
-    //set the chunk of road
-    Chunk.set(chunkEntity, false, mileNumber, 0, 0);
     Position.set(getCarriageEntity(), 0, yEnd + 1, 0);
 
   }
 
+  //create terrain using an area
   function createTerrain(bytes32 causedBy, int32 width, int32 down, int32 up) public {
     
     IWorld world = IWorld(_world());
+
     GameConfigData memory config = GameConfig.get();
 
     //spawn all the rows
@@ -237,7 +252,7 @@ contract TerrainSubsystem is System {
     if (pieces >= (roadWidth * uint32(playHeight))) {
       finishMile(chunk, currentMile, pieces);
     } else {
-      Chunk.set(chunk, false, currentMile, pieces, 0);
+      Chunk.set(chunk, false, currentMile, pieces, 0, true);
     }
   }
 
@@ -245,7 +260,7 @@ contract TerrainSubsystem is System {
     console.log("finish chunk");
     console.logInt(currentMile);
 
-    Chunk.set(chunk, true, currentMile, pieces, block.number);
+    Chunk.set(chunk, true, currentMile, pieces, block.number, true);
     contemplateMile(currentMile);
 
     currentMile += 1;

@@ -10,6 +10,7 @@ import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
 import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { SpawnSubsystem } from "../systems/SpawnSubsystem.sol";
 import { FloraSubsystem } from "../systems/FloraSubsystem.sol";
+import { TerrainSubsystem } from "../systems/TerrainSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
@@ -40,6 +41,12 @@ contract ActionSystem is System {
     require(atPosition.length < 1, "occupied");
 
     world.spawnPlayer(entity, x, y, false);
+  }
+
+  function summonMap() public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    IWorld world = IWorld(_world());
+    world.createMileTerrain(player);
   }
 
   function action(ActionType newAction, int32 x, int32 y) public {

@@ -133,6 +133,8 @@ export default mudConfig({
         mile: "int32",
         pieces: "uint32",
         blockCompleted: "uint256",
+        spawned: "bool",
+
         // // dynamic list of people who have helped build the mile
         // entities: "bytes32[]",
         //   //dynamic list of people who have helped build the mile

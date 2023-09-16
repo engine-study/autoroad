@@ -40,10 +40,10 @@ public class GaulDebug : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt)) {
             debugString += "Spawn Mile";
-            if( Input.GetMouseButtonDown(0)) { TxManager.SendSafe<SpawnMileAdminFunction>();}
+            if( Input.GetMouseButtonDown(0)) { TxManager.SendQueue<SpawnMileAdminFunction>();}
         } else if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt)) {
             debugString += "Finish Current Mile";
-            if (Input.GetMouseButtonDown(0)) { TxManager.SendSafe<FinishMileAdminFunction>(); }
+            if (Input.GetMouseButtonDown(0)) { TxManager.SendQueue<FinishMileAdminFunction>(); }
         } else if (Input.GetKey(KeyCode.LeftAlt)) {
             debugString += "LMB: Select \nRMB: Teleport";
 
@@ -105,9 +105,9 @@ public class GaulDebug : MonoBehaviour
                
             }
 
-            if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.Tab) && npc > -1) { TxManager.SendSafe<SpawnNPCAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((NPCType)npc)); }
-            else if (Input.GetMouseButtonDown(0) && terrain > -1) { TxManager.SendSafe<SpawnTerrainAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((TerrainType)terrain)); }
-            else if (Input.GetMouseButtonDown(1)) { TxManager.SendSafe<DeleteAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToInt32(0)); }
+            if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.Tab) && npc > -1) { TxManager.SendQueue<SpawnNPCAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((NPCType)npc)); }
+            else if (Input.GetMouseButtonDown(0) && terrain > -1) { TxManager.SendQueue<SpawnTerrainAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToByte((TerrainType)terrain)); }
+            else if (Input.GetMouseButtonDown(1)) { TxManager.SendQueue<DeleteAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z), System.Convert.ToInt32(0)); }
         }
 
 
