@@ -68,13 +68,6 @@ export default mudConfig({
       dataStruct: false,
       schema: {
         startingMile: "int32",
-        kills: "int32",
-        deaths: "int32",
-        moves: "int32",
-        mined: "int32",
-        pushed: "int32",
-        shoveled: "int32",
-        completed: "int32",
       },
     },
 

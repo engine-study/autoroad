@@ -32,7 +32,7 @@ contract SpawnSubsystem is System {
       int32 players = GameState.getPlayerCount() + 1;
       int32 mileJoined = GameState.getMiles();
 
-      Stats.setStartingMile(entity, mileJoined);
+      Stats.set(entity, mileJoined);
 
       if(!isBot) {
         // GameState.setPlayerCount(players+1);
