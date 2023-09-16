@@ -4,9 +4,9 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Move, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots } from "../codegen/Tables.sol";
+import { Move, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots, NPC } from "../codegen/Tables.sol";
 import { Position, PositionTableId } from "../codegen/Tables.sol";
-import { MoveType, ActionType } from "../codegen/Types.sol";
+import { MoveType, ActionType, NPCType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { MapSubsystem } from "../systems/MapSubsystem.sol";
@@ -28,15 +28,12 @@ contract SpawnSubsystem is System {
       Coinage.set(entity, 0);
       Weight.set(entity, -1);
       Boots.set(entity, 3, 3);
+      NPC.set(entity, uint32(NPCType.Player));
 
       int32 players = GameState.getPlayerCount() + 1;
       int32 mileJoined = GameState.getMiles();
 
       Stats.set(entity, mileJoined);
-
-      if(!isBot) {
-        // GameState.setPlayerCount(players+1);
-      }
 
     }
 
