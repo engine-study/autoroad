@@ -98,10 +98,11 @@ public class ChunkComponent : MUDComponent
         ChunkTable table = (ChunkTable)update;
 
         completed = table.completed != null ? (bool)table.completed : completed;
+        spawned = table.spawned != null ? (bool)table.spawned : spawned;
         mileNumber = table.mile != null ? (int)table.mile : mileNumber;
         pieces = table.pieces != null ? (int)table.pieces : pieces;
 
-        Debug.Log("Chunk " + mileNumber + " Pieces: " + pieces + " Completed: " + completed.ToString());
+        Debug.Log("CHUNK " + mileNumber + " Completed: " + completed.ToString() + " Spawned: " + spawned.ToString(), this);
 
         // Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
         // Debug.Log("MileTest " + table.mileNumber, this);
