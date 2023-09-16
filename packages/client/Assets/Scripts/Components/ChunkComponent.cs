@@ -54,7 +54,7 @@ public class ChunkComponent : MUDComponent
 
     void Init() {
 
-        rowTotal = RoadConfigComponent.Height;
+        rowTotal = MapConfigComponent.Height;
         rows = new RowComponent[rowTotal];
         
         for (int i = 0; i < rowTotal; i++)
@@ -72,13 +72,13 @@ public class ChunkComponent : MUDComponent
         groundLeft.localPosition = Vector3.right * (RoadConfigComponent.Left - .5f);
         groundRight.localPosition = Vector3.right * (RoadConfigComponent.Right + .5f);
 
-        groundLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right - 1f);
-        groundRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.PlayWidth - RoadConfigComponent.Right - 1f);
+        groundLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.Width - RoadConfigComponent.Right - 1f);
+        groundRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.Width - RoadConfigComponent.Right - 1f);
 
-        spawnLeft.localPosition = Vector3.right * (-MapConfigComponent.PlayWidth - .5f);
-        spawnRight.localPosition = Vector3.right * (MapConfigComponent.PlayWidth + .5f);
-        spawnLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth - MapConfigComponent.PlayWidth - 1f);
-        spawnRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth - MapConfigComponent.PlayWidth - 1f);
+        spawnLeft.localPosition = Vector3.right * (-MapConfigComponent.Width - .5f);
+        spawnRight.localPosition = Vector3.right * (MapConfigComponent.Width + .5f);
+        spawnLeft.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth - MapConfigComponent.Width - 1f);
+        spawnRight.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth - MapConfigComponent.Width - 1f);
 
     }
 
@@ -119,7 +119,7 @@ public class ChunkComponent : MUDComponent
         while (RoadConfigComponent.Width == 0) { await UniTask.Delay(500); }
         while (BoundsComponent.Left == 0) {  await UniTask.Delay(500); }
 
-        mileStartHeight = mileNumber * RoadConfigComponent.Height;
+        mileStartHeight = mileNumber * MapConfigComponent.Height;
         transform.position = Vector3.forward * mileStartHeight;
 
         if (completed) {

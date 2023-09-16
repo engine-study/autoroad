@@ -434,22 +434,22 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
         }
 
-        public Task<string> CreateEntitiesRequestAsync(byte[] chunkEntity, int playArea, uint roadHeight)
+        public Task<string> CreateEntitiesRequestAsync(byte[] chunkEntity, int playWidth, uint playHeight)
         {
             var createEntitiesFunction = new CreateEntitiesFunction();
                 createEntitiesFunction.ChunkEntity = chunkEntity;
-                createEntitiesFunction.PlayArea = playArea;
-                createEntitiesFunction.RoadHeight = roadHeight;
+                createEntitiesFunction.PlayWidth = playWidth;
+                createEntitiesFunction.PlayHeight = playHeight;
             
              return ContractHandler.SendRequestAsync(createEntitiesFunction);
         }
 
-        public Task<TransactionReceipt> CreateEntitiesRequestAndWaitForReceiptAsync(byte[] chunkEntity, int playArea, uint roadHeight, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CreateEntitiesRequestAndWaitForReceiptAsync(byte[] chunkEntity, int playWidth, uint playHeight, CancellationTokenSource cancellationToken = null)
         {
             var createEntitiesFunction = new CreateEntitiesFunction();
                 createEntitiesFunction.ChunkEntity = chunkEntity;
-                createEntitiesFunction.PlayArea = playArea;
-                createEntitiesFunction.RoadHeight = roadHeight;
+                createEntitiesFunction.PlayWidth = playWidth;
+                createEntitiesFunction.PlayHeight = playHeight;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
         }
@@ -504,6 +504,38 @@ namespace IWorld.Service
                 createMileFunction.MileNumber = mileNumber;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createMileFunction, cancellationToken);
+        }
+
+        public Task<string> CreateTerrainRequestAsync(CreateTerrainFunction createTerrainFunction)
+        {
+             return ContractHandler.SendRequestAsync(createTerrainFunction);
+        }
+
+        public Task<TransactionReceipt> CreateTerrainRequestAndWaitForReceiptAsync(CreateTerrainFunction createTerrainFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createTerrainFunction, cancellationToken);
+        }
+
+        public Task<string> CreateTerrainRequestAsync(byte[] causedBy, int width, int down, int up)
+        {
+            var createTerrainFunction = new CreateTerrainFunction();
+                createTerrainFunction.CausedBy = causedBy;
+                createTerrainFunction.Width = width;
+                createTerrainFunction.Down = down;
+                createTerrainFunction.Up = up;
+            
+             return ContractHandler.SendRequestAsync(createTerrainFunction);
+        }
+
+        public Task<TransactionReceipt> CreateTerrainRequestAndWaitForReceiptAsync(byte[] causedBy, int width, int down, int up, CancellationTokenSource cancellationToken = null)
+        {
+            var createTerrainFunction = new CreateTerrainFunction();
+                createTerrainFunction.CausedBy = causedBy;
+                createTerrainFunction.Width = width;
+                createTerrainFunction.Down = down;
+                createTerrainFunction.Up = up;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createTerrainFunction, cancellationToken);
         }
 
         public Task<string> DebugMileRequestAsync(DebugMileFunction debugMileFunction)

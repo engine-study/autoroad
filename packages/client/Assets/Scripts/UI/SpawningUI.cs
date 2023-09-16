@@ -35,12 +35,12 @@ public class SpawningUI : SPWindowParent
         if(toggle) {
             SPCamera.SetFollow(null);
             SPCamera.SetFOVGlobal(10f);
-            SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + RoadConfigComponent.Height * .5f) + Vector3.right * MapConfigComponent.PlayWidth);
+            SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.right * MapConfigComponent.Width);
 
             nameButton.UpdateField(NameComponent.LocalName);
 
             spawnZone.transform.position = Vector3.right * (BoundsComponent.Right+.5f) + Vector3.forward * (BoundsComponent.Down-.5f);
-            spawnZone.transform.localScale = Vector3.up + Vector3.right * (MapConfigComponent.SpawnWidth-MapConfigComponent.PlayWidth) + Vector3.forward * RoadConfigComponent.Height;
+            spawnZone.transform.localScale = Vector3.up + Vector3.right * (MapConfigComponent.SpawnWidth-MapConfigComponent.Width) + Vector3.forward * MapConfigComponent.Height;
             
             cursor.transform.parent = CursorMUD.CursorTransform;
             cursor.transform.localPosition = Vector3.zero;
@@ -76,7 +76,7 @@ public class SpawningUI : SPWindowParent
 
         goodSpawn = true; 
 
-        goodSpawn = y <= BoundsComponent.Up && y >= BoundsComponent.Down && x > MapConfigComponent.PlayWidth && x <= MapConfigComponent.SpawnWidth;
+        goodSpawn = y <= BoundsComponent.Up && y >= BoundsComponent.Down && x > MapConfigComponent.Width && x <= MapConfigComponent.SpawnWidth;
         goodSpawn = goodSpawn && CursorMUD.Entity == null;
 
         ok.SetActive(goodSpawn);

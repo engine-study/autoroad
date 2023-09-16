@@ -5,7 +5,7 @@ using mud.Client;
 
 public class WorldScroll : MonoBehaviour {
 
-    public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)RoadConfigComponent.Height);}
+    public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)MapConfigComponent.Height);}
     public static WorldScroll Instance;
     public static float Mile {get { return Instance.currentMile; } }
 
@@ -215,8 +215,8 @@ public class WorldScroll : MonoBehaviour {
 
         currentMile = newMile;
 
-        front.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height + RoadConfigComponent.Height);
-        back.transform.position = Vector3.forward * (currentMile * RoadConfigComponent.Height - RoadConfigComponent.Height);
+        front.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height + MapConfigComponent.Height);
+        back.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height - MapConfigComponent.Height);
 
     }
 

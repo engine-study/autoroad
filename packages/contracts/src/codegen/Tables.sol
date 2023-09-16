@@ -7,8 +7,8 @@ import { GameConfig, GameConfigData, GameConfigTableId } from "./tables/GameConf
 import { Stats, StatsTableId } from "./tables/Stats.sol";
 import { Name, NameTableId } from "./tables/Name.sol";
 import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
-import { Bounds, BoundsTableId } from "./tables/Bounds.sol";
 import { RoadConfig, RoadConfigTableId } from "./tables/RoadConfig.sol";
+import { Bounds, BoundsTableId } from "./tables/Bounds.sol";
 import { GameState, GameStateTableId } from "./tables/GameState.sol";
 import { Chunk, ChunkTableId } from "./tables/Chunk.sol";
 import { Entities, EntitiesTableId } from "./tables/Entities.sol";

@@ -8,7 +8,6 @@ public class RoadConfigComponent : MUDComponent
 {
     public static RoadConfigComponent Instance;
     public static int Width;
-    public static int Height;
     public static int Left;
     public static int Right;
 
@@ -23,12 +22,10 @@ public class RoadConfigComponent : MUDComponent
         RoadConfigTable update = (RoadConfigTable)table;
 
         width = (int)update.width;
-        height = (int)update.height;        
         left = (int)update.left;
         right = (int)update.right;
 
         Width = width;
-        Height = height;        
         Left = left;
         Right = right;
     }

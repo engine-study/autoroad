@@ -24,8 +24,8 @@ contract PostDeploy is Script {
     //deploys the MapConfig
     GameState.set(world, int32(-1), 0);
     GameConfig.set(world, debug, dummyPlayers, roadComplete);
-    MapConfig.set(world, 10, 13);
-    RoadConfig.set(world, 3, 10, -1, 1);
+    MapConfig.set(world, 10, 10, 13);
+    RoadConfig.set(world, 3, -1, 1);
 
     world.createMap(worldAddress);
     world.createMile(0);

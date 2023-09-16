@@ -87,8 +87,20 @@ export default mudConfig({
       keySchema: {},
       dataStruct: false,
       schema: {
-        playArea: "int32",
-        spawnArea: "int32",
+        playWidth: "int32",
+        playHeight: "int32",
+        playSpawnWidth: "int32",
+      },
+    },
+
+    RoadConfig: {
+      //empty keySchema creates a singleton
+      keySchema: {},
+      dataStruct: false,
+      schema: {
+        width: "uint32",
+        left: "int32",
+        right: "int32",
       },
     },
 
@@ -100,18 +112,6 @@ export default mudConfig({
         right: "int32",
         up: "int32",
         down: "int32",
-      },
-    },
-
-    RoadConfig: {
-      //empty keySchema creates a singleton
-      keySchema: {},
-      dataStruct: false,
-      schema: {
-        width: "uint32",
-        height: "uint32",
-        left: "int32",
-        right: "int32",
       },
     },
 

@@ -12,7 +12,7 @@ public class GameStateComponent : MUDComponent {
     public static System.Action OnGameStateUpdated;
     public static System.Action<int> OnMileCompleted;
     public static GameStateComponent Instance;
-    public static float MILE_DISTANCE {get { return RoadConfigComponent.Height; } }
+    public static float MILE_DISTANCE {get { return MapConfigComponent.Height; } }
     public static float MILE_COUNT;
     public static int PlayerCount;
     float lastMile = -1;

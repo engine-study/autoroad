@@ -27,8 +27,7 @@ contract TerrainSubsystem is System {
 
   function onRoad(int32 x, int32 y) public returns (bool) {
     // bound to map
-    (uint32 width, uint32 height, int32 left, int32 right) = RoadConfig.get();
-    return x >= int32(left) && x <= right;
+    return x >= RoadConfig.getLeft() && x <= RoadConfig.getRight();
   }
 
   function createMile(int32 mileNumber) public {
@@ -45,34 +44,40 @@ contract TerrainSubsystem is System {
     //create an entity for the chunk itself
     bytes32 chunkEntity = getChunkEntity(mileNumber);
 
-    (, int32 players) = GameState.get();
+    //TODO simple setter
+    int32 players = GameState.getPlayerCount();
     GameState.set(mileNumber, players);
     // GameState.setMiles(mileNumber);
 
     //create a new chunk
-    (int32 playArea, int32 spawnArea) = MapConfig.get();
-    (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
+    int32 playWidth = MapConfig.getPlayWidth();
+    int32 playHeight = MapConfig.getPlayHeight();
 
     //the start of the curret mile
-    int32 yStart = mileNumber * int32(roadHeight);
-    //the end of the current mile
-    int32 yEnd = int32(yStart) + int32(roadHeight) + -1;
+    int32 yStart = mileNumber * playHeight;
+    int32 yEnd = int32(yStart) + playHeight + -1;
 
-    Bounds.set(int32(-playArea), playArea, yEnd, yStart);
-    GameConfigData memory config = GameConfig.get();
-
-    // world.createEntities(chunkEntity, playArea, roadHeight);
+    //set new game area
+    Bounds.set(int32(-playWidth), playWidth, yEnd, yStart);
 
     //set the chunk of road
     Chunk.set(chunkEntity, false, mileNumber, 0, 0);
     Position.set(getCarriageEntity(), 0, yEnd + 1, 0);
 
+  }
+
+  function createTerrain(bytes32 causedBy, int32 width, int32 down, int32 up) public {
+    
+    IWorld world = IWorld(_world());
+    GameConfigData memory config = GameConfig.get();
+
     //spawn all the rows
     //spawn all the obstacles
     //spawn all the rocks/resources
-    for (int32 y = yStart; y <= yEnd; y++) {
+    
+    for (int32 y = down; y <= up; y++) {
       //SPAWN TERRAIN
-      for (int32 x = int32(-playArea); x <= playArea; x++) {
+      for (int32 x = int32(-width); x <= width; x++) {
 
         uint noiseCoord = randomCoord(0, 2000, x, y);
 
@@ -96,7 +101,7 @@ contract TerrainSubsystem is System {
             terrainType = TerrainType.Pillar;
           } 
           if(terrainType != TerrainType.None) {
-            spawnTerrain(chunkEntity, x, y, terrainType);
+            spawnTerrain(causedBy, x, y, terrainType);
           }
         } else {
           //NPCS
@@ -113,7 +118,7 @@ contract TerrainSubsystem is System {
           }
 
           if(npcType != NPCType.None) {
-            world.spawnNPC(chunkEntity, x, y, npcType);
+            world.spawnNPC(causedBy, x, y, npcType);
           }
         }
       
@@ -127,17 +132,17 @@ contract TerrainSubsystem is System {
   function getCarriageEntity() public returns(bytes32) {return keccak256(abi.encode("Carriage"));}
 
   function contemplateMile(int32 mileNumber) public {
-    GameConfigData memory config = GameConfig.get();
-    (, uint32 roadHeight, int32 leftRoad, int32 rightRoad) = RoadConfig.get();
-    int32 yStart = mileNumber * int32(roadHeight);
-    int32 yEnd = int32(yStart) + int32(roadHeight) + -1;
+    int32 playHeight = MapConfig.getPlayHeight();
+    int32 leftRoad = RoadConfig.getLeft();
+    int32 rightRoad = RoadConfig.getRight();
+    int32 yStart = mileNumber * playHeight;
+    int32 yEnd = int32(yStart) + playHeight + -1;
 
     for (int32 y = yStart; y <= yEnd; y++) {
       for (int32 x = leftRoad; x <= rightRoad; x++) {
         bytes32 road = getRoadEntity(x,y);
-        if (Road.getState(road) < uint32(RoadState.Paved)) {
-          continue;
-        }
+
+        if (Road.getState(road) < uint32(RoadState.Paved)) { continue; }
 
         uint noiseCoord = randomCoord(0, 100, x, y);
 
@@ -223,12 +228,13 @@ contract TerrainSubsystem is System {
     bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
 
     uint32 pieces = Chunk.getPieces(chunk);
-    (uint32 roadWidth, uint32 roadHeight, , ) = RoadConfig.get();
+    int32 playHeight = MapConfig.getPlayHeight();
+    uint32 roadWidth = RoadConfig.getWidth();
 
     pieces++;
 
     //road complete!
-    if (pieces >= (roadWidth * roadHeight)) {
+    if (pieces >= (roadWidth * uint32(playHeight))) {
       finishMile(chunk, currentMile, pieces);
     } else {
       Chunk.set(chunk, false, currentMile, pieces, 0);
@@ -248,11 +254,12 @@ contract TerrainSubsystem is System {
   }
 
   function debugMile(bytes32 credit) public {
-    (uint32 roadWidth, uint32 roadHeight, int32 left, int32 right) = RoadConfig.get();
+    (uint32 roadWidth, int32 left, int32 right) = RoadConfig.get();
     int32 currentMile = GameState.getMiles();
+    int32 playHeight = MapConfig.getPlayHeight();
 
-    int32 yStart = int32(currentMile * int32(roadHeight));
-    int32 yEnd = yStart + int32(roadHeight);
+    int32 yStart = int32(currentMile * playHeight);
+    int32 yEnd = yStart + playHeight;
 
     console.log("debug mile");
     console.logInt(currentMile);
@@ -263,15 +270,12 @@ contract TerrainSubsystem is System {
 
     for (int32 y = yStart; y < yEnd; y++) {
       for (int32 x = left; x <= right; x++) {
-        console.log("spawn");
-        console.logInt(x);
-        console.logInt(y);
         spawnDebugRoad(credit, x, y);
       }
     }
 
     bytes32 chunk = getChunkEntity(currentMile);
-    uint32 pieces = roadWidth * roadHeight;
+    uint32 pieces = roadWidth * uint32(playHeight);
 
     finishMile(chunk, currentMile, pieces);
   }

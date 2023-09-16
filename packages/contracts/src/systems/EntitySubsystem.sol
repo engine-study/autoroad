@@ -12,11 +12,11 @@ import { MapSubsystem } from "./MapSubsystem.sol";
 
 contract EntitySubsystem is System {
 
-  function createEntities(bytes32 chunkEntity, int32 playArea, uint32 roadHeight) public {
+  function createEntities(bytes32 chunkEntity, int32 playWidth, uint32 playHeight) public {
     //set entities arrays
-    uint256 totalWidth = uint256(uint32(playArea) + uint32(playArea) + 1);
+    uint256 totalWidth = uint256(uint32(playWidth) + uint32(playWidth) + 1);
     bytes32[] memory width = new bytes32[](totalWidth);
-    bytes32[] memory height = new bytes32[](uint256(roadHeight));
+    bytes32[] memory height = new bytes32[](uint256(playHeight));
     Entities.set(chunkEntity, width, height);
   }
 

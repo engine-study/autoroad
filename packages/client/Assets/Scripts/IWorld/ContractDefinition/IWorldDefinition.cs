@@ -196,10 +196,10 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "chunkEntity", 1)]
         public virtual byte[] ChunkEntity { get; set; }
-        [Parameter("int32", "playArea", 2)]
-        public virtual int PlayArea { get; set; }
-        [Parameter("uint32", "roadHeight", 3)]
-        public virtual uint RoadHeight { get; set; }
+        [Parameter("int32", "playWidth", 2)]
+        public virtual int PlayWidth { get; set; }
+        [Parameter("uint32", "playHeight", 3)]
+        public virtual uint PlayHeight { get; set; }
     }
 
     public partial class CreateMapFunction : CreateMapFunctionBase { }
@@ -218,6 +218,21 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("int32", "mileNumber", 1)]
         public virtual int MileNumber { get; set; }
+    }
+
+    public partial class CreateTerrainFunction : CreateTerrainFunctionBase { }
+
+    [Function("createTerrain")]
+    public class CreateTerrainFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("int32", "width", 2)]
+        public virtual int Width { get; set; }
+        [Parameter("int32", "down", 3)]
+        public virtual int Down { get; set; }
+        [Parameter("int32", "up", 4)]
+        public virtual int Up { get; set; }
     }
 
     public partial class DebugMileFunction : DebugMileFunctionBase { }
@@ -1801,6 +1816,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

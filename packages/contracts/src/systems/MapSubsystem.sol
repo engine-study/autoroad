@@ -21,14 +21,14 @@ contract MapSubsystem is System {
   //the coordinate exists inside ALL CURRENT AND PREVIOUS MILES and INSIDE THE SPAWN ZONES
   function onWorld(int32 x, int32 y) public view returns (bool) {
     int32 up = Bounds.getUp();
-    int32 spawnWidth = MapConfig.getSpawnArea();
+    int32 spawnWidth = MapConfig.getPlaySpawnWidth();
     return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up && y >= 0;
   }
 
   function onSpawn(int32 x, int32 y) public view returns (bool) {
     int32 up = Bounds.getUp();
     int32 down = Bounds.getDown();
-    (int32 playWidth, int32 spawnWidth) = MapConfig.get();
+    (int32 playWidth, , int32 spawnWidth) = MapConfig.get();
     return (x > playWidth && x <= spawnWidth) && (y <= up && y >= down);
   }
   function createMap(address worldAddress) public {
