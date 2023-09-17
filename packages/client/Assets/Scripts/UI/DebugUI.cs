@@ -22,4 +22,16 @@ public class DebugUI : SPWindowParent
         TxManager.SendDirect<AddGemXPFunction>(System.Convert.ToUInt32(5));
     }
 
+
+    public void SpawnPuzzle() {
+        TxManager.SendDirect<SpawnPuzzleAdminFunction>();
+    }
+    
+    public void SpawnMile() {
+        TxManager.SendDirect<SpawnMileAdminFunction>();
+    }
+
+    public void FinishMile() {
+        TxManager.SendDirect<FinishMileAdminFunction>();
+    }
 }
