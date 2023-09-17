@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seeker } from "../codegen/Tables.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seeker} from "../codegen/Tables.sol";
 import { ActionType, NPCType } from "../codegen/Types.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { ActionSystem } from "./ActionSystem.sol";
@@ -32,23 +32,31 @@ contract BehaviourSubsystem is System {
     if(Aggro.get(entity) == distance) {aggro(causedBy, player, entity, playerPos, entityPos);}
   }
   
-  function seek(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+  function seek(bytes32 causedBy, bytes32 target, bytes32 seeker, PositionData memory targetPos, PositionData memory seekerPos) public {
     console.log("seek");
 
     IWorld world = IWorld(_world());
-    //walk towards player
-    PositionData memory walkPos = addPosition(entityPos,getVectorNormalized(entityPos,playerPos));
+    //walk towards target
+    PositionData memory walkPos = addPosition(seekerPos,getVectorNormalized(seekerPos,targetPos));
     bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(walkPos.x, walkPos.y, 0));
-    world.moveTo(causedBy, entity, entityPos, walkPos, atDest, ActionType.Walking);
+    world.moveTo(causedBy, seeker, seekerPos, walkPos, atDest, ActionType.Walking);
   }
 
-  function aggro(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+  function aggro(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory targetPos, PositionData memory attackerPos) public {
     console.log("aggro");
 
     IWorld world = IWorld(_world());
-    //kill player
-    world.setAction(entity, ActionType.Melee, playerPos.x, playerPos.y);
-    world.kill(causedBy, player, entity, playerPos);
+
+    NPCType targetType = NPCType(NPC.get(target));
+    NPCType attackerType = NPCType(NPC.get(attacker));
+    
+    //soldiers don't attack players or other soldiers
+    if(attackerType == NPCType.Soldier && targetType != NPCType.Barbarian) {return;}
+    if(attackerType == NPCType.Barbarian && targetType == NPCType.Barbarian) {return;}
+
+    //kill target
+    world.setAction(attacker, ActionType.Melee, targetPos.x, targetPos.y);
+    world.kill(causedBy, target, attacker, targetPos);
   }
 
 }

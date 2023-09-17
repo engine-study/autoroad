@@ -74,14 +74,14 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "player", 2)]
-        public virtual byte[] Player { get; set; }
-        [Parameter("bytes32", "entity", 3)]
-        public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "playerPos", 4)]
-        public virtual PositionData PlayerPos { get; set; }
-        [Parameter("tuple", "entityPos", 5)]
-        public virtual PositionData EntityPos { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "attacker", 3)]
+        public virtual byte[] Attacker { get; set; }
+        [Parameter("tuple", "targetPos", 4)]
+        public virtual PositionData TargetPos { get; set; }
+        [Parameter("tuple", "attackerPos", 5)]
+        public virtual PositionData AttackerPos { get; set; }
     }
 
     public partial class BuyCosmeticFunction : BuyCosmeticFunctionBase { }
@@ -1080,14 +1080,14 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "player", 2)]
-        public virtual byte[] Player { get; set; }
-        [Parameter("bytes32", "entity", 3)]
-        public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "playerPos", 4)]
-        public virtual PositionData PlayerPos { get; set; }
-        [Parameter("tuple", "entityPos", 5)]
-        public virtual PositionData EntityPos { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "seeker", 3)]
+        public virtual byte[] Seeker { get; set; }
+        [Parameter("tuple", "targetPos", 4)]
+        public virtual PositionData TargetPos { get; set; }
+        [Parameter("tuple", "seekerPos", 5)]
+        public virtual PositionData SeekerPos { get; set; }
     }
 
     public partial class SendCoinsFunction : SendCoinsFunctionBase { }

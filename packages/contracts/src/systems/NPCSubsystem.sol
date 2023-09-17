@@ -27,6 +27,7 @@ contract NPCSubsystem is System {
       Soldier.set(entity, true);
       Weight.set(entity, 1);
       Seeker.set(entity, 2);
+      Aggro.set(entity,1);
     } else if (npcType == NPCType.Barbarian) {
       Barbarian.set(entity, true);
       Weight.set(entity, 1);
