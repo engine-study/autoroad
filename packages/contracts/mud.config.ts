@@ -40,6 +40,10 @@ export default mudConfig({
       name: "spawn",
       openAccess: false,
     },
+    PuzzleSubsystem: {
+      name: "puzzle",
+      openAccess: false,
+    },
   },
 
   enums: {
@@ -51,6 +55,7 @@ export default mudConfig({
     AnimationType: ["Walk", "Hop", "Teleport", "Push"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
+    PuzzleType: ["None", "Miliarium", "Bearer", "Count"],
   },
 
   tables: {

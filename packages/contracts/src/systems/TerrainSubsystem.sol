@@ -3,15 +3,12 @@ pragma solidity ^0.8.0;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
+
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/Tables.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
-
 import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/Types.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
-import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { positionToEntityKey, position3DToEntityKey } from "../utility/positionToEntityKey.sol";
-import { randomCoord } from "../utility/random.sol";
+
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
@@ -19,7 +16,10 @@ import { FloraSubsystem } from "./FloraSubsystem.sol";
 import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { randomCoord } from "../utility/random.sol";
 
 contract TerrainSubsystem is System {
   //updateRow
@@ -61,26 +61,27 @@ contract TerrainSubsystem is System {
     bytes32 chunkEntity = getChunkEntity(mileNumber);
     require(Chunk.getSpawned(chunkEntity) == false, "already spawned");
 
-
+    //calculate new map bounds based on chunk
+    //eventually maybe should use Bounds to calculate so we can add rest sections?
     int32 playWidth = MapConfig.getPlayWidth();
     int32 playHeight = MapConfig.getPlayHeight();
-    int32 yStart = mileNumber * playHeight;
-    int32 yEnd = int32(yStart) + playHeight + -1;
+    int32 yBottom = mileNumber * playHeight;
+    int32 yTop = int32(yBottom) + playHeight + -1;
 
     //spawn the area
     IWorld world = IWorld(_world());
-    world.createTerrain(causedBy, playWidth, yStart, yEnd);
+    world.createTerrain(causedBy, playWidth, yTop, yBottom);
     
     //set new game area
     //todo set single setters
     Chunk.set(chunkEntity, false, mileNumber, 0, 0, true);
-    Bounds.set(int32(-playWidth), playWidth, yEnd, yStart);
-    Position.set(getCarriageEntity(), 0, yEnd + 1, 0);
+    Bounds.set(int32(-playWidth), playWidth, yTop, yBottom);
+    Position.set(getCarriageEntity(), 0, yTop + 1, 0);
 
   }
 
   //create terrain using an area
-  function createTerrain(bytes32 causedBy, int32 width, int32 down, int32 up) public {
+  function createTerrain(bytes32 causedBy, int32 width, int32 up, int32 down) public {
     
     IWorld world = IWorld(_world());
 

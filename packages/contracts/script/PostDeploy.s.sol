@@ -8,6 +8,7 @@ import { GameState, GameConfig, MapConfig, RoadConfig } from "../src/codegen/Tab
 import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
 import { TerrainSubsystem } from "../src/systems/TerrainSubsystem.sol";
 import { MapSubsystem } from "../src/systems/MapSubsystem.sol";
+import { random } from "../src/utility/random.sol";
 
 contract PostDeploy is Script {
   function run(address worldAddress) external {
@@ -32,7 +33,8 @@ contract PostDeploy is Script {
 
     // some debug to check if our abiencode is working
     // abiTest(worldAddress);
-
+    randomTest(worldAddress);
+    
     vm.stopBroadcast();
   }
 
@@ -46,5 +48,31 @@ contract PostDeploy is Script {
     console.logBytes32(positionHash);
     console.logBytes32(combinedHash);
     console.logBytes32(stringInt);
+  }
+
+  function randomTest(address worldAddress) public {
+
+    console.log("0 - 1");
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+    console.logInt(int(random(0,1)));
+
+    console.log("0 - 2");
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+    console.logInt(int(random(0,2)));
+
   }
 }

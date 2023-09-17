@@ -11,6 +11,7 @@ import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 contract AdminSystem is System {
+
   //TODO, SET ADMIN
   function isAdmin(bytes32 player) public pure returns (bool) {
     return true;
@@ -45,11 +46,17 @@ contract AdminSystem is System {
     IWorld(_world()).deleteAt(x,y, layer);
   }
 
-  function spawnMileAdmin() public {
+  function spawnPuzzleAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
     int32 nextMile = GameState.getMiles() + 1;
     IWorld(_world()).createMile(nextMile);
+  }
+
+  function spawnMileAdmin() public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    IWorld(_world()).createPuzzles(player);
   }
 
   function finishMileAdmin() public {
