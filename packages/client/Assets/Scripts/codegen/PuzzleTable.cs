@@ -23,7 +23,8 @@ namespace DefaultNamespace
             return ID;
         }
 
-        public ulong? value;
+        public ulong? puzzleType;
+        public bool? complete;
 
         public override Type TableType()
         {
@@ -43,7 +44,11 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (value != other.value)
+            if (puzzleType != other.puzzleType)
+            {
+                return false;
+            }
+            if (complete != other.complete)
             {
                 return false;
             }
@@ -52,7 +57,9 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (ulong)(int)functionParameters[0];
+            puzzleType = (ulong)(int)functionParameters[0];
+
+            complete = (bool)functionParameters[1];
         }
 
         public override void RecordToTable(Record record)
@@ -60,8 +67,10 @@ namespace DefaultNamespace
             var table = record.value;
             //bool hasValues = false;
 
-            var valueValue = (ulong)table["value"];
-            value = valueValue;
+            var puzzleTypeValue = (ulong)table["puzzleType"];
+            puzzleType = puzzleTypeValue;
+            var completeValue = (bool)table["complete"];
+            complete = completeValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -94,14 +103,17 @@ namespace DefaultNamespace
                 {
                     current = new PuzzleTable
                     {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
+                        puzzleType = value.Item1.TryGetValue("puzzleType", out var puzzleTypeVal)
+                            ? (ulong)puzzleTypeVal
+                            : default,
+                        complete = value.Item1.TryGetValue("complete", out var completeVal)
+                            ? (bool)completeVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new PuzzleTable { value = null, };
+                    current = new PuzzleTable { puzzleType = null, complete = null, };
                 }
             }
 
@@ -111,14 +123,17 @@ namespace DefaultNamespace
                 {
                     previous = new PuzzleTable
                     {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
+                        puzzleType = value.Item2.TryGetValue("puzzleType", out var puzzleTypeVal)
+                            ? (ulong)puzzleTypeVal
+                            : default,
+                        complete = value.Item2.TryGetValue("complete", out var completeVal)
+                            ? (bool)completeVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new PuzzleTable { value = null, };
+                    previous = new PuzzleTable { puzzleType = null, complete = null, };
                 }
             }
 

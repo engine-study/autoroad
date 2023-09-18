@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, GameEvent } from "../codegen/Tables.sol";
+import { Position, PositionTableId } from "../codegen/Tables.sol";
 import { Player, Health, Tree, Seeds, Move } from "../codegen/Tables.sol";
 import { TerrainType, FloraType, MoveType } from "../codegen/Types.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";

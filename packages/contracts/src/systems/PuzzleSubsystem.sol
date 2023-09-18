@@ -17,15 +17,21 @@ contract PuzzleSubsystem is System {
 
   function triggerPuzzles(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
 
-    //we aren't a puzzle, skip this trigger
-    if(Puzzle.get(entity) == 0) return;
+    PuzzleType puzzleType = PuzzleType(Puzzle.getPuzzleType(entity));
 
-    //search underground for triggers (-1)
-    bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, -1));
-    if(atPosition.length > 0 && Trigger.get(atPosition[0]) == entity) {
-      //success, freeze miliarium in place
-      Move.set(entity, uint32(MoveType.Obstruction));
-      IWorld(_world()).givePuzzleReward(causedBy);
+    //we aren't a puzzle, skip this trigger
+    if(puzzleType == PuzzleType.None) return;
+
+    if(puzzleType == PuzzleType.Miliarium) {
+      //search underground for triggers (-1)
+      bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, -1));
+      if(atPosition.length > 0 && Trigger.get(atPosition[0]) == entity) {
+        //success, freeze miliarium in place
+        Move.set(entity, uint32(MoveType.Obstruction));
+        IWorld(_world()).givePuzzleReward(causedBy);
+        //TODO set to single setter
+        Puzzle.set(entity, uint32(puzzleType), true);
+      }
     }
 
   }
@@ -70,7 +76,7 @@ contract PuzzleSubsystem is System {
     Miliarium.set(mil, true);
     Weight.set(mil, 1);
     Move.set(mil, uint32(MoveType.Push));
-    Puzzle.set(mil, uint32(PuzzleType.Miliarium));
+    Puzzle.set(mil, uint32(PuzzleType.Miliarium), false);
 
     //put triggers underground
     pos = findEmptyPositionInArea(trigger, width, up, down, roadSide);
@@ -96,7 +102,7 @@ contract PuzzleSubsystem is System {
       bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, 0));
       if(atPosition.length > 0) { 
         //check for obstructions and puzzles
-        isValid = Puzzle.get(atPosition[0]) == 0 && Move.get(atPosition[0]) != uint32(MoveType.Obstruction); 
+        isValid = Puzzle.getPuzzleType(atPosition[0]) == 0 && Move.get(atPosition[0]) != uint32(MoveType.Obstruction); 
       }
       
       //check for triggers if still valid

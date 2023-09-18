@@ -10,8 +10,13 @@ public abstract class MoverComponent : MUDComponent {
     PositionSync sync;
     protected override void Init(SpawnInfo newSpawnInfo) {
         base.Init(newSpawnInfo);
-        sync = gameObject.AddComponent<PositionSync>();
-        sync.rotateToFace = true;
+
+        sync = gameObject.GetComponent<PositionSync>();
+        if(sync == null) {
+            sync = gameObject.AddComponent<PositionSync>();
+            sync.rotateToFace = true;
+        }
+        
         anim = GetComponentInChildren<SPAnimationMover>();
         // ToggleRequiredComponent(true, MUDWorld.FindPrefab<PositionComponent>());
     }

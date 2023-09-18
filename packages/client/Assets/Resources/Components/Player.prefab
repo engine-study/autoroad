@@ -314,7 +314,7 @@ Transform:
   - {fileID: 1469008974362436549}
   - {fileID: 7784753608082169161}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &592219380604067791
 MonoBehaviour:
@@ -564,9 +564,9 @@ MonoBehaviour:
   synced: 0
   targetComponent: {fileID: 0}
   target: {fileID: 2243986332771371095}
-  hideIfNoPosition: 1
-  hideIfBelowGround: 1
-  hideAfterLoaded: 1
+  hideIfNoPosition: 0
+  hideIfBelowGround: 0
+  hideAfterLoaded: 0
   rotateToFace: 0
   speed: 1
   rotationSpeed: 720
@@ -592,6 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2243986332771371095}
+  head: {fileID: 0}
   action: 0
   actionEffect: {fileID: 0}
   entity: {fileID: 0}

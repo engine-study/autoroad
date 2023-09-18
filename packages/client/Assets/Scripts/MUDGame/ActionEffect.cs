@@ -27,7 +27,6 @@ public class ActionEffect : MonoBehaviour {
         if (active != toggle) {
             if (toggle) {
                 setup.PositionSync.OnMoveEnd += OnMoveEnd;
-                setup.PositionSync.SetMovement(movement);
             }  else {
                 setup.PositionSync.OnMoveEnd -= OnMoveEnd;
             }
@@ -38,17 +37,17 @@ public class ActionEffect : MonoBehaviour {
         if(toggle) {
             
             //set the movement, LET THIS LINGER, states without movement use the last movement given
-            setup.PositionSync.SetMovement(movement);
+            if(movement) setup.PositionSync.SetMovement(movement);
 
             if(setup.PositionSync.Moving) {
                 //play movement animation
-                ToggleMoveAnimation(true);
+                ToggleMovementEffects(true);
             } else {
                 //play state animation
-                ToggleActionAnimation(true);
+                ToggleActionEffects(true);
             }
         } else {
-            ToggleActionAnimation(false);
+            ToggleActionEffects(false);
         }
 
         active = toggle;
@@ -57,28 +56,28 @@ public class ActionEffect : MonoBehaviour {
     }
     
     public void OnMoveStart() {
-        ToggleMoveAnimation(true);
+        ToggleMovementEffects(true);
     }   
 
     public void OnMoveEnd() {
-        ToggleMoveAnimation(false);
+        ToggleMovementEffects(false);
     }
 
 
-    void ToggleMoveAnimation(bool toggle) {
+    void ToggleMovementEffects(bool toggle) {
 
         if(toggle) {
             moveEffect?.PlayEnabled();
             PlayAnimation(movementClip);
         } else {
             moveEffect?.PlayDisabled();
-            ToggleActionAnimation(true);
+            ToggleActionEffects(true);
     
         }
 
     }
 
-    void ToggleActionAnimation(bool toggle) {
+    void ToggleActionEffects(bool toggle) {
 
         if(toggle) {
 

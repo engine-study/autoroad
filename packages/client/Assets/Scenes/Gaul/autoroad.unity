@@ -26389,7 +26389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4904230719414751080, guid: 3ed94691dade01a4aaccf7ce151fb3e7, type: 3}
       propertyPath: m_Name
-      value: Soldier (1)
+      value: Soldier
       objectReference: {fileID: 0}
     - target: {fileID: 4904230719414751080, guid: 3ed94691dade01a4aaccf7ce151fb3e7, type: 3}
       propertyPath: m_IsActive
@@ -50674,6 +50674,7 @@ MonoBehaviour:
   - {fileID: 1735051090325256476, guid: 3a42384fe53597d4392af049f7955818, type: 3}
   - {fileID: 8946060380383362920, guid: 2fe31ad07c7c12246ae5963fe1843539, type: 3}
   - {fileID: -1379058472570784372, guid: 564a0b99db91d5d4ca154855b778ce6f, type: 3}
+  - {fileID: 7814506977384768522, guid: 5a023588fc2a96a40b246164e42b5cac, type: 3}
   - {fileID: 4808806995307670058, guid: ff195b3847477194fa4f14c6af17c290, type: 3}
   - {fileID: 4013091470561306812, guid: f81792a7944a68143874f73de650db8b, type: 3}
   - {fileID: 5117984663886283829, guid: a743baee3ef63a2488055572b3a8eaa4, type: 3}
@@ -61661,6 +61662,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 359423741}
     m_Modifications:
+    - target: {fileID: 1735051090325256476, guid: 3a42384fe53597d4392af049f7955818, type: 3}
+      propertyPath: requiredComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735051090325256476, guid: 3a42384fe53597d4392af049f7955818, type: 3}
+      propertyPath: requiredComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 7814506977384768522, guid: 5a023588fc2a96a40b246164e42b5cac, type: 3}
     - target: {fileID: 7015938143220594257, guid: 3a42384fe53597d4392af049f7955818, type: 3}
       propertyPath: m_Name
       value: Miliarium

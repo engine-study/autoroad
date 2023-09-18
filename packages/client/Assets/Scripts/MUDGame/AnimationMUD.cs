@@ -9,11 +9,13 @@ public class AnimationMUD : MonoBehaviour
     public ActionComponent ActionComponent {get{return actionComponent;}}
     public PositionSync PositionSync { get; private set; }
     public SPAnimator Animator { get; private set; }
+    public SPController Controller { get; private set; }
     public SPLooker Look {get{return looker;}}
 
     [Header("Animation")]
     [SerializeField] Transform target;
-    [SerializeField] Transform head;
+    Transform head;
+    Rigidbody headRB;
     Transform headParent;
     Vector3 headPosLocal;
     Quaternion headRotLocal;
@@ -31,15 +33,23 @@ public class AnimationMUD : MonoBehaviour
         entity = GetComponentInParent<MUDEntity>();
         looker = target.gameObject.AddComponent<SPLooker>();
 
+
     }
 
     protected virtual void Start() {
 
         
         Animator = GetComponentInChildren<SPAnimator>();
+        Controller = GetComponentInChildren<SPController>();
+        if(Controller == null) {
+            Controller = gameObject.AddComponent<SPController>();
+            Controller.ToggleController(false);
+        }
+
         PositionSync = GetComponentInParent<PositionSync>();
 
         head = Animator.Head;
+        headRB = head.GetComponent<Rigidbody>();
         headParent = head.transform.parent;
         headPosLocal = head.localPosition;
         headRotLocal = head.localRotation;
@@ -70,7 +80,10 @@ public class AnimationMUD : MonoBehaviour
         EnterState(actionComponent.Action);
     }
 
+
+    bool isSimple;
     public void ToggleSimple(bool toggle) {
+        isSimple = toggle;
         if(toggle) {
             head.parent = transform;
             head.localPosition = Vector3.up;
@@ -82,17 +95,29 @@ public class AnimationMUD : MonoBehaviour
         }
     }
 
+    public void ToggleRagdoll(bool toggle) {
+        
+        Controller.Ragdoll(toggle);
+
+        if(toggle) {
+            headRB.isKinematic = false;
+            head.parent = transform;
+        } else {
+            //set head back to where its supposed to be
+            headRB.isKinematic = true;
+            ToggleSimple(isSimple);
+        }
+
+    }
+
     public virtual void EnterState(ActionName newAction) {
 
         //turn off old action
         if (actionEffect != null && newAction != action) { 
-            if (actionCoroutine != null) { StopCoroutine(actionCoroutine); }
             ToggleAction(false, actionEffect); 
         }
 
-        Debug.Log("AnimationMUD: " + newAction.ToString(), this);
-        // Debug.Log(((int)actionComponent.Position.x).ToString(), this);
-        // Debug.Log(((int)actionComponent.Position.z).ToString(), this);
+        Debug.Log("AnimationMUD: " + newAction.ToString() + " (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
 
         action = newAction;
         actionEffect = LoadAction(action.ToString());
@@ -106,20 +131,18 @@ public class AnimationMUD : MonoBehaviour
         
     }   
 
+    public virtual void ToggleDead(bool toggle) {
+        if(toggle) {
+            
+        } else {
+
+        }
+    }
+
     public virtual void ToggleAction(bool toggle, ActionEffect newAction) {
         actionEffect.Toggle(toggle, this);
     }
 
-    Coroutine actionCoroutine;
-    IEnumerator ActionCoroutine(ActionEffect newAction) {
-        yield return null;
-        ToggleAction(true, newAction);
-
-        yield return new WaitForSeconds(2f);
-        ToggleAction(false, newAction);
-
-    }
-    
     
     //load from resources folder
     ActionEffect LoadAction(string action) {
