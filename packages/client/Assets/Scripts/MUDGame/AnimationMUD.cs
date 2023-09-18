@@ -13,6 +13,10 @@ public class AnimationMUD : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] Transform target;
+    [SerializeField] Transform head;
+    Transform headParent;
+    Vector3 headPosLocal;
+    Quaternion headRotLocal;
     Dictionary<string, ActionEffect> effects = new Dictionary<string, ActionEffect>();
 
     [Header("Debug")]
@@ -26,6 +30,9 @@ public class AnimationMUD : MonoBehaviour
 
         entity = GetComponentInParent<MUDEntity>();
         looker = target.gameObject.AddComponent<SPLooker>();
+        headParent = head.transform.parent;
+        headPosLocal = head.localPosition;
+        headRotLocal = head.localRotation;
     }
 
     protected virtual void Start() {
@@ -60,6 +67,17 @@ public class AnimationMUD : MonoBehaviour
         EnterState(actionComponent.Action);
     }
 
+    public void ToggleSimple(bool toggle) {
+        if(toggle) {
+            head.parent = transform;
+            head.localPosition = Vector3.up;
+            head.localRotation = Quaternion.identity;
+        } else {
+            head.parent = headParent;
+            head.localPosition = headPosLocal;
+            head.localRotation = headRotLocal;
+        }
+    }
 
     public virtual void EnterState(ActionName newAction) {
 

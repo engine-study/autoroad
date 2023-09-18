@@ -14,7 +14,7 @@ import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getU
 
 contract PuzzleSubsystem is System {
 
-  function createPuzzles(bytes32 causedBy) public {
+  function createRandomPuzzle(bytes32 causedBy) public {
     
     IWorld world = IWorld(_world());
 

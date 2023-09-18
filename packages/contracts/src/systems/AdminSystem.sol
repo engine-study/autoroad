@@ -6,7 +6,8 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Player, Position, Health, Move, GameState, Coinage } from "../codegen/Tables.sol";
 import { TerrainType, NPCType } from "../codegen/Types.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
-import { NPCSubsystem } from "./TerrainSubsystem.sol";
+import { NPCSubsystem } from "./NPCSubsystem.sol";
+import { PuzzleSubsystem } from "./PuzzleSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
@@ -49,14 +50,14 @@ contract AdminSystem is System {
   function spawnPuzzleAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    int32 nextMile = GameState.getMiles() + 1;
-    IWorld(_world()).createMile(nextMile);
+    IWorld(_world()).createRandomPuzzle(player);
   }
 
   function spawnMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).createPuzzles(player);
+    int32 nextMile = GameState.getMiles() + 1;
+    IWorld(_world()).createMile(nextMile);
   }
 
   function finishMileAdmin() public {
