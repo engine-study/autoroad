@@ -22,6 +22,12 @@ function randomFromEntity(uint minNumber,uint maxNumber, bytes32 entity) view re
      return amount;
 } 
 
+function randomFromEntitySeed(uint minNumber,uint maxNumber, bytes32 entity, uint seed) view returns (uint amount) {
+     amount = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, block.number, entity, seed))) % (maxNumber-minNumber);
+     amount = amount + minNumber;
+     return amount;
+} 
+
 function randomSeed(uint minNumber,uint maxNumber, uint seed) view returns (uint amount) {
      amount = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, block.number, seed))) % (maxNumber-minNumber);
      amount = amount + minNumber;

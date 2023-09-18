@@ -23,7 +23,7 @@ namespace DefaultNamespace
             return ID;
         }
 
-        public string? value;
+        public ulong? value;
 
         public override Type TableType()
         {
@@ -52,7 +52,7 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (string)functionParameters[0];
+            value = (ulong)(int)functionParameters[0];
         }
 
         public override void RecordToTable(Record record)
@@ -60,7 +60,7 @@ namespace DefaultNamespace
             var table = record.value;
             //bool hasValues = false;
 
-            var valueValue = (string)table["value"];
+            var valueValue = (ulong)table["value"];
             value = valueValue;
         }
 
@@ -95,7 +95,7 @@ namespace DefaultNamespace
                     current = new PuzzleTable
                     {
                         value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (string)valueVal
+                            ? (ulong)valueVal
                             : default,
                     };
                 }
@@ -112,7 +112,7 @@ namespace DefaultNamespace
                     previous = new PuzzleTable
                     {
                         value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (string)valueVal
+                            ? (ulong)valueVal
                             : default,
                     };
                 }

@@ -469,24 +469,31 @@ contract MoveSubsystem is System {
     moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
   }
 
-  function setPosition(bytes32 causedBy, bytes32 player, int32 x, int32 y, int32 layer, ActionType action) public {
-    setPositionData(causedBy, player, PositionData(x, y, layer), action);
+  function setPosition(bytes32 causedBy, bytes32 entity, int32 x, int32 y, int32 layer, ActionType action) public {
+    setPositionData(causedBy, entity, PositionData(x, y, layer), action);
   }
 
-  function setPositionData(bytes32 causedBy, bytes32 player, PositionData memory pos, ActionType action) public {
-    IWorld(_world()).setAction(player, action, pos.x, pos.y);
-    setPositionRaw(causedBy, player, pos);
+  function setPositionData(bytes32 causedBy, bytes32 entity, PositionData memory pos, ActionType action) public {
+    IWorld(_world()).setAction(entity, action, pos.x, pos.y);
+    setPositionRaw(causedBy, entity, pos);
   }
 
-  function setPositionRaw(bytes32 causedBy, bytes32 player, PositionData memory pos) public {
-    Position.set(player, pos);
+  function setPositionRaw(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
+    Position.set(entity, pos);
 
-    //we have to be careful not to infinite loop here
-    IWorld(_world()).triggerEntities(causedBy, player, pos);
+    IWorld world = IWorld(_world());
+
+    //only movements onto main game map update stuff
+    if(pos.layer == 0) {
+      
+      //we have to be careful not to infinite loop here 
+      //(ie. an entity moves that triggers a move that triggers a move)
+      world.triggerEntities(causedBy, entity, pos);
+      world.triggerPuzzles(causedBy, entity, pos);
+
+      //TODO add atPosition argument to help speed up subsequent ticks?
+    }
+
   }
-
-  // function animation(bytes32 player, AnimationType anim) public {
-  //   Animation.emitEphemeral(player, uint32(anim));
-  // }
 
 }

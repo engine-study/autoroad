@@ -32,7 +32,12 @@ contract RewardSubsystem is System {
     giveGem(player, 1);
     giveCoins(player, 25);
     giveXP(player, 25);
+  }
 
+  function givePuzzleReward(bytes32 player) public {
+    giveGem(player, 1);
+    giveCoins(player, Conscription.get(player) ? int32(20) : int32(10));
+    giveXP(player, 25);
   }
 
   function giveKilledBarbarianReward(bytes32 player) public {
@@ -43,16 +48,13 @@ contract RewardSubsystem is System {
 
   }
 
-  
   function giveRoadShoveledReward(bytes32 player) public {
-
     int32 amount = Conscription.get(player) ? int32(4) : int32(2);
 
     giveCoins(player, amount);
     giveXP(player, 10);
 
   }
-
 
   function giveRoadFilledReward(bytes32 player) public {
 

@@ -20,6 +20,7 @@ contract EntitySubsystem is System {
     Entities.set(chunkEntity, width, height);
   }
 
+  //find all nearby entities that have tick updates and tick them
   function triggerEntities(bytes32 causedBy, bytes32 player, PositionData memory pos) public {
     console.log("triggerEntities");
 

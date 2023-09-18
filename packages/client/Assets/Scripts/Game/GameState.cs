@@ -73,6 +73,8 @@ public class GameState : MonoBehaviour {
         for (int i = 0; i < tables.Length; i++) { tables[i].gameObject.SetActive(true); }
 
         while(ChunkComponent.ActiveChunk == null) {await UniTask.Delay(100);}
+
+        await UniTask.Delay(2000);
         if(ChunkComponent.ActiveChunk.Spawned == false) { if(await TxManager.SendUntilPasses<SummonMapFunction>() == false) Debug.LogError("Could not summon map.");}
 
         SPEvents.OnServerLoaded?.Invoke();

@@ -48,7 +48,7 @@ export default mudConfig({
 
   enums: {
     ActionType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn"],
-    TerrainType: ["None", "Rock", "Mine", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole"],
+    TerrainType: ["None", "Rock", "Mine", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Miliarium"],
     NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
@@ -182,7 +182,7 @@ export default mudConfig({
 
     //puzzle components try to be moved onto triggers (ie. Miliarli )
     Miliarium: "bool",
-    Puzzle: "bytes32",
+    Puzzle: "uint32",
     Trigger: "bytes32",
 
     Position: {
