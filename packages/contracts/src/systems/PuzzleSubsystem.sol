@@ -85,13 +85,12 @@ contract PuzzleSubsystem is System {
   function findEmptyPositionInArea(bytes32 entity, int32 width, int32 up, int32 down, int32 roadSide) public returns(PositionData memory pos) {
 
     bool isValid = false;
+    uint attempts = 0;
 
     while(isValid == false) {
 
-      uint attempts = 0;
-      pos = getRandomPositionNotRoad(entity, width, up, down, roadSide, attempts);
-
       isValid = true;
+      pos = getRandomPositionNotRoad(entity, width, up, down, roadSide, attempts);
 
       //don't overwrite Puzzles or Triggers or Obstructions already on road
       bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, 0));
@@ -107,6 +106,7 @@ contract PuzzleSubsystem is System {
       }
 
       attempts++;
+      require(attempts < 10, "ran out of valid positions");
 
     }
 
@@ -119,7 +119,7 @@ contract PuzzleSubsystem is System {
     //spawn on right side
     pos.x = int32(uint32(randomFromEntitySeed(uint32(roadSide), uint32(width), causedBy, seed )));
     pos.y = int32(uint32(randomFromEntitySeed(uint32(down), uint32(up), causedBy, seed )));
-
+    pos.layer = 0;
     //switch what side of the road we spawn on
     if(random(1,10) > 5) {
       pos.x = int32(-pos.x);

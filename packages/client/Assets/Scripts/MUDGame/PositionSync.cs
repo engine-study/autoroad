@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
+using DefaultNamespace;
 
 public class PositionSync : ComponentSync
 {
@@ -40,7 +41,7 @@ public class PositionSync : ComponentSync
     [SerializeField] float distanceMoved = 0f;
     [SerializeField] float distance = 0f;
 
-    public override MUDComponent SyncedComponent() {return new PositionComponent();}
+    public override Type MUDTableType() {return typeof(PositionTable);}
 
     protected override void Awake() {
         base.Awake();

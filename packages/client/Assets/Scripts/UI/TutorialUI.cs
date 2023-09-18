@@ -38,6 +38,13 @@ public class TutorialUI : SPWindowParent
 
     }
 
+    public override void ToggleWindow(bool toggle) {
+        base.ToggleWindow(toggle);
+
+        Toggle(toggle);
+
+    }
+
     void Toggle(bool toggle) {
 
         tutorialParent.SetActive(toggle);
