@@ -7,8 +7,17 @@ pragma solidity >=0.8.0;
 //   return randomNumber;
 // }
 
+
+
 function random(uint minNumber,uint maxNumber) view returns (uint amount) {
      amount = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, block.number))) % (maxNumber-minNumber);
+     amount = amount + minNumber;
+     return amount;
+} 
+
+//todo create seed based off something harder to simulate
+function randomFromEntity(uint minNumber,uint maxNumber, bytes32 entity) view returns (uint amount) {
+     amount = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, block.number, entity))) % (maxNumber-minNumber);
      amount = amount + minNumber;
      return amount;
 } 

@@ -13,7 +13,7 @@ public abstract class PropComponent : MUDComponent {
         propPrefab.gameObject.SetActive(false);
 
         PlayerMUD player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
-        player.Animator.defaultPropPrefab = propPrefab;
+        player.Animator.SetDefaultProp(propPrefab);
         player.Animator.ToggleProp(true, propPrefab);
 
     }

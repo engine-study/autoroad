@@ -30,9 +30,7 @@ public class AnimationMUD : MonoBehaviour
 
         entity = GetComponentInParent<MUDEntity>();
         looker = target.gameObject.AddComponent<SPLooker>();
-        headParent = head.transform.parent;
-        headPosLocal = head.localPosition;
-        headRotLocal = head.localRotation;
+
     }
 
     protected virtual void Start() {
@@ -40,6 +38,11 @@ public class AnimationMUD : MonoBehaviour
         
         Animator = GetComponentInChildren<SPAnimator>();
         PositionSync = GetComponentInParent<PositionSync>();
+
+        head = Animator.Head;
+        headParent = head.transform.parent;
+        headPosLocal = head.localPosition;
+        headRotLocal = head.localRotation;
 
         if(entity == null) return;
         

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState } from "../codegen/Tables.sol";
@@ -8,7 +9,7 @@ import { TerrainType, PuzzleType } from "../codegen/Types.sol";
 
 import { MapSubsystem } from "./MapSubsystem.sol";
 
-import { random, randomCoord } from "../utility/random.sol";
+import { random, randomCoord, randomFromEntity } from "../utility/random.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
@@ -16,6 +17,8 @@ contract PuzzleSubsystem is System {
 
   function createRandomPuzzle(bytes32 causedBy) public {
     
+    console.log("starting puzzle");
+
     IWorld world = IWorld(_world());
 
     PuzzleType puzzleType = PuzzleType(random(0, uint32(PuzzleType.Count)));
@@ -26,36 +29,46 @@ contract PuzzleSubsystem is System {
     int32 up = Bounds.getUp();
     int32 down = Bounds.getDown();
 
-    if (puzzleType == PuzzleType.Miliarium) {
+    if (true || puzzleType == PuzzleType.Miliarium) {
         createMiliarium(causedBy, roadRight, playWidth, up, down );
     } else if(puzzleType == PuzzleType.Bearer) {
         // createBearer(causedBy);
     }
 
+    console.log("done puzzle");
+
   }
 
   function createMiliarium(bytes32 causedBy, int32 roadSide, int32 width, int32 up, int32 down) public {
 
+    console.log("miliarium");
+
     bytes32 mil = getUniqueEntity();
     bytes32 trigger = getUniqueEntity();
 
-    Position.set(mil, findEmptyPositionInArea(width, roadSide, up, down));
-    Position.set(trigger, findEmptyPositionInArea(width, roadSide, up, down));
+    Position.set(mil, findEmptyPositionInArea(mil, width, roadSide, up, down));
+    Miliarium.set(mil, true);
+    Puzzle.set(mil, trigger);
+
+    Position.set(trigger, findEmptyPositionInArea(trigger, width, roadSide, up, down));
+    Trigger.set(trigger, mil);
 
   }
 
   //finds a position and deletes the object on it
-  function findEmptyPositionInArea(int32 width, int32 roadSide, int32 up, int32 down) public returns(PositionData memory pos) {
+  function findEmptyPositionInArea(bytes32 entity, int32 width, int32 roadSide, int32 up, int32 down) public returns(PositionData memory pos) {
+
+    console.log("empty positions");
 
     bool isValid = false;
 
     while(isValid == false) {
 
-      pos = getRandomPositionNotRoad(width, roadSide, down, up);
+      pos = getRandomPositionNotRoad(entity, width, roadSide, up, down);
 
       //don't overrwrite other puzzles
       bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, 0));
-      if(atPosition.length > 0) { isValid = Puzzle.get(atPosition[0]) != bytes32(0); }
+      if(atPosition.length > 0) { isValid = Puzzle.get(atPosition[0]) != bytes32(0) && Trigger.get(atPosition[0]) != bytes32(0); }
       else {isValid = true;}
 
     }
@@ -64,11 +77,13 @@ contract PuzzleSubsystem is System {
 
   }
 
-  function getRandomPositionNotRoad(int32 width, int32 roadSide, int32 up, int32 down) public view returns(PositionData memory pos) {
+  function getRandomPositionNotRoad(bytes32 causedBy, int32 width, int32 roadSide, int32 up, int32 down) public view returns(PositionData memory pos) {
+
+    console.log("random road position");
 
     //spawn on right side
-    pos.x = int32(uint32(random(uint32(roadSide), uint32(width))));
-    pos.y = int32(uint32(random(uint32(down), uint32(up))));
+    pos.x = int32(uint32(randomFromEntity(uint32(roadSide), uint32(width), causedBy )));
+    pos.y = int32(uint32(randomFromEntity(uint32(down), uint32(up), causedBy )));
 
     //switch what side of the road we spawn on
     if(random(0,2) > 1) {
