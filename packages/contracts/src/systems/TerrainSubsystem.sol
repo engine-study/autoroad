@@ -54,7 +54,7 @@ contract TerrainSubsystem is System {
 
   }
 
-  function createMileTerrain(bytes32 causedBy) public {
+  function summonMile(bytes32 causedBy) public {
 
     //check if chunk is already spawned
     int32 mileNumber = GameState.getMiles();
@@ -68,15 +68,16 @@ contract TerrainSubsystem is System {
     int32 yBottom = mileNumber * playHeight;
     int32 yTop = int32(yBottom) + playHeight + -1;
 
+    //set new game area
+    //todo set single setters
+    Position.set(getCarriageEntity(), 0, yTop + 1, 0);
+    Bounds.set(int32(-playWidth), playWidth, yTop, yBottom);
+    Chunk.set(chunkEntity, false, mileNumber, 0, 0, true);
+
     //spawn the area
     IWorld world = IWorld(_world());
     world.createTerrain(causedBy, playWidth, yTop, yBottom);
-    
-    //set new game area
-    //todo set single setters
-    Chunk.set(chunkEntity, false, mileNumber, 0, 0, true);
-    Bounds.set(int32(-playWidth), playWidth, yTop, yBottom);
-    Position.set(getCarriageEntity(), 0, yTop + 1, 0);
+    world.createRandomPuzzle(causedBy, playWidth, yTop, yBottom);
 
   }
 
@@ -123,11 +124,11 @@ contract TerrainSubsystem is System {
           //NPCS
           NPCType npcType = NPCType.None;
 
-          if (noiseCoord > 1000 && noiseCoord <= 1025) {
+          if (noiseCoord > 1000 && noiseCoord <= 1010) {
             npcType = NPCType.Ox;
-          } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
+          } else if (noiseCoord > 1100 && noiseCoord <= 1125) {
             npcType = NPCType.Soldier;
-          } else if (noiseCoord > 1150 && noiseCoord < 1200) {
+          } else if (noiseCoord > 1150 && noiseCoord < 1175) {
             npcType = NPCType.Barbarian;
           } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
             npcType = NPCType.Player;
@@ -206,7 +207,7 @@ contract TerrainSubsystem is System {
 
   function deleteAt(int32 x, int32 y, int32 layer) public {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, layer));
-    require(atPosition.length > 0, "empty");
+    if(atPosition.length == 0) {return;}
     Position.deleteRecord(atPosition[0]);
   }
 

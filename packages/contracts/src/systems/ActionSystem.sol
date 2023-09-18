@@ -46,7 +46,7 @@ contract ActionSystem is System {
   function summonMap() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
-    world.createMileTerrain(player);
+    world.summonMile(player);
   }
 
   function action(ActionType newAction, int32 x, int32 y) public {

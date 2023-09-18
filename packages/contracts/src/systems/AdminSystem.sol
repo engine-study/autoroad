@@ -50,7 +50,7 @@ contract AdminSystem is System {
   function spawnPuzzleAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).createRandomPuzzle(player);
+    IWorld(_world()).createPuzzleOnMile(player);
   }
 
   function spawnMileAdmin() public {
