@@ -71,6 +71,8 @@ contract PuzzleSubsystem is System {
     bytes32 mil = getUniqueEntity();
     bytes32 trigger = getUniqueEntity();
 
+    console.log("miliarium");
+
     PositionData memory pos = findEmptyPositionInArea(mil, width, up, down, roadSide);
     
     //delete whatever was there and place puzzle
@@ -81,6 +83,8 @@ contract PuzzleSubsystem is System {
     Move.set(mil, uint32(MoveType.Push));
     Rock.set(mil, uint32(RockType.Miliarium));
     Puzzle.set(mil, uint32(PuzzleType.Miliarium), false);
+
+    console.log("trigger");
 
     //put triggers underground
     pos = findEmptyPositionInArea(trigger, width, up, down, roadSide);
@@ -109,12 +113,14 @@ contract PuzzleSubsystem is System {
       if(atPosition.length > 0) { 
         //check for obstructions and puzzles
         isValid = Puzzle.getPuzzleType(atPosition[0]) == 0 && Move.get(atPosition[0]) != uint32(MoveType.Obstruction); 
+        if(!isValid) {console.log("mil blocked");}
       }
       
       //check for triggers if still valid
       if(isValid) {
         bytes32[] memory atTriggerPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, -1));
         if(atTriggerPosition.length > 0) {isValid = Trigger.get(atTriggerPosition[0]) == bytes32(0);}
+        if(!isValid) {console.log("trigger blocked");}
       }
 
       attempts++;
@@ -128,12 +134,15 @@ contract PuzzleSubsystem is System {
 
   function getRandomPositionNotRoad(bytes32 causedBy, int32 width, int32 up, int32 down, int32 roadSide, uint seed) public view returns(PositionData memory pos) {
     
-    console.log("get random");
-
     //spawn on right side
     pos.x = int32(uint32(randomFromEntitySeed(uint32(roadSide), uint32(width), causedBy, seed )));
     pos.y = int32(uint32(randomFromEntitySeed(uint32(down), uint32(up), causedBy, seed )));
     pos.layer = 0;
+
+    console.log("get random");
+    console.logInt(int(pos.x));
+    console.logInt(int(pos.y));
+
     //switch what side of the road we spawn on
     if(random(1,10) > 5) {
       pos.x = int32(-pos.x);

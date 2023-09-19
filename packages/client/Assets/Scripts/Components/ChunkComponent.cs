@@ -19,7 +19,7 @@ public class ChunkComponent : MUDComponent
     [Header("State")]
     [SerializeField] protected bool completed;
     [SerializeField] protected bool spawned;
-    [SerializeField] protected int pieces;
+    [SerializeField] protected int roads;
     [SerializeField] protected int mileNumber;
     [SerializeField] protected int mileStartHeight;
     [SerializeField] protected RowComponent[] rows;
@@ -100,7 +100,7 @@ public class ChunkComponent : MUDComponent
         completed = table.completed != null ? (bool)table.completed : completed;
         spawned = table.spawned != null ? (bool)table.spawned : spawned;
         mileNumber = table.mile != null ? (int)table.mile : mileNumber;
-        pieces = table.pieces != null ? (int)table.pieces : pieces;
+        roads = table.roads != null ? (int)table.roads : roads;
 
         Debug.Log("CHUNK " + mileNumber + " Completed: " + completed.ToString() + " Spawned: " + spawned.ToString(), this);
 

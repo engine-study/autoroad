@@ -70,7 +70,7 @@ contract TerrainSubsystem is System {
     // GameState.setMiles(newMile);
 
     //create the chunk
-    Chunk.set(newChunk, false, newMile, 0, 0, false);
+    Chunk.set(newChunk, newMile, false, false,  0, 0);
 
   }
 
@@ -99,10 +99,15 @@ contract TerrainSubsystem is System {
 
     //spawn the area
     IWorld world = IWorld(_world());
+
+    console.log("create terrain");
     world.createTerrain(causedBy, playWidth, yTop, yBottom);
+
+    console.log("create puzzle");
     world.createRandomPuzzle(causedBy, playWidth, yTop, yBottom);
 
-    Chunk.set(chunkEntity, false, mileNumber, 0, 0, true);
+    console.log("set chunk");
+    Chunk.set(chunkEntity, mileNumber, true, false, 0, 0);
 
   }
 
@@ -151,9 +156,9 @@ contract TerrainSubsystem is System {
 
           if (noiseCoord > 1000 && noiseCoord <= 1010) {
             npcType = NPCType.Ox;
-          } else if (noiseCoord > 1100 && noiseCoord <= 1125) {
+          } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
             npcType = NPCType.Soldier;
-          } else if (noiseCoord > 1150 && noiseCoord < 1175) {
+          } else if (noiseCoord > 1150 && noiseCoord < 1200) {
             npcType = NPCType.Barbarian;
           } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
             npcType = NPCType.Player;
@@ -272,7 +277,7 @@ contract TerrainSubsystem is System {
     (int32 currentMile, ) = GameState.get();
     bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
 
-    uint32 pieces = Chunk.getPieces(chunk);
+    uint32 pieces = Chunk.getRoads(chunk);
     int32 playHeight = MapConfig.getPlayHeight();
     uint32 roadWidth = RoadConfig.getWidth();
 
@@ -282,7 +287,7 @@ contract TerrainSubsystem is System {
     if (pieces >= (roadWidth * uint32(playHeight))) {
       finishMile(chunk, currentMile, pieces);
     } else {
-      Chunk.set(chunk, false, currentMile, pieces, 0, true);
+      Chunk.set(chunk, currentMile, true, false, pieces, 0);
     }
   }
 
@@ -290,7 +295,7 @@ contract TerrainSubsystem is System {
     console.log("finish chunk");
     console.logInt(currentMile);
 
-    Chunk.set(chunk, true, currentMile, pieces, block.number, true);
+    Chunk.set(chunk, currentMile, true, true, pieces, block.number);
     contemplateMile(currentMile);
 
     currentMile += 1;

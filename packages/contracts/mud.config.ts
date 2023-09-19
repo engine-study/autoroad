@@ -134,11 +134,11 @@ export default mudConfig({
       openAccess: false, // it's a subsystem now!
       dataStruct: false,
       schema: {
-        completed: "bool",
         mile: "int32",
-        pieces: "uint32",
-        blockCompleted: "uint256",
         spawned: "bool",
+        completed: "bool",
+        roads: "uint32",
+        blockCompleted: "uint256",
 
         // // dynamic list of people who have helped build the mile
         // entities: "bytes32[]",
