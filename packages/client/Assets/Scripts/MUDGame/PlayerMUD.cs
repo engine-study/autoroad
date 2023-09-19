@@ -99,7 +99,7 @@ public class PlayerMUD : SPPlayer
             Actor.InputClick(0, Reciever.TargetInteract);
         }
 
-        if(Sync.Moving == false && action.Action == ActionName.Idle) {
+        if(Sync.Moving == false) {
             //update rotation based on mouseInput
             // Determine the new rotation
             Vector3 mouseDir = SPInput.MousePlanePos - transform.position;

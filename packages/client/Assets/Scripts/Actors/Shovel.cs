@@ -14,8 +14,9 @@ public class Shovel : Equipment
     }
 
     public override async UniTask<bool> Use() {
-        int x = (int)transform.position.x;
-        int y = (int)transform.position.z;
+
+        int x = (int)CursorMUD.GridPos.x;
+        int y = (int)CursorMUD.GridPos.z;
 
         Debug.Log("Shoveled: " + x + "," + y);
         

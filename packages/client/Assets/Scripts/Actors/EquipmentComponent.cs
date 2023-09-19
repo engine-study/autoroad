@@ -27,8 +27,9 @@ public class EquipmentComponent : Equipment
     }
 
     public override async UniTask<bool> Use() {
-        int x = (int)transform.position.x;
-        int y = (int)transform.position.z;
+
+        int x = (int)CursorMUD.GridPos.x;
+        int y = (int)CursorMUD.GridPos.z;
 
         Debug.Log(action.ToString() + ": " + x + "," + y);
                 

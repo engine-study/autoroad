@@ -202,22 +202,12 @@ namespace IWorld.ContractDefinition
         public virtual uint PlayHeight { get; set; }
     }
 
-    public partial class CreateMapFunction : CreateMapFunctionBase { }
-
-    [Function("createMap")]
-    public class CreateMapFunctionBase : FunctionMessage
-    {
-        [Parameter("address", "worldAddress", 1)]
-        public virtual string WorldAddress { get; set; }
-    }
-
     public partial class CreateMileFunction : CreateMileFunctionBase { }
 
     [Function("createMile")]
     public class CreateMileFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "mileNumber", 1)]
-        public virtual int MileNumber { get; set; }
+
     }
 
     public partial class CreateMiliariumFunction : CreateMiliariumFunctionBase { }
@@ -274,6 +264,15 @@ namespace IWorld.ContractDefinition
         public virtual int Up { get; set; }
         [Parameter("int32", "down", 4)]
         public virtual int Down { get; set; }
+    }
+
+    public partial class CreateWorldFunction : CreateWorldFunctionBase { }
+
+    [Function("createWorld")]
+    public class CreateWorldFunctionBase : FunctionMessage
+    {
+        [Parameter("address", "worldAddress", 1)]
+        public virtual string WorldAddress { get; set; }
     }
 
     public partial class DebugMileFunction : DebugMileFunctionBase { }

@@ -454,35 +454,14 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
         }
 
-        public Task<string> CreateMapRequestAsync(CreateMapFunction createMapFunction)
-        {
-             return ContractHandler.SendRequestAsync(createMapFunction);
-        }
-
-        public Task<TransactionReceipt> CreateMapRequestAndWaitForReceiptAsync(CreateMapFunction createMapFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createMapFunction, cancellationToken);
-        }
-
-        public Task<string> CreateMapRequestAsync(string worldAddress)
-        {
-            var createMapFunction = new CreateMapFunction();
-                createMapFunction.WorldAddress = worldAddress;
-            
-             return ContractHandler.SendRequestAsync(createMapFunction);
-        }
-
-        public Task<TransactionReceipt> CreateMapRequestAndWaitForReceiptAsync(string worldAddress, CancellationTokenSource cancellationToken = null)
-        {
-            var createMapFunction = new CreateMapFunction();
-                createMapFunction.WorldAddress = worldAddress;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createMapFunction, cancellationToken);
-        }
-
         public Task<string> CreateMileRequestAsync(CreateMileFunction createMileFunction)
         {
              return ContractHandler.SendRequestAsync(createMileFunction);
+        }
+
+        public Task<string> CreateMileRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<CreateMileFunction>();
         }
 
         public Task<TransactionReceipt> CreateMileRequestAndWaitForReceiptAsync(CreateMileFunction createMileFunction, CancellationTokenSource cancellationToken = null)
@@ -490,20 +469,9 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createMileFunction, cancellationToken);
         }
 
-        public Task<string> CreateMileRequestAsync(int mileNumber)
+        public Task<TransactionReceipt> CreateMileRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
         {
-            var createMileFunction = new CreateMileFunction();
-                createMileFunction.MileNumber = mileNumber;
-            
-             return ContractHandler.SendRequestAsync(createMileFunction);
-        }
-
-        public Task<TransactionReceipt> CreateMileRequestAndWaitForReceiptAsync(int mileNumber, CancellationTokenSource cancellationToken = null)
-        {
-            var createMileFunction = new CreateMileFunction();
-                createMileFunction.MileNumber = mileNumber;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createMileFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<CreateMileFunction>(null, cancellationToken);
         }
 
         public Task<string> CreateMiliariumRequestAsync(CreateMiliariumFunction createMiliariumFunction)
@@ -628,6 +596,32 @@ namespace IWorld.Service
                 createTerrainFunction.Down = down;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createTerrainFunction, cancellationToken);
+        }
+
+        public Task<string> CreateWorldRequestAsync(CreateWorldFunction createWorldFunction)
+        {
+             return ContractHandler.SendRequestAsync(createWorldFunction);
+        }
+
+        public Task<TransactionReceipt> CreateWorldRequestAndWaitForReceiptAsync(CreateWorldFunction createWorldFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createWorldFunction, cancellationToken);
+        }
+
+        public Task<string> CreateWorldRequestAsync(string worldAddress)
+        {
+            var createWorldFunction = new CreateWorldFunction();
+                createWorldFunction.WorldAddress = worldAddress;
+            
+             return ContractHandler.SendRequestAsync(createWorldFunction);
+        }
+
+        public Task<TransactionReceipt> CreateWorldRequestAndWaitForReceiptAsync(string worldAddress, CancellationTokenSource cancellationToken = null)
+        {
+            var createWorldFunction = new CreateWorldFunction();
+                createWorldFunction.WorldAddress = worldAddress;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createWorldFunction, cancellationToken);
         }
 
         public Task<string> DebugMileRequestAsync(DebugMileFunction debugMileFunction)

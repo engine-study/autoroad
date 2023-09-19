@@ -38,7 +38,7 @@ public class Cosmetic : MonoBehaviour
             smr.bones = oldSMR.bones;
         }
 
-        SPAnimator.SetToPlayerLayer(newBody);
+        SPAnimator.SetToCharacterRenderLayer(newBody);
 
         activeBody.SetActive(true);
         activeBody.transform.parent = bodyParent;

@@ -19,16 +19,23 @@ public class MiliariumComponent : MUDComponent {
         Entity.SetName("Milliarium");
 
         puzzle = Entity.GetMUDComponent<PuzzleComponent>();
-
+        puzzle.OnUpdated += UpdatePuzzleState;
         UpdatePuzzleState();
     }
-    
+
+    protected override void InitDestroy()
+    {
+        base.InitDestroy();
+        puzzle.OnUpdated -= UpdatePuzzleState;
+    }
+
+
     protected override IMudTable GetTable() {return new MiliariumTable();}
 
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         MiliariumTable table = update as MiliariumTable;
-        UpdatePuzzleState();
+
     }
 
     void UpdatePuzzleState() {

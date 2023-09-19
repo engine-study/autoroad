@@ -46,9 +46,7 @@ public class PositionSync : ComponentSync
     protected override void Awake() {
         base.Awake();
 
-        if(target == null) {
-            target = transform;
-        }
+        if(target == null) { target = transform; }
     }
 
     protected override void InitComponents() {
@@ -72,6 +70,7 @@ public class PositionSync : ComponentSync
 
         if(useLine) {
             line = ((GameObject)(Instantiate(Resources.Load("Prefabs/LinePosition"), transform))).GetComponent<LineRenderer>();
+            line.enabled = false;
         }
 
         gameObject.SetActive(IsVisible());
@@ -94,18 +93,14 @@ public class PositionSync : ComponentSync
 
         if (syncType == ComponentSyncType.Lerp) {
            
-            if(target.position != TargetPos) {
-
-                StartMove();
-                // if (moving) { StartModifiedMove(); }
-                // else { StartMove(); }
-            }
+            // if(target.position != TargetPos) StartMove();
+            StartMove();
 
         } else if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
+
             target.position = pos.Pos;
-            if(moving) {
-                EndMove();
-            }
+            if(moving) { EndMove(); }
+
         }
 
     }

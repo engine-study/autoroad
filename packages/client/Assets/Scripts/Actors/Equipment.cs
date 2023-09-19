@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using mud.Client;
-public abstract class Equipment : MonoBehaviour
-{
+
+public abstract class Equipment : MonoBehaviour {
 
     public SPActor Sender {get{return sender;}}
     public SPInteract Interact {get{return interact;}}

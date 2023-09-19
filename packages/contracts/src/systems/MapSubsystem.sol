@@ -32,12 +32,4 @@ contract MapSubsystem is System {
     return (x > playWidth && x <= spawnWidth) && (y <= up && y >= down);
   }
 
-  //create any entity that exists always 
-  function createMap(address worldAddress) public {
-
-    IWorld world = IWorld(worldAddress);
-    Carriage.set(world.getCarriageEntity(), true);
-
-  }
-
 }

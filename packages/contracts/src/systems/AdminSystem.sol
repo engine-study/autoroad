@@ -56,8 +56,7 @@ contract AdminSystem is System {
   function spawnMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    int32 nextMile = GameState.getMiles() + 1;
-    IWorld(_world()).createMile(nextMile);
+    IWorld(_world()).createMile();
   }
 
   function finishMileAdmin() public {

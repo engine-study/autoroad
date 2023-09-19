@@ -6,7 +6,7 @@ using DefaultNamespace;
 using mud.Unity;
 using IWorld.ContractDefinition;
 
-public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, _Count }
+public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, Miliarium, Lapis, Saxum, Columna, _Count }
 public class RockComponent : MUDComponent {
 
     public RockType RockType {get { return rockType; } }
@@ -75,13 +75,13 @@ public class RockComponent : MUDComponent {
         }
 
         gameObject.SetActive(rockType < RockType.Rudus);
+        flash.SetTarget(stages[(int)rockType]);
 
     }
 
     protected override void UpdateComponentRich() {
         base.UpdateComponentRich();
 
-        flash.SetTarget(stages[(int)rockType].GetComponent<RandomSelector>()?.ActiveChild);
         flash.Flash();
         fx_break.Play();
 

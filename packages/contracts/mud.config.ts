@@ -51,7 +51,7 @@ export default mudConfig({
     TerrainType: ["None", "Rock", "Mine", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Miliarium"],
     NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
-    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus"],
+    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar"],
     AnimationType: ["Walk", "Hop", "Teleport", "Push"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],

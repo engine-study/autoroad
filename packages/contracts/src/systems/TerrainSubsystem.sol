@@ -30,27 +30,47 @@ contract TerrainSubsystem is System {
     return x >= RoadConfig.getLeft() && x <= RoadConfig.getRight();
   }
 
-  function createMile(int32 mileNumber) public {
+  function createWorld(address worldAddress) public {
+    IWorld world = IWorld(worldAddress);
+
+    bool debug = true; 
+    bool dummyPlayers = true; 
+    bool roadComplete = true; 
+
+    GameState.set(world, int32(-1), 0);
+    GameConfig.set(world, debug, dummyPlayers, roadComplete);
+    MapConfig.set(world, 10, 10, 13);
+    RoadConfig.set(world, 3, -1, 1);
+
+    Carriage.set(world.getCarriageEntity(), true);
+
+  }
+
+  function createMile() public {
+
     IWorld world = IWorld(_world());
-    int32 currentMile = GameState.getMiles();
+    int32 oldMile = GameState.getMiles();
+    int32 newMile = oldMile + 1;
+    bytes32 oldChunk = getChunkEntity(oldMile);
 
-    console.log("create mile");
-    console.logInt(mileNumber);
-    console.log("current mile");
-    console.logInt(currentMile);
+    require(oldMile == -1 || Chunk.getCompleted(oldChunk) == true , "fatal, mile not complete");
 
-    require(mileNumber > currentMile, "creating mile again");
+    console.log("old mile");
+    console.logInt(oldMile);
+
+    console.log("new mile");
+    console.logInt(newMile);
 
     //create an entity for the chunk itself
-    bytes32 chunkEntity = getChunkEntity(mileNumber);
+    bytes32 newChunk = getChunkEntity(newMile);
 
     //TODO simple setter
     int32 players = GameState.getPlayerCount();
-    GameState.set(mileNumber, players);
-    // GameState.setMiles(mileNumber);
+    GameState.set(newMile, players);
+    // GameState.setMiles(newMile);
 
     //create the chunk
-    Chunk.set(chunkEntity, false, mileNumber, 0, 0, false);
+    Chunk.set(newChunk, false, newMile, 0, 0, false);
 
   }
 
@@ -59,7 +79,11 @@ contract TerrainSubsystem is System {
     //check if chunk is already spawned
     int32 mileNumber = GameState.getMiles();
     bytes32 chunkEntity = getChunkEntity(mileNumber);
-    require(Chunk.getSpawned(chunkEntity) == false, "already spawned");
+    
+    require(mileNumber > -1, "fatal, mile not created");
+    require(Chunk.getMile(chunkEntity) == mileNumber, "fatal, mile number doesn't match");
+    require(Chunk.getCompleted(chunkEntity) == false, "fatal, already completed");
+    require(Chunk.getSpawned(chunkEntity) == false, "fatal, already spawned");
 
     //calculate new map bounds based on chunk
     //eventually maybe should use Bounds to calculate so we can add rest sections?
@@ -72,12 +96,13 @@ contract TerrainSubsystem is System {
     //todo set single setters
     Position.set(getCarriageEntity(), 0, yTop + 1, 0);
     Bounds.set(int32(-playWidth), playWidth, yTop, yBottom);
-    Chunk.set(chunkEntity, false, mileNumber, 0, 0, true);
 
     //spawn the area
     IWorld world = IWorld(_world());
     world.createTerrain(causedBy, playWidth, yTop, yBottom);
     world.createRandomPuzzle(causedBy, playWidth, yTop, yBottom);
+
+    Chunk.set(chunkEntity, false, mileNumber, 0, 0, true);
 
   }
 
@@ -182,14 +207,17 @@ contract TerrainSubsystem is System {
     } else if (tType == TerrainType.Tree) {
       world.spawnFlora(player, entity, x, y);
     } else if (tType == TerrainType.HeavyBoy) {
+      Rock.set(entity, uint32(RockType.Heavy));
       Boulder.set(entity, true);
       Weight.set(entity, 3);
       Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.HeavyHeavyBoy) {
+      Rock.set(entity, uint32(RockType.HeavyHeavy));
       Boulder.set(entity, true);
       Weight.set(entity, 5);
       Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.Pillar) {
+      Rock.set(entity, uint32(RockType.Pillar));
       Boulder.set(entity, true);
       Weight.set(entity, 99);
       Move.set(entity, uint32(MoveType.Obstruction));
@@ -267,7 +295,7 @@ contract TerrainSubsystem is System {
 
     currentMile += 1;
 
-    createMile(currentMile);
+    createMile();
   }
 
   function debugMile(bytes32 credit) public {

@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight } from "../codegen/Tables.sol";
+import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/Tables.sol";
 import { Puzzle, Trigger, Miliarium } from "../codegen/Tables.sol";
-import { TerrainType, PuzzleType, MoveType } from "../codegen/Types.sol";
+import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/Types.sol";
 
 import { MapSubsystem } from "./MapSubsystem.sol";
 
@@ -43,12 +43,15 @@ contract PuzzleSubsystem is System {
     createRandomPuzzle(causedBy, playWidth, up, down);
   }
 
+
   function createRandomPuzzle(bytes32 causedBy, int32 playWidth, int32 up, int32 down ) public {
     
     IWorld world = IWorld(_world());
 
     PuzzleType puzzleType = PuzzleType(random(0, uint32(PuzzleType.Count)));
     int32 roadRight = RoadConfig.getRight();
+
+    console.log("create puzzle");
 
     //use mile number to spawn puzzles?
     // int32 mileNumber = GameState.getMiles();
@@ -76,6 +79,7 @@ contract PuzzleSubsystem is System {
     Miliarium.set(mil, true);
     Weight.set(mil, 1);
     Move.set(mil, uint32(MoveType.Push));
+    Rock.set(mil, uint32(RockType.Miliarium));
     Puzzle.set(mil, uint32(PuzzleType.Miliarium), false);
 
     //put triggers underground
@@ -89,6 +93,8 @@ contract PuzzleSubsystem is System {
 
   //finds a position and deletes the object on it
   function findEmptyPositionInArea(bytes32 entity, int32 width, int32 up, int32 down, int32 roadSide) public returns(PositionData memory pos) {
+
+    console.log("find empty pos");
 
     bool isValid = false;
     uint attempts = 0;
@@ -121,6 +127,8 @@ contract PuzzleSubsystem is System {
   }
 
   function getRandomPositionNotRoad(bytes32 causedBy, int32 width, int32 up, int32 down, int32 roadSide, uint seed) public view returns(PositionData memory pos) {
+    
+    console.log("get random");
 
     //spawn on right side
     pos.x = int32(uint32(randomFromEntitySeed(uint32(roadSide), uint32(width), causedBy, seed )));
