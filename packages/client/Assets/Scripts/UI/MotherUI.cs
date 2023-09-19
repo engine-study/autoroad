@@ -23,6 +23,8 @@ public class MotherUI : SPUIInstance {
 
     [Header("Menu")]
     public MenuUI menu;
+    public GameObject menusParent;
+    public SPWindow debugButton;
     public DebugUI debug;
     public WorldUI playerInfo;
 
@@ -34,17 +36,22 @@ public class MotherUI : SPUIInstance {
     public AudioClip sfx_spawn;
     public AudioClip sfx_start;
 
-    List<SPWindowParent> gameMenus = new List<SPWindowParent>();
+    List<SPWindowParent> gameMenus;
 
     protected override void Awake() {
         base.Awake();
 
+        SPGlobal.OnDebug += OnDebug;
+        OnDebug(SPGlobal.IsDebug);
+
         Mother = this;
 
-        gameMenus.Add(store);
-        gameMenus.Add(debug);
-        gameMenus.Add(menu);
-
+        gameMenus = new List<SPWindowParent>();
+        for(int i = 0; i < menusParent.transform.childCount; i++) {
+            SPWindowParent menuWindow = menusParent.transform.GetChild(i).GetComponent<SPWindowParent>();
+            if(menuWindow) gameMenus.Add(menuWindow);
+        }
+        
         foreach(SPWindowParent w in gameMenus) {
             w.ToggleWindowClose();
         }
@@ -53,13 +60,29 @@ public class MotherUI : SPUIInstance {
         TogglePlayerCreation(false);
         TogglePlayerSpawning(false);
         ToggleRespawn(false);
-        tutorial.ToggleWindowClose();
 
         ToggleGame(false);
 
         SPEvents.OnServerLoaded += ShowServer;
         SPEvents.OnLocalPlayerSpawn += SpawnPlayer;
 
+    }
+
+    protected override void Start() {
+        base.Start();
+                
+        tutorial.ToggleWindowClose();
+
+    }
+
+    void Update() {
+        if(Input.GetKeyDown(KeyCode.BackQuote) && Input.GetKey(KeyCode.LeftShift)) {
+            SPGlobal.ToggleDebug(!SPGlobal.IsDebug);
+        }
+    }
+
+    void OnDebug(bool toggle) {
+        debugButton.ToggleWindow(toggle);
     }
 
     protected override void OnDestroy() {

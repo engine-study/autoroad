@@ -15,7 +15,7 @@ public class GameUI : SPWindowParent
     public SPButton storeButton;
     public SPButton debugButton;
     public SPButton menuButton;
-
+    
     public GameObject teleportUI;
 
 
@@ -71,7 +71,6 @@ public class GameUI : SPWindowParent
     public void ToggleMenu() {
         MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.menu);
     }
-
 
     public void ToggleDebug() {
         MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.debug);

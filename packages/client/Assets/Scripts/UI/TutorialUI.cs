@@ -60,13 +60,14 @@ public class TutorialUI : SPWindowParent
             SPCamera.SetFollow(null);
             SPCamera.SetFOVGlobal(5f);
             SPCamera.SetTarget(tutorialParent.transform.position); //+ Vector3.right * tutorialText.Index * distance + Vector3.down * vertical
-
+            SPUIBase.ToggleMotherUI(false);
             ShowTutorial();
 
         } else {
             SPCamera.SetFollow(null);
             SPCamera.SetTarget(Vector3.zero);
             SPCamera.SetFOVGlobal(10f);
+            SPUIBase.ToggleMotherUI(true);
         }
 
         SPCamera.ToggleScroll(!toggle);
