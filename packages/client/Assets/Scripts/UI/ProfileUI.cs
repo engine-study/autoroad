@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using mud.Unity;
 using UnityEngine;
 
-public class ProfileUI : SPWindow
+public class ProfileUI : SPWindowParent
 {
     [Header("Profile")]
     public SPInputField nameField;
@@ -24,8 +24,15 @@ public class ProfileUI : SPWindow
 
     }
 
+    protected override void Start() {
+        base.Start();
+
+        UpdateAddress();
+        UpdateName();
+    }
+
     void UpdateAddress() {
-        publicKeyField.UpdateField(NetworkManager.LocalAddress);
+        publicKeyField.UpdateField(NetworkManager.LocalAddressNotKey);
     }
 
     void UpdateName() {

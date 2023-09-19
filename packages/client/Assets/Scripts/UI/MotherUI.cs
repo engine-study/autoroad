@@ -27,6 +27,8 @@ public class MotherUI : SPUIInstance {
     public SPWindow debugButton;
     public DebugUI debug;
     public WorldUI playerInfo;
+    [Header("Profile")]
+    public ProfileUI profile;
 
     [Header("Store")]
     public StoreUI store;
@@ -36,7 +38,7 @@ public class MotherUI : SPUIInstance {
     public AudioClip sfx_spawn;
     public AudioClip sfx_start;
 
-    List<SPWindowParent> gameMenus;
+    public List<SPWindowParent> gameMenus;
 
     protected override void Awake() {
         base.Awake();
@@ -49,12 +51,14 @@ public class MotherUI : SPUIInstance {
         gameMenus = new List<SPWindowParent>();
         for(int i = 0; i < menusParent.transform.childCount; i++) {
             SPWindowParent menuWindow = menusParent.transform.GetChild(i).GetComponent<SPWindowParent>();
-            if(menuWindow) gameMenus.Add(menuWindow);
+            if(menuWindow != null) gameMenus.Add(menuWindow);
         }
         
         foreach(SPWindowParent w in gameMenus) {
             w.ToggleWindowClose();
         }
+
+        profile.ToggleWindowClose();
 
         ToggleLoading(true);
         TogglePlayerCreation(false);
