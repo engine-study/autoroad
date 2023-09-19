@@ -200,7 +200,7 @@ public class ControllerMUD : SPController {
                 return;
             }
 
-            Debug.Log("Walk TX (" + (int)transform.position.x + "," + (int)transform.position.z + ") to (" + (int)movePos.x + "," + (int)movePos.z );
+            Debug.Log("Walk TX (" + (int)transform.position.x + "," + (int)transform.position.z + ") to (" + (int)movePos.x + "," + (int)movePos.z + ")");
             List<TxUpdate> updates = new List<TxUpdate>() { ActionsMUD.PositionOptimistic(mudEntity, movePos) };
             ActionsMUD.ActionTx(mudEntity, ActionName.Walking, movePos, updates);
 

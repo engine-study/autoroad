@@ -10,11 +10,17 @@ public class TutorialUI : SPWindowParent
     [SerializeField] Transform tutorialTransform;
     [SerializeField] GameObject [] tutorials;
     float vertical = 1f;
+    float distance = 25f;
     bool hasStarted = false;
     Vector3 targetPos;
 
     protected override void Awake() {
         base.Awake();
+
+        for(int i = 0; i < tutorials.Length; i++) {
+            tutorials[i].transform.localPosition = Vector3.zero;
+        }
+
         tutorialText.OnUpdated += ShowTutorial;
     }
 
@@ -52,8 +58,10 @@ public class TutorialUI : SPWindowParent
         if(toggle) {
             tutorialTransform.localPosition = targetPos;
             SPCamera.SetFollow(null);
-            SPCamera.SetTarget(tutorialParent.transform.position + Vector3.up * vertical);
             SPCamera.SetFOVGlobal(5f);
+            SPCamera.SetTarget(tutorialParent.transform.position); //+ Vector3.right * tutorialText.Index * distance + Vector3.down * vertical
+
+            ShowTutorial();
 
         } else {
             SPCamera.SetFollow(null);
@@ -66,17 +74,12 @@ public class TutorialUI : SPWindowParent
 
     }
 
-    void Update() {
-        tutorialTransform.localPosition = Vector3.Lerp(tutorialTransform.localPosition, targetPos, .05f);
-    }
-
     void ShowTutorial() {
 
-        targetPos = Vector3.left * tutorialText.Index * 10f;
 
-        // for(int i = 0; i < tutorials.Length; i++) {
-        //     tutorials[i].SetActive(i == tutorialText.Index);
-        // }
+        for(int i = 0; i < tutorials.Length; i++) {
+            tutorials[i].SetActive(i == tutorialText.Index);
+        }
     }
 
 }

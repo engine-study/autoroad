@@ -112,7 +112,7 @@ contract PuzzleSubsystem is System {
       bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, 0));
       if(atPosition.length > 0) { 
         //check for obstructions and puzzles
-        isValid = Puzzle.getPuzzleType(atPosition[0]) == 0 && Move.get(atPosition[0]) != uint32(MoveType.Obstruction); 
+        isValid = Puzzle.getPuzzleType(atPosition[0]) == uint32(PuzzleType.None) && Move.get(atPosition[0]) != uint32(MoveType.Obstruction); 
         if(!isValid) {console.log("mil blocked");}
       }
       
