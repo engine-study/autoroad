@@ -16,7 +16,7 @@ public class GameUI : SPWindowParent
     public SPButton debugButton;
     public SPButton menuButton;
     
-    public GameObject teleportUI;
+    public TeleportUI teleportUI;
 
 
     public override void Init() {
@@ -26,7 +26,7 @@ public class GameUI : SPWindowParent
         UpdateScrolls();
         UpdateSeeds();
 
-        teleportUI.SetActive(false);
+        teleportUI.ToggleWindowClose();
 
         CoinComponent.OnLocalUpdate += UpdateCoins;
         ScrollComponent.OnLocalUpdate += UpdateScrolls;
@@ -62,25 +62,6 @@ public class GameUI : SPWindowParent
 
     public void SendCoin() {
 
-    }
-
-    public void ToggleStore() {
-        MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.store);
-    }
-
-    public void ToggleMenu() {
-        MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.menu);
-    }
-
-    public void ToggleDebug() {
-        MotherUI.Mother.ToggleMenuWindow(MotherUI.Mother.debug);
-    }
-
-    public void ToggleTeleport() {
-        teleportUI.SetActive(!teleportUI.activeSelf);
-    }
-    public void ToggleTeleport(bool toggle) {
-        teleportUI.SetActive(toggle);
     }
 
 }

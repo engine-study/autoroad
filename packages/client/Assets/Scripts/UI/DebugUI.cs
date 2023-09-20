@@ -7,7 +7,7 @@ using IWorld.ContractDefinition;
 public class DebugUI : SPWindowParent
 {
     public void RespawnPlayer() {
-        TxManager.SendDirect<DestroyPlayerAdminFunction>();
+        TxManager.SendDirect<KillPlayerAdminFunction>(PositionComponent.PositionToTransaction(CursorMUD.GridPos));
     }
 
     public void GiveCoins() {

@@ -702,6 +702,17 @@ namespace IWorld.ContractDefinition
         public virtual PositionData Pos { get; set; }
     }
 
+    public partial class KillPlayerAdminFunction : KillPlayerAdminFunctionBase { }
+
+    [Function("killPlayerAdmin")]
+    public class KillPlayerAdminFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class KillRewardsFunction : KillRewardsFunctionBase { }
 
     [Function("killRewards")]
@@ -1134,6 +1145,14 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32[]", "at", 1)]
         public virtual List<byte[]> At { get; set; }
+    }
+
+    public partial class ResetPlayerFunction : ResetPlayerFunctionBase { }
+
+    [Function("resetPlayer")]
+    public class ResetPlayerFunctionBase : FunctionMessage
+    {
+
     }
 
     public partial class RevokeAccessFunction : RevokeAccessFunctionBase { }
@@ -2116,6 +2135,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class NeumanNeighborhoodOutputDTO : NeumanNeighborhoodOutputDTOBase { }
 
     [FunctionOutput]
@@ -2211,6 +2232,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

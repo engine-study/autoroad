@@ -29,6 +29,14 @@ contract ActionSystem is System {
 
   }
 
+  function resetPlayer() public {
+    bytes32 entity = addressToEntityKey(address(_msgSender()));
+    IWorld world = IWorld(_world());
+    PositionData memory pos = Position.get(entity);
+    world.kill(entity, entity, entity, pos);
+
+  } 
+
   function spawn(int32 x, int32 y) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());

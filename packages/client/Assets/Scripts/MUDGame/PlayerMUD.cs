@@ -95,6 +95,10 @@ public class PlayerMUD : SPPlayer
     protected override void UpdateInput() {
         base.UpdateInput();
 
+        if(AnimationMUD.Action == ActionName.Dead) {
+            return;
+        }
+
         if (Reciever.TargetGO) {
             Actor.InputClick(0, Reciever.TargetInteract);
         }

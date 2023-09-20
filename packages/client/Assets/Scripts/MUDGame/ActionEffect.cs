@@ -19,7 +19,7 @@ public class ActionEffect : MonoBehaviour {
         if(moveEffect) moveEffect.active = false;
     }
     
-    public void Toggle(bool toggle, AnimationMUD animation) {
+    public virtual void Toggle(bool toggle, AnimationMUD animation) {
 
         setup = animation;
 

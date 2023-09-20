@@ -38,7 +38,6 @@ public class MotherUI : SPUIInstance {
     public AudioClip sfx_spawn;
     public AudioClip sfx_start;
 
-    public List<SPWindowParent> gameMenus;
 
     protected override void Awake() {
         base.Awake();
@@ -47,16 +46,6 @@ public class MotherUI : SPUIInstance {
         OnDebug(SPGlobal.IsDebug);
 
         Mother = this;
-
-        gameMenus = new List<SPWindowParent>();
-        for(int i = 0; i < menusParent.transform.childCount; i++) {
-            SPWindowParent menuWindow = menusParent.transform.GetChild(i).GetComponent<SPWindowParent>();
-            if(menuWindow != null) gameMenus.Add(menuWindow);
-        }
-        
-        foreach(SPWindowParent w in gameMenus) {
-            w.ToggleWindowClose();
-        }
 
         profile.ToggleWindowClose();
 
@@ -142,15 +131,6 @@ public class MotherUI : SPUIInstance {
     public static void ToggleGame(bool toggle) {
         Mother.playerInfo.ToggleWindow(!toggle);
         Mother.game.ToggleWindow(toggle);
-    }
-    
-    public void ToggleMenuWindow(SPWindowParent open) {
-        open.ToggleWindow();
-        foreach(SPWindowParent w in gameMenus) {
-            if(w != open) {
-                w.ToggleWindowClose();
-            }
-        }
     }
 
     void SpawnPlayer() {

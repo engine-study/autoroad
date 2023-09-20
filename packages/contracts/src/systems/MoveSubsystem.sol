@@ -375,12 +375,13 @@ contract MoveSubsystem is System {
   function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
     IWorld world = IWorld(_world());
 
+    world.setAction(target, ActionType.Dead, pos.x, pos.y);
+
     //kill target
     Health.set(target, -1);
     Position.deleteRecord(target);
 
     //set to dead
-    world.setAction(target, ActionType.Dead, pos.x, pos.y);
     world.killRewards(causedBy, target, attacker);
 
     //spawn bones

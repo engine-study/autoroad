@@ -1515,6 +1515,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(killFunction, cancellationToken);
         }
 
+        public Task<string> KillPlayerAdminRequestAsync(KillPlayerAdminFunction killPlayerAdminFunction)
+        {
+             return ContractHandler.SendRequestAsync(killPlayerAdminFunction);
+        }
+
+        public Task<TransactionReceipt> KillPlayerAdminRequestAndWaitForReceiptAsync(KillPlayerAdminFunction killPlayerAdminFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(killPlayerAdminFunction, cancellationToken);
+        }
+
+        public Task<string> KillPlayerAdminRequestAsync(int x, int y)
+        {
+            var killPlayerAdminFunction = new KillPlayerAdminFunction();
+                killPlayerAdminFunction.X = x;
+                killPlayerAdminFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(killPlayerAdminFunction);
+        }
+
+        public Task<TransactionReceipt> KillPlayerAdminRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var killPlayerAdminFunction = new KillPlayerAdminFunction();
+                killPlayerAdminFunction.X = x;
+                killPlayerAdminFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(killPlayerAdminFunction, cancellationToken);
+        }
+
         public Task<string> KillRewardsRequestAsync(KillRewardsFunction killRewardsFunction)
         {
              return ContractHandler.SendRequestAsync(killRewardsFunction);
@@ -2372,6 +2400,26 @@ namespace IWorld.Service
                 requirePushableOrEmptyFunction.At = at;
             
             return ContractHandler.QueryAsync<RequirePushableOrEmptyFunction, bool>(requirePushableOrEmptyFunction, blockParameter);
+        }
+
+        public Task<string> ResetPlayerRequestAsync(ResetPlayerFunction resetPlayerFunction)
+        {
+             return ContractHandler.SendRequestAsync(resetPlayerFunction);
+        }
+
+        public Task<string> ResetPlayerRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<ResetPlayerFunction>();
+        }
+
+        public Task<TransactionReceipt> ResetPlayerRequestAndWaitForReceiptAsync(ResetPlayerFunction resetPlayerFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(resetPlayerFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> ResetPlayerRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<ResetPlayerFunction>(null, cancellationToken);
         }
 
         public Task<string> RevokeAccessRequestAsync(RevokeAccessFunction revokeAccessFunction)

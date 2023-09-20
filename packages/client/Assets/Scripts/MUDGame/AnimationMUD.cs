@@ -101,6 +101,7 @@ public class AnimationMUD : MonoBehaviour
 
         if(toggle) {
             headRB.isKinematic = false;
+            headRB.velocity = Random.onUnitSphere * .1f;
             head.parent = transform;
         } else {
             //set head back to where its supposed to be
