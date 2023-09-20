@@ -6,7 +6,7 @@ import { console } from "forge-std/console.sol";
 
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/Tables.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/Tables.sol";
-import { Position, PositionData, PositionTableId, Tree, Seeds } from "../codegen/Tables.sol";
+import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/Tables.sol";
 import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/Types.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
@@ -41,137 +41,169 @@ contract TerrainSubsystem is System {
     GameConfig.set(world, debug, dummyPlayers, roadComplete);
     MapConfig.set(world, 10, 10, 13);
     RoadConfig.set(world, 3, -1, 1);
+    Row.set(world, int32(-1));
 
-    Carriage.set(world.getCarriageEntity(), true);
+    bytes32 carriage = world.getCarriageEntity();
+    Carriage.set(carriage, true);
+    Position.set(carriage, 0, -1, 0);
 
+  }
+
+  function getMileBounds(int32 mile) public returns(int32 left, int32 right, int32 up, int32 down) {
+    right = MapConfig.getPlayWidth();
+    left = int32(-right);
+    
+    int32 playHeight = MapConfig.getPlayHeight();
+    down = mile * playHeight;
+    up = down + playHeight + int32(-1);
   }
 
   function createMile() public {
 
     IWorld world = IWorld(_world());
-    int32 oldMile = GameState.getMiles();
-    int32 newMile = oldMile + 1;
-    bytes32 oldChunk = getChunkEntity(oldMile);
-
-    require(oldMile == -1 || Chunk.getCompleted(oldChunk) == true , "fatal, mile not complete");
+    int32 mile = GameState.getMiles();
+    bytes32 oldChunk = getChunkEntity(mile);
 
     console.log("old mile");
-    console.logInt(oldMile);
+    console.logInt(mile);
+
+    require(mile == -1 || Chunk.getCompleted(oldChunk) == true , "fatal, mile not complete");
+
+    mile++;
 
     console.log("new mile");
-    console.logInt(newMile);
-
-    //create an entity for the chunk itself
-    bytes32 newChunk = getChunkEntity(newMile);
+    console.logInt(mile);
 
     //TODO simple setter
     int32 players = GameState.getPlayerCount();
-    GameState.set(newMile, players);
-    // GameState.setMiles(newMile);
+    GameState.set(mile, players);
+    // GameState.setMiles(mile);
 
     //create the chunk
-    Chunk.set(newChunk, newMile, false, false,  0, 0);
+    bytes32 newChunk = getChunkEntity(mile);
+    Chunk.set(newChunk, mile, false, false,  0, 0);
 
   }
 
-  function summonMile(bytes32 causedBy) public {
+  function summonMile(bytes32 causedBy, bool summonAll) public {
 
     //check if chunk is already spawned
-    int32 mileNumber = GameState.getMiles();
-    bytes32 chunkEntity = getChunkEntity(mileNumber);
+    int32 mile = GameState.getMiles();
+    bytes32 chunkEntity = getChunkEntity(mile);
     
-    require(mileNumber > -1, "fatal, mile not created");
-    require(Chunk.getMile(chunkEntity) == mileNumber, "fatal, mile number doesn't match");
+    require(mile > -1, "fatal, mile not created");
+    require(Chunk.getMile(chunkEntity) == mile, "fatal, mile number doesn't match");
     require(Chunk.getCompleted(chunkEntity) == false, "fatal, already completed");
     require(Chunk.getSpawned(chunkEntity) == false, "fatal, already spawned");
 
     //calculate new map bounds based on chunk
     //eventually maybe should use Bounds to calculate so we can add rest sections?
-    int32 playWidth = MapConfig.getPlayWidth();
-    int32 playHeight = MapConfig.getPlayHeight();
-    int32 yBottom = mileNumber * playHeight;
-    int32 yTop = int32(yBottom) + playHeight + -1;
 
-    //set new game area
-    //todo set single setters
-    Position.set(getCarriageEntity(), 0, yTop + 1, 0);
-    Bounds.set(int32(-playWidth), playWidth, yTop, yBottom);
-
-    //spawn the area
     IWorld world = IWorld(_world());
+    (int32 left, int32 right, int32 up, int32 down) = getMileBounds(mile);
+    int32 row = Row.get();
 
-    console.log("create terrain");
-    world.createTerrain(causedBy, playWidth, yTop, yBottom);
+    if(summonAll) {
+      while(row < up) {row = summonRow(causedBy, left, right, up, down);}
+    } else {
+      //summon another row, until we have summoned all of them
+      row = summonRow(causedBy, left, right, up, down);
+    }
 
-    console.log("create puzzle");
-    world.createRandomPuzzle(causedBy, playWidth, yTop, yBottom);
-
-    console.log("set chunk");
-    Chunk.set(chunkEntity, mileNumber, true, false, 0, 0);
+    //complete the mile, set the new bounds
+    if(row < up) {return;}
+    mileIsReady(causedBy, mile, left, right, up, down);
 
   }
 
-  //create terrain using an area
-  function createTerrain(bytes32 causedBy, int32 width, int32 up, int32 down) public {
+  function mileIsReady(bytes32 causedBy, int32 mile, int32 left, int32 right, int32 up, int32 down) private {
+
+    IWorld world = IWorld(_world());
+
+    console.log("mile ready");
+
+    console.log("create puzzle");
+    world.createRandomPuzzle(causedBy, right, up, down);
+    
+    console.log("set chunk");
+    bytes32 chunkEntity = getChunkEntity(mile);
+    Chunk.set(chunkEntity, mile, true, false, 0, 0);
+
+    //set bounds 
+    Position.set(getCarriageEntity(), 0, up + 1, 0);
+    Bounds.set(left, right, up, down);
+
+  }
+
+  function summonRow(bytes32 causedBy, int32 left, int32 right, int32 up, int32 down) public returns(int32 row) {
+
+    row = Row.get();
+    row++;
+
+    spawnRow(causedBy, right, row);
+
+    Row.set(row);
+    return row;
+
+  }
+    
+  function spawnRow(bytes32 causedBy, int32 width, int32 y) private {
     
     IWorld world = IWorld(_world());
 
     GameConfigData memory config = GameConfig.get();
-
-    //spawn all the rows
-    //spawn all the obstacles
-    //spawn all the rocks/resources
     
-    for (int32 y = down; y <= up; y++) {
-      //SPAWN TERRAIN
-      for (int32 x = int32(-width); x <= width; x++) {
+    //SPAWN TERRAIN
+    for (int32 x = int32(-width); x <= width; x++) {
 
-        uint noiseCoord = randomCoord(0, 2000, x, y);
+      uint noiseCoord = randomCoord(0, 2000, x, y);
 
-        // console.log("noise ", noiseCoord);
+      // console.log("noise ", noiseCoord);
 
-        if(noiseCoord < 1000) {
-          //TERRAIN
-          TerrainType terrainType = TerrainType.None;
+      if(noiseCoord < 1000) {
+        //TERRAIN
+        TerrainType terrainType = TerrainType.None;
 
-          if (noiseCoord <= 100) {
-            terrainType = TerrainType.Tree;
-          } else if (noiseCoord > 100 && noiseCoord <= 200) {
-            terrainType = TerrainType.Rock;
-          } else if (noiseCoord > 200 && noiseCoord <= 225) {
-            terrainType = TerrainType.HeavyBoy;
-          } else if (noiseCoord > 225 && noiseCoord <= 250) {
-            if (world.onRoad(x, y)) { continue;}
-            terrainType = TerrainType.HeavyHeavyBoy;
-          } else if (noiseCoord > 300 && noiseCoord <= 325) {
-            if (world.onRoad(x, y)) { continue;}
-            terrainType = TerrainType.Pillar;
-          } 
-          if(terrainType != TerrainType.None) {
-            spawnTerrain(causedBy, x, y, terrainType);
-          }
-        } else {
-          //NPCS
-          NPCType npcType = NPCType.None;
-
-          if (noiseCoord > 1000 && noiseCoord <= 1010) {
-            npcType = NPCType.Ox;
-          } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
-            npcType = NPCType.Soldier;
-          } else if (noiseCoord > 1150 && noiseCoord < 1200) {
-            npcType = NPCType.Barbarian;
-          } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
-            npcType = NPCType.Player;
-          }
-
-          if(npcType != NPCType.None) {
-            world.spawnNPC(causedBy, x, y, npcType);
-          }
+        if (noiseCoord <= 100) {
+          terrainType = TerrainType.Tree;
+        } else if (noiseCoord > 100 && noiseCoord <= 200) {
+          terrainType = TerrainType.Rock;
+        } else if (noiseCoord > 200 && noiseCoord <= 225) {
+          terrainType = TerrainType.HeavyBoy;
+        } else if (noiseCoord > 225 && noiseCoord <= 250) {
+          if (world.onRoad(x, y)) { continue;}
+          terrainType = TerrainType.HeavyHeavyBoy;
+        } else if (noiseCoord > 300 && noiseCoord <= 325) {
+          if (world.onRoad(x, y)) { continue;}
+          terrainType = TerrainType.Pillar;
+        } 
+        if(terrainType != TerrainType.None) {
+          spawnTerrain(causedBy, x, y, terrainType);
         }
-      
-      }
-    }
+      } else {
+        //NPCS
+        NPCType npcType = NPCType.None;
 
+        if (noiseCoord > 1000 && noiseCoord <= 1010) {
+          npcType = NPCType.Ox;
+        } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
+          npcType = NPCType.Soldier;
+        } else if (noiseCoord > 1150 && noiseCoord < 1200) {
+          npcType = NPCType.Barbarian;
+        } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
+          npcType = NPCType.Player;
+        }
+
+        if(npcType != NPCType.None) {
+          world.spawnNPC(causedBy, x, y, npcType);
+        }
+      }
+    
+    }
+  }
+
+  function procGenAt(int32 x, int32 y) private {
+    
   }
 
   function getRoadEntity(int32 x, int32 y) public returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
@@ -179,14 +211,11 @@ contract TerrainSubsystem is System {
   function getCarriageEntity() public returns(bytes32) {return keccak256(abi.encode("Carriage"));}
 
   function contemplateMile(int32 mileNumber) public {
-    int32 playHeight = MapConfig.getPlayHeight();
-    int32 leftRoad = RoadConfig.getLeft();
-    int32 rightRoad = RoadConfig.getRight();
-    int32 yStart = mileNumber * playHeight;
-    int32 yEnd = int32(yStart) + playHeight + -1;
+    
+    (int32 left, int32 right, int32 up, int32 down) = getMileBounds(mileNumber);
 
-    for (int32 y = yStart; y <= yEnd; y++) {
-      for (int32 x = leftRoad; x <= rightRoad; x++) {
+    for (int32 y = down; y <= up; y++) {
+      for (int32 x = left; x <= right; x++) {
         bytes32 road = getRoadEntity(x,y);
 
         if (Road.getState(road) < uint32(RoadState.Paved)) { continue; }
@@ -233,8 +262,9 @@ contract TerrainSubsystem is System {
     } 
 
     //get rid of this hack pls
-    if(tType != TerrainType.None && tType != TerrainType.Road && tType != TerrainType.Hole)
+    if(tType != TerrainType.None && tType != TerrainType.Road && tType != TerrainType.Hole) {
       Position.set(entity, x, y, 0);
+    }
 
   }
 
@@ -274,7 +304,7 @@ contract TerrainSubsystem is System {
 
   //TODO fix this horrible thing,make it more robust
   function updateChunk() public {
-    (int32 currentMile, ) = GameState.get();
+    int32 currentMile = GameState.getMiles();
     bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
 
     uint32 pieces = Chunk.getRoads(chunk);

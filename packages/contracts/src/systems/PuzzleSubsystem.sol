@@ -44,7 +44,7 @@ contract PuzzleSubsystem is System {
   }
 
 
-  function createRandomPuzzle(bytes32 causedBy, int32 playWidth, int32 up, int32 down ) public {
+  function createRandomPuzzle(bytes32 causedBy, int32 right, int32 up, int32 down ) public {
     
     IWorld world = IWorld(_world());
 
@@ -57,7 +57,7 @@ contract PuzzleSubsystem is System {
     // int32 mileNumber = GameState.getMiles();
 
     if (true || puzzleType == PuzzleType.Miliarium) {
-        createMiliarium(causedBy, playWidth, up, down, roadRight );
+        createMiliarium(causedBy, right, up, down, roadRight );
     } else if(puzzleType == PuzzleType.Bearer) {
         // createBearer(causedBy);
     }

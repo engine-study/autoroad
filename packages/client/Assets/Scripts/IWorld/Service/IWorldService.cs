@@ -544,58 +544,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createRandomPuzzleFunction, cancellationToken);
         }
 
-        public Task<string> CreateRandomPuzzleRequestAsync(byte[] causedBy, int playWidth, int up, int down)
+        public Task<string> CreateRandomPuzzleRequestAsync(byte[] causedBy, int right, int up, int down)
         {
             var createRandomPuzzleFunction = new CreateRandomPuzzleFunction();
                 createRandomPuzzleFunction.CausedBy = causedBy;
-                createRandomPuzzleFunction.PlayWidth = playWidth;
+                createRandomPuzzleFunction.Right = right;
                 createRandomPuzzleFunction.Up = up;
                 createRandomPuzzleFunction.Down = down;
             
              return ContractHandler.SendRequestAsync(createRandomPuzzleFunction);
         }
 
-        public Task<TransactionReceipt> CreateRandomPuzzleRequestAndWaitForReceiptAsync(byte[] causedBy, int playWidth, int up, int down, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CreateRandomPuzzleRequestAndWaitForReceiptAsync(byte[] causedBy, int right, int up, int down, CancellationTokenSource cancellationToken = null)
         {
             var createRandomPuzzleFunction = new CreateRandomPuzzleFunction();
                 createRandomPuzzleFunction.CausedBy = causedBy;
-                createRandomPuzzleFunction.PlayWidth = playWidth;
+                createRandomPuzzleFunction.Right = right;
                 createRandomPuzzleFunction.Up = up;
                 createRandomPuzzleFunction.Down = down;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createRandomPuzzleFunction, cancellationToken);
-        }
-
-        public Task<string> CreateTerrainRequestAsync(CreateTerrainFunction createTerrainFunction)
-        {
-             return ContractHandler.SendRequestAsync(createTerrainFunction);
-        }
-
-        public Task<TransactionReceipt> CreateTerrainRequestAndWaitForReceiptAsync(CreateTerrainFunction createTerrainFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createTerrainFunction, cancellationToken);
-        }
-
-        public Task<string> CreateTerrainRequestAsync(byte[] causedBy, int width, int up, int down)
-        {
-            var createTerrainFunction = new CreateTerrainFunction();
-                createTerrainFunction.CausedBy = causedBy;
-                createTerrainFunction.Width = width;
-                createTerrainFunction.Up = up;
-                createTerrainFunction.Down = down;
-            
-             return ContractHandler.SendRequestAsync(createTerrainFunction);
-        }
-
-        public Task<TransactionReceipt> CreateTerrainRequestAndWaitForReceiptAsync(byte[] causedBy, int width, int up, int down, CancellationTokenSource cancellationToken = null)
-        {
-            var createTerrainFunction = new CreateTerrainFunction();
-                createTerrainFunction.CausedBy = causedBy;
-                createTerrainFunction.Width = width;
-                createTerrainFunction.Up = up;
-                createTerrainFunction.Down = down;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createTerrainFunction, cancellationToken);
         }
 
         public Task<string> CreateWorldRequestAsync(CreateWorldFunction createWorldFunction)
@@ -1076,6 +1044,32 @@ namespace IWorld.Service
             return ContractHandler.QueryAsync<GetKeySchemaFunction, byte[]>(getKeySchemaFunction, blockParameter);
         }
 
+        public Task<string> GetMileBoundsRequestAsync(GetMileBoundsFunction getMileBoundsFunction)
+        {
+             return ContractHandler.SendRequestAsync(getMileBoundsFunction);
+        }
+
+        public Task<TransactionReceipt> GetMileBoundsRequestAndWaitForReceiptAsync(GetMileBoundsFunction getMileBoundsFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(getMileBoundsFunction, cancellationToken);
+        }
+
+        public Task<string> GetMileBoundsRequestAsync(int mile)
+        {
+            var getMileBoundsFunction = new GetMileBoundsFunction();
+                getMileBoundsFunction.Mile = mile;
+            
+             return ContractHandler.SendRequestAsync(getMileBoundsFunction);
+        }
+
+        public Task<TransactionReceipt> GetMileBoundsRequestAndWaitForReceiptAsync(int mile, CancellationTokenSource cancellationToken = null)
+        {
+            var getMileBoundsFunction = new GetMileBoundsFunction();
+                getMileBoundsFunction.Mile = mile;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(getMileBoundsFunction, cancellationToken);
+        }
+
         public Task<GetRandomPositionNotRoadOutputDTO> GetRandomPositionNotRoadQueryAsync(GetRandomPositionNotRoadFunction getRandomPositionNotRoadFunction, BlockParameter blockParameter = null)
         {
             return ContractHandler.QueryDeserializingToObjectAsync<GetRandomPositionNotRoadFunction, GetRandomPositionNotRoadOutputDTO>(getRandomPositionNotRoadFunction, blockParameter);
@@ -1411,6 +1405,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(grantAccessFunction, cancellationToken);
         }
 
+        public Task<string> HelpSummonRequestAsync(HelpSummonFunction helpSummonFunction)
+        {
+             return ContractHandler.SendRequestAsync(helpSummonFunction);
+        }
+
+        public Task<string> HelpSummonRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<HelpSummonFunction>();
+        }
+
+        public Task<TransactionReceipt> HelpSummonRequestAndWaitForReceiptAsync(HelpSummonFunction helpSummonFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(helpSummonFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> HelpSummonRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<HelpSummonFunction>(null, cancellationToken);
+        }
+
         public Task<string> InstallModuleRequestAsync(InstallModuleFunction installModuleFunction)
         {
              return ContractHandler.SendRequestAsync(installModuleFunction);
@@ -1597,6 +1611,26 @@ namespace IWorld.Service
                 manifestFunction.Item = item;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(manifestFunction, cancellationToken);
+        }
+
+        public Task<string> MegaSummonRequestAsync(MegaSummonFunction megaSummonFunction)
+        {
+             return ContractHandler.SendRequestAsync(megaSummonFunction);
+        }
+
+        public Task<string> MegaSummonRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<MegaSummonFunction>();
+        }
+
+        public Task<TransactionReceipt> MegaSummonRequestAndWaitForReceiptAsync(MegaSummonFunction megaSummonFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(megaSummonFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> MegaSummonRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<MegaSummonFunction>(null, cancellationToken);
         }
 
         public Task<string> MeleeRequestAsync(MeleeFunction meleeFunction)
@@ -3358,26 +3392,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(stickFunction, cancellationToken);
         }
 
-        public Task<string> SummonMapRequestAsync(SummonMapFunction summonMapFunction)
-        {
-             return ContractHandler.SendRequestAsync(summonMapFunction);
-        }
-
-        public Task<string> SummonMapRequestAsync()
-        {
-             return ContractHandler.SendRequestAsync<SummonMapFunction>();
-        }
-
-        public Task<TransactionReceipt> SummonMapRequestAndWaitForReceiptAsync(SummonMapFunction summonMapFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(summonMapFunction, cancellationToken);
-        }
-
-        public Task<TransactionReceipt> SummonMapRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync<SummonMapFunction>(null, cancellationToken);
-        }
-
         public Task<string> SummonMileRequestAsync(SummonMileFunction summonMileFunction)
         {
              return ContractHandler.SendRequestAsync(summonMileFunction);
@@ -3388,20 +3402,56 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(summonMileFunction, cancellationToken);
         }
 
-        public Task<string> SummonMileRequestAsync(byte[] causedBy)
+        public Task<string> SummonMileRequestAsync(byte[] causedBy, bool summonAll)
         {
             var summonMileFunction = new SummonMileFunction();
                 summonMileFunction.CausedBy = causedBy;
+                summonMileFunction.SummonAll = summonAll;
             
              return ContractHandler.SendRequestAsync(summonMileFunction);
         }
 
-        public Task<TransactionReceipt> SummonMileRequestAndWaitForReceiptAsync(byte[] causedBy, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SummonMileRequestAndWaitForReceiptAsync(byte[] causedBy, bool summonAll, CancellationTokenSource cancellationToken = null)
         {
             var summonMileFunction = new SummonMileFunction();
                 summonMileFunction.CausedBy = causedBy;
+                summonMileFunction.SummonAll = summonAll;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(summonMileFunction, cancellationToken);
+        }
+
+        public Task<string> SummonRowRequestAsync(SummonRowFunction summonRowFunction)
+        {
+             return ContractHandler.SendRequestAsync(summonRowFunction);
+        }
+
+        public Task<TransactionReceipt> SummonRowRequestAndWaitForReceiptAsync(SummonRowFunction summonRowFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(summonRowFunction, cancellationToken);
+        }
+
+        public Task<string> SummonRowRequestAsync(byte[] causedBy, int left, int right, int up, int down)
+        {
+            var summonRowFunction = new SummonRowFunction();
+                summonRowFunction.CausedBy = causedBy;
+                summonRowFunction.Left = left;
+                summonRowFunction.Right = right;
+                summonRowFunction.Up = up;
+                summonRowFunction.Down = down;
+            
+             return ContractHandler.SendRequestAsync(summonRowFunction);
+        }
+
+        public Task<TransactionReceipt> SummonRowRequestAndWaitForReceiptAsync(byte[] causedBy, int left, int right, int up, int down, CancellationTokenSource cancellationToken = null)
+        {
+            var summonRowFunction = new SummonRowFunction();
+                summonRowFunction.CausedBy = causedBy;
+                summonRowFunction.Left = left;
+                summonRowFunction.Right = right;
+                summonRowFunction.Up = up;
+                summonRowFunction.Down = down;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(summonRowFunction, cancellationToken);
         }
 
         public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)

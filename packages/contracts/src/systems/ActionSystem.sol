@@ -51,10 +51,16 @@ contract ActionSystem is System {
     world.spawnPlayer(entity, x, y, false);
   }
 
-  function summonMap() public {
+  function megaSummon() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
-    world.summonMile(player);
+    world.summonMile(player, true);
+  }
+
+  function helpSummon() public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    IWorld world = IWorld(_world());
+    world.summonMile(player, false);
   }
 
   function action(ActionType newAction, int32 x, int32 y) public {

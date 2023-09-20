@@ -10,6 +10,10 @@ public class DebugUI : SPWindowParent
         TxManager.SendDirect<KillPlayerAdminFunction>(PositionComponent.PositionToTransaction(CursorMUD.GridPos));
     }
 
+    public void SummonMile() {
+        TxManager.SendDirect<MegaSummonFunction>();
+    }
+
     public void GiveCoins() {
         TxManager.SendDirect<AddCoinsAdminFunction>(100);
     }
@@ -21,7 +25,6 @@ public class DebugUI : SPWindowParent
     public void GiveGems() {
         TxManager.SendDirect<AddGemXPFunction>(System.Convert.ToUInt32(5));
     }
-
 
     public void SpawnPuzzle() {
         TxManager.SendDirect<SpawnPuzzleAdminFunction>();

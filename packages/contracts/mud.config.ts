@@ -155,13 +155,6 @@ export default mudConfig({
       },
     },
 
-    Row: {
-      dataStruct: false,
-      schema: {
-        segments: "uint32",
-      },
-    },
-
     //units
     NPC: "uint32",
     Soldier: "bool",
@@ -231,6 +224,12 @@ export default mudConfig({
     },
 
     Carriage: "bool",
+    Row: { 
+      keySchema: {}, 
+      schema: { 
+        value : "int32",
+      },
+    },
 
     // Item: {
     //   dataStruct: false,

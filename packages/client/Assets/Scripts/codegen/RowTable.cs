@@ -23,7 +23,7 @@ namespace DefaultNamespace
             return ID;
         }
 
-        public ulong? segments;
+        public long? value;
 
         public override Type TableType()
         {
@@ -43,7 +43,7 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (segments != other.segments)
+            if (value != other.value)
             {
                 return false;
             }
@@ -52,7 +52,7 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            segments = (ulong)(int)functionParameters[0];
+            value = (long)(int)functionParameters[0];
         }
 
         public override void RecordToTable(Record record)
@@ -60,8 +60,8 @@ namespace DefaultNamespace
             var table = record.value;
             //bool hasValues = false;
 
-            var segmentsValue = (ulong)table["segments"];
-            segments = segmentsValue;
+            var valueValue = (long)table["value"];
+            value = valueValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -92,14 +92,14 @@ namespace DefaultNamespace
                 {
                     current = new RowTable
                     {
-                        segments = value.Item1.TryGetValue("segments", out var segmentsVal)
-                            ? (ulong)segmentsVal
+                        value = value.Item1.TryGetValue("value", out var valueVal)
+                            ? (long)valueVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    current = new RowTable { segments = null, };
+                    current = new RowTable { value = null, };
                 }
             }
 
@@ -109,14 +109,14 @@ namespace DefaultNamespace
                 {
                     previous = new RowTable
                     {
-                        segments = value.Item2.TryGetValue("segments", out var segmentsVal)
-                            ? (ulong)segmentsVal
+                        value = value.Item2.TryGetValue("value", out var valueVal)
+                            ? (long)valueVal
                             : default,
                     };
                 }
                 catch (InvalidCastException)
                 {
-                    previous = new RowTable { segments = null, };
+                    previous = new RowTable { value = null, };
                 }
             }
 
