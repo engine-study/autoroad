@@ -7,13 +7,17 @@ public class StoreItemUI : SPWindow
     [HideInInspector] public StoreUI store;
     [SerializeField] GaulItem item;
     [SerializeField] SPInputField itemText;
-    [SerializeField] SPButton buyButton;
+    [SerializeField] SPButton buyButtonCoin;
+    [SerializeField] SPButton buyButtonGem;
+    [SerializeField] SPButton buyButtonEth;
 
     public void SetItem(GaulItem newItem) {
 
         item = newItem;
         itemText.UpdateField(item.itemName);
-        buyButton.UpdateField(item.price.ToString("000"));
+        buyButtonCoin.UpdateField(item.price.ToString("000"));
+        buyButtonGem.UpdateField(item.gem.ToString("000"));
+        buyButtonEth.UpdateField(item.eth.ToString("000"));
         CanBuy();
     }
 
@@ -23,6 +27,8 @@ public class StoreItemUI : SPWindow
 
     public void CanBuy() {
         ToggleWindow(XPComponent.LocalLevel >= item.minLevel);
-        buyButton.ToggleState(CoinComponent.LocalCoins >= item.price ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonCoin.ToggleState(CoinComponent.LocalCoins >= item.price ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonGem.ToggleState(GemComponent.LocalGems >= item.gem ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonEth.ToggleState(CoinComponent.LocalCoins >= item.price ? SPSelectableState.Default : SPSelectableState.Disabled);
     }
 }

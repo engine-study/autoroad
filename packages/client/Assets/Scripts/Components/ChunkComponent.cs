@@ -8,6 +8,9 @@ using Cysharp.Threading.Tasks;
 public class ChunkComponent : MUDComponent
 {
 
+    public static System.Action OnActiveChunk;
+    public static System.Action OnChunkUpdate;
+    
     public static ChunkComponent ActiveChunk;
     public static ChunkComponent GetChunk(int mile) {Chunks.TryGetValue(mile, out var chunk); return chunk; }
     public static Dictionary<int, ChunkComponent> Chunks;
@@ -34,7 +37,7 @@ public class ChunkComponent : MUDComponent
     int widthSize;
 
     public GameObject activeObjects;
-    bool createdChunk = false;
+    bool hasInit = false;
 
     //    completed: "bool",
     //     mileNumber: "uint32",
@@ -110,8 +113,12 @@ public class ChunkComponent : MUDComponent
 
         activeObjects.SetActive(!completed);
 
-        if (createdChunk == false) {
+        if (hasInit == false) {
             CreateChunk();
+        }
+
+        if(ActiveChunk == this) {
+            OnChunkUpdate?.Invoke();
         }
 
     }
@@ -138,10 +145,13 @@ public class ChunkComponent : MUDComponent
         }
 
 
-        createdChunk = true;
+        hasInit = true;
 
         Chunks.Add(mileNumber, this);
-        if (mileNumber == GameStateComponent.MILE_COUNT) { ActiveChunk = this; }
+        if (mileNumber == GameStateComponent.MILE_COUNT) { 
+            ActiveChunk = this; 
+            OnActiveChunk?.Invoke();
+        }
     }
 
     public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {

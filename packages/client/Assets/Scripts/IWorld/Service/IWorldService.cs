@@ -932,50 +932,29 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
         }
 
-        public Task<string> GetCarriageEntityRequestAsync(GetCarriageEntityFunction getCarriageEntityFunction)
+        public Task<byte[]> GetCarriageEntityQueryAsync(GetCarriageEntityFunction getCarriageEntityFunction, BlockParameter blockParameter = null)
         {
-             return ContractHandler.SendRequestAsync(getCarriageEntityFunction);
+            return ContractHandler.QueryAsync<GetCarriageEntityFunction, byte[]>(getCarriageEntityFunction, blockParameter);
         }
 
-        public Task<string> GetCarriageEntityRequestAsync()
+        
+        public Task<byte[]> GetCarriageEntityQueryAsync(BlockParameter blockParameter = null)
         {
-             return ContractHandler.SendRequestAsync<GetCarriageEntityFunction>();
+            return ContractHandler.QueryAsync<GetCarriageEntityFunction, byte[]>(null, blockParameter);
         }
 
-        public Task<TransactionReceipt> GetCarriageEntityRequestAndWaitForReceiptAsync(GetCarriageEntityFunction getCarriageEntityFunction, CancellationTokenSource cancellationToken = null)
+        public Task<byte[]> GetChunkEntityQueryAsync(GetChunkEntityFunction getChunkEntityFunction, BlockParameter blockParameter = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(getCarriageEntityFunction, cancellationToken);
+            return ContractHandler.QueryAsync<GetChunkEntityFunction, byte[]>(getChunkEntityFunction, blockParameter);
         }
 
-        public Task<TransactionReceipt> GetCarriageEntityRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync<GetCarriageEntityFunction>(null, cancellationToken);
-        }
-
-        public Task<string> GetChunkEntityRequestAsync(GetChunkEntityFunction getChunkEntityFunction)
-        {
-             return ContractHandler.SendRequestAsync(getChunkEntityFunction);
-        }
-
-        public Task<TransactionReceipt> GetChunkEntityRequestAndWaitForReceiptAsync(GetChunkEntityFunction getChunkEntityFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(getChunkEntityFunction, cancellationToken);
-        }
-
-        public Task<string> GetChunkEntityRequestAsync(int mile)
+        
+        public Task<byte[]> GetChunkEntityQueryAsync(int mile, BlockParameter blockParameter = null)
         {
             var getChunkEntityFunction = new GetChunkEntityFunction();
                 getChunkEntityFunction.Mile = mile;
             
-             return ContractHandler.SendRequestAsync(getChunkEntityFunction);
-        }
-
-        public Task<TransactionReceipt> GetChunkEntityRequestAndWaitForReceiptAsync(int mile, CancellationTokenSource cancellationToken = null)
-        {
-            var getChunkEntityFunction = new GetChunkEntityFunction();
-                getChunkEntityFunction.Mile = mile;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(getChunkEntityFunction, cancellationToken);
+            return ContractHandler.QueryAsync<GetChunkEntityFunction, byte[]>(getChunkEntityFunction, blockParameter);
         }
 
         public Task<byte[]> GetFieldQueryAsync(GetFieldFunction getFieldFunction, BlockParameter blockParameter = null)
@@ -1119,32 +1098,19 @@ namespace IWorld.Service
             return ContractHandler.QueryAsync<GetRecordFunction, byte[]>(getRecordFunction, blockParameter);
         }
 
-        public Task<string> GetRoadEntityRequestAsync(GetRoadEntityFunction getRoadEntityFunction)
+        public Task<byte[]> GetRoadEntityQueryAsync(GetRoadEntityFunction getRoadEntityFunction, BlockParameter blockParameter = null)
         {
-             return ContractHandler.SendRequestAsync(getRoadEntityFunction);
+            return ContractHandler.QueryAsync<GetRoadEntityFunction, byte[]>(getRoadEntityFunction, blockParameter);
         }
 
-        public Task<TransactionReceipt> GetRoadEntityRequestAndWaitForReceiptAsync(GetRoadEntityFunction getRoadEntityFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(getRoadEntityFunction, cancellationToken);
-        }
-
-        public Task<string> GetRoadEntityRequestAsync(int x, int y)
+        
+        public Task<byte[]> GetRoadEntityQueryAsync(int x, int y, BlockParameter blockParameter = null)
         {
             var getRoadEntityFunction = new GetRoadEntityFunction();
                 getRoadEntityFunction.X = x;
                 getRoadEntityFunction.Y = y;
             
-             return ContractHandler.SendRequestAsync(getRoadEntityFunction);
-        }
-
-        public Task<TransactionReceipt> GetRoadEntityRequestAndWaitForReceiptAsync(int x, int y, CancellationTokenSource cancellationToken = null)
-        {
-            var getRoadEntityFunction = new GetRoadEntityFunction();
-                getRoadEntityFunction.X = x;
-                getRoadEntityFunction.Y = y;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(getRoadEntityFunction, cancellationToken);
+            return ContractHandler.QueryAsync<GetRoadEntityFunction, byte[]>(getRoadEntityFunction, blockParameter);
         }
 
         public Task<byte[]> GetSchemaQueryAsync(GetSchemaFunction getSchemaFunction, BlockParameter blockParameter = null)

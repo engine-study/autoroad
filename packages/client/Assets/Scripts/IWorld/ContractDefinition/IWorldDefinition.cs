@@ -2027,9 +2027,23 @@ namespace IWorld.ContractDefinition
 
 
 
+    public partial class GetCarriageEntityOutputDTO : GetCarriageEntityOutputDTOBase { }
 
+    [FunctionOutput]
+    public class GetCarriageEntityOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bytes32", "", 1)]
+        public virtual byte[] ReturnValue1 { get; set; }
+    }
 
+    public partial class GetChunkEntityOutputDTO : GetChunkEntityOutputDTOBase { }
 
+    [FunctionOutput]
+    public class GetChunkEntityOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bytes32", "", 1)]
+        public virtual byte[] ReturnValue1 { get; set; }
+    }
 
     public partial class GetFieldOutputDTO : GetFieldOutputDTOBase { }
 
@@ -2109,7 +2123,14 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Data { get; set; }
     }
 
+    public partial class GetRoadEntityOutputDTO : GetRoadEntityOutputDTOBase { }
 
+    [FunctionOutput]
+    public class GetRoadEntityOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bytes32", "", 1)]
+        public virtual byte[] ReturnValue1 { get; set; }
+    }
 
     public partial class GetSchemaOutputDTO : GetSchemaOutputDTOBase { }
 

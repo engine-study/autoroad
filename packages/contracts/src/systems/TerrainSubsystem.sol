@@ -125,14 +125,13 @@ contract TerrainSubsystem is System {
     console.log("create puzzle");
     world.createRandomPuzzle(causedBy, right, up, down);
     
-    console.log("set chunk");
-    bytes32 chunkEntity = getChunkEntity(mile);
-    Chunk.set(chunkEntity, mile, true, false, 0, 0);
-
     //set bounds 
     Position.set(getCarriageEntity(), 0, up + 1, 0);
     Bounds.set(left, right, up, down);
 
+    console.log("set chunk");
+    bytes32 chunkEntity = getChunkEntity(mile);
+    Chunk.set(chunkEntity, mile, true, false, 0, 0);
   }
 
   function summonRow(bytes32 causedBy, int32 left, int32 right, int32 up, int32 down) public returns(int32 row) {
@@ -152,13 +151,18 @@ contract TerrainSubsystem is System {
     IWorld world = IWorld(_world());
 
     GameConfigData memory config = GameConfig.get();
-    
+
+    // console.log("noise ", noiseCoord);
+    //TODO optimise gas, we're rolling a dice for every tile,
+    //lets just use a random function to decide how many objects to spawn per row
+    //and then roll for that tile alone
+    // uint objects = randomCoord(0, 100, x, y) > 90;
+
     //SPAWN TERRAIN
     for (int32 x = int32(-width); x <= width; x++) {
 
       uint noiseCoord = randomCoord(0, 2000, x, y);
 
-      // console.log("noise ", noiseCoord);
 
       if(noiseCoord < 1000) {
         //TERRAIN
@@ -206,9 +210,9 @@ contract TerrainSubsystem is System {
     
   }
 
-  function getRoadEntity(int32 x, int32 y) public returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
-  function getChunkEntity(int32 mile) public returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
-  function getCarriageEntity() public returns(bytes32) {return keccak256(abi.encode("Carriage"));}
+  function getRoadEntity(int32 x, int32 y) public view returns(bytes32) {return keccak256(abi.encode("Road", x, y, block.number));}
+  function getChunkEntity(int32 mile) public view returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
+  function getCarriageEntity() public view returns(bytes32) {return keccak256(abi.encode("Carriage"));}
 
   function contemplateMile(int32 mileNumber) public {
     

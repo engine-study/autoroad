@@ -10,8 +10,12 @@ public class DebugUI : SPWindowParent
         TxManager.SendDirect<KillPlayerAdminFunction>(PositionComponent.PositionToTransaction(CursorMUD.GridPos));
     }
 
-    public void SummonMile() {
+    public void MegaSummonMile() {
         TxManager.SendDirect<MegaSummonFunction>();
+    }
+
+    public void HelpSummonMile() {
+        TxManager.SendDirect<HelpSummonFunction>();
     }
 
     public void GiveCoins() {
