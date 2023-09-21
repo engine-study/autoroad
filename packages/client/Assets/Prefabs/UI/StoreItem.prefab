@@ -169,8 +169,9 @@ MonoBehaviour:
   store: {fileID: 0}
   item: {fileID: 0}
   itemText: {fileID: 3303318125735887310}
-  buyButton: {fileID: 4559506560572102032}
-  priceSprites: {fileID: 0}
+  buyButtonCoin: {fileID: 0}
+  buyButtonGem: {fileID: 0}
+  buyButtonEth: {fileID: 0}
 --- !u!1 &7482247615571288637
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +265,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &394725005394789717
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1049,17 +1050,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7806112309199744526, guid: be74fee8ca86c834fa9669bd0af11f9b, type: 3}
   m_PrefabInstance: {fileID: 7033529807246514445}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4559506560572102032 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6834917320607550621, guid: be74fee8ca86c834fa9669bd0af11f9b, type: 3}
-  m_PrefabInstance: {fileID: 7033529807246514445}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7550917824457285800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1079,6 +1069,10 @@ PrefabInstance:
     - target: {fileID: 74632072950208418, guid: 98d39e230537b854caba5d0d4d019e1c, type: 3}
       propertyPath: m_Color.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 74632072950208418, guid: 98d39e230537b854caba5d0d4d019e1c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3058283292945560371, guid: 98d39e230537b854caba5d0d4d019e1c, type: 3}
       propertyPath: m_Text

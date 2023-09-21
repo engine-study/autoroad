@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SummonUI : MonoBehaviour
+public class SummonUI : SPWindow
 {
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         ChunkComponent.OnChunkUpdate += UpdateSummon;
+        ToggleWindowClose();
     }
-    void OnDestroy() {
+    protected override void OnDestroy() {
+        base.OnDestroy();
         ChunkComponent.OnChunkUpdate -= UpdateSummon;
     }
 
-    void UpdateSummon() {
+    public void UpdateSummon() {
         gameObject.SetActive(ChunkComponent.ActiveChunk.Spawned == false);
     }
 

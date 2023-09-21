@@ -154,7 +154,7 @@ public class RoadComponent : MUDComponent {
         //infer entity of our chunk and look for it
         localChunkPos = new Vector2Int((int)transform.position.x, (int)transform.position.z - mileNumber * MapConfigComponent.Height);
 
-        parent.AddRoadComponent(Entity.Key, this, localChunkPos.x, localChunkPos.y);
+        parent.Mile.AddRoadComponent(Entity.Key, this, localChunkPos.x, localChunkPos.y);
     }
 
 }

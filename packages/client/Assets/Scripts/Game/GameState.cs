@@ -19,6 +19,7 @@ public class GameState : MonoBehaviour {
 
     [Header("Test")]
     [SerializeField] bool freshStart = false; 
+    [SerializeField] bool autoJoin = false; 
 
     [Header("Game")]
     [SerializeField] GamePhase phase;
@@ -33,19 +34,12 @@ public class GameState : MonoBehaviour {
     [SerializeField] PlayerMUD localPlayer;
 
     void Awake() {
+
         Instance = this;
         editorObjects.SetActive(false);
 
-        NetworkManager.OnInitialized += SetupGame;
-        NetworkManager.OnInitialized += LoadServer;
-        SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
-        GameStateComponent.OnGameStateUpdated += GameStateUpdated;
     }
-
-    void Start() {
-
-    }
-
+    
     void OnDestroy() {
 
         NetworkManager.OnInitialized -= SetupGame;
@@ -55,6 +49,24 @@ public class GameState : MonoBehaviour {
 
         Instance = null;
     }
+
+    void JoinGaul() {
+
+        NetworkManager.OnInitialized += SetupGame;
+        NetworkManager.OnInitialized += LoadServer;
+        SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
+        GameStateComponent.OnGameStateUpdated += GameStateUpdated;
+
+        NetworkManager.Instance.Connect();
+        
+    }
+
+    void Start() {
+        if(autoJoin) {
+            JoinGaul();
+        }
+    }
+
 
     async void SetupGame() {
         await GameSetup();
