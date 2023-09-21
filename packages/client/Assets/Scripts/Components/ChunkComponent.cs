@@ -37,7 +37,7 @@ public class ChunkComponent : MUDComponent
     int widthSize;
 
     public GameObject activeObjects;
-    bool hasInit = false;
+    bool chunkLoaded = false;
 
     //    completed: "bool",
     //     mileNumber: "uint32",
@@ -113,7 +113,7 @@ public class ChunkComponent : MUDComponent
 
         activeObjects.SetActive(!completed);
 
-        if (hasInit == false) {
+        if (chunkLoaded == false) {
             CreateChunk();
         }
 
@@ -145,7 +145,7 @@ public class ChunkComponent : MUDComponent
         }
 
 
-        hasInit = true;
+        chunkLoaded = true;
 
         Chunks.Add(mileNumber, this);
         if (mileNumber == GameStateComponent.MILE_COUNT) { 

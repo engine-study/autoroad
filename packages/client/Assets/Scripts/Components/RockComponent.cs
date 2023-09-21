@@ -75,7 +75,10 @@ public class RockComponent : MUDComponent {
         }
 
         gameObject.SetActive(rockType < RockType.Rudus);
-        flash.SetTarget(stages[(int)rockType]);
+        
+        if(Loaded) {
+            flash.SetTarget(stages[(int)rockType]);
+        }
 
     }
 

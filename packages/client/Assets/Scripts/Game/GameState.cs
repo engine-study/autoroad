@@ -143,8 +143,8 @@ public class GameState : MonoBehaviour {
         while(PlayerMUD.LocalPlayer == null) {await UniTask.Delay(500);}
 
         //spawn debug road elements
-        while(GameStateComponent.PlayerCount == 0) {await UniTask.Delay(500);}
-        if(GameStateComponent.PlayerCount == 1) {
+        while(PlayerComponent.PlayerCount == 0) {await UniTask.Delay(500);}
+        if(PlayerComponent.PlayerCount == 1) {
             // Debug.Log("Spawning debug road", this);
             // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
         }

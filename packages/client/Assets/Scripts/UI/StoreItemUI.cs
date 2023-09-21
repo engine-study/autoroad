@@ -15,9 +15,15 @@ public class StoreItemUI : SPWindow
 
         item = newItem;
         itemText.UpdateField(item.itemName);
+
         buyButtonCoin.UpdateField(item.price.ToString("000"));
         buyButtonGem.UpdateField(item.gem.ToString("000"));
         buyButtonEth.UpdateField(item.eth.ToString("000"));
+
+        buyButtonCoin.ToggleWindow(item.price > 0);
+        buyButtonGem.ToggleWindow(item.gem > 0);
+        buyButtonEth.ToggleWindow(item.eth > 0);
+
         CanBuy();
     }
 

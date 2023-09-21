@@ -5,29 +5,21 @@ using TMPro;
 using UnityEngine.UI;
 using mud.Client;
 
-public class ActorUI : SPWindowBase {
+public class ActorUI : SPWindowEntity {
+
     [Header("Stats")]
-    public MUDEntity entity;
+    public LevelUI level;
+    public MoveTypeUI move;
+    public TextMeshProUGUI nameText;
+    public SPRawText nameRawText;
     public StatUI healthStat;
     public StatUI attackStat;
-    public SPRawText nameRawText;
-    public TextMeshProUGUI nameText;
-    public MoveTypeUI move;
 
-    public void UpdateInfo(Entity newEntity) {
+    public override void UpdateEntity() {
+        base.UpdateEntity();
 
-        if (entity != newEntity) {
-            if (entity != null)
-                entity.OnUpdated -= Refresh;
-
-            MUDEntity m = newEntity as MUDEntity;
-            if (m != null) {
-                m.OnUpdated += Refresh;
-            }
-        }
-
-        entity = (MUDEntity)newEntity;
-        move.UpdateInfo(entity);
+        move.SetEntity(entity);
+        level.SetEntity(entity);
 
         if (entity) {
             nameRawText.UpdateField(entity.Name);
@@ -45,10 +37,6 @@ public class ActorUI : SPWindowBase {
             LayoutRebuilder.ForceRebuildLayoutImmediate(Rect);
             
         // Canvas.ForceUpdateCanvases();
-    }
-
-    void Refresh() {
-        UpdateInfo(entity);
     }
 
 }

@@ -5,7 +5,8 @@ using mud.Unity;
 
 public class XPComponent : MUDComponent {
 
-    public int Count { get { return xp; } }
+    public int Level { get { return level; } }
+    public int XP { get { return xp; } }
     public static int LocalXP;
     public static int LocalLevel;
     public static System.Action OnXPUpdate;
@@ -24,7 +25,7 @@ public class XPComponent : MUDComponent {
 
     protected override IMudTable GetTable() {return new XPTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
-
+        
         XPTable table = update as XPTable;
 
         xp = (int)table.value;

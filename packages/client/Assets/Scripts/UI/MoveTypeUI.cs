@@ -3,34 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 
-public class MoveTypeUI : SPWindow
+public class MoveTypeUI : SPWindowMUDComponent
 {
     [Header("Move")]
-    public SPWindowPosition position;
-    public SPButton weight, strength, obstacle;
-    public MUDEntity entity;
+    public SPButton weight;
+    public SPButton strength, obstacle;
+
+    [Header("Debug")]
     public MoveComponent moveComponent;
     public WeightComponent weightComponent;
-    public void UpdateInfo(Entity newEntity) {
 
-        if(entity != newEntity) {
-            if(entity != null)
-                entity.OnUpdated -= Refresh;
-            
-            MUDEntity m = (MUDEntity)newEntity;
-            if(m != null) {
-                m.OnUpdated += Refresh;
-            }
-        }
+    public override System.Type ComponentType() {return typeof(MoveComponent);}
 
-        entity = (MUDEntity)newEntity;
+    public override void UpdateComponent() {
+        base.UpdateComponent();
 
-        if (entity) {
-            moveComponent = entity.GetMUDComponent<MoveComponent>();
-            weightComponent = entity.GetMUDComponent<WeightComponent>();
-        }
-
-        if(entity && moveComponent) {
+        moveComponent = entity.GetMUDComponent<MoveComponent>();
+        weightComponent = entity.GetMUDComponent<WeightComponent>();
+    
+        if(moveComponent) {
 
             SPButton button = null;
 
@@ -58,7 +49,4 @@ public class MoveTypeUI : SPWindow
 
     }
 
-    void Refresh() {
-        UpdateInfo(entity);
-    }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 using mud.Client;
+using UnityEngine.UI;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -20,23 +22,35 @@ public class GaulDebug : MonoBehaviour
     int terrain = 0;
     int npc = 0;
 
-    void Start() {
-        debugParent.SetActive(SPGlobal.IsDebug);
-    }
-
-    void Update() {
-
-        if(SPGlobal.IsDebug) {
-            UpdateDebug();
-        } 
-
-    }
-
+    bool on = false;
     string debugString;
-    void UpdateDebug() {
 
+    void Start() {
 
-        debugString = "";
+        SPGlobal.OnDebug += ToggleDebug;
+
+        on = !SPGlobal.IsDebug;
+        ToggleDebug(SPGlobal.IsDebug);
+    }
+    void Destroy() {
+        ToggleDebug(false);
+    }
+    
+    void ToggleDebug(bool toggle) {
+        
+        if(toggle == on) return;
+
+        if(toggle) {
+            CursorMUD.OnGridPosition += UpdateDebug;
+            debugParent.SetActive(SPGlobal.IsDebug);   
+        } else {
+            CursorMUD.OnGridPosition += UpdateDebug;
+        }
+                
+    }
+    
+    void Update() {
+          debugString = "";
 
         if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt)) {
             debugString += "Spawn Mile";
@@ -133,6 +147,12 @@ public class GaulDebug : MonoBehaviour
         //     actionName.UpdateField("Spawn Shoveled Road");
         //     if (Input.GetMouseButtonDown(0)) { TxManager.Send<SpawnShoveledRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z)); }
         // }
+    }
+
+
+    void UpdateDebug(Vector3 newPos) {
+
+      
     }
 
 }

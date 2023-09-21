@@ -125,7 +125,7 @@ export default mudConfig({
       dataStruct: false,
       schema: {
         miles: "int32",
-        playerCount: "int32",
+        unused: "int32",
       },
     },
 

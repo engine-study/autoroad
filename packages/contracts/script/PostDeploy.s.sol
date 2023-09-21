@@ -21,6 +21,11 @@ contract PostDeploy is Script {
     //deploys the MapConfig
     world.createWorld(worldAddress);
     world.createMile();
+    world.helpSummon();
+    world.helpSummon();
+    world.helpSummon();
+    world.helpSummon();
+    world.helpSummon();
 
     // some debug to check if our abiencode is working
     // abiTest(worldAddress);

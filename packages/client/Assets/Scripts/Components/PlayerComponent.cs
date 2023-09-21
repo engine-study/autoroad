@@ -11,6 +11,7 @@ using System.Collections.Generic;
 
 public class PlayerComponent : MUDComponent {
 
+    public static int PlayerCount;
     public static PlayerComponent LocalPlayer;
     public static System.Action OnPlayerSpawn;
     public bool IsLocalPlayer { get { return isLocalPlayer; } }
@@ -33,13 +34,27 @@ public class PlayerComponent : MUDComponent {
     protected override void Init(SpawnInfo newSpawnInfo) {
         base.Init(newSpawnInfo);
 
+        PlayerCount++;
+
         isLocalPlayer = Entity.Key == NetworkManager.LocalAddress;
         if (IsLocalPlayer) {
             LocalPlayer = this;
             OnPlayerSpawn?.Invoke();
         }
+    }
+
+    
+    protected override void InitDestroy() {
+        base.InitDestroy();
+
+        PlayerCount--;
+
+        if(health) { health.OnUpdated -= CheckHealth;}
+        if(position) { position.OnUpdated -= CheckPosition;}
+        if(gameEvent) { gameEvent.OnUpdated -= PlayerEvent;}
 
     }
+
 
     protected override IMudTable GetTable() {return new PlayerTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
@@ -60,22 +75,6 @@ public class PlayerComponent : MUDComponent {
     void AddGameEvents() {
         gameEvent = Entity.GetMUDComponent<GameEventComponent>();
         gameEvent.OnUpdated += PlayerEvent;
-
-    }
-
-    protected override void InitDestroy() {
-        base.InitDestroy();
-
-        if(health) {
-            health.OnUpdated -= CheckHealth;
-        }
-
-        if(position) {
-            position.OnUpdated -= CheckPosition;
-        }
-
-        if(gameEvent)
-            gameEvent.OnUpdated -= PlayerEvent;
 
     }
 

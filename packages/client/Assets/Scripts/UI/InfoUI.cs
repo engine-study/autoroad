@@ -5,9 +5,8 @@ using TMPro;
 using UnityEngine.UI;
 using mud.Client;
 
-public class InfoUI : SPWindow
+public class InfoUI : SPWindowEntity
 {
-    MUDEntity entity;
 
     [Header("Info")]
     public SPButton header;
@@ -28,22 +27,10 @@ public class InfoUI : SPWindow
     public void ClearCoordinate() {
         coordinate.UpdateField("? ?");
     }
-    public void UpdateInfo(Entity newEntity)
+
+    public override void SetEntity(MUDEntity newEntity)
     {
-
-        if(entity != newEntity) {
-            if(entity != null)
-                entity.OnUpdated -= Refresh;
-            
-            MUDEntity m = newEntity as MUDEntity;
-            if(m != null) {
-                m.OnUpdated += Refresh;
-            }
-        }
-    
-        entity = newEntity as MUDEntity;
-
-
+        base.SetEntity(newEntity);
 
         if(entity == null) {
             header.ToggleWindowClose();
@@ -53,20 +40,6 @@ public class InfoUI : SPWindow
             header.UpdateField(MUDHelper.TruncateHash(entity.Key));
         }
 
-        // if(mEntity is Structure) {
-        //     Structure structure = mEntity as Structure;
-
-        // } else if(mEntity is Resource) {
-        //     Resource resource = mEntity as Resource;
-
-        // } else if (mEntity is Unit) {
-        //     Unit unit = mEntity as Unit;
-
-         // }
-
     }
 
-    void Refresh() {
-        UpdateInfo(entity);
-    }
 }

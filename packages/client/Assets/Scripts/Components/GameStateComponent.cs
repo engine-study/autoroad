@@ -14,12 +14,10 @@ public class GameStateComponent : MUDComponent {
     public static GameStateComponent Instance;
     public static float MILE_DISTANCE {get { return MapConfigComponent.Height; } }
     public static float MILE_COUNT;
-    public static int PlayerCount;
     float lastMile = -1;
 
     [Header("Debug")]
-    [SerializeField] protected int currentMile;
-    [SerializeField] protected int playerCount;
+    [SerializeField] protected int mile;
 
 
     protected override IMudTable GetTable() {return new GameStateTable();}
@@ -29,12 +27,9 @@ public class GameStateComponent : MUDComponent {
         
         GameStateTable table = (GameStateTable)update;
 
-        currentMile = table.miles != null ? (int)table.miles : currentMile;;
+        mile = table.miles != null ? (int)table.miles : mile;;
 
-        PlayerCount = table.playerCount != null ? (int)table.playerCount : PlayerCount;
-        playerCount = PlayerCount;
-
-        MILE_COUNT = currentMile;
+        MILE_COUNT = mile;
 
         // Debug.Log("Game State:");
         // Debug.Log("Miles: " + (table.miles != null ? (int)table.miles : "null"));

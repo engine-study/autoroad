@@ -75,13 +75,16 @@ contract TerrainSubsystem is System {
     console.logInt(mile);
 
     //TODO simple setter
-    int32 players = GameState.getPlayerCount();
-    GameState.set(mile, players);
+    GameState.set(mile, 0);
     // GameState.setMiles(mile);
 
     //create the chunk
     bytes32 newChunk = getChunkEntity(mile);
     Chunk.set(newChunk, mile, false, false,  0, 0);
+
+    //move carriage to top of mile
+    int32 height = MapConfig.getPlayHeight();
+    Position.set(getCarriageEntity(), 0, ((mile+1) * height) + 1, 0);
 
   }
 
@@ -126,7 +129,6 @@ contract TerrainSubsystem is System {
     world.createRandomPuzzle(causedBy, right, up, down);
     
     //set bounds 
-    Position.set(getCarriageEntity(), 0, up + 1, 0);
     Bounds.set(left, right, up, down);
 
     console.log("set chunk");
