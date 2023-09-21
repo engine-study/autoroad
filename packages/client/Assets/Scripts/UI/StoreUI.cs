@@ -36,13 +36,13 @@ public class StoreUI : SPWindowParent
             newItem.SetItem(newItemInfo);
         }
 
-        XPComponent.OnLevelUp += UpdateStore;
+        XPComponent.OnLocalLevelUp += UpdateStore;
         CoinComponent.OnLocalUpdate += UpdateStore;
     }
 
     protected override void OnDestroy() {
         base.OnDestroy();
-        XPComponent.OnLevelUp -= UpdateStore;
+        XPComponent.OnLocalLevelUp -= UpdateStore;
         CoinComponent.OnLocalUpdate -= UpdateStore;
     }
 

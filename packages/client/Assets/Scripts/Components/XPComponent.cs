@@ -9,7 +9,8 @@ public class XPComponent : MUDComponent {
     public int XP { get { return xp; } }
     public static int LocalXP;
     public static int LocalLevel;
-    public static System.Action OnXPUpdate;
+    public static System.Action OnLocalXPUpdate;
+    public static System.Action OnLocalLevelUp;
     public static System.Action OnLevelUp;
 
     [SerializeField] int xp;
@@ -30,16 +31,20 @@ public class XPComponent : MUDComponent {
 
         xp = (int)table.value;
         level = XPToLevel(xp);
-
-        if(lastLevel != -1 && level != lastLevel) {
-            OnLevelUp?.Invoke();
-        }
-
+        
+        bool levelingUp = lastLevel != -1 && level != lastLevel;
+        
         if(Entity.Key == NetworkManager.LocalAddress) {
+
             LocalXP = xp;
             LocalLevel = level;
-            OnXPUpdate?.Invoke();
+
+            OnLocalXPUpdate?.Invoke();
+            
+            if(levelingUp) { OnLocalLevelUp?.Invoke();}
         }
+
+        if(levelingUp) {OnLevelUp?.Invoke();}
 
         lastLevel = level;
 

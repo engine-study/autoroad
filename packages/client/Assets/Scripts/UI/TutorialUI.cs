@@ -9,6 +9,7 @@ public class TutorialUI : SPWindowParent
     [SerializeField] GameObject tutorialParent;
     [SerializeField] Transform tutorialTransform;
     [SerializeField] GameObject [] tutorials;
+    [SerializeField] AudioClip startClip, endClip;
     float vertical = 1f;
     float distance = 25f;
     bool hasStarted = false;
@@ -56,6 +57,8 @@ public class TutorialUI : SPWindowParent
         tutorialParent.SetActive(toggle);
 
         if(toggle) {
+
+            SPAudioSource.PlayGlobal(startClip);
             tutorialTransform.localPosition = targetPos;
             SPCamera.SetFollow(null);
             SPCamera.SetFOVGlobal(5f);
