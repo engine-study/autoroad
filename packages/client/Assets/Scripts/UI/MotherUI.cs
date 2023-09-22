@@ -106,23 +106,27 @@ public class MotherUI : SPUIInstance {
 
 
     void UpdateWheelOptimistic(TxUpdate update) {
+
         if (update.Info.Source == UpdateSource.Optimistic) {
-            // wheel.UpdateState(ActionEndState.Success, true);
             wheel.ActionPending();
-        SPUIBase.PlaySound(Mother.sfx_txSent);
+            SPUIBase.PlaySound(Mother.sfx_txSent);
         }
+    }
+
+    public static void TransactionSuccess() {
+        ActionWheel.ActionRelease(ActionEndState.Success, true);
     }
 
     public static void TransactionFailed() {
         SPCamera.AddShakeGlobal(.1f);
-        ActionWheel.UpdateState(ActionEndState.Failed, true);
+        ActionWheel.ActionRelease(ActionEndState.Failed, true);
         SPUIBase.PlaySound(Mother.sfx_txRevert);
     }
 
     void UpdateWheel(bool txSuccess) {
 
         if (txSuccess) {
-            ActionWheel.UpdateState(ActionEndState.Success, true);
+            TransactionSuccess();
         } else {
             TransactionFailed();
         }
