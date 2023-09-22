@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 using System;
-using Microsoft.Unity.VisualStudio.Editor;
 
 public class LevelUI : SPWindowMUDComponent
 {

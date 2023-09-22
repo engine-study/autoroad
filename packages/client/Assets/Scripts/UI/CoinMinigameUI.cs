@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -72,7 +71,7 @@ public class CoinMinigameUI : MonoBehaviour
         rotate.gameObject.SetActive(false);
         canvas.gameObject.SetActive(true);
         sfx_launched.Play();
-        
+
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
