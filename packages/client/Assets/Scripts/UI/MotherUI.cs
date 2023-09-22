@@ -11,11 +11,12 @@ public class MotherUI : SPUIInstance {
     public static MotherUI Mother;
     public static SPActionWheelUI ActionWheel {get { return Mother.wheel; } }
 
+    [Header("Options")]
+    [SerializeField] bool fastStart = false; 
+
     [Header("UI")]
-    public bool freshInstall;
     public GameObject loadingScreen;
     public GameObject nameAndSpawnScreen;
-    public Image loadingScreenBackground;
     public SPActionWheelUI wheel;
     public NameOptionUI playerCreate;
     public SpawningUI spawning;
@@ -164,6 +165,7 @@ public class MotherUI : SPUIInstance {
 
     public void StartPlaying() {
         ToggleGame(true);
+        WorldScroll.Instance.SetToPlayerMile();
     }
 
     public static void FollowPlayer() {
@@ -176,6 +178,16 @@ public class MotherUI : SPUIInstance {
     }
 
     IEnumerator MainMenuCoroutine() {
+
+        if(fastStart) {
+            map.ToggleWindowOpen();
+            menu.ToggleWindowOpen();
+            ToggleLoading(false);
+
+            GameState.PlayGame();
+            menu.ToggleWindowClose();
+            yield break;
+        }
 
         //play a sound
         SPUIBase.PlaySound(sfx_loaded);

@@ -16,9 +16,10 @@ public class ChunkComponent : MUDComponent
     public static Dictionary<int, ChunkComponent> Chunks;
 
     public Mile Mile {get{return mile;}}
-    public RowComponent[] Rows { get { return mile.Rows; } }
+    public int MileNumber {get{return mileNumber;}}
     public bool Completed {get{return completed;}}
     public bool Spawned {get{return spawned;}}
+    public RowComponent[] Rows { get { return mile.Rows; } }
     
     [Header("Chunk")]
     [SerializeField] Mile mile;

@@ -7,7 +7,7 @@ public class SummonUI : SPWindow
     protected override void Awake() {
         base.Awake();
         ChunkComponent.OnChunkUpdate += UpdateSummon;
-        ToggleWindowClose();
+        UpdateSummon();
     }
     protected override void OnDestroy() {
         base.OnDestroy();
@@ -15,7 +15,7 @@ public class SummonUI : SPWindow
     }
 
     public void UpdateSummon() {
-        gameObject.SetActive(ChunkComponent.ActiveChunk.Spawned == false);
+        gameObject.SetActive(ChunkComponent.ActiveChunk?.Spawned == false);
     }
 
 }

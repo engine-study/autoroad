@@ -42,16 +42,12 @@ public class GameState : MonoBehaviour {
         Instance = this;
         editorObjects.SetActive(false);
         
-        NetworkManager.OnInitialized += SetupGame;
-        NetworkManager.OnInitialized += LoadServer;
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
     }
     
     void OnDestroy() {
 
-        NetworkManager.OnInitialized -= SetupGame;
-        NetworkManager.OnInitialized -= LoadServer;
         SPEvents.OnLocalPlayerSpawn -= RecieverPlayer;
         GameStateComponent.OnGameStateUpdated -= GameStateUpdated;
 
@@ -67,23 +63,19 @@ public class GameState : MonoBehaviour {
     }
 
     void Start() {
+
         if(autoJoin) {
             JoinGaul();
         }
-    }
 
-    async void SetupGame() {
-        await GameSetup();
-    }
-
-
-
-    void LoadServer() {
+        GameSetup();
         LoadMap();
+
     }
 
     async UniTask LoadMap() {
 
+        while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
         while(TableSpawner.Loaded == false) {await UniTask.Delay(100);}
         while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(100);}
 
@@ -97,7 +89,6 @@ public class GameState : MonoBehaviour {
 
     }
 
-
     public static void PlayGame() {
 
         Instance.gamePlaying = true;
@@ -107,6 +98,11 @@ public class GameState : MonoBehaviour {
 
     }
     async UniTask PlayGameLoop() {
+
+        while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
+
+        //wait until the map is setup
+        while (ChunkComponent.ActiveChunk == null || (ChunkComponent.ActiveChunk.MileNumber == 0 && ChunkComponent.ActiveChunk.Spawned == false)) { await UniTask.Delay(200); }
 
         //wait for name table
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
@@ -176,9 +172,6 @@ public class GameState : MonoBehaviour {
 
 
     async UniTask GameSetup() {
-
-        //wait until the map is setup
-        while (ChunkComponent.ActiveChunk == null || ChunkComponent.ActiveChunk.Spawned == false) { await UniTask.Delay(200); }
         
         //destroy the player if we want to simulate the login sequence
         if (freshStart) {

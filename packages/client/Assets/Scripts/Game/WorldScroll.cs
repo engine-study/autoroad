@@ -16,7 +16,7 @@ public class WorldScroll : MonoBehaviour {
     public UnityEngine.UI.Scrollbar playerUI;
     public SPHeading mileHeading;
     public SPButton recapButton;
-    public SPButton resetCameraButton;
+    public SPButton playerButton, landscapeButon;
 
     [Header("Game State")]
     [SerializeField] private TableManager chunkTable;
@@ -93,7 +93,8 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdateInput() {
         
-        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && Input.GetKey(KeyCode.LeftShift)) {
+        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && SPInput.ModifierKey == false) {
+            if(Input.mouseScrollDelta.y != 0f) {mileUI.ToggleWindowOpen();}
             mileScroll = GetSoftClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
@@ -115,7 +116,7 @@ public class WorldScroll : MonoBehaviour {
         }
 
         if (SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
-            ResetCameraToPlayer();
+            SetToPlayerMile();
         }
     }
 
@@ -178,18 +179,15 @@ public class WorldScroll : MonoBehaviour {
         
     }
 
-    public void ResetCameraToPlayer() {
-        if (PlayerComponent.LocalPlayer == null) { return; }
-        SetToPlayerMile();
-    }
-
     public void ToggleCameraOnPlayer(bool toggle) {
 
         playerFocus = toggle; 
-        resetCameraButton.ToggleWindow(!playerFocus);
+
+        playerButton.ToggleWindow(!playerFocus);
+        landscapeButon.ToggleWindow(playerFocus);
 
         if(toggle) {
-            SPCamera.SetFollow(PlayerComponent.LocalPlayer.PlayerScript.Root);
+            MotherUI.FollowPlayer();
         } else {
             SPCamera.SetFollow(null);
         }
