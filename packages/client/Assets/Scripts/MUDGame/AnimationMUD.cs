@@ -39,14 +39,14 @@ public class AnimationMUD : MonoBehaviour
     protected virtual void Start() {
 
         
-        Animator = GetComponentInChildren<SPAnimator>();
-        Controller = GetComponentInChildren<SPController>();
+        Animator = GetComponentInChildren<SPAnimator>(true);
+        Controller = GetComponentInChildren<SPController>(true);
         if(Controller == null) {
             Controller = gameObject.AddComponent<SPController>();
             Controller.ToggleController(false);
         }
 
-        PositionSync = GetComponentInParent<PositionSync>();
+        PositionSync = GetComponentInParent<PositionSync>(true);
 
         head = Animator.Head;
         headRB = head.GetComponent<Rigidbody>();

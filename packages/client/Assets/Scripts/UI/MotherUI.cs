@@ -34,8 +34,12 @@ public class MotherUI : SPUIInstance {
     public DebugUI debug;
     public WorldUI playerInfo;
     public ProfileUI profile;
-    public AudioClip sfx_spawn;
-    public AudioClip sfx_start;
+
+    [Header("Game State")]
+    public AudioClip sfx_mainMenu;
+    public AudioClip sfx_loaded;
+    public AudioClip sfx_txSent;
+    public AudioClip sfx_txRevert;
 
 
     protected override void Awake() {
@@ -52,6 +56,8 @@ public class MotherUI : SPUIInstance {
         menu.ToggleWindowClose();
         spectate.ToggleWindowClose();
 
+        wheel.Init();
+
         ToggleLoading(true);
         TogglePlayerCreation(false);
         TogglePlayerSpawning(false);
@@ -59,9 +65,9 @@ public class MotherUI : SPUIInstance {
 
         ToggleGame(false);
 
-        SPEvents.OnServerLoaded += ShowServer;
-        SPEvents.OnGameStarted += PlayGame;
-        SPEvents.OnGameReady += LoadPlayer;
+        SPEvents.OnServerLoaded += ShowMainMenu;
+        SPEvents.OnGameReady += GameReady;
+        SPEvents.OnPlayGame += PlayGame;
 
     }
 
@@ -70,9 +76,9 @@ public class MotherUI : SPUIInstance {
 
         Mother = null;
 
-        SPEvents.OnServerLoaded -= ShowServer;
-        SPEvents.OnGameStarted -= PlayGame;
-        SPEvents.OnGameReady -= LoadPlayer;
+        SPEvents.OnServerLoaded -= ShowMainMenu;
+        SPEvents.OnGameReady -= GameReady;
+        SPEvents.OnPlayGame -= PlayGame;
 
         TxManager.OnTransaction -= UpdateWheel;
         TxUpdate.OnUpdated -= UpdateWheelOptimistic;
@@ -100,21 +106,24 @@ public class MotherUI : SPUIInstance {
 
     void UpdateWheelOptimistic(TxUpdate update) {
         if (update.Info.Source == UpdateSource.Optimistic) {
-            wheel.UpdateState(ActionEndState.Success, true);
+            // wheel.UpdateState(ActionEndState.Success, true);
+            wheel.ActionPending();
+        SPUIBase.PlaySound(Mother.sfx_txSent);
         }
     }
 
     public static void TransactionFailed() {
         SPCamera.AddShakeGlobal(.1f);
         ActionWheel.UpdateState(ActionEndState.Failed, true);
+        SPUIBase.PlaySound(Mother.sfx_txRevert);
     }
 
     void UpdateWheel(bool txSuccess) {
 
         if (txSuccess) {
-
+            ActionWheel.UpdateState(ActionEndState.Success, true);
         } else {
-            wheel.UpdateState(ActionEndState.Failed, true);
+            TransactionFailed();
         }
     }
 
@@ -144,16 +153,16 @@ public class MotherUI : SPUIInstance {
     }
     
 
-    public void LoadPlayer() {
+    public void GameReady() {
 
         TxManager.OnTransaction += UpdateWheel;
         TxUpdate.OnUpdated += UpdateWheelOptimistic;
 
-        SPUIBase.PlaySound(sfx_spawn);
-        FollowPlayer();
+        Debug.Log("Game Ready", this);
 
-        Debug.Log("Loaded Player", this);
+    }
 
+    public void StartPlaying() {
         ToggleGame(true);
     }
 
@@ -162,23 +171,19 @@ public class MotherUI : SPUIInstance {
         SPCamera.SetFOVGlobal(5f);
     }
 
-    void ShowServer() {
-        StartCoroutine(ServerCoroutine());
+    void ShowMainMenu() {
+        StartCoroutine(MainMenuCoroutine());
     }
 
-    IEnumerator ServerCoroutine() {
+    IEnumerator MainMenuCoroutine() {
 
         //play a sound
-
-        //animate out screen 
-        loadingScreenBackground.color = Color.black - Color.black;
-        yield return new WaitForSeconds(.1f);
-
-        SPUIBase.PlaySound(sfx_start);
-
-        //hide loading
+        SPUIBase.PlaySound(sfx_loaded);
         ToggleLoading(false);
 
+        yield return new WaitForSeconds(2f);
+
+        SPUIBase.PlaySound(sfx_mainMenu);
         map.ToggleWindowOpen();
         menu.ToggleWindowOpen();
 

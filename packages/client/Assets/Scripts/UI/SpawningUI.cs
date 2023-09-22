@@ -4,6 +4,7 @@ using UnityEngine;
 using mud.Client;
 using IWorld.ContractDefinition;
 using DefaultNamespace;
+using Cysharp.Threading.Tasks;
 
 public class SpawningUI : SPWindowParent
 {
@@ -21,6 +22,7 @@ public class SpawningUI : SPWindowParent
     public GameObject ok, bad;
 
     public AudioClip sfx_spawnChoose;
+    public AudioClip sfx_spawn;
 
     protected override void OnEnable() {
         base.OnEnable();
@@ -104,6 +106,12 @@ public class SpawningUI : SPWindowParent
             spawnZone.SetActive(true);
 
         }
+
+        while(SPPlayer.LocalPlayer == null) { await UniTask.Delay(100);}
+        
+        SPUIBase.PlaySound(sfx_spawn);
+        WorldScroll.Instance.SetToPlayerMile();
+        
     }
 
 }

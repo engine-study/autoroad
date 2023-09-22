@@ -46,8 +46,6 @@ public class GameState : MonoBehaviour {
         NetworkManager.OnInitialized += LoadServer;
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
-
-        
     }
     
     void OnDestroy() {
@@ -65,9 +63,7 @@ public class GameState : MonoBehaviour {
     }
 
     void LeaveGaul() {
-
         gameReady = false;
-
     }
 
     void Start() {
@@ -76,15 +72,11 @@ public class GameState : MonoBehaviour {
         }
     }
 
-
     async void SetupGame() {
         await GameSetup();
     }
 
-    public static void PlayGame() {
-        Instance.gamePlaying = true;
-        SPEvents.OnGameStarted?.Invoke();
-    }
+
 
     void LoadServer() {
         LoadMap();
@@ -96,33 +88,30 @@ public class GameState : MonoBehaviour {
         while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(100);}
 
         for (int i = 0; i < tables.Length; i++) { tables[i].gameObject.SetActive(true); }
-
         while(ChunkComponent.ActiveChunk == null) {await UniTask.Delay(100);}
 
-        await UniTask.Delay(2000);
-
-        // if(ChunkComponent.ActiveChunk.Spawned == false) { if(await TxManager.SendUntilPasses<SummonMapFunction>() == false) Debug.LogError("Could not summon map.");}
+        await UniTask.Delay(1000);
 
         SPEvents.OnServerLoaded?.Invoke();
-
         Debug.Log("Server Loaded", this);
 
     }
 
-    async UniTask GameSetup() {
 
-        //wait until the map is setup
-        while (ChunkComponent.ActiveChunk == null || ChunkComponent.ActiveChunk.Spawned == false) { await UniTask.Delay(200); }
-        
-        //destroy the player if we want to simulate the login sequence
-        if (freshStart) {
-            await TxManager.SendQueue<DestroyPlayerAdminFunction>();
-            //while(player is not null) {}
-        }
+    public static void PlayGame() {
+
+        Instance.gamePlaying = true;
+        SPEvents.OnPlayGame?.Invoke();
+                
+        Instance.PlayGameLoop();
+
+    }
+    async UniTask PlayGameLoop() {
 
         //wait for name table
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
         NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalAddress);
+
 
         //-----------------------------------------------------------------------
         //NAMING
@@ -172,7 +161,7 @@ public class GameState : MonoBehaviour {
         }
 
         //wait for the player
-        while(PlayerMUD.LocalPlayer == null) {await UniTask.Delay(500);}
+        while(PlayerMUD.LocalPlayer == null) {await UniTask.Delay(100);}
 
         //spawn debug road elements
         while(PlayerComponent.PlayerCount == 0) {await UniTask.Delay(500);}
@@ -180,13 +169,28 @@ public class GameState : MonoBehaviour {
             // Debug.Log("Spawning debug road", this);
             // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
         }
+
+        MotherUI.Mother.StartPlaying();
+
+    }
+
+
+    async UniTask GameSetup() {
+
+        //wait until the map is setup
+        while (ChunkComponent.ActiveChunk == null || ChunkComponent.ActiveChunk.Spawned == false) { await UniTask.Delay(200); }
         
+        //destroy the player if we want to simulate the login sequence
+        if (freshStart) {
+            await TxManager.SendQueue<DestroyPlayerAdminFunction>();
+            //while(player is not null) {}
+        }
+
         Debug.Log("Game Ready", this);
         gameReady = true;
         SPEvents.OnGameReady?.Invoke();
 
     }
-
 
     //player is spawned
     void RecieverPlayer() {

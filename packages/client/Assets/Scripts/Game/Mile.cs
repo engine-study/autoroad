@@ -7,6 +7,7 @@ public class Mile : MonoBehaviour
     public RowComponent[] Rows { get { return rows; } }
 
     [Header("Mile")]
+    [SerializeField] Transform roadParent;
     [SerializeField] Transform groundParent;
     [SerializeField] Transform groundLeft, groundRight;
     [SerializeField] Transform spawnLeft, spawnRight;
@@ -27,6 +28,8 @@ public class Mile : MonoBehaviour
         chunk = newChunk;
         isRealChunk = chunk != null;
 
+        roadParent.gameObject.SetActive(!isRealChunk);
+
         if(isRealChunk) {
                     
             rowTotal = MapConfigComponent.Height;
@@ -40,8 +43,11 @@ public class Mile : MonoBehaviour
 
                 rows[i] = newRow;
             }
-        }  
+        } else {
 
+        }
+
+        roadParent.localScale = Vector3.one + Vector3.right * RoadConfigComponent.Width;
         groundParent.localScale = Vector3.one + Vector3.forward * (rowTotal-1);
 
         groundLeft.localPosition = Vector3.right * (RoadConfigComponent.Left - .5f);

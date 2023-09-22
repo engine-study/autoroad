@@ -72,6 +72,8 @@ public class WorldScroll : MonoBehaviour {
         mileUI.ToggleWindowOpen();
 
         UpdatePlayerPosition();
+        SetToScrollMile();
+        
     }
         
     
@@ -156,13 +158,13 @@ public class WorldScroll : MonoBehaviour {
 
     }
 
-    void SetToScrollMile() {
+    public void SetToScrollMile() {
         Debug.Log("SCROLL: Scroll", this);
         ToggleCameraOnPlayer(false);
         SetMile(Mathf.RoundToInt(mileScroll));
     }
 
-    void SetToPlayerMile() {
+    public void SetToPlayerMile() {
 
         Debug.Log("SCROLL: Player", this);
 
