@@ -2,21 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class PlayerUI : MonoBehaviour
+public class PlayerUI : SPWindowParent
 {
     public SPActionUI actions;
     public SPButton level;
     public SPBar slider;
-    void Awake() {
+
+    public override void Init() {
+        base.Init(); 
         SPEvents.OnLocalPlayerSpawn += SetupPlayer;
         XPComponent.OnLocalXPUpdate += UpdateXP;
         XPComponent.OnLocalLevelUp += UpdateLevel;
 
         slider.SetFill(0f);
         level.UpdateField("0");
+
+    }
+    
+    protected override void Awake() {
+        base.Awake();
+
     }
 
-    void OnDestroy() {
+    protected override void OnDestroy() {
+        base.OnDestroy();
         SPEvents.OnLocalPlayerSpawn -= SetupPlayer;
         XPComponent.OnLocalXPUpdate -= UpdateXP;
         XPComponent.OnLocalLevelUp -= UpdateLevel;
@@ -24,10 +33,7 @@ public class PlayerUI : MonoBehaviour
     }
 
     void SetupPlayer() {
-
-        
         actions.Setup(SPPlayer.LocalPlayer.Actor);
-
     }
 
 

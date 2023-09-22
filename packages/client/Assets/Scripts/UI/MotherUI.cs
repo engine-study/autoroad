@@ -33,6 +33,7 @@ public class MotherUI : SPUIInstance {
     public StoreUI store;
     public SPWindow debugButton;
     public DebugUI debug;
+    public PlayerUI playerUI;
     public WorldUI playerInfo;
     public ProfileUI profile;
 
@@ -65,7 +66,8 @@ public class MotherUI : SPUIInstance {
         ToggleRespawn(false);
 
         ToggleGame(false);
-
+        playerUI.Init();
+        
         SPEvents.OnServerLoaded += ShowMainMenu;
         SPEvents.OnGameReady += GameReady;
         SPEvents.OnPlayGame += PlayGame;
