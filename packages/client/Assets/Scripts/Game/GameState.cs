@@ -15,7 +15,10 @@ using UnityEditor;
 
 public enum GamePhase { Lobby, Game, PostGame, _Count }
 public class GameState : MonoBehaviour {
+    public static Action GameStarted;
     public static GameState Instance;
+    public static bool GameReady {get{return Instance.gameReady;}}
+    public static bool GamePlaying {get{return Instance.gamePlaying;}}
 
     [Header("Test")]
     [SerializeField] bool freshStart = false; 
@@ -32,12 +35,12 @@ public class GameState : MonoBehaviour {
 
     [Header("Debug")]
     [SerializeField] PlayerMUD localPlayer;
+    [SerializeField] bool gameReady = false; 
+    [SerializeField] bool gamePlaying = false; 
 
     void Awake() {
-
         Instance = this;
         editorObjects.SetActive(false);
-
     }
     
     void OnDestroy() {
@@ -61,6 +64,12 @@ public class GameState : MonoBehaviour {
         
     }
 
+    void LeaveGaul() {
+
+        gameReady = false;
+
+    }
+
     void Start() {
         if(autoJoin) {
             JoinGaul();
@@ -72,6 +81,10 @@ public class GameState : MonoBehaviour {
         await GameSetup();
     }
 
+    public static void PlayGame() {
+        Instance.gamePlaying = true;
+        SPEvents.OnGameStarted?.Invoke();
+    }
 
     void LoadServer() {
         LoadMap();
@@ -160,6 +173,9 @@ public class GameState : MonoBehaviour {
             // Debug.Log("Spawning debug road", this);
             // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
         }
+        
+        gameReady = true;
+
     }
 
 

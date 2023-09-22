@@ -40,9 +40,11 @@ public class GaulDebug : MonoBehaviour
         
         if(toggle == on) return;
 
+        on = toggle;
+        debugParent.SetActive(toggle);   
+
         if(toggle) {
             CursorMUD.OnGridPosition += UpdateDebug;
-            debugParent.SetActive(SPGlobal.IsDebug);   
         } else {
             CursorMUD.OnGridPosition += UpdateDebug;
         }

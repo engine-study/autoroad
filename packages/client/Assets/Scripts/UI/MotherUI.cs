@@ -23,6 +23,7 @@ public class MotherUI : SPUIInstance {
 
     [Header("Menu")]
     public MenuUI menu;
+    public SpectateUI spectate;
     public GameObject menusParent;
     public SPWindow debugButton;
     public DebugUI debug;
@@ -35,6 +36,7 @@ public class MotherUI : SPUIInstance {
 
     [Header("Game")]
     public GameUI game;
+    public MapUI map;
     public AudioClip sfx_spawn;
     public AudioClip sfx_start;
 
@@ -48,6 +50,9 @@ public class MotherUI : SPUIInstance {
         Mother = this;
 
         profile.ToggleWindowClose();
+        map.ToggleWindowClose();
+        menu.ToggleWindowClose();
+        spectate.ToggleWindowClose();
 
         ToggleLoading(true);
         TogglePlayerCreation(false);
@@ -57,7 +62,20 @@ public class MotherUI : SPUIInstance {
         ToggleGame(false);
 
         SPEvents.OnServerLoaded += ShowServer;
-        SPEvents.OnLocalPlayerSpawn += SpawnPlayer;
+        SPEvents.OnGameStarted += PlayGame;
+
+    }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+
+        Mother = null;
+
+        SPEvents.OnServerLoaded -= ShowServer;
+        SPEvents.OnGameStarted -= PlayGame;
+
+        TxManager.OnTransaction -= UpdateWheel;
+        TxUpdate.OnUpdated -= UpdateWheelOptimistic;
 
     }
 
@@ -78,18 +96,6 @@ public class MotherUI : SPUIInstance {
         debugButton.ToggleWindow(toggle);
     }
 
-    protected override void OnDestroy() {
-        base.OnDestroy();
-
-        Mother = null;
-
-        SPEvents.OnServerLoaded -= ShowServer;
-        SPEvents.OnLocalPlayerSpawn -= SpawnPlayer;
-
-        TxManager.OnTransaction -= UpdateWheel;
-        TxUpdate.OnUpdated -= UpdateWheelOptimistic;
-
-    }
 
 
     void UpdateWheelOptimistic(TxUpdate update) {
@@ -133,7 +139,7 @@ public class MotherUI : SPUIInstance {
         Mother.game.ToggleWindow(toggle);
     }
 
-    void SpawnPlayer() {
+    void PlayGame() {
 
         ToggleGame(true);
 
@@ -167,6 +173,8 @@ public class MotherUI : SPUIInstance {
 
         //hide loading
         ToggleLoading(false);
+
+        map.ToggleWindowOpen();
 
     }
 

@@ -33,7 +33,7 @@ public class Mile : MonoBehaviour
             rows = new RowComponent[rowTotal];
             for (int i = 0; i < rowTotal; i++)
             {
-                RowComponent newRow = Instantiate(rowPrefab, transform.position + Vector3.forward * i, Quaternion.identity, transform);
+                RowComponent newRow = Instantiate(rowPrefab, transform.position + Vector3.forward * (i+.5f), Quaternion.identity, transform);
                 newRow.chunk = chunk;
                 newRow.name = "Row " + i;
                 newRow.SpawnRoad(RoadConfigComponent.Width);
