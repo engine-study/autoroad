@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpectateUI : SPWindowParent
 {
-    [SerializeField] MenuUI menu;
+    [SerializeField] MainMenuUI menu;
 
     public void ToggleSpectate(bool toggle) {
         ToggleWindow(toggle);

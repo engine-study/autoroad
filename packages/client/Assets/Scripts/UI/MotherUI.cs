@@ -22,21 +22,17 @@ public class MotherUI : SPUIInstance {
     public TutorialUI tutorial;
 
     [Header("Menu")]
-    public MenuUI menu;
+    public MainMenuUI menu;
     public SpectateUI spectate;
-    public GameObject menusParent;
-    public SPWindow debugButton;
-    public DebugUI debug;
-    public WorldUI playerInfo;
-    [Header("Profile")]
-    public ProfileUI profile;
-
-    [Header("Store")]
-    public StoreUI store;
 
     [Header("Game")]
     public GameUI game;
     public MapUI map;
+    public StoreUI store;
+    public SPWindow debugButton;
+    public DebugUI debug;
+    public WorldUI playerInfo;
+    public ProfileUI profile;
     public AudioClip sfx_spawn;
     public AudioClip sfx_start;
 
@@ -150,6 +146,8 @@ public class MotherUI : SPUIInstance {
 
         FollowPlayer();
 
+        Debug.Log("Play Game", this);
+
     }
 
     public static void FollowPlayer() {
@@ -175,6 +173,9 @@ public class MotherUI : SPUIInstance {
         ToggleLoading(false);
 
         map.ToggleWindowOpen();
+        menu.ToggleWindowOpen();
+
+        Debug.Log("Main Menu", this);
 
     }
 

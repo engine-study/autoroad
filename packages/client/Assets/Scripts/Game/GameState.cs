@@ -41,6 +41,13 @@ public class GameState : MonoBehaviour {
     void Awake() {
         Instance = this;
         editorObjects.SetActive(false);
+        
+        NetworkManager.OnInitialized += SetupGame;
+        NetworkManager.OnInitialized += LoadServer;
+        SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
+        GameStateComponent.OnGameStateUpdated += GameStateUpdated;
+
+        
     }
     
     void OnDestroy() {
@@ -54,14 +61,7 @@ public class GameState : MonoBehaviour {
     }
 
     void JoinGaul() {
-
-        NetworkManager.OnInitialized += SetupGame;
-        NetworkManager.OnInitialized += LoadServer;
-        SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
-        GameStateComponent.OnGameStateUpdated += GameStateUpdated;
-
         NetworkManager.Instance.Connect();
-        
     }
 
     void LeaveGaul() {
@@ -104,6 +104,8 @@ public class GameState : MonoBehaviour {
         // if(ChunkComponent.ActiveChunk.Spawned == false) { if(await TxManager.SendUntilPasses<SummonMapFunction>() == false) Debug.LogError("Could not summon map.");}
 
         SPEvents.OnServerLoaded?.Invoke();
+
+        Debug.Log("Server Loaded", this);
 
     }
 
@@ -174,6 +176,7 @@ public class GameState : MonoBehaviour {
             // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
         }
         
+        Debug.Log("Game Ready", this);
         gameReady = true;
 
     }
