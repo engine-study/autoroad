@@ -67,10 +67,12 @@ public class TutorialUI : SPWindowParent
             ShowTutorial();
 
         } else {
-            SPCamera.SetFollow(null);
-            SPCamera.SetTarget(Vector3.zero);
-            SPCamera.SetFOVGlobal(10f);
-            SPUIBase.ToggleMotherUI(true);
+            if(hasStarted) {
+                SPCamera.SetFollow(null);
+                SPCamera.SetTarget(Vector3.zero);
+                SPCamera.SetFOVGlobal(10f);
+                SPUIBase.ToggleMotherUI(true);
+            }
         }
 
         SPCamera.ToggleScroll(!toggle);

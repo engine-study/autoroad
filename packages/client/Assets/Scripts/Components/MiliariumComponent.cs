@@ -26,7 +26,7 @@ public class MiliariumComponent : MUDComponent {
     protected override void InitDestroy()
     {
         base.InitDestroy();
-        puzzle.OnUpdated -= UpdatePuzzleState;
+        if(puzzle) {puzzle.OnUpdated -= UpdatePuzzleState;}
     }
 
 

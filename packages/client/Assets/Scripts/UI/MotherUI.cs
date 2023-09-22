@@ -15,7 +15,7 @@ public class MotherUI : SPUIInstance {
     [SerializeField] bool fastStart = false; 
 
     [Header("UI")]
-    public GameObject loadingScreen;
+    public LoadingUI loadingScreen;
     public GameObject nameAndSpawnScreen;
     public SPActionWheelUI wheel;
     public NameOptionUI playerCreate;
@@ -133,7 +133,7 @@ public class MotherUI : SPUIInstance {
     }
 
     public static void ToggleLoading(bool toggle) {
-        Mother.loadingScreen.SetActive(toggle);
+        Mother.loadingScreen.Toggle(toggle);
     }
     public static void TogglePlayerCreation(bool toggle) {
         Mother.playerCreate.ToggleWindow(toggle);

@@ -1,27 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using mud.Client;
 using mud.Unity;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class LoadingUI : MonoBehaviour
+public class LoadingUI : SPWindowParent
 {
+    [Header("Loading")]
     [SerializeField] TMPro.TextMeshProUGUI text;
-
     float dotTime = 0f;
+
     int dots;
     string dotString;
 
-    void OnEnable() {
-        text.text = "";
+    public override void Init() {
+        base.Init();
+
+    }
+
+    public void Toggle(bool toggle) {
+
+        ToggleWindow(toggle);
+
+        if(toggle) {
+            text.text = "";
+        }
+                
+
+    }
+
+    protected override void OnEnable() {
+        base.OnEnable();
+        Toggle(true);
+    }
+
+    protected override void OnDisable() {
+        base.OnDisable();
+        Toggle(false);
     }
 
     void Update() {
         
         dotTime -= Time.deltaTime;
         if(dotTime < 0f) {
-            dots = (dots+1) % 3;
+            dots = (dots+1) % 4;
             dotTime += .2f;
             dotString = "";
             for(int i = 0; i < dots; i++) {
@@ -36,9 +60,8 @@ public class LoadingUI : MonoBehaviour
         }
 
 
-    }
 
-    void OnDisable() {
 
     }
+
 }

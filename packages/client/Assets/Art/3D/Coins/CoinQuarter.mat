@@ -12,9 +12,10 @@ Material:
   m_Parent: {fileID: 2100000, guid: 52bb3aa679f26d845b01ba7eeda9d100, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
+  - _PARALLAXMAP
+  - _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -29,10 +30,13 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _BumpScale: 0.4
+    - _BumpScale: 0.5
+    - _Metallic: 0.5
+    - _Parallax: 0.01
+    - _Smoothness: 0.6
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.7708779, b: 0.25943398, a: 1}
-    - _Color: {r: 1, g: 0.77087784, b: 0.25943395, a: 1}
+    - _BaseColor: {r: 0.509434, g: 0.41706902, b: 0.21386614, a: 1}
+    - _Color: {r: 0.509434, g: 0.417069, b: 0.21386611, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &7167583288714192318
 MonoBehaviour:
