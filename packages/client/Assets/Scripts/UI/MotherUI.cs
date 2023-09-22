@@ -14,6 +14,7 @@ public class MotherUI : SPUIInstance {
     [Header("UI")]
     public bool freshInstall;
     public GameObject loadingScreen;
+    public GameObject nameAndSpawnScreen;
     public Image loadingScreenBackground;
     public SPActionWheelUI wheel;
     public NameOptionUI playerCreate;
@@ -44,6 +45,7 @@ public class MotherUI : SPUIInstance {
         OnDebug(SPGlobal.IsDebug);
 
         Mother = this;
+        nameAndSpawnScreen.SetActive(false);
 
         profile.ToggleWindowClose();
         map.ToggleWindowClose();
@@ -59,6 +61,7 @@ public class MotherUI : SPUIInstance {
 
         SPEvents.OnServerLoaded += ShowServer;
         SPEvents.OnGameStarted += PlayGame;
+        SPEvents.OnGameReady += LoadPlayer;
 
     }
 
@@ -69,6 +72,7 @@ public class MotherUI : SPUIInstance {
 
         SPEvents.OnServerLoaded -= ShowServer;
         SPEvents.OnGameStarted -= PlayGame;
+        SPEvents.OnGameReady -= LoadPlayer;
 
         TxManager.OnTransaction -= UpdateWheel;
         TxUpdate.OnUpdated -= UpdateWheelOptimistic;
@@ -136,18 +140,21 @@ public class MotherUI : SPUIInstance {
     }
 
     void PlayGame() {
+        nameAndSpawnScreen.SetActive(true);
+    }
+    
 
-        ToggleGame(true);
+    public void LoadPlayer() {
 
         TxManager.OnTransaction += UpdateWheel;
         TxUpdate.OnUpdated += UpdateWheelOptimistic;
 
         SPUIBase.PlaySound(sfx_spawn);
-
         FollowPlayer();
 
-        Debug.Log("Play Game", this);
+        Debug.Log("Loaded Player", this);
 
+        ToggleGame(true);
     }
 
     public static void FollowPlayer() {

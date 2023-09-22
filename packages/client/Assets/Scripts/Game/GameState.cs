@@ -124,7 +124,9 @@ public class GameState : MonoBehaviour {
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
         NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalAddress);
 
-        //create our player name
+        //-----------------------------------------------------------------------
+        //NAMING
+        //-----------------------------------------------------------------------
         if (localName == null) {
 
             if (SPGlobal.IsDebug) {
@@ -151,6 +153,9 @@ public class GameState : MonoBehaviour {
         PlayerTable playerTable = MUDWorld.FindValue<PlayerTable>(NetworkManager.LocalAddress);
         HealthComponent healthComponent = MUDWorld.FindComponent<HealthComponent>(NetworkManager.LocalAddress);
 
+        //-----------------------------------------------------------------------
+        //SPAWNING
+        //-----------------------------------------------------------------------
         if (playerTable == null || healthComponent == null || healthComponent.Health < 1) {
 
             if(SPGlobal.IsDebug) {
@@ -178,6 +183,7 @@ public class GameState : MonoBehaviour {
         
         Debug.Log("Game Ready", this);
         gameReady = true;
+        SPEvents.OnGameReady?.Invoke();
 
     }
 

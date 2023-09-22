@@ -10,6 +10,7 @@ public class MainMenuUI : SPWindowParent
     [SerializeField] SpectateUI spectate;
 
     public void Play() {
+        ToggleWindowClose();
         GameState.PlayGame();
     }
 
