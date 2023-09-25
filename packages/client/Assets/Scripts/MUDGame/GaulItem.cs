@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item", menuName = "Gaul/Item", order = 1)]
+public enum PaymentType {None, Coins, Gems, Eth}
 
+[CreateAssetMenu(fileName = "Item", menuName = "Gaul/Item", order = 1)]
 public class GaulItem : ScriptableObject {
 
     public string itemName = "Item";
@@ -12,6 +13,7 @@ public class GaulItem : ScriptableObject {
     [TextArea(1,5)]
     public string itemDescription = "";
     public ItemType itemType;
+    public PaymentType paymentType;
     public bool isRare;
     public int minLevel = 0;
     public float price = 0;

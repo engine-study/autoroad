@@ -54,8 +54,8 @@ namespace IWorld.ContractDefinition
     [Function("addGemXP")]
     public class AddGemXPFunctionBase : FunctionMessage
     {
-        [Parameter("uint32", "amount", 1)]
-        public virtual uint Amount { get; set; }
+        [Parameter("int32", "amount", 1)]
+        public virtual int Amount { get; set; }
     }
 
     public partial class AddXPAdminFunction : AddXPAdminFunctionBase { }
@@ -84,13 +84,30 @@ namespace IWorld.ContractDefinition
         public virtual PositionData AttackerPos { get; set; }
     }
 
-    public partial class BuyCosmeticFunction : BuyCosmeticFunctionBase { }
+    public partial class BuyFunction : BuyFunctionBase { }
 
-    [Function("buyCosmetic")]
-    public class BuyCosmeticFunctionBase : FunctionMessage
+    [Function("buy")]
+    public class BuyFunctionBase : FunctionMessage
     {
         [Parameter("uint32", "id", 1)]
         public virtual uint Id { get; set; }
+        [Parameter("uint8", "payment", 2)]
+        public virtual byte Payment { get; set; }
+    }
+
+    public partial class BuyItemFunction : BuyItemFunctionBase { }
+
+    [Function("buyItem")]
+    public class BuyItemFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "sender", 1)]
+        public virtual byte[] Sender { get; set; }
+        [Parameter("bytes32", "seller", 2)]
+        public virtual byte[] Seller { get; set; }
+        [Parameter("uint32", "id", 3)]
+        public virtual uint Id { get; set; }
+        [Parameter("uint8", "payment", 4)]
+        public virtual byte Payment { get; set; }
     }
 
     public partial class CallFunction : CallFunctionBase { }
@@ -104,6 +121,19 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Name { get; set; }
         [Parameter("bytes", "funcSelectorAndArgs", 3)]
         public virtual byte[] FuncSelectorAndArgs { get; set; }
+    }
+
+    public partial class CanBuyFunction : CanBuyFunctionBase { }
+
+    [Function("canBuy", "bool")]
+    public class CanBuyFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "price", 1)]
+        public virtual int Price { get; set; }
+        [Parameter("int32", "gems", 2)]
+        public virtual int Gems { get; set; }
+        [Parameter("int32", "eth", 3)]
+        public virtual int Eth { get; set; }
     }
 
     public partial class CanDoStuffFunction : CanDoStuffFunctionBase { }
@@ -200,6 +230,14 @@ namespace IWorld.ContractDefinition
         public virtual int PlayWidth { get; set; }
         [Parameter("uint32", "playHeight", 3)]
         public virtual uint PlayHeight { get; set; }
+    }
+
+    public partial class CreateItemMappingFunction : CreateItemMappingFunctionBase { }
+
+    [Function("createItemMapping")]
+    public class CreateItemMappingFunctionBase : FunctionMessage
+    {
+
     }
 
     public partial class CreateMileFunction : CreateMileFunctionBase { }
@@ -569,8 +607,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
-        [Parameter("uint32", "amount", 2)]
-        public virtual uint Amount { get; set; }
+        [Parameter("int32", "amount", 2)]
+        public virtual int Amount { get; set; }
     }
 
     public partial class GiveKilledBarbarianRewardFunction : GiveKilledBarbarianRewardFunctionBase { }
@@ -1962,6 +2000,10 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
     public partial class CanPlaceOnOutputDTO : CanPlaceOnOutputDTOBase { }
 
     [FunctionOutput]
@@ -1979,6 +2021,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

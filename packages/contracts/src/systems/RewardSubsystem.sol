@@ -4,7 +4,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 import { Player, GameState, Road, Coinage, Gem, Conscription, XP, NPC, Soldier, Barbarian} from "../codegen/Tables.sol";
 import { NPCType } from "../codegen/Types.sol";
-import { ItemSystem } from "./ItemSystem.sol";
+import { ItemSubsystem } from "./ItemSubsystem.sol";
 
 contract RewardSubsystem is System {
 
@@ -75,8 +75,8 @@ contract RewardSubsystem is System {
     XP.set(player, xp + amount);
   }
 
-  function giveGem(bytes32 player, uint32 amount) public {
-    uint32 gems = Gem.get(player) + amount;
+  function giveGem(bytes32 player, int32 amount) public {
+    int32 gems = Gem.get(player) + amount;
     Gem.set(player, gems);
   }
 

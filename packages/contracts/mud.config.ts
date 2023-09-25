@@ -16,6 +16,26 @@ export default mudConfig({
       name: "behaviour",
       openAccess: false,
     },
+    EntitySubsystem: {
+      name: "entities",
+      openAccess: false,
+    },
+    FloraSubsystem: {
+      name: "flora",
+      openAccess: false,
+    },
+    ItemSubsystem: {
+      name: "item",
+      openAccess: false,
+    },
+    NPCSubsystem: {
+      name: "npc",
+      openAccess: false,
+    },
+    PuzzleSubsystem: {
+      name: "puzzle",
+      openAccess: false,
+    },
     TerrainSubsystem: {
       name: "terrain",
       openAccess: false,
@@ -24,24 +44,8 @@ export default mudConfig({
       name: "reward",
       openAccess: false,
     },
-    FloraSubsystem: {
-      name: "flora",
-      openAccess: false,
-    },
-    EntitySubsystem: {
-      name: "entities",
-      openAccess: false,
-    },
-    NPCSubsystem: {
-      name: "npc",
-      openAccess: false,
-    },
     SpawnSubsystem: {
       name: "spawn",
-      openAccess: false,
-    },
-    PuzzleSubsystem: {
-      name: "puzzle",
       openAccess: false,
     },
   },
@@ -56,6 +60,7 @@ export default mudConfig({
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
     PuzzleType: ["None", "Miliarium", "Bearer", "Count"],
+    PaymentType: ["None", "Coins", "Gems", "Eth"],
   },
 
   tables: {
@@ -199,7 +204,7 @@ export default mudConfig({
     Damage: "int32",
     Health: "int32",
     Seeds: "uint32",
-    Gem: "uint32",
+    Gem: "int32",
 
     //unique objects
     Rock: "uint32",

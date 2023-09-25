@@ -114,7 +114,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(addGemXPFunction, cancellationToken);
         }
 
-        public Task<string> AddGemXPRequestAsync(uint amount)
+        public Task<string> AddGemXPRequestAsync(int amount)
         {
             var addGemXPFunction = new AddGemXPFunction();
                 addGemXPFunction.Amount = amount;
@@ -122,7 +122,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(addGemXPFunction);
         }
 
-        public Task<TransactionReceipt> AddGemXPRequestAndWaitForReceiptAsync(uint amount, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> AddGemXPRequestAndWaitForReceiptAsync(int amount, CancellationTokenSource cancellationToken = null)
         {
             var addGemXPFunction = new AddGemXPFunction();
                 addGemXPFunction.Amount = amount;
@@ -190,30 +190,64 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(aggroFunction, cancellationToken);
         }
 
-        public Task<string> BuyCosmeticRequestAsync(BuyCosmeticFunction buyCosmeticFunction)
+        public Task<string> BuyRequestAsync(BuyFunction buyFunction)
         {
-             return ContractHandler.SendRequestAsync(buyCosmeticFunction);
+             return ContractHandler.SendRequestAsync(buyFunction);
         }
 
-        public Task<TransactionReceipt> BuyCosmeticRequestAndWaitForReceiptAsync(BuyCosmeticFunction buyCosmeticFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> BuyRequestAndWaitForReceiptAsync(BuyFunction buyFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyCosmeticFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyFunction, cancellationToken);
         }
 
-        public Task<string> BuyCosmeticRequestAsync(uint id)
+        public Task<string> BuyRequestAsync(uint id, byte payment)
         {
-            var buyCosmeticFunction = new BuyCosmeticFunction();
-                buyCosmeticFunction.Id = id;
+            var buyFunction = new BuyFunction();
+                buyFunction.Id = id;
+                buyFunction.Payment = payment;
             
-             return ContractHandler.SendRequestAsync(buyCosmeticFunction);
+             return ContractHandler.SendRequestAsync(buyFunction);
         }
 
-        public Task<TransactionReceipt> BuyCosmeticRequestAndWaitForReceiptAsync(uint id, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> BuyRequestAndWaitForReceiptAsync(uint id, byte payment, CancellationTokenSource cancellationToken = null)
         {
-            var buyCosmeticFunction = new BuyCosmeticFunction();
-                buyCosmeticFunction.Id = id;
+            var buyFunction = new BuyFunction();
+                buyFunction.Id = id;
+                buyFunction.Payment = payment;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyCosmeticFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyFunction, cancellationToken);
+        }
+
+        public Task<string> BuyItemRequestAsync(BuyItemFunction buyItemFunction)
+        {
+             return ContractHandler.SendRequestAsync(buyItemFunction);
+        }
+
+        public Task<TransactionReceipt> BuyItemRequestAndWaitForReceiptAsync(BuyItemFunction buyItemFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyItemFunction, cancellationToken);
+        }
+
+        public Task<string> BuyItemRequestAsync(byte[] sender, byte[] seller, uint id, byte payment)
+        {
+            var buyItemFunction = new BuyItemFunction();
+                buyItemFunction.Sender = sender;
+                buyItemFunction.Seller = seller;
+                buyItemFunction.Id = id;
+                buyItemFunction.Payment = payment;
+            
+             return ContractHandler.SendRequestAsync(buyItemFunction);
+        }
+
+        public Task<TransactionReceipt> BuyItemRequestAndWaitForReceiptAsync(byte[] sender, byte[] seller, uint id, byte payment, CancellationTokenSource cancellationToken = null)
+        {
+            var buyItemFunction = new BuyItemFunction();
+                buyItemFunction.Sender = sender;
+                buyItemFunction.Seller = seller;
+                buyItemFunction.Id = id;
+                buyItemFunction.Payment = payment;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyItemFunction, cancellationToken);
         }
 
         public Task<string> CallRequestAsync(CallFunction callFunction)
@@ -244,6 +278,36 @@ namespace IWorld.Service
                 callFunction.FuncSelectorAndArgs = funcSelectorAndArgs;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(callFunction, cancellationToken);
+        }
+
+        public Task<string> CanBuyRequestAsync(CanBuyFunction canBuyFunction)
+        {
+             return ContractHandler.SendRequestAsync(canBuyFunction);
+        }
+
+        public Task<TransactionReceipt> CanBuyRequestAndWaitForReceiptAsync(CanBuyFunction canBuyFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canBuyFunction, cancellationToken);
+        }
+
+        public Task<string> CanBuyRequestAsync(int price, int gems, int eth)
+        {
+            var canBuyFunction = new CanBuyFunction();
+                canBuyFunction.Price = price;
+                canBuyFunction.Gems = gems;
+                canBuyFunction.Eth = eth;
+            
+             return ContractHandler.SendRequestAsync(canBuyFunction);
+        }
+
+        public Task<TransactionReceipt> CanBuyRequestAndWaitForReceiptAsync(int price, int gems, int eth, CancellationTokenSource cancellationToken = null)
+        {
+            var canBuyFunction = new CanBuyFunction();
+                canBuyFunction.Price = price;
+                canBuyFunction.Gems = gems;
+                canBuyFunction.Eth = eth;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(canBuyFunction, cancellationToken);
         }
 
         public Task<string> CanDoStuffRequestAsync(CanDoStuffFunction canDoStuffFunction)
@@ -452,6 +516,26 @@ namespace IWorld.Service
                 createEntitiesFunction.PlayHeight = playHeight;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
+        }
+
+        public Task<string> CreateItemMappingRequestAsync(CreateItemMappingFunction createItemMappingFunction)
+        {
+             return ContractHandler.SendRequestAsync(createItemMappingFunction);
+        }
+
+        public Task<string> CreateItemMappingRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<CreateItemMappingFunction>();
+        }
+
+        public Task<TransactionReceipt> CreateItemMappingRequestAndWaitForReceiptAsync(CreateItemMappingFunction createItemMappingFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createItemMappingFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> CreateItemMappingRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<CreateItemMappingFunction>(null, cancellationToken);
         }
 
         public Task<string> CreateMileRequestAsync(CreateMileFunction createMileFunction)
@@ -1165,7 +1249,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(giveGemFunction, cancellationToken);
         }
 
-        public Task<string> GiveGemRequestAsync(byte[] player, uint amount)
+        public Task<string> GiveGemRequestAsync(byte[] player, int amount)
         {
             var giveGemFunction = new GiveGemFunction();
                 giveGemFunction.Player = player;
@@ -1174,7 +1258,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(giveGemFunction);
         }
 
-        public Task<TransactionReceipt> GiveGemRequestAndWaitForReceiptAsync(byte[] player, uint amount, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> GiveGemRequestAndWaitForReceiptAsync(byte[] player, int amount, CancellationTokenSource cancellationToken = null)
         {
             var giveGemFunction = new GiveGemFunction();
                 giveGemFunction.Player = player;

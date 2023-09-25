@@ -46,11 +46,11 @@ public class StoreUI : SPWindowParent
         CoinComponent.OnLocalUpdate -= UpdateStore;
     }
 
-    public void Buy(GaulItem buyItem) {
+    public void Buy(GaulItem buyItem, PaymentType paymentType) {
         if (buyItem == null) { Debug.LogError("No item"); return; }
         if (buyItem.ID < 0) { Debug.LogError("No item index"); return; }
 
-        BuyItem(buyItem.ID);
+        BuyItem(buyItem.ID, paymentType);
     }
 
     void UpdateStore() {
@@ -59,9 +59,9 @@ public class StoreUI : SPWindowParent
         }
     }
 
-    public void BuyItem(int itemID) {
+    public void BuyItem(int itemID, PaymentType payment) {
         // ActionsMUD.ActionOptimistic(PlayerComponent.LocalPlayer.Entity, ActionName.Buy, PlayerComponent.LocalPlayer.transform.position);
-        TxManager.SendQueue<BuyCosmeticFunction>(System.Convert.ToUInt32(itemID));
+        TxManager.SendQueue<BuyFunction>(System.Convert.ToUInt32(itemID), System.Convert.ToByte((int)payment));
         BuyFX();
     }
 

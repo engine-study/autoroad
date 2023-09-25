@@ -19,9 +19,13 @@ public class WorldScroll : MonoBehaviour {
     public SPButton playerButton, landscapeButon;
 
     [Header("Game State")]
-    [SerializeField] private TableManager chunkTable;
-    [SerializeField] private GameObject front;
-    [SerializeField] private GameObject back;
+    [SerializeField] TableManager chunkTable;
+    [SerializeField] GameObject front;
+    [SerializeField] GameObject back;
+
+    [Header("Terrain")]
+    [SerializeField] List<GameObject> terrains;
+    [SerializeField] List<GameObject> active;
 
     [Header("Debug")]
     [SerializeField] bool playerFocus = false;
@@ -232,9 +236,10 @@ public class WorldScroll : MonoBehaviour {
         newChunk.gameObject.SetActive(true);
         recapButton.ToggleWindow(newChunk.Completed);
 
-
-
     }
 
+    public void SetupTerrain(int newMile) {
+
+    }
 
 }

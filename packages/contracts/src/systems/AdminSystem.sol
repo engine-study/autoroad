@@ -98,7 +98,7 @@ contract AdminSystem is System {
     IWorld(_world()).giveXP(player, amount);
   }
 
-  function addGemXP(uint32 amount) public {
+  function addGemXP(int32 amount) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
     IWorld(_world()).giveGem(player, amount);

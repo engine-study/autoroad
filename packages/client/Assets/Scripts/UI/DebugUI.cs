@@ -27,7 +27,7 @@ public class DebugUI : SPWindowParent
     }
 
     public void GiveGems() {
-        TxManager.SendDirect<AddGemXPFunction>(System.Convert.ToUInt32(5));
+        TxManager.SendDirect<AddGemXPFunction>(System.Convert.ToInt32(5));
     }
 
     public void SpawnPuzzle() {

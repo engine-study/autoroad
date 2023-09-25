@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Action, Name, Player, Health} from "../codegen/Tables.sol";
-import { ActionType } from "../codegen/Types.sol";
+import { ActionType, PaymentType } from "../codegen/Types.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
 import { MapSubsystem } from "../systems/MapSubsystem.sol";
@@ -61,6 +61,14 @@ contract ActionSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
     world.summonMile(player, false);
+  }
+
+  function buy(uint32 id, PaymentType payment) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    IWorld world = IWorld(_world());
+    world.buyItem(player, player, id, payment);
+    PositionData memory pos = Position.get(player);
+    setAction(player, ActionType.Buy, pos.x, pos.y);
   }
 
   function action(ActionType newAction, int32 x, int32 y) public {

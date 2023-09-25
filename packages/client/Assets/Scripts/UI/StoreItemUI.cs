@@ -27,8 +27,16 @@ public class StoreItemUI : SPWindow
         CanBuy();
     }
 
-    public void Buy() {
-        store.Buy(item);
+    public void BuyCoins() {
+        store.Buy(item, PaymentType.Coins);
+    }
+
+    public void BuyGems() {
+        store.Buy(item, PaymentType.Gems);
+    }
+
+    public void BuyEth() {
+        store.Buy(item, PaymentType.Eth);
     }
 
     public void CanBuy() {
