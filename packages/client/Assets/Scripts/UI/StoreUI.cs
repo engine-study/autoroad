@@ -9,6 +9,7 @@ public class StoreUI : SPWindowParent
 
     [Header("Store")]
     public StoreItemUI itemPrefab;
+    public RectTransform itemRect;
     public AudioClip [] sfx_buy;
 
     [Header("Debug")]
@@ -29,7 +30,7 @@ public class StoreUI : SPWindowParent
             
             itemInfo.Add(newItemInfo);
 
-            StoreItemUI newItem = Instantiate(itemPrefab.gameObject, transform).GetComponent<StoreItemUI>();
+            StoreItemUI newItem = Instantiate(itemPrefab.gameObject, itemRect).GetComponent<StoreItemUI>();
             newItem.store = this;
             items.Add(newItem);
 

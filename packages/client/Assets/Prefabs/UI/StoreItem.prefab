@@ -171,6 +171,12 @@ MonoBehaviour:
   buyButtonCoin: {fileID: 4559506560572102032}
   buyButtonGem: {fileID: 5453143771108011923}
   buyButtonEth: {fileID: 8426432297972598587}
+  itemTypeImage: {fileID: 8826552081898230378}
+  itemTypeSprites:
+  - {fileID: 740767143, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 740767143, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 740767143, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 740767143, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
   item: {fileID: 0}
 --- !u!1 &7482247615571288637
 GameObject:
@@ -184,12 +190,12 @@ GameObject:
   - component: {fileID: 9021324305582033209}
   - component: {fileID: 8826552081898230378}
   m_Layer: 5
-  m_Name: LimitedTimeIcon
+  m_Name: ItemType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9215776104402743806
 RectTransform:
   m_ObjectHideFlags: 0
@@ -198,18 +204,18 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7482247615571288637}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.00037589576}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00033464964}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6281993141600889878}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -120, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -50, y: 0}
   m_SizeDelta: {x: 40, y: 40}
-  m_Pivot: {x: 1, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &9021324305582033209
 CanvasRenderer:
   m_ObjectHideFlags: 0

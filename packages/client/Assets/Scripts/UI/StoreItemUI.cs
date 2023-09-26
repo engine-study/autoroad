@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoreItemUI : SPWindow
 {
@@ -10,6 +11,8 @@ public class StoreItemUI : SPWindow
     [SerializeField] SPButton buyButtonCoin;
     [SerializeField] SPButton buyButtonGem;
     [SerializeField] SPButton buyButtonEth;
+    [SerializeField] Image itemTypeImage;
+    [SerializeField] Sprite [] itemTypeSprites;
 
     [Header("Debug")]
     [SerializeField] GaulItem item;
@@ -26,6 +29,8 @@ public class StoreItemUI : SPWindow
         buyButtonCoin.ToggleWindow(item.price > 0);
         buyButtonGem.ToggleWindow(item.gem > 0);
         buyButtonEth.ToggleWindow(item.eth > 0);
+        
+        itemTypeImage.sprite = itemTypeSprites[(int)item.itemType];
 
         CanBuy();
     }
