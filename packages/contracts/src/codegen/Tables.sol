@@ -40,6 +40,7 @@ import { Damage, DamageTableId } from "./tables/Damage.sol";
 import { Health, HealthTableId } from "./tables/Health.sol";
 import { Seeds, SeedsTableId } from "./tables/Seeds.sol";
 import { Gem, GemTableId } from "./tables/Gem.sol";
+import { Eth, EthTableId } from "./tables/Eth.sol";
 import { Rock, RockTableId } from "./tables/Rock.sol";
 import { Boulder, BoulderTableId } from "./tables/Boulder.sol";
 import { Tree, TreeTableId } from "./tables/Tree.sol";

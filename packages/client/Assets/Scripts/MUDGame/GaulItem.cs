@@ -19,6 +19,14 @@ public class GaulItem : ScriptableObject {
     public float price = 0;
     public int gem = 0;
     public float eth = 0f;
+
+    public string FullDescription() {
+        return "<b><size=32>" + itemName + "</size></b> - <size=28>" + ItemTypeString(itemType) + "</size>\n" + itemDescription;
+    }
+
+    public string ItemTypeString(ItemType newType) { return ItemStrings[(int)newType]; }
+
+    public static string [] ItemStrings = new string[]{"Item", "Tool", "Outfit", "Unique Outfit"};
 }
 
 public enum ItemType { GameplayStashable, GameplayEquipment, Cosmetic, PayedCosmetic }

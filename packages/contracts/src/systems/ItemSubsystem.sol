@@ -4,9 +4,9 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action } from "../codegen/Tables.sol";
-import { Coinage, Gem, XP, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/Tables.sol";
+import { Coinage, Gem, Eth, XP, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/Tables.sol";
 import { ActionType, PaymentType } from "../codegen/Types.sol";
-// import { Item } from "../codegen/Tables.sol";
+
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { GaulItems } from "../data/GaulItems.sol";

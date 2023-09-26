@@ -6,6 +6,7 @@ using UnityEngine;
 public class ProfileUI : SPWindowParent
 {
     [Header("Profile")]
+    public PlayerUI playerUI;
     public SPInputField nameField;
     public SPInputField publicKeyField;
 
@@ -16,8 +17,17 @@ public class ProfileUI : SPWindowParent
         NetworkManager.OnInitialized += UpdateAddress;
     }
 
-    protected override void OnDisable() {
-        base.OnDisable();
+
+    public override void ToggleWindow(bool toggle)
+    {
+        base.ToggleWindow(toggle);
+        if(toggle) {
+            playerUI.ShowLevel();
+        }
+    }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
 
         NameComponent.OnLocalName -= UpdateName;
         NetworkManager.OnInitialized -= UpdateAddress;

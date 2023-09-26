@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class StoreItemUI : SPWindow
 {
+    [Header("Store Item")]
     [HideInInspector] public StoreUI store;
-    [SerializeField] GaulItem item;
     [SerializeField] SPInputField itemText;
     [SerializeField] SPButton buyButtonCoin;
     [SerializeField] SPButton buyButtonGem;
     [SerializeField] SPButton buyButtonEth;
+
+    [Header("Debug")]
+    [SerializeField] GaulItem item;
 
     public void SetItem(GaulItem newItem) {
 
@@ -17,14 +20,19 @@ public class StoreItemUI : SPWindow
         itemText.UpdateField(item.itemName);
 
         buyButtonCoin.UpdateField(item.price.ToString("000"));
-        buyButtonGem.UpdateField(item.gem.ToString("000"));
-        buyButtonEth.UpdateField(item.eth.ToString("000"));
+        buyButtonGem.UpdateField(item.gem.ToString("0"));
+        buyButtonEth.UpdateField(item.eth.ToString(".00"));
 
         buyButtonCoin.ToggleWindow(item.price > 0);
         buyButtonGem.ToggleWindow(item.gem > 0);
         buyButtonEth.ToggleWindow(item.eth > 0);
 
         CanBuy();
+    }
+
+    public void UpdateDescription() {
+        SPRawText text = SPHoverWindow.Instance.GetComponentInChildren<SPRawText>(true);
+        text.UpdateField(item.FullDescription());
     }
 
     public void BuyCoins() {

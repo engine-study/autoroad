@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 using System;
+using TMPro;
 
 public class LevelUI : SPWindowMUDComponent
 {
     [Header("Level")]
-    public SPButton levelButton;
+    public TextMeshProUGUI levelButton;
 
     public override Type ComponentType() {return typeof(XPComponent);}
 
@@ -16,7 +17,7 @@ public class LevelUI : SPWindowMUDComponent
     public override void UpdateComponent() {
         base.UpdateComponent();
 
-        levelButton.UpdateField((component as XPComponent).Level.ToString());
+        levelButton.text = (component as XPComponent).Level.ToString();
 
     }
 

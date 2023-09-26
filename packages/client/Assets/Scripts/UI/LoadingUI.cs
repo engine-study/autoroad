@@ -11,7 +11,7 @@ public class LoadingUI : SPWindowParent
     [Header("Loading")]
     [SerializeField] TMPro.TextMeshProUGUI text;
     float dotTime = 0f;
-
+    int totalTables = -1;
     int dots;
     string dotString;
 
@@ -33,6 +33,7 @@ public class LoadingUI : SPWindowParent
 
     protected override void OnEnable() {
         base.OnEnable();
+        totalTables = -1;
         Toggle(true);
     }
 

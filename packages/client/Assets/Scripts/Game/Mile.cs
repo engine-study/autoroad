@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class Mile : MonoBehaviour
@@ -8,6 +9,7 @@ public class Mile : MonoBehaviour
 
     [Header("Mile")]
     [SerializeField] Transform roadParent;
+    [SerializeField] Transform terrainParent;
     [SerializeField] Transform groundParent;
     [SerializeField] Transform groundLeft, groundRight;
     [SerializeField] Transform spawnLeft, spawnRight;
@@ -21,11 +23,18 @@ public class Mile : MonoBehaviour
     int rowTotal;
     int widthSize;
 
+    async void Start() {
+        await SetupMileAsync();
+    }
+
     public void SetupMile(ChunkComponent newChunk) {
-
-        if (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { Debug.LogError("Can't setup chunk"); return; }
-
         chunk = newChunk;
+    }
+
+    async UniTask SetupMileAsync() {
+
+        while (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { await UniTask.Delay(200); }
+
         isRealChunk = chunk != null;
 
         roadParent.gameObject.SetActive(!isRealChunk);
@@ -48,7 +57,8 @@ public class Mile : MonoBehaviour
         }
 
         roadParent.localScale = Vector3.one + Vector3.right * RoadConfigComponent.Width;
-        groundParent.localScale = Vector3.one + Vector3.forward * (rowTotal-1);
+        groundParent.localScale = Vector3.one + Vector3.forward * MapConfigComponent.Height;
+        terrainParent.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth * 2 + 1);
 
         groundLeft.localPosition = Vector3.right * (RoadConfigComponent.Left - .5f);
         groundRight.localPosition = Vector3.right * (RoadConfigComponent.Right + .5f);

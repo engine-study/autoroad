@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class PlayerUI : SPWindowParent
 {
     public SPActionUI actions;
-    public SPButton level;
+    public LevelUI level;
     public SPBar slider;
 
     public override void Init() {
@@ -14,14 +14,19 @@ public class PlayerUI : SPWindowParent
         XPComponent.OnLocalXPUpdate += UpdateXP;
         XPComponent.OnLocalLevelUp += UpdateLevel;
 
+
         slider.SetFill(0f);
-        level.UpdateField("0");
 
     }
     
     protected override void Awake() {
         base.Awake();
 
+    }
+
+    public void ShowLevel() {
+        slider.ToggleWindowOpen();
+        level.ToggleWindowOpen();
     }
 
     protected override void OnDestroy() {
@@ -33,6 +38,7 @@ public class PlayerUI : SPWindowParent
     }
 
     void SetupPlayer() {
+        level.SetEntity(PlayerComponent.LocalPlayer.Entity);
         actions.Setup(SPPlayer.LocalPlayer.Actor);
     }
 
@@ -48,7 +54,6 @@ public class PlayerUI : SPWindowParent
         UpdateXP();
 
         level.ToggleWindowOpen();
-        level.UpdateField(XPComponent.LocalLevel.ToString());
         SPStrobeUI.ToggleStrobe(level);
     }
 }

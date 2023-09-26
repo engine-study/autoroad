@@ -205,6 +205,7 @@ export default mudConfig({
     Health: "int32",
     Seeds: "uint32",
     Gem: "int32",
+    Eth: "uint256",
 
     //unique objects
     Rock: "uint32",

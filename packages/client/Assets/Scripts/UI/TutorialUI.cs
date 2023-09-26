@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TutorialUI : SPWindowParent
 {
+    public static System.Action<bool> OnTutorial;
+
     [Header("Tutorial")]
     [SerializeField] SPTextSequence tutorialText;
     [SerializeField] GameObject tutorialParent;
@@ -67,6 +69,7 @@ public class TutorialUI : SPWindowParent
             ShowTutorial();
 
         } else {
+            //todo set to world scroll
             if(hasStarted) {
                 SPCamera.SetFollow(null);
                 SPCamera.SetTarget(Vector3.zero);
@@ -77,6 +80,7 @@ public class TutorialUI : SPWindowParent
 
         SPCamera.ToggleScroll(!toggle);
 
+        OnTutorial?.Invoke(toggle);
 
     }
 

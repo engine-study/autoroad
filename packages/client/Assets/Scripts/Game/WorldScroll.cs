@@ -49,6 +49,8 @@ public class WorldScroll : MonoBehaviour {
         GameStateComponent.OnGameStateUpdated += Init;
         SPEvents.OnLocalPlayerSpawn += InitPlayer;
 
+        TutorialUI.OnTutorial += ToggleTutorial;
+
         enabled = false;
 
     }
@@ -79,7 +81,6 @@ public class WorldScroll : MonoBehaviour {
         SetToScrollMile();
         
     }
-        
     
     void Update() {
 
@@ -163,6 +164,12 @@ public class WorldScroll : MonoBehaviour {
 
     }
 
+    public void ToggleTutorial(bool toggle) {
+        enabled = !toggle;
+        front.SetActive(!toggle);
+        back.SetActive(!toggle);
+    }
+
     public void SetToScrollMile() {
         Debug.Log("SCROLL: Scroll", this);
         ToggleCameraOnPlayer(false);
@@ -194,6 +201,8 @@ public class WorldScroll : MonoBehaviour {
             MotherUI.FollowPlayer();
         } else {
             SPCamera.SetFollow(null);
+            SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
+            SPCamera.SetFOVGlobal(10f);
         }
 
     }
@@ -219,22 +228,21 @@ public class WorldScroll : MonoBehaviour {
 
         currentMile = newMile;
 
-        front.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height + MapConfigComponent.Height);
-        back.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height - MapConfigComponent.Height);
-
     }
 
     public void LoadMile(int newMile) {
         
-        string chunkEntity = MUDHelper.Keccak256("Chunk", (int)newMile);
-        ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
+        bool loaded = ChunkLoader.LoadMile(newMile);
 
-        if(newChunk == null) {
+        if(loaded == false) {
             return;
         }
-           
-        newChunk.gameObject.SetActive(true);
-        recapButton.ToggleWindow(newChunk.Completed);
+      
+        recapButton.ToggleWindow(ChunkLoader.Chunk.Completed);
+    
+        front.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height + MapConfigComponent.Height);
+        back.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height - MapConfigComponent.Height);
+
 
     }
 
