@@ -26,6 +26,8 @@ public class ChunkLoader : MonoBehaviour
     }
 
     public bool LoadMileInternal(int newMile) {
+        
+        Debug.Log("WORLD: Loading " + newMile, this);
 
         string chunkEntity = MUDHelper.Keccak256("Chunk", (int)newMile);
         ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);

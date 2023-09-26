@@ -10,6 +10,10 @@ public class StoreUI : SPWindowParent
     [Header("Store")]
     public StoreItemUI itemPrefab;
     public RectTransform itemRect;
+
+
+    [EnumNamedArray( typeof(ItemType) )]
+    public SPButton [] itemTypeHeaders;
     public AudioClip [] sfx_buy;
 
     [Header("Debug")]
@@ -23,6 +27,10 @@ public class StoreUI : SPWindowParent
         object[] itemObjects = Resources.LoadAll("Data/Store");
         itemPrefab.ToggleWindowClose();
 
+        for(int i =0; i < itemTypeHeaders.Length; i++) {
+            itemTypeHeaders[i].UpdateField(GaulItem.ItemTypeString((ItemType)i));
+        }
+
         for (int i = 0; i < itemObjects.Length; i++) {
 
             GaulItem newItemInfo = itemObjects[i] as GaulItem;
@@ -32,8 +40,9 @@ public class StoreUI : SPWindowParent
 
             StoreItemUI newItem = Instantiate(itemPrefab.gameObject, itemRect).GetComponent<StoreItemUI>();
             newItem.store = this;
-            items.Add(newItem);
+            newItem.transform.SetSiblingIndex(itemTypeHeaders[(int)newItemInfo.itemType].transform.GetSiblingIndex()+1);
 
+            items.Add(newItem);
             newItem.SetItem(newItemInfo);
         }
 
@@ -55,8 +64,19 @@ public class StoreUI : SPWindowParent
     }
 
     void UpdateStore() {
+
+        int childCount = 0;
+        int newChildCount = 0;
+
         for (int i = 0; i < items.Count; i++) {
+            if(items[i].gameObject.activeSelf) { childCount++;}
             items[i].CanBuy();
+            if(items[i].gameObject.activeSelf) { newChildCount++;}
+
+        }
+
+        if(childCount != newChildCount) {
+            //strobe button
         }
     }
 

@@ -7,7 +7,7 @@ public class WorldScroll : MonoBehaviour {
 
     public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)MapConfigComponent.Height);}
     public static WorldScroll Instance;
-    public static float Mile {get { return Instance.currentMile; } }
+    public static float Mile {get { return Instance.mile; } }
 
     [Header("World Scroll")]
     public SPWindowParent mileUI;
@@ -30,19 +30,19 @@ public class WorldScroll : MonoBehaviour {
     [Header("Debug")]
     [SerializeField] bool playerFocus = false;
     [SerializeField] float maxMile = 0f;
-    [SerializeField] int currentMile = -1;
+    [SerializeField] int mile = -1;
     [SerializeField] float mileScroll, lastScroll = -100f;
     float playerMile = 0f, lastPlayerMile = -1f;
     float targetScroll, targetPlayer;
 
-    public float MileDistance { get { return currentMile * GameStateComponent.MILE_DISTANCE; } }
+    public float MileDistance { get { return mile * GameStateComponent.MILE_DISTANCE; } }
     public float MileTotalScroll { get { return mileScroll * GameStateComponent.MILE_DISTANCE; } }
     public static float GetMileLerp(float newMile) {return GameStateComponent.MILE_COUNT == 0 ? 1f : Mathf.Clamp01(newMile/GameStateComponent.MILE_COUNT);}
 
     void Awake() {
 
         Instance = this;
-        currentMile = -1;
+        mile = -1;
         playerUI.gameObject.SetActive(false);
         mileUI.ToggleWindowClose();
 
@@ -98,7 +98,7 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdateInput() {
         
-        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && SPInput.ModifierKey == false) {
+        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && SPInput.ModifierKey == false && Input.mouseScrollDelta.y != 0f) {
             if(Input.mouseScrollDelta.y != 0f) {mileUI.ToggleWindowOpen();}
             mileScroll = GetSoftClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
@@ -128,13 +128,13 @@ public class WorldScroll : MonoBehaviour {
     void UpdateScroll() {
 
         //magnetism, lerp back to current mile
-        mileScroll = Mathf.MoveTowards(mileScroll, currentMile, 1f * Time.deltaTime);
+        mileScroll = Mathf.MoveTowards(mileScroll, mile, 1f * Time.deltaTime);
         targetScroll = GetMileLerp(mileScroll);
 
         bool isInNewMile = Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileDistance) > GameStateComponent.MILE_DISTANCE * .5f;
         int newMile = Mathf.RoundToInt(mileScroll);
         //if we're more than halfway to the next mile, magnet over to it
-        if (isInNewMile && newMile != currentMile) {
+        if (isInNewMile && newMile != mile) {
             SetToScrollMile();
         }
 
@@ -213,7 +213,7 @@ public class WorldScroll : MonoBehaviour {
 
     public void SetMile(int newMile) {
 
-        Debug.Log("WORLD: (" + currentMile + ") " + (int)newMile + " / " + (int)maxMile, this);
+        Debug.Log("WORLD: (" + mile + ") " + (int)newMile + " / " + (int)maxMile, this);
 
         //out of range
         if(newMile > maxMile || newMile < 0f) {
@@ -226,7 +226,11 @@ public class WorldScroll : MonoBehaviour {
         mileHeading.UpdateField("Mile " + (int)(newMile+1));
         mileUI.ToggleWindowOpen();
 
-        currentMile = newMile;
+        recapButton.ToggleWindow(ChunkLoader.Chunk.Completed);
+    
+        front.transform.position = Vector3.forward * (mile * MapConfigComponent.Height + MapConfigComponent.Height);
+        back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
+
 
     }
 
@@ -235,15 +239,11 @@ public class WorldScroll : MonoBehaviour {
         bool loaded = ChunkLoader.LoadMile(newMile);
 
         if(loaded == false) {
+            Debug.LogError("Couldn't load mile " + newMile, this);
             return;
         }
       
-        recapButton.ToggleWindow(ChunkLoader.Chunk.Completed);
-    
-        front.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height + MapConfigComponent.Height);
-        back.transform.position = Vector3.forward * (currentMile * MapConfigComponent.Height - MapConfigComponent.Height);
-
-
+        mile = newMile;
     }
 
     public void SetupTerrain(int newMile) {
