@@ -28,6 +28,7 @@ public class TutorialUI : SPWindowParent
     }
 
     protected override void Start() {
+        base.Start();
         hasStarted = true;
         Toggle(true);
     }

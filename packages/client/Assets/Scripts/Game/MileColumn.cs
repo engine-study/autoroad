@@ -5,35 +5,58 @@ using UnityEngine;
 public class MileColumn : MonoBehaviour
 {
 
+    public int Mile {get{return Mathf.RoundToInt(MileRaw);}}
+    public float MileRaw {get{return totalRot/round;}}
 
     [Header("Rotate")]
     [SerializeField] Transform column;
     [SerializeField] float horizontalSpeed = 2.0f;
     [SerializeField] float verticalSpeed = 2.0f;
     [SerializeField] float drag = 1.0f;
+    [SerializeField] float round = 180f;
 
     float scroll, lastScroll;
     float velocity;
-    float lifeTimeRot;
+    float totalRot;
+    float roundedRot;
     Vector3 startPos;
+    float axis, startAxis = 0f;
+    bool goodInput;
+    public void SetMile(float newMile) {
+        totalRot = Mathf.Clamp(newMile * round, 0f, (GameStateComponent.MILE_COUNT+1f) * round);
+    }
 
     void Update() {
 
         lastScroll = scroll;
+        axis = Input.GetAxis("Mouse X");
 
-        if(Input.GetMouseButton(0)) {
-            scroll = Mathf.Lerp(scroll, horizontalSpeed * -Input.GetAxis("Mouse X") * Time.deltaTime, .5f);
+        if(Input.GetMouseButtonDown(0)) {
+            goodInput = SPUIBase.IsPointerOverUIElement == false;
+        }
+
+        bool mouseInput = Input.GetMouseButton(0) && goodInput;
+
+        if(mouseInput) {
+            scroll = Mathf.Lerp(scroll, horizontalSpeed * -(axis - startAxis) * Time.deltaTime, .5f);
         } else {
+            startAxis = axis;
             scroll = Mathf.MoveTowards(scroll, 0f, Time.deltaTime * drag);
         }
 
         // float newVel = (scroll - lastScroll) / Time.deltaTime;
         // velocity = Mathf.Lerp(velocity, Mathf.Clamp01(newVel - drag), .25f);
 
-        lifeTimeRot = Mathf.Clamp(lifeTimeRot + scroll, 0f, 1080f);
+        totalRot = Mathf.Clamp(totalRot + scroll, 0f, (GameStateComponent.MILE_COUNT+1f) * round);
+        roundedRot = Mathf.Round(totalRot / round) * round;
 
-        column.localRotation = Quaternion.Euler(0, lifeTimeRot, 0f);
-        column.localPosition = Vector3.down * lifeTimeRot * verticalSpeed;
+        Quaternion rot = Quaternion.identity;
+
+        if(mouseInput) {rot = Quaternion.Lerp(column.localRotation, Quaternion.Euler(Vector3.up * totalRot), .1f);}
+        else {rot = Quaternion.Lerp(column.localRotation, Quaternion.Euler(Vector3.up * roundedRot), .1f);}
+
+        column.localRotation = rot;
+        column.localPosition = Vector3.down * totalRot * verticalSpeed;
 
     }
 

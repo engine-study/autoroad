@@ -238,10 +238,7 @@ public class WorldScroll : MonoBehaviour {
         
         bool loaded = ChunkLoader.LoadMile(newMile);
 
-        if(loaded == false) {
-            Debug.LogError("Couldn't load mile " + newMile, this);
-            return;
-        }
+        if(loaded == false) { return; }
       
         mile = newMile;
     }

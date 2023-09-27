@@ -33,6 +33,7 @@ public class ChunkLoader : MonoBehaviour
         ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
 
         if(newChunk == null) {
+            Debug.LogError("Couldn't load mile " + newMile, this);
             return false; 
         }
 
