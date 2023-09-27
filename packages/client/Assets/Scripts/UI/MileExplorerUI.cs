@@ -17,16 +17,18 @@ public class MileExplorerUI : SPWindowParent
     [Header("Column")]
     public MileColumn column;
 
-    bool hasSetup = false; 
+    [Header("Debug")]
+    [SerializeField] int mile = -10;
+    [SerializeField] bool hasSetup = false; 
+    
     int lastMile = -1;
-    int mile = -10;
     int sliderMile = -99;
     bool firstTime = true;
 
     public override void Init() {
         base.Init();
-
-        SetMaxMile();
+        slider.value = 0f;
+        column.SetMile(0f);
         GameStateComponent.OnGameStateUpdated += SetMaxMile;
     }
 
@@ -37,6 +39,7 @@ public class MileExplorerUI : SPWindowParent
 
     protected override void OnEnable() {
         base.OnEnable();
+        if(!hasSetup) return;
         Toggle(true);
     }
 
@@ -47,25 +50,19 @@ public class MileExplorerUI : SPWindowParent
 
     public void SetMaxMile() {
         hasSetup = true;
-        slider.maxValue = GameStateComponent.MILE_COUNT + 1.45f;
-        slider.minValue = -.45f;
+        slider.maxValue = GameStateComponent.MILE_COUNT + .25f;
+        slider.minValue = -.25f;
     }
 
     void Update() {
 
-        if(Input.GetMouseButton(0)) {
-
+        if(column.IsInputting) {
+            slider.value = Mathf.Lerp(slider.value, column.MileRaw, .25f);
         } else {
-            slider.value = Mathf.Lerp(slider.value, mile, .2f);
+            slider.value = Mathf.Lerp(slider.value, mile, .25f);
+            column.SetMile(slider.value);
+            sliderMile = Mathf.RoundToInt(slider.value);
         }
-
-        //rotate column to slider value;
-        column.SetMile(slider.value);
-        sliderMile = Mathf.RoundToInt(slider.value);
-        
-        // if(sliderMile != mile) {
-        //     SetMile(sliderMile);
-        // }
 
         if(column.Mile != mile) {
             SetMile(column.Mile);
@@ -81,7 +78,7 @@ public class MileExplorerUI : SPWindowParent
         lastMile = mile;
         mile = newMile;
 
-        Debug.Log("Loading " + newMile);
+        Debug.Log("EXPLORE " + newMile);
 
         title.UpdateField("Mile " + (newMile+1));
 
@@ -113,32 +110,34 @@ public class MileExplorerUI : SPWindowParent
 
     void Toggle(bool toggle) {
 
-        if(!hasSetup) return;
-
-        SetMaxMile();
-
         column.gameObject.SetActive(toggle);
         fullscreenBG.gameObject.SetActive(toggle);
 
         if(toggle) {
 
-            if(firstTime) {SetMile(0);}
+            if(firstTime) {
+                SetMaxMile();
+                SetMile(0);
+            }
 
             firstTime = false;
+
+            column.SetRot(mile - .25f);
+            SetMile(mile);
 
             SPCamera.SetFollow(null);
             SPCamera.SetFOVGlobal(2f);
 
         } else {
             //todo set to world scroll
-            if(hasSetup) {
+            if(hasInit) {
                 SPCamera.SetFollow(null);
                 SPCamera.SetTarget(Vector3.zero);
                 SPCamera.SetFOVGlobal(10f);
             }
         }
 
-        if(hasSetup) {
+        if(hasInit) {
             SPUIBase.ToggleMotherUI(!toggle);
         }
 

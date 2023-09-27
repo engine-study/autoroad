@@ -5,15 +5,19 @@ using UnityEngine;
 public class MileColumn : MonoBehaviour
 {
 
-    public int Mile {get{return Mathf.RoundToInt(MileRaw);}}
-    public float MileRaw {get{return totalRot/round;}}
-
+    public int Mile {get{return Mathf.RoundToInt(mile);}}
+    public float MileRaw {get{return mile;}}
+    public bool IsInputting {get{return mouseInput || scrollInput;}}
     [Header("Rotate")]
     [SerializeField] Transform column;
     [SerializeField] float horizontalSpeed = 2.0f;
+    [SerializeField] float wheelSpeed = 10.0f;
     [SerializeField] float verticalSpeed = 2.0f;
     [SerializeField] float drag = 1.0f;
     [SerializeField] float round = 180f;
+
+    [Header("Debug")]
+    [SerializeField] float mile;
 
     float scroll, lastScroll;
     float velocity;
@@ -22,9 +26,16 @@ public class MileColumn : MonoBehaviour
     float roundedRot;
     Vector3 startPos;
     float axis, startAxis = 0f;
-    bool goodInput;
+    bool mouseInput, scrollInput;
+
     public void SetMile(float newMile) {
-        totalRot = Mathf.Clamp(newMile * round, 0f, (GameStateComponent.MILE_COUNT+1f) * round);
+        totalRot = Mathf.Clamp(newMile * round, -.25f * round, (GameStateComponent.MILE_COUNT + .25f) * round);
+    }
+
+    public void SetRot(float newMile) {
+        lerpRot = newMile * round;
+        column.localRotation = Quaternion.Euler(Vector3.up * newMile * round);
+        column.localPosition = Vector3.down * newMile * round * verticalSpeed;
     }
 
     void Update() {
@@ -32,14 +43,14 @@ public class MileColumn : MonoBehaviour
         lastScroll = scroll;
         axis = Input.GetAxis("Mouse X");
 
-        if(Input.GetMouseButtonDown(0)) {
-            goodInput = SPUIBase.IsPointerOverUIElement == false;
-        }
-
-        bool mouseInput = Input.GetMouseButton(0) && goodInput;
+        mouseInput = false && Input.GetMouseButton(0);
+        scrollInput = Input.mouseScrollDelta.y != 0f;
 
         if(mouseInput) {
-            scroll = Mathf.Lerp(scroll, horizontalSpeed * -(axis - startAxis) * Time.deltaTime, .5f);
+            scroll = Mathf.Lerp(scroll, horizontalSpeed * -(axis - startAxis) * Time.deltaTime, .25f);
+        } else if(scrollInput) {
+            startAxis = axis;
+            scroll = Mathf.Lerp(scroll, wheelSpeed * Input.mouseScrollDelta.y * Time.deltaTime, .25f);
         } else {
             startAxis = axis;
             scroll = Mathf.MoveTowards(scroll, 0f, Time.deltaTime * drag);
@@ -48,17 +59,13 @@ public class MileColumn : MonoBehaviour
         // float newVel = (scroll - lastScroll) / Time.deltaTime;
         // velocity = Mathf.Lerp(velocity, Mathf.Clamp01(newVel - drag), .25f);
 
-        totalRot = Mathf.Clamp(totalRot + scroll, 0f, (GameStateComponent.MILE_COUNT+1f) * round);
+        totalRot = Mathf.Clamp(totalRot + scroll, round * -.25f, (GameStateComponent.MILE_COUNT + .25f) * round);
         lerpRot = Mathf.Lerp(lerpRot, totalRot, .1f);
         roundedRot = Mathf.Round(totalRot / round) * round;
 
-        Quaternion rot = Quaternion.identity;
+        mile = lerpRot/round;
 
-        if(true || mouseInput) {rot = Quaternion.Euler(Vector3.up * lerpRot);}
-        else {rot = Quaternion.Lerp(column.localRotation, Quaternion.Euler(Vector3.up * roundedRot), .1f);}
-
-        column.localRotation = rot;
-        column.localPosition = Vector3.down * totalRot * verticalSpeed;
+        SetRot(mile);
 
     }
 
