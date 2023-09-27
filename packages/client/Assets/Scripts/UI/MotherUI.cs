@@ -22,6 +22,7 @@ public class MotherUI : SPUIInstance {
     public SpawningUI spawning;
     public RespawnUI respawn;
     public TutorialUI tutorial;
+    public MileExplorerUI explorer;
 
     [Header("Menu")]
     public MainMenuUI menu;
@@ -57,6 +58,9 @@ public class MotherUI : SPUIInstance {
         map.ToggleWindowClose();
         menu.ToggleWindowClose();
         spectate.ToggleWindowClose();
+
+        explorer.Init();
+        explorer.ToggleWindowClose();
 
         wheel.Init();
 

@@ -18,6 +18,7 @@ public class MileColumn : MonoBehaviour
     float scroll, lastScroll;
     float velocity;
     float totalRot;
+    float lerpRot;
     float roundedRot;
     Vector3 startPos;
     float axis, startAxis = 0f;
@@ -48,11 +49,12 @@ public class MileColumn : MonoBehaviour
         // velocity = Mathf.Lerp(velocity, Mathf.Clamp01(newVel - drag), .25f);
 
         totalRot = Mathf.Clamp(totalRot + scroll, 0f, (GameStateComponent.MILE_COUNT+1f) * round);
+        lerpRot = Mathf.Lerp(lerpRot, totalRot, .1f);
         roundedRot = Mathf.Round(totalRot / round) * round;
 
         Quaternion rot = Quaternion.identity;
 
-        if(mouseInput) {rot = Quaternion.Lerp(column.localRotation, Quaternion.Euler(Vector3.up * totalRot), .1f);}
+        if(true || mouseInput) {rot = Quaternion.Euler(Vector3.up * lerpRot);}
         else {rot = Quaternion.Lerp(column.localRotation, Quaternion.Euler(Vector3.up * roundedRot), .1f);}
 
         column.localRotation = rot;

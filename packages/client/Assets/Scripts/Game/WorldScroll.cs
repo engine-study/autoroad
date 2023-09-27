@@ -221,7 +221,11 @@ public class WorldScroll : MonoBehaviour {
             return;
         }
 
-        LoadMile(newMile);
+        
+        bool loaded = ChunkLoader.LoadMile(newMile);
+        if(loaded == false) { return; }
+
+        mile = newMile;
 
         mileHeading.UpdateField("Mile " + (int)(newMile+1));
         mileUI.ToggleWindowOpen();
@@ -232,15 +236,6 @@ public class WorldScroll : MonoBehaviour {
         back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
 
 
-    }
-
-    public void LoadMile(int newMile) {
-        
-        bool loaded = ChunkLoader.LoadMile(newMile);
-
-        if(loaded == false) { return; }
-      
-        mile = newMile;
     }
 
     public void SetupTerrain(int newMile) {
