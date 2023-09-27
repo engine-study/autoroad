@@ -30,9 +30,10 @@ public class RoadComponent : MUDComponent {
     [SerializeField] string creditedPlayer;
     [SerializeField] string creditedPlayerDebug;
     [SerializeField] bool hasGem;
-    [SerializeField] ChunkComponent parent;
+    [SerializeField] ChunkComponent chunk;
+    [SerializeField] PositionComponent pos;
     [SerializeField] PlayerComponent filledBy;
-    [SerializeField] Vector2Int localChunkPos;
+    [SerializeField] Vector2Int localPos;
 
     RoadState lastStage = RoadState.None;
 
@@ -45,6 +46,25 @@ public class RoadComponent : MUDComponent {
     protected override void PostInit() {
         base.PostInit();
         AddToChunk();
+    }
+
+    public async UniTaskVoid AddToChunk() {
+
+        //infer mileNumber;
+
+        //directly find mile chunk entity
+        // string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
+        // parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
+
+        pos = Entity.GetMUDComponent<PositionComponent>();
+        mileNumber = (int)PositionComponent.PositionToMile(pos.Pos);
+        
+        while (ChunkComponent.Chunks[mileNumber] == null) { await UniTask.Delay(150);}
+
+        //add this road to the chunk
+        localPos = new Vector2Int((int)pos.Pos.x, (int)pos.Pos.z - mileNumber * MapConfigComponent.Height);
+        chunk = ChunkComponent.Chunks[mileNumber];
+        chunk.Mile.AddRoadComponent(Entity.Key, this, localPos.x, localPos.y);
     }
 
     protected override IMudTable GetTable() {return new RoadTable();}
@@ -135,26 +155,6 @@ public class RoadComponent : MUDComponent {
         for (int i = 0; i < stages.Length; i++) {
             stages[i].SetActive(i == (int)State);
         }
-    }
-
-    public async UniTaskVoid AddToChunk() {
-
-        //infer mileNumber;
-        mileNumber = (int)WorldScroll.PositionToMile(transform.position);
-
-        //load mile chunk
-        string chunkEntity = MUDHelper.Keccak256("Chunk", mileNumber);
-        parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
-        
-        while (parent == null) {
-            await UniTask.Delay(500);
-            parent = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
-        }
-
-        //infer entity of our chunk and look for it
-        localChunkPos = new Vector2Int((int)transform.position.x, (int)transform.position.z - mileNumber * MapConfigComponent.Height);
-
-        parent.Mile.AddRoadComponent(Entity.Key, this, localChunkPos.x, localChunkPos.y);
     }
 
 }

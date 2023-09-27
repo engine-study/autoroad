@@ -28,12 +28,9 @@ public class GameStateComponent : MUDComponent {
         GameStateTable table = (GameStateTable)update;
 
         mile = table.miles != null ? (int)table.miles : mile;;
-
         MILE_COUNT = mile;
 
-        // Debug.Log("Game State:");
-        // Debug.Log("Miles: " + (table.miles != null ? (int)table.miles : "null"));
-        // Debug.Log("Players: " + (table.playerCount != null ? (int)table.playerCount : "null"));
+        Debug.Log("[GAMECOMPONENT] Mile: " + mile);
 
         Entity.SetName("WORLD");
         Entity.transform.parent = null;

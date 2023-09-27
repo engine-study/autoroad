@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
+using System;
 
 public class WorldScroll : MonoBehaviour {
 
-    public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)MapConfigComponent.Height);}
+    public static Action OnMile;
     public static WorldScroll Instance;
     public static float Mile {get { return Instance.mile; } }
 
@@ -98,13 +99,13 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdateInput() {
         
-        if (SPUIBase.CanInput && SPUIBase.IsMouseOnScreen && SPInput.ModifierKey == false && Input.mouseScrollDelta.y != 0f) {
+        if (SPUIBase.CanInput && !SPUIBase.IsPointerOverUIElement && SPUIBase.IsMouseOnScreen && SPInput.ModifierKey == false && Input.mouseScrollDelta.y != 0f) {
             if(Input.mouseScrollDelta.y != 0f) {mileUI.ToggleWindowOpen();}
             mileScroll = GetSoftClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
         
-        if (SPUIBase.CanInput && !SPInput.ModifierKey && Input.GetMouseButtonDown(1)) {
+        if (SPUIBase.CanInput && !SPUIBase.IsPointerOverUIElement && !SPInput.ModifierKey && Input.GetMouseButtonDown(1)) {
 
             ToggleCameraOnPlayer(false);
 
@@ -153,7 +154,7 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdatePlayerPosition() {
 
-        playerMile = GetClampedMile(PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos));
+        playerMile = GetClampedMile(PositionComponent.PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos));
         targetPlayer = GetMileLerp(playerMile);
 
         if (playerMile != lastPlayerMile) {
@@ -221,7 +222,7 @@ public class WorldScroll : MonoBehaviour {
             return;
         }
 
-        
+        //LOAD MILE
         bool loaded = ChunkLoader.LoadMile(newMile);
         if(loaded == false) { return; }
 
@@ -235,10 +236,7 @@ public class WorldScroll : MonoBehaviour {
         front.transform.position = Vector3.forward * (mile * MapConfigComponent.Height + MapConfigComponent.Height);
         back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
 
-
-    }
-
-    public void SetupTerrain(int newMile) {
+        OnMile?.Invoke();
 
     }
 

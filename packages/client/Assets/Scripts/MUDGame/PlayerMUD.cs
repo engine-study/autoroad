@@ -35,7 +35,7 @@ public class PlayerMUD : SPPlayer
         
         // Debug.Log("Player Init");
         if(Player.Loaded) DoNetworkInit();
-        else Player.OnComponentsLoaded += DoNetworkInit;
+        else Player.OnLoaded += DoNetworkInit;
 
         cosmetics = new Cosmetic[] {bodyCosmetic, headCosmetic, capeCosmetic, backpackCosmetic};
         for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated += Equip;}
@@ -78,7 +78,7 @@ public class PlayerMUD : SPPlayer
     protected override void Destroy()
     {
         base.Destroy();
-        Player.OnComponentsLoaded -= NetworkInit;
+        Player.OnLoaded -= NetworkInit;
         Actor.OnActionEnd -= ActionCursorUpdate;
         for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
 

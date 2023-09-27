@@ -25,10 +25,10 @@ public class GameState : MonoBehaviour {
     [SerializeField] bool autoJoin = false; 
 
     [Header("Game")]
-    [SerializeField] GamePhase phase;
-    [SerializeField] RecieverMUD reciever;
-    [SerializeField] TableManager playerTable;
+    [SerializeField] TableSpawner mainTables;
+    [SerializeField] TableManager chunkTable;
     [SerializeField] TableManager [] tables;
+    [SerializeField] RecieverMUD reciever;
 
     [Header("UI")]
     [SerializeField] GameObject editorObjects;
@@ -75,17 +75,27 @@ public class GameState : MonoBehaviour {
 
     async UniTask LoadMap() {
 
+        //Load network
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
-        while(TableSpawner.Loaded == false) {await UniTask.Delay(100);}
+
+        //Load world states
+        Debug.Log("---GAMESTATE--- LOAD WORLD");
+        while(mainTables.Loaded == false) {await UniTask.Delay(100);}
         while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(100);}
 
-        for (int i = 0; i < tables.Length; i++) { tables[i].gameObject.SetActive(true); }
-        while(ChunkComponent.ActiveChunk == null) {await UniTask.Delay(100);}
+        //Load all chunks
+        Debug.Log("---GAMESTATE--- LOAD CHUNKS");
+        chunkTable.SubscribeAll();
+        while(ChunkComponent.ChunkList.Count < GameStateComponent.MILE_COUNT+1) {await UniTask.Delay(100);}
+
+        //Load all entities with position component
+        Debug.Log("---GAMESTATE--- LOAD ALL");
+        for (int i = 0; i < tables.Length; i++) { tables[i].SubscribeAll(); }
 
         await UniTask.Delay(1000);
 
         SPEvents.OnServerLoaded?.Invoke();
-        Debug.Log("Server Loaded", this);
+        Debug.Log("---GAMESTATE--- DONE");
 
     }
 

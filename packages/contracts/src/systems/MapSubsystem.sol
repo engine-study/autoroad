@@ -28,7 +28,8 @@ contract MapSubsystem is System {
   function onSpawn(int32 x, int32 y) public view returns (bool) {
     int32 up = Bounds.getUp();
     int32 down = Bounds.getDown();
-    (int32 playWidth, , int32 spawnWidth) = MapConfig.get();
+    int32 playWidth = MapConfig.getPlayWidth();
+    int32 spawnWidth = MapConfig.getPlaySpawnWidth();
     return (x > playWidth && x <= spawnWidth) && (y <= up && y >= down);
   }
 

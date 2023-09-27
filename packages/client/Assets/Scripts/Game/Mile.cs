@@ -22,21 +22,28 @@ public class Mile : MonoBehaviour
     bool isRealChunk = false; 
     int rowTotal;
     int widthSize;
+    bool startedInit = false;
 
-    async void Start() {
-        await SetupMileAsync();
+    void Start() {
+        Init();
     }
 
-    public void SetupMile(ChunkComponent newChunk) {
+    public void Init(ChunkComponent newChunk) {
         chunk = newChunk;
+        Init();
+    }
+
+    public async void Init() {
+        if(startedInit) return;
+        startedInit = true;
+        await SetupMileAsync();
     }
 
     async UniTask SetupMileAsync() {
 
-        while (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { await UniTask.Delay(200); }
+        while (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { await UniTask.Delay(100); }
 
         isRealChunk = chunk != null;
-
         roadParent.gameObject.SetActive(!isRealChunk);
 
         if(isRealChunk) {
@@ -73,7 +80,7 @@ public class Mile : MonoBehaviour
     }
 
     public void AddRoadComponent(string entity, RoadComponent c, int x, int y) {
-        // Debug.Log("Adding " + x + " " + y + " Rows: " + rows.Length + " Mile: " + c.Mile + " " + mileNumber, c);
+        // Debug.Log("Adding [" + x + "," + y + "] Rows: " + rows.Length + " Mile: " + c.Mile, c);
         rows[y].SetRoadBlock(entity, x + RoadConfigComponent.Right, c);
     }
 }

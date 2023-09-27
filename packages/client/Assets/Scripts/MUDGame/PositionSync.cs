@@ -41,7 +41,7 @@ public class PositionSync : ComponentSync
     [SerializeField] float distanceMoved = 0f;
     [SerializeField] float distance = 0f;
 
-    public override Type MUDTableType() {return typeof(PositionTable);}
+    public override Type MUDComponentType() {return typeof(PositionComponent);}
 
     protected override void Awake() {
         base.Awake();

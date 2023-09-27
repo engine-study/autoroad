@@ -41,6 +41,7 @@ contract TerrainSubsystem is System {
     GameConfig.set(world, debug, dummyPlayers, roadComplete);
     MapConfig.set(world, 10, 10, 13);
     RoadConfig.set(world, 3, -1, 1);
+    Bounds.set(0, 0, -1, 1);
     Row.set(world, int32(-1));
 
     bytes32 carriage = world.getCarriageEntity();
