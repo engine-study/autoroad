@@ -5,6 +5,7 @@ using mud.Client;
 using DefaultNamespace;
 using Cysharp.Threading.Tasks;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class ChunkComponent : MUDComponent
 {
@@ -60,12 +61,13 @@ public class ChunkComponent : MUDComponent
     //add all position components to their proper chunks
     static void StaticInit() {
 
+        Debug.Log("[CHUNK] STATIC INIT");
         Chunks = new Dictionary<int, ChunkComponent>();
         ChunkList = new List<ChunkComponent>();
         PositionsOnMiles = new Dictionary<PositionComponent, int>();
 
         TableManager pos = MUDWorld.FindTable<PositionComponent>();
-        pos.OnComponentUpdated += PositionsToChunk;
+        pos.OnComponentSpawned += PositionsToChunk;
         
     }
 
@@ -76,26 +78,28 @@ public class ChunkComponent : MUDComponent
         PositionsOnMiles = null;
 
         TableManager pos = MUDWorld.FindTable<PositionComponent>();
-        if(pos) pos.OnComponentUpdated -= PositionsToChunk;
+        if(pos) pos.OnComponentSpawned -= PositionsToChunk;
     }
 
     static void PositionsToChunk(MUDComponent newPos) {
         PositionComponent pos = (PositionComponent)newPos;
         MUDEntity entity = newPos.Entity;
 
-        if(PositionsOnMiles.ContainsKey(pos)) {return;}
+        if(PositionsOnMiles.ContainsKey(pos)) {Debug.LogError("Double spawn"); return;}
 
         Debug.Log("CHUNK: " + newPos.Entity.gameObject.name, newPos.Entity);
         PositionsOnMiles[pos] = -1;
-        entity.OnInitInfo += AddOnLoaded;
-        pos.OnUpdatedInfo += AddOnUpdated;
+
+        if(newPos.Entity.HasInit) { PositionMileSpawn(newPos.Entity);}
+        else {entity.OnInitInfo += PositionMileSpawn;}
+        pos.OnUpdatedInfo += PositionMileUpdate;
     }
 
-    static void AddOnLoaded(MUDEntity entity) {
+    static void PositionMileSpawn(MUDEntity entity) {
         AddEntityToChunk(entity.GetMUDComponent<PositionComponent>());
     }
 
-    static void AddOnUpdated(MUDComponent c, UpdateInfo update) {
+    static void PositionMileUpdate(MUDComponent c, UpdateInfo update) {
         if(c.Entity.HasInit == false) return;
         AddEntityToChunk((PositionComponent)c);
     }
@@ -103,32 +107,33 @@ public class ChunkComponent : MUDComponent
     static void AddEntityToChunk(PositionComponent pos) {
 
         int mile = (int)PositionComponent.PositionToMile(pos.Pos);
-        ChunkComponent chunk = GetChunk(mile);
+        int onMile = PositionsOnMiles[pos];
 
-        if(chunk == null) return; //this can happen to certain objects like the Carriage that don't have a position
-        chunk.PositionOnMile(pos);
-    }
-
-    void PositionOnMile(PositionComponent newPos) {
-
-        int onMile = PositionsOnMiles[newPos];
-
+        bool unparent = false;
         //remove from old mile or we're still on the same mile
-        if(onMile != -1) {
-            int newMile = (int)PositionComponent.PositionToMile(newPos.Pos);
-            if(onMile == newMile) return;
-            GetChunk(onMile).Positions.Remove(newPos);
+        if(onMile != -1 && onMile != mile && GetChunk(onMile) != null) {
+            GetChunk(onMile).Positions.Remove(pos);
+            unparent = true;
+        }
+
+        //add to mile
+        ChunkComponent chunk = GetChunk(mile);
+        if(chunk == null) {
+
+        } else {
+            //parent
+            chunk.Positions.Add(pos);
+            pos.Entity.transform.parent = chunk.Objects;
+            unparent = false;
         }
 
         //add to mile dictionary and list
-        PositionsOnMiles[newPos] = mileNumber;
-        Positions.Add(newPos);
+        PositionsOnMiles[pos] = mile;
 
-        //parent
-        newPos.Entity.transform.parent = Objects;
-       
+        if(unparent) {
+            pos.Entity.transform.parent = EntityDictionary.Parent;
+        }
     }
-
     
     void LoadChunk() {
 

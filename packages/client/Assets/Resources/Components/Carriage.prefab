@@ -46,15 +46,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7714e534a5bbfb4aa2c2074a7861fe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents: []
+  requiredComponents:
+  - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  entity: {fileID: 0}
+  hasInit: 0
+  loaded: 0
+  spawnInfo:
+    entity: {fileID: 0}
+    source: 0
+    table: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
   networkInfo:
     updateType: 0
     source: 0
-  hasInit: 0
-  loaded: 0
+  lastInfo:
+    updateType: 0
+    source: 0
 --- !u!114 &4941280937411259393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,14 +79,22 @@ MonoBehaviour:
   syncType: 0
   synced: 0
   targetComponent: {fileID: 0}
-  targetTransform: {fileID: 0}
+  target: {fileID: 0}
   hideIfNoPosition: 1
+  hideIfBelowGround: 0
+  hideAfterLoaded: 0
   rotateToFace: 0
   speed: 1
   rotationSpeed: 720
+  useLine: 0
+  parentTransformToEntity: 0
   pos: {fileID: 0}
-  targetPos: {x: 0, y: 0, z: 0}
+  movement: {fileID: 0}
+  StartPos: {x: 0, y: 0, z: 0}
   moving: 0
+  moveLerp: 0
+  distanceMoved: 0
+  distance: 0
 --- !u!1001 &4782353780807100089
 PrefabInstance:
   m_ObjectHideFlags: 0

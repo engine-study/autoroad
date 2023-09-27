@@ -62,14 +62,14 @@ public class GameState : MonoBehaviour {
         gameReady = false;
     }
 
-    void Start() {
+    async void Start() {
 
         if(autoJoin) {
             JoinGaul();
         }
 
-        GameSetup();
-        LoadMap();
+        await GameSetup();
+        await LoadMap();
 
     }
 
@@ -86,7 +86,7 @@ public class GameState : MonoBehaviour {
         //Load all chunks
         Debug.Log("---GAMESTATE--- LOAD CHUNKS");
         chunkTable.SubscribeAll();
-        while(ChunkComponent.ChunkList.Count < GameStateComponent.MILE_COUNT+1) {await UniTask.Delay(100);}
+        while(ChunkComponent.ActiveChunk == null || ChunkComponent.ChunkList.Count < GameStateComponent.MILE_COUNT + 1) { await UniTask.Delay(100);}
 
         //Load all entities with position component
         Debug.Log("---GAMESTATE--- LOAD ALL");
@@ -189,7 +189,8 @@ public class GameState : MonoBehaviour {
             //while(player is not null) {}
         }
 
-        Debug.Log("Game Ready", this);
+        Debug.Log("---GAMESTATE--- Game Ready", this);
+
         gameReady = true;
         SPEvents.OnGameReady?.Invoke();
 

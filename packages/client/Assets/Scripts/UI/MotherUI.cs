@@ -168,8 +168,7 @@ public class MotherUI : SPUIInstance {
 
         TxManager.OnTransaction += UpdateWheel;
         TxUpdate.OnUpdated += UpdateWheelOptimistic;
-
-        Debug.Log("Game Ready", this);
+        Debug.Log("[UI] Game Ready", this);
 
     }
 

@@ -22,12 +22,9 @@ public class GameStateComponent : MUDComponent {
 
     protected override IMudTable GetTable() {return new GameStateTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
-
-        Instance = this;
-        
         GameStateTable table = (GameStateTable)update;
 
-        mile = table.miles != null ? (int)table.miles : mile;;
+        mile = table.miles != null ? (int)table.miles : mile;
         MILE_COUNT = mile;
 
         Debug.Log("[GAMECOMPONENT] Mile: " + mile);
@@ -45,4 +42,14 @@ public class GameStateComponent : MUDComponent {
 
     }
 
+    protected override void Awake() {
+        base.Awake();
+        Instance = this;
+    }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        Instance = null;
+
+    }
 }
