@@ -15,15 +15,10 @@ Material:
   - _ALPHATEST
   - _BAKED_MESH_DATA
   - _COLOR_TINT
-  - _LIGHTING_QUALITY_HIGH
-  - _NORMALMAP
-  - _SURFACE_MAP_PACKED
-  - _TRANSLUCENCY
+  - _LIGHTING_QUALITY_LOW
   - _WIND
   m_InvalidKeywords:
   - _INTERACTION_OFF
-  - _LINKMAPTILINGOFFSET_ON
-  - _OVERLAY_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
@@ -35,6 +30,7 @@ Material:
   - TransparentBackface
   - TransparentDepthPrepass
   - TransparentDepthPostpass
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -306,7 +302,7 @@ Material:
     - _Ior: 1
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
-    - _LightingQuality: 0
+    - _LightingQuality: 1
     - _Lightness: 0
     - _LinkDetailsWithBase: 0
     - _LinkMapTilingOffset: 1
@@ -315,7 +311,7 @@ Material:
     - _MaxWindStrength: 0.1164738
     - _Metallic: 0
     - _Mode: 0
-    - _MotionVectors: 1
+    - _MotionVectors: 0
     - _NormalMapScale: 1
     - _NormalMapSpace: 0
     - _NormalScale: 1
@@ -371,7 +367,7 @@ Material:
     - _TransNormalDistortion: 0.19
     - _TransScattering: 20.5
     - _TransShadow: 1
-    - _Translucency: 1
+    - _Translucency: 0
     - _TranslucencyAmbient: 0.5
     - _TranslucencyBlendMode: 0
     - _TranslucencyDistortion: 0.5
@@ -445,5 +441,5 @@ Material:
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _Variationcolor: {r: 1, g: 0.5, b: 0, a: 0.184}
     - _WindDirectionAndStrength: {r: 1, g: 1, b: 1, a: 1}
-    - _WindFade: {r: 50, g: 20, b: 0, a: 0}
+    - _WindFade: {r: 50, g: 500, b: 0, a: 0}
   m_BuildTextureStacks: []

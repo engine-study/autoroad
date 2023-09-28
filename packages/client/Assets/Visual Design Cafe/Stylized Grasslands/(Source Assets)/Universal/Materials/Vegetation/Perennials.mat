@@ -15,15 +15,13 @@ Material:
   - _ALPHATEST
   - _BAKED_MESH_DATA
   - _COLOR_TINT
-  - _LIGHTING_QUALITY_HIGH
+  - _LIGHTING_QUALITY_LOW
   - _NORMALMAP
+  - _SPECULARHIGHLIGHTS_OFF
   - _SURFACE_MAP_PACKED
-  - _TRANSLUCENCY
   - _WIND
   m_InvalidKeywords:
   - _INTERACTION_OFF
-  - _LINKMAPTILINGOFFSET_ON
-  - _OVERLAY_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
@@ -34,12 +32,13 @@ Material:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
-        m_Texture: {fileID: 2800000, guid: ba17f8ace417c4d4aab53278820675b9, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -253,7 +252,7 @@ Material:
     - _DistortionVectorBias: -1
     - _DistortionVectorScale: 2
     - _DoubleSidedEnable: 1
-    - _DoubleSidedMode: 0
+    - _DoubleSidedMode: 2
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 0
     - _EmissionIntensity: 0
@@ -291,7 +290,7 @@ Material:
     - _Ior: 1
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
-    - _LightingQuality: 0
+    - _LightingQuality: 1
     - _Lightness: 0
     - _LinkDetailsWithBase: 1
     - _LinkMapTilingOffset: 1
@@ -299,7 +298,7 @@ Material:
     - _MaterialQuality: 0
     - _Metallic: 0
     - _Mode: 0
-    - _MotionVectors: 1
+    - _MotionVectors: 0
     - _NatureRendererDistanceControl: 1
     - _NormalMapScale: 1
     - _NormalMapSpace: 0
@@ -329,7 +328,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
-    - _SpecularHighlights: 1
+    - _SpecularHighlights: 0
     - _SrcBlend: 1
     - _StencilRef: 4
     - _StencilRefDepth: 0
@@ -356,7 +355,7 @@ Material:
     - _TransNormalDistortion: 0.167
     - _TransScattering: 9.2
     - _TransShadow: 0.9
-    - _Translucency: 1
+    - _Translucency: 0
     - _TranslucencyAmbient: 0.5
     - _TranslucencyBlendMode: 0
     - _TranslucencyDistortion: 0.5
@@ -411,12 +410,12 @@ Material:
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _LowVegetationStiffness: {r: 0, g: 1, b: 0, a: 0}
     - _OcclusionRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _ScaleFade: {r: 50, g: 20, b: 0, a: 0}
+    - _ScaleFade: {r: 50, g: 500, b: 0, a: 0}
     - _Shiver: {r: 1, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
-    - _TintVariation: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+    - _TintVariation: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
     - _Translucency: {r: 0, g: 0, b: 0, a: 0}
     - _TranslucencyColor: {r: 1, g: 1, b: 1, a: 1}
     - _TranslucencyTint: {r: 0.5879325, g: 0.6397059, b: 0.44214967, a: 0}
@@ -427,5 +426,5 @@ Material:
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _WindDirectionAndStrength: {r: 1, g: 1, b: 1, a: 1}
-    - _WindFade: {r: 50, g: 20, b: 0, a: 0}
+    - _WindFade: {r: 50, g: 500, b: 0, a: 0}
   m_BuildTextureStacks: []
