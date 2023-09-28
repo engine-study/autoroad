@@ -63,30 +63,30 @@ public class GameState : MonoBehaviour {
     }
 
     async void Start() {
+        await Init();
+    }
 
-        if(autoJoin) {
-            JoinGaul();
-        }
-
+    async UniTask Init() {
         await GameSetup();
         await LoadMap();
-
     }
 
     async UniTask LoadMap() {
 
         //Load network
+        if(autoJoin) { JoinGaul();}
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
 
         //Load world states
         Debug.Log("---GAMESTATE--- LOAD WORLD");
+        mainTables.SpawnTables();
         while(mainTables.Loaded == false) {await UniTask.Delay(100);}
         while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(100);}
 
         //Load all chunks
         Debug.Log("---GAMESTATE--- LOAD CHUNKS");
         chunkTable.SubscribeAll();
-        while(ChunkComponent.ActiveChunk == null || ChunkComponent.ChunkList.Count < GameStateComponent.MILE_COUNT + 1) { await UniTask.Delay(100);}
+        while(ChunkComponent.HasLoadedAllChunks == false) { await UniTask.Delay(100);}
 
         //Load all entities with position component
         Debug.Log("---GAMESTATE--- LOAD ALL");

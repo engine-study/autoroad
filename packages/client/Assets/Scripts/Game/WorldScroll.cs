@@ -47,12 +47,13 @@ public class WorldScroll : MonoBehaviour {
         playerUI.gameObject.SetActive(false);
         mileUI.ToggleWindowClose();
 
+        enabled = false;
+
         GameStateComponent.OnGameStateUpdated += Init;
         SPEvents.OnLocalPlayerSpawn += InitPlayer;
 
         TutorialUI.OnTutorial += ToggleTutorial;
 
-        enabled = false;
 
     }
 
@@ -84,6 +85,8 @@ public class WorldScroll : MonoBehaviour {
     }
     
     void Update() {
+
+        if(ChunkComponent.HasLoadedAllChunks == false) {return;}
 
         UpdateInput();
         UpdateScroll();

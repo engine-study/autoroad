@@ -22,7 +22,7 @@ public class GridMUD : MonoBehaviour {
     void Awake() {
         Instance = this;
         positions = new List<MUDComponent>();
-        TableDictionary.OnTableToggle += Init;
+        // TableDictionary.OnTableToggle += Init;
         NetworkManager.OnInitialized += Setup;
     }
 
@@ -32,7 +32,7 @@ public class GridMUD : MonoBehaviour {
 
     void OnDestroy() {
         Instance = null;
-        TableDictionary.OnTableToggle -= Init;
+        // TableDictionary.OnTableToggle -= Init;
         CursorMUD.OnGridPosition -= UpdateComponents;
 
         if (positionTable) {

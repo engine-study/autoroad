@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 public class ChunkComponent : MUDComponent
 {
 
+    public static bool HasLoadedAllChunks{get{return ChunkList != null && ChunkList.Count == GameStateComponent.MILE_COUNT+1 && GameStateComponent.MILE_COUNT > -1;}}
     public static System.Action OnActiveChunk;
     public static System.Action OnChunkUpdate;
     

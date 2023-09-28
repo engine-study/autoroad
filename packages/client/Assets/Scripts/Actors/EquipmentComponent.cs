@@ -22,7 +22,7 @@ public class EquipmentComponent : Equipment
 
     public override bool CanUse() {
         bool canUse = base.CanUse();
-        bool hasExpectedPrefab = (prefab == null && CursorMUD.MUDEntity == null) || (CursorMUD.MUDEntity != null && CursorMUD.MUDEntity.ExpectedComponents.Contains(prefab));
+        bool hasExpectedPrefab = (prefab == null && CursorMUD.MUDEntity == null) || (CursorMUD.MUDEntity != null && CursorMUD.MUDEntity.ExpectedComponents.Contains(prefab.GetType()));
         return false && canUse && hasExpectedPrefab; 
     }
 
