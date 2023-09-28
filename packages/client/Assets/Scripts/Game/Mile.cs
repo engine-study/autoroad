@@ -63,7 +63,7 @@ public class Mile : MonoBehaviour
 
         }
 
-        roadParent.localScale = Vector3.one + Vector3.right * RoadConfigComponent.Width;
+        roadParent.localScale = Vector3.one + Vector3.right * (RoadConfigComponent.Width-1f);
         groundParent.localScale = Vector3.one + Vector3.forward * MapConfigComponent.Height;
         terrainParent.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth * 2 + 1);
 

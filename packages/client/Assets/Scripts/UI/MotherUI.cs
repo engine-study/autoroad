@@ -37,6 +37,7 @@ public class MotherUI : SPUIInstance {
     public PlayerUI playerUI;
     public WorldUI playerInfo;
     public ProfileUI profile;
+    public SPHoverWindow hover;
 
     [Header("Game State")]
     public AudioClip sfx_mainMenu;
@@ -61,7 +62,8 @@ public class MotherUI : SPUIInstance {
 
         explorer.Init();
         explorer.ToggleWindowClose();
-
+        hover.Init();
+        
         wheel.Init();
 
         ToggleLoading(true);

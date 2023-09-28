@@ -12,6 +12,7 @@ using UnityEditor;
 #endif
 
 public enum TerrainType {None, Rock, Mine, Tree, HeavyBoy, HeavyHeavyBoy, Pillar, Road, Hole}
+
 public class GaulDebug : MonoBehaviour
 {
 
@@ -27,10 +28,13 @@ public class GaulDebug : MonoBehaviour
 
     void Start() {
 
-        SPGlobal.OnDebug += ToggleDebug;
+        if(Application.isPlaying) {
+            SPGlobal.OnDebug += ToggleDebug;
 
-        on = !SPGlobal.IsDebug;
-        ToggleDebug(SPGlobal.IsDebug);
+            on = !SPGlobal.IsDebug;
+            ToggleDebug(SPGlobal.IsDebug);
+        }
+
     }
     void Destroy() {
         ToggleDebug(false);
@@ -52,7 +56,33 @@ public class GaulDebug : MonoBehaviour
     }
     
     void Update() {
-          debugString = "";
+
+        if(Application.isPlaying) UpdatePlayMode();
+
+    }
+
+    void UpdateEditMode() {
+
+        int mileShortcut = SPInput.GetNumber();
+        if(mileShortcut != -1) {
+            SPCamera camera = FindObjectOfType<SPCamera>();
+            camera.transform.position = Vector3.forward * (mileShortcut * 10f + 5f);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Minus)) {
+            SPCamera camera = FindObjectOfType<SPCamera>();
+            camera.SetFOV(camera.FOV - 5f);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Equals)) {
+            SPCamera camera = FindObjectOfType<SPCamera>();
+            camera.SetFOV(camera.FOV + 5f);    
+        }
+
+    }
+
+    void UpdatePlayMode() {
+        debugString = "";
 
         if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt)) {
             debugString += "Spawn Mile";
@@ -156,5 +186,73 @@ public class GaulDebug : MonoBehaviour
 
       
     }
+
+    void GoMile(int i) {
+        SPCamera camera = FindObjectOfType<SPCamera>();
+        camera.transform.position = Vector3.forward * (i * 10f + 5f);
+    }
+    
+    void Zoom(bool zoomIn) {
+        SPCamera camera = FindObjectOfType<SPCamera>();
+        camera.SetFOV(zoomIn ? camera.FOV + 5 : camera.FOV - 5, true);
+    }
+    
+    #if UNITY_EDITOR
+
+    [MenuItem("Engine/ZoomIn _PGUP")]
+    static void ZoomIn() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.Zoom(true);
+    }
+
+    [MenuItem("Engine/ZoomOut _PGDN")]
+    static void ZoomOut() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.Zoom(false);
+    }
+
+
+    [MenuItem("Engine/Mile1 &1")]
+    static void Mile0() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.GoMile(0);
+    }
+    [MenuItem("Engine/Mile2 &2")]
+    static void Mile1() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.GoMile(1);
+    }
+    [MenuItem("Engine/Mile3 &3")]
+    static void Mile2() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.GoMile(2);
+    }
+    [MenuItem("Engine/Mile4 &4")]
+    static void Mile3() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.GoMile(3);
+    }
+    [MenuItem("Engine/Mile5 &5")]
+    static void Mile4() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.GoMile(4);
+    }
+    [MenuItem("Engine/Mile6 &6")]
+    static void Mile5() {
+        if(Application.isPlaying) { return; }
+        var gd = FindObjectOfType<GaulDebug>();
+        gd.GoMile(5);
+    }
+
+
+
+    #endif
 
 }
