@@ -99,12 +99,12 @@ public class GameState : MonoBehaviour {
 
     }
 
-    public static void PlayGame() {
+    public static async void PlayGame() {
 
         Instance.gamePlaying = true;
         SPEvents.OnPlayGame?.Invoke();
                 
-        Instance.PlayGameLoop();
+        await Instance.PlayGameLoop();
 
     }
     async UniTask PlayGameLoop() {
@@ -117,7 +117,6 @@ public class GameState : MonoBehaviour {
         //wait for name table
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
         NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalAddress);
-
 
         //-----------------------------------------------------------------------
         //NAMING

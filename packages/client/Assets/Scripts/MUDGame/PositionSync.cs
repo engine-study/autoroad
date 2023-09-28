@@ -88,8 +88,8 @@ public class PositionSync : ComponentSync
 
 
 
-    protected override void UpdateSync() {
-        base.UpdateSync();
+    protected override void HandleUpdate() {
+        base.HandleUpdate();
 
         if (syncType == ComponentSyncType.Lerp) {
            

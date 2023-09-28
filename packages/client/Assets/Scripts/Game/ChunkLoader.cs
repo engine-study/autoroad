@@ -37,12 +37,15 @@ public class ChunkLoader : MonoBehaviour
             return false; 
         }
 
-        if(chunk) {
+        if(chunk && chunk != newChunk) {
             chunk.gameObject.SetActive(false);
         }
 
         chunk = newChunk;
-        newChunk.gameObject.SetActive(true);
+
+        if(newChunk.gameObject.activeInHierarchy == false) {
+            newChunk.gameObject.SetActive(true);
+        }
 
         return true;
     }

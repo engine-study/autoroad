@@ -45,6 +45,7 @@ public class GridMUD : MonoBehaviour {
     }
 
     void UpdateComponents(Vector3 newPos) {
+        if(GameState.GamePlaying == false) {return;}
         componentsAt = GetComponentsAtPosition((int)newPos.x, (int)newPos.z, (int)newPos.y);
         firstComponent = componentsAt.Count > 0 ? componentsAt[0] : null;
     }

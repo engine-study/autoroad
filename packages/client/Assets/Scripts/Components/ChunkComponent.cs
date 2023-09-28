@@ -78,8 +78,8 @@ public class ChunkComponent : MUDComponent
         ChunkList = null;
         PositionsOnMiles = null;
 
-        TableManager pos = MUDWorld.FindTable<PositionComponent>();
-        if(pos) pos.OnComponentSpawned -= PositionsToChunk;
+        // TableManager pos = MUDWorld.FindTable<PositionComponent>();
+        // if(pos) pos.OnComponentSpawned -= PositionsToChunk;
     }
 
     static void PositionsToChunk(MUDComponent newPos) {
