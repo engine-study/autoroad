@@ -48,7 +48,7 @@ public class ChunkLoader : MonoBehaviour
     }
 
     public static void RegisterChunk(ChunkComponent newChunk) {
-        if(Chunks.ContainsKey(newChunk.MileNumber)) { Debug.LogError("Chunk " + newChunk.MileNumber + " already exists", newChunk); return;}
+        if(Chunks.ContainsKey(newChunk.MileNumber)) { Debug.LogError("[CHUNK] " + newChunk.MileNumber + " already exists", newChunk); return;}
         ChunkList.Add(newChunk);
         Chunks.Add(newChunk.MileNumber, newChunk);
 
@@ -57,7 +57,7 @@ public class ChunkLoader : MonoBehaviour
             OnActiveChunk?.Invoke();
         }
 
-        Debug.Log("CHUNK " + newChunk.MileNumber + " Completed: " + newChunk.Completed.ToString() + " Spawned: " + newChunk.Spawned.ToString() + " TOTAL: " + ChunkList.Count, newChunk);
+        Debug.Log("[CHUNK] " + newChunk.MileNumber + " Completed: " + newChunk.Completed.ToString() + " Spawned: " + newChunk.Spawned.ToString() + " TOTAL: " + ChunkList.Count, newChunk);
 
     }
 
@@ -67,7 +67,7 @@ public class ChunkLoader : MonoBehaviour
 
     public bool LoadMileInternal(int newMile) {
         
-        Debug.Log("WORLD: Loading " + newMile, this);
+        Debug.Log("[CHUNK]: Loading " + newMile, this);
 
         string chunkEntity = MUDHelper.Keccak256("Chunk", (int)newMile);
         ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
@@ -78,14 +78,16 @@ public class ChunkLoader : MonoBehaviour
         }
 
         if(chunk && chunk != newChunk) {
-            chunk.Toggle(false);
+            bool isCloseEnough = Mathf.Abs(chunk.MileNumber - newMile) < 2;
+            chunk.Toggle(isCloseEnough);
         }
+
+        if(newMile-1 >= 0) { Chunks[newMile-1].Toggle(true);}
+        if(newMile+1 < ChunkList.Count) { Chunks[newMile+1].Toggle(true);}
 
         chunk = newChunk;
-
-        if(newChunk.gameObject.activeInHierarchy == false) {
-            newChunk.Toggle(true);
-        }
+        newChunk.Toggle(true);
+        
 
         return true;
     }
@@ -96,7 +98,7 @@ public class ChunkLoader : MonoBehaviour
 
         if(PositionsOnMiles.ContainsKey(pos)) {Debug.LogError("Double spawn"); return;}
 
-        Debug.Log("CHUNK: " + newPos.Entity.gameObject.name, newPos.Entity);
+        // Debug.Log("CHUNK: " + newPos.Entity.gameObject.name, newPos.Entity);
         PositionsOnMiles[pos] = -1;
 
         if(newPos.Entity.HasInit) { PositionMileSpawn(newPos.Entity);}
