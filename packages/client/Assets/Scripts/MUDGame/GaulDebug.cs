@@ -194,7 +194,7 @@ public class GaulDebug : MonoBehaviour
     
     void Zoom(bool zoomIn) {
         SPCamera camera = FindObjectOfType<SPCamera>();
-        camera.SetFOV(zoomIn ? camera.FOV + 5 : camera.FOV - 5, true);
+        camera.SetFOV(zoomIn ? camera.FOV - 2.5f : camera.FOV + 2.5f, true);
     }
     
     #if UNITY_EDITOR

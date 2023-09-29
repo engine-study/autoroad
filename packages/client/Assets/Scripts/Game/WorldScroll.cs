@@ -25,8 +25,8 @@ public class WorldScroll : MonoBehaviour {
     [SerializeField] GameObject back;
 
     [Header("Terrain")]
-    [SerializeField] List<GameObject> terrains;
-    [SerializeField] List<GameObject> active;
+    [SerializeField] List<GameObject> dummyMiles;
+    [SerializeField] List<ChunkComponent> realMiles;
 
     [Header("Debug")]
     [SerializeField] bool playerFocus = false;
