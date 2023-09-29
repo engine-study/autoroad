@@ -13,6 +13,7 @@ public class Mile : MonoBehaviour
     [SerializeField] Transform groundParent;
     [SerializeField] Transform groundLeft, groundRight;
     [SerializeField] Transform spawnLeft, spawnRight;
+    [SerializeField] Transform rowParent;
     [SerializeField] RowComponent rowPrefab;
     [SerializeField] RowComponent[] rows;
 
@@ -31,6 +32,11 @@ public class Mile : MonoBehaviour
     public void Init(ChunkComponent newChunk) {
         chunk = newChunk;
         Init();
+    }
+
+    public void Toggle(bool toggle) {
+        rowParent.gameObject.SetActive(toggle);
+        roadParent.gameObject.SetActive(!toggle);
     }
 
     public async void Init() {
@@ -52,7 +58,7 @@ public class Mile : MonoBehaviour
             rows = new RowComponent[rowTotal];
             for (int i = 0; i < rowTotal; i++)
             {
-                RowComponent newRow = Instantiate(rowPrefab, transform.position + Vector3.forward * (i+.5f), Quaternion.identity, transform);
+                RowComponent newRow = Instantiate(rowPrefab, transform.position + Vector3.forward * (i+.5f), Quaternion.identity, rowParent);
                 newRow.chunk = chunk;
                 newRow.name = "Row " + i;
                 newRow.SpawnRoad(RoadConfigComponent.Width);
@@ -64,7 +70,7 @@ public class Mile : MonoBehaviour
         }
 
         roadParent.localScale = Vector3.one + Vector3.right * (RoadConfigComponent.Width-1f);
-        groundParent.localScale = Vector3.one + Vector3.forward * MapConfigComponent.Height;
+        groundParent.localScale = Vector3.one + Vector3.forward * (MapConfigComponent.Height-1f);
         terrainParent.localScale = Vector3.one + Vector3.right * (MapConfigComponent.SpawnWidth * 2 + 1);
 
         groundLeft.localPosition = Vector3.right * (RoadConfigComponent.Left - .5f);

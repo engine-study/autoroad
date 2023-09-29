@@ -82,7 +82,7 @@ public class MileExplorerUI : SPWindowParent
 
         title.UpdateField("Mile " + (newMile+1));
 
-        ChunkComponent chunk = ChunkComponent.GetChunk(newMile);
+        ChunkComponent chunk = ChunkLoader.GetChunk(newMile);
         
         if(chunk == null || !chunk.Completed) {
             mileText.ToggleWindowClose();

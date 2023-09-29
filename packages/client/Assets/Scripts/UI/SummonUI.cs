@@ -15,7 +15,7 @@ public class SummonUI : SPWindow
     }
 
     public void UpdateSummon() {
-        gameObject.SetActive(ChunkComponent.ActiveChunk?.Spawned == false);
+        gameObject.SetActive(ChunkLoader.ActiveChunk?.Spawned == false);
     }
 
 }

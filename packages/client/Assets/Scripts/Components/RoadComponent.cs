@@ -59,11 +59,11 @@ public class RoadComponent : MUDComponent {
         pos = Entity.GetMUDComponent<PositionComponent>();
         mileNumber = (int)PositionComponent.PositionToMile(pos.Pos);
         
-        while (ChunkComponent.Chunks[mileNumber] == null) { await UniTask.Delay(150);}
+        while (ChunkLoader.Chunks[mileNumber] == null) { await UniTask.Delay(150);}
 
         //add this road to the chunk
         localPos = new Vector2Int((int)pos.Pos.x, (int)pos.Pos.z - mileNumber * MapConfigComponent.Height);
-        chunk = ChunkComponent.Chunks[mileNumber];
+        chunk = ChunkLoader.Chunks[mileNumber];
         chunk.Mile.AddRoadComponent(Entity.Key, this, localPos.x, localPos.y);
     }
 

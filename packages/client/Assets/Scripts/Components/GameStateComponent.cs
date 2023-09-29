@@ -32,8 +32,8 @@ public class GameStateComponent : MUDComponent {
         Entity.SetName("WORLD");
         Entity.transform.parent = null;
 
-        OnGameStateUpdated?.Invoke();
 
+        OnGameStateUpdated?.Invoke();
         if(Loaded && MILE_COUNT != lastMile && lastMile != -1) {
             OnMileCompleted?.Invoke((int)lastMile);
         }

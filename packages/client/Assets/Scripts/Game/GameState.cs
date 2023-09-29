@@ -86,7 +86,7 @@ public class GameState : MonoBehaviour {
         //Load all chunks
         Debug.Log("---GAMESTATE--- LOAD CHUNKS");
         chunkTable.SubscribeAll();
-        while(ChunkComponent.HasLoadedAllChunks == false) { await UniTask.Delay(100);}
+        while(ChunkLoader.HasLoadedAllChunks == false) { await UniTask.Delay(100);}
 
         //Load all entities with position component
         Debug.Log("---GAMESTATE--- LOAD ALL");
@@ -112,7 +112,7 @@ public class GameState : MonoBehaviour {
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
 
         //wait until the map is setup
-        while (ChunkComponent.ActiveChunk == null || (ChunkComponent.ActiveChunk.MileNumber == 0 && ChunkComponent.ActiveChunk.Spawned == false)) { await UniTask.Delay(200); }
+        while (ChunkLoader.ActiveChunk == null || (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false)) { await UniTask.Delay(200); }
 
         //wait for name table
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}

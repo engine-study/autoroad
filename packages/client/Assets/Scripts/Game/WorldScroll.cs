@@ -21,6 +21,7 @@ public class WorldScroll : MonoBehaviour {
 
     [Header("Game State")]
     [SerializeField] TableManager chunkTable;
+    [SerializeField] GameObject worldObjects;
     [SerializeField] GameObject front;
     [SerializeField] GameObject back;
 
@@ -49,7 +50,7 @@ public class WorldScroll : MonoBehaviour {
 
         enabled = false;
 
-        GameStateComponent.OnGameStateUpdated += Init;
+        GameStateComponent.OnGameStateUpdated += GameStateUpdate;
         SPEvents.OnLocalPlayerSpawn += InitPlayer;
 
         TutorialUI.OnTutorial += ToggleTutorial;
@@ -59,15 +60,16 @@ public class WorldScroll : MonoBehaviour {
 
     void OnDestroy() {
         Instance = null;
-        GameStateComponent.OnGameStateUpdated -= Init;
+        GameStateComponent.OnGameStateUpdated -= GameStateUpdate;
         SPEvents.OnLocalPlayerSpawn -= InitPlayer;
 
         if(PlayerMUD.LocalPlayer)
             (PlayerMUD.LocalPlayer as PlayerMUD).Position.OnUpdated -= UpdatePlayerPosition;
     }
 
-    void Init() {
-        SetMaxMile((int)GameStateComponent.MILE_COUNT);
+    void GameStateUpdate() {
+        SetFurthestMile((int)GameStateComponent.MILE_COUNT);
+        
     }
 
     void InitPlayer() {
@@ -86,7 +88,7 @@ public class WorldScroll : MonoBehaviour {
     
     void Update() {
 
-        if(ChunkComponent.HasLoadedAllChunks == false) {return;}
+        if(ChunkLoader.HasLoadedAllChunks == false) {return;}
 
         UpdateInput();
         UpdateScroll();
@@ -170,8 +172,6 @@ public class WorldScroll : MonoBehaviour {
 
     public void ToggleTutorial(bool toggle) {
         enabled = !toggle;
-        front.SetActive(!toggle);
-        back.SetActive(!toggle);
     }
 
     public void SetToScrollMile() {
@@ -211,8 +211,10 @@ public class WorldScroll : MonoBehaviour {
 
     }
 
-    public void SetMaxMile(int newMaxMile) {
+    public void SetFurthestMile(int newMaxMile) {
         maxMile = newMaxMile;
+        front.transform.position = Vector3.forward * (maxMile * MapConfigComponent.Height + MapConfigComponent.Height);
+        // back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
     }
 
     public void SetMile(int newMile) {
@@ -236,8 +238,8 @@ public class WorldScroll : MonoBehaviour {
 
         recapButton.ToggleWindow(ChunkLoader.Chunk.Completed);
     
-        front.transform.position = Vector3.forward * (mile * MapConfigComponent.Height + MapConfigComponent.Height);
-        back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
+        // front.transform.position = Vector3.forward * (mile * MapConfigComponent.Height + MapConfigComponent.Height);
+        // back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
 
         OnMile?.Invoke();
 

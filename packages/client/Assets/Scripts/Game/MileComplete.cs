@@ -68,7 +68,7 @@ public class MileComplete : MonoBehaviour
         gemUI.ToggleWindowOpen();
         gemUI.UpdateField("0");
 
-        ChunkComponent chunk = ChunkComponent.Chunks[mile];
+        ChunkComponent chunk = ChunkLoader.Chunks[mile];
         players = new List<PlayerMUD>();
         roads = new List<RoadComponent>();
         gems = new List<SPResourceJuicy>();

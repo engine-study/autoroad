@@ -10,15 +10,8 @@ using Unity.VisualScripting;
 public class ChunkComponent : MUDComponent
 {
 
-    public static bool HasLoadedAllChunks{get{return ChunkList != null && ChunkList.Count == GameStateComponent.MILE_COUNT+1 && GameStateComponent.MILE_COUNT > -1;}}
-    public static System.Action OnActiveChunk;
     public static System.Action OnChunkUpdate;
     
-    public static ChunkComponent ActiveChunk;
-    public static ChunkComponent GetChunk(int mile) {Chunks.TryGetValue(mile, out var chunk); return chunk; }
-    public static Dictionary<int, ChunkComponent> Chunks;
-    public static List<ChunkComponent> ChunkList;
-    public static Dictionary<PositionComponent, int> PositionsOnMiles;
     public Transform Objects {get{return entityParent;}}
 
     public Mile Mile {get{return mile;}}
@@ -49,100 +42,17 @@ public class ChunkComponent : MUDComponent
     //       //dynamic list of people who have helped build the mile
     //     contributors: "bytes32[]",
 
-    protected override void Awake() {
-        base.Awake();
-        if(Chunks == null) {StaticInit();}
+    public void Toggle(bool toggle) {
+        mile.Toggle(toggle);
+        entityParent.gameObject.SetActive(toggle);
     }
 
-    protected override void InitDestroy() {
-        base.InitDestroy();
-        if(Chunks != null) {StaticDestroy();}
-    }
-
-    //add all position components to their proper chunks
-    static void StaticInit() {
-
-        Debug.Log("[CHUNK] STATIC INIT");
-        Chunks = new Dictionary<int, ChunkComponent>();
-        ChunkList = new List<ChunkComponent>();
-        PositionsOnMiles = new Dictionary<PositionComponent, int>();
-
-        TableManager pos = MUDWorld.FindTable<PositionComponent>();
-        pos.OnComponentSpawned += PositionsToChunk;
-        
-    }
-
-    static void StaticDestroy() {
-        
-        Chunks = null;
-        ChunkList = null;
-        PositionsOnMiles = null;
-
-        // TableManager pos = MUDWorld.FindTable<PositionComponent>();
-        // if(pos) pos.OnComponentSpawned -= PositionsToChunk;
-    }
-
-    static void PositionsToChunk(MUDComponent newPos) {
-        PositionComponent pos = (PositionComponent)newPos;
-        MUDEntity entity = newPos.Entity;
-
-        if(PositionsOnMiles.ContainsKey(pos)) {Debug.LogError("Double spawn"); return;}
-
-        Debug.Log("CHUNK: " + newPos.Entity.gameObject.name, newPos.Entity);
-        PositionsOnMiles[pos] = -1;
-
-        if(newPos.Entity.HasInit) { PositionMileSpawn(newPos.Entity);}
-        else {entity.OnInitInfo += PositionMileSpawn;}
-        pos.OnUpdatedInfo += PositionMileUpdate;
-    }
-
-    static void PositionMileSpawn(MUDEntity entity) {
-        AddEntityToChunk(entity.GetMUDComponent<PositionComponent>());
-    }
-
-    static void PositionMileUpdate(MUDComponent c, UpdateInfo update) {
-        if(c.Entity.HasInit == false) return;
-        AddEntityToChunk((PositionComponent)c);
-    }
-
-    static void AddEntityToChunk(PositionComponent pos) {
-
-        int mile = (int)PositionComponent.PositionToMile(pos.Pos);
-        int onMile = PositionsOnMiles[pos];
-
-        bool unparent = false;
-        //remove from old mile or we're still on the same mile
-        if(onMile != -1 && onMile != mile && GetChunk(onMile) != null) {
-            GetChunk(onMile).Positions.Remove(pos);
-            unparent = true;
-        }
-
-        //add to mile
-        ChunkComponent chunk = GetChunk(mile);
-        if(chunk == null) {
-
-        } else {
-            //parent
-            chunk.Positions.Add(pos);
-            pos.Entity.transform.parent = chunk.Objects;
-            unparent = false;
-        }
-
-        //add to mile dictionary and list
-        PositionsOnMiles[pos] = mile;
-
-        if(unparent) {
-            pos.Entity.transform.parent = EntityDictionary.Parent;
-        }
-    }
-    
-    void LoadChunk() {
+    void RegisterChunk() {
 
         //IMPORTANT
         //we must have loaded MapConfigComponent and RoadConfigComponent before we set up chunks
         //IMPORTANT 
         if (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { Debug.LogError("Can't setup chunk"); return;}
-        if(Chunks.ContainsKey(mileNumber)) { Debug.LogError("Chunk " + mileNumber + " already exists", this); return;}
 
         Entity.SetName("MILE - " + mileNumber);
         Entity.transform.parent = WorldScroll.Instance.transform;
@@ -154,23 +64,13 @@ public class ChunkComponent : MUDComponent
         mile.Init(this);
         active.SetActive(false);
 
-        ChunkList.Add(this);
-        Chunks.Add(mileNumber, this);
-
+        ChunkLoader.RegisterChunk(this);
 
         if (completed) {
         } else {
         }
 
         chunkLoaded = true;
-
-        if (mileNumber == GameStateComponent.MILE_COUNT) { 
-            ActiveChunk = this; 
-            OnActiveChunk?.Invoke();
-        }
-
-        Debug.Log("CHUNK " + mileNumber + " Completed: " + completed.ToString() + " Spawned: " + spawned.ToString() + " TOTAL: " + ChunkList.Count, this);
-
 
     }
 
@@ -192,10 +92,10 @@ public class ChunkComponent : MUDComponent
         active.SetActive(!completed);
 
         if (chunkLoaded == false) {
-            LoadChunk();
+            RegisterChunk();
         }
 
-        if(ActiveChunk == this) {
+        if(ChunkLoader.ActiveChunk == this) {
             OnChunkUpdate?.Invoke();
         }
 
