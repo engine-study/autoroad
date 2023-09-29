@@ -43,15 +43,10 @@ public class PositionSync : ComponentSync
 
     public override Type MUDComponentType() {return typeof(PositionComponent);}
 
-    protected override void Awake() {
-        base.Awake();
-
-        if(target == null) { target = transform; }
-    }
-
     protected override void InitComponents() {
         base.InitComponents();
 
+        if(target == null) { target = transform; }
         pos = SyncComponent as PositionComponent;
                 
         if(parentTransformToEntity) {
@@ -63,6 +58,7 @@ public class PositionSync : ComponentSync
 
     protected override void InitialSync() {
         base.InitialSync();
+
 
         //set up our side of the compnents BEFORE 
         target.position = pos.Pos;
