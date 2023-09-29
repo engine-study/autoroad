@@ -180,13 +180,16 @@ public class WorldScroll : MonoBehaviour {
         enabled = !toggle;
     }
 
-    public void SetToScrollMile(bool withFX = false) {
+    public void SetToScrollMile() { SetToScrollMile(false);}
+    public void SetToPlayerMile() {SetToPlayerMile(false);}
+
+    public void SetToScrollMile(bool withFX) {
         Debug.Log("SCROLL: Scroll", this);
         ToggleCameraOnPlayer(false);
         SetMile(Mathf.RoundToInt(mileScroll), withFX);
     }
 
-    public void SetToPlayerMile(bool withFX = false) {
+    public void SetToPlayerMile(bool withFX) {
 
         Debug.Log("SCROLL: Player", this);
 
@@ -202,18 +205,19 @@ public class WorldScroll : MonoBehaviour {
 
     public void ToggleCameraOnPlayer(bool toggle) {
 
+        if(toggle) {
+            MotherUI.FollowPlayer();
+        } else {
+            if(playerFocus) SPCamera.SetFOVGlobal(10f);
+            SPCamera.SetFollow(null);
+            SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
+        }
+
         playerFocus = toggle; 
 
         playerButton.ToggleWindow(!playerFocus);
         landscapeButon.ToggleWindow(playerFocus);
 
-        if(toggle) {
-            MotherUI.FollowPlayer();
-        } else {
-            SPCamera.SetFollow(null);
-            SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
-            SPCamera.SetFOVGlobal(10f);
-        }
 
     }
 

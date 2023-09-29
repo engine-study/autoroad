@@ -181,7 +181,12 @@ public class MotherUI : SPUIInstance {
 
     public static void FollowPlayer() {
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
-        SPCamera.SetFOVGlobal(5f);
+        SPCamera.SetFOVGlobal(4f);
+    }
+
+    public static void ToggleFollow(bool toggle) {
+        if(toggle) {FollowPlayer();}
+        else {}
     }
 
     void ShowMainMenu() {
