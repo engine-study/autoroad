@@ -64,7 +64,7 @@ public class TutorialUI : SPWindowParent
             SPAudioSource.PlayGlobal(startClip);
             tutorialTransform.localPosition = targetPos;
             SPCamera.SetFollow(null);
-            SPCamera.SetFOVGlobal(5f);
+            SPCamera.SetFOVGlobal(4f);
             SPCamera.SetTarget(tutorialParent.transform.position); //+ Vector3.right * tutorialText.Index * distance + Vector3.down * vertical
             SPUIBase.ToggleMotherUI(false);
             ShowTutorial();
