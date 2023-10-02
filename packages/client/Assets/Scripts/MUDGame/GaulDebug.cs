@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
-using mud.Client;
+using mud;
 using UnityEngine.UI;
 
 

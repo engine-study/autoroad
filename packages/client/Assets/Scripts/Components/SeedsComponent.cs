@@ -1,7 +1,7 @@
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 
 public class SeedsComponent : MUDComponent {
 
@@ -17,7 +17,7 @@ public class SeedsComponent : MUDComponent {
         SeedsTable table = update as SeedsTable;
         count = (int)table.value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalCount = count;
             OnLocalUpdate?.Invoke();
         }

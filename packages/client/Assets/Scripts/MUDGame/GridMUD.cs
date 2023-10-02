@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 using IWorld.ContractDefinition;
 using DefaultNamespace;
 
@@ -55,11 +55,11 @@ public class GridMUD : MonoBehaviour {
         var ds = NetworkManager.Instance.ds;
 
         Condition[] conditions = new Condition[] { Condition.Has("x", System.Convert.ToInt64(x)), Condition.Has("y", System.Convert.ToInt64(y)), Condition.Has("layer", System.Convert.ToInt64(layer)) };
-        var allComponentsAtPosition = new Query().In(PositionTable.ID).In(PositionTable.ID, conditions );
+        var allComponentsAtPosition = new Query().In(PositionTable.PositionRxTable).In(PositionTable.PositionRxTable, conditions );
         var recordsWithPosition = ds.RunQuery(allComponentsAtPosition);
 
         List<PositionComponent> components = new List<PositionComponent>();
-        foreach(Record r in recordsWithPosition) {
+        foreach(RxRecord r in recordsWithPosition) {
             PositionComponent pos = MUDWorld.FindComponent<PositionComponent>(r.key);
 
             if(pos == null) {

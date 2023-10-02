@@ -1,7 +1,7 @@
 
 using UnityEngine;
-using mud.Client;
-using NetworkManager = mud.Unity.NetworkManager;
+using mud;
+using NetworkManager = mud.NetworkManager;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 using System.Numerics;
@@ -36,7 +36,7 @@ public class PlayerComponent : MUDComponent {
 
         PlayerCount++;
 
-        isLocalPlayer = Entity.Key == NetworkManager.LocalAddress;
+        isLocalPlayer = Entity.Key == NetworkManager.LocalKey;
         if (IsLocalPlayer) {
             LocalPlayer = this;
             OnPlayerSpawn?.Invoke();

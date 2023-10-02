@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using IWorld.ContractDefinition;
 using DefaultNamespace;
 using Cysharp.Threading.Tasks;

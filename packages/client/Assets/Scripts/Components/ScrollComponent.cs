@@ -1,7 +1,7 @@
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 
 public class ScrollComponent : MUDComponent {
 
@@ -19,7 +19,7 @@ public class ScrollComponent : MUDComponent {
         ScrollTable table = update as ScrollTable;
         scrolls = (int)table.value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalScrolls = scrolls;
             OnLocalUpdate?.Invoke();
         }

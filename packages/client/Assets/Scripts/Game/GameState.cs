@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 using System;
@@ -15,14 +15,12 @@ using UnityEditor;
 
 public enum GamePhase { Lobby, Game, PostGame, _Count }
 public class GameState : MonoBehaviour {
-    public static Action GameStarted;
     public static GameState Instance;
     public static bool GameReady {get{return Instance.gameReady;}}
     public static bool GamePlaying {get{return Instance.gamePlaying;}}
 
     [Header("Test")]
     [SerializeField] bool freshStart = false; 
-    [SerializeField] bool autoJoin = false; 
 
     [Header("Game")]
     [SerializeField] TableSpawner mainTables;
@@ -74,7 +72,6 @@ public class GameState : MonoBehaviour {
     async UniTask LoadMap() {
 
         //Load network
-        if(autoJoin) { JoinGaul();}
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
 
         //Load world states
@@ -116,7 +113,7 @@ public class GameState : MonoBehaviour {
 
         //wait for name table
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
-        NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalAddress);
+        NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //NAMING
@@ -144,8 +141,8 @@ public class GameState : MonoBehaviour {
         //wait for player table
         while(MUDWorld.FindTable<PlayerComponent>().Loaded == false) {await UniTask.Delay(500);}
         while(MUDWorld.FindTable<HealthComponent>().Loaded == false) {await UniTask.Delay(500);}
-        PlayerTable playerTable = MUDWorld.FindValue<PlayerTable>(NetworkManager.LocalAddress);
-        HealthComponent healthComponent = MUDWorld.FindComponent<HealthComponent>(NetworkManager.LocalAddress);
+        PlayerTable playerTable = MUDWorld.FindValue<PlayerTable>(NetworkManager.LocalKey);
+        HealthComponent healthComponent = MUDWorld.FindComponent<HealthComponent>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //SPAWNING

@@ -1,7 +1,7 @@
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 using System;
 
 public class ActionComponent : MUDComponent {
@@ -19,7 +19,7 @@ public class ActionComponent : MUDComponent {
         base.PostInit();
 
 
-        if (Entity.Key == NetworkManager.LocalAddress) {
+        if (Entity.Key == NetworkManager.LocalKey) {
             LocalState = this;
         }
     }

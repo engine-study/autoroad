@@ -1,6 +1,6 @@
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
+using mud;
 using System.Collections.Generic;
 
 public class PositionComponent : MUDComponent {

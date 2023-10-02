@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 
 public class CoinComponent : MUDComponent {
     public int Coins { get { return coins; } }
@@ -20,7 +20,7 @@ public class CoinComponent : MUDComponent {
         CoinageTable table = update as CoinageTable;
         coins = (int)table.value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalCoins = coins;
             OnLocalUpdate?.Invoke();
         }

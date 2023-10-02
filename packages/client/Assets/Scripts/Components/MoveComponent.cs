@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using DefaultNamespace;
 
 public enum MoveType { None, Obstruction, Hole, Carry, Push, Trap } 

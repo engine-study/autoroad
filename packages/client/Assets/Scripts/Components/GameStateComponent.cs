@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
-using NetworkManager = mud.Unity.NetworkManager;
+using mud;
+using NetworkManager = mud.NetworkManager;
 using Cysharp.Threading.Tasks;
 using UniRx;
 

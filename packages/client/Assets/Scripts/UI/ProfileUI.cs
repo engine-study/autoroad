@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using mud.Unity;
+using mud;
 using UnityEngine;
 
 public class ProfileUI : SPWindowParent
@@ -42,7 +42,7 @@ public class ProfileUI : SPWindowParent
     }
 
     void UpdateAddress() {
-        publicKeyField.UpdateField(NetworkManager.LocalAddressNotKey);
+        publicKeyField.UpdateField(NetworkManager.LocalAddress);
     }
 
     void UpdateName() {

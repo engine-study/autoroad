@@ -1,7 +1,7 @@
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 using System;
 
 public class NameComponent : MUDComponent {
@@ -31,7 +31,7 @@ public class NameComponent : MUDComponent {
         NameTable table = update as NameTable;
         playerName = NameUI.TableToName((int)table.first, (int)table.middle, (int)table.last);
 
-        if(Entity.Key == NetworkManager.Instance.addressKey) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             localName = playerName;
             OnLocalName?.Invoke();
         }

@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 
-public class MUDTest : mud.Client.MUDNetworkSync
+public class MUDTest : mud.MUDNetworkSync
 {
 
     public string worldAddress;
     public string blockNumber;
-    protected override async void Init(mud.Unity.NetworkManager nm)
+    protected override async void Init(mud.NetworkManager nm)
     {
         base.Init(nm);
 
@@ -16,13 +16,11 @@ public class MUDTest : mud.Client.MUDNetworkSync
         // blockNumber = nm.blockNumber;
 
         var jsonFile = Resources.Load<TextAsset>("latest");
-        var data = JsonUtility.FromJson<mud.Unity.LocalDeploy>(jsonFile.text);
-        worldAddress = data.worldAddress;
 
-        Debug.Log("World: " + MUDHelper.Keccak256(worldAddress));
-        Debug.Log("WorldEncoded: " + MUDHelper.Keccak256Address(worldAddress));
+        Debug.Log("World: " + MUDHelper.Keccak256(NetworkManager.WorldAddress));
+        Debug.Log("WorldEncoded: " + MUDHelper.Keccak256Address(NetworkManager.WorldAddress));
         Debug.Log("Position: " + MUDHelper.Keccak256(5, 10));
-        Debug.Log("Combined: " + MUDHelper.Keccak256Address(worldAddress, 5, 10));
+        Debug.Log("Combined: " + MUDHelper.Keccak256Address(NetworkManager.WorldAddress, 5, 10));
         Debug.Log("StringInt: " + MUDHelper.Keccak256("hello", 5, 10));
     }
 }

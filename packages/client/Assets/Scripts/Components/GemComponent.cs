@@ -1,7 +1,7 @@
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 
 public class GemComponent : MUDComponent {
     public int Gems { get { return gems; } }
@@ -19,7 +19,7 @@ public class GemComponent : MUDComponent {
 
         gems = (int)table.value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalGems = gems;
             OnLocalUpdate?.Invoke();
         }

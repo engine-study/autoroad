@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using mud.Unity;
+using mud;
+
 using IWorld.ContractDefinition;
 using Nethereum.Contracts;
 using Cysharp.Threading.Tasks;

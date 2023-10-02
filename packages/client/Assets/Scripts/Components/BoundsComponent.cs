@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
+using mud;
 
 public class BoundsComponent : MUDComponent
 {
@@ -39,7 +39,7 @@ public class BoundsComponent : MUDComponent
     public static void ShowBorder() {if(Instance) Instance.borderVisuals.SetActive(false); Instance.borderVisuals.SetActive(true);}
 
     protected override IMudTable GetTable() {return new BoundsTable();}
-    protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
+    protected override void UpdateComponent(mud.IMudTable table, UpdateInfo newInfo) {
 
         BoundsTable bounds = (BoundsTable)table;
 

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 public class OxComponent : MoverComponent {
@@ -17,7 +17,7 @@ public class OxComponent : MoverComponent {
     }
 
     protected override IMudTable GetTable() {return new OxTable();}
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo)
+    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo)
     {
         base.UpdateComponent(update, newInfo);
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using mud.Client;
+using mud;
 using UniRx;
 using ObservableExtensions = UniRx.ObservableExtensions;
 

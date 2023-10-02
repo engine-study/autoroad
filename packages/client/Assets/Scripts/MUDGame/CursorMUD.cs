@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using System;
 
 public class CursorMUD : MonoBehaviour {
@@ -35,12 +35,20 @@ public class CursorMUD : MonoBehaviour {
     [SerializeField] SPBase baseObject;
 
 
+
     void Awake() {
         Instance = this;
+        enabled = false;
+        SPEvents.OnServerLoaded += Init;
     }
 
     void OnDestroy() {
         Instance = null;
+        SPEvents.OnServerLoaded -= Init;
+    }
+
+    void Init() {
+        enabled = true;
     }
 
     void Update() {
@@ -87,7 +95,7 @@ public class CursorMUD : MonoBehaviour {
 
         // hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
         
-        if(!mud.Unity.NetworkManager.Initialized)
+        if(!mud.NetworkManager.Initialized)
             return;
 
         if(SPUIBase.IsPointerOverUIElement) {

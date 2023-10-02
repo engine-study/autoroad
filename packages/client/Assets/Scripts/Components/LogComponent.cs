@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 public class LogComponent : MUDComponent {
@@ -30,7 +30,7 @@ public class LogComponent : MUDComponent {
     }
 
     protected override IMudTable GetTable() {return new LogTable();}
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo)
+    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo)
     {
 
     }
