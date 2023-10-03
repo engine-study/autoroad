@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
@@ -7,15 +7,22 @@ import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } fr
 import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Scroll, Seeds, Boots, Weight, Animation, NPC } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, RockType, MoveType, ActionType, AnimationType, NPCType } from "../codegen/Types.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
+import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
+
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract MoveSubsystem is System {
+
+  function getKeysAtPosition(int32 x, int32 y, int32 layer) public view returns(bytes32[] memory) {
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicData) = Position.encode(x, y, layer);
+    return getKeysWithValue(IWorld(_world()), PositionTableId, staticData, encodedLengths, dynamicData);
+  }
 
   function moveSimple(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
@@ -39,7 +46,7 @@ contract MoveSubsystem is System {
     uint walkLength = 0;
     for (uint i = 1; i < positions.length; i++) {
       
-      bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory atPosition = world.getKeysAtPosition ( positions[i].x, positions[i].y, 0);
       assert(atPosition.length < 2);
 
       bool continueWalk = world.onWorld(positions[i].x, positions[i].y);
@@ -64,7 +71,7 @@ contract MoveSubsystem is System {
 
     //walk all the spaces (remember the 0 index is our original position, start at index 1)
     for (uint i = 1; i <= walkLength; i++) {
-      bytes32[] memory atPosTemp = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory atPosTemp = world.getKeysAtPosition ( positions[i].x, positions[i].y, 0);
       moveTo(player, player, positions[i-1], positions[i], atPosTemp, ActionType.Walking);
 
       //if we die while moving we must stop
@@ -124,7 +131,7 @@ contract MoveSubsystem is System {
     PositionData memory pushPos = PositionData(x, y, 0);
 
     //check initial push is good
-    require(canInteract(player, x, y, getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0)), 1), "bad interact");
+    require(canInteract(player, x, y, world.getKeysAtPosition(pushPos.x, pushPos.y, 0), 1), "bad interact");
 
     console.log("start push");
 
@@ -134,7 +141,7 @@ contract MoveSubsystem is System {
     uint maxLength = 16;
     bytes32[] memory pushArray = new bytes32[](maxLength);
     PositionData memory vector = PositionData(pushPos.x - shoverPos.x, pushPos.y - shoverPos.y, 0);
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
+    bytes32[] memory atPos = world.getKeysAtPosition(shoverPos.x, shoverPos.y, 0);
 
     //continue push loop as long as there is something to push
     while (atPos.length > uint(0)) {
@@ -156,7 +163,7 @@ contract MoveSubsystem is System {
       requireOnMap(atPos, pushPos);
 
       //next space
-      atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
+      atPos = world.getKeysAtPosition(pushPos.x, pushPos.y, 0);
 
       //increment push and check the destination is on map
       index++;
@@ -296,7 +303,8 @@ contract MoveSubsystem is System {
   function mine(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
+
 
     require(canInteract(player, x, y, atPosition, 1), "bad interact");
 
@@ -336,7 +344,8 @@ contract MoveSubsystem is System {
     require(canDoStuff(player), "hmm");
 
     PositionData memory pos = PositionData(x, y, 0);
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
+
     require(atPosition.length > 0, "attacking an empty spot");
     require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
 
@@ -356,7 +365,8 @@ contract MoveSubsystem is System {
     require(canDoStuff(player), "hmm");
 
     PositionData memory pos = PositionData(x, y, 0);
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
+
     require(atPosition.length > 0, "attacking an empty spot");
     require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
 
@@ -409,43 +419,11 @@ contract MoveSubsystem is System {
     IWorld world = IWorld(_world());
     require(world.onWorld(x, y), "offworld");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition( x, y, 0 );
+
     require(atPosition.length < 1, "occupied");
     setPosition(player, player, x, y, 0, ActionType.Teleport);
   }
-
-  // function carry(int32 carryX, int32 carryY) public {
-  //   require(canDoStuff(player), "hmm");
-
-  //   bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(carryX, carryY, 0));
-
-  //   // Position
-  //   require(atPosition.length > 0, "trying to carry an empty spot");
-  //   uint32 move = Move.get(atPosition[0]);
-  //   require(move == uint32(MoveType.Carry), "non-carry object");
-
-  //   Carrying.set(player, atPosition[0]);
-
-  //   // Position.deleteRecord()
-  //   // bytes32[] memory atPushPosition = getKeysWithValue(PositionTableId, Position.encode(pushX, pushY));
-  //   // require(atPushPosition.length != 1, "pushing into an occupied spot");
-  // }
-
-  // function drop(int32 x, int32 y) public {
-  //   bytes32 player = addressToEntityKey(address(_msgSender()));
-  //   require(canDoStuff(player), "hmm");
-
-  //   bytes32 carrying = Carrying.get(player);
-  //   require(carrying != 0, "Not carrying anything");
-
-  //   bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-
-  //   if (atPosition.length == 0) {
-  //     //drop rocks back on ground
-  //   } else {
-  //     //check to see if we can fill hole
-  //   }
-  // }
 
   function fish(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
@@ -455,14 +433,14 @@ contract MoveSubsystem is System {
     PositionData memory fishPos = PositionData(x, y, 0);
 
     //check initial push is good
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(fishPos.x, fishPos.y, 0));
+    bytes32[] memory atPos = world.getKeysAtPosition(fishPos.x, fishPos.y, 0);
     require(canInteract(player, x, y, atPos, 1), "bad interact");
     require(Weight.get(atPos[0]) <= 0, "too heavy");
     
 
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
-    bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(endPos.x, endPos.y, 0));
+    bytes32[] memory atDest = world.getKeysAtPosition(endPos.x, endPos.y, 0);
 
     requirePushable(atPos);
     requireOnMap(atDest, endPos);

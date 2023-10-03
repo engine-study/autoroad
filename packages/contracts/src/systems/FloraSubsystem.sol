@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
@@ -8,10 +8,10 @@ import { Player, Health, Tree, Seeds, Move } from "../codegen/Tables.sol";
 import { TerrainType, FloraType, MoveType } from "../codegen/Types.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { randomSeed, randomCoord} from "../utility/random.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 
 contract FloraSubsystem is System {
 
@@ -48,7 +48,8 @@ contract FloraSubsystem is System {
     IWorld world = IWorld(_world());
     require(world.canDoStuff(player), "hmm");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition ( x, y, 0 );
+
 
     require(world.canInteract(player, x, y, atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
@@ -84,9 +85,11 @@ contract FloraSubsystem is System {
     uint32 seeds = Seeds.get(player);
     require(seeds > 0, "no seeds");
 
-    bytes32[] memory atRoad = getKeysWithValue(PositionTableId, Position.encode(x, y, -1));
+    bytes32[] memory atRoad = world.getKeysAtPosition ( x, y, -1 );
+
     require(atRoad.length == 0, "road here");
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition ( x, y, 0 );
+
     require(world.canInteractEmpty(player, x, y, atPosition, 1), "bad interact");
 
 

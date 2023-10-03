@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Move, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/Tables.sol";
+import { Move, Carrying, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/Tables.sol";
 import { Position, PositionTableId } from "../codegen/Tables.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/Types.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { randomCoord } from "../utility/random.sol";

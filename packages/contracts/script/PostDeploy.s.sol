@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.21;
 
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
@@ -19,12 +19,12 @@ contract PostDeploy is Script {
     vm.startBroadcast(deployerPrivateKey);
 
     //deploys the MapConfig
-    world.createWorld(worldAddress);
+    world.createWorld();
     world.createMile();
 
     // some debug to check if our abiencode is working
     // abiTest(worldAddress);
-    randomTest(worldAddress);
+    // randomTest(worldAddress);
     
     vm.stopBroadcast();
   }

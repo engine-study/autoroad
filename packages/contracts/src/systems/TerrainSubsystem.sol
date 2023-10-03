@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
@@ -16,9 +16,9 @@ import { FloraSubsystem } from "./FloraSubsystem.sol";
 import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { randomCoord } from "../utility/random.sol";
 
 contract TerrainSubsystem is System {
@@ -30,21 +30,21 @@ contract TerrainSubsystem is System {
     return x >= RoadConfig.getLeft() && x <= RoadConfig.getRight();
   }
 
-  function createWorld(address worldAddress) public {
-    IWorld world = IWorld(worldAddress);
+  function createWorld() public {
+    IWorld world = IWorld(_world());
 
     bool debug = true; 
     bool dummyPlayers = true; 
     bool roadComplete = true; 
 
-    GameState.set(world, int32(-1), 0);
-    GameConfig.set(world, debug, dummyPlayers, roadComplete);
-    MapConfig.set(world, 10, 10, 13);
-    RoadConfig.set(world, 3, -1, 1);
+    GameState.set(int32(-1), 0);
+    GameConfig.set(debug, dummyPlayers, roadComplete);
+    MapConfig.set(10, 10, 13);
+    RoadConfig.set(3, -1, 1);
     Bounds.set(0, 0, -1, 1);
-    Row.set(world, int32(-1));
+    Row.set(int32(-1));
 
-    bytes32 carriage = world.getCarriageEntity();
+    bytes32 carriage = getCarriageEntity();
     Carriage.set(carriage, true);
     Position.set(carriage, 0, -1, 0);
 
@@ -60,8 +60,8 @@ contract TerrainSubsystem is System {
   }
 
   function createMile() public {
-
     IWorld world = IWorld(_world());
+    
     int32 mile = GameState.getMiles();
     bytes32 oldChunk = getChunkEntity(mile);
 
@@ -276,7 +276,8 @@ contract TerrainSubsystem is System {
   }
 
   function deleteAt(int32 x, int32 y, int32 layer) public {
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, layer));
+    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, layer );
+
     if(atPosition.length == 0) {return;}
     Position.deleteRecord(atPosition[0]);
   }
@@ -368,8 +369,10 @@ contract TerrainSubsystem is System {
   }
 
   function spawnShoveledRoad(bytes32 player, int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition ( x, y, 0 );
+
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 entity = getRoadEntity(x,y);
@@ -381,7 +384,7 @@ contract TerrainSubsystem is System {
     Move.set(entity, uint32(MoveType.Hole));
     Position.set(entity, x, y, 0);
 
-    IWorld(_world()).giveRoadShoveledReward(player);
+    world.giveRoadShoveledReward(player);
   }
 
   

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
@@ -12,7 +12,7 @@ import { SpawnSubsystem } from "../systems/SpawnSubsystem.sol";
 import { FloraSubsystem } from "../systems/FloraSubsystem.sol";
 import { TerrainSubsystem } from "../systems/TerrainSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract ActionSystem is System {
 
@@ -45,7 +45,7 @@ contract ActionSystem is System {
     if (playerExists) { require(Health.get(entity) == -1, "not dead, can't respawn");}
     require(world.onSpawn(x,y), "out of spawn");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition(x, y, 0);
     require(atPosition.length < 1, "occupied");
 
     world.spawnPlayer(entity, x, y, false);
@@ -101,6 +101,6 @@ contract ActionSystem is System {
   }
 
   function setAction(bytes32 player, ActionType newAction, int32 x, int32 y) public {
-    Action.emitEphemeral(player, uint32(newAction), x, y);
+    Action.set(player, uint32(newAction), x, y);
   }
 }

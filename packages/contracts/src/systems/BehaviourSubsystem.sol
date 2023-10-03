@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
@@ -9,7 +9,7 @@ import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { ActionSystem } from "./ActionSystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition } from "../utility/grid.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract BehaviourSubsystem is System {
 
@@ -38,7 +38,7 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
     //walk towards target
     PositionData memory walkPos = addPosition(seekerPos,getVectorNormalized(seekerPos,targetPos));
-    bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(walkPos.x, walkPos.y, 0));
+    bytes32[] memory atDest = world.getKeysAtPosition(walkPos.x, walkPos.y, 0);
     world.moveTo(causedBy, seeker, seekerPos, walkPos, atDest, ActionType.Walking);
   }
 

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
@@ -10,7 +10,7 @@ import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { PuzzleSubsystem } from "./PuzzleSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract AdminSystem is System {
 
@@ -34,7 +34,8 @@ contract AdminSystem is System {
   function killPlayerAdmin(int32 x, int32 y) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
     require(isAdmin(entity), "not admin");    
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
+
     if(atPosition.length == 0) return;
     IWorld(_world()).kill(entity, atPosition[0], entity, PositionData(x,y,0));
   }
