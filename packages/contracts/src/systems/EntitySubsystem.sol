@@ -3,7 +3,7 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/Tables.sol";
 import { NPCType } from "../codegen/Types.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";

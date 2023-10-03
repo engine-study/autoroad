@@ -7,12 +7,13 @@ import { Action, Name, Player, Health} from "../codegen/Tables.sol";
 import { ActionType, PaymentType } from "../codegen/Types.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
+import { ToolSubsystem } from "../systems/ToolSubsystem.sol";
 import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { SpawnSubsystem } from "../systems/SpawnSubsystem.sol";
 import { FloraSubsystem } from "../systems/FloraSubsystem.sol";
 import { TerrainSubsystem } from "../systems/TerrainSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract ActionSystem is System {
 
@@ -101,6 +102,6 @@ contract ActionSystem is System {
   }
 
   function setAction(bytes32 player, ActionType newAction, int32 x, int32 y) public {
-    Action.set(player, uint32(newAction), x, y);
+    Action.emitEphemeral(player, uint32(newAction), x, y);
   }
 }

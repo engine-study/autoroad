@@ -13,15 +13,15 @@ import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
-import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
-
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+// import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract MoveSubsystem is System {
 
   function getKeysAtPosition(int32 x, int32 y, int32 layer) public view returns(bytes32[] memory) {
-    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicData) = Position.encode(x, y, layer);
-    return getKeysWithValue(IWorld(_world()), PositionTableId, staticData, encodedLengths, dynamicData);
+    // (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicData) = Position.encode(x, y, layer);
+    // return getKeysWithValue(IWorld(_world()), PositionTableId, staticData, encodedLengths, dynamicData);
+    return getKeysWithValue(IWorld(_world()), PositionTableId, Position.encode(x, y, layer));
   }
 
   function moveSimple(bytes32 player, int32 x, int32 y) public {
@@ -39,7 +39,6 @@ contract MoveSubsystem is System {
 
     // get all the positions in the line we are walking (including starting position)
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
-
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
 
@@ -244,7 +243,7 @@ contract MoveSubsystem is System {
       MoveType moveType = MoveType(Move.get(atDestination[0]));
       if (moveType == MoveType.Hole || moveType == MoveType.Trap) {
         //kill if it was a player
-        if(Player.get(entity)) { kill(causedBy, entity, causedBy, to);}
+        if(Player.get(entity)) { IWorld(_world()).kill(causedBy, entity, causedBy, to);}
         if(Road.getState(atDestination[0]) == uint32(RoadState.Shoveled)) {
           IWorld(_world()).spawnRoadFromPlayer(causedBy, entity, atDestination[0], to);
         }
@@ -298,154 +297,6 @@ contract MoveSubsystem is System {
     require(withinManhattanMinimum(entityPos, playerPos, distance), "too far or too close");
 
     return true;
-  }
-
-  function mine(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
-
-    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
-
-
-    require(canInteract(player, x, y, atPosition, 1), "bad interact");
-
-    uint32 rockState = Rock.get(atPosition[0]);
-
-    require(rockState > uint32(RockType.None), "Rock not found or none");
-    require(rockState < uint32(RockType.Nucleus), "Rock ground to a pulp");
-
-    //increment the rock state
-    rockState += 1;
-
-    Rock.set(atPosition[0], rockState);
-
-    //give rocks that are mined a pushable component
-    if (rockState == uint32(RockType.Statumen)) {
-      Move.set(atPosition[0], uint32(MoveType.Push));
-    }
-    //become shovelable once we are broken down enough
-    else if (rockState == uint32(RockType.Rudus)) {
-      Position.deleteRecord(atPosition[0]);
-      // Move.set(atPosition[0], uint32(MoveType.Shovel));
-    }
-
-  }
-
-  function shovel(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
-    IWorld world = IWorld(_world());
-    require(world.onRoad(x, y), "off road");
-    require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
-
-    world.spawnShoveledRoad(player, x,y);
-
-  }
-
-  function stick(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
-
-    PositionData memory pos = PositionData(x, y, 0);
-    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
-
-    require(atPosition.length > 0, "attacking an empty spot");
-    require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
-
-    int32 health = Health.get(atPosition[0]);
-    require(health > 0, "this thing on?");
-
-    health--;
-
-    if (health <= 0) {
-      kill(player, atPosition[0], player, pos);
-    } else {
-      Health.set(atPosition[0], health);
-    }
-  }
-
-  function melee(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
-
-    PositionData memory pos = PositionData(x, y, 0);
-    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
-
-    require(atPosition.length > 0, "attacking an empty spot");
-    require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
-
-    int32 health = Health.get(atPosition[0]);
-    require(health > 0, "this thing on?");
-
-    health--;
-
-    if (health <= 0) {
-      kill(player, atPosition[0], player, pos);
-    } else {
-      Health.set(atPosition[0], health);
-    }
-  }
-
-  function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
-    IWorld world = IWorld(_world());
-
-    world.setAction(target, ActionType.Dead, pos.x, pos.y);
-
-    //kill target
-    Health.set(target, -1);
-    Position.deleteRecord(target);
-
-    //set to dead
-    world.killRewards(causedBy, target, attacker);
-
-    //spawn bones
-    // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
-    // Bones.set(bonesEntity, true);
-    // Position.set(bonesEntity, pos);
-    // Move.set(bonesEntity, uint32(MoveType.Push));
-  }
-
-  function teleportScroll(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
-
-    //remove scrolls
-    uint32 scrolls = Scroll.get(player);
-    require(scrolls > uint32(0), "not enough scrolls");
-    Scroll.set(player, scrolls - 1);
-
-    teleport(player, x, y);
-
-  }
-
-  function teleport(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
-
-    IWorld world = IWorld(_world());
-    require(world.onWorld(x, y), "offworld");
-
-    bytes32[] memory atPosition = world.getKeysAtPosition( x, y, 0 );
-
-    require(atPosition.length < 1, "occupied");
-    setPosition(player, player, x, y, 0, ActionType.Teleport);
-  }
-
-  function fish(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
-    IWorld world = IWorld(_world());
-
-    PositionData memory startPos = Position.get(player);
-    PositionData memory fishPos = PositionData(x, y, 0);
-
-    //check initial push is good
-    bytes32[] memory atPos = world.getKeysAtPosition(fishPos.x, fishPos.y, 0);
-    require(canInteract(player, x, y, atPos, 1), "bad interact");
-    require(Weight.get(atPos[0]) <= 0, "too heavy");
-    
-
-    PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
-    PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
-    bytes32[] memory atDest = world.getKeysAtPosition(endPos.x, endPos.y, 0);
-
-    requirePushable(atPos);
-    requireOnMap(atDest, endPos);
-    requireCanPlaceOn(atDest);
-    moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
   }
 
   function setPosition(bytes32 causedBy, bytes32 entity, int32 x, int32 y, int32 layer, ActionType action) public {

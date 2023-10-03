@@ -53,4 +53,3 @@ import { Carriage, CarriageTableId } from "./tables/Carriage.sol";
 import { Row, RowTableId } from "./tables/Row.sol";
 import { Action, ActionTableId } from "./tables/Action.sol";
 import { Animation, AnimationTableId } from "./tables/Animation.sol";
-import { GameEvent, GameEventTableId } from "./tables/GameEvent.sol";

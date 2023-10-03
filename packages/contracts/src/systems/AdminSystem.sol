@@ -10,7 +10,7 @@ import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { PuzzleSubsystem } from "./PuzzleSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract AdminSystem is System {
 

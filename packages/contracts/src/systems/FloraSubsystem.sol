@@ -8,10 +8,10 @@ import { Player, Health, Tree, Seeds, Move } from "../codegen/Tables.sol";
 import { TerrainType, FloraType, MoveType } from "../codegen/Types.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { randomSeed, randomCoord} from "../utility/random.sol";
-import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
+import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
 contract FloraSubsystem is System {
 

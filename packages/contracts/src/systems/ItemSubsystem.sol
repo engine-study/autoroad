@@ -7,7 +7,7 @@ import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameStat
 import { Coinage, Gem, Eth, XP, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/Tables.sol";
 import { ActionType, PaymentType } from "../codegen/Types.sol";
 
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { GaulItems } from "../data/GaulItems.sol";
 

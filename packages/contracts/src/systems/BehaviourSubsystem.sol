@@ -9,7 +9,7 @@ import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { ActionSystem } from "./ActionSystem.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition } from "../utility/grid.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract BehaviourSubsystem is System {
 

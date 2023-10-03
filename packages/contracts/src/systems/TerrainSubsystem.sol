@@ -16,9 +16,9 @@ import { FloraSubsystem } from "./FloraSubsystem.sol";
 import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
+import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 import { randomCoord } from "../utility/random.sol";
 
 contract TerrainSubsystem is System {

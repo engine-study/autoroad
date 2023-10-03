@@ -11,7 +11,7 @@ import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 
 import { random, randomFromEntitySeed } from "../utility/random.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract PuzzleSubsystem is System {
 
