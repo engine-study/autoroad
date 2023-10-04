@@ -10,7 +10,8 @@ public class EnableDisableMUD : SPEnableDisable
     [SerializeField] bool hasInit = false;
     [SerializeField] MUDComponent component;
 
-    public override bool CanPlay(bool enable, SPEffects effect) { return base.CanPlay(enable, effect) && hasInit && component.Loaded && (!enable || hasPlayed || (!hasPlayed && component.SpawnInfo.Source != SpawnSource.Load));}
+    public override bool CanPlay(bool enable, SPEffects effect) { return false; }
+    // public override bool CanPlay(bool enable, SPEffects effect) { return base.CanPlay(enable, effect) && hasInit && component.Loaded && (!enable || hasPlayed || (!hasPlayed && component.SpawnInfo.Source != SpawnSource.Load));}
 
     protected override void Awake() {
         base.Awake();
@@ -28,9 +29,12 @@ public class EnableDisableMUD : SPEnableDisable
             if (component == null) { Debug.LogError("No component", this); return; }
         }
 
+        component.OnToggleActive += Spawn;
         hasInit = true;
     }   
 
-
+    void OnDestroy() {
+        if(component) {component.OnToggleActive -= Spawn;}
+    }
 
 }

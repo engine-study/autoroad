@@ -8,8 +8,10 @@ public class MileColumn : MonoBehaviour
     public int Mile {get{return Mathf.RoundToInt(mile);}}
     public float MileRaw {get{return mile;}}
     public bool IsInputting {get{return mouseInput || scrollInput;}}
+
     [Header("Rotate")]
-    [SerializeField] Transform column;
+    [SerializeField] Transform camera;
+    [SerializeField] MileSegment segmentPrefab;
     [SerializeField] float horizontalSpeed = 2.0f;
     [SerializeField] float wheelSpeed = 10.0f;
     [SerializeField] float verticalSpeed = 2.0f;
@@ -34,8 +36,8 @@ public class MileColumn : MonoBehaviour
 
     public void SetRot(float newMile) {
         lerpRot = newMile * round;
-        column.localRotation = Quaternion.Euler(Vector3.up * newMile * round);
-        column.localPosition = Vector3.down * newMile * round * verticalSpeed;
+        camera.localRotation = Quaternion.Euler(Vector3.up * newMile * round);
+        camera.localPosition = Vector3.down * newMile * round * verticalSpeed;
     }
 
     void Update() {

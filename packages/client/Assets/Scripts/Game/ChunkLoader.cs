@@ -82,13 +82,12 @@ public class ChunkLoader : MonoBehaviour
             chunk.Toggle(isCloseEnough);
         }
 
-        if(newMile-1 >= 0) { Chunks[newMile-1].Toggle(true);}
-        if(newMile+1 < ChunkList.Count) { Chunks[newMile+1].Toggle(true);}
+        for(int i = 0; i < ChunkList.Count; i++) {
+            bool showChunk = i == newMile || (i >= newMile-1 && i <= newMile+1);
+            ChunkList[i].Toggle(showChunk);
+        }
 
-        chunk = newChunk;
-        newChunk.Toggle(true);
-        
-
+        chunk = newChunk;        
         return true;
     }
 
