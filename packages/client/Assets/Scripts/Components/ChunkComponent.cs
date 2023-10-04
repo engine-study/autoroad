@@ -7,11 +7,9 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 
-public class ChunkComponent : MUDComponent
-{
-
-    public static System.Action OnChunkUpdate;
+public class ChunkComponent : MUDComponent {
     
+    public static System.Action OnChunkUpdate;
     public Transform Objects {get{return entityParent;}}
 
     public Mile Mile {get{return mile;}}

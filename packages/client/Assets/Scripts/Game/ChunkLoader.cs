@@ -6,6 +6,7 @@ using mud.Client;
 public class ChunkLoader : MonoBehaviour
 {
     public static System.Action OnActiveChunk;
+    public static System.Action<ChunkComponent> OnChunkRegistered;
 
     public static bool HasLoadedAllChunks{get{return ChunkList != null && ChunkList.Count == GameStateComponent.MILE_COUNT+1 && GameStateComponent.MILE_COUNT > -1;}}
     public static ChunkLoader Instance;
@@ -59,6 +60,7 @@ public class ChunkLoader : MonoBehaviour
 
         Debug.Log("[CHUNK] " + newChunk.MileNumber + " Completed: " + newChunk.Completed.ToString() + " Spawned: " + newChunk.Spawned.ToString() + " TOTAL: " + ChunkList.Count, newChunk);
 
+        OnChunkRegistered?.Invoke(newChunk);
     }
 
     public static bool LoadMile(int newMile) {

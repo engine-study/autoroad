@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class MileSegment : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    [Header("Segment")]
+    [SerializeField] GameObject wip;
+    [SerializeField] GameObject finished;
+    public void ToggleFinished(bool toggle) {
+        wip.SetActive(!toggle);
+        finished.SetActive(toggle);
     }
 }

@@ -9,9 +9,16 @@ public class MileColumn : MonoBehaviour
     public float MileRaw {get{return mile;}}
     public bool IsInputting {get{return mouseInput || scrollInput;}}
 
+    [Header("Column")]
+    [SerializeField] float segmentHeight = 1.5f;
+    [SerializeField] Transform segmentParent;
+    [SerializeField] Transform columnTop;
+    [SerializeField] MileSegment segmentPrefab;
+    public Dictionary<int, MileSegment> Segments = new Dictionary<int, MileSegment>();
+
+
     [Header("Rotate")]
     [SerializeField] Transform camera;
-    [SerializeField] MileSegment segmentPrefab;
     [SerializeField] float horizontalSpeed = 2.0f;
     [SerializeField] float wheelSpeed = 10.0f;
     [SerializeField] float verticalSpeed = 2.0f;
@@ -30,6 +37,20 @@ public class MileColumn : MonoBehaviour
     float axis, startAxis = 0f;
     bool mouseInput, scrollInput;
 
+    void Awake() {
+
+        segmentPrefab.gameObject.SetActive(false);
+
+        ChunkLoader.OnChunkRegistered += AddChunk;
+        GameStateComponent.OnGameStateUpdated += UpdateProgress;
+        GameStateComponent.OnMileCompleted += UpdateComplete;
+    }
+
+    void OnDestroy() {
+        ChunkLoader.OnChunkRegistered -= AddChunk;
+        GameStateComponent.OnGameStateUpdated -= UpdateProgress;
+        GameStateComponent.OnMileCompleted -= UpdateComplete;
+    }
     public void SetMile(float newMile) {
         totalRot = Mathf.Clamp(newMile * round, -.25f * round, (GameStateComponent.MILE_COUNT + .25f) * round);
     }
@@ -38,6 +59,28 @@ public class MileColumn : MonoBehaviour
         lerpRot = newMile * round;
         camera.localRotation = Quaternion.Euler(Vector3.up * newMile * round);
         camera.localPosition = Vector3.down * newMile * round * verticalSpeed;
+    }
+
+    void AddChunk(ChunkComponent newChunk) {
+        int mile = newChunk.MileNumber;
+        MileSegment ms = Instantiate(segmentPrefab, segmentParent.position + Vector3.up * mile * segmentHeight, Quaternion.Euler(0f, (mile % 2) * 180f,0f), segmentParent);
+        
+        ms.gameObject.SetActive(true);
+        ms.ToggleFinished(mile < GameStateComponent.MILE_COUNT);
+
+        Segments.Add(mile, ms);
+    }
+
+    void UpdateProgress() {
+        columnTop.position = segmentParent.position + Vector3.up * GameStateComponent.MILE_COUNT * segmentHeight;
+    }
+
+    void UpdateComplete(int completedMile) {
+
+        Segments.TryGetValue(completedMile, out MileSegment ms);
+        if(ms == null) {Debug.LogError("Could not find segment " + completedMile, this); return;}
+        ms.ToggleFinished(true);
+        
     }
 
     void Update() {
@@ -69,10 +112,6 @@ public class MileColumn : MonoBehaviour
 
         SetRot(mile);
 
-    }
-
-    void LateUpdate() {
-        transform.position = SPCamera.I.transform.position;
     }
 
 }
