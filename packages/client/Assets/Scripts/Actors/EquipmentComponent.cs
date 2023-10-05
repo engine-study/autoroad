@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 using mud.Unity;
+using mud.Client;
 using System;
 
 public class EquipmentComponent : Equipment
@@ -22,7 +22,7 @@ public class EquipmentComponent : Equipment
 
     public override bool CanUse() {
         bool canUse = base.CanUse();
-        bool hasExpectedPrefab = (prefab == null && CursorMUD.MUDEntity == null) || (CursorMUD.MUDEntity != null && CursorMUD.MUDEntity.ExpectedComponents.Contains(prefab.GetType()));
+        bool hasExpectedPrefab = (prefab == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(prefab.GetType()));
         return false && canUse && hasExpectedPrefab; 
     }
 

@@ -86,12 +86,12 @@ public class TreeComponent : MUDComponent {
     }
 
     void TreeVisibility() {
-        gameObject.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
+        treeRoot.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
     }
 
     void TreeSpawnAnimation() {
 
-        gameObject.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
+        treeRoot.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
 
         // if (health.UpdateSource != UpdateSource.Revert && pos.UpdateType == UpdateType.DeleteRecord && Loaded && pos.UpdateType != lastPosUpdateType) {
         //     SPAudioSource.Play(transform.position, sfx_hits);
@@ -152,16 +152,16 @@ public class TreeComponent : MUDComponent {
         //     rb.centerOfMass = Vector3.zero;
         //     rb.angularVelocity = (Vector3.right * Random.Range(-5f,5f) + Vector3.forward * Random.Range(-5f,5f) );
         // }
-        treeRoot.gameObject.SetActive(false);
+        treeRoot.SetActive(false);
         yield return new WaitForSeconds(2.5f);
-        gameObject.SetActive(false);
+        Entity.Toggle(false);
     }
 
     public void Chop() {
         ChopTree(Entity);
     }
 
-    public async void ChopTree(MUDEntity entity) {
+    public async void ChopTree(mud.Client.MUDEntity entity) {
         List<TxUpdate> updates = new List<TxUpdate>();
         
         updates.Add(TxManager.MakeOptimistic(health, health.Health - 1));

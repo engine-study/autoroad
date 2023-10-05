@@ -28,7 +28,7 @@ public class InfoUI : SPWindowEntity
         coordinate.UpdateField("? ?");
     }
 
-    public override void SetEntity(MUDEntity newEntity)
+    public override void SetEntity(mud.Client.MUDEntity newEntity)
     {
         base.SetEntity(newEntity);
 

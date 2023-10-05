@@ -6,9 +6,9 @@ using mud.Client;
 public class SPWindowEntity : SPWindowBase
 {
     [Header("Entity")]
-    public MUDEntity entity;
+    public mud.Client.MUDEntity entity;
 
-    public virtual void SetEntity(MUDEntity newEntity) {
+    public virtual void SetEntity(mud.Client.MUDEntity newEntity) {
         
         //already setup this entity
         if(entity == newEntity) {

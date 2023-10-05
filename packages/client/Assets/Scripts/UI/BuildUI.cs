@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using mud.Client;
 public class BuildUI : PhaseUI
 {
     [Header("Build")]
     public GameObject worldUI;
     public StatUI stats;
     public InfoUI info;
-    public Entity targetEntity;
+    public MUDEntity targetEntity;
 
 
     public override void ToggleWindow(bool toggle)

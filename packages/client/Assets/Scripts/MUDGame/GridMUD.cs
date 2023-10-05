@@ -72,7 +72,7 @@ public class GridMUD : MonoBehaviour {
         return components;
     }
 
-    public static MUDEntity GetEntityAt(Vector3 newPos) {
+    public static mud.Client.MUDEntity GetEntityAt(Vector3 newPos) {
 
         if(Instance.useQuery) {
             List<PositionComponent> comps = GetComponentsAtPosition((int)newPos.x, (int)newPos.z, (int)newPos.y);

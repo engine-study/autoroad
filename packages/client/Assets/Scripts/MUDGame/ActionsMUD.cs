@@ -114,18 +114,18 @@ public class ActionsMUD : MonoBehaviour
 
     }
 
-    public static TxUpdate PositionOptimistic(MUDEntity entity, Vector3 atPos) {
+    public static TxUpdate PositionOptimistic(mud.Client.MUDEntity entity, Vector3 atPos) {
         PositionComponent posComponent = MUDWorld.FindOrMakeComponent<PositionComponent>(entity.Key);
         return TxManager.MakeOptimistic(posComponent, PositionComponent.PositionToOptimistic(atPos));
     }
 
-    public static TxUpdate ActionOptimistic(MUDEntity entity, ActionName action, Vector3 atPos) {
+    public static TxUpdate ActionOptimistic(mud.Client.MUDEntity entity, ActionName action, Vector3 atPos) {
         ActionComponent actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
         return TxManager.MakeOptimistic(actionComponent, action, (int)atPos.x, (int)atPos.z); 
     }
 
     
-    public static UniTask<bool> ActionTx(MUDEntity entity, ActionName action, Vector3 atPos, List<TxUpdate> updates = null) {
+    public static UniTask<bool> ActionTx(mud.Client.MUDEntity entity, ActionName action, Vector3 atPos, List<TxUpdate> updates = null) {
 
         //add the senders optimistic update
         if (updates == null) { updates = new List<TxUpdate>(); }

@@ -15,15 +15,15 @@ public class HoverPolish : MonoBehaviour
         CursorMUD.OnLeaveEntity -= RemoveActions;
     }
 
-    void AddActions(Entity newEntity) {
+    void AddActions(MUDEntity newEntity) {
         ToggleActions(true, newEntity);
     }
 
-    void RemoveActions(Entity newEntity) {
+    void RemoveActions(MUDEntity newEntity) {
         ToggleActions(false, newEntity);
     }
 
-    void ToggleActions(bool toggle, Entity newEntity) {
+    void ToggleActions(bool toggle, MUDEntity newEntity) {
         
         if(newEntity == null) {
             return;

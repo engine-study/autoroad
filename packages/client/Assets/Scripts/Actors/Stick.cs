@@ -11,7 +11,7 @@ public class Stick : Equipment
     public override bool CanUse() {
         bool canUse = base.CanUse();
 
-        MUDEntity e = CursorMUD.MUDEntity;
+        mud.Client.MUDEntity e = CursorMUD.Entity;
         if(e == null) return false;
         
         PlayerComponent player = e?.GetMUDComponent<PlayerComponent>();
@@ -35,7 +35,7 @@ public class Stick : Equipment
         List<TxUpdate> updates = new List<TxUpdate>();
 
         PositionComponent ourPosition = Sender.GetComponent<PlayerMUD>().Position;
-        PositionComponent theirPosition = CursorMUD.MUDEntity.GetMUDComponent<PositionComponent>();
+        PositionComponent theirPosition = CursorMUD.Entity.GetMUDComponent<PositionComponent>();
 
         updates.Add(TxManager.MakeOptimistic(ourPosition, PositionComponent.PositionToOptimistic(pushObject)));
         updates.Add(TxManager.MakeOptimistic(theirPosition, PositionComponent.PositionToOptimistic(pushToPos)));

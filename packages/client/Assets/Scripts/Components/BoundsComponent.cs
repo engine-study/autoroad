@@ -8,7 +8,7 @@ public class BoundsComponent : MUDComponent
 {
 
 
-    public static bool OnWorld(MUDEntity entity, Vector3 pos) {
+    public static bool OnWorld(mud.Client.MUDEntity entity, Vector3 pos) {
         if (entity.GetMUDComponent<PlayerComponent>()) { return MapConfigComponent.OnMap(pos); }
         else return OnBounds(pos); 
     }

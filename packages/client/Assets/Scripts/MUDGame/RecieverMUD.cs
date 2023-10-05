@@ -24,17 +24,17 @@ public class RecieverMUD : SPReciever
         CursorMUD.OnLeaveEntity -= RemoveActions;
     }
 
-    void AddActions(Entity newEntity) {
+    void AddActions(MUDEntity newEntity) {
         ToggleActions(true, newEntity);
     }
 
-    void RemoveActions(Entity newEntity) {
+    void RemoveActions(MUDEntity newEntity) {
         ToggleActions(false, newEntity);
     }
 
-    void ToggleActions(bool toggle, Entity newEntity) {
-        
-        MUDEntity m = (MUDEntity)newEntity;
+    void ToggleActions(bool toggle, MUDEntity newEntity) {
+
+        mud.Client.MUDEntity m = (mud.Client.MUDEntity)newEntity;
         if(m == null) {
             return;
         }

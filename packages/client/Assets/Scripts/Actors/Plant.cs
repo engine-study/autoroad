@@ -15,7 +15,7 @@ public class Plant : Equipment
         bool onBounds = BoundsComponent.OnBounds((int)transform.position.x, (int)transform.position.z);
         bool onRoad = RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z);
 
-        return canUse && SeedsComponent.LocalCount > 0 && !onRoad && onBounds && CursorMUD.MUDEntity == null;
+        return canUse && SeedsComponent.LocalCount > 0 && !onRoad && onBounds && CursorMUD.Entity == null;
 
     }
 

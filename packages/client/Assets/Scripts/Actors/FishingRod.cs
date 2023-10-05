@@ -11,7 +11,7 @@ public class FishingRod : Equipment
     public override bool CanUse() {
         bool canUse = base.CanUse();
 
-        MUDEntity e = CursorMUD.MUDEntity;
+        MUDEntity e = CursorMUD.Entity;
 
         if(e == null) return false;
         
@@ -36,11 +36,11 @@ public class FishingRod : Equipment
             return false;
         }
 
-        PositionComponent theirPosition = CursorMUD.MUDEntity.GetMUDComponent<PositionComponent>();
+        PositionComponent theirPosition = CursorMUD.Entity.GetMUDComponent<PositionComponent>();
 
         List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(ActionsMUD.ActionOptimistic(CursorMUD.MUDEntity, ActionName.Hop, pushToPos));
-        updates.Add(ActionsMUD.PositionOptimistic(CursorMUD.MUDEntity, pushToPos));
+        updates.Add(ActionsMUD.ActionOptimistic(CursorMUD.Entity, ActionName.Hop, pushToPos));
+        updates.Add(ActionsMUD.PositionOptimistic(CursorMUD.Entity, pushToPos));
         
         return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Fishing, CursorMUD.GridPos);
 

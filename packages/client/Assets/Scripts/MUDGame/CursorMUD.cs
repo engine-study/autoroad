@@ -11,12 +11,11 @@ public class CursorMUD : MonoBehaviour {
     public static Transform LookTarget { get { return Instance.lookTarget; } }
     public static Vector3 WorldPos { get { return Instance.mousePos; } }
     public static Vector3 GridPos { get { return Instance.gridPos; } }
-    public static Entity Entity { get { return Instance.hover; } }
-    public static MUDEntity MUDEntity { get { return Instance.hover as MUDEntity; } }
+    public static MUDEntity Entity { get { return Instance.hover; } }
     public static PositionComponent Position { get { return Instance.pos; } }
     public static SPBase Base { get { return Instance.baseObject; } }
-    public static Action<Entity> OnHoverEntity;
-    public static Action<Entity> OnLeaveEntity;
+    public static Action<MUDEntity> OnHoverEntity;
+    public static Action<MUDEntity> OnLeaveEntity;
     public static Action<Vector3> OnGridPosition;
     public static Action<Vector3> OnCursorPosition;
 
@@ -30,7 +29,7 @@ public class CursorMUD : MonoBehaviour {
     [SerializeField] Vector3 rawMousePos;
     [SerializeField] Vector3 mousePos, lastPos;
     [SerializeField] Vector3 gridPos, lastGridPos;
-    [SerializeField] Entity hover, lastHover;
+    [SerializeField] mud.Client.MUDEntity hover, lastHover;
     [SerializeField] PositionComponent pos;
     [SerializeField] SPBase baseObject;
 
@@ -98,7 +97,7 @@ public class CursorMUD : MonoBehaviour {
 
         if (lastHover != hover) {
 
-            pos = hover != null && hover is MUDEntity ? (hover as MUDEntity).GetMUDComponent<PositionComponent>() : null;
+            pos = hover != null && hover is mud.Client.MUDEntity ? (hover as mud.Client.MUDEntity).GetMUDComponent<PositionComponent>() : null;
             baseObject = hover != null ? hover.GetComponentInChildren<SPBase>() : null;
 
             OnLeaveEntity?.Invoke(lastHover);

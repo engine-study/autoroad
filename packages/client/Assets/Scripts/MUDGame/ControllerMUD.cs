@@ -22,7 +22,7 @@ public class ControllerMUD : SPController {
     [SerializeField] private AudioClip[] sfx_bump;
 
     private System.IDisposable? _disposer;
-    private MUDEntity mudEntity;
+    private mud.Client.MUDEntity mudEntity;
     private PlayerMUD playerScript;
 
     private Vector3 onchainPos;
@@ -38,7 +38,7 @@ public class ControllerMUD : SPController {
     bool init = false;
 
     void Awake() {
-        mudEntity = GetComponentInParent<MUDEntity>();
+        mudEntity = GetComponentInParent<mud.Client.MUDEntity>();
         enabled = false;
         distance = Random.Range(0f, .25f);
     }
@@ -136,7 +136,7 @@ public class ControllerMUD : SPController {
         Vector3 moveTo = playerScript.Position.Pos + direction;
 
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
-        MUDEntity e = GridMUD.GetEntityAt(moveTo);
+        mud.Client.MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
 
         Vector3 moveMinimum = onchainPos + direction;
@@ -157,7 +157,7 @@ public class ControllerMUD : SPController {
             List<Vector3> targets = new List<Vector3>();
 
             Vector3 pushToPos = moveTo;
-            MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
+            mud.Client.MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
 
             while(destinationEntity != null) {
 

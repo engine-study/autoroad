@@ -102,8 +102,8 @@ public class ChunkLoader : MonoBehaviour
         // Debug.Log("CHUNK: " + newPos.Entity.gameObject.name, newPos.Entity);
         PositionsOnMiles[pos] = -1;
 
-        if(newPos.Entity.HasInit) { PositionMileSpawn(newPos.Entity);}
-        else {entity.OnInitInfo += PositionMileSpawn;}
+        if(newPos.Entity.Loaded) { PositionMileSpawn(newPos.Entity);}
+        else {entity.OnLoadedInfo += PositionMileSpawn;}
         pos.OnUpdatedInfo += PositionMileUpdate;
     }
 
@@ -112,7 +112,7 @@ public class ChunkLoader : MonoBehaviour
     }
 
     static void PositionMileUpdate(MUDComponent c, UpdateInfo update) {
-        if(c.Entity.HasInit == false) return;
+        if(c.Entity.Loaded == false) return;
         AddEntityToChunk((PositionComponent)c);
     }
 

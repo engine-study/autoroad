@@ -213,7 +213,7 @@ contract TerrainSubsystem is System {
     
   }
 
-  function getRoadEntity(int32 x, int32 y) public view returns(bytes32) {return keccak256(abi.encode("Road", x, y, block.number));}
+  function getRoadEntity(int32 x, int32 y) public view returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
   function getChunkEntity(int32 mile) public view returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
   function getCarriageEntity() public view returns(bytes32) {return keccak256(abi.encode("Carriage"));}
 

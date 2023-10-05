@@ -7,7 +7,10 @@ public class ActionEffectDead : ActionEffect
     public override void Toggle(bool toggle, AnimationMUD animation) {
         base.Toggle(toggle, animation);
 
-        animation.ToggleRagdoll(toggle);
     }
 
+    protected override void ToggleActionEffects(bool toggle) {
+        base.ToggleActionEffects(toggle);
+        anim.ToggleRagdoll(toggle);
+    }
 }

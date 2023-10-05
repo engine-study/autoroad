@@ -24,13 +24,13 @@ public class AnimationMUD : MonoBehaviour
     [Header("Debug")]
     [SerializeField] ActionName action;
     [SerializeField] ActionEffect actionEffect;
-    [SerializeField] MUDEntity entity;
+    [SerializeField] mud.Client.MUDEntity entity;
     [SerializeField] ActionComponent actionComponent;
     SPLooker looker;
     protected virtual void Awake() {
         if(target == null) target = transform;
 
-        entity = GetComponentInParent<MUDEntity>();
+        entity = GetComponentInParent<mud.Client.MUDEntity>();
         looker = target.gameObject.AddComponent<SPLooker>();
 
     }
@@ -56,8 +56,8 @@ public class AnimationMUD : MonoBehaviour
         
         actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
 
-        if(entity.HasInit) Init();
-        else entity.OnInit += Init;
+        if(entity.Loaded) Init();
+        else entity.OnLoaded += Init;
     }
 
     void Init() {
@@ -69,7 +69,7 @@ public class AnimationMUD : MonoBehaviour
 
     void OnDestroy() {
 
-        if(entity) entity.OnInit -= Init;
+        if(entity) entity.OnLoaded -= Init;
         if(actionComponent) actionComponent.OnUpdated -= UpdateAction;
         
     }

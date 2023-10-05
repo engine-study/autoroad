@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ActionEffect : MonoBehaviour {
+    
     [Header("Action Data")]
     public MoverMUD movement;
     public SPEnableDisable effect;
@@ -11,7 +12,7 @@ public class ActionEffect : MonoBehaviour {
     public string actionClip;
     public string movementClip;
 
-    AnimationMUD setup;
+    protected AnimationMUD anim;
     bool active = false; 
 
     void Awake() {
@@ -21,14 +22,14 @@ public class ActionEffect : MonoBehaviour {
     
     public virtual void Toggle(bool toggle, AnimationMUD animation) {
 
-        setup = animation;
+        anim = animation;
 
         //first time setup
         if (active != toggle) {
             if (toggle) {
-                setup.PositionSync.OnMoveEnd += OnMoveEnd;
+                anim.PositionSync.OnMoveEnd += OnMoveEnd;
             }  else {
-                setup.PositionSync.OnMoveEnd -= OnMoveEnd;
+                anim.PositionSync.OnMoveEnd -= OnMoveEnd;
             }
             
         }
@@ -37,9 +38,9 @@ public class ActionEffect : MonoBehaviour {
         if(toggle) {
             
             //set the movement, LET THIS LINGER, states without movement use the last movement given
-            if(movement) setup.PositionSync.SetMovement(movement);
+            if(movement) anim.PositionSync.SetMovement(movement);
 
-            if(setup.PositionSync.Moving) {
+            if(anim.PositionSync.Moving) {
                 //play movement animation
                 ToggleMovementEffects(true);
             } else {
@@ -64,7 +65,7 @@ public class ActionEffect : MonoBehaviour {
     }
 
 
-    void ToggleMovementEffects(bool toggle) {
+    protected virtual void ToggleMovementEffects(bool toggle) {
 
         if(toggle) {
             moveEffect?.PlayEnabled();
@@ -77,7 +78,7 @@ public class ActionEffect : MonoBehaviour {
 
     }
 
-    void ToggleActionEffects(bool toggle) {
+    protected virtual void ToggleActionEffects(bool toggle) {
 
         if(toggle) {
 
@@ -88,7 +89,7 @@ public class ActionEffect : MonoBehaviour {
             if(action) {
                 if(action is SPActionPlayer) {
                     SPActionPlayer actionPlayer = action as SPActionPlayer;
-                    actionPlayer.animatorState?.Apply(setup.Animator);
+                    actionPlayer.animatorState?.Apply(anim.Animator);
                 }
             }
 
@@ -100,9 +101,9 @@ public class ActionEffect : MonoBehaviour {
     }
 
     void PlayAnimation(string clipName) {        
-        if(setup.Animator == null) { return; }
+        if(anim.Animator == null) { return; }
         if (string.IsNullOrEmpty(clipName)) { return; }
-        setup.Animator.PlayClip(clipName);
+        anim.Animator.PlayClip(clipName);
     }
 
 }

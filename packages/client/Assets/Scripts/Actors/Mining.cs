@@ -10,8 +10,8 @@ public class Mining : Equipment
 {
     public override bool CanUse() {
         bool canUse = base.CanUse();
-        RockComponent rock = CursorMUD.MUDEntity.GetMUDComponent<RockComponent>();
-        return false && canUse && CursorMUD.MUDEntity != null && rock != null && rock.RockType < RockType.Nucleus; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
+        RockComponent rock = CursorMUD.Entity.GetMUDComponent<RockComponent>();
+        return false && canUse && CursorMUD.Entity != null && rock != null && rock.RockType < RockType.Nucleus; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
     }
 
     public override async UniTask<bool> Use() {
