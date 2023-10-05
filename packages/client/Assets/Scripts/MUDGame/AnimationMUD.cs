@@ -33,12 +33,10 @@ public class AnimationMUD : MonoBehaviour
         entity = GetComponentInParent<MUDEntity>();
         looker = target.gameObject.AddComponent<SPLooker>();
 
-
     }
 
     protected virtual void Start() {
 
-        
         Animator = GetComponentInChildren<SPAnimator>(true);
         Controller = GetComponentInChildren<SPController>(true);
         if(Controller == null) {
@@ -66,13 +64,13 @@ public class AnimationMUD : MonoBehaviour
         actionComponent = entity.GetMUDComponent<ActionComponent>();
         if (actionComponent == null) { Debug.LogError("No action component", this); return; }
 
-        actionComponent.OnRichUpdate += UpdateAction;
+        actionComponent.OnUpdated += UpdateAction;
     }
 
     void OnDestroy() {
 
         if(entity) entity.OnInit -= Init;
-        if(actionComponent) actionComponent.OnRichUpdate -= UpdateAction;
+        if(actionComponent) actionComponent.OnUpdated -= UpdateAction;
         
     }
 
@@ -118,7 +116,7 @@ public class AnimationMUD : MonoBehaviour
             ToggleAction(false, actionEffect); 
         }
 
-        Debug.Log(gameObject.name + " [ANIM]: " + newAction.ToString() + " (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
+        Debug.Log(actionComponent.Entity.Name + " [ANIM]: " + newAction.ToString() + " (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
 
         action = newAction;
         actionEffect = LoadAction(action.ToString());

@@ -86,29 +86,17 @@ contract MoveSubsystem is System {
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
 
-    uint walkLength = positions.length-1;
     for (uint i = 1; i < positions.length; i++) {
-      
-      bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
-      assert(atPosition.length < 2);
-
-      bool continueWalk = world.onWorld(positions[i].x, positions[i].y) && canWalkOn(atPosition);
-      
-      //if we hit an object or at the end of our walk, move to that position
-      if (continueWalk == false) {
-        require(i > 1, "Nowhere to move");
-        walkLength = i-1;
-        break;
-      }
-
-    }
-
-    //walk all the spaces (remember the 0 index is our original position, start at index 1)
-    for (uint i = 1; i <= walkLength; i++) {
-
+  
       bytes32[] memory atDest = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      assert(atDest.length < 2);
 
-      //move
+      //check if valid position
+      bool canWalk = world.onWorld(positions[i].x, positions[i].y) && canWalkOn(atDest);
+
+      //if we hit an object or at the end of our walk, break out
+      if (canWalk == false) { require(i > 1, "Nowhere to move"); return;}
+
       moveTo(player, player, positions[i-1], positions[i], atDest, ActionType.Walking);
 
       //if we die while moving we must stop
@@ -252,13 +240,15 @@ contract MoveSubsystem is System {
 
     //simple move, no terrain at destination, exit out of method early
     if(atDest.length == 0) {
-
       setPosition(causedBy, entity, to, animation);
-
     } else {
-
+      
       //move onto a MoveType
       MoveType moveTypeAtDest = MoveType(Move.get(atDest[0]));
+
+      //we soft fail bad moves, don't require this to work
+      if(canPlaceOn(moveTypeAtDest) == false) {return;}
+
       handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest);
 
       //if we're still alive, move into the position (this will trigger an entity update too)
@@ -270,8 +260,6 @@ contract MoveSubsystem is System {
   }
 
   function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDest, MoveType moveTypeAtDest) private {
-
-      require(canPlaceOn(moveTypeAtDest), "obstructed");
 
       if(moveTypeAtDest == MoveType.Hole) {
         
@@ -286,11 +274,11 @@ contract MoveSubsystem is System {
         }
 
       } else if(moveTypeAtDest == MoveType.Trap) {
-        //kill if it was an NPC, otherwise trap is destroyed with no effect
         if(NPC.get(entity) > 0) { 
+          //kill if it was an NPC
           kill(causedBy, entity, causedBy, to);
-        }
-        else {
+        } else {
+          //otherwise trap is destroyed with no effect
           Position.deleteRecord(atDest[0]);
         }
       }
@@ -317,6 +305,7 @@ contract MoveSubsystem is System {
 
   function mine(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
+    IWorld world = IWorld(_world());
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
 
@@ -342,6 +331,8 @@ contract MoveSubsystem is System {
       // Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
 
+    world.setAction(player, ActionType.Mining, x, y);
+
   }
 
   function shovel(bytes32 player, int32 x, int32 y) public {
@@ -351,11 +342,13 @@ contract MoveSubsystem is System {
     require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
 
     world.spawnShoveledRoad(player, x,y);
+    world.setAction(player, ActionType.Shoveling, x, y);
 
   }
 
   function stick(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
+    IWorld world = IWorld(_world());
 
     PositionData memory pos = PositionData(x, y, 0);
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
@@ -372,6 +365,8 @@ contract MoveSubsystem is System {
     } else {
       Health.set(atPosition[0], health);
     }
+
+    world.setAction(player, ActionType.Stick, x, y);
   }
 
   function melee(bytes32 player, int32 x, int32 y) public {
@@ -385,6 +380,8 @@ contract MoveSubsystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
+    world.setAction(player, ActionType.Melee, x, y);
+
     health--;
 
     if (health <= 0) {
@@ -397,13 +394,15 @@ contract MoveSubsystem is System {
   function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
     IWorld world = IWorld(_world());
 
-    world.setAction(target, ActionType.Dead, pos.x, pos.y);
-
-    //kill target
+    //kill and move underground
+    pos.layer = -2;
+    Position.set(target, pos);
     Health.set(target, -1);
-    Position.deleteRecord(target);
 
     //set to dead
+    world.setAction(target, ActionType.Dead, pos.x, pos.y);
+
+    //rewards
     world.killRewards(causedBy, target, attacker);
 
     //spawn bones
@@ -449,15 +448,20 @@ contract MoveSubsystem is System {
     require(canInteract(player, x, y, atPos, 1), "bad interact");
     require(Weight.get(atPos[0]) <= 0, "too heavy");
     
+    //set player action
+    world.setAction(player, ActionType.Fishing, x, y);
 
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
     bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(endPos.x, endPos.y, 0));
 
+    //move other player
     requirePushable(atPos);
     requireOnMap(atDest, endPos);
     requireCanPlaceOn(atDest);
     moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
+
+    
   }
 
 }

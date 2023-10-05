@@ -5165,7 +5165,7 @@ Transform:
   - {fileID: 2753365398783459916}
   - {fileID: 7979390971383273270}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1735051090325256476
 MonoBehaviour:
@@ -5181,9 +5181,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents:
   - {fileID: 5117984663886283829, guid: a743baee3ef63a2488055572b3a8eaa4, type: 3}
+  - {fileID: 7814506977384768522, guid: 5a023588fc2a96a40b246164e42b5cac, type: 3}
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
+  isActive: 0
   spawnInfo:
     entity: {fileID: 0}
     source: 0

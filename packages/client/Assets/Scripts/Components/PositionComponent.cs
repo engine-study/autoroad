@@ -16,7 +16,7 @@ public class PositionComponent : MUDComponent {
     public static object[] PositionToTransaction(Vector3 newPos) { return new object[] { System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
     public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)MapConfigComponent.Height);}
 
-    [Header("Debug")]
+    [Header("Position")]
     [SerializeField] bool isVisible = true;
     [SerializeField] int layer = 0;
     [SerializeField] Vector2 position2D;
@@ -41,7 +41,7 @@ public class PositionComponent : MUDComponent {
         //create an animation component right away since they are ephemeral and might not spawn automatically
         if(syncer == null) {syncer = Entity.GetComponentInChildren<PositionSync>(true);}
 
-        OnPositionToggle?.Invoke(isVisible);
+        OnPositionToggle?.Invoke(IsVisible);
 
     }
 

@@ -11,6 +11,11 @@ public class HealthComponent : MUDComponent {
     [SerializeField] int health = 0;
     [SerializeField] bool dead;
     protected override IMudTable GetTable() {return new HealthTable();}
+    protected override void PostInit() {
+        base.PostInit();
+        // Entity.Toggle(health > 0);
+    }
+
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
         health = (int)(table as HealthTable).value;
         dead = health < 0 || newInfo.UpdateType == UpdateType.DeleteRecord;

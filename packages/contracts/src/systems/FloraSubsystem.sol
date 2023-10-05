@@ -53,6 +53,8 @@ contract FloraSubsystem is System {
     require(world.canInteract(player, x, y, atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
 
+    world.setAction(player, ActionType.Chop, x, y);
+
     int32 health = Health.get(atPosition[0]);
     health--;
 
@@ -74,6 +76,8 @@ contract FloraSubsystem is System {
     } else {
       Health.set(atPosition[0], health);
     }
+
+    
   }
 
   
@@ -89,6 +93,7 @@ contract FloraSubsystem is System {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
     require(world.canInteractEmpty(player, x, y, atPosition, 1), "bad interact");
 
+    world.setAction(player, ActionType.Plant, x, y);
 
     Seeds.set(player, seeds-1);
     world.spawnTerrain(player, x, y, TerrainType.Tree);

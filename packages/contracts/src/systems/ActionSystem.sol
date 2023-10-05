@@ -75,7 +75,8 @@ contract ActionSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
 
-    if (newAction == ActionType.Idle) {} else if (newAction == ActionType.Mining) {
+    if (newAction == ActionType.Idle) {} 
+    else if (newAction == ActionType.Mining) {
       world.mine(player, x, y);
     } else if (newAction == ActionType.Shoveling) {
       world.shovel(player, x, y);
@@ -85,7 +86,8 @@ contract ActionSystem is System {
       world.fish(player, x, y);
     } else if (newAction == ActionType.Walking) {
       world.moveSimple(player, x, y);
-    } else if (newAction == ActionType.Buy) {} else if (newAction == ActionType.Plant) {
+    } else if (newAction == ActionType.Buy) {} 
+    else if (newAction == ActionType.Plant) {
       world.plant(player, x, y);
     } else if (newAction == ActionType.Push) {
       world.push(player, x, y);
@@ -97,7 +99,6 @@ contract ActionSystem is System {
       world.melee(player, x, y);
     }
 
-    setAction(player, newAction, x, y);
   }
 
   function setAction(bytes32 player, ActionType newAction, int32 x, int32 y) public {

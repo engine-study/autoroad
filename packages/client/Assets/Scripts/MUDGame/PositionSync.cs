@@ -18,7 +18,7 @@ public class PositionSync : ComponentSync
     [Header("Optional")]
     [SerializeField] Transform target;
     [SerializeField] public bool hideIfNoPosition = true;    
-    [SerializeField] public bool hideIfBelowGround = false;    
+    [SerializeField] public bool hideIfBelowGround = true;    
     [SerializeField] public bool hideAfterLoaded = false;    
     [SerializeField] public bool rotateToFace = false;
     [SerializeField] float speed = 1f;
@@ -68,7 +68,7 @@ public class PositionSync : ComponentSync
             line.enabled = false;
         }
 
-        gameObject.SetActive(IsVisible());
+        pos.Entity.Toggle(IsVisible());
 
     }
 
@@ -138,8 +138,8 @@ public class PositionSync : ComponentSync
         // if(action && wasMoving) {action.PlayAnimation(false);}
         if(line) line.enabled = false;
 
-        if(hideAfterLoaded && gameObject.activeInHierarchy != IsVisible()) {
-            gameObject.SetActive(IsVisible());
+        if(hideAfterLoaded) {
+            pos.Entity.Toggle(IsVisible());
         }
 
         OnMoveEnd?.Invoke();

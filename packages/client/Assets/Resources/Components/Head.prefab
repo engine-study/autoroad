@@ -35,7 +35,7 @@ Transform:
   - {fileID: 3207655554034716850}
   - {fileID: 3324230437709716678}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6232110463889642377
 MonoBehaviour:
@@ -54,6 +54,7 @@ MonoBehaviour:
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
+  isActive: 0
   spawnInfo:
     entity: {fileID: 0}
     source: 0
@@ -248,10 +249,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5209224381163900232}
     m_Modifications:
-    - target: {fileID: 259192005287709734, guid: 355b41d28469ae540b204aedc3daba94, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 148e9c88b82343e459a31e21b3c976be, type: 2}
     - target: {fileID: 1428759413108537161, guid: 355b41d28469ae540b204aedc3daba94, type: 3}
       propertyPath: m_RootOrder
       value: -1
