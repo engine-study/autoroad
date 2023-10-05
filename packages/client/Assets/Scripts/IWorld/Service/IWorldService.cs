@@ -410,10 +410,10 @@ namespace IWorld.Service
         }
 
         
-        public Task<bool> CanPlaceOnQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
+        public Task<bool> CanPlaceOnQueryAsync(byte moveAt, BlockParameter blockParameter = null)
         {
             var canPlaceOnFunction = new CanPlaceOnFunction();
-                canPlaceOnFunction.At = at;
+                canPlaceOnFunction.MoveAt = moveAt;
             
             return ContractHandler.QueryAsync<CanPlaceOnFunction, bool>(canPlaceOnFunction, blockParameter);
         }
@@ -2436,6 +2436,20 @@ namespace IWorld.Service
 
 
 
+        public Task<bool> RequireEmptyOrPushableQueryAsync(RequireEmptyOrPushableFunction requireEmptyOrPushableFunction, BlockParameter blockParameter = null)
+        {
+            return ContractHandler.QueryAsync<RequireEmptyOrPushableFunction, bool>(requireEmptyOrPushableFunction, blockParameter);
+        }
+
+        
+        public Task<bool> RequireEmptyOrPushableQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
+        {
+            var requireEmptyOrPushableFunction = new RequireEmptyOrPushableFunction();
+                requireEmptyOrPushableFunction.At = at;
+            
+            return ContractHandler.QueryAsync<RequireEmptyOrPushableFunction, bool>(requireEmptyOrPushableFunction, blockParameter);
+        }
+
         public Task<string> RequireLegalMoveRequestAsync(RequireLegalMoveFunction requireLegalMoveFunction)
         {
              return ContractHandler.SendRequestAsync(requireLegalMoveFunction);
@@ -2471,20 +2485,6 @@ namespace IWorld.Service
 
 
 
-
-        public Task<bool> RequirePushableOrEmptyQueryAsync(RequirePushableOrEmptyFunction requirePushableOrEmptyFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryAsync<RequirePushableOrEmptyFunction, bool>(requirePushableOrEmptyFunction, blockParameter);
-        }
-
-        
-        public Task<bool> RequirePushableOrEmptyQueryAsync(List<byte[]> at, BlockParameter blockParameter = null)
-        {
-            var requirePushableOrEmptyFunction = new RequirePushableOrEmptyFunction();
-                requirePushableOrEmptyFunction.At = at;
-            
-            return ContractHandler.QueryAsync<RequirePushableOrEmptyFunction, bool>(requirePushableOrEmptyFunction, blockParameter);
-        }
 
         public Task<string> ResetPlayerRequestAsync(ResetPlayerFunction resetPlayerFunction)
         {
@@ -2766,92 +2766,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionFunction, cancellationToken);
         }
 
-        public Task<string> SetPositionRequestAsync(byte[] causedBy, byte[] entity, int x, int y, int layer, byte action)
+        public Task<string> SetPositionRequestAsync(byte[] causedBy, byte[] entity, PositionData pos, byte action)
         {
             var setPositionFunction = new SetPositionFunction();
                 setPositionFunction.CausedBy = causedBy;
                 setPositionFunction.Entity = entity;
-                setPositionFunction.X = x;
-                setPositionFunction.Y = y;
-                setPositionFunction.Layer = layer;
+                setPositionFunction.Pos = pos;
                 setPositionFunction.Action = action;
             
              return ContractHandler.SendRequestAsync(setPositionFunction);
         }
 
-        public Task<TransactionReceipt> SetPositionRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, int x, int y, int layer, byte action, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SetPositionRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData pos, byte action, CancellationTokenSource cancellationToken = null)
         {
             var setPositionFunction = new SetPositionFunction();
                 setPositionFunction.CausedBy = causedBy;
                 setPositionFunction.Entity = entity;
-                setPositionFunction.X = x;
-                setPositionFunction.Y = y;
-                setPositionFunction.Layer = layer;
+                setPositionFunction.Pos = pos;
                 setPositionFunction.Action = action;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionFunction, cancellationToken);
-        }
-
-        public Task<string> SetPositionDataRequestAsync(SetPositionDataFunction setPositionDataFunction)
-        {
-             return ContractHandler.SendRequestAsync(setPositionDataFunction);
-        }
-
-        public Task<TransactionReceipt> SetPositionDataRequestAndWaitForReceiptAsync(SetPositionDataFunction setPositionDataFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionDataFunction, cancellationToken);
-        }
-
-        public Task<string> SetPositionDataRequestAsync(byte[] causedBy, byte[] entity, PositionData pos, byte action)
-        {
-            var setPositionDataFunction = new SetPositionDataFunction();
-                setPositionDataFunction.CausedBy = causedBy;
-                setPositionDataFunction.Entity = entity;
-                setPositionDataFunction.Pos = pos;
-                setPositionDataFunction.Action = action;
-            
-             return ContractHandler.SendRequestAsync(setPositionDataFunction);
-        }
-
-        public Task<TransactionReceipt> SetPositionDataRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData pos, byte action, CancellationTokenSource cancellationToken = null)
-        {
-            var setPositionDataFunction = new SetPositionDataFunction();
-                setPositionDataFunction.CausedBy = causedBy;
-                setPositionDataFunction.Entity = entity;
-                setPositionDataFunction.Pos = pos;
-                setPositionDataFunction.Action = action;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionDataFunction, cancellationToken);
-        }
-
-        public Task<string> SetPositionRawRequestAsync(SetPositionRawFunction setPositionRawFunction)
-        {
-             return ContractHandler.SendRequestAsync(setPositionRawFunction);
-        }
-
-        public Task<TransactionReceipt> SetPositionRawRequestAndWaitForReceiptAsync(SetPositionRawFunction setPositionRawFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionRawFunction, cancellationToken);
-        }
-
-        public Task<string> SetPositionRawRequestAsync(byte[] causedBy, byte[] entity, PositionData pos)
-        {
-            var setPositionRawFunction = new SetPositionRawFunction();
-                setPositionRawFunction.CausedBy = causedBy;
-                setPositionRawFunction.Entity = entity;
-                setPositionRawFunction.Pos = pos;
-            
-             return ContractHandler.SendRequestAsync(setPositionRawFunction);
-        }
-
-        public Task<TransactionReceipt> SetPositionRawRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData pos, CancellationTokenSource cancellationToken = null)
-        {
-            var setPositionRawFunction = new SetPositionRawFunction();
-                setPositionRawFunction.CausedBy = causedBy;
-                setPositionRawFunction.Entity = entity;
-                setPositionRawFunction.Pos = pos;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setPositionRawFunction, cancellationToken);
         }
 
         public Task<string> SetRecordRequestAsync(SetRecord1Function setRecord1Function)

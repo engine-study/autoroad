@@ -46,8 +46,7 @@ contract PuzzleSubsystem is System {
 
   function createRandomPuzzle(bytes32 causedBy, int32 right, int32 up, int32 down ) public {
     
-    IWorld world = IWorld(_world());
-
+    // IWorld world = IWorld(_world());
     PuzzleType puzzleType = PuzzleType(random(0, uint32(PuzzleType.Count)));
 
     console.log("create puzzle");

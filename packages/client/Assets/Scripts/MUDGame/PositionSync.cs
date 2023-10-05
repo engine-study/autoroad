@@ -59,7 +59,6 @@ public class PositionSync : ComponentSync
     protected override void InitialSync() {
         base.InitialSync();
 
-
         //set up our side of the compnents BEFORE 
         target.position = pos.Pos;
         StartPos = pos.Pos;
@@ -147,6 +146,7 @@ public class PositionSync : ComponentSync
     }
 
     protected override void UpdateLerp() {
+        base.UpdateLerp();
 
         UpdateRotation();
         UpdateMovement();

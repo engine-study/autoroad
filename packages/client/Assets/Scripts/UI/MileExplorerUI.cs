@@ -110,7 +110,6 @@ public class MileExplorerUI : SPWindowParent
 
     void Toggle(bool toggle) {
 
-        column.gameObject.SetActive(toggle);
         fullscreenBG.gameObject.SetActive(toggle);
 
         if(toggle) {
