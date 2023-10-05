@@ -116,7 +116,7 @@ public class AnimationMUD : MonoBehaviour
             ToggleAction(false, actionEffect); 
         }
 
-        Debug.Log(actionComponent.Entity.Name + " [ANIM]: " + newAction.ToString() + " (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
+        Debug.Log(actionComponent.Entity.Name + " [ANIM]: [" + newAction.ToString().ToUpper() + "] (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
 
         action = newAction;
         actionEffect = LoadAction(action.ToString());

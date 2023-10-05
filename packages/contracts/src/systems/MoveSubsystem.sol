@@ -289,8 +289,11 @@ contract MoveSubsystem is System {
 
     IWorld world = IWorld(_world());
 
-    Position.set(entity, pos);
+    //game will get the action movement type before we move
     world.setAction(entity, action, pos.x, pos.y);
+
+    //we move
+    Position.set(entity, pos);
 
     //only movements onto main game map update stuff
     if(pos.layer != 0) { return; }
@@ -371,6 +374,7 @@ contract MoveSubsystem is System {
 
   function melee(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
+    IWorld world = IWorld(_world());
 
     PositionData memory pos = PositionData(x, y, 0);
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));

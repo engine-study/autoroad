@@ -5,7 +5,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Position, PositionTableId } from "../codegen/Tables.sol";
 import { Player, Health, Tree, Seeds, Move } from "../codegen/Tables.sol";
-import { TerrainType, FloraType, MoveType } from "../codegen/Types.sol";
+import { ActionType, TerrainType, FloraType, MoveType } from "../codegen/Types.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
