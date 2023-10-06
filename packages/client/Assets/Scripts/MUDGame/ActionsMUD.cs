@@ -72,8 +72,8 @@ public class ActionsMUD : MonoBehaviour
         if (!player.IsLocalPlayer)
             return;
 
-        gameObject.transform.parent = null;
-        gameObject.transform.position = Vector3.zero;
+        // gameObject.transform.parent = null;
+        // gameObject.transform.position = Vector3.zero;
 
         position = player.Position;
 

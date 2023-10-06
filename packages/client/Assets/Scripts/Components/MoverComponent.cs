@@ -14,7 +14,6 @@ public abstract class MoverComponent : MUDComponent {
         sync = gameObject.GetComponent<PositionSync>();
 
         if(sync == null) {
-            Debug.Log("Mover adding sync", this);
             sync = gameObject.AddComponent<PositionSync>();
             sync.SetSyncType(ComponentSync.ComponentSyncType.Lerp);
             sync.rotateToFace = true;

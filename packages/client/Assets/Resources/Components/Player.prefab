@@ -239,7 +239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5602793206139484455
 Transform:
   m_ObjectHideFlags: 0
@@ -812,6 +812,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1469008974362436549}
+  - component: {fileID: 6650067709986563327}
   - component: {fileID: 190895346912483442}
   m_Layer: 0
   m_Name: Actions
@@ -847,6 +848,19 @@ Transform:
   m_Father: {fileID: 2243986332771371095}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6650067709986563327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649011601951813574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a90a3c1097001bb4aa49d8dfc3c998a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Interacts: []
 --- !u!114 &190895346912483442
 MonoBehaviour:
   m_ObjectHideFlags: 0

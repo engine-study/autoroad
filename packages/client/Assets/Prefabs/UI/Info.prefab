@@ -115,6 +115,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isolateDebug: 0
   uniqueUITag: 
+  border: {fileID: 0}
+  bg: {fileID: 0}
+  rect: {fileID: 7847038547141376804}
+  customTheme: {fileID: 0}
+  _graphics: []
+  _texts: []
+  _images: []
+  _bgs: []
+  hasInit: 0
   theme:
     parentTheme:
       color: {r: 1, g: 1, b: 1, a: 1}
@@ -136,14 +145,9 @@ MonoBehaviour:
     borderWidth: 0.5
     textSize: 18
     paragraphSize: 18
-  border: {fileID: 0}
-  bg: {fileID: 0}
-  rect: {fileID: 0}
-  _graphics: []
-  _texts: []
-  _images: []
-  _bgs: []
-  hasInit: 0
+  baseObject: {fileID: 0}
+  position: {fileID: 0}
+  entity: {fileID: 0}
   header: {fileID: 3788798013032477123}
   playerName: {fileID: 2595972012482688032}
   coordinate: {fileID: 9188659873123265951}

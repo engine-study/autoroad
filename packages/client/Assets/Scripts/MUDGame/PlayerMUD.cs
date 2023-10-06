@@ -100,8 +100,13 @@ public class PlayerMUD : SPPlayer
         }
 
         if (Reciever.TargetGO) {
-            Actor.InputClick(0, Reciever.TargetInteract);
+            // Actor.InputClick(0, Reciever.TargetInteract);
         }
+
+        for(int i = 0; i < SPActionUI.Instance.Actions.Count; i++) {
+            Actor.InputKey(SPInput.GetAlphaKey(i), SPActionUI.Instance.Actions[i].Interactable);
+        }
+
 
         if((Controller as ControllerMUD).MovementInput || Sync.Moving) {
             Animator.IK.SetLook(null);

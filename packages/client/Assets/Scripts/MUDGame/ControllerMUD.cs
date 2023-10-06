@@ -72,8 +72,8 @@ public class ControllerMUD : SPController {
         SetPositionInstant(playerScript.Position.Pos);
 
         if(playerScript.IsLocalPlayer) {
-            SPActionUI.Instance.ToggleAction(true, walkAction, true);
-            SPActionUI.Instance.ToggleAction(true, pushAction, true);
+            SPActionUI.Instance.SpawnAction(walkAction);
+            SPActionUI.Instance.SpawnAction(pushAction);
         }
 
         init = true;

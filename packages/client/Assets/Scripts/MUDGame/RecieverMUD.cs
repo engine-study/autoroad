@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
+using System.Linq;
 
 public class RecieverMUD : SPReciever
 {
@@ -34,7 +35,7 @@ public class RecieverMUD : SPReciever
 
     void ToggleActions(bool toggle, MUDEntity newEntity) {
 
-        mud.Client.MUDEntity m = (mud.Client.MUDEntity)newEntity;
+        MUDEntity m = newEntity;
         if(m == null) {
             return;
         }
@@ -44,12 +45,15 @@ public class RecieverMUD : SPReciever
             return;
         }
 
-        SPInteract [] interacts = m.GetComponentsInChildren<SPInteract>(true);
-        if(interacts == null) {
-            return;
-        }
+        List<SPInteract> interacts;
+        SPActionProvider ap = m.GetComponentInChildren<SPActionProvider>();
 
-        for(int i = 0; i < interacts.Length; i++) {
+        if(ap) { interacts = ap.Interacts;} 
+        else { interacts = m.GetComponentsInChildren<SPInteract>(true).ToList();}
+        
+        if(interacts == null) { return;}
+
+        for(int i = 0; i < interacts.Count; i++) {
 
             //these interacts havent init yet
             if(interacts[i].GameObject() == null) {
