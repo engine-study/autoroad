@@ -14,15 +14,15 @@ public class Stick : Equipment
         mud.Client.MUDEntity e = CursorMUD.Entity;
         if(e == null) return false;
         
-        PlayerComponent player = e?.GetMUDComponent<PlayerComponent>();
+        NPCComponent npc = e?.GetMUDComponent<NPCComponent>();
         MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
         bool onBounds = BoundsComponent.OnBounds((int)transform.position.x, (int)transform.position.z);
-        return canUse && onBounds && player != null && !player.IsLocalPlayer && moveType != null && moveType.MoveType == MoveType.Push; 
+        return canUse && onBounds && npc != null && moveType != null && moveType.MoveType == MoveType.Push; 
     }
     
     public override async UniTask<bool> Use() {
         
-        Debug.Log("PUSHING");
+        Debug.Log("STICKING");
 
         Vector3 pushObject = transform.position;
         Vector3 pushToPos = transform.position + (transform.position - Sender.transform.position).normalized;

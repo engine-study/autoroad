@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: b0530f009882d4745b843783cf964d06, type: 2}
+  action: {fileID: 11400000, guid: b1ca9791cba55aa40a7ef010d291b398, type: 2}
   state: {fileID: 0}
   interacting: 0
   targetGO: {fileID: 162845486387516806}
@@ -886,7 +886,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 1109723294861298092}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8677290009412671634}
   - {fileID: 0}
   equipment: []
 --- !u!1 &1902544159680851214
@@ -1001,14 +1001,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1379806157842434035}
   - component: {fileID: 3995134369058425196}
-  - component: {fileID: 298405710139751867}
+  - component: {fileID: 8677290009412671634}
   m_Layer: 0
   m_Name: Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1379806157842434035
 Transform:
   m_ObjectHideFlags: 0
@@ -1046,7 +1046,7 @@ MonoBehaviour:
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &298405710139751867
+--- !u!114 &8677290009412671634
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3562155450139694466}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 166787b93eca79344893642ca5df0817, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c339828eed6797469e9f26dd8ff0fc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ourComponent: {fileID: 0}
