@@ -43,6 +43,7 @@ public class ControllerMUD : SPController {
     int moveDistance = 3;
     // [SerializeField] private AudioClip[] pushes;
     bool init = false;
+    Vector3 lastInputDir;
 
     void Awake() {
         mudEntity = GetComponentInParent<mud.Client.MUDEntity>();
@@ -115,7 +116,7 @@ public class ControllerMUD : SPController {
     float minTime = 0f;
     float transactionWait = 1f;
     float cancelWait = .5f;
-    Vector3 moveDest, direction;
+    Vector3 moveDest, inputDir;
     bool input, wasInputting;
     void UpdateInput() {
 
@@ -137,22 +138,22 @@ public class ControllerMUD : SPController {
         }
 
         bool noModifiers = !SPInput.ModifierKey;
-        input = noModifiers && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
+        inputDir = new Vector3(Mathf.RoundToInt(Input.GetAxis("Horizontal")), 0f, Mathf.RoundToInt(Input.GetAxis("Vertical")));
+        input = noModifiers && (inputDir.x != 0 || inputDir.z != 0);
 
         if (!input) {
             if(wasInputting) { player.Actor.InputAction(false, false, currentAction); wasInputting = false;}
             return;
         }
         
-        Vector3 movePos = onchainPos + Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
-        direction = (movePos - playerScript.Position.Pos).normalized;
-        Vector3 moveTo = playerScript.Position.Pos + direction;
+        Vector3 movePos = onchainPos + inputDir.x * Vector3.right * moveDistance + inputDir.z * Vector3.forward * moveDistance;
+        Vector3 moveTo = playerScript.Position.Pos + inputDir;
 
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
         mud.Client.MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
 
-        Vector3 moveMinimum = onchainPos + direction;
+        Vector3 moveMinimum = onchainPos + inputDir;
         if(!MapConfigComponent.OnMap((int)moveMinimum.x, (int)moveMinimum.z)) {
             BoundsComponent.ShowBorder();
             return;
@@ -160,8 +161,6 @@ public class ControllerMUD : SPController {
         
         if (moveComponent != null && moveComponent.MoveType == MoveType.Push) {
             
-            Debug.Log("Push Tx");
-
             bool weight = false;
             bool obstruction = false;
 
@@ -177,14 +176,14 @@ public class ControllerMUD : SPController {
                 MoveComponent destMoveComponent = destinationEntity.GetMUDComponent<MoveComponent>();
                 PlayerComponent player = destinationEntity.GetMUDComponent<PlayerComponent>();
 
-                if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction || (player == null && !MapConfigComponent.OnMap(pushToPos+direction))) {
+                if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction || (player == null && !MapConfigComponent.OnMap(pushToPos+inputDir))) {
                     FailedMove(pushToPos);
                     return;
                 } else if(destMoveComponent.MoveType != MoveType.Push) {
                     break;
                 }
 
-                pushToPos += direction;
+                pushToPos += inputDir;
 
                 positions.Add(pos);
                 targets.Add(pushToPos);
@@ -223,12 +222,21 @@ public class ControllerMUD : SPController {
 
         }
 
+        //reset the action if we changed direction
+        if(inputDir != lastInputDir) {
+            wasInputting = false;
+            player.Actor.InputAction(false, false, currentAction);
+        }
+
+        lastInputDir = inputDir;
+
         //look to rotation
         playerScript.AnimationMUD.Look.SetLookRotation(moveTo);
         player.Actor.InputAction(!wasInputting, true, currentAction);
         wasInputting = true;
 
         if(player.Actor.ActionState >= ActionState.Acting) {
+            Debug.Log("MOVE: " + currentAction.gameObject.name);
             markerPos = moveDest;
             minTime = transactionWait;
         }
@@ -341,7 +349,7 @@ public class ControllerMUD : SPController {
         }
 
         if(Application.isPlaying && init) {
-            Gizmos.DrawLine(playerScript.Position.Pos, playerScript.Position.Pos + direction);
+            Gizmos.DrawLine(playerScript.Position.Pos, playerScript.Position.Pos + inputDir);
         }
     }
 
