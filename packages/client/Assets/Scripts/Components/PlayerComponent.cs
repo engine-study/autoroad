@@ -175,8 +175,7 @@ public class PlayerComponent : MUDComponent {
             return;
         }
 
-        PlayerComponent otherPlayer = actor.Owner().GetComponent<PlayerComponent>();
-        PlayerMUD otherScript = actor.Owner().GetComponent<PlayerMUD>();
+        NPCComponent otherPlayer = actor.Owner().GetComponent<NPCComponent>();
 
         if(otherPlayer == null) {
             Debug.LogError("Not sure: " + actor.Owner().name, this);
