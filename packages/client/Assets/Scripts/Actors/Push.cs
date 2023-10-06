@@ -5,15 +5,13 @@ using mud.Client;
 using mud.Unity;
 using Cysharp.Threading.Tasks;
 using IWorld.ContractDefinition;
-public class MoveNoBoots : Equipment
+public class Push : Equipment
 {
     
     public override bool CanUse() 
     {
         bool canUse = base.CanUse();
-
         return canUse;
-
     }
 
     
@@ -24,7 +22,7 @@ public class MoveNoBoots : Equipment
 
         //can try optimistic
 
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Walking, new Vector3(x, 0, y));
+        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Push, new Vector3(x, 0, y));
     }
 
 }

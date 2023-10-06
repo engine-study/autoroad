@@ -224,6 +224,39 @@ MonoBehaviour:
   interact: {fileID: 1213519046495480021}
   action: 2
   prefab: {fileID: 5117984663886283829, guid: a743baee3ef63a2488055572b3a8eaa4, type: 3}
+--- !u!1 &249988128059420794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5602793206139484455}
+  m_Layer: 0
+  m_Name: DefaultActions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5602793206139484455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249988128059420794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 150797922493352345}
+  - {fileID: 6157213340480997780}
+  m_Father: {fileID: 2243986332771371095}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &532174930075841667
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +345,7 @@ Transform:
   m_Children:
   - {fileID: 1825105952789505544}
   - {fileID: 1469008974362436549}
+  - {fileID: 5602793206139484455}
   - {fileID: 7784753608082169161}
   m_Father: {fileID: 0}
   m_RootOrder: -1
@@ -367,8 +401,10 @@ MonoBehaviour:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   - {fileID: 887154974638645543, guid: a34254a59a3dd7845b586282bc8292e2, type: 3}
   - {fileID: 77022645062805081, guid: 219b049c5faf436428e270937e831a80, type: 3}
+  entity: {fileID: 0}
   hasInit: 0
   loaded: 0
+  isActive: 0
   spawnInfo:
     entity: {fileID: 0}
     source: 0
@@ -442,6 +478,8 @@ MonoBehaviour:
   forceVelocity: {x: 0, y: 0, z: 0}
   tagging: 1
   detectCollisions: 1
+  walkAction: {fileID: 6819035568640496617}
+  pushAction: {fileID: 8686894057738085968}
   playerTransform: {fileID: 0}
   moveMarker: {fileID: 1902544159680851214}
   sfx_bump:
@@ -464,7 +502,7 @@ MonoBehaviour:
   State: {fileID: 0}
   reciever: {fileID: 0}
   actionScript: {fileID: 0}
-  currentGO: {fileID: 0}
+  target: {fileID: 0}
   gos: []
   internalState: 0
   castCount: 0
@@ -592,7 +630,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2243986332771371095}
-  head: {fileID: 0}
   action: 0
   actionEffect: {fileID: 0}
   entity: {fileID: 0}
@@ -636,13 +673,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6157213340480997780}
   - component: {fileID: 8686894057738085968}
+  - component: {fileID: 3731015518636971258}
   m_Layer: 0
   m_Name: Push
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6157213340480997780
 Transform:
   m_ObjectHideFlags: 0
@@ -655,7 +693,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1469008974362436549}
+  m_Father: {fileID: 5602793206139484455}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8686894057738085968
@@ -670,28 +708,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: {fileID: 0}
+  action: {fileID: 11400000, guid: 4609dc857f2bf2d40b1a4c9071ce4af8, type: 2}
   state: {fileID: 0}
   interacting: 0
-  targetGO: {fileID: 0}
+  targetGO: {fileID: 1007400376755907874}
   OnStartEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1649011601951813574}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3731015518636971258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007400376755907874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89c16505f390b884780e83b0ee7e8bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ourComponent: {fileID: 0}
+  canUse: 0
+  interact: {fileID: 8686894057738085968}
 --- !u!1 &1406280839565207205
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,10 +836,8 @@ Transform:
   - {fileID: 2537452241586521742}
   - {fileID: 5128378892147274858}
   - {fileID: 2156452120599045409}
-  - {fileID: 150797922493352345}
   - {fileID: 4066138594547704809}
   - {fileID: 7439667250433199178}
-  - {fileID: 6157213340480997780}
   - {fileID: 5324249605790467795}
   - {fileID: 8310672604737950051}
   - {fileID: 1379806157842434035}
@@ -1072,7 +1111,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &150797922493352345
 Transform:
   m_ObjectHideFlags: 0
@@ -1085,7 +1124,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1469008974362436549}
+  m_Father: {fileID: 5602793206139484455}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6819035568640496617
@@ -1100,25 +1139,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: {fileID: 0}
+  action: {fileID: 11400000, guid: 816e44df342dd264da395749cf2d1b2e, type: 2}
   state: {fileID: 0}
   interacting: 0
-  targetGO: {fileID: 0}
+  targetGO: {fileID: 3780725568213690077}
   OnStartEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1649011601951813574}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []

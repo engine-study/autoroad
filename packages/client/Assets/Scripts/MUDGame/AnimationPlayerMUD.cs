@@ -13,7 +13,7 @@ public class AnimationPlayerMUD : AnimationMUD
         playerScript = GetComponent<PlayerMUD>();
     }
 
-    public override void ToggleAction(bool toggle, ActionEffect newAction) {
+    public override void ToggleAction(bool toggle, ActionName newAction) {
         base.ToggleAction(toggle, newAction);
 
         // if (playerScript.IsLocalPlayer) {

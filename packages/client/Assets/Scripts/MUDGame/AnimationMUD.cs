@@ -111,24 +111,23 @@ public class AnimationMUD : MonoBehaviour
 
     public virtual void EnterState(ActionName newAction) {
 
-        //turn off old action
-        if (actionEffect != null && newAction != action) { 
-            ToggleAction(false, actionEffect); 
-        }
-
         Debug.Log(actionComponent.Entity.Name + " [ANIM]: [" + newAction.ToString().ToUpper() + "] (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
-
-        action = newAction;
-        actionEffect = LoadAction(action.ToString());
-        looker.SetLookRotation(actionComponent.Position);
-
-        //play new action if it exists
-        if(actionEffect == null) return;
-
-        ToggleAction(true, actionEffect);
-        // actionCoroutine = StartCoroutine(ActionCoroutine(actionEffect));
+        
+        if(WaitAFrame != null) StopCoroutine(WaitAFrame); 
+        WaitAFrame = StartCoroutine(AnimationInsanity(newAction));
         
     }   
+
+    Coroutine WaitAFrame;
+    IEnumerator AnimationInsanity(ActionName newAction) {
+
+        yield return null;
+        
+        //turn off old action
+        if (actionEffect != null && newAction != action) { ToggleAction(false, action); }
+        ToggleAction(true, newAction);
+
+    }
 
     public virtual void ToggleDead(bool toggle) {
         if(toggle) {
@@ -138,7 +137,15 @@ public class AnimationMUD : MonoBehaviour
         }
     }
 
-    public virtual void ToggleAction(bool toggle, ActionEffect newAction) {
+    public virtual void ToggleAction(bool toggle, ActionName newAction) {
+
+        action = newAction;
+        actionEffect = LoadAction(action.ToString());
+        
+        //play new action if it exists
+        if(actionEffect == null) return;
+
+        looker.SetLookRotation(actionComponent.Position);
         actionEffect.Toggle(toggle, this);
     }
 

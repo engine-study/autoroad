@@ -46,6 +46,8 @@ public class MotherUI : SPUIInstance {
     public AudioClip sfx_txRevert;
 
 
+
+
     protected override void Awake() {
         base.Awake();
 
@@ -80,6 +82,15 @@ public class MotherUI : SPUIInstance {
 
     }
 
+    public void GameReady() {
+
+        TxManager.OnSend += SendTx;
+        TxManager.OnTransaction += UpdateWheel;
+        TxUpdate.OnUpdated += UpdateWheelOptimistic;
+        Debug.Log("[UI] Game Ready", this);
+
+    }
+
     protected override void OnDestroy() {
         base.OnDestroy();
 
@@ -89,6 +100,7 @@ public class MotherUI : SPUIInstance {
         SPEvents.OnGameReady -= GameReady;
         SPEvents.OnPlayGame -= PlayGame;
 
+        TxManager.OnSend -= SendTx;
         TxManager.OnTransaction -= UpdateWheel;
         TxUpdate.OnUpdated -= UpdateWheelOptimistic;
 
@@ -111,14 +123,20 @@ public class MotherUI : SPUIInstance {
         debugButton.ToggleWindow(toggle);
     }
 
+    void SendTx() {
+        wheel.ActionPending();
+        SPUIBase.PlaySound(Mother.sfx_txSent);
+    }
 
+    void RecieveTx() {
 
+    }
     void UpdateWheelOptimistic(TxUpdate update) {
 
-        if (update.Info.Source == UpdateSource.Optimistic) {
-            wheel.ActionPending();
-            SPUIBase.PlaySound(Mother.sfx_txSent);
-        }
+        // if (update.Info.Source == UpdateSource.Optimistic) {
+        //     wheel.ActionPending();
+        //     SPUIBase.PlaySound(Mother.sfx_txSent);
+        // }
     }
 
     public static void TransactionSuccess() {
@@ -165,14 +183,6 @@ public class MotherUI : SPUIInstance {
         nameAndSpawnScreen.SetActive(true);
     }
     
-
-    public void GameReady() {
-
-        TxManager.OnTransaction += UpdateWheel;
-        TxUpdate.OnUpdated += UpdateWheelOptimistic;
-        Debug.Log("[UI] Game Ready", this);
-
-    }
 
     public void StartPlaying() {
         ToggleGame(true);

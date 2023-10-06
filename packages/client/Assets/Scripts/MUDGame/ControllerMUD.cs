@@ -13,24 +13,31 @@ public class ControllerMUD : SPController {
 
 
     public System.Action OnFinishedMove;
+    public bool MovementInput {get{return input;}}
+
+    [Header("Actions")]
+    [SerializeField] SPInteract walkAction;
+    [SerializeField] SPInteract pushAction;
+    SPInteract currentAction;
 
     [Header("MUD")]
-    [SerializeField] private Transform playerTransform;
-    [SerializeField] private GameObject moveMarker;
+    [SerializeField] Transform playerTransform;
+    [SerializeField] GameObject moveMarker;
 
     [Header("FX")]
-    [SerializeField] private AudioClip[] sfx_bump;
+    [SerializeField] AudioClip[] sfx_bump;
 
-    private System.IDisposable? _disposer;
-    private mud.Client.MUDEntity mudEntity;
-    private PlayerMUD playerScript;
+    System.IDisposable? _disposer;
+    mud.Client.MUDEntity mudEntity;
+    PlayerMUD playerScript;
 
-    private Vector3 onchainPos;
-    private Vector3 lastOnchainPos = Vector3.down;
+    Vector3 onchainPos;
+    Vector3 lastOnchainPos = Vector3.down;
     Vector3 lastPos, lookVector;
     Quaternion lookRotation;
     Vector3 markerPos;
     float alive = 0f;
+    float keyDown = 0f;
     float rotationSpeed = 720f;
     float distance;
     int moveDistance = 3;
@@ -63,6 +70,11 @@ public class ControllerMUD : SPController {
         onchainPos = playerScript.Position.Pos;
         SetPositionInstant(playerScript.Position.Pos);
 
+        if(playerScript.IsLocalPlayer) {
+            SPActionUI.Instance.ToggleAction(true, walkAction, true);
+            SPActionUI.Instance.ToggleAction(true, pushAction, true);
+        }
+
         init = true;
 
     }
@@ -80,7 +92,6 @@ public class ControllerMUD : SPController {
 
         _disposer?.Dispose();
     }
-
 
     public override void ToggleController(bool toggle) {
         base.ToggleController(toggle);
@@ -105,6 +116,7 @@ public class ControllerMUD : SPController {
     float transactionWait = 1f;
     float cancelWait = .5f;
     Vector3 moveDest, direction;
+    bool input, wasInputting;
     void UpdateInput() {
 
         if (!hasInit) {
@@ -125,12 +137,13 @@ public class ControllerMUD : SPController {
         }
 
         bool noModifiers = !SPInput.ModifierKey;
-        bool input = noModifiers && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
+        input = noModifiers && (Mathf.RoundToInt(Input.GetAxis("Horizontal")) != 0 || Mathf.RoundToInt(Input.GetAxis("Vertical")) != 0);
 
-        if (!input)
+        if (!input) {
+            if(wasInputting) { player.Actor.InputAction(false, false, currentAction); wasInputting = false;}
             return;
-
-
+        }
+        
         Vector3 movePos = onchainPos + Mathf.RoundToInt(Input.GetAxis("Horizontal")) * Vector3.right * moveDistance + Mathf.RoundToInt(Input.GetAxis("Vertical")) * Vector3.forward * moveDistance;
         direction = (movePos - playerScript.Position.Pos).normalized;
         Vector3 moveTo = playerScript.Position.Pos + direction;
@@ -145,9 +158,8 @@ public class ControllerMUD : SPController {
             return;
         }
         
-
         if (moveComponent != null && moveComponent.MoveType == MoveType.Push) {
-
+            
             Debug.Log("Push Tx");
 
             bool weight = false;
@@ -182,16 +194,18 @@ public class ControllerMUD : SPController {
 
             List<TxUpdate> updates = new List<TxUpdate>();
 
-            //update everyones action and position
-            for (int i = positions.Count-1; i >= 0; i--) { 
-                updates.Add(ActionsMUD.ActionOptimistic(positions[i].Entity, ActionName.Push, targets[i] + direction));
-                updates.Add(ActionsMUD.PositionOptimistic(positions[i].Entity, targets[i]));
-            }
+            // //update everyones action and position
+            // for (int i = positions.Count-1; i >= 0; i--) { 
+            //     updates.Add(ActionsMUD.ActionOptimistic(positions[i].Entity, ActionName.Push, targets[i] + direction));
+            //     updates.Add(ActionsMUD.PositionOptimistic(positions[i].Entity, targets[i]));
+            // }
 
             //update our own position
-            // updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Push, moveTo + direction));
-            updates.Add(ActionsMUD.PositionOptimistic(mudEntity, moveTo));
-            ActionsMUD.ActionTx(mudEntity, ActionName.Push, moveTo, updates);
+            // updates.Add(ActionsMUD.PositionOptimistic(mudEntity, moveTo));
+            // ActionsMUD.ActionTx(mudEntity, ActionName.Push, moveTo, updates);
+
+            currentAction = pushAction;
+            pushAction.transform.position = moveTo;
 
         } else {
 
@@ -200,14 +214,24 @@ public class ControllerMUD : SPController {
                 return;
             }
 
-            Debug.Log("Walk TX (" + (int)transform.position.x + "," + (int)transform.position.z + ") to (" + (int)movePos.x + "," + (int)movePos.z + ")");
-            List<TxUpdate> updates = new List<TxUpdate>() { ActionsMUD.PositionOptimistic(mudEntity, movePos) };
-            ActionsMUD.ActionTx(mudEntity, ActionName.Walking, movePos, updates);
+            currentAction = walkAction;
+            walkAction.transform.position = movePos;
+
+            // Debug.Log("Walk TX (" + (int)transform.position.x + "," + (int)transform.position.z + ") to (" + (int)movePos.x + "," + (int)movePos.z + ")");
+            // List<TxUpdate> updates = new List<TxUpdate>() { ActionsMUD.PositionOptimistic(mudEntity, movePos) };
+            // ActionsMUD.ActionTx(mudEntity, ActionName.Walking, movePos, updates);
 
         }
 
-        markerPos = moveDest;
-        minTime = transactionWait;
+        //look to rotation
+        playerScript.AnimationMUD.Look.SetLookRotation(moveTo);
+        player.Actor.InputAction(!wasInputting, true, currentAction);
+        wasInputting = true;
+
+        if(player.Actor.ActionState >= ActionState.Acting) {
+            markerPos = moveDest;
+            minTime = transactionWait;
+        }
 
     }
 
@@ -217,7 +241,7 @@ public class ControllerMUD : SPController {
             BoundsComponent.ShowBorder();
         }
 
-        Debug.Log("Push Tx Canceled");
+        Debug.Log("Move Tx Canceled");
         MotherUI.TransactionFailed();
         player?.Animator.PlayClip("Hit");
         minTime = cancelWait;

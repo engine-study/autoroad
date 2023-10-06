@@ -9,14 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6beca4e58ff1e242b9cb2ba458bfff8, type: 3}
-  m_Name: ActionPlayer_Door
+  m_Script: {fileID: 11500000, guid: f389906e166e88c4b967f9fc8e263a7a, type: 3}
+  m_Name: Push_AnimatorState
   m_EditorClassIdentifier: 
-  actionName: Warp
-  actionType: 0
-  CastDuration: 1
-  ActionDuration: 0
-  Distance: 1.1
-  conditions: []
-  endAction: []
-  animatorState: {fileID: 0}
+  animationSpeed: 1
+  overrideController: {fileID: 22100000, guid: 9f678131990782f4ea1954cdd83a7ffc, type: 2}
+  prop: {fileID: 0}

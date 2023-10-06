@@ -103,16 +103,18 @@ public class PlayerMUD : SPPlayer
             Actor.InputClick(0, Reciever.TargetInteract);
         }
 
-        if(Sync.Moving == false) {
+        if((Controller as ControllerMUD).MovementInput || Sync.Moving) {
+            Animator.IK.SetLook(null);
+        } else {
             //update rotation based on mouseInput
             // Determine the new rotation
             Vector3 mouseDir = SPInput.MousePlanePos - transform.position;
             if ( mouseDir.magnitude > .5f) { //playerScript.Actor.ActionState == ActionState.Idle && mouseDir.magnitude > .5f
                 Animator.IK.SetLook(CursorMUD.LookTarget);
                 animMud.Look.SetLookRotation(transform.position + mouseDir);
-            } 
-        } else {
-            Animator.IK.SetLook(null);
+            } else {
+                Animator.IK.SetLook(null);
+            }
         }
 
     }

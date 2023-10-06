@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class ActionEffect : MonoBehaviour {
     
-    [Header("Action Data")]
+    [Header("Debug")]
+    [SerializeField] bool active = false; 
+
+    [Header("Movement")]
     public MoverMUD movement;
-    public SPEnableDisable effect;
     public SPEnableDisable moveEffect;
-    public SPAction action;
-    public string actionClip;
     public string movementClip;
 
+    [Header("Action")]
+    public SPAction action;
+    public SPEnableDisable effect;
+    public string actionClip;
+
     protected AnimationMUD anim;
-    bool active = false; 
 
     void Awake() {
         if(effect) effect.active = false;
@@ -26,14 +30,9 @@ public class ActionEffect : MonoBehaviour {
 
         //first time setup
         if (active != toggle) {
-            if (toggle) {
-                anim.PositionSync.OnMoveEnd += OnMoveEnd;
-            }  else {
-                anim.PositionSync.OnMoveEnd -= OnMoveEnd;
-            }
-            
+            if (toggle) { anim.PositionSync.OnMoveEnd += OnMoveEnd;}  
+            else {anim.PositionSync.OnMoveEnd -= OnMoveEnd; }
         }
-
 
         if(toggle) {
             
