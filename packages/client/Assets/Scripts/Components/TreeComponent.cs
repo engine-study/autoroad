@@ -127,13 +127,14 @@ public class TreeComponent : MUDComponent {
             SPAudioSource.Play(transform.position, sfx_hits);
             fx_hit.Play();
 
+            flash.SetTarget(types[(int)treeState]);
+            flash.Flash();
+
             if(treeState == FloraType.Oak) {
-                flash.SetTarget(oakStages[Mathf.Clamp(health.Health,0,oakStages.Length - 1)]);
-                flash.Flash();
                 TreeHealthInstant();
                 fx_branchFall.Play();
             } else {
-                flash.Flash();
+                
             }
             
         }

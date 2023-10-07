@@ -98,9 +98,9 @@ public class AnimationMUD : MonoBehaviour
         Controller.Ragdoll(toggle);
 
         if(toggle) {
+            head.parent = transform;
             headRB.isKinematic = false;
             headRB.velocity = Random.onUnitSphere * .1f;
-            head.parent = transform;
         } else {
             //set head back to where its supposed to be
             headRB.isKinematic = true;

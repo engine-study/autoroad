@@ -308,8 +308,8 @@ contract MoveSubsystem is System {
 
   function mine(bytes32 player, int32 x, int32 y) public {
     require(canDoStuff(player), "hmm");
-    IWorld world = IWorld(_world());
 
+    IWorld world = IWorld(_world());
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
 
     require(canInteract(player, x, y, atPosition, 1), "bad interact");
@@ -320,9 +320,10 @@ contract MoveSubsystem is System {
     require(rockState < uint32(RockType.Nucleus), "Rock ground to a pulp");
 
     //increment the rock state
-    rockState += 1;
+    rockState++;
 
     Rock.set(atPosition[0], rockState);
+    world.setAction(player, ActionType.Mining, x, y);
 
     //give rocks that are mined a pushable component
     if (rockState == uint32(RockType.Statumen)) {
@@ -334,7 +335,6 @@ contract MoveSubsystem is System {
       // Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
 
-    world.setAction(player, ActionType.Mining, x, y);
 
   }
 

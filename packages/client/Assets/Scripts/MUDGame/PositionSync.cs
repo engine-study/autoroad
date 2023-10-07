@@ -68,7 +68,7 @@ public class PositionSync : ComponentSync
             line.enabled = false;
         }
 
-        pos.Entity.Toggle(IsVisible());
+        ourComponent.Toggle(IsVisible(), false);
 
     }
 
@@ -139,7 +139,7 @@ public class PositionSync : ComponentSync
         if(line) line.enabled = false;
 
         if(hideAfterLoaded) {
-            pos.Entity.Toggle(IsVisible());
+            ourComponent.Toggle(IsVisible());
         }
 
         OnMoveEnd?.Invoke();

@@ -28,7 +28,7 @@ public class ControllerMUD : SPController {
     [SerializeField] AudioClip[] sfx_bump;
 
     System.IDisposable? _disposer;
-    mud.Client.MUDEntity mudEntity;
+    MUDEntity mudEntity;
     PlayerMUD playerScript;
 
     Vector3 onchainPos;
@@ -46,7 +46,7 @@ public class ControllerMUD : SPController {
     Vector3 lastInputDir;
 
     void Awake() {
-        mudEntity = GetComponentInParent<mud.Client.MUDEntity>();
+        mudEntity = GetComponentInParent<MUDEntity>();
         enabled = false;
         distance = Random.Range(0f, .25f);
     }
@@ -146,12 +146,15 @@ public class ControllerMUD : SPController {
             return;
         }
         
-        Vector3 movePos = onchainPos + inputDir.x * Vector3.right * moveDistance + inputDir.z * Vector3.forward * moveDistance;
-        Vector3 moveTo = playerScript.Position.Pos + inputDir;
+        Vector3 movePos = onchainPos + (inputDir.x * Vector3.right * moveDistance) + (inputDir.z * Vector3.forward * moveDistance);
+        Vector3 moveTo = onchainPos + inputDir;
 
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
-        mud.Client.MUDEntity e = GridMUD.GetEntityAt(moveTo);
+        MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
+
+        //look to rotation
+        playerScript.AnimationMUD.Look.SetLookRotation(moveTo);
 
         Vector3 moveMinimum = onchainPos + inputDir;
         if(!MapConfigComponent.OnMap((int)moveMinimum.x, (int)moveMinimum.z)) {
@@ -168,7 +171,7 @@ public class ControllerMUD : SPController {
             List<Vector3> targets = new List<Vector3>();
 
             Vector3 pushToPos = moveTo;
-            mud.Client.MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
+            MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
 
             while(destinationEntity != null) {
 
@@ -227,11 +230,8 @@ public class ControllerMUD : SPController {
             wasInputting = false;
             player.Actor.InputAction(false, false, currentAction);
         }
-
         lastInputDir = inputDir;
 
-        //look to rotation
-        playerScript.AnimationMUD.Look.SetLookRotation(moveTo);
         player.Actor.InputAction(!wasInputting, true, currentAction);
         wasInputting = true;
 

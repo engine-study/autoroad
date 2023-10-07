@@ -15,10 +15,12 @@ public class ActionsMUD : MonoBehaviour
 
     [Header("Equipment")]
     [SerializeField] List<Equipment> equipment;
+    [SerializeField] List<Equipment> local;
 
     PlayerMUD player;
     PositionComponent position;
     float distanceToPlayer = 999f;
+
 
 
     void Awake() {
@@ -61,19 +63,18 @@ public class ActionsMUD : MonoBehaviour
             ToggleEquipment(true, e);
         }
 
-        // gameObject.SetActive(player.IsLocalPlayer);
-        if(!player.IsLocalPlayer) {
+        for(int i = 0; i < local.Count; i++) {local[i].gameObject.SetActive(player.IsLocalPlayer);}
+
+        if (!player.IsLocalPlayer) {
             foreach(Equipment e in baseEquipment) {
                 if (e == null) { continue; }
                 e.gameObject.SetActive(false);
             }
+            return;
         }
 
-        if (!player.IsLocalPlayer)
-            return;
-
-        // gameObject.transform.parent = null;
-        // gameObject.transform.position = Vector3.zero;
+        gameObject.transform.parent = null;
+        gameObject.transform.position = Vector3.zero;
 
         position = player.Position;
 
