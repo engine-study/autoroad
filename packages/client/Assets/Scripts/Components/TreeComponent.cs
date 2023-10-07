@@ -23,19 +23,13 @@ public class TreeComponent : MUDComponent {
     public FloraType treeState;
     FloraType lastState = FloraType.None;
     int lastHealth = -999;
-    UpdateType lastPosUpdateType;
     protected override void PostInit() {
         base.PostInit();
 
         pos = Entity.GetMUDComponent<PositionComponent>();
         health = Entity.GetMUDComponent<HealthComponent>();
 
-        pos.OnInstantUpdate += TreeVisibility;
-        pos.OnRichUpdate += TreeSpawnAnimation;
-
         health.OnUpdated += TreeHit;
-
-        TreeVisibility();
 
     }
 
@@ -43,7 +37,6 @@ public class TreeComponent : MUDComponent {
         base.InitDestroy();
 
         if(health) health.OnUpdated -= TreeHit;
-        if(pos) pos.OnUpdated -= TreeSpawnAnimation;
     }
     
     protected override IMudTable GetTable() {return new TreeTable();}
@@ -85,40 +78,6 @@ public class TreeComponent : MUDComponent {
         }
     }
 
-    void TreeVisibility() {
-        treeRoot.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
-    }
-
-    void TreeSpawnAnimation() {
-
-        treeRoot.SetActive(pos.UpdateInfo.UpdateType != UpdateType.DeleteRecord);
-
-        // if (health.UpdateSource != UpdateSource.Revert && pos.UpdateType == UpdateType.DeleteRecord && Loaded && pos.UpdateType != lastPosUpdateType) {
-        //     SPAudioSource.Play(transform.position, sfx_hits);
-        //     SPAudioSource.Play(transform.position, sfx_falls);
-        //     fx_fall.Play(true);
-        //     flash.Flash();
-        //     fallCoroutine = StartCoroutine(FallCoroutine());
-
-        // } else {
-
-        //     //if we reverted to an alive state, fix
-        //     if (fallCoroutine != null) {
-        //         StopCoroutine(fallCoroutine);
-        //     }
-
-        //     if (rb) {
-        //         rb.isKinematic = true;
-        //     }
-
-        //     treeRoot.transform.localPosition = Vector3.zero;
-        //     treeRoot.transform.localRotation = Quaternion.identity;
-            
-        // }
-
-        lastPosUpdateType = pos.UpdateInfo.UpdateType;
-
-    }
 
     void TreeHit() {
 

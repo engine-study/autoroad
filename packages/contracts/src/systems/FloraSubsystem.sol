@@ -64,10 +64,9 @@ contract FloraSubsystem is System {
       Position.deleteRecord(atPosition[0]);
 
       uint32 seedCount = Seeds.get(player);
-      uint32 newSeeds = uint32(randomSeed(0,1,uint(seedCount)));
-      if(newSeeds > 0) {
-        Seeds.set(player, seedCount + newSeeds);
-      }
+      Seeds.set(player, seedCount + 1);
+      // uint32 newSeeds = uint32(randomSeed(0,2,uint(seedCount)));
+      // if(newSeeds > 0) {Seeds.set(player, seedCount + newSeeds);}
 
       //randomly spawn a log
       //kill a player if it falls on them

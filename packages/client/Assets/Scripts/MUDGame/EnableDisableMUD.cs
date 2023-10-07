@@ -20,9 +20,7 @@ public class EnableDisableMUD : SPEnableDisable
 
     void Init() {
 
-        if(hasInit) {
-            return;
-        }
+        if(hasInit) { return;}
 
         if(component == null) {
             component = GetComponentInParent<MUDComponent>();

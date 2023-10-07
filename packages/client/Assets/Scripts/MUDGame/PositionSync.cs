@@ -87,15 +87,10 @@ public class PositionSync : ComponentSync
         base.HandleUpdate();
 
         if (syncType == ComponentSyncType.Lerp) {
-           
             // if(target.position != TargetPos) StartMove();
             StartMove();
-
         } else if (syncType == ComponentSyncType.Instant || SyncComponent.UpdateInfo.Source == UpdateSource.Revert) {
-
-            target.position = pos.Pos;
-            if(moving) { EndMove(); }
-
+            EndMove();
         }
 
     }
@@ -137,10 +132,7 @@ public class PositionSync : ComponentSync
 
         // if(action && wasMoving) {action.PlayAnimation(false);}
         if(line) line.enabled = false;
-
-        if(hideAfterLoaded) {
-            ourComponent.Toggle(IsVisible());
-        }
+        if(hideAfterLoaded) { ourComponent.Toggle(IsVisible());}
 
         OnMoveEnd?.Invoke();
     }
