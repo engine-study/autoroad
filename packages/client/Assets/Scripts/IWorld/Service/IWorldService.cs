@@ -346,24 +346,22 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(canInteractFunction, cancellationToken);
         }
 
-        public Task<string> CanInteractRequestAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance)
+        public Task<string> CanInteractRequestAsync(byte[] player, PositionData playerPos, List<byte[]> entities, BigInteger distance)
         {
             var canInteractFunction = new CanInteractFunction();
                 canInteractFunction.Player = player;
-                canInteractFunction.X = x;
-                canInteractFunction.Y = y;
+                canInteractFunction.PlayerPos = playerPos;
                 canInteractFunction.Entities = entities;
                 canInteractFunction.Distance = distance;
             
              return ContractHandler.SendRequestAsync(canInteractFunction);
         }
 
-        public Task<TransactionReceipt> CanInteractRequestAndWaitForReceiptAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CanInteractRequestAndWaitForReceiptAsync(byte[] player, PositionData playerPos, List<byte[]> entities, BigInteger distance, CancellationTokenSource cancellationToken = null)
         {
             var canInteractFunction = new CanInteractFunction();
                 canInteractFunction.Player = player;
-                canInteractFunction.X = x;
-                canInteractFunction.Y = y;
+                canInteractFunction.PlayerPos = playerPos;
                 canInteractFunction.Entities = entities;
                 canInteractFunction.Distance = distance;
             
@@ -380,24 +378,24 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(canInteractEmptyFunction, cancellationToken);
         }
 
-        public Task<string> CanInteractEmptyRequestAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance)
+        public Task<string> CanInteractEmptyRequestAsync(byte[] player, PositionData playerPos, PositionData entityPos, List<byte[]> entities, BigInteger distance)
         {
             var canInteractEmptyFunction = new CanInteractEmptyFunction();
                 canInteractEmptyFunction.Player = player;
-                canInteractEmptyFunction.X = x;
-                canInteractEmptyFunction.Y = y;
+                canInteractEmptyFunction.PlayerPos = playerPos;
+                canInteractEmptyFunction.EntityPos = entityPos;
                 canInteractEmptyFunction.Entities = entities;
                 canInteractEmptyFunction.Distance = distance;
             
              return ContractHandler.SendRequestAsync(canInteractEmptyFunction);
         }
 
-        public Task<TransactionReceipt> CanInteractEmptyRequestAndWaitForReceiptAsync(byte[] player, int x, int y, List<byte[]> entities, BigInteger distance, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CanInteractEmptyRequestAndWaitForReceiptAsync(byte[] player, PositionData playerPos, PositionData entityPos, List<byte[]> entities, BigInteger distance, CancellationTokenSource cancellationToken = null)
         {
             var canInteractEmptyFunction = new CanInteractEmptyFunction();
                 canInteractEmptyFunction.Player = player;
-                canInteractEmptyFunction.X = x;
-                canInteractEmptyFunction.Y = y;
+                canInteractEmptyFunction.PlayerPos = playerPos;
+                canInteractEmptyFunction.EntityPos = entityPos;
                 canInteractEmptyFunction.Entities = entities;
                 canInteractEmptyFunction.Distance = distance;
             
@@ -1741,6 +1739,38 @@ namespace IWorld.Service
                 mineFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(mineFunction, cancellationToken);
+        }
+
+        public Task<string> MoveOrPushRequestAsync(MoveOrPushFunction moveOrPushFunction)
+        {
+             return ContractHandler.SendRequestAsync(moveOrPushFunction);
+        }
+
+        public Task<TransactionReceipt> MoveOrPushRequestAndWaitForReceiptAsync(MoveOrPushFunction moveOrPushFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveOrPushFunction, cancellationToken);
+        }
+
+        public Task<string> MoveOrPushRequestAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData vector)
+        {
+            var moveOrPushFunction = new MoveOrPushFunction();
+                moveOrPushFunction.CausedBy = causedBy;
+                moveOrPushFunction.Player = player;
+                moveOrPushFunction.StartPos = startPos;
+                moveOrPushFunction.Vector = vector;
+            
+             return ContractHandler.SendRequestAsync(moveOrPushFunction);
+        }
+
+        public Task<TransactionReceipt> MoveOrPushRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData vector, CancellationTokenSource cancellationToken = null)
+        {
+            var moveOrPushFunction = new MoveOrPushFunction();
+                moveOrPushFunction.CausedBy = causedBy;
+                moveOrPushFunction.Player = player;
+                moveOrPushFunction.StartPos = startPos;
+                moveOrPushFunction.Vector = vector;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveOrPushFunction, cancellationToken);
         }
 
         public Task<string> MoveSimpleRequestAsync(MoveSimpleFunction moveSimpleFunction)

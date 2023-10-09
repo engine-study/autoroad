@@ -152,13 +152,11 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
-        [Parameter("int32", "x", 2)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 3)]
-        public virtual int Y { get; set; }
-        [Parameter("bytes32[]", "entities", 4)]
+        [Parameter("tuple", "playerPos", 2)]
+        public virtual PositionData PlayerPos { get; set; }
+        [Parameter("bytes32[]", "entities", 3)]
         public virtual List<byte[]> Entities { get; set; }
-        [Parameter("uint256", "distance", 5)]
+        [Parameter("uint256", "distance", 4)]
         public virtual BigInteger Distance { get; set; }
     }
 
@@ -169,10 +167,10 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
-        [Parameter("int32", "x", 2)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 3)]
-        public virtual int Y { get; set; }
+        [Parameter("tuple", "playerPos", 2)]
+        public virtual PositionData PlayerPos { get; set; }
+        [Parameter("tuple", "entityPos", 3)]
+        public virtual PositionData EntityPos { get; set; }
         [Parameter("bytes32[]", "entities", 4)]
         public virtual List<byte[]> Entities { get; set; }
         [Parameter("uint256", "distance", 5)]
@@ -807,6 +805,21 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class MoveOrPushFunction : MoveOrPushFunctionBase { }
+
+    [Function("moveOrPush")]
+    public class MoveOrPushFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("tuple", "startPos", 3)]
+        public virtual PositionData StartPos { get; set; }
+        [Parameter("tuple", "vector", 4)]
+        public virtual PositionData Vector { get; set; }
     }
 
     public partial class MoveSimpleFunction : MoveSimpleFunctionBase { }
@@ -2185,6 +2198,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

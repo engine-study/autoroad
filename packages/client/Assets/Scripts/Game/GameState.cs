@@ -110,9 +110,12 @@ public class GameState : MonoBehaviour {
     async UniTask PlayGameLoop() {
 
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
+        while(ChunkLoader.ActiveChunk == null) { await UniTask.Delay(200); }
 
         //wait until the map is setup
-        while (ChunkLoader.ActiveChunk == null || (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false)) { await UniTask.Delay(200); }
+        while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
+            if(SPGlobal.IsDebug) { await TxManager.SendUntilPasses<HelpSummonFunction>();}
+        }
 
         //wait for name table
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}

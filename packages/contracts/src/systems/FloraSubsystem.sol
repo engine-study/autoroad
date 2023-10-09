@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId } from "../codegen/Tables.sol";
+import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { Player, Health, Tree, Seeds, Move } from "../codegen/Tables.sol";
 import { ActionType, TerrainType, FloraType, MoveType } from "../codegen/Types.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
@@ -50,7 +50,7 @@ contract FloraSubsystem is System {
 
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
 
-    require(world.canInteract(player, x, y, atPosition, 1), "bad interact");
+    require(world.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
 
     world.setAction(player, ActionType.Chop, x, y);
@@ -90,7 +90,7 @@ contract FloraSubsystem is System {
     bytes32[] memory atRoad = getKeysWithValue(PositionTableId, Position.encode(x, y, -1));
     require(atRoad.length == 0, "road here");
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-    require(world.canInteractEmpty(player, x, y, atPosition, 1), "bad interact");
+    require(world.canInteractEmpty(player, Position.get(player), PositionData(x,y,0), atPosition, 1), "bad interact");
 
     world.setAction(player, ActionType.Plant, x, y);
 

@@ -19,7 +19,7 @@ public class PositionSync : ComponentSync
     [SerializeField] Transform target;
     [SerializeField] public bool hideIfNoPosition = true;    
     [SerializeField] public bool hideIfBelowGround = true;    
-    [SerializeField] public bool hideAfterLoaded = false;    
+    [SerializeField] public bool hideAfterLoaded = true;    
     [SerializeField] public bool rotateToFace = false;
     [SerializeField] float speed = 1f;
     [SerializeField] float rotationSpeed = 720f;

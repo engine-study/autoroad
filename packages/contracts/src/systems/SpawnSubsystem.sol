@@ -5,12 +5,16 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
 import { Move, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/Tables.sol";
-import { Position, PositionTableId } from "../codegen/Tables.sol";
+import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/Types.sol";
+
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { randomCoord } from "../utility/random.sol";
+
+import { ActionSystem } from "../systems/ActionSystem.sol";
+import { MapSubsystem } from "../systems/MapSubsystem.sol";
+import { RewardSubsystem } from "../systems/RewardSubsystem.sol";
 
 contract SpawnSubsystem is System {
     
@@ -44,6 +48,27 @@ contract SpawnSubsystem is System {
     Position.set(entity, x, y, 0);
     IWorld(_world()).setAction(entity, ActionType.Spawn, x, y);
 
+  }
+  
+  function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
+    IWorld world = IWorld(_world());
+
+    //kill and move underground
+    pos.layer = -2;
+    Position.set(target, pos);
+    Health.set(target, -1);
+
+    //set to dead
+    world.setAction(target, ActionType.Dead, pos.x, pos.y);
+
+    //rewards
+    world.killRewards(causedBy, target, attacker);
+
+    //spawn bones
+    // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
+    // Bones.set(bonesEntity, true);
+    // Position.set(bonesEntity, pos);
+    // Move.set(bonesEntity, uint32(MoveType.Push));
   }
 
 }

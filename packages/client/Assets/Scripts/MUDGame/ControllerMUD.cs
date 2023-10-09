@@ -146,7 +146,6 @@ public class ControllerMUD : SPController {
             return;
         }
         
-        Vector3 movePos = onchainPos + (inputDir.x * Vector3.right * moveDistance) + (inputDir.z * Vector3.forward * moveDistance);
         Vector3 moveTo = onchainPos + inputDir;
 
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
@@ -217,7 +216,7 @@ public class ControllerMUD : SPController {
             }
 
             currentAction = walkAction;
-            walkAction.transform.position = movePos;
+            walkAction.transform.position = moveTo;
 
             // Debug.Log("Walk TX (" + (int)transform.position.x + "," + (int)transform.position.z + ") to (" + (int)movePos.x + "," + (int)movePos.z + ")");
             // List<TxUpdate> updates = new List<TxUpdate>() { ActionsMUD.PositionOptimistic(mudEntity, movePos) };

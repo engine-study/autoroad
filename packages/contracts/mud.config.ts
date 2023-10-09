@@ -48,6 +48,10 @@ export default mudConfig({
       name: "spawn",
       openAccess: false,
     },
+    ToolSubsystem: {
+      name: "tool",
+      openAccess: false,
+    },
   },
 
   enums: {

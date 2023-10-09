@@ -6,13 +6,16 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Action, Name, Player, Health} from "../codegen/Tables.sol";
 import { ActionType, PaymentType } from "../codegen/Types.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
+
+import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+
 import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
+import { ToolSubsystem } from "../systems/ToolSubsystem.sol";
 import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { SpawnSubsystem } from "../systems/SpawnSubsystem.sol";
 import { FloraSubsystem } from "../systems/FloraSubsystem.sol";
 import { TerrainSubsystem } from "../systems/TerrainSubsystem.sol";
-import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract ActionSystem is System {
 

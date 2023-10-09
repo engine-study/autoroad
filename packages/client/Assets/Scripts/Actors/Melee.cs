@@ -22,8 +22,8 @@ public class Melee : Equipment
     public override async UniTask<bool> Use() {
         
         Debug.Log("MELEEING");
-        Vector3 pushObject = transform.position;
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Stick, pushObject);
+        Vector3 melee = transform.position;
+        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Melee, melee);
     }
     
 }
