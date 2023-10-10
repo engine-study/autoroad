@@ -31,6 +31,7 @@ public class MotherUI : SPUIInstance {
     [Header("Game")]
     public GameUI game;
     public MapUI map;
+    public MileComplete mileComplete;
     public StoreUI store;
     public SPWindow debugButton;
     public DebugUI debug;
@@ -65,6 +66,7 @@ public class MotherUI : SPUIInstance {
         explorer.Init();
         explorer.ToggleWindowClose();
         hover.Init();
+        mileComplete.Init();
         
         wheel.Init();
 

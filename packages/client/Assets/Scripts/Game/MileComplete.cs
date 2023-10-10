@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 
-public class MileComplete : MonoBehaviour
+public class MileComplete : SPWindowParent
 {
     public static MileComplete Instance;
 
@@ -21,13 +21,18 @@ public class MileComplete : MonoBehaviour
     [SerializeField] List<SPResourceJuicy> gems;
 
     static Coroutine coroutine;
-    void Awake() {
+    public override void Init() {
+
+        if(hasInit) return;
+        base.Init();
+
         Instance = this;
         mileUI.SetActive(false);
         GameStateComponent.OnMileCompleted += PlayMileRewardSequence;
     }
 
-    void OnDestroy() {
+    protected override void Destroy() {
+        base.Destroy();
         Instance = null;
         GameStateComponent.OnMileCompleted -= PlayMileRewardSequence;
     }
@@ -37,10 +42,12 @@ public class MileComplete : MonoBehaviour
     }
 
     public static void PlayMileRewardSequence(int mile) { PlayMileRewardSequence(mile, true); }
+    public static void PlayMileRewardSequence(int mile, bool showComplete) { Instance.PlayReward(mile, showComplete);}
 
-    public static void PlayMileRewardSequence(int mile, bool showComplete) {
-        if(coroutine != null) Instance.StopCoroutine(coroutine);
-        coroutine = Instance.StartCoroutine(Instance.MileEndCoroutine(mile, showComplete));
+    void PlayReward(int mile, bool showComplete) {
+        mileUI.SetActive(true);
+        if(coroutine != null) StopCoroutine(coroutine);
+        coroutine = StartCoroutine(MileEndCoroutine(mile, showComplete));
     }
 
     void SetCameraToMile(int mile) {
