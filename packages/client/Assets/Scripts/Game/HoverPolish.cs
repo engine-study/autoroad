@@ -43,7 +43,7 @@ public class HoverPolish : MonoBehaviour
         if(player.IsLocalPlayer) {
 
         } else {
-            player.Animator.IK.SetLook(toggle ? SPUIBase.Camera.transform : null);
+            // player.Animator.IK.SetLook(toggle ? SPUIBase.Camera.transform : null);
         }
     }
 }

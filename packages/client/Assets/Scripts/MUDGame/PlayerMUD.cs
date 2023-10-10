@@ -10,7 +10,7 @@ public class PlayerMUD : SPPlayer
     public PositionSync Sync{get{return positionSync;}}
     public ActionsMUD Actions{get{return actions;}}
     public AnimationMUD AnimationMUD{get{return animMud;}}
-    public static bool CanInput {get{return GameState.GamePlaying && GameState.GameReady && LocalPlayer && LocalPlayer.HasInit && !PlayerComponent.LocalPlayer.IsDead && TxManager.CanSendTx;}}
+    protected override bool Input(){ return base.Input() && GameState.GamePlaying && GameState.GameReady && !PlayerComponent.LocalPlayer.IsDead && TxManager.CanSendTx; }
 
     [Header("MUD")]
     [SerializeField] private PlayerComponent playerComponent;
@@ -71,6 +71,7 @@ public class PlayerMUD : SPPlayer
         
         if(IsLocalPlayer) {
             Actor.OnActionEnd += ActionCursorUpdate;
+            positionSync.OnMoveEnd += MoveEndUpdate;
         }
 
     }
@@ -78,8 +79,11 @@ public class PlayerMUD : SPPlayer
     protected override void Destroy()
     {
         base.Destroy();
+
         Player.OnLoaded -= NetworkInit;
         Actor.OnActionEnd -= ActionCursorUpdate;
+        positionSync.OnMoveEnd -= MoveEndUpdate;
+
         for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
 
     }
@@ -87,9 +91,8 @@ public class PlayerMUD : SPPlayer
     void Equip() {SPAudioSource.Play(Root.position, sfx_equip);}
 
     //refresh what available actions we have
-    void ActionCursorUpdate(ActionEndState endState) {
-        CursorMUD.ForceCursorUpdate();
-    }
+    void ActionCursorUpdate(ActionEndState endState) { CursorMUD.ForceCursorUpdate();}
+    void MoveEndUpdate() { CursorMUD.ForceCursorUpdate();}
 
 
     protected override void UpdateInput() {

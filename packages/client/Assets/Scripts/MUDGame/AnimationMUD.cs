@@ -127,6 +127,10 @@ public class AnimationMUD : MonoBehaviour
         if (actionEffect != null && newAction != action) { ToggleAction(false, action); }
         ToggleAction(true, newAction);
 
+        yield return new WaitForSeconds(2f);
+        
+        ToggleAction(false, newAction);
+
     }
 
     public virtual void ToggleDead(bool toggle) {
