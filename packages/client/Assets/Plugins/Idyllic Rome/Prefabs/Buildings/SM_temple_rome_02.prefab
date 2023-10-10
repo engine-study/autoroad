@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6092195634237593054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6899517971997822820}
+  - component: {fileID: 7525471680111935681}
+  - component: {fileID: 5731727551194559499}
+  - component: {fileID: 5570128219811305871}
+  m_Layer: 0
+  m_Name: SM_temple_rome_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6899517971997822820
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092195634237593054}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7525471680111935681
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092195634237593054}
+  m_Mesh: {fileID: -150728190396121453, guid: 7fdb3dbc8048d6e408ed575257e0f329, type: 3}
+--- !u!23 &5731727551194559499
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092195634237593054}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2f9c651b2247f504199463d80a99cd8e, type: 2}
+  - {fileID: 2100000, guid: 5f501caf81f425f40be38a7ecf9a1f33, type: 2}
+  - {fileID: 2100000, guid: 76416977d342da14486ba971c5d429d0, type: 2}
+  - {fileID: 2100000, guid: be7a4ce7e59eadf44b815f3e08858159, type: 2}
+  - {fileID: 2100000, guid: 2d8890852e3247f4982a2117c4bc3772, type: 2}
+  - {fileID: 2100000, guid: be7a4ce7e59eadf44b815f3e08858159, type: 2}
+  - {fileID: 2100000, guid: be7a4ce7e59eadf44b815f3e08858159, type: 2}
+  - {fileID: 2100000, guid: d55c5cafecda8e648ae4e91290c5b904, type: 2}
+  - {fileID: 2100000, guid: 99af3d1838f3cf542a58fed24e99828e, type: 2}
+  - {fileID: 2100000, guid: cec43e7a91db6a04899fd8ac34aca81f, type: 2}
+  - {fileID: 2100000, guid: cec43e7a91db6a04899fd8ac34aca81f, type: 2}
+  - {fileID: 2100000, guid: 3bd26df64ba0e1b489d2e3aaa23965c0, type: 2}
+  - {fileID: 2100000, guid: 8c92bb27bdb8f3249a3f5c28100bc567, type: 2}
+  - {fileID: 2100000, guid: edff5659c46481a4d8a1eaddff9a039e, type: 2}
+  - {fileID: 2100000, guid: 66e526911e7f8e0468e351f89eaea0f9, type: 2}
+  - {fileID: 2100000, guid: 5398e42b4758b1b439eebd2084ec47a5, type: 2}
+  - {fileID: 2100000, guid: c279d7514af83fb4bb94ee815fbf5261, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5570128219811305871
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092195634237593054}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -150728190396121453, guid: 7fdb3dbc8048d6e408ed575257e0f329, type: 3}
