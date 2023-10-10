@@ -277,7 +277,7 @@ contract TerrainSubsystem is System {
 
   function deleteAt(int32 x, int32 y, int32 layer) public {
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, layer));
-    if(atPosition.length == 0) {return;}
+    require(atPosition.length > 0, "Nothing to delete");
     Position.deleteRecord(atPosition[0]);
   }
 

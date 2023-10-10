@@ -336,7 +336,10 @@ MonoBehaviour:
   controller: {fileID: 7427059931089221354}
   anim: {fileID: 7375503188354032431}
   animator: {fileID: 5770678829304191941}
+  velocity: {fileID: 0}
   resources: {fileID: 6317482249733295959}
+  alive: 1
+  isLocalPlayer: 0
   playerComponent: {fileID: 5348944994237342613}
   positionSync: {fileID: 7552157436396032579}
   actions: {fileID: 190895346912483442}
@@ -439,7 +442,6 @@ MonoBehaviour:
   bhopBoost: 0.25
   moveDirection: {x: 0, y: 0, z: 0}
   lookAt: {x: 0, y: 0, z: 0}
-  velocity: {x: 0, y: 0, z: 0}
   moveDirectionNoY: {x: 0, y: 0, z: 0}
   forceVelocity: {x: 0, y: 0, z: 0}
   tagging: 1
