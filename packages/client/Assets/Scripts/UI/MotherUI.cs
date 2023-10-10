@@ -189,9 +189,9 @@ public class MotherUI : SPUIInstance {
         WorldScroll.Instance.SetToPlayerMile();
     }
 
-    public static void FollowPlayer() {
+    public static void FollowPlayer(bool zoom = false) {
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
-        SPCamera.SetFOVGlobal(4f);
+        if(zoom) {SPCamera.SetFOVGlobal(4f);}
     }
 
     public static void ToggleFollow(bool toggle) {

@@ -15,32 +15,26 @@ public class FishingRod : Equipment
 
         if(e == null) return false;
         
-        MoveComponent moveType = e?.GetMUDComponent<MoveComponent>();
-        WeightComponent weight = e?.GetMUDComponent<WeightComponent>();
+        MoveComponent moveType = e.GetMUDComponent<MoveComponent>();
+        WeightComponent weight = e.GetMUDComponent<WeightComponent>();
 
-        bool startOnBounds = BoundsComponent.OnWorld(e,CursorMUD.GridPos);
-        bool endOnBounds = BoundsComponent.OnWorld(e,CursorMUD.GridPos);
+        Vector3 pushObject = transform.position;
+        Vector3 pushToPos = Sender.transform.position - (transform.position - Sender.transform.position).normalized;
 
-        return canUse && startOnBounds && endOnBounds && moveType != null && moveType.MoveType == MoveType.Push && (weight == null || weight.Weight <= 0);
+        if(!OnWorld(e, pushToPos)) {return false;}
+
+        return canUse && moveType != null && moveType.MoveType == MoveType.Push && (weight == null || weight.Weight <= 0);
     }
     
     public override async UniTask<bool> Use() {
         
         Debug.Log("Fishing");
 
-        Vector3 pushObject = transform.position;
-        Vector3 pushToPos = Sender.transform.position - (transform.position - Sender.transform.position).normalized;
+        // PositionComponent theirPosition = CursorMUD.Entity.GetMUDComponent<PositionComponent>();
 
-        if(!BoundsComponent.OnBounds((int)pushToPos.x, (int)pushToPos.z)) {
-            BoundsComponent.ShowBorder();
-            return false;
-        }
-
-        PositionComponent theirPosition = CursorMUD.Entity.GetMUDComponent<PositionComponent>();
-
-        List<TxUpdate> updates = new List<TxUpdate>();
-        updates.Add(ActionsMUD.ActionOptimistic(CursorMUD.Entity, ActionName.Hop, pushToPos));
-        updates.Add(ActionsMUD.PositionOptimistic(CursorMUD.Entity, pushToPos));
+        // List<TxUpdate> updates = new List<TxUpdate>();
+        // updates.Add(ActionsMUD.ActionOptimistic(CursorMUD.Entity, ActionName.Hop, pushToPos));
+        // updates.Add(ActionsMUD.PositionOptimistic(CursorMUD.Entity, pushToPos));
         
         return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Fishing, CursorMUD.GridPos);
 

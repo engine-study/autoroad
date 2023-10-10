@@ -275,10 +275,15 @@ contract TerrainSubsystem is System {
 
   }
 
-  function deleteAt(int32 x, int32 y, int32 layer) public {
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, layer));
+  function deleteAtRequire(PositionData memory pos) public {
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y, pos.layer));
     require(atPosition.length > 0, "Nothing to delete");
     Position.deleteRecord(atPosition[0]);
+  }
+
+  function deleteAt(PositionData memory pos) public {
+    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y, pos.layer));
+    if(atPosition.length > 0) Position.deleteRecord(atPosition[0]);
   }
 
   function spawnRoadFromPlayer(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {

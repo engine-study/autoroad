@@ -203,12 +203,12 @@ public class WorldScroll : MonoBehaviour {
         
     }
 
-    public void ToggleCameraOnPlayer(bool toggle) {
+    public void ToggleCameraOnPlayer(bool toggle, bool changeZoom = false) {
 
         if(toggle) {
-            MotherUI.FollowPlayer();
+            MotherUI.FollowPlayer(changeZoom);
         } else {
-            if(playerFocus) SPCamera.SetFOVGlobal(10f);
+            if(playerFocus && changeZoom) SPCamera.SetFOVGlobal(10f);
             SPCamera.SetFollow(null);
             SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
         }

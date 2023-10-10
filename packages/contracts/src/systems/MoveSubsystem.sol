@@ -67,10 +67,14 @@ contract MoveSubsystem is System {
     require(canPlaceOn(move), "cannot place on");
   }
 
-  function requireOnMap(bytes32[] memory at, PositionData memory pos) public view {
+  function requireOnMap(bytes32 at, PositionData memory pos) public view {
+    require(onMapOrSpawn(at,pos), "off world");
+  }
+
+  function onMapOrSpawn(bytes32 at, PositionData memory pos) public view returns(bool) {
     IWorld world = IWorld(_world());
-    if(at.length > 0 && Player.get(at[0])) require(world.onWorld(pos.x, pos.y), "off world");
-    else {require(world.onMap(pos.x, pos.y), "off map");}
+    if(Player.get(at)) {return world.onWorld(pos.x, pos.y);}
+    else {return world.onMap(pos.x, pos.y);}
   }
 
   function requireEmptyOrPushable(bytes32[] memory at) public view returns(bool) {
@@ -152,7 +156,7 @@ contract MoveSubsystem is System {
       assert(atDest.length < 2);
 
       //check if valid position
-      bool canWalk = world.onWorld(positions[i].x, positions[i].y) && canWalkOn(atDest);
+      bool canWalk = onMapOrSpawn(player, positions[i]) && canWalkOn(atDest);
 
       //if we hit an object or at the end of our walk, break out
       if (canWalk == false) { require(i > 1, "Nowhere to move"); return;}
@@ -192,7 +196,7 @@ contract MoveSubsystem is System {
     bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
 
     //continue push loop as long as there is something to push
-    while (atPos.length > uint(0)) {
+    while (atPos.length > 0) {
       console.logUint(index);
 
       //leave loop early if we get blocked or finally reach a non-pushable space (empty or hole)
@@ -208,7 +212,8 @@ contract MoveSubsystem is System {
       totalWeight += Weight.get(atPos[0]);
       require(totalWeight < 1, "too heavy");
 
-      requireOnMap(atPos, pushPos);
+      //don't let anything go off map
+      requireOnMap(atPos[0], pushPos);
 
       //next space
       atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));

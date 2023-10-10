@@ -15,7 +15,7 @@ public class Melee : Equipment
         if(e == null) return false;
         
         NPCComponent npc = e?.GetMUDComponent<NPCComponent>();
-        bool onBounds = BoundsComponent.OnBounds((int)transform.position.x, (int)transform.position.z);
+        bool onBounds = OnWorld(transform.position);
         return canUse && onBounds && npc != null; 
     }
     

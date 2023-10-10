@@ -740,24 +740,46 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtFunction, cancellationToken);
         }
 
-        public Task<string> DeleteAtRequestAsync(int x, int y, int layer)
+        public Task<string> DeleteAtRequestAsync(PositionData pos)
         {
             var deleteAtFunction = new DeleteAtFunction();
-                deleteAtFunction.X = x;
-                deleteAtFunction.Y = y;
-                deleteAtFunction.Layer = layer;
+                deleteAtFunction.Pos = pos;
             
              return ContractHandler.SendRequestAsync(deleteAtFunction);
         }
 
-        public Task<TransactionReceipt> DeleteAtRequestAndWaitForReceiptAsync(int x, int y, int layer, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> DeleteAtRequestAndWaitForReceiptAsync(PositionData pos, CancellationTokenSource cancellationToken = null)
         {
             var deleteAtFunction = new DeleteAtFunction();
-                deleteAtFunction.X = x;
-                deleteAtFunction.Y = y;
-                deleteAtFunction.Layer = layer;
+                deleteAtFunction.Pos = pos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtFunction, cancellationToken);
+        }
+
+        public Task<string> DeleteAtRequireRequestAsync(DeleteAtRequireFunction deleteAtRequireFunction)
+        {
+             return ContractHandler.SendRequestAsync(deleteAtRequireFunction);
+        }
+
+        public Task<TransactionReceipt> DeleteAtRequireRequestAndWaitForReceiptAsync(DeleteAtRequireFunction deleteAtRequireFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtRequireFunction, cancellationToken);
+        }
+
+        public Task<string> DeleteAtRequireRequestAsync(PositionData pos)
+        {
+            var deleteAtRequireFunction = new DeleteAtRequireFunction();
+                deleteAtRequireFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAsync(deleteAtRequireFunction);
+        }
+
+        public Task<TransactionReceipt> DeleteAtRequireRequestAndWaitForReceiptAsync(PositionData pos, CancellationTokenSource cancellationToken = null)
+        {
+            var deleteAtRequireFunction = new DeleteAtRequireFunction();
+                deleteAtRequireFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtRequireFunction, cancellationToken);
         }
 
         public Task<string> DeleteRecordRequestAsync(DeleteRecordFunction deleteRecordFunction)
@@ -1910,6 +1932,21 @@ namespace IWorld.Service
                 onMapFunction.Y = y;
             
             return ContractHandler.QueryAsync<OnMapFunction, bool>(onMapFunction, blockParameter);
+        }
+
+        public Task<bool> OnMapOrSpawnQueryAsync(OnMapOrSpawnFunction onMapOrSpawnFunction, BlockParameter blockParameter = null)
+        {
+            return ContractHandler.QueryAsync<OnMapOrSpawnFunction, bool>(onMapOrSpawnFunction, blockParameter);
+        }
+
+        
+        public Task<bool> OnMapOrSpawnQueryAsync(byte[] at, PositionData pos, BlockParameter blockParameter = null)
+        {
+            var onMapOrSpawnFunction = new OnMapOrSpawnFunction();
+                onMapOrSpawnFunction.At = at;
+                onMapOrSpawnFunction.Pos = pos;
+            
+            return ContractHandler.QueryAsync<OnMapOrSpawnFunction, bool>(onMapOrSpawnFunction, blockParameter);
         }
 
         public Task<string> OnRoadRequestAsync(OnRoadFunction onRoadFunction)

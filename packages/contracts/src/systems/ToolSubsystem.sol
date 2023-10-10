@@ -122,8 +122,9 @@ contract ToolSubsystem is System {
 
     //move other player
     world.requirePushable(atPos);
-    world.requireOnMap(atDest, endPos);
+    world.requireOnMap(atDest[0], endPos);
     world.requireCanPlaceOn(atDest);
+    
     world.moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
 
   }

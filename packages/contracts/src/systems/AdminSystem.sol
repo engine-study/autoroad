@@ -53,7 +53,7 @@ contract AdminSystem is System {
   function deleteAdmin(int32 x, int32 y, int32 layer) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).deleteAt(x,y, layer);
+    IWorld(_world()).deleteAtRequire(PositionData(x,y, layer));
   }
 
   function spawnPuzzleAdmin() public {

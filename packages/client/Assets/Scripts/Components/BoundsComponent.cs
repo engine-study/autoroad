@@ -36,7 +36,7 @@ public class BoundsComponent : MUDComponent
         Instance = null;
     }
 
-    public static void ShowBorder() {if(Instance) Instance.borderVisuals.SetActive(false); Instance.borderVisuals.SetActive(true);}
+    public static void ShowBorder() {if(Instance) {Instance.borderVisuals.SetActive(false);} Instance.borderVisuals.SetActive(true);}
 
     protected override IMudTable GetTable() {return new BoundsTable();}
     protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {

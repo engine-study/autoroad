@@ -323,12 +323,17 @@ namespace IWorld.ContractDefinition
     [Function("deleteAt")]
     public class DeleteAtFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
-        [Parameter("int32", "layer", 3)]
-        public virtual int Layer { get; set; }
+        [Parameter("tuple", "pos", 1)]
+        public virtual PositionData Pos { get; set; }
+    }
+
+    public partial class DeleteAtRequireFunction : DeleteAtRequireFunctionBase { }
+
+    [Function("deleteAtRequire")]
+    public class DeleteAtRequireFunctionBase : FunctionMessage
+    {
+        [Parameter("tuple", "pos", 1)]
+        public virtual PositionData Pos { get; set; }
     }
 
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }
@@ -900,6 +905,17 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class OnMapOrSpawnFunction : OnMapOrSpawnFunctionBase { }
+
+    [Function("onMapOrSpawn", "bool")]
+    public class OnMapOrSpawnFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "at", 1)]
+        public virtual byte[] At { get; set; }
+        [Parameter("tuple", "pos", 2)]
+        public virtual PositionData Pos { get; set; }
+    }
+
     public partial class OnRoadFunction : OnRoadFunctionBase { }
 
     [Function("onRoad", "bool")]
@@ -1193,8 +1209,8 @@ namespace IWorld.ContractDefinition
     [Function("requireOnMap")]
     public class RequireOnMapFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32[]", "at", 1)]
-        public virtual List<byte[]> At { get; set; }
+        [Parameter("bytes32", "at", 1)]
+        public virtual byte[] At { get; set; }
         [Parameter("tuple", "pos", 2)]
         public virtual PositionData Pos { get; set; }
     }
@@ -2037,6 +2053,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class FindEmptyPositionInAreaOutputDTO : FindEmptyPositionInAreaOutputDTOBase { }
 
     [FunctionOutput]
@@ -2245,6 +2263,15 @@ namespace IWorld.ContractDefinition
 
     [FunctionOutput]
     public class OnMapOutputDTOBase : IFunctionOutputDTO 
+    {
+        [Parameter("bool", "", 1)]
+        public virtual bool ReturnValue1 { get; set; }
+    }
+
+    public partial class OnMapOrSpawnOutputDTO : OnMapOrSpawnOutputDTOBase { }
+
+    [FunctionOutput]
+    public class OnMapOrSpawnOutputDTOBase : IFunctionOutputDTO 
     {
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }

@@ -114,7 +114,7 @@ public class GameState : MonoBehaviour {
 
         //wait until the map is setup
         while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
-            if(SPGlobal.IsDebug) { await TxManager.SendDirect<HelpSummonFunction>();}
+            if(SPGlobal.IsDebug) { if(await TxManager.SendDirect<HelpSummonFunction>() == false) {await UniTask.Delay(1000);}}
         }
 
         //wait for name table

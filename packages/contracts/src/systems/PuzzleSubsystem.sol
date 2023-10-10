@@ -75,7 +75,7 @@ contract PuzzleSubsystem is System {
     PositionData memory pos = findEmptyPositionInArea(mil, width, up, down, roadSide);
     
     //delete whatever was there and place puzzle
-    world.deleteAt(pos.x, pos.y, pos.layer);
+    world.deleteAt(pos);
     Position.set(mil, pos);
     Miliarium.set(mil, true);
     Weight.set(mil, 1);
