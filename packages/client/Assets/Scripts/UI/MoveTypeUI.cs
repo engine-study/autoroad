@@ -31,7 +31,7 @@ public class MoveTypeUI : SPWindowMUDComponent
 
             if(moveComponent.MoveType == MoveType.Push) {
                 button = weightComponent.Weight < 0 ? strength : weight;
-                button.UpdateField(((int)Mathf.Abs(weightComponent.Weight)).ToString());
+                button.UpdateField(((int)Mathf.Abs(weightComponent.Weight)).ToString("00"));
                 button.ToggleWindowOpen();
             } else if(moveComponent.MoveType == MoveType.Obstruction) {
                 // button = obstacle;
