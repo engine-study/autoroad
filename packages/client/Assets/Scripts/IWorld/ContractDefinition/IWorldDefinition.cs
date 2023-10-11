@@ -855,8 +855,8 @@ namespace IWorld.ContractDefinition
         public virtual PositionData To { get; set; }
         [Parameter("bytes32[]", "atDest", 5)]
         public virtual List<byte[]> AtDest { get; set; }
-        [Parameter("uint8", "animation", 6)]
-        public virtual byte Animation { get; set; }
+        [Parameter("uint8", "actionType", 6)]
+        public virtual byte ActionType { get; set; }
     }
 
     public partial class NameFunction : NameFunctionBase { }

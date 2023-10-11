@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action } from "../codegen/Tables.sol";
+import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action, Conscription, Weight } from "../codegen/Tables.sol";
 import { Coinage, Gem, Eth, XP, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/Tables.sol";
 import { ActionType, PaymentType } from "../codegen/Types.sol";
 
@@ -22,8 +22,6 @@ contract ItemSubsystem is System {
   } 
 
   function buyItem(bytes32 sender, bytes32 seller, uint32 id, PaymentType payment) public {
-    int32 coins = Coinage.get(sender);
-    require(coins > 0, "probably not enough coins");
     addToInventory(sender, id, payment);
   }
 
@@ -41,7 +39,7 @@ contract ItemSubsystem is System {
         Stick.set(player, true);
       } 
       else if (id == 1) { //robe
-        pay(player, 100, 0, 0, payment, 0);
+        pay(player, 250, 0, 0, payment, 0);
         Robe.set(player, 0);
       } 
       else if (id == 2) { //pickelhaube
@@ -53,28 +51,33 @@ contract ItemSubsystem is System {
         FishingRod.set(player, true);
       } 
       else if (id == 4) { //boots
-        pay(player, 50, 0, 0, payment, 0);
-        Boots.set(player, 1, 3);
+        pay(player, 100, 0, 0, payment, 0);
+        int32 weight = Weight.get(player);
+        Weight.set(player, weight - 1);
+        // Boots.set(player, 1, 3);
       } 
       else if (id == 5) { //scroll
         pay(player, 5, 0, 0, payment, 0);
         uint32 scrolls = Scroll.get(player);
         Scroll.set(player, scrolls + 1);
+      } else if (id == 6) { //conscription
+        pay(player, 0, 0, 10000000000000000, payment, 0);
+        Conscription.set(player, true);
       } 
     
     } 
     
     //OUTFITS
-    else if(id < 200) {
-      if (id == 100) { //leather
-        pay(player, 0, 1, 1, payment, 0);
+    // else if(id < 200) {
+    //   if (id == 100) { //leather
+    //     pay(player, 0, 1, 1, payment, 0);
 
-      } 
-      else if (id == 100) { //etc
-        pay(player, 0, 1, 1, payment, 0);
+    //   } 
+    //   else if (id == 100) { //etc
+    //     pay(player, 0, 1, 1, payment, 0);
 
-      } 
-    }
+    //   } 
+    // }
 
     //LIMITED TIME
     else if(id < 300) {
@@ -82,7 +85,7 @@ contract ItemSubsystem is System {
     }
   }
 
-  function pay(bytes32 account, int32 coinPrice, int32 gemPrice, int32 ethPrice, PaymentType paymentType, int32 minLevel) private {
+  function pay(bytes32 account, int32 coinPrice, int32 gemPrice, uint256 ethPrice, PaymentType paymentType, int32 minLevel) private {
     require(paymentType != PaymentType.None, "no payment type set");
 
     int32 level = 1;
@@ -117,9 +120,9 @@ contract ItemSubsystem is System {
     Gem.set(player, gems - amount);
   }
 
-  function withdrawEth(bytes32 player, int32 amount) private {
+  function withdrawEth(bytes32 player, uint256 amount) private {
     require(amount > 0, "amount is zero or negative");
-    require(false, "not available atm");
+    // require(false, "not available atm");
     // require(gems >= amount, "not enough gems");
 
   }

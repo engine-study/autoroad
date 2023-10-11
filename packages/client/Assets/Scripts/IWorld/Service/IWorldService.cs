@@ -1835,7 +1835,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
         }
 
-        public Task<string> MoveToRequestAsync(byte[] causedBy, byte[] entity, PositionData from, PositionData to, List<byte[]> atDest, byte animation)
+        public Task<string> MoveToRequestAsync(byte[] causedBy, byte[] entity, PositionData from, PositionData to, List<byte[]> atDest, byte actionType)
         {
             var moveToFunction = new MoveToFunction();
                 moveToFunction.CausedBy = causedBy;
@@ -1843,12 +1843,12 @@ namespace IWorld.Service
                 moveToFunction.From = from;
                 moveToFunction.To = to;
                 moveToFunction.AtDest = atDest;
-                moveToFunction.Animation = animation;
+                moveToFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAsync(moveToFunction);
         }
 
-        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData from, PositionData to, List<byte[]> atDest, byte animation, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveToRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData from, PositionData to, List<byte[]> atDest, byte actionType, CancellationTokenSource cancellationToken = null)
         {
             var moveToFunction = new MoveToFunction();
                 moveToFunction.CausedBy = causedBy;
@@ -1856,7 +1856,7 @@ namespace IWorld.Service
                 moveToFunction.From = from;
                 moveToFunction.To = to;
                 moveToFunction.AtDest = atDest;
-                moveToFunction.Animation = animation;
+                moveToFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveToFunction, cancellationToken);
         }

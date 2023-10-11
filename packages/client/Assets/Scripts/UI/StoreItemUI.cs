@@ -7,7 +7,7 @@ public class StoreItemUI : SPWindow
 {
     [Header("Store Item")]
     [HideInInspector] public StoreUI store;
-    [SerializeField] SPInputField itemText;
+    [SerializeField] SPButton itemText;
     [SerializeField] SPButton buyButtonCoin;
     [SerializeField] SPButton buyButtonGem;
     [SerializeField] SPButton buyButtonEth;

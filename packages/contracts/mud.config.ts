@@ -60,7 +60,6 @@ export default mudConfig({
     NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar"],
-    AnimationType: ["Walk", "Hop", "Teleport", "Push"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
     PuzzleType: ["None", "Miliarium", "Bearer", "Count"],
@@ -257,14 +256,6 @@ export default mudConfig({
         action: "uint32",
         x: "int32",
         y: "int32",
-      },
-    },
-
-    Animation: {
-      ephemeral: true,
-      dataStruct: false,
-      schema: {
-        state: "uint32",
       },
     },
 

@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, Player, Health } from "../codegen/Tables.sol";
-import { Road, Move, Action, Boots, Weight, Animation, NPC } from "../codegen/Tables.sol";
+import { Road, Move, Action, Boots, Weight, NPC } from "../codegen/Tables.sol";
 import { PositionTableId, PositionData } from "../codegen/Tables.sol";
 import { RoadState, MoveType, ActionType, NPCType } from "../codegen/Types.sol";
 
@@ -267,12 +267,12 @@ contract MoveSubsystem is System {
     PositionData memory from,
     PositionData memory to,
     bytes32[] memory atDest,
-    ActionType animation
+    ActionType actionType
   ) public {
 
     //simple move, no terrain at destination, exit out of method early
     if(atDest.length == 0) {
-      setPosition(causedBy, entity, to, animation);
+      setPosition(causedBy, entity, to, actionType);
     } else {
       
       //move onto a MoveType
@@ -285,7 +285,7 @@ contract MoveSubsystem is System {
 
       //if we're still alive, move into the position (this will trigger an entity update too)
       if(canDoStuff(entity)) {
-        setPosition(causedBy, entity, to, animation);
+        setPosition(causedBy, entity, to, actionType);
       }
 
     }
