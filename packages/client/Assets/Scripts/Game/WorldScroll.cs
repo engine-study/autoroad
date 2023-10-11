@@ -32,6 +32,7 @@ public class WorldScroll : MonoBehaviour {
     [SerializeField] float maxMile = 0f;
     [SerializeField] int mile = -1;
     [SerializeField] float mileScroll, lastScroll = -100f;
+    [SerializeField] ChunkComponent focusedChunk;
     float playerMile = 0f, lastPlayerMile = -1f;
     float targetScroll, targetPlayer;
     bool ready = false;
@@ -242,6 +243,10 @@ public class WorldScroll : MonoBehaviour {
         if(loaded == false) { return; }
 
         mile = newMile;
+
+        if(focusedChunk != null) {focusedChunk.Highlight(false);}
+        focusedChunk = ChunkLoader.Chunks[mile];
+        focusedChunk.Highlight(true);
 
         mileHeading.UpdateField("Mile " + (int)(newMile+1));
         mileUI.ToggleWindowOpen();

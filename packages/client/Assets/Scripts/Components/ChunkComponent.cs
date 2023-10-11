@@ -22,7 +22,7 @@ public class ChunkComponent : MUDComponent {
     [Header("Chunk")]
     [SerializeField] Mile mile;
     [SerializeField] Transform entityParent;
-    [SerializeField] GameObject active;
+    [SerializeField] GameObject incomplete;
 
     [Header("Debug")]
     [SerializeField] bool completed;
@@ -45,6 +45,10 @@ public class ChunkComponent : MUDComponent {
         entityParent.gameObject.SetActive(toggle);
     }
 
+    public void Highlight(bool toggle) {
+        mile.Highlight(toggle);
+    }
+
     void RegisterChunk() {
 
         //IMPORTANT
@@ -53,14 +57,18 @@ public class ChunkComponent : MUDComponent {
         if (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { Debug.LogError("Can't setup chunk"); return;}
 
         Entity.SetName("MILE - " + mileNumber);
-        Entity.transform.parent = WorldScroll.Instance.transform;
+
+        // Entity.transform.parent = WorldScroll.Instance.transform;
+        transform.parent = WorldScroll.Instance.transform;
+
         positions = new List<PositionComponent>();
 
         gameObject.name = "CHUNK - " + mileNumber;
         transform.position = Vector3.forward * mileNumber * MapConfigComponent.Height;
 
+        Highlight(false);
+
         mile.Init(this);
-        active.SetActive(false);
 
         ChunkLoader.RegisterChunk(this);
 
@@ -87,7 +95,7 @@ public class ChunkComponent : MUDComponent {
         // Debug.Log("MileTest " + table.mileNumber, this);
         // Debug.Log("Mile " + mileNumber, this);
 
-        active.SetActive(!completed);
+        incomplete.SetActive(!completed);
 
         if (chunkLoaded == false) {
             RegisterChunk();

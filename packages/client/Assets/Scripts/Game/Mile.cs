@@ -14,6 +14,8 @@ public class Mile : MonoBehaviour
     [SerializeField] Transform groundLeft, groundRight;
     [SerializeField] Transform spawnLeft, spawnRight;
     [SerializeField] Transform rowParent;
+    [SerializeField] Borders border;
+    [SerializeField] GameObject [] highlights;
     [SerializeField] RowComponent rowPrefab;
     [SerializeField] RowComponent[] rows;
 
@@ -37,6 +39,11 @@ public class Mile : MonoBehaviour
     public void Toggle(bool toggle) {
         rowParent.gameObject.SetActive(toggle);
         roadParent.gameObject.SetActive(!toggle);
+    }
+
+    public void Highlight(bool toggle) {
+        border.gameObject.SetActive(toggle);
+        for(int i = 0; i < highlights.Length; i++) {highlights[i].SetActive(toggle);}
     }
 
     public async void Init() {
@@ -68,6 +75,9 @@ public class Mile : MonoBehaviour
         } else {
 
         }
+
+
+        border.SetBorder(new Vector4(-MapConfigComponent.Width, MapConfigComponent.Width, MapConfigComponent.Height-1, 0));
 
         roadParent.localScale = Vector3.one + Vector3.right * (RoadConfigComponent.Width-1f);
         groundParent.localScale = Vector3.one + Vector3.forward * (MapConfigComponent.Height-1f);

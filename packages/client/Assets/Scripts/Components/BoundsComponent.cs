@@ -19,16 +19,14 @@ public class BoundsComponent : MUDComponent
     public static BoundsComponent Instance;
 
     [Header("Bounds")]
-    [SerializeField] GameObject borderVisuals;
-    [SerializeField] Transform front, back;
-    [SerializeField] Transform left, right;
-    [SerializeField] private Vector4 boundVector;
+    [SerializeField] Borders borders;
+    [SerializeField] Vector4 borderVector;
 
     protected override void Awake() {
         base.Awake();
 
         Instance = this;
-        borderVisuals.SetActive(false);
+        borders.gameObject.SetActive(false);
     }
 
     protected override void OnDestroy() {
@@ -36,7 +34,7 @@ public class BoundsComponent : MUDComponent
         Instance = null;
     }
 
-    public static void ShowBorder() {if(Instance) {Instance.borderVisuals.SetActive(false);} Instance.borderVisuals.SetActive(true);}
+    public static void ShowBorder() {if(Instance) {Instance.borders.gameObject.SetActive(false); Instance.borders.gameObject.SetActive(true);}}
 
     protected override IMudTable GetTable() {return new BoundsTable();}
     protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
@@ -48,18 +46,7 @@ public class BoundsComponent : MUDComponent
         Up = (int)bounds.up;
         Down = (int)bounds.down;
 
-        boundVector = new Vector4(Left, Right, Up, Down);
-
-        front.localPosition = Vector3.forward * (Up + .5f);
-
-        front.localScale = Vector3.one + Vector3.right * (Right-Left);
-        back.localScale = Vector3.one + Vector3.right * (Right-Left);
-
-        left.localPosition = Vector3.right * (Left - .5f) - Vector3.forward * .5f;
-        right.localPosition = Vector3.right * (Right + .5f) - Vector3.forward * .5f;
-
-        left.localScale = Vector3.one + Vector3.forward * (Up);
-        right.localScale = Vector3.one + Vector3.forward * (Up);
-
+        borderVector = new Vector4(Left, Right, Up, Down);
+        borders.SetBorder(borderVector);
     }
 }
