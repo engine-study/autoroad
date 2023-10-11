@@ -56,6 +56,8 @@ public class Mile : MonoBehaviour
 
         while (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { await UniTask.Delay(100); }
 
+        Highlight(false);
+
         isRealChunk = chunk != null;
         roadParent.gameObject.SetActive(!isRealChunk);
 
