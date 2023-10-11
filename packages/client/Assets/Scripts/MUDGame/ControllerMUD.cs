@@ -257,10 +257,13 @@ public class ControllerMUD : SPController {
 
     public void TeleportMUD(Vector3 position, bool admin = false) {
 
+        if(PositionComponent.OnMap(position, true) == false) {return;}
+
         moveDest = position;
 
         List<TxUpdate> updates = new List<TxUpdate>();
         updates.Add(ActionsMUD.PositionOptimistic(mudEntity, position));
+
 
         if(admin) {
             updates.Add(ActionsMUD.ActionOptimistic(mudEntity, ActionName.Teleport, position));

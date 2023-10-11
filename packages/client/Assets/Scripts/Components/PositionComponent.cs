@@ -16,6 +16,24 @@ public class PositionComponent : MUDComponent {
     public static object[] PositionToTransaction(Vector3 newPos) { return new object[] { System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
     public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)MapConfigComponent.Height);}
 
+    public static bool OnWorld(MUDEntity e, Vector3 pos, bool showFX = false) {
+        bool onWorld = BoundsComponent.OnWorld(e, pos);
+        if(!onWorld && showFX) BoundsComponent.ShowBorder();
+        return onWorld;
+    }
+
+    public static bool OnMap(Vector3 pos, bool showFX = false) {
+        bool onWorld = MapConfigComponent.OnMap(pos);
+        if(!onWorld && showFX) BoundsComponent.ShowBorder();
+        return onWorld;
+    }
+
+    public static bool OnBounds(Vector3 pos, bool showFX = false) {
+        bool onWorld = BoundsComponent.OnBounds(pos);
+        if(!onWorld && showFX) BoundsComponent.ShowBorder();
+        return onWorld;
+    }
+
     [Header("Position")]
     [SerializeField] bool isVisible = true;
     [SerializeField] int layer = 0;

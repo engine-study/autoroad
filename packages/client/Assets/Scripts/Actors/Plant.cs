@@ -12,7 +12,7 @@ public class Plant : Equipment
     public override bool CanUse() 
     {
         bool canUse = base.CanUse();
-        bool onBounds = OnWorld(transform.position);
+        bool onBounds = PositionComponent.OnMap(transform.position);
         // bool onRoad = RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z);
 
         return canUse && SeedsComponent.LocalCount > 0 && onBounds && CursorMUD.Entity == null;

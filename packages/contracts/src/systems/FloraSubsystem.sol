@@ -83,14 +83,19 @@ contract FloraSubsystem is System {
   function plant(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
     require(world.canDoStuff(player), "hmm");
-    require(!world.onRoad(x, y), "on road");
+
     uint32 seeds = Seeds.get(player);
     require(seeds > 0, "no seeds");
 
+    require(world.onMap(x, y), "off map");
+    require(!world.onRoad(x, y), "on road");
+
     bytes32[] memory atRoad = getKeysWithValue(PositionTableId, Position.encode(x, y, -1));
     require(atRoad.length == 0, "road here");
+
+    PositionData memory pos = PositionData(x,y,0);
     bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
-    require(world.canInteractEmpty(player, Position.get(player), PositionData(x,y,0), atPosition, 1), "bad interact");
+    require(world.canInteractEmpty(player, Position.get(player), pos, atPosition, 1), "bad interact");
 
     world.setAction(player, ActionType.Plant, x, y);
 

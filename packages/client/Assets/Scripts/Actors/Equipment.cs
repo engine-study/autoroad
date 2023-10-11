@@ -34,18 +34,6 @@ public abstract class Equipment : MonoBehaviour {
         ((SPActionPlayer)interact.Action()).ToggleCastState(toggle, sender, interact);
     }
 
-    public bool OnWorld(MUDEntity e, Vector3 pos, bool showFX = false) {
-        bool onWorld = BoundsComponent.OnWorld(e, pos);
-        if(!onWorld && showFX) BoundsComponent.ShowBorder();
-        return onWorld;
-    }
-
-    public bool OnWorld(Vector3 pos, bool showFX = false) {
-        bool onWorld = BoundsComponent.OnBounds(pos);
-        if(!onWorld && showFX) BoundsComponent.ShowBorder();
-        return onWorld;
-    }
-
     public virtual bool CanUse() {
         return gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && interact.Action().TryAction(sender, interact);
     }
