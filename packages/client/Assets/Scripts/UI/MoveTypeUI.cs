@@ -6,8 +6,7 @@ using mud.Client;
 public class MoveTypeUI : SPWindowMUDComponent
 {
     [Header("Move")]
-    public SPButton weight;
-    public SPButton strength, obstacle;
+    public StatUI weight;
 
     [Header("Debug")]
     public MoveComponent moveComponent;
@@ -23,16 +22,11 @@ public class MoveTypeUI : SPWindowMUDComponent
     
         if(moveComponent) {
 
-            SPButton button = null;
-
             weight.ToggleWindowClose();
-            strength.ToggleWindowClose();
-            obstacle.ToggleWindowClose();
 
             if(moveComponent.MoveType == MoveType.Push) {
-                button = weightComponent.Weight < 0 ? strength : weight;
-                button.UpdateField(((int)Mathf.Abs(weightComponent.Weight)).ToString("00"));
-                button.ToggleWindowOpen();
+                weight.SetValue(Mathf.Abs(weightComponent.Weight).ToString("00"));
+                weight.ToggleWindowOpen();
             } else if(moveComponent.MoveType == MoveType.Obstruction) {
                 // button = obstacle;
                 // button.ToggleWindowOpen();
@@ -40,7 +34,7 @@ public class MoveTypeUI : SPWindowMUDComponent
 
             }
 
-            ToggleWindow(button != null);
+            ToggleWindow(weight.gameObject.activeSelf);
             
 
         } else {

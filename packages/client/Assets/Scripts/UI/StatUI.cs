@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ResourceType {None, RoadCoin, Gem, Eth, XP, Level, Scroll, Seed}
+public enum ResourceType {None, RoadCoin, Gem, Eth, XP, Level, Scroll, Seed, Strength, Weight}
 public class StatUI : SPWindowEntity
 {
     public SPButton Button{get{return button;}}
@@ -11,9 +11,13 @@ public class StatUI : SPWindowEntity
     [SerializeField] ResourceType type;
     [SerializeField] SPButton button;
 
-    [Header("Stats")]
+    [Header("Graphics")]
+    [SerializeField] bool useColors = false;
+
     [EnumNamedArray( typeof(ResourceType) )]
     public Sprite [] Sprites;
+    public Color [] Colors;
+    public Sprite Weight, Strength;
 
 
     public override void Init() {
