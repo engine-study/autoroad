@@ -17,12 +17,10 @@ public class GaulItem : ScriptableObject {
     [TextArea(1,5)]
     public string itemDescription = "";
     public ItemType itemType;
-    public PaymentType paymentType;
+    public Currency value;
     public bool isRare;
     public int minLevel = 0;
-    public float price = 0;
-    public int gem = 0;
-    public float eth = 0f;
+
     public Vector2 mileRange = Vector2.zero;
 
     public string FullDescription() {
@@ -32,4 +30,26 @@ public class GaulItem : ScriptableObject {
     public static string ItemTypeString(ItemType newType) { return ItemStrings[(int)newType]; }
 
     public static string [] ItemStrings = new string[]{"Item", "Tool", "Outfit", "Special"};
+}
+
+[System.Serializable]
+public class Currency {
+    public float price = 0;
+    public int gem = 0;
+    public float eth = 0f;
+    public float XP = 0f;
+
+    public float StatToValue(StatType statType) {
+
+        if(statType == StatType.RoadCoin) {
+            return price;
+        } else if(statType == StatType.Gem) {
+            return gem;
+        } else if(statType == StatType.Eth) {
+            return eth;
+        } else if(statType == StatType.XP) {
+            return XP;
+        } else return -1;
+
+    }
 }

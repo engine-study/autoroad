@@ -45,6 +45,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3258256625819404812, guid: 56baed37566700045a54f002e834a974, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258256625819404812, guid: 56baed37566700045a54f002e834a974, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258256625819404812, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_Color.a
       value: 1
       objectReference: {fileID: 0}
@@ -59,6 +67,10 @@ PrefabInstance:
     - target: {fileID: 3258256625819404812, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_Color.r
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258256625819404812, guid: 56baed37566700045a54f002e834a974, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4919312151948710093, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_Sprite
@@ -78,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_text
-      value: 210
+      value: 05
       objectReference: {fileID: 0}
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_fontSize
@@ -345,7 +357,19 @@ MonoBehaviour:
   - {fileID: -1544646415, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
   - {fileID: 1475120759, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
   - {fileID: 327923005, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
-  Colors: []
+  Colors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0.16967781, g: 0.8773585, b: 0.4046683, a: 1}
+  - {r: 0.16862746, g: 0.8784314, b: 0.40392157, a: 1}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0.2028302, g: 0.5301688, b: 1, a: 1}
+  - {r: 1, g: 0.78431374, b: 0, a: 1}
+  RewardColor: {r: 0.16862746, g: 0.8784314, b: 0.40392157, a: 1}
+  PenaltyColor: {r: 1, g: 0.27058825, b: 0.23137255, a: 1}
   Weight: {fileID: 0}
   Strength: {fileID: 0}
 --- !u!224 &1988034271763254339 stripped

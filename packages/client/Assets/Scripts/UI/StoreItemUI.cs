@@ -22,13 +22,13 @@ public class StoreItemUI : SPWindow
         item = newItem;
         itemText.UpdateField(item.itemName);
 
-        buyButtonCoin.UpdateField(item.price.ToString("000"));
-        buyButtonGem.UpdateField(item.gem.ToString("0"));
-        buyButtonEth.UpdateField(item.eth.ToString(".00"));
+        buyButtonCoin.UpdateField(item.value.price.ToString("000"));
+        buyButtonGem.UpdateField(item.value.gem.ToString("0"));
+        buyButtonEth.UpdateField(item.value.eth.ToString(".00"));
 
-        buyButtonCoin.ToggleWindow(item.price > 0);
-        buyButtonGem.ToggleWindow(item.gem > 0);
-        buyButtonEth.ToggleWindow(item.eth > 0);
+        buyButtonCoin.ToggleWindow(item.value.price > 0);
+        buyButtonGem.ToggleWindow(item.value.gem > 0);
+        buyButtonEth.ToggleWindow(item.value.eth > 0);
         
         itemTypeImage.sprite = itemTypeSprites[(int)item.itemType];
 
@@ -58,8 +58,8 @@ public class StoreItemUI : SPWindow
 
         if(!display) {return;}
 
-        buyButtonCoin.ToggleState(CoinComponent.LocalCoins >= item.price ? SPSelectableState.Default : SPSelectableState.Disabled);
-        buyButtonGem.ToggleState(GemComponent.LocalGems >= item.gem ? SPSelectableState.Default : SPSelectableState.Disabled);
-        buyButtonEth.ToggleState(CoinComponent.LocalCoins >= item.price ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonCoin.ToggleState(CoinComponent.LocalCoins >= item.value.price ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonGem.ToggleState(GemComponent.LocalGems >= item.value.gem ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonEth.ToggleState(CoinComponent.LocalCoins >= item.value.eth ? SPSelectableState.Default : SPSelectableState.Disabled);
     }
 }

@@ -37,7 +37,7 @@ contract RewardSubsystem is System {
   function givePuzzleReward(bytes32 player) public {
     giveGem(player, 1);
     giveCoins(player, Conscription.get(player) ? int32(50) : int32(25));
-    giveXP(player, 25);
+    giveXP(player, 100);
   }
 
   function giveKilledBarbarianReward(bytes32 player) public {
