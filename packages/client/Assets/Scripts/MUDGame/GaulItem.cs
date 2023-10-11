@@ -8,6 +8,9 @@ public enum ItemType { GameplayStashable, GameplayEquipment, Cosmetic, PayedCosm
 [CreateAssetMenu(fileName = "Item", menuName = "Gaul/Item", order = 1)]
 public class GaulItem : ScriptableObject {
 
+    public bool InMileRange {get{return mileRange == Vector2.zero || (GameStateComponent.MILE_COUNT >= mileRange.x && GameStateComponent.MILE_COUNT <= mileRange.y);}}
+    public bool HighEnoughLevel {get{return XPComponent.LocalLevel >= minLevel;}}
+    
     public string itemName = "Item";
     public int ID = -1;
 
@@ -20,6 +23,7 @@ public class GaulItem : ScriptableObject {
     public float price = 0;
     public int gem = 0;
     public float eth = 0f;
+    public Vector2 mileRange = Vector2.zero;
 
     public string FullDescription() {
         return "<b><size=32>" + itemName + "</size></b> - <size=28>" + ItemTypeString(itemType) + "</size>\n" + itemDescription;

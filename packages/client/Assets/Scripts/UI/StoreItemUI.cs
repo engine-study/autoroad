@@ -53,7 +53,11 @@ public class StoreItemUI : SPWindow
     }
 
     public void CanBuy() {
-        ToggleWindow(XPComponent.LocalLevel >= item.minLevel);
+        bool display = item.HighEnoughLevel && item.InMileRange;
+        ToggleWindow(display);
+
+        if(!display) {return;}
+
         buyButtonCoin.ToggleState(CoinComponent.LocalCoins >= item.price ? SPSelectableState.Default : SPSelectableState.Disabled);
         buyButtonGem.ToggleState(GemComponent.LocalGems >= item.gem ? SPSelectableState.Default : SPSelectableState.Disabled);
         buyButtonEth.ToggleState(CoinComponent.LocalCoins >= item.price ? SPSelectableState.Default : SPSelectableState.Disabled);
