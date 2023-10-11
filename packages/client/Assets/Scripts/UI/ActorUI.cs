@@ -12,26 +12,24 @@ public class ActorUI : SPWindowEntity {
     public MoveTypeUI move;
     public TextMeshProUGUI nameText;
     public SPRawText nameRawText;
-    public StatUI healthStat;
-    public StatUI attackStat;
 
     public override void UpdateEntity() {
         base.UpdateEntity();
 
-        move.SetEntity(entity);
-        level.SetEntity(entity);
+        move.SetEntity(Entity);
+        level.SetEntity(Entity);
 
-        if (entity) {
-            nameRawText.UpdateField(entity.Name);
-            nameText.text = entity.Name;
-            PositionComponent pos = entity.GetMUDComponent<PositionComponent>();
+        if (Entity) {
+            nameRawText.UpdateField(Entity.Name);
+            nameText.text = Entity.Name;
+            PositionComponent pos = Entity.GetMUDComponent<PositionComponent>();
             position.SetFollow(pos?.transform);   
         } else {
             nameText.text = "";
             position.SetFollow(null);   
         }
 
-        gameObject.SetActive(entity != null);
+        gameObject.SetActive(Entity != null);
 
         if(gameObject.activeInHierarchy)
             LayoutRebuilder.ForceRebuildLayoutImmediate(Rect);

@@ -1475,6 +1475,40 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(grantAccessFunction, cancellationToken);
         }
 
+        public Task<string> HandleMoveTypeRequestAsync(HandleMoveTypeFunction handleMoveTypeFunction)
+        {
+             return ContractHandler.SendRequestAsync(handleMoveTypeFunction);
+        }
+
+        public Task<TransactionReceipt> HandleMoveTypeRequestAndWaitForReceiptAsync(HandleMoveTypeFunction handleMoveTypeFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(handleMoveTypeFunction, cancellationToken);
+        }
+
+        public Task<string> HandleMoveTypeRequestAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest)
+        {
+            var handleMoveTypeFunction = new HandleMoveTypeFunction();
+                handleMoveTypeFunction.CausedBy = causedBy;
+                handleMoveTypeFunction.Entity = entity;
+                handleMoveTypeFunction.To = to;
+                handleMoveTypeFunction.AtDest = atDest;
+                handleMoveTypeFunction.MoveTypeAtDest = moveTypeAtDest;
+            
+             return ContractHandler.SendRequestAsync(handleMoveTypeFunction);
+        }
+
+        public Task<TransactionReceipt> HandleMoveTypeRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest, CancellationTokenSource cancellationToken = null)
+        {
+            var handleMoveTypeFunction = new HandleMoveTypeFunction();
+                handleMoveTypeFunction.CausedBy = causedBy;
+                handleMoveTypeFunction.Entity = entity;
+                handleMoveTypeFunction.To = to;
+                handleMoveTypeFunction.AtDest = atDest;
+                handleMoveTypeFunction.MoveTypeAtDest = moveTypeAtDest;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(handleMoveTypeFunction, cancellationToken);
+        }
+
         public Task<string> HelpSummonRequestAsync(HelpSummonFunction helpSummonFunction)
         {
              return ContractHandler.SendRequestAsync(helpSummonFunction);

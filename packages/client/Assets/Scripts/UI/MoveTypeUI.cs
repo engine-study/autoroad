@@ -18,8 +18,8 @@ public class MoveTypeUI : SPWindowMUDComponent
     public override void UpdateComponent() {
         base.UpdateComponent();
 
-        moveComponent = entity.GetMUDComponent<MoveComponent>();
-        weightComponent = entity.GetMUDComponent<WeightComponent>();
+        moveComponent = Entity.GetMUDComponent<MoveComponent>();
+        weightComponent = Entity.GetMUDComponent<WeightComponent>();
     
         if(moveComponent) {
 

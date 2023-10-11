@@ -9,6 +9,7 @@ public class Mile : MonoBehaviour
 
     [Header("Mile")]
     [SerializeField] Transform roadParent;
+    [SerializeField] GameObject roadMesh;
     [SerializeField] Transform terrainParent;
     [SerializeField] Transform groundParent;
     [SerializeField] Transform groundLeft, groundRight;
@@ -38,7 +39,7 @@ public class Mile : MonoBehaviour
 
     public void Toggle(bool toggle) {
         rowParent.gameObject.SetActive(toggle);
-        roadParent.gameObject.SetActive(!toggle);
+        roadMesh.SetActive(!toggle);
     }
 
     public void Highlight(bool toggle) {
@@ -59,7 +60,7 @@ public class Mile : MonoBehaviour
         Highlight(false);
 
         isRealChunk = chunk != null;
-        roadParent.gameObject.SetActive(!isRealChunk);
+        roadMesh.SetActive(!isRealChunk);
 
         if(isRealChunk) {
                     

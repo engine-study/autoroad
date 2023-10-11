@@ -82,7 +82,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_fontSize
-      value: 24
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_fontAsset
@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: e410837ce8a9e2b4d8771294d67582c5, type: 2}
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_fontSizeBase
-      value: 24
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_overflowMode
@@ -103,6 +103,10 @@ PrefabInstance:
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_enableAutoSizing
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 4096
       objectReference: {fileID: 0}
     - target: {fileID: 5599799695562624227, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_HorizontalAlignment
@@ -162,11 +166,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7223537804255672794, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 25
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7223537804255672794, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 25
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7223537804255672794, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_LocalPosition.z
@@ -266,10 +270,91 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9039265576782335069, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: m_Name
-      value: CoinBuy
+      value: ButtonStat
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9039265576782335069, guid: 56baed37566700045a54f002e834a974, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 706524249199869422}
   m_SourcePrefab: {fileID: 100100000, guid: 56baed37566700045a54f002e834a974, type: 3}
+--- !u!1 &1988034271763254338 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9039265576782335069, guid: 56baed37566700045a54f002e834a974, type: 3}
+  m_PrefabInstance: {fileID: 7414902481924603935}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &706524249199869422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988034271763254338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b3fcd53e9956a408a256eb7ddd76ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isolateDebug: 0
+  uniqueUITag: 
+  border: {fileID: 0}
+  bg: {fileID: 0}
+  rect: {fileID: 1988034271763254339}
+  customTheme: {fileID: 11400000, guid: af4b9fab3ca50df4dbc2fecadc3e48e2, type: 2}
+  _graphics: []
+  _texts: []
+  _images: []
+  _bgs: []
+  hasInit: 0
+  theme:
+    parentTheme:
+      color: {r: 1, g: 1, b: 1, a: 1}
+      bgColor: {r: 0, g: 0, b: 0, a: 1}
+    defaultTheme:
+      color: {r: 1, g: 1, b: 1, a: 1}
+      bgColor: {r: 0, g: 0, b: 0, a: 1}
+    linkTheme:
+      color: {r: 1, g: 1, b: 1, a: 1}
+      bgColor: {r: 0, g: 0, b: 0, a: 1}
+    addressTheme:
+      color: {r: 1, g: 1, b: 1, a: 1}
+      bgColor: {r: 0, g: 0, b: 0, a: 1}
+    identityTheme:
+      color: {r: 1, g: 1, b: 1, a: 1}
+      bgColor: {r: 0, g: 0, b: 0, a: 1}
+    highlightColor: {r: 0, g: 1, b: 0, a: 1}
+    readOnlyHighlight: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    borderWidth: 0.5
+    textSize: 18
+    paragraphSize: 18
+  entity: {fileID: 0}
+  position: {fileID: 0}
+  type: 0
+  button: {fileID: 2961269026226810576}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: -517139019, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 1508831071, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 1650998810, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 740767143, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 740767143, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: 1963846045, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  - {fileID: -1544646415, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+--- !u!224 &1988034271763254339 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 9039265576782335068, guid: 56baed37566700045a54f002e834a974, type: 3}
+  m_PrefabInstance: {fileID: 7414902481924603935}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2961269026226810576 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5764481045237526223, guid: 56baed37566700045a54f002e834a974, type: 3}
+  m_PrefabInstance: {fileID: 7414902481924603935}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988034271763254338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -9,9 +9,9 @@ using IWorld.ContractDefinition;
 public class GameUI : SPWindowParent
 {
 
-    public SPButton coins;
-    public SPButton scrolls;
-    public SPButton seeds;
+    public StatUI coins;
+    public StatUI scrolls;
+    public StatUI seeds;
     public SPButton storeButton;
     public SPButton debugButton;
     public SPButton menuButton;
@@ -43,19 +43,19 @@ public class GameUI : SPWindowParent
     }
 
     void UpdateCoins() {
-        coins.UpdateField(CoinComponent.LocalCoins.ToString("000"));
+        coins.SetValue(CoinComponent.LocalCoins.ToString("000"));
         SPStrobeUI.ToggleStrobe(coins);
     }
 
     void UpdateScrolls() {
-        scrolls.UpdateField(ScrollComponent.LocalScrolls.ToString("00"));
-        scrolls.ToggleState(ScrollComponent.LocalScrolls > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
+        scrolls.SetValue(ScrollComponent.LocalScrolls.ToString("00"));
+        scrolls.Button.ToggleState(ScrollComponent.LocalScrolls > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
         SPStrobeUI.ToggleStrobe(scrolls);
     }
 
      void UpdateSeeds() {
-        seeds.UpdateField(SeedsComponent.LocalCount.ToString("00"));
-        seeds.ToggleState(SeedsComponent.LocalCount > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
+        seeds.SetValue(SeedsComponent.LocalCount.ToString("00"));
+        seeds.Button.ToggleState(SeedsComponent.LocalCount > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
         SPStrobeUI.ToggleStrobe(seeds);
     }
 

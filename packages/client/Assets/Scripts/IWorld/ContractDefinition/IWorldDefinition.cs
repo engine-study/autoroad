@@ -683,6 +683,23 @@ namespace IWorld.ContractDefinition
         public virtual string Grantee { get; set; }
     }
 
+    public partial class HandleMoveTypeFunction : HandleMoveTypeFunctionBase { }
+
+    [Function("handleMoveType", "bool")]
+    public class HandleMoveTypeFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "to", 3)]
+        public virtual PositionData To { get; set; }
+        [Parameter("bytes32[]", "atDest", 4)]
+        public virtual List<byte[]> AtDest { get; set; }
+        [Parameter("uint8", "moveTypeAtDest", 5)]
+        public virtual byte MoveTypeAtDest { get; set; }
+    }
+
     public partial class HelpSummonFunction : HelpSummonFunctionBase { }
 
     [Function("helpSummon")]
@@ -2183,6 +2200,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "schema", 1)]
         public virtual byte[] Schema { get; set; }
     }
+
+
 
 
 

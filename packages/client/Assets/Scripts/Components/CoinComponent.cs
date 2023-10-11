@@ -56,17 +56,19 @@ public class CoinComponent : MUDComponent {
 
         int quarters = 0;
 
-        if(amount > 50) {
-            quarters = amount / 25;
-            remainder %= 25;
-        }
+        // if(amount > 50) {
+        //     quarters = amount / 25;
+        //     remainder %= 25;
+        // }
 
-        int dimes = remainder / 10;
-        remainder %= 10;
+        // int dimes = remainder / 10;
+        // remainder %= 10;
 
-        int nickels = remainder / 5;
-        remainder %= 5;
+        // int nickels = remainder / 5;
+        // remainder %= 5;
 
+        int dimes = 0;
+        int nickels = 0;
         int pennies = remainder;
 
         for (int i = 0; i < quarters+dimes+nickels+pennies; i++) {

@@ -15,7 +15,7 @@ public class CursorUI : MonoBehaviour {
 
     [Header("Debug")]
     public SPBase baseObject;
-    public mud.Client.MUDEntity entity;
+    public MUDEntity entity;
 
     void Awake() {
 
@@ -43,13 +43,14 @@ public class CursorUI : MonoBehaviour {
     //CHECK FOR INTERACTIONS
     void UpdateHoverEntity(MUDEntity newEntity) {
 
+        entity = newEntity;
+        
         SPCursorTexture.UpdateCursor(newEntity == null ? SPCursorState.Default : SPCursorState.Hand);
         SPBase newObject = newEntity != null ? newEntity.GetComponentInChildren<SPBase>() : null;
         baseObject = newObject;
 
-        info.SetEntity((mud.Client.MUDEntity)newEntity);
-        actor.SetEntity((mud.Client.MUDEntity)newEntity);
-        actor.UpdateObject(newObject);
+        info.SetEntity(newEntity);
+        actor.SetEntity(newEntity);
 
         CursorUpdate?.Invoke();
     }

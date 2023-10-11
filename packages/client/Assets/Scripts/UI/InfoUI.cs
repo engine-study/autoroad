@@ -32,12 +32,12 @@ public class InfoUI : SPWindowEntity
     {
         base.SetEntity(newEntity);
 
-        if(entity == null) {
+        if(Entity == null) {
             header.ToggleWindowClose();
             header.UpdateField("Empty");
         } else {
             header.ToggleWindowOpen();
-            header.UpdateField(MUDHelper.TruncateHash(entity.Key));
+            header.UpdateField(MUDHelper.TruncateHash(Entity.Key));
         }
 
     }

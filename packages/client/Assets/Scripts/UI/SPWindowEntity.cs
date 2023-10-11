@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 
-public class SPWindowEntity : SPWindowBase
+public class SPWindowEntity : SPWindow
 {
-    [Header("Entity")]
-    public mud.Client.MUDEntity entity;
+    public MUDEntity Entity {get{return entity;}}
 
-    public virtual void SetEntity(mud.Client.MUDEntity newEntity) {
+    [Header("Entity")]
+    [SerializeField] MUDEntity entity;
+    [SerializeField] protected SPWindowPosition position;
+
+    public virtual void SetEntity(MUDEntity newEntity) {
         
         //already setup this entity
-        if(entity == newEntity) {
+        if(Entity == newEntity) {
             return;
         }
 
-        if(entity != null) {
-            entity.OnUpdated -= Refresh;
+        if(Entity != null) {
+            Entity.OnUpdated -= Refresh;
         }
         
         entity = newEntity;
 
         //cant find component
-        if(entity == null) {
+        if(Entity == null) {
             ToggleWindowClose();
             return;
         }
 
-        entity.OnUpdated += Refresh;
+        Entity.OnUpdated += Refresh;
         UpdateEntity();
     }
 

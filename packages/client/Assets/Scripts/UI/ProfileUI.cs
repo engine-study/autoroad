@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using mud.Unity;
 using UnityEngine;
 
-public enum ResourceType {RoadCoin, Gem, Eth, XP, Level, Scroll, Seed}
 public class ProfileUI : SPWindowParent
 {
     [Header("Profile")]

@@ -278,10 +278,11 @@ contract MoveSubsystem is System {
       //move onto a MoveType
       MoveType moveTypeAtDest = MoveType(Move.get(atDest[0]));
 
-      //we soft fail bad moves, don't require this to work
+      //we soft fail bad moves and exit out of them
       if(canPlaceOn(moveTypeAtDest) == false) {return;}
 
-      handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest);
+      //check if we survive the move through terrain
+      if(handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest) == false) {return;}
 
       //if we're still alive, move into the position (this will trigger an entity update too)
       if(canDoStuff(entity)) {
@@ -291,7 +292,7 @@ contract MoveSubsystem is System {
     }
   }
 
-  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDest, MoveType moveTypeAtDest) private {
+  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDest, MoveType moveTypeAtDest) public returns(bool) {
     IWorld world = IWorld(_world());
 
     if(moveTypeAtDest == MoveType.Hole) {
@@ -299,6 +300,7 @@ contract MoveSubsystem is System {
       //kill if it was an NPC
       if(NPC.get(entity) > 0) { 
         world.kill(causedBy, entity, causedBy, to);
+        return false;
       }
 
       //spawn road, move pushed thing to under road
@@ -310,11 +312,15 @@ contract MoveSubsystem is System {
       if(NPC.get(entity) > 0) { 
         //kill if it was an NPC
         world.kill(causedBy, entity, causedBy, to);
+        return false;
       } else {
         //otherwise trap is destroyed with no effect
         Position.deleteRecord(atDest[0]);
       }
     }
+
+    return true;
+
   }
 
   function setPosition(bytes32 causedBy, bytes32 entity, PositionData memory pos, ActionType action) public {

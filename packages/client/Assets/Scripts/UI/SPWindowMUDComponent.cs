@@ -14,7 +14,7 @@ public abstract class SPWindowMUDComponent : SPWindowEntity
     public override void UpdateEntity() {
         base.UpdateEntity();
 
-        component = entity.GetMUDComponent(ComponentType());
+        component = Entity.GetMUDComponent(ComponentType());
         if(component == null) {
             ToggleWindowClose();
             return;
