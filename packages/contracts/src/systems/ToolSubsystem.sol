@@ -112,19 +112,21 @@ contract ToolSubsystem is System {
     bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(fishPos.x, fishPos.y, 0));
     require(world.canInteract(player, startPos, atPos, 1), "bad interact");
     require(Weight.get(atPos[0]) <= 0, "too heavy");
-    
+    world.requirePushable(atPos);
+
     //set player action
     world.setAction(player, ActionType.Fishing, x, y);
 
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
+    
     bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(endPos.x, endPos.y, 0));
+    if(atDest.length > 0) {
+      world.requireOnMap(atDest[0], endPos);
+      world.requireCanPlaceOn(atDest);
+    }
 
     //move other player
-    world.requirePushable(atPos);
-    world.requireOnMap(atDest[0], endPos);
-    world.requireCanPlaceOn(atDest);
-
     world.moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
 
   }

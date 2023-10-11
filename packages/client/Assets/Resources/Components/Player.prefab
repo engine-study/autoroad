@@ -162,7 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3380346333242925706}
   - component: {fileID: 1213519046495480021}
-  - component: {fileID: 2169507955528524443}
+  - component: {fileID: 3576323133495739383}
   m_Layer: 0
   m_Name: Mining
   m_TagString: Untagged
@@ -207,7 +207,7 @@ MonoBehaviour:
   OnEndEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2169507955528524443
+--- !u!114 &3576323133495739383
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,14 +216,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 172001496114023145}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5af972b3d921ab948886cfc24220e1c9, type: 3}
+  m_Script: {fileID: 11500000, guid: a9381831617420843a4840cda69f797e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 1213519046495480021}
-  action: 2
-  prefab: {fileID: 5117984663886283829, guid: a743baee3ef63a2488055572b3a8eaa4, type: 3}
 --- !u!1 &532174930075841667
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +334,6 @@ MonoBehaviour:
   controller: {fileID: 7427059931089221354}
   anim: {fileID: 7375503188354032431}
   animator: {fileID: 5770678829304191941}
-  velocity: {fileID: 0}
   resources: {fileID: 6317482249733295959}
   alive: 1
   isLocalPlayer: 0
@@ -820,7 +817,7 @@ MonoBehaviour:
   baseEquipment:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 2169507955528524443}
+  - {fileID: 3576323133495739383}
   - {fileID: 1442630704522070475}
   - {fileID: 280045079999324278}
   - {fileID: 2902068070347510194}

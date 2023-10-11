@@ -11316,7 +11316,6 @@ GameObject:
   - component: {fileID: 8176298541283412739}
   - component: {fileID: 7173250004357761728}
   - component: {fileID: 5117984663886283829}
-  - component: {fileID: 5672806480608959983}
   - component: {fileID: 7201583706257857126}
   - component: {fileID: 7397639299022656998}
   m_Layer: 0
@@ -11343,7 +11342,7 @@ Transform:
   - {fileID: 2761096293915743356}
   - {fileID: 7224923374306265492}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7173250004357761728
 MonoBehaviour:
@@ -11436,40 +11435,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1d62fed449b594e49a5b41bc065e5e32, type: 3}
   rockType: 0
   moveComponent: {fileID: 0}
---- !u!114 &5672806480608959983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8176298541283094271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: d55458b104cac5a4b954f4c4a26d8691, type: 2}
-  state: {fileID: 0}
-  interacting: 0
-  targetGO: {fileID: 0}
-  OnStartEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5117984663886283829}
-        m_TargetAssemblyTypeName: RockComponent, Assembly-CSharp
-        m_MethodName: Mine
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnEndEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &7201583706257857126
 MonoBehaviour:
   m_ObjectHideFlags: 0

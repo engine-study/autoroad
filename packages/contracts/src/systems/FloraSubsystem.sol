@@ -88,7 +88,7 @@ contract FloraSubsystem is System {
     require(seeds > 0, "no seeds");
 
     require(world.onMap(x, y), "off map");
-    require(!world.onRoad(x, y), "on road");
+    // require(!world.onRoad(x, y), "on road");
 
     bytes32[] memory atRoad = getKeysWithValue(PositionTableId, Position.encode(x, y, -1));
     require(atRoad.length == 0, "road here");
