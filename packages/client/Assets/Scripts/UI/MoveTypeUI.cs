@@ -25,17 +25,17 @@ public class MoveTypeUI : MUDComponentUI
     
         if(moveComponent) {
 
-
             if(showObstruction) {obstruction.ToggleWindow(moveComponent.MoveType == MoveType.Obstruction);}
 
-            if(moveComponent.MoveType == MoveType.Push && (showZeroWeight || weightComponent.Weight != 0 )) {
-                weight.SetValue(Mathf.Abs(weightComponent.Weight).ToString("00"));
+            if(moveComponent.MoveType == MoveType.Push && weightComponent && (showZeroWeight || weightComponent.Weight != 0 )) {
+
+                weight.SetValue(weightComponent.Weight >= 0 ? StatType.Weight : StatType.Strength, Mathf.Abs(weightComponent.Weight).ToString("00"));
                 weight.ToggleWindowOpen();
             } else {
                 weight.ToggleWindowClose();
             }
 
-            ToggleWindow(weight.gameObject.activeSelf);
+            ToggleWindow(weight.gameObject.activeSelf || obstruction.gameObject.activeSelf);
             
 
         } else {
