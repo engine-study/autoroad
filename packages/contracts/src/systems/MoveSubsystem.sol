@@ -296,16 +296,16 @@ contract MoveSubsystem is System {
     IWorld world = IWorld(_world());
 
     if(moveTypeAtDest == MoveType.Hole) {
-      
+
+      //spawn road, move pushed thing to under road
+      if(Road.getState(atDest[0]) == uint32(RoadState.Shoveled)) {
+        world.spawnRoadFromPlayer(causedBy, entity, atDest[0], to);
+      }
+            
       //kill if it was an NPC
       if(NPC.get(entity) > 0) { 
         world.kill(causedBy, entity, causedBy, to);
         return false;
-      }
-
-      //spawn road, move pushed thing to under road
-      if(Road.getState(atDest[0]) == uint32(RoadState.Shoveled)) {
-        IWorld(_world()).spawnRoadFromPlayer(causedBy, entity, atDest[0], to);
       }
 
     } else if(moveTypeAtDest == MoveType.Trap) {
