@@ -8,9 +8,9 @@ public class StoreItemUI : SPWindow
     [Header("Store Item")]
     [HideInInspector] public StoreUI store;
     [SerializeField] SPButton itemText;
-    [SerializeField] SPButton buyButtonCoin;
-    [SerializeField] SPButton buyButtonGem;
-    [SerializeField] SPButton buyButtonEth;
+    [SerializeField] StatUI buyButtonCoin;
+    [SerializeField] StatUI buyButtonGem;
+    [SerializeField] StatUI buyButtonEth;
     [SerializeField] Image itemTypeImage;
     [SerializeField] Sprite [] itemTypeSprites;
 
@@ -22,9 +22,9 @@ public class StoreItemUI : SPWindow
         item = newItem;
         itemText.UpdateField(item.itemName);
 
-        buyButtonCoin.UpdateField(item.value.price.ToString("000"));
-        buyButtonGem.UpdateField(item.value.gem.ToString("0"));
-        buyButtonEth.UpdateField(item.value.eth.ToString(".00"));
+        buyButtonCoin.SetValue( StatType.RoadCoin, item.value.price);
+        buyButtonGem.SetValue( StatType.Gem, item.value.gem);
+        buyButtonEth.SetValue( StatType.Eth, item.value.eth);
 
         buyButtonCoin.ToggleWindow(item.value.price > 0);
         buyButtonGem.ToggleWindow(item.value.gem > 0);
@@ -58,8 +58,8 @@ public class StoreItemUI : SPWindow
 
         if(!display) {return;}
 
-        buyButtonCoin.ToggleState(CoinComponent.LocalCoins >= item.value.price ? SPSelectableState.Default : SPSelectableState.Disabled);
-        buyButtonGem.ToggleState(GemComponent.LocalGems >= item.value.gem ? SPSelectableState.Default : SPSelectableState.Disabled);
-        buyButtonEth.ToggleState(CoinComponent.LocalCoins >= item.value.eth ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonCoin.Button.ToggleState(CoinComponent.LocalCoins >= item.value.price ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonGem.Button.ToggleState(GemComponent.LocalGems >= item.value.gem ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonEth.Button.ToggleState(CoinComponent.LocalCoins >= item.value.eth ? SPSelectableState.Default : SPSelectableState.Disabled);
     }
 }
