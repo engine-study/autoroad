@@ -6,9 +6,10 @@ using mud.Client;
 public class MoveTypeUI : MUDComponentUI
 {
     [Header("Move")]
-    public StatUI weight;
     public bool showObstruction;
+    public bool showZeroWeight;
     public SPButton obstruction;
+    public StatUI weight;
 
     [Header("Debug")]
     public MoveComponent moveComponent;
@@ -27,7 +28,7 @@ public class MoveTypeUI : MUDComponentUI
 
             if(showObstruction) {obstruction.ToggleWindow(moveComponent.MoveType == MoveType.Obstruction);}
 
-            if(moveComponent.MoveType == MoveType.Push) {
+            if(moveComponent.MoveType == MoveType.Push && (showZeroWeight || weightComponent.Weight != 0 )) {
                 weight.SetValue(Mathf.Abs(weightComponent.Weight).ToString("00"));
                 weight.ToggleWindowOpen();
             } else {
