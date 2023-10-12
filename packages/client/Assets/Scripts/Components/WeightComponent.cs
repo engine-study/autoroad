@@ -12,7 +12,7 @@ public class WeightComponent : ValueComponent {
     [Header("Weight")]
     [SerializeField] private int weight;
 
-    protected override float SetValue(IMudTable update) {return (int)((WeightTable)update).value;}
+    protected override float SetValue(IMudTable update) {return Mathf.Abs((int)((WeightTable)update).value);}
     protected override StatType SetStat(IMudTable update) {if(Value <= 0) return StatType.Strength; else return StatType.Weight;}
     
     protected override IMudTable GetTable() {return new WeightTable();}

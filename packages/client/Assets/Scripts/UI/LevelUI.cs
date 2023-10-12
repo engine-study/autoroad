@@ -9,12 +9,9 @@ public class LevelUI : MUDComponentUI
 {
     [Header("Level")]
     public TextMeshProUGUI levelButton;
-
+    
     public override Type ComponentType() {return typeof(XPComponent);}
-
-
-
-    public override void UpdateComponent() {
+    protected override void UpdateComponent() {
         base.UpdateComponent();
 
         levelButton.text = (component as XPComponent).Level.ToString();

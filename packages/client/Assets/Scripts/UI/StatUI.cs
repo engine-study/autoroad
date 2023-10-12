@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using mud.Client;
+using UnityEngine.UI;
 
 public enum StatType {None, RoadCoin, Gem, Eth, XP, Level, Scroll, Seed, Strength, Weight, Health, _Count}
 public class StatUI : EntityUI
@@ -26,12 +27,6 @@ public class StatUI : EntityUI
     public Color RewardColor;
     public Color PenaltyColor;
 
-    public override void Init() {
-        if(hasInit) return;
-        base.Init();
-
-    }
-
     public static Type StatToComponent(StatType statType) {
         if(statType == StatType.RoadCoin) { return typeof(CoinComponent);
         } else if(statType == StatType.Gem) { return typeof(GemComponent);
@@ -47,18 +42,44 @@ public class StatUI : EntityUI
 
     }
 
+    public static string StatToString(StatType statType, float value) {
+        if(statType == StatType.RoadCoin) { return ((int)value).ToString("000");
+        } else if(statType == StatType.Eth) { return value.ToString(".00");
+        } else { return ((int)value).ToString("00");}
+
+    }
+
     public void SetValue(string newStat) {
         SetValue(type, newStat);
     }
 
+    public void SetValue(StatType newType, float newStat) {
+        SetValue(newType, StatToString(newType, newStat));
+    }
+
     public void SetValue(StatType newType, string newStat) {
 
+        if(!hasInit) {Init();}
+
         if((int)newType >= Sprites.Length || Sprites[(int)newType] == null) {Debug.LogError(newType + " not available.", this); return;}
+        if((int)newType >= Colors.Length || Colors[(int)newType] == null) {Debug.LogError(newType + " not available.", this); return;}
 
         type = newType;
 
         button.UpdateField(newStat);
         button.Image.sprite = Sprites[(int)newType];
+
+        if(useColors) {
+
+            if(IsValue) {
+                bg.color = float.Parse(newStat) >= 0f ? RewardColor : PenaltyColor;
+            } else if(IsWeight) {
+                if(Colors[(int)newType].a > 0f) {bg.color = Colors[(int)newType];}
+            } else {
+                if(Colors[(int)newType].a > 0f) {bg.color = Colors[(int)newType];}
+            }
+        }
+
 
 
     }

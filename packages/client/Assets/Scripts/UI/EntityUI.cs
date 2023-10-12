@@ -11,12 +11,12 @@ public class EntityUI : SPWindow
     [SerializeField] MUDEntity entity;
     [SerializeField] protected SPWindowPosition position;
 
-    public virtual void SetEntity(MUDEntity newEntity) {
+    public virtual void SetEntity(MUDEntity newEntity, bool force = false) {
         
         if(!hasInit) Init();
         
         //already setup this entity
-        if(Entity == newEntity) { return;}
+        if(Entity == newEntity && !force) { return;}
         if(Entity != null) { Entity.OnUpdated -= Refresh;}
         
         entity = newEntity;
@@ -31,7 +31,7 @@ public class EntityUI : SPWindow
         UpdateEntity();
     }
 
-    public virtual void UpdateEntity() {
+    protected virtual void UpdateEntity() {
         ToggleWindowOpen();
     }
 

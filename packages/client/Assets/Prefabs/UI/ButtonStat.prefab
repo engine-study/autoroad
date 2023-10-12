@@ -129,6 +129,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5764481045237526223, guid: 56baed37566700045a54f002e834a974, type: 3}
+      propertyPath: bg
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5764481045237526223, guid: 56baed37566700045a54f002e834a974, type: 3}
       propertyPath: invert
       value: 1
       objectReference: {fileID: 0}
@@ -312,7 +316,7 @@ MonoBehaviour:
   isolateDebug: 0
   uniqueUITag: 
   border: {fileID: 0}
-  bg: {fileID: 0}
+  bg: {fileID: 5463044082844568083}
   rect: {fileID: 1988034271763254339}
   customTheme: {fileID: 11400000, guid: af4b9fab3ca50df4dbc2fecadc3e48e2, type: 2}
   _graphics: []
@@ -345,6 +349,7 @@ MonoBehaviour:
   position: {fileID: 0}
   type: 0
   button: {fileID: 2961269026226810576}
+  buttonBG: {fileID: 5463044082844568083}
   useColors: 0
   Sprites:
   - {fileID: 0}
@@ -360,8 +365,8 @@ MonoBehaviour:
   - {fileID: -839198462, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
   Colors:
   - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0.16967781, g: 0.8773585, b: 0.4046683, a: 1}
-  - {r: 0.16862746, g: 0.8784314, b: 0.40392157, a: 1}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
@@ -386,5 +391,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5463044082844568083 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3258256625819404812, guid: 56baed37566700045a54f002e834a974, type: 3}
+  m_PrefabInstance: {fileID: 7414902481924603935}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

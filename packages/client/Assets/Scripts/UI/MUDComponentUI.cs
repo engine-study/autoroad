@@ -11,7 +11,7 @@ public abstract class MUDComponentUI : EntityUI
     public abstract Type ComponentType();
 
 
-    public override void UpdateEntity() {
+    protected override void UpdateEntity() {
         base.UpdateEntity();
 
         component = Entity.GetMUDComponent(ComponentType());
@@ -23,7 +23,7 @@ public abstract class MUDComponentUI : EntityUI
         UpdateComponent();
     }
 
-    public virtual void UpdateComponent() {
+    protected virtual void UpdateComponent() {
         
     }
 

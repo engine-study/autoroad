@@ -28,8 +28,7 @@ public class InfoUI : EntityUI
         coordinate.UpdateField("? ?");
     }
 
-    public override void SetEntity(mud.Client.MUDEntity newEntity)
-    {
+    public override void SetEntity(MUDEntity newEntity, bool force = false) {
         base.SetEntity(newEntity);
 
         if(Entity == null) {

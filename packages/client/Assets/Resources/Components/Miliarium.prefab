@@ -4911,6 +4911,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2753365398783459916}
+  - component: {fileID: 6267218370391856006}
   m_Layer: 0
   m_Name: Active
   m_TagString: Untagged
@@ -4935,6 +4936,19 @@ Transform:
   m_Father: {fileID: 7195238289463005579}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6267218370391856006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2529792219602928110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b000dcf47d61706458831d37cc3cded1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value: {fileID: 11400000, guid: 8425dde728c69f74bb1d3b959f20da32, type: 2}
 --- !u!1 &3039406161668327406
 GameObject:
   m_ObjectHideFlags: 0
@@ -5142,7 +5156,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7195238289463005579}
   - component: {fileID: 1735051090325256476}
-  - component: {fileID: 2810368410359146058}
   m_Layer: 0
   m_Name: Miliarium
   m_TagString: Untagged
@@ -5204,19 +5217,6 @@ MonoBehaviour:
   puzzleComplete: {fileID: 9058513363211458049}
   rock: {fileID: 0}
   puzzle: {fileID: 0}
---- !u!114 &2810368410359146058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7015938143220594257}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b000dcf47d61706458831d37cc3cded1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Value: {fileID: 11400000, guid: 8425dde728c69f74bb1d3b959f20da32, type: 2}
 --- !u!1 &9008811766623074911
 GameObject:
   m_ObjectHideFlags: 0

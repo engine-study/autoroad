@@ -10,17 +10,16 @@ public class ActorUI : EntityUI {
     [Header("Stats")]
     public StatsList stats;
     public LevelUI level;
-    public MoveTypeUI move;
     public TextMeshProUGUI nameText;
     public SPRawText nameRawText;
 
-    public override void UpdateEntity() {
+    protected override void UpdateEntity() {
         base.UpdateEntity();
 
         // move.SetEntity(Entity);
         level.SetEntity(Entity);
         stats.SetEntity(Entity);
-        
+
         if (Entity) {
             nameRawText.UpdateField(Entity.Name);
             nameText.text = Entity.Name;
