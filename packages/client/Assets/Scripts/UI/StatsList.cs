@@ -17,8 +17,8 @@ public class StatsList : EntityUI
 
     public override void Init() {
         if(hasInit) {return;}
+        base.Init();
 
-        Init();
         statPrefab.ToggleWindowClose();
         stats = new StatUI[(int)StatType._Count];
     }
@@ -26,7 +26,7 @@ public class StatsList : EntityUI
     public override void UpdateEntity() {
         base.UpdateEntity();
 
-        for(int i = 0; i < stats.Length; i++) {
+        for(int i = 1; i < (int)StatType._Count; i++) {
 
             component = (ValueComponent)Entity.GetMUDComponent(StatUI.StatToComponent((StatType)i));
 

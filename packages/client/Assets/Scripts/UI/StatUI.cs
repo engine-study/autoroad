@@ -43,7 +43,7 @@ public class StatUI : EntityUI
         } else if(statType == StatType.Strength) { return typeof(WeightComponent);
         } else if(statType == StatType.Weight) { return typeof(WeightComponent);
         } else if(statType == StatType.Health) { return typeof(HealthComponent);
-        } else { Debug.LogError("Unhandled"); return null;}
+        } else { Debug.LogError(statType + " Unhandled"); return null;}
 
     }
 
