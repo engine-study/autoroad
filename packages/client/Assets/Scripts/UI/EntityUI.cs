@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 
-public class SPWindowEntity : SPWindow
+public class EntityUI : SPWindow
 {
     public MUDEntity Entity {get{return entity;}}
 
@@ -13,14 +13,11 @@ public class SPWindowEntity : SPWindow
 
     public virtual void SetEntity(MUDEntity newEntity) {
         
+        if(!hasInit) Init();
+        
         //already setup this entity
-        if(Entity == newEntity) {
-            return;
-        }
-
-        if(Entity != null) {
-            Entity.OnUpdated -= Refresh;
-        }
+        if(Entity == newEntity) { return;}
+        if(Entity != null) { Entity.OnUpdated -= Refresh;}
         
         entity = newEntity;
 

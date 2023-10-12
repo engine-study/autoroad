@@ -5,7 +5,7 @@ using mud.Client;
 using System;
 using TMPro;
 
-public class LevelUI : SPWindowMUDComponent
+public class LevelUI : MUDComponentUI
 {
     [Header("Level")]
     public TextMeshProUGUI levelButton;

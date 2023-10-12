@@ -3,7 +3,7 @@ using DefaultNamespace;
 using mud.Client;
 using mud.Unity;
 
-public class GemComponent : MUDComponent {
+public class GemComponent : ValueComponent {
     public int Gems { get { return gems; } }
     public static int LocalGems;
     public static System.Action OnLocalUpdate;
@@ -12,8 +12,13 @@ public class GemComponent : MUDComponent {
     [Header("Position")]
     [SerializeField] private int gems = 0;
 
+
+    protected override float SetValue(IMudTable update) {return (int)((GemTable)update).value;}
+    protected override StatType SetStat(IMudTable update) {return StatType.Gem;}
+
     protected override IMudTable GetTable() {return new GemTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+        base.UpdateComponent(update,newInfo);
 
         GemTable table = update as GemTable;
 

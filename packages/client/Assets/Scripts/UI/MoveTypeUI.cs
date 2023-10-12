@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud.Client;
 
-public class MoveTypeUI : SPWindowMUDComponent
+public class MoveTypeUI : MUDComponentUI
 {
     [Header("Move")]
     public StatUI weight;

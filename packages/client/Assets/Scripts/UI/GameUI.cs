@@ -30,7 +30,7 @@ public class GameUI : SPWindowParent
 
         CoinComponent.OnLocalUpdate += UpdateCoins;
         ScrollComponent.OnLocalUpdate += UpdateScrolls;
-        SeedsComponent.OnLocalUpdate += UpdateSeeds;
+        SeedComponent.OnLocalUpdate += UpdateSeeds;
     }
 
     protected override void Destroy() {
@@ -38,7 +38,7 @@ public class GameUI : SPWindowParent
 
         CoinComponent.OnLocalUpdate -= UpdateCoins;
         ScrollComponent.OnLocalUpdate -= UpdateScrolls;
-        SeedsComponent.OnLocalUpdate -= UpdateSeeds;
+        SeedComponent.OnLocalUpdate -= UpdateSeeds;
 
     }
 
@@ -54,8 +54,8 @@ public class GameUI : SPWindowParent
     }
 
      void UpdateSeeds() {
-        seeds.SetValue(SeedsComponent.LocalCount.ToString("00"));
-        seeds.Button.ToggleState(SeedsComponent.LocalCount > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
+        seeds.SetValue(SeedComponent.LocalCount.ToString("00"));
+        seeds.Button.ToggleState(SeedComponent.LocalCount > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
         SPStrobeUI.ToggleStrobe(seeds);
     }
 

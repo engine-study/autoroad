@@ -3,22 +3,26 @@ using DefaultNamespace;
 using mud.Client;
 using mud.Unity;
 
-public class SeedsComponent : MUDComponent {
+public class SeedComponent : ValueComponent {
 
-    public int Count { get { return count; } }
+    public int Seeds { get { return seeds; } }
     public static int LocalCount;
     public static System.Action OnLocalUpdate;
 
-    public int count;
+    public int seeds;
+
+    protected override float SetValue(IMudTable update) {return (int)((SeedsTable)update).value;}
+    protected override StatType SetStat(IMudTable update) {return StatType.Seed;}
 
     protected override IMudTable GetTable() {return new SeedsTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+        base.UpdateComponent(update,newInfo);
 
         SeedsTable table = update as SeedsTable;
-        count = (int)table.value;
+        seeds = (int)table.value;
 
         if(Entity.Key == NetworkManager.LocalAddress) {
-            LocalCount = count;
+            LocalCount = seeds;
             OnLocalUpdate?.Invoke();
         }
 

@@ -3,7 +3,7 @@ using DefaultNamespace;
 using mud.Client;
 using mud.Unity;
 
-public class XPComponent : MUDComponent {
+public class XPComponent : ValueComponent {
 
     public int Level { get { return level; } }
     public int XP { get { return xp; } }
@@ -24,9 +24,13 @@ public class XPComponent : MUDComponent {
         level = -1;
     }
 
+    protected override float SetValue(IMudTable update){return (int)((XPTable)update).value;}
+    protected override StatType SetStat(IMudTable update) {return StatType.XP;}
+
     protected override IMudTable GetTable() {return new XPTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
-        
+        base.UpdateComponent(update,newInfo);
+
         XPTable table = update as XPTable;
 
         xp = (int)table.value;

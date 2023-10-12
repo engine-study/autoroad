@@ -4,7 +4,7 @@ using DefaultNamespace;
 using mud.Client;
 using mud.Unity;
 
-public class CoinComponent : MUDComponent {
+public class CoinComponent : ValueComponent {
     public int Coins { get { return coins; } }
     public static int LocalCoins;
     public static System.Action OnLocalUpdate;
@@ -16,6 +16,7 @@ public class CoinComponent : MUDComponent {
 
     protected override IMudTable GetTable() {return new CoinageTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+        base.UpdateComponent(update, newInfo);
 
         CoinageTable table = update as CoinageTable;
         coins = (int)table.value;
@@ -33,6 +34,10 @@ public class CoinComponent : MUDComponent {
         lastCoins = coins;
 
     }
+
+    protected override float SetValue(IMudTable mudTable) {return (int)((CoinageTable)mudTable).value;}
+    protected override string SetString(IMudTable mudTable) {return Value.ToString("000");}
+    protected override StatType SetStat(IMudTable mudTable) {return StatType.RoadCoin;}
 
     protected override void PostInit() {
         base.PostInit();

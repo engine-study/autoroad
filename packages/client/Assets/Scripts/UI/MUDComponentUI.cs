@@ -4,7 +4,7 @@ using UnityEngine;
 using mud.Client;
 using System;
 
-public abstract class SPWindowMUDComponent : SPWindowEntity
+public abstract class MUDComponentUI : EntityUI
 {
     [Header("Component")]
     public MUDComponent component;

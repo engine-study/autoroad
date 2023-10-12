@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using mud.Client;
 
-public class InfoUI : SPWindowEntity
+public class InfoUI : EntityUI
 {
 
     [Header("Info")]

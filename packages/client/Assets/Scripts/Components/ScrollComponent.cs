@@ -3,7 +3,7 @@ using DefaultNamespace;
 using mud.Client;
 using mud.Unity;
 
-public class ScrollComponent : MUDComponent {
+public class ScrollComponent : ValueComponent {
 
     public int Scrolls { get { return scrolls; } }
     public static int LocalScrolls;
@@ -13,8 +13,12 @@ public class ScrollComponent : MUDComponent {
 
     public int scrolls;
 
+    protected override float SetValue(IMudTable update) {return (int)((ScrollTable)update).value;}
+    protected override StatType SetStat(IMudTable update) {return StatType.Scroll;}
+
     protected override IMudTable GetTable() {return new ScrollTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+        base.UpdateComponent(update,newInfo);
 
         ScrollTable table = update as ScrollTable;
         scrolls = (int)table.value;

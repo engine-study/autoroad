@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using mud.Client;
 
-public class ActorUI : SPWindowEntity {
+public class ActorUI : EntityUI {
 
     [Header("Stats")]
     public LevelUI level;
