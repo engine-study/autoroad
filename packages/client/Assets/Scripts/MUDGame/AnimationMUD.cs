@@ -11,9 +11,7 @@ public class AnimationMUD : MonoBehaviour
     public IActor Actor {get{return actor;}}
 
     [Header("Animation")]
-
-
-    [SerializeField] Transform target;
+    [SerializeField] Transform root;
     Transform head;
     Rigidbody headRB;
     Transform headParent;
@@ -24,6 +22,7 @@ public class AnimationMUD : MonoBehaviour
     [Header("Action Debug")]
     [SerializeField] ActionName action;
     [SerializeField] ActionEffect actionEffect;
+    [SerializeField] MUDEntity target;
 
     [Header("Linked")]
     public PositionSync PositionSync;
@@ -35,10 +34,10 @@ public class AnimationMUD : MonoBehaviour
     [SerializeField] IActor actor;
 
     protected virtual void Awake() {
-        if(target == null) target = transform;
+        if(root == null) root = transform;
 
         entity = GetComponentInParent<MUDEntity>();
-        looker = target.gameObject.AddComponent<SPLooker>();
+        looker = root.gameObject.AddComponent<SPLooker>();
 
     }
 
@@ -122,6 +121,7 @@ public class AnimationMUD : MonoBehaviour
 
         Debug.Log(actionComponent.Entity.Name + " [ANIM]: [" + newAction.ToString().ToUpper() + "] (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
         
+
         if(WaitAFrame != null) StopCoroutine(WaitAFrame); 
         WaitAFrame = StartCoroutine(AnimationInsanity(newAction));
         
@@ -132,6 +132,9 @@ public class AnimationMUD : MonoBehaviour
 
         yield return null;
         
+        PositionSync pos = target.GetComponentInChildren<PositionSync>();
+        while(target && pos && pos.Moving) {yield return null;} 
+
         //turn off old action
         if (actionEffect != null && newAction != action) { ToggleAction(false, action); }
         ToggleAction(true, newAction);
@@ -159,6 +162,7 @@ public class AnimationMUD : MonoBehaviour
         if(actionEffect == null) return;
 
         looker.SetLookRotation(actionComponent.Position);
+        target = GridMUD.GetEntityAt(actionComponent.Position);
         actionEffect.Toggle(toggle, this);
     }
 
