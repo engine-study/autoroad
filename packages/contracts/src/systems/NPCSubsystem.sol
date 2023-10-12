@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { NPC, Seeker, Weight, Move, Position, PositionData, Barbarian, Soldier, Ox, Aggro, Health } from "../codegen/Tables.sol";
+import { NPC, Seeker, Weight, Move, Position, PositionData, Barbarian, Soldier, Ox, Aggro, Health, Archer } from "../codegen/Tables.sol";
 import { NPCType, MoveType, ActionType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
@@ -33,6 +33,10 @@ contract NPCSubsystem is System {
       Weight.set(entity, 1);
       Seeker.set(entity, 2);
       Aggro.set(entity,1);
+    } else if (npcType == NPCType.BarbarianArcher) {
+      Barbarian.set(entity, true);
+      Weight.set(entity, 1);
+      Archer.set(entity, 5);
     } else if (npcType == NPCType.Ox) {
       Ox.set(entity, true);
       Weight.set(entity, -5);

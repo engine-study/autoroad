@@ -55,9 +55,9 @@ export default mudConfig({
   },
 
   enums: {
-    ActionType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn"],
+    ActionType: ["Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn", "Bow"],
     TerrainType: ["None", "Rock", "Mine", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Miliarium"],
-    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox"],
+    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
@@ -167,6 +167,7 @@ export default mudConfig({
     NPC: "uint32",
     Soldier: "bool",
     Barbarian: "bool",
+    Archer: "uint32",
     Seeker: "uint32",
     Aggro: "uint32",
 

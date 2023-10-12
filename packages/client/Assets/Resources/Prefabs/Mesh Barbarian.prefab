@@ -169,6 +169,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1778542097137655899, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6760134619851410607}
+    - targetCorrespondingSourceObject: {fileID: 1778542097137655899, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7234157562008683345}
   m_SourcePrefab: {fileID: 100100000, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
 --- !u!1 &1152216860714602717 stripped
 GameObject:
@@ -214,6 +217,19 @@ MonoBehaviour:
   turnAnimateVel: 0
   footstepDistance: 0.25
   footsteps: []
+--- !u!114 &7234157562008683345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152216860714602717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b000dcf47d61706458831d37cc3cded1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value: {fileID: 11400000, guid: 42e7e74fe2e8e1c41ad05d0744939479, type: 2}
 --- !u!95 &1549290377505044776 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 203777849020484014, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}

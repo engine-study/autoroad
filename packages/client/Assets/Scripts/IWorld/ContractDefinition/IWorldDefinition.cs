@@ -67,23 +67,6 @@ namespace IWorld.ContractDefinition
         public virtual BigInteger Amount { get; set; }
     }
 
-    public partial class AggroFunction : AggroFunctionBase { }
-
-    [Function("aggro")]
-    public class AggroFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "causedBy", 1)]
-        public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
-        public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "attacker", 3)]
-        public virtual byte[] Attacker { get; set; }
-        [Parameter("tuple", "targetPos", 4)]
-        public virtual PositionData TargetPos { get; set; }
-        [Parameter("tuple", "attackerPos", 5)]
-        public virtual PositionData AttackerPos { get; set; }
-    }
-
     public partial class BuyFunction : BuyFunctionBase { }
 
     [Function("buy")]
@@ -121,6 +104,17 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Name { get; set; }
         [Parameter("bytes", "funcSelectorAndArgs", 3)]
         public virtual byte[] FuncSelectorAndArgs { get; set; }
+    }
+
+    public partial class CanAggroEntityFunction : CanAggroEntityFunctionBase { }
+
+    [Function("canAggroEntity", "bool")]
+    public class CanAggroEntityFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "attacker", 1)]
+        public virtual byte[] Attacker { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
     }
 
     public partial class CanBuyFunction : CanBuyFunctionBase { }
@@ -184,6 +178,21 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("uint8", "moveAt", 1)]
         public virtual byte MoveAt { get; set; }
+    }
+
+    public partial class CanProjectileCrossFunction : CanProjectileCrossFunctionBase { }
+
+    [Function("canProjectileCross", "bool")]
+    public class CanProjectileCrossFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("tuple", "from", 2)]
+        public virtual PositionData From { get; set; }
+        [Parameter("tuple", "to", 3)]
+        public virtual PositionData To { get; set; }
+        [Parameter("uint256", "distance", 4)]
+        public virtual BigInteger Distance { get; set; }
     }
 
     public partial class CanWalkOnFunction : CanWalkOnFunctionBase { }
@@ -366,6 +375,57 @@ namespace IWorld.ContractDefinition
     public class DestroyPlayerAdminFunctionBase : FunctionMessage
     {
 
+    }
+
+    public partial class DoAggroFunction : DoAggroFunctionBase { }
+
+    [Function("doAggro")]
+    public class DoAggroFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "attacker", 3)]
+        public virtual byte[] Attacker { get; set; }
+        [Parameter("tuple", "targetPos", 4)]
+        public virtual PositionData TargetPos { get; set; }
+        [Parameter("tuple", "attackerPos", 5)]
+        public virtual PositionData AttackerPos { get; set; }
+    }
+
+    public partial class DoArrowFunction : DoArrowFunctionBase { }
+
+    [Function("doArrow")]
+    public class DoArrowFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "attacker", 3)]
+        public virtual byte[] Attacker { get; set; }
+        [Parameter("tuple", "targetPos", 4)]
+        public virtual PositionData TargetPos { get; set; }
+        [Parameter("tuple", "attackerPos", 5)]
+        public virtual PositionData AttackerPos { get; set; }
+    }
+
+    public partial class DoSeekFunction : DoSeekFunctionBase { }
+
+    [Function("doSeek")]
+    public class DoSeekFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "seeker", 3)]
+        public virtual byte[] Seeker { get; set; }
+        [Parameter("tuple", "targetPos", 4)]
+        public virtual PositionData TargetPos { get; set; }
+        [Parameter("tuple", "seekerPos", 5)]
+        public virtual PositionData SeekerPos { get; set; }
     }
 
     public partial class EmitEphemeralRecord1Function : EmitEphemeralRecord1FunctionBase { }
@@ -1262,23 +1322,6 @@ namespace IWorld.ContractDefinition
         public virtual string Grantee { get; set; }
     }
 
-    public partial class SeekFunction : SeekFunctionBase { }
-
-    [Function("seek")]
-    public class SeekFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "causedBy", 1)]
-        public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
-        public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "seeker", 3)]
-        public virtual byte[] Seeker { get; set; }
-        [Parameter("tuple", "targetPos", 4)]
-        public virtual PositionData TargetPos { get; set; }
-        [Parameter("tuple", "seekerPos", 5)]
-        public virtual PositionData SeekerPos { get; set; }
-    }
-
     public partial class SendCoinsFunction : SendCoinsFunctionBase { }
 
     [Function("sendCoins")]
@@ -2027,6 +2070,8 @@ namespace IWorld.ContractDefinition
         public virtual bool ReturnValue1 { get; set; }
     }
 
+
+
     public partial class CanWalkOnOutputDTO : CanWalkOnOutputDTOBase { }
 
     [FunctionOutput]
@@ -2035,6 +2080,12 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
+
+
+
+
 
 
 
@@ -2358,8 +2409,6 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
-
-
 
 
 

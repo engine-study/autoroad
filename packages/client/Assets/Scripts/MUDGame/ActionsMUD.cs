@@ -7,7 +7,7 @@ using IWorld.ContractDefinition;
 using Nethereum.Contracts;
 using Cysharp.Threading.Tasks;
 
-public enum ActionName {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn}
+public enum ActionName {Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow}
 public class ActionsMUD : MonoBehaviour
 {
     [EnumNamedArray( typeof(ActionName) )]

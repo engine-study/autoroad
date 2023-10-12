@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4551743638741576257}
   - component: {fileID: 3920419788891728086}
   - component: {fileID: 5620658488514795469}
-  - component: {fileID: 5530352237790718599}
   m_Layer: 0
   m_Name: Barbarian
   m_TagString: Untagged
@@ -49,7 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 206dc6abbc610cc4794fb858302eae48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents: []
+  requiredComponents:
+  - {fileID: 7854098582000433893, guid: 135ce94ab023ef8409ebcf67ffa01a91, type: 3}
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -67,6 +67,12 @@ MonoBehaviour:
   lastInfo:
     updateType: 0
     source: 0
+  propSword: {fileID: 8638183470726521885, guid: b09fd5f78cbcb8a4aa90fa04a36fe5ac, type: 3}
+  propBow: {fileID: 8638183470726521885, guid: c57f581c64ffcf443ab3e3dc0b55bdfb, type: 3}
+  swordStance: {fileID: 22100000, guid: 50d14147cb2cf9e45b69a6490723ddb6, type: 2}
+  bowStance: {fileID: 22100000, guid: 9c1e892c0135fd143ba3a7ba2dfe6d63, type: 2}
+  npc: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &4551743638741576257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,19 +146,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5530352237790718599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4904230719414751080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b000dcf47d61706458831d37cc3cded1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Value: {fileID: 11400000, guid: 42e7e74fe2e8e1c41ad05d0744939479, type: 2}
 --- !u!1001 &7344475665206059927
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -60,20 +60,24 @@ public class CoinComponent : ValueComponent {
         int remainder = amount;
 
         int quarters = 0;
-
-        // if(amount > 50) {
-        //     quarters = amount / 25;
-        //     remainder %= 25;
-        // }
-
-        // int dimes = remainder / 10;
-        // remainder %= 10;
-
-        // int nickels = remainder / 5;
-        // remainder %= 5;
-
         int dimes = 0;
         int nickels = 0;
+
+        if(remainder > 50) {
+            quarters = amount / 25;
+            remainder %= 25;
+        }
+
+        if(remainder > 20) {
+            dimes = remainder / 10;
+            remainder %= 10;
+        }
+
+        if(remainder > 10) {
+            nickels = remainder / 5;
+            remainder %= 5;
+        }
+
         int pennies = remainder;
 
         for (int i = 0; i < quarters+dimes+nickels+pennies; i++) {

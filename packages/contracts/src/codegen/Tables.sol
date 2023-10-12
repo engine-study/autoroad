@@ -15,6 +15,7 @@ import { Entities, EntitiesTableId } from "./tables/Entities.sol";
 import { NPC, NPCTableId } from "./tables/NPC.sol";
 import { Soldier, SoldierTableId } from "./tables/Soldier.sol";
 import { Barbarian, BarbarianTableId } from "./tables/Barbarian.sol";
+import { Archer, ArcherTableId } from "./tables/Archer.sol";
 import { Seeker, SeekerTableId } from "./tables/Seeker.sol";
 import { Aggro, AggroTableId } from "./tables/Aggro.sol";
 import { Shovel, ShovelTableId } from "./tables/Shovel.sol";

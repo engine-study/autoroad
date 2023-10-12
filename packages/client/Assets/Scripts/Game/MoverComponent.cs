@@ -22,17 +22,16 @@ public abstract class MoverComponent : MUDComponent {
         anim = GetComponentInChildren<SPAnimationMover>();
         // ToggleRequiredComponent(true, MUDWorld.FindPrefab<PositionComponent>());
     }
-    protected override void PostInit() {
-        base.PostInit();
-    }
+    
+    // protected override void PostInit() {
+    //     base.PostInit();
+    // }
 
-    protected override void InitDestroy() {
-        base.InitDestroy();
+    // protected override void InitDestroy() {
+    //     base.InitDestroy();
 
-    }
+    // }
 
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo)
-    {
-
-    }
+    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {}
+    
 }

@@ -4,13 +4,24 @@ using DefaultNamespace;
 using mud.Client;
 using UnityEngine;
 
-public enum NPCType {None, Player, Soldier, Barbarian, Ox}
+public enum NPCType {None, Player, Soldier, Barbarian, Ox, BarbarianArcher}
 public class NPCComponent : MUDComponent
 {
     public NPCType NPC {get{return npc;}}
 
     [Header("NPC")]
+    [SerializeField] NPCKit [] kits;
+
+    [Header("Debug")]
     [SerializeField] NPCType npc;
+
+    protected override void PostInit() {
+        base.PostInit();
+
+        // SetKit(kits[(int)npc]);
+
+    }
+
     protected override IMudTable GetTable() {return new NPCTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
@@ -19,7 +30,10 @@ public class NPCComponent : MUDComponent
      
     }
 
-    
+    public void SetKit(NPCKit newKit) {
+
+    }
+
     public void Meleed(bool toggle, IActor actor) {
 
         if(!toggle) { return;}
@@ -41,3 +55,8 @@ public class NPCComponent : MUDComponent
 
 }
 
+[System.Serializable]
+public class NPCKit{
+    public SPAnimationProp prop;
+
+}

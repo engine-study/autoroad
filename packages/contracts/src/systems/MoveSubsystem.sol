@@ -84,6 +84,12 @@ contract MoveSubsystem is System {
     return move == uint32(MoveType.Push);
   }
 
+  function canProjectileCross(bytes32 player, PositionData memory from, PositionData memory to, uint distance) public returns(bool) {
+    // checks that the position is below the min and maximum distance and is not diagonal
+    require(from.x == to.x || from.y == to.y, "cannot move diagonally ");
+    require(withinManhattanMinimum(to, from, distance), "too far or too close");
+    return true;
+  }
 
   function requireLegalMove(bytes32 player, PositionData memory from, PositionData memory to, uint distance) public returns(bool) {
     // checks that the position is below the min and maximum distance and is not diagonal

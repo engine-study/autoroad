@@ -188,6 +188,7 @@ contract TerrainSubsystem is System {
           spawnTerrain(causedBy, x, y, terrainType);
         }
       } else {
+
         //NPCS
         NPCType npcType = NPCType.None;
 
@@ -195,9 +196,11 @@ contract TerrainSubsystem is System {
           npcType = NPCType.Ox;
         } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
           npcType = NPCType.Soldier;
-        } else if (noiseCoord > 1150 && noiseCoord < 1200) {
+        } else if (noiseCoord > 1200 && noiseCoord < 1300) {
           npcType = NPCType.Barbarian;
-        } else if (config.dummyPlayers && noiseCoord > 1200 && noiseCoord <= 1300) {
+        } else if (noiseCoord > 1300 && noiseCoord <= 1400) {
+          npcType = NPCType.BarbarianArcher;
+        } else if (config.dummyPlayers && noiseCoord > 1500 && noiseCoord <= 1550) {
           npcType = NPCType.Player;
         }
 

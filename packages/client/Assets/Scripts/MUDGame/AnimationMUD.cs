@@ -24,13 +24,13 @@ public class AnimationMUD : MonoBehaviour
     [Header("Debug")]
     [SerializeField] ActionName action;
     [SerializeField] ActionEffect actionEffect;
-    [SerializeField] mud.Client.MUDEntity entity;
+    [SerializeField] MUDEntity entity;
     [SerializeField] ActionComponent actionComponent;
     SPLooker looker;
     protected virtual void Awake() {
         if(target == null) target = transform;
 
-        entity = GetComponentInParent<mud.Client.MUDEntity>();
+        entity = GetComponentInParent<MUDEntity>();
         looker = target.gameObject.AddComponent<SPLooker>();
 
     }

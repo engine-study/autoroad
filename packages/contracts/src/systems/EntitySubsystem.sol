@@ -22,7 +22,7 @@ contract EntitySubsystem is System {
 
   //find all nearby entities that have tick updates and tick them
   function triggerEntities(bytes32 causedBy, bytes32 player, PositionData memory pos) public {
-    console.log("triggerEntities");
+    // console.log("triggerEntities");
 
     //only NPC movements trigger entity ticks
     if(NPC.get(player) == uint32(NPCType.None)) {return;}
@@ -30,23 +30,34 @@ contract EntitySubsystem is System {
     //if we are off the map we don't trigger NPCs
     if (IWorld(_world()).onMap(pos.x, pos.y) == false) { return;}
 
-    //TODO gas golf
+    //TODO gas golf, calculate distances and other things here so tickBehaviour doesnt do it
+    IWorld world = IWorld(_world());
     PositionData[] memory positions = neumanNeighborhoodOuter(pos, 2);
     bytes32[] memory entities = activeEntities(positions);
 
     for (uint i = 0; i < positions.length; i++) {
       if (entities[i] == bytes32(0)) {continue;}
-      IWorld(_world()).tickBehaviour(causedBy, player, entities[i], pos, positions[i]);
+
+      //tick npcs
+      NPCType npcType = NPCType(NPC.get(entities[i]));
+      if(npcType > NPCType.None) {world.tickBehaviour(causedBy, player, entities[i], pos, positions[i]);}
+
+      //tick other things possible (resources, idk)
+
+      //check player is still alive, exit early if not?? 
+      //test this pls, what happens if 3 npcs try to kill one player at once
+      // if(world.canDoStuff(player) == false) {return;}
     }
   }
 
   function activeEntities(PositionData[] memory positions) internal returns (bytes32[] memory) {
-    console.log("activeEntities");
+    // console.log("activeEntities");
     bytes32[] memory neighbors = new bytes32[](positions.length);
     for (uint i = 0; i < positions.length; i++) {
       bytes32[] memory entities = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
-      neighbors[i] = entities.length > 0 ? entities[0] : bytes32(0);
+      if(entities.length > 0) {neighbors[i] = entities[0];}
     }
+
     return neighbors;
   }
 
