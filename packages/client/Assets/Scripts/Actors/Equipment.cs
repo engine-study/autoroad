@@ -31,7 +31,7 @@ public abstract class Equipment : MonoBehaviour {
     }
     
     public void UseState(bool toggle) {
-        ((SPActionPlayer)interact.Action()).ToggleCastState(toggle, sender, interact);
+        interact.Action().DoCast(toggle, sender);
     }
 
     public virtual bool CanUse() {

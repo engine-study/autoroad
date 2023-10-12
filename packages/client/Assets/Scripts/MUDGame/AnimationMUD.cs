@@ -7,12 +7,12 @@ public class AnimationMUD : MonoBehaviour
 {
     public ActionName Action {get{return action;}}
     public ActionComponent ActionComponent {get{return actionComponent;}}
-    public PositionSync PositionSync { get; private set; }
-    public SPAnimator Animator { get; private set; }
-    public SPController Controller { get; private set; }
     public SPLooker Look {get{return looker;}}
+    public IActor Actor {get{return actor;}}
 
     [Header("Animation")]
+
+
     [SerializeField] Transform target;
     Transform head;
     Rigidbody headRB;
@@ -21,12 +21,19 @@ public class AnimationMUD : MonoBehaviour
     Quaternion headRotLocal;
     Dictionary<string, ActionEffect> effects = new Dictionary<string, ActionEffect>();
 
-    [Header("Debug")]
+    [Header("Action Debug")]
     [SerializeField] ActionName action;
     [SerializeField] ActionEffect actionEffect;
+
+    [Header("Linked")]
+    public PositionSync PositionSync;
+    public SPAnimator Animator;
+    public SPController Controller;
     [SerializeField] MUDEntity entity;
     [SerializeField] ActionComponent actionComponent;
-    SPLooker looker;
+    [SerializeField] SPLooker looker;
+    [SerializeField] IActor actor;
+
     protected virtual void Awake() {
         if(target == null) target = transform;
 
@@ -45,6 +52,8 @@ public class AnimationMUD : MonoBehaviour
         }
 
         PositionSync = GetComponentInParent<PositionSync>(true);
+
+        actor = new ActorAnimator(Animator);
 
         head = Animator.Head;
         headRB = head.GetComponent<Rigidbody>();

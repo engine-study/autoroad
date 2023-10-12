@@ -196,9 +196,9 @@ contract TerrainSubsystem is System {
           npcType = NPCType.Ox;
         } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
           npcType = NPCType.Soldier;
-        } else if (noiseCoord > 1200 && noiseCoord < 1300) {
+        } else if (noiseCoord > 1200 && noiseCoord < 1250) {
           npcType = NPCType.Barbarian;
-        } else if (noiseCoord > 1300 && noiseCoord <= 1400) {
+        } else if (noiseCoord > 1300 && noiseCoord <= 1350) {
           npcType = NPCType.BarbarianArcher;
         } else if (config.dummyPlayers && noiseCoord > 1500 && noiseCoord <= 1550) {
           npcType = NPCType.Player;

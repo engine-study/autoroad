@@ -17,7 +17,8 @@ public class ActionEffect : MonoBehaviour {
     public SPEnableDisable effect;
     public string actionClip;
 
-    protected AnimationMUD anim;
+    [Header("Debug")]
+    [SerializeField] protected AnimationMUD anim;
 
     void Awake() {
         if(effect) effect.active = false;
@@ -79,23 +80,21 @@ public class ActionEffect : MonoBehaviour {
 
     protected virtual void ToggleActionEffects(bool toggle) {
 
+        Debug.Log(gameObject.name + ": " + toggle, this);
+
         if(toggle) {
 
             effect?.PlayEnabled();
             PlayAnimation(actionClip);
 
-            //move to AnimationPlayerMUD later
-            if(action) {
-                if(action is SPActionPlayer) {
-                    SPActionPlayer actionPlayer = action as SPActionPlayer;
-                    actionPlayer.animatorState?.Apply(anim.Animator);
-                }
-            }
-
         } else {
         
             effect?.PlayDisabled();
             // PlayAnimation("");
+        }
+
+        if(action && anim) {
+            action.DoCast(toggle, anim.Actor);
         }
     }
 

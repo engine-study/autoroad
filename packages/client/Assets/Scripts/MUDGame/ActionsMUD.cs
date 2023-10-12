@@ -98,8 +98,7 @@ public class ActionsMUD : MonoBehaviour
     }
 
 
-    public void ActionToActionProp(ActionName newState, Vector3 position)
-    {
+    public void ActionToActionProp(ActionName newState, Vector3 position) {
 
         //turn player to face position
         player.AnimationMUD.Look.SetLookRotation(position);
