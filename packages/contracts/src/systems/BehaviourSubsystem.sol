@@ -73,7 +73,7 @@ contract BehaviourSubsystem is System {
     if(canAggroEntity(attacker, target) == false) {return;}
 
     //kill target
-    world.setAction(attacker, ActionType.Melee, targetPos.x, targetPos.y);
+    world.setActionTargeted(attacker, ActionType.Melee, targetPos.x, targetPos.y, target);
     world.kill(causedBy, target, attacker, targetPos);
   }
 
@@ -102,7 +102,7 @@ contract BehaviourSubsystem is System {
       }
     }
 
-    world.setAction(attacker, ActionType.Bow, targetPos.x, targetPos.y);
+    world.setActionTargeted(attacker, ActionType.Bow, targetPos.x, targetPos.y, target);
 
     //kill target if it is NPC
     uint32 npc = NPC.get(target);

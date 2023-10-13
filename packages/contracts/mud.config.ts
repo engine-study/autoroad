@@ -257,6 +257,7 @@ export default mudConfig({
         action: "uint32",
         x: "int32",
         y: "int32",
+        target: "bytes32",
       },
     },
 

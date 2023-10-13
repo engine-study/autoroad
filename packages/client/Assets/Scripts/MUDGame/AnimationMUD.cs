@@ -6,7 +6,7 @@ using mud.Client;
 public class AnimationMUD : MonoBehaviour
 {
     public ActionName Action {get{return actionEffect ? actionEffect.Action : ActionName.Idle;}}
-    public ActionComponent ActionComponent {get{return actionComponent;}}
+    public ActionComponent ActionData {get{return actionData;}}
     public SPLooker Look {get{return looker;}}
     public IActor Actor {get{return actor;}}
 
@@ -21,15 +21,13 @@ public class AnimationMUD : MonoBehaviour
 
     [Header("Action Debug")]
     [SerializeField] ActionEffect actionEffect;
-    [SerializeField] MUDEntity target;
-    [SerializeField] PositionSync targetPos;
 
     [Header("Linked")]
     public PositionSync PositionSync;
     public SPAnimator Animator;
     public SPController Controller;
     [SerializeField] MUDEntity entity;
-    [SerializeField] ActionComponent actionComponent;
+    [SerializeField] ActionComponent actionData;
     [SerializeField] SPLooker looker;
     [SerializeField] IActor actor;
 
@@ -62,28 +60,28 @@ public class AnimationMUD : MonoBehaviour
 
         if(entity == null) return;
         
-        actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
+        actionData = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
 
         if(entity.Loaded) Init();
         else entity.OnLoaded += Init;
     }
 
     void Init() {
-        actionComponent = entity.GetMUDComponent<ActionComponent>();
-        if (actionComponent == null) { Debug.LogError("No action component", this); return; }
+        actionData = entity.GetMUDComponent<ActionComponent>();
+        if (actionData == null) { Debug.LogError("No action component", this); return; }
 
-        actionComponent.OnUpdated += UpdateAction;
+        actionData.OnUpdated += UpdateAction;
     }
 
     void OnDestroy() {
 
         if(entity) entity.OnLoaded -= Init;
-        if(actionComponent) actionComponent.OnUpdated -= UpdateAction;
+        if(actionData) actionData.OnUpdated -= UpdateAction;
         
     }
 
     void UpdateAction() {
-        EnterState(actionComponent.Action);
+        EnterState(actionData.Action);
     }
 
 
@@ -119,8 +117,11 @@ public class AnimationMUD : MonoBehaviour
 
     public virtual void EnterState(ActionName newAction) {
 
-        Debug.Log(actionComponent.Entity.Name + " [ANIM]: [" + newAction.ToString().ToUpper() + "] (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
+        Debug.Log(actionData.Entity.Name + " [ANIM]: [" + newAction.ToString().ToUpper() + "] (" + (int)actionData.Position.x + "," + (int)actionData.Position.z + ")", this);
         ActionEffect newEffect = LoadAction(newAction.ToString());
+
+        //look at the new thing
+        looker.SetLookRotation(actionData.Position);
 
         if(newEffect == null) {
             ToggleAction(false, actionEffect);
@@ -138,15 +139,12 @@ public class AnimationMUD : MonoBehaviour
     Coroutine WaitAFrame;
     IEnumerator AnimationInsanity(ActionEffect newAction) {
 
+
         //wait a frame so all the positions are synced
         yield return null;
-        
-        looker.SetLookRotation(actionComponent.Position);
-        target = GridMUD.GetEntityAt(actionComponent.Position);
-        targetPos = target && target != actionComponent.Entity ? target.GetRootComponent<PositionSync>() : null;
 
         //if we have a target that is moving (and is not us), wait until it comes to the position
-        while(newAction.targeted && targetPos && targetPos.Pos.Entity != actionComponent.Entity && targetPos.Moving) {yield return null;} 
+        while(actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
 
         //turn off old action
         if (actionEffect != null && newAction.Action != Action) { ToggleAction(false, actionEffect); }
@@ -189,15 +187,20 @@ public class AnimationMUD : MonoBehaviour
     }
 
     void OnDrawGizmos() {
-        if(targetPos) {
-            Gizmos.color = targetPos.Moving ? Color.yellow : Color.green;
-            Gizmos.DrawLine(transform.position + Vector3.up * .2f, targetPos.transform.position + Vector3.up * .2f);
-        }
+        if(actionData) {
         
-        if(actionComponent && actionComponent.Action != ActionName.None) {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position + Vector3.up * .1f, actionComponent.Position + Vector3.up * .1f);
-            Gizmos.DrawWireSphere(actionComponent.Position + Vector3.up * .1f, .1f);
+            if(actionData.Action != ActionName.None && actionData.Position != transform.position) {
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(transform.position + Vector3.up * .2f, actionData.Position + Vector3.up * .2f);    
+            }
+            
+            if(actionData && actionData.Target) {
+                Gizmos.color = actionData.Target.Moving ? Color.blue : Color.green;
+                Gizmos.DrawWireCube(actionData.Target.GridPos, Vector3.one - Vector3.up * .98f);
+                Gizmos.DrawLine(transform.position + Vector3.up * .1f, actionData.Target.transform.position + Vector3.up * .1f);
+                Gizmos.DrawWireSphere(actionData.Target.Pos.Pos + Vector3.up * .1f, .1f);
+            }
+
         }
     }
   

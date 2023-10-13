@@ -53,7 +53,7 @@ contract FloraSubsystem is System {
     require(world.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
 
-    world.setAction(player, ActionType.Chop, x, y);
+    world.setActionTargeted(player, ActionType.Chop, x, y, atPosition[0]);
 
     int32 health = Health.get(atPosition[0]);
     health--;

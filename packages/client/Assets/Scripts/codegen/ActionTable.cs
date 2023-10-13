@@ -26,6 +26,7 @@ namespace DefaultNamespace
         public ulong? action;
         public long? x;
         public long? y;
+        public string? target;
 
         public override Type TableType()
         {
@@ -57,6 +58,10 @@ namespace DefaultNamespace
             {
                 return false;
             }
+            if (target != other.target)
+            {
+                return false;
+            }
             return true;
         }
 
@@ -67,6 +72,8 @@ namespace DefaultNamespace
             x = (long)(int)functionParameters[1];
 
             y = (long)(int)functionParameters[2];
+
+            target = (string)functionParameters[3];
         }
 
         public override void RecordToTable(Record record)
@@ -80,6 +87,8 @@ namespace DefaultNamespace
             x = xValue;
             var yValue = (long)table["y"];
             y = yValue;
+            var targetValue = (string)table["target"];
+            target = targetValue;
         }
 
         public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
@@ -117,6 +126,9 @@ namespace DefaultNamespace
                             : default,
                         x = value.Item1.TryGetValue("x", out var xVal) ? (long)xVal : default,
                         y = value.Item1.TryGetValue("y", out var yVal) ? (long)yVal : default,
+                        target = value.Item1.TryGetValue("target", out var targetVal)
+                            ? (string)targetVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
@@ -126,6 +138,7 @@ namespace DefaultNamespace
                         action = null,
                         x = null,
                         y = null,
+                        target = null,
                     };
                 }
             }
@@ -141,6 +154,9 @@ namespace DefaultNamespace
                             : default,
                         x = value.Item2.TryGetValue("x", out var xVal) ? (long)xVal : default,
                         y = value.Item2.TryGetValue("y", out var yVal) ? (long)yVal : default,
+                        target = value.Item2.TryGetValue("target", out var targetVal)
+                            ? (string)targetVal
+                            : default,
                     };
                 }
                 catch (InvalidCastException)
@@ -150,6 +166,7 @@ namespace DefaultNamespace
                         action = null,
                         x = null,
                         y = null,
+                        target = null,
                     };
                 }
             }

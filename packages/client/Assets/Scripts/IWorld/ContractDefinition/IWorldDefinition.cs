@@ -1346,6 +1346,23 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class SetActionTargetedFunction : SetActionTargetedFunctionBase { }
+
+    [Function("setActionTargeted")]
+    public class SetActionTargetedFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("uint8", "newAction", 2)]
+        public virtual byte NewAction { get; set; }
+        [Parameter("int32", "x", 3)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 4)]
+        public virtual int Y { get; set; }
+        [Parameter("bytes32", "target", 5)]
+        public virtual byte[] Target { get; set; }
+    }
+
     public partial class SetFieldFunction : SetFieldFunctionBase { }
 
     [Function("setField")]
@@ -2409,6 +2426,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

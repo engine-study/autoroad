@@ -59,7 +59,7 @@ contract ToolSubsystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
-    world.setAction(player, ActionType.Melee, x, y);
+    world.setActionTargeted(player, ActionType.Melee, x, y, atPosition[0]);
 
     health--;
 
@@ -87,7 +87,7 @@ contract ToolSubsystem is System {
     rockState++;
 
     Rock.set(atPosition[0], rockState);
-    world.setAction(player, ActionType.Mining, x, y);
+    world.setActionTargeted(player, ActionType.Mining, x, y, atPosition[0]);
 
     //give rocks that are mined a pushable component
     if (rockState == uint32(RockType.Statumen)) {
@@ -115,7 +115,7 @@ contract ToolSubsystem is System {
     world.requirePushable(atPos);
 
     //set player action
-    world.setAction(player, ActionType.Fishing, x, y);
+    world.setActionTargeted(player, ActionType.Fishing, x, y, atPos[0]);
 
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);

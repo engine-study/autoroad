@@ -117,7 +117,11 @@ contract ActionSystem is System {
 
   }
 
+  function setActionTargeted(bytes32 player, ActionType newAction, int32 x, int32 y, bytes32 target) public {
+    Action.emitEphemeral(player, uint32(newAction), x, y, target);
+  }
+
   function setAction(bytes32 player, ActionType newAction, int32 x, int32 y) public {
-    Action.emitEphemeral(player, uint32(newAction), x, y);
+    Action.emitEphemeral(player, uint32(newAction), x, y, bytes32(0));
   }
 }

@@ -121,7 +121,7 @@ public class ActionsMUD : MonoBehaviour
 
     public static TxUpdate ActionOptimistic(MUDEntity entity, ActionName action, Vector3 atPos) {
         ActionComponent actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
-        return TxManager.MakeOptimistic(actionComponent, action, (int)atPos.x, (int)atPos.z); 
+        return TxManager.MakeOptimistic(actionComponent, action, (int)atPos.x, (int)atPos.z, "0"); 
     }
 
     

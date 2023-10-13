@@ -11,6 +11,7 @@ public class PositionSync : ComponentSync
     public Action OnMoveUpdate;
     public PositionComponent Pos {get{return pos;}}
     // public AnimationComponent Anim {get{return anim;}}
+    public Vector3 GridPos {get{return transform.position;}}
     public Transform Target {get{return target;}}
     public float MoveLerp {get{return moveLerp;}}
     public bool Moving {get{return moving;}}
@@ -34,6 +35,7 @@ public class PositionSync : ComponentSync
     [Header("Debug")]
     [SerializeField] PositionComponent pos;
     [SerializeField] MoverMUD movement;
+    [SerializeField] Vector3 GridPos;
     [SerializeField] Vector3 StartPos;
     [SerializeField] Vector3 TargetPos => pos.Pos; 
     [SerializeField] bool moving = false;    
@@ -95,6 +97,10 @@ public class PositionSync : ComponentSync
 
     }
 
+    void UpdateGrid(Vector3 pos) {
+        GridPos = new Vector3(Mathf.Round(pos.x),Mathf.Round(pos.y),Mathf.Round(pos.z));
+    }
+
     void StartMove() {
 
         bool wasMoving = moving;
@@ -105,6 +111,8 @@ public class PositionSync : ComponentSync
         moveLerp = 0f;
         distanceMoved = 0f;
         StartPos = target.position;
+
+        UpdateGrid(StartPos);
 
         distance = Vector3.Distance(StartPos, TargetPos);
 
@@ -127,6 +135,8 @@ public class PositionSync : ComponentSync
         enabled = false;
         moving = false;
         target.position = pos.Pos;
+
+        UpdateGrid(pos.Pos);
 
         Debug.Log(gameObject.name + " MOVE: End (" + (movement ? movement.name : "/") + ")", this);
 
@@ -183,6 +193,7 @@ public class PositionSync : ComponentSync
 
         }
 
+        UpdateGrid(target.position);
      
     }
 
@@ -195,6 +206,14 @@ public class PositionSync : ComponentSync
         //turn off for efficiency until next update
         if(target.position == TargetPos || moveLerp >= 1f) {
             EndMove();
+        }
+    }
+
+    void DrawGizmos() {
+        if(Moving) {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position + Vector3.up * .05f, Pos.Pos + Vector3.up * .05f);
+            Gizmos.DrawWireSphere(Pos.Pos + Vector3.up * .05f, .1f);
         }
     }
 

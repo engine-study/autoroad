@@ -346,19 +346,19 @@ public class ControllerMUD : SPController {
 
     void OnDrawGizmos() {
 
-        if (moveDest != Vector3.zero) {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(playerTransform.position + Vector3.up * .25f, playerTransform.position + Vector3.up * .25f + (moveDest - playerTransform.position).normalized);
-        }
+        // if (moveDest != Vector3.zero) {
+        //     Gizmos.color = Color.green;
+        //     Gizmos.DrawLine(playerTransform.position + Vector3.up * .25f, playerTransform.position + Vector3.up * .25f + (moveDest - playerTransform.position).normalized);
+        // }
 
-        if (inputDir != Vector3.zero) {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(playerTransform.position + Vector3.up * .25f, playerTransform.position + Vector3.up * .25f + inputDir);
-        }
+        // if (inputDir != Vector3.zero) {
+        //     Gizmos.color = Color.yellow;
+        //     Gizmos.DrawLine(playerTransform.position + Vector3.up * .25f, playerTransform.position + Vector3.up * .25f + inputDir);
+        // }
 
-        if(Application.isPlaying && init) {
-            Gizmos.DrawLine(playerScript.Position.Pos, playerScript.Position.Pos + inputDir);
-        }
+        // if(Application.isPlaying && init) {
+        //     Gizmos.DrawLine(playerScript.Position.Pos, playerScript.Position.Pos + inputDir);
+        // }
     }
 
 }

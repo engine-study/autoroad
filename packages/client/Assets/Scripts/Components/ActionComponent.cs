@@ -9,10 +9,16 @@ public class ActionComponent : MUDComponent {
     public static ActionComponent LocalState;
     public ActionName Action {get { return actionType; } }
     public Vector3 Position {get { return targetPos; } }
+    public PositionSync Target {get { return targetSync; } }
 
     [Header("State")]
-    [SerializeField] private ActionName actionType;
-    [SerializeField] private Vector3 targetPos;
+    [SerializeField] ActionName actionType;
+    [SerializeField] Vector3 targetPos;
+    [SerializeField] PositionSync targetSync;
+
+    [Header("Target")]
+    [SerializeField] string targetBytes;
+    [SerializeField] MUDEntity targetEntity;
 
 
     protected override void PostInit() {
@@ -37,6 +43,14 @@ public class ActionComponent : MUDComponent {
 
         actionType = (ActionName)table.action;
         targetPos = new Vector3((int)table.x, 0f, (int)table.y);
+
+        targetBytes = ((string)table.target).ToLower();
+        targetEntity = MUDWorld.FindEntity(targetBytes);
+
+        if(targetEntity) {
+            targetSync = targetEntity.GetRootComponent<PositionSync>();
+            if(targetSync == null) {Debug.LogError("No pos for action", this);return;}
+        }
 
     }
 

@@ -2823,6 +2823,40 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setActionFunction, cancellationToken);
         }
 
+        public Task<string> SetActionTargetedRequestAsync(SetActionTargetedFunction setActionTargetedFunction)
+        {
+             return ContractHandler.SendRequestAsync(setActionTargetedFunction);
+        }
+
+        public Task<TransactionReceipt> SetActionTargetedRequestAndWaitForReceiptAsync(SetActionTargetedFunction setActionTargetedFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setActionTargetedFunction, cancellationToken);
+        }
+
+        public Task<string> SetActionTargetedRequestAsync(byte[] player, byte newAction, int x, int y, byte[] target)
+        {
+            var setActionTargetedFunction = new SetActionTargetedFunction();
+                setActionTargetedFunction.Player = player;
+                setActionTargetedFunction.NewAction = newAction;
+                setActionTargetedFunction.X = x;
+                setActionTargetedFunction.Y = y;
+                setActionTargetedFunction.Target = target;
+            
+             return ContractHandler.SendRequestAsync(setActionTargetedFunction);
+        }
+
+        public Task<TransactionReceipt> SetActionTargetedRequestAndWaitForReceiptAsync(byte[] player, byte newAction, int x, int y, byte[] target, CancellationTokenSource cancellationToken = null)
+        {
+            var setActionTargetedFunction = new SetActionTargetedFunction();
+                setActionTargetedFunction.Player = player;
+                setActionTargetedFunction.NewAction = newAction;
+                setActionTargetedFunction.X = x;
+                setActionTargetedFunction.Y = y;
+                setActionTargetedFunction.Target = target;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setActionTargetedFunction, cancellationToken);
+        }
+
         public Task<string> SetFieldRequestAsync(SetFieldFunction setFieldFunction)
         {
              return ContractHandler.SendRequestAsync(setFieldFunction);
