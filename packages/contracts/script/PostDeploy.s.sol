@@ -17,8 +17,8 @@ contract PostDeploy is Script {
     vm.startBroadcast(deployerPrivateKey);
 
     //deploys the MapConfig
-    world.createWorld();
-    world.createMile();
+    // world.createWorld();
+    // world.createMile();
 
     // some debug to check if our abiencode is working
     // abiTest(worldAddress);
