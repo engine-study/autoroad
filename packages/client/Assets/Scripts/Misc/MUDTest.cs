@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 
-public class MUDTest : mud.Client.MUDNetworkSync
+public class MUDTest : mud.MUDNetworkSync
 {
 
     public string worldAddress;

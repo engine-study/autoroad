@@ -2,7 +2,7 @@
 
 #nullable enable
 using System;
-using mud.Client;
+using mud;
 using mud.Network.schemas;
 using mud.Unity;
 using UniRx;

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 
@@ -11,7 +11,7 @@ public class Melee : Equipment
     public override bool CanUse() {
         bool canUse = base.CanUse();
 
-        mud.Client.MUDEntity e = CursorMUD.Entity;
+        mud.MUDEntity e = CursorMUD.Entity;
         if(e == null) return false;
         
         NPCComponent npc = e?.GetMUDComponent<NPCComponent>();

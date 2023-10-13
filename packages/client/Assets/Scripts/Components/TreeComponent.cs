@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 
@@ -40,7 +40,7 @@ public class TreeComponent : MUDComponent {
     }
     
     protected override IMudTable GetTable() {return new TreeTable();}
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {
 
         TreeTable treeUpdate = (TreeTable)update;
 
@@ -121,7 +121,7 @@ public class TreeComponent : MUDComponent {
         ChopTree(Entity);
     }
 
-    public async void ChopTree(mud.Client.MUDEntity entity) {
+    public async void ChopTree(mud.MUDEntity entity) {
         List<TxUpdate> updates = new List<TxUpdate>();
         
         updates.Add(TxManager.MakeOptimistic(health, health.Health - 1));

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 public abstract class ValueComponent : MUDComponent {

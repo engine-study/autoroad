@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud.Unity;
-using mud.Client;
+using mud;
 public class WorldUI : SPWindowParent
 {
     [SerializeField] SPRawText burnerAddress, worldContract, faucet;

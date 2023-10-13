@@ -1,6 +1,6 @@
 
 using UnityEngine;
-using mud.Client;
+using mud;
 using NetworkManager = mud.Unity.NetworkManager;
 using DefaultNamespace;
 using IWorld.ContractDefinition;

@@ -1,6 +1,6 @@
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
+using mud;
 using mud.Unity;
 
 public class SeedComponent : ValueComponent {

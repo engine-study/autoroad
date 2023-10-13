@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
-using mud.Client;
+using mud;
 using UnityEngine;
 
 public enum NPCType {None, Player, Soldier, Barbarian, Ox, BarbarianArcher}

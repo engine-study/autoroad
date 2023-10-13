@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
-using mud.Client;
+using mud;
 
 public class StatsMUD : MUDComponent {
     [Header("Stats")]

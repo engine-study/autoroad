@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using mud.Client;
+using mud;
 using IWorld.ContractDefinition;
 
 public class NameOptionUI : SPWindowParent {

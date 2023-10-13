@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
-using mud.Client;
+using mud;
 using UnityEngine.UI;
 
 
@@ -157,8 +157,8 @@ public class GaulDebug : MonoBehaviour
         }
 
 
-        if(CursorMUD.Entity is mud.Client.MUDEntity) {
-            mud.Client.MUDEntity m = (mud.Client.MUDEntity)CursorMUD.Entity;
+        if(CursorMUD.Entity is mud.MUDEntity) {
+            mud.MUDEntity m = (mud.MUDEntity)CursorMUD.Entity;
             PlayerComponent player = m.GetMUDComponent<PlayerComponent>();
             // if(player) {debugString += "\n" + playerCom}
 

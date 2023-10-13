@@ -7,7 +7,7 @@ using mud.Unity;
 using UniRx;
 using UnityEngine;
 using ObservableExtensions = UniRx.ObservableExtensions;
-using mud.Client;
+using mud;
 
 public class ControllerMUD : SPController {
 
