@@ -209,12 +209,19 @@ public class PositionSync : ComponentSync
         }
     }
 
-    void DrawGizmos() {
-        if(Moving) {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position + Vector3.up * .05f, Pos.Pos + Vector3.up * .05f);
-            Gizmos.DrawWireSphere(Pos.Pos + Vector3.up * .05f, .1f);
+    void OnDrawGizmos() {
+
+        if(Application.isPlaying && Pos) {
+
+            Gizmos.color = Moving ? Color.yellow : Color.green - Color.black * .5f;
+            Gizmos.DrawWireCube(GridPos, Vector3.one * .9f - Vector3.up * .88f);
+
+            if(Moving) {
+                Gizmos.DrawLine(transform.position + Vector3.up * .1f, Pos.Pos + Vector3.up * .1f);
+                Gizmos.DrawWireSphere(Pos.Pos + Vector3.up * .1f, .1f);
+            }
         }
+        
     }
 
 }

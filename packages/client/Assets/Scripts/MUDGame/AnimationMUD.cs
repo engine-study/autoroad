@@ -139,7 +139,6 @@ public class AnimationMUD : MonoBehaviour
     Coroutine WaitAFrame;
     IEnumerator AnimationInsanity(ActionEffect newAction) {
 
-
         //wait a frame so all the positions are synced
         yield return null;
 
@@ -154,6 +153,7 @@ public class AnimationMUD : MonoBehaviour
         
         ToggleAction(false, newAction);
 
+        WaitAFrame = null;
     }
 
     public virtual void ToggleAction(bool toggle, ActionEffect newEffect) {
@@ -187,18 +187,18 @@ public class AnimationMUD : MonoBehaviour
     }
 
     void OnDrawGizmos() {
-        if(actionData) {
+        if(actionData && WaitAFrame != null) {
         
-            if(actionData.Action != ActionName.None && actionData.Position != transform.position) {
-                Gizmos.color = Color.green;
-                Gizmos.DrawLine(transform.position + Vector3.up * .2f, actionData.Position + Vector3.up * .2f);    
-            }
+            // if(actionData.Action != ActionName.None && actionData.Position != transform.position) {
+            //     Gizmos.color = Color.green;
+            //     Gizmos.DrawLine(transform.position + Vector3.up * .2f, actionData.Position + Vector3.up * .2f);    
+            // }
             
             if(actionData && actionData.Target) {
                 Gizmos.color = actionData.Target.Moving ? Color.blue : Color.green;
-                Gizmos.DrawWireCube(actionData.Target.GridPos, Vector3.one - Vector3.up * .98f);
-                Gizmos.DrawLine(transform.position + Vector3.up * .1f, actionData.Target.transform.position + Vector3.up * .1f);
-                Gizmos.DrawWireSphere(actionData.Target.Pos.Pos + Vector3.up * .1f, .1f);
+                Gizmos.DrawWireCube(actionData.Target.GridPos, Vector3.one * .5f - Vector3.up * .48f);
+                Gizmos.DrawLine(transform.position + Vector3.up * .15f, actionData.Target.transform.position + Vector3.up * .15f);
+                Gizmos.DrawWireSphere(actionData.Target.Pos.Pos + Vector3.up * .15f, .1f);
             }
 
         }
