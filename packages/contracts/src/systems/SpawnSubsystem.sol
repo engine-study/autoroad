@@ -3,12 +3,11 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Move, Carrying, Bones, Name, Stats, GameEvent, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/Tables.sol";
-import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { MoveType, ActionType, NPCType } from "../codegen/Types.sol";
+import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/index.sol";
+import { Move, Carrying, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/index.sol";
+import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
+import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { randomCoord } from "../utility/random.sol";
 

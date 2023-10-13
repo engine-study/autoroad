@@ -3,11 +3,10 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action, Conscription, Weight } from "../codegen/Tables.sol";
-import { Coinage, Gem, Eth, XP, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/Tables.sol";
-import { ActionType, PaymentType } from "../codegen/Types.sol";
+import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action, Conscription, Weight } from "../codegen/index.sol";
+import { Coinage, Gem, Eth, XP, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/index.sol";
+import { ActionType, PaymentType } from "../codegen/common.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { GaulItems } from "../data/GaulItems.sol";
 

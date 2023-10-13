@@ -3,12 +3,13 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, Player, Health } from "../codegen/Tables.sol";
-import { Road, Move, Action, Boots, Weight, NPC } from "../codegen/Tables.sol";
-import { PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { RoadState, MoveType, ActionType, NPCType } from "../codegen/Types.sol";
+import { RoadConfig, MapConfig, Position, Player, Health } from "../codegen/index.sol";
+import { Road, Move, Action, Boots, Weight, NPC } from "../codegen/index.sol";
+import { PositionTableId, PositionData } from "../codegen/index.sol";
+import { RoadState, MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 
@@ -22,6 +23,11 @@ contract MoveSubsystem is System {
     //TODO add game pausing global
     if(Health.get(player) < 1) return false;
     return true;
+  }
+
+  function getKeysAtPosition(int32 x, int32 y, int32 layer) public view returns(bytes32[] memory) {
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicData) = Position.encode(x, y, layer);
+    return getKeysWithValue(IWorld(_world()), PositionTableId, staticData, encodedLengths, dynamicData);
   }
 
   function canInteract(
@@ -124,8 +130,8 @@ contract MoveSubsystem is System {
 
   //never call directly without requiring canInteract() and canDoStuff()
   function moveOrPush(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector) public {
-
-      bytes32[] memory atNext = getKeysWithValue(PositionTableId, Position.encode(startPos.x + vector.x, startPos.y + vector.y, 0));
+      IWorld world = IWorld(_world());
+      bytes32[] memory atNext = getKeysAtPosition(startPos.x + vector.x, startPos.y + vector.y, 0);
       if(atNext.length == 0) { doMoveWithBoots(causedBy, player, startPos, vector);} 
       else { doPush(causedBy, player, startPos, vector); }
       
@@ -158,7 +164,7 @@ contract MoveSubsystem is System {
 
     for (uint i = 1; i < positions.length; i++) {
   
-      bytes32[] memory atDest = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory atDest = getKeysAtPosition(positions[i].x, positions[i].y, 0);
       assert(atDest.length < 2);
 
       //check if valid position
@@ -181,7 +187,7 @@ contract MoveSubsystem is System {
     PositionData memory toPos = PositionData(x,y,0);
 
     require(canDoStuff(player), "hmm");
-    require(canInteract(player, playerPos, getKeysWithValue(PositionTableId, Position.encode(x, y, 0)), 1), "bad interact");
+    require(canInteract(player, playerPos, getKeysAtPosition(x, y, 0), 1), "bad interact");
 
     doPush(player, player, playerPos, PositionData(toPos.x - playerPos.x,toPos.y - playerPos.y,0));
   }
@@ -199,7 +205,7 @@ contract MoveSubsystem is System {
     uint maxLength = 16;
     bytes32[] memory pushArray = new bytes32[](maxLength);
     PositionData memory pushPos = PositionData(shoverPos.x + vector.x, shoverPos.y + vector.y, 0);
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
+    bytes32[] memory atPos = getKeysAtPosition(shoverPos.x, shoverPos.y, 0);
 
     //continue push loop as long as there is something to push
     while (atPos.length > 0) {
@@ -222,7 +228,7 @@ contract MoveSubsystem is System {
       requireOnMap(atPos[0], pushPos);
 
       //next space
-      atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
+      atPos = getKeysAtPosition(pushPos.x, pushPos.y, 0);
 
       //increment push and check the destination is on map
       index++;
@@ -250,7 +256,7 @@ contract MoveSubsystem is System {
       bytes32 pushed = pushArray[i];
 
       //recalculate at position everytime
-      atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
+      atPos = getKeysAtPosition(pushPos.x, pushPos.y, 0);
       moveTo(causer, pushed, shoverPos, pushPos, atPos, ActionType.Push);
 
       pushPos.x -= vector.x;
@@ -359,7 +365,7 @@ contract MoveSubsystem is System {
 
     PositionData memory startPos = Position.get(player);
     PositionData memory endPos = PositionData(x, y, 0);
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPos = getKeysAtPosition(x, y, 0);
     moveTo(player, player, startPos, endPos, atPos, ActionType.Teleport);
   }
 

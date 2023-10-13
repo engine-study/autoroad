@@ -3,10 +3,10 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { NPC, Seeker, Weight, Move, Position, PositionData, Barbarian, Soldier, Ox, Aggro, Health, Archer } from "../codegen/Tables.sol";
-import { NPCType, MoveType, ActionType } from "../codegen/Types.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { NPC, Seeker, Weight, Move, Position, PositionData, Barbarian, Soldier, Ox, Aggro, Health, Archer } from "../codegen/index.sol";
+import { NPCType, MoveType, ActionType } from "../codegen/common.sol";
+
+import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 

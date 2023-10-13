@@ -1,14 +1,13 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MITTypes.sol
 pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seeker, Move} from "../codegen/Tables.sol";
-import { Soldier, Barbarian, Archer} from "../codegen/Tables.sol";
-import { ActionType, NPCType, MoveType } from "../codegen/Types.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seeker, Move} from "../codegen/index.sol";
+import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
+import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
 
 import { MapSubsystem } from "./MapSubsystem.sol";
@@ -89,7 +88,7 @@ contract BehaviourSubsystem is System {
     //check if anything is in the way 
     for (uint i = 1; i < positions.length-1; i++) {
   
-      bytes32[] memory atDest = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory atDest = world.getKeysAtPosition(positions[i].x, positions[i].y, 0);
 
       if(atDest.length > 0) {
         //check if this movetype will intercept the arrow

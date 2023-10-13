@@ -3,15 +3,15 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/Tables.sol";
-import { Puzzle, Trigger, Miliarium } from "../codegen/Tables.sol";
-import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/Types.sol";
+import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/index.sol";
+import { Puzzle, Trigger, Miliarium } from "../codegen/index.sol";
+import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/common.sol";
+
+import { random, randomFromEntitySeed } from "../utility/random.sol";
 
 import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 
-import { random, randomFromEntitySeed } from "../utility/random.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract PuzzleSubsystem is System {
 

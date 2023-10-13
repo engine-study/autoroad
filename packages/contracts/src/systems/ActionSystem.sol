@@ -3,12 +3,11 @@ pragma solidity >=0.8;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Action, Name, Player, Health} from "../codegen/Tables.sol";
-import { ActionType, PaymentType } from "../codegen/Types.sol";
-import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
+import { Action, Name, Player, Health} from "../codegen/index.sol";
+import { ActionType, PaymentType } from "../codegen/common.sol";
+import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
 import { ToolSubsystem } from "../systems/ToolSubsystem.sol";
@@ -117,11 +116,12 @@ contract ActionSystem is System {
 
   }
 
+  //todo can't call these directly
   function setActionTargeted(bytes32 player, ActionType newAction, int32 x, int32 y, bytes32 target) public {
-    Action.emitEphemeral(player, uint32(newAction), x, y, target);
+    Action.set(player, uint32(newAction), x, y, target);
   }
 
   function setAction(bytes32 player, ActionType newAction, int32 x, int32 y) public {
-    Action.emitEphemeral(player, uint32(newAction), x, y, bytes32(0));
+    Action.set(player, uint32(newAction), x, y, bytes32(0));
   }
 }

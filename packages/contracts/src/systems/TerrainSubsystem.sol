@@ -4,10 +4,10 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/Tables.sol";
-import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/Tables.sol";
-import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/Types.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/index.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/index.sol";
+import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/index.sol";
+import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/common.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
@@ -16,9 +16,8 @@ import { FloraSubsystem } from "./FloraSubsystem.sol";
 import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { randomCoord } from "../utility/random.sol";
 
 contract TerrainSubsystem is System {
@@ -30,8 +29,8 @@ contract TerrainSubsystem is System {
     return x >= RoadConfig.getLeft() && x <= RoadConfig.getRight();
   }
 
-  function createWorld(address worldAddress) public {
-    IWorld world = IWorld(worldAddress);
+  function createWorld() public {
+    IWorld world = IWorld(_world());
 
     bool debug = true; 
     bool dummyPlayers = true; 
@@ -279,13 +278,15 @@ contract TerrainSubsystem is System {
   }
 
   function deleteAtRequire(PositionData memory pos) public {
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y, pos.layer));
+    IWorld world = IWorld(_world());
+    bytes32[] memory atPosition = world.getKeysAtPosition(pos.x, pos.y, pos.layer);
     require(atPosition.length > 0, "Nothing to delete");
     Position.deleteRecord(atPosition[0]);
   }
 
   function deleteAt(PositionData memory pos) public {
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y, pos.layer));
+    IWorld world = IWorld(_world());
+    bytes32[] memory atPosition = world.getKeysAtPosition(pos.x, pos.y, pos.layer);
     if(atPosition.length > 0) Position.deleteRecord(atPosition[0]);
   }
 
@@ -376,8 +377,9 @@ contract TerrainSubsystem is System {
   }
 
   function spawnShoveledRoad(bytes32 player, int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition(x, y, 0);
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 entity = getRoadEntity(x,y);

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
-import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
+import { MapConfig, Position, PositionTableId, PositionData } from "../codegen/index.sol";
 
 // //returns the positions from a point plus an added vector
 // function fromToLinePositions(

@@ -3,14 +3,16 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Player, Position, Health, Move, GameState, Coinage, PositionData, PositionTableId } from "../codegen/Tables.sol";
-import { TerrainType, NPCType } from "../codegen/Types.sol";
+import { Player, Position, Health, Move, GameState, Coinage, PositionData, PositionTableId } from "../codegen/index.sol";
+import { TerrainType, NPCType } from "../codegen/common.sol";
+
+import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+
+import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { PuzzleSubsystem } from "./PuzzleSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
-import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract AdminSystem is System {
 

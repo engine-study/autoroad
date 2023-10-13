@@ -3,9 +3,9 @@ pragma solidity >=0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
-import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/Tables.sol";
-import { NPCType } from "../codegen/Types.sol";
+
+import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/index.sol";
+import { NPCType } from "../codegen/common.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { BehaviourSubsystem } from "./BehaviourSubsystem.sol";
 import { MapSubsystem } from "./MapSubsystem.sol";
@@ -54,7 +54,7 @@ contract EntitySubsystem is System {
     // console.log("activeEntities");
     bytes32[] memory neighbors = new bytes32[](positions.length);
     for (uint i = 0; i < positions.length; i++) {
-      bytes32[] memory entities = getKeysWithValue(PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory entities = IWorld(_world()).getKeysAtPosition(positions[i].x, positions[i].y, 0);
       if(entities.length > 0) {neighbors[i] = entities[0];}
     }
 

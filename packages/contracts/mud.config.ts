@@ -71,7 +71,7 @@ export default mudConfig({
 
     GameConfig: {
       keySchema: {},
-      schema: {
+      valueSchema: {
         debug: "bool",
         dummyPlayers: "bool",
         roadComplete: "bool",
@@ -80,14 +80,14 @@ export default mudConfig({
 
     Stats: {
       dataStruct: false,
-      schema: {
+      valueSchema: {
         startingMile: "int32",
       },
     },
 
     Name: {
       dataStruct: false,
-      schema: {
+      valueSchema: {
         named: "bool",
         first: "uint32",
         middle: "uint32",
@@ -100,7 +100,7 @@ export default mudConfig({
       //empty keySchema creates a singleton
       keySchema: {},
       dataStruct: false,
-      schema: {
+      valueSchema: {
         playWidth: "int32",
         playHeight: "int32",
         playSpawnWidth: "int32",
@@ -111,7 +111,7 @@ export default mudConfig({
       //empty keySchema creates a singleton
       keySchema: {},
       dataStruct: false,
-      schema: {
+      valueSchema: {
         width: "uint32",
         left: "int32",
         right: "int32",
@@ -121,7 +121,7 @@ export default mudConfig({
     Bounds: {
       keySchema: {},
       dataStruct: false,
-      schema: {
+      valueSchema: {
         left: "int32",
         right: "int32",
         up: "int32",
@@ -132,7 +132,7 @@ export default mudConfig({
     GameState: {
       keySchema: {},
       dataStruct: false,
-      schema: {
+      valueSchema: {
         miles: "int32",
         unused: "int32",
       },
@@ -141,7 +141,7 @@ export default mudConfig({
     Chunk: {
       name: "Chunk",
       dataStruct: false,
-      schema: {
+      valueSchema: {
         mile: "int32",
         spawned: "bool",
         completed: "bool",
@@ -157,7 +157,7 @@ export default mudConfig({
 
     Entities: {
       dataStruct: false,
-      schema: {
+      valueSchema: {
         width: "bytes32[]",
         height: "bytes32[]",
       },
@@ -183,13 +183,13 @@ export default mudConfig({
     Weight: "int32",
 
     //puzzle components try to be moved onto triggers (ie. Miliarli )
-    Puzzle: { dataStruct: false, schema: { puzzleType: "uint32", complete: "bool"},},
+    Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool"},},
     Trigger: "bytes32",
     Miliarium: "bool",
 
     Position: {
       name: "Position",
-      schema: {
+      valueSchema: {
         x: "int32",
         y: "int32",
         layer: "int32",
@@ -202,7 +202,7 @@ export default mudConfig({
     Move: "uint32",
     Carrying: "bytes32",
     FishingRod: "bool",
-    Boots: {schema: {minMove: "int32", maxMove: "int32",},},
+    Boots: {valueSchema: {minMove: "int32", maxMove: "int32",},},
 
     //properties
     Damage: "int32",
@@ -226,7 +226,7 @@ export default mudConfig({
     Road: {
       name: "Road",
       dataStruct: false,
-      schema: {
+      valueSchema: {
         state: "uint32",
         filled: "bytes32",
         gem: "bool",
@@ -236,14 +236,14 @@ export default mudConfig({
     Carriage: "bool",
     Row: { 
       keySchema: {}, 
-      schema: { 
+      valueSchema: { 
         value : "int32",
       },
     },
 
     // Item: {
     //   dataStruct: false,
-    //   schema: {
+    //   valueSchema: {
     //     name: "string",
     //     id: "uint32",
     //     equipped: "bool",
@@ -251,9 +251,9 @@ export default mudConfig({
     // },
 
     Action: {
-      ephemeral: true,
+      offchainOnly: true,
       dataStruct: false,
-      schema: {
+      valueSchema: {
         action: "uint32",
         x: "int32",
         y: "int32",

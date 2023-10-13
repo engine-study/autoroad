@@ -2,8 +2,8 @@ pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
-import { Player, GameState, Road, Coinage, Gem, Conscription, XP, NPC, Soldier, Barbarian} from "../codegen/Tables.sol";
-import { NPCType } from "../codegen/Types.sol";
+import { Player, GameState, Road, Coinage, Gem, Conscription, XP, NPC, Soldier, Barbarian} from "../codegen/index.sol";
+import { NPCType } from "../codegen/common.sol";
 import { ItemSubsystem } from "./ItemSubsystem.sol";
 
 contract RewardSubsystem is System {

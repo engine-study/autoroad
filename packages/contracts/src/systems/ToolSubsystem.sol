@@ -3,13 +3,14 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Scroll, Seeds, Boots, Weight, NPC } from "../codegen/Tables.sol";
-import { PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/Types.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/index.sol";
+import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Scroll, Seeds, Boots, Weight, NPC } from "../codegen/index.sol";
+import { PositionTableId, PositionData } from "../codegen/index.sol";
+import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/common.sol";
+
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
+
 import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
@@ -28,7 +29,7 @@ contract ToolSubsystem is System {
     PositionData memory stickPos = PositionData(x, y, 0);
 
     //check initial push is good
-    bytes32[] memory atStick = getKeysWithValue(PositionTableId, Position.encode(stickPos.x, stickPos.y, 0));
+    bytes32[] memory atStick = world.getKeysAtPosition(stickPos.x, stickPos.y, 0);
     require(world.canInteract(player, playerPos, atStick, 1), "bad interact");
     
     PositionData memory vector = PositionData(stickPos.x - playerPos.x, stickPos.y - playerPos.y, 0);
@@ -52,7 +53,7 @@ contract ToolSubsystem is System {
     require(world.canDoStuff(player), "hmm");
 
     PositionData memory pos = PositionData(x, y, 0);
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition(x, y, 0);
     require(atPosition.length > 0, "attacking an empty spot");
     require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
 
@@ -74,7 +75,7 @@ contract ToolSubsystem is System {
     IWorld world = IWorld(_world());
     require(world.canDoStuff(player), "hmm");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition(x, y, 0);
 
     require(world.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
 
@@ -109,7 +110,7 @@ contract ToolSubsystem is System {
     PositionData memory fishPos = PositionData(x, y, 0);
 
     //check initial push is good
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(fishPos.x, fishPos.y, 0));
+    bytes32[] memory atPos = world.getKeysAtPosition(fishPos.x, fishPos.y, 0);
     require(world.canInteract(player, startPos, atPos, 1), "bad interact");
     require(Weight.get(atPos[0]) <= 0, "too heavy");
     world.requirePushable(atPos);
@@ -120,7 +121,7 @@ contract ToolSubsystem is System {
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
     
-    bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(endPos.x, endPos.y, 0));
+    bytes32[] memory atDest = world.getKeysAtPosition(endPos.x, endPos.y, 0);
     if(atDest.length > 0) {
       world.requireOnMap(atDest[0], endPos);
       world.requireCanPlaceOn(atDest);
