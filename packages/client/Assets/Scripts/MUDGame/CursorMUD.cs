@@ -34,12 +34,20 @@ public class CursorMUD : MonoBehaviour {
     [SerializeField] SPBase baseObject;
 
 
+
     void Awake() {
         Instance = this;
+        enabled = false;
+        SPEvents.OnServerLoaded += Init;
     }
 
     void OnDestroy() {
         Instance = null;
+        SPEvents.OnServerLoaded -= Init;
+    }
+
+    void Init() {
+        enabled = true;
     }
 
     void Update() {

@@ -1,4 +1,5 @@
-import { mudConfig, resolveTableId } from "@latticexyz/world/register";
+import { mudConfig } from "@latticexyz/world/register";
+import { resolveTableId } from "@latticexyz/config";
 
 export default mudConfig({
 
@@ -139,7 +140,6 @@ export default mudConfig({
 
     Chunk: {
       name: "Chunk",
-      openAccess: false, // it's a subsystem now!
       dataStruct: false,
       schema: {
         mile: "int32",
@@ -261,28 +261,17 @@ export default mudConfig({
       },
     },
 
-    GameEvent: {
-      ephemeral: true,
-      schema: {
-        eventType: "string",
-      },
-    },
-
-
   },
 
   modules: [
+    
     {
       name: "UniqueEntityModule",
       root: true,
     },
+
     {
       name: "KeysWithValueModule",
-      root: true,
-      args: [resolveTableId("Position")],
-    },
-    {
-      name: "KeysInTableModule",
       root: true,
       args: [resolveTableId("Position")],
     },

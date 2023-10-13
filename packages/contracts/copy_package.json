@@ -4,35 +4,36 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-
-    "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:abi-ts",
-    "build:mud": "rimraf src/codegen && mud tablegen && mud worldgen",
+    "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:abi-ts && pnpm run build:unity",
     "build:abi": "forge clean && forge build --skip test script",
     "build:abi-ts": "mud abi-ts && prettier --write '**/*.abi.json.d.ts'",
+    "build:mud": "rimraf src/codegen && mud tablegen && mud worldgen",
+    "build:unity": "dotnet tool restore && pnpm run csgen",
 
+    "csgen": "pnpm run csBindings && pnpm run csTables",
+    "csTables": "rimraf ../client/Assets/Scripts/codegen && tsx unity/csDataStore.ts ../client/Assets/Scripts/codegen",
+    "csBindings": "ts-node unity/csBindings.ts ../client/Assets/Scripts",
+
+    "deploy": "pnpm run initialize && mud deploy && pnpm run resources",
     "deploy:local": "pnpm run build && mud deploy",
     "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
-    "dev": "pnpm mud dev-contracts",
+    "initialize": "pnpm run tablegen && pnpm run worldgen && pnpm run build && dotnet tool restore && pnpm run csgen",
+    "dev": "pnpm mud dev-contracts && pnpm run deploy --disableTxWait",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
-    "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
-    "test": "tsc --noEmit && mud test",
-
-    "dev:unity": "pnpm run dev && pnpm run deploy:unity",
-    "deploy:unity": "pnpm run csgen && mud deploy && pnpm run resources",
-    
-    "csgen": "dotnet tool restore && pnpm run csBindings && pnpm run csTables",
-    "csBindings": "ts-node unity/csBindings.ts ../client/Assets/Scripts",
-    "csTables": "rimraf ../client/Assets/Scripts/codegen && tsx unity/csDataStore.ts ../client/Assets/Scripts/codegen",
-
     "resources": "ts-node unity/moveDeployToResources.ts ../client/Assets/Resources ./deploys/31337",
     "resources:testnet": "ts-node unity/moveDeployToResources.ts ../client/Assets/Resources ./deploys/4242",
-    "resources:hackathon": "ts-node unity/moveDeployToResources.ts ../client/Assets/Resources ./deploys/371337"
+    "resources:hackathon": "ts-node unity/moveDeployToResources.ts ../client/Assets/Resources ./deploys/371337",
+    "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
+    "tablegen": "mud tablegen",
+    "test": "tsc --noEmit && mud test",
+    "worldgen": "mud worldgen"
   },
   "dependencies": {
     "@latticexyz/cli": "2.0.0-next.8",
     "@latticexyz/schema-type": "2.0.0-next.8",
     "@latticexyz/store": "2.0.0-next.8",
+    "@latticexyz/world": "2.0.0-next.8",
     "@latticexyz/world": "2.0.0-next.8"
   },
   "devDependencies": {
@@ -43,12 +44,6 @@
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.7",
     "solhint-config-mud": "2.0.0-next.8",
-    "solhint-plugin-mud": "2.0.0-next.8",
-    
-    "ejs": "^3.1.9",
-    "ts-node": "^10.9.1",
-    "tsup": "^6.7.0",
-    "tsx": "^3.12.7",
-    "typechain": "^8.1.1"
+    "solhint-plugin-mud": "2.0.0-next.8"
   }
 }

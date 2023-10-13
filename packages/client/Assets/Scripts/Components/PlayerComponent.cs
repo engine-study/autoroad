@@ -36,7 +36,7 @@ public class PlayerComponent : MUDComponent {
 
         PlayerCount++;
 
-        isLocalPlayer = Entity.Key == NetworkManager.LocalAddress;
+        isLocalPlayer = Entity.Key == NetworkManager.LocalKey;
         if (IsLocalPlayer) {
             LocalPlayer = this;
             OnPlayerSpawn?.Invoke();

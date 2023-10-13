@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
@@ -48,7 +48,7 @@ contract ActionSystem is System {
     if (playerExists) { require(Health.get(entity) == -1, "not dead, can't respawn");}
     require(world.onSpawn(x,y), "out of spawn");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = world.getKeysAtPosition(x, y, 0);
     require(atPosition.length < 1, "occupied");
 
     world.spawnPlayer(entity, x, y, false);

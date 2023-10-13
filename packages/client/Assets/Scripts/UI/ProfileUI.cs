@@ -42,7 +42,7 @@ public class ProfileUI : SPWindowParent
     }
 
     void UpdateAddress() {
-        publicKeyField.UpdateField(NetworkManager.LocalAddressNotKey);
+        publicKeyField.UpdateField(NetworkManager.LocalAddress);
     }
 
     void UpdateName() {
