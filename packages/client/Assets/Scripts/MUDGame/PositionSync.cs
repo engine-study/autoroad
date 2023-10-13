@@ -98,7 +98,7 @@ public class PositionSync : ComponentSync
     }
 
     void UpdateGrid(Vector3 pos) {
-        GridPos = new Vector3(Mathf.Round(pos.x),Mathf.Round(pos.y),Mathf.Round(pos.z));
+        gridPos = new Vector3(Mathf.Round(pos.x),Mathf.Round(pos.y),Mathf.Round(pos.z));
     }
 
     void StartMove() {
