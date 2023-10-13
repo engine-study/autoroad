@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using DefaultNamespace;
 using mud;
-using mud.Unity;
+using mud;
 
 public class CoinComponent : ValueComponent {
     public int Coins { get { return coins; } }

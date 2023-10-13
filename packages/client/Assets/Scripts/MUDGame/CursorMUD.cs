@@ -86,7 +86,7 @@ public class CursorMUD : MonoBehaviour {
 
         // hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
         
-        if(!mud.Unity.NetworkManager.Initialized)
+        if(!mud.NetworkManager.Initialized)
             return;
 
         if(SPUIBase.IsPointerOverUIElement) {

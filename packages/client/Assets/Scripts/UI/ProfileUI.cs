@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using mud.Unity;
+using mud;
 using UnityEngine;
 
 public class ProfileUI : SPWindowParent

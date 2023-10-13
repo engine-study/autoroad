@@ -8,7 +8,7 @@ public class MUDTest : mud.MUDNetworkSync
 
     public string worldAddress;
     public string blockNumber;
-    protected override async void Init(mud.Unity.NetworkManager nm)
+    protected override async void Init(mud.NetworkManager nm)
     {
         base.Init(nm);
 
@@ -16,7 +16,7 @@ public class MUDTest : mud.MUDNetworkSync
         // blockNumber = nm.blockNumber;
 
         var jsonFile = Resources.Load<TextAsset>("latest");
-        var data = JsonUtility.FromJson<mud.Unity.LocalDeploy>(jsonFile.text);
+        var data = JsonUtility.FromJson<mud.LocalDeploy>(jsonFile.text);
         worldAddress = data.worldAddress;
 
         Debug.Log("World: " + MUDHelper.Keccak256(worldAddress));

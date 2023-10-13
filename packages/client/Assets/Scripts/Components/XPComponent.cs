@@ -1,7 +1,7 @@
 using UnityEngine;
 using DefaultNamespace;
 using mud;
-using mud.Unity;
+using mud;
 
 public class XPComponent : ValueComponent {
 

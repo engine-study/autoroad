@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
-using mud.Unity;
+using mud;
 using UniRx;
 using UnityEngine;
 using ObservableExtensions = UniRx.ObservableExtensions;

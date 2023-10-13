@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DefaultNamespace;
 using mud;
-using NetworkManager = mud.Unity.NetworkManager;
+using NetworkManager = mud.NetworkManager;
 using Cysharp.Threading.Tasks;
 using UniRx;
 

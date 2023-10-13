@@ -1,7 +1,7 @@
 
 using UnityEngine;
 using mud;
-using NetworkManager = mud.Unity.NetworkManager;
+using NetworkManager = mud.NetworkManager;
 using DefaultNamespace;
 using IWorld.ContractDefinition;
 using System.Numerics;
