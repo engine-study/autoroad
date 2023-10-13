@@ -5,7 +5,7 @@ using mud.Client;
 
 public class AnimationMUD : MonoBehaviour
 {
-    public ActionName Action {get{return action;}}
+    public ActionName Action {get{return actionEffect ? actionEffect.Action : ActionName.Idle;}}
     public ActionComponent ActionComponent {get{return actionComponent;}}
     public SPLooker Look {get{return looker;}}
     public IActor Actor {get{return actor;}}
@@ -20,9 +20,9 @@ public class AnimationMUD : MonoBehaviour
     Dictionary<string, ActionEffect> effects = new Dictionary<string, ActionEffect>();
 
     [Header("Action Debug")]
-    [SerializeField] ActionName action;
     [SerializeField] ActionEffect actionEffect;
     [SerializeField] MUDEntity target;
+    [SerializeField] PositionSync targetPos;
 
     [Header("Linked")]
     public PositionSync PositionSync;
@@ -120,23 +120,36 @@ public class AnimationMUD : MonoBehaviour
     public virtual void EnterState(ActionName newAction) {
 
         Debug.Log(actionComponent.Entity.Name + " [ANIM]: [" + newAction.ToString().ToUpper() + "] (" + (int)actionComponent.Position.x + "," + (int)actionComponent.Position.z + ")", this);
-        
+        ActionEffect newEffect = LoadAction(newAction.ToString());
+
+        if(newEffect == null) {
+            ToggleAction(false, actionEffect);
+            actionEffect = null;
+            return;
+        } else {
+            if(newEffect.Action != newAction) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
+        }
 
         if(WaitAFrame != null) StopCoroutine(WaitAFrame); 
-        WaitAFrame = StartCoroutine(AnimationInsanity(newAction));
+        WaitAFrame = StartCoroutine(AnimationInsanity(newEffect));
         
     }   
 
     Coroutine WaitAFrame;
-    IEnumerator AnimationInsanity(ActionName newAction) {
+    IEnumerator AnimationInsanity(ActionEffect newAction) {
 
+        //wait a frame so all the positions are synced
         yield return null;
         
-        PositionSync pos = target.GetComponentInChildren<PositionSync>();
-        while(target && pos && pos.Moving) {yield return null;} 
+        looker.SetLookRotation(actionComponent.Position);
+        target = GridMUD.GetEntityAt(actionComponent.Position);
+        targetPos = target && target != actionComponent.Entity ? target.GetRootComponent<PositionSync>() : null;
+
+        //if we have a target that is moving (and is not us), wait until it comes to the position
+        while(newAction.targeted && targetPos && targetPos.Pos.Entity != actionComponent.Entity && targetPos.Moving) {yield return null;} 
 
         //turn off old action
-        if (actionEffect != null && newAction != action) { ToggleAction(false, action); }
+        if (actionEffect != null && newAction.Action != Action) { ToggleAction(false, actionEffect); }
         ToggleAction(true, newAction);
 
         yield return new WaitForSeconds(2f);
@@ -145,27 +158,15 @@ public class AnimationMUD : MonoBehaviour
 
     }
 
-    public virtual void ToggleDead(bool toggle) {
-        if(toggle) {
-            
-        } else {
+    public virtual void ToggleAction(bool toggle, ActionEffect newEffect) {
 
-        }
-    }
+        actionEffect = toggle ? newEffect : null;
 
-    public virtual void ToggleAction(bool toggle, ActionName newAction) {
-
-        action = newAction;
-        actionEffect = LoadAction(action.ToString());
-        
         //play new action if it exists
-        if(actionEffect == null) return;
+        if(newEffect == null) return;
+        newEffect.Toggle(toggle, this);
 
-        looker.SetLookRotation(actionComponent.Position);
-        target = GridMUD.GetEntityAt(actionComponent.Position);
-        actionEffect.Toggle(toggle, this);
     }
-
     
     //load from resources folder
     ActionEffect LoadAction(string action) {
@@ -185,6 +186,19 @@ public class AnimationMUD : MonoBehaviour
         }
 
         return newAction;
+    }
+
+    void OnDrawGizmos() {
+        if(targetPos) {
+            Gizmos.color = targetPos.Moving ? Color.yellow : Color.green;
+            Gizmos.DrawLine(transform.position + Vector3.up * .2f, targetPos.transform.position + Vector3.up * .2f);
+        }
+        
+        if(actionComponent && actionComponent.Action != ActionName.None) {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position + Vector3.up * .1f, actionComponent.Position + Vector3.up * .1f);
+            Gizmos.DrawWireSphere(actionComponent.Position + Vector3.up * .1f, .1f);
+        }
     }
   
 

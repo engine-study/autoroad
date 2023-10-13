@@ -9829,12 +9829,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f888a5006eebce49ad6183d142e2201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionName: 2
   movement: {fileID: 0}
-  effect: {fileID: 8003657974771625591}
   moveEffect: {fileID: 0}
-  action: {fileID: 0}
-  actionClip: Idle
   movementClip: Idle
+  targeted: 0
+  action: {fileID: 0}
+  effect: {fileID: 8003657974771625591}
+  actionClip: Idle
+  active: 0
+  anim: {fileID: 0}
 --- !u!114 &8003657974771625591
 MonoBehaviour:
   m_ObjectHideFlags: 0

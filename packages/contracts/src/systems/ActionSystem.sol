@@ -81,26 +81,39 @@ contract ActionSystem is System {
     if (newAction == ActionType.Idle) {} 
     else if (newAction == ActionType.Mining) {
       world.mine(player, x, y);
+      return;
     } else if (newAction == ActionType.Shoveling) {
       world.shovel(player, x, y);
+      return;
     } else if (newAction == ActionType.Stick) {
       world.stick(player, x, y);
+      return;
     } else if (newAction == ActionType.Fishing) {
       world.fish(player, x, y);
+      return;
     } else if (newAction == ActionType.Walking) {
       world.moveSimple(player, x, y);
-    } else if (newAction == ActionType.Buy) {} 
-    else if (newAction == ActionType.Plant) {
+      return;
+    } else if (newAction == ActionType.Buy) {
+      require(false, "Not setup.");
+    } else if (newAction == ActionType.Plant) {
       world.plant(player, x, y);
+      return;
     } else if (newAction == ActionType.Push) {
       world.push(player, x, y);
+      return;
     } else if (newAction == ActionType.Chop) {
       world.chop(player, x, y);
+      return;
     } else if (newAction == ActionType.Teleport) {
       world.teleportScroll(player, x, y);
+      return;
     } else if (newAction == ActionType.Melee) {
       world.melee(player, x, y);
+      return;
     }
+
+    require(false, "No action found.");
 
   }
 

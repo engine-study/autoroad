@@ -5039,12 +5039,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2802861c5b056254181b195745e73d2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionName: 14
   movement: {fileID: 11400000, guid: c82c8dceb3c332f419a3eabce90978da, type: 2}
-  effect: {fileID: 0}
   moveEffect: {fileID: 7011156856655909593}
-  action: {fileID: 0}
-  actionClip: Idle
   movementClip: 
+  targeted: 0
+  action: {fileID: 0}
+  effect: {fileID: 0}
+  actionClip: Idle
+  active: 0
+  anim: {fileID: 0}
 --- !u!114 &7011156856655909593
 MonoBehaviour:
   m_ObjectHideFlags: 0

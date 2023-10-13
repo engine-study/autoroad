@@ -72,6 +72,7 @@ public class GridMUD : MonoBehaviour {
         return components;
     }
 
+
     public static MUDEntity GetEntityAt(Vector3 newPos) {
 
         if(Instance.useQuery) {

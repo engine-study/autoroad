@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ActionEffect : MonoBehaviour {
     
-    [Header("Debug")]
-    [SerializeField] bool active = false; 
+
+    public ActionName Action {get{return actionName;}}
+    [Header("Action")]
+    [SerializeField] public ActionName actionName;
 
     [Header("Movement")]
     public MoverMUD movement;
@@ -13,11 +16,13 @@ public class ActionEffect : MonoBehaviour {
     public string movementClip;
 
     [Header("Action")]
-    public SPAction action;
-    public SPEnableDisable effect;
-    public string actionClip;
+    public bool targeted;
+    [SerializeField] SPAction action;
+    [SerializeField] SPEnableDisable effect;
+    [SerializeField] string actionClip;
 
     [Header("Debug")]
+    [SerializeField] bool active = false; 
     [SerializeField] protected AnimationMUD anim;
 
     void Awake() {

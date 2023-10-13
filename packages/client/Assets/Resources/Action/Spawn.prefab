@@ -4991,12 +4991,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2802861c5b056254181b195745e73d2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionName: 15
   movement: {fileID: 11400000, guid: 78c3a8ee934009b4d8ae1b8a52c97383, type: 2}
-  effect: {fileID: 0}
   moveEffect: {fileID: 3989839364933986615}
-  action: {fileID: 0}
-  actionClip: Spawn
   movementClip: 
+  targeted: 0
+  action: {fileID: 0}
+  effect: {fileID: 0}
+  actionClip: Spawn
+  active: 0
+  anim: {fileID: 0}
 --- !u!114 &3989839364933986615
 MonoBehaviour:
   m_ObjectHideFlags: 0
