@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud;
 using mud;
-using DefaultNamespace;
+using mudworld;
 using IWorld.ContractDefinition;
 using System;
 using Cysharp.Threading.Tasks;
@@ -54,8 +54,8 @@ public class GameState : MonoBehaviour {
         Instance = null;
     }
 
-    void JoinGaul() {
-        NetworkManager.Instance.Connect();
+    async void JoinGaul() {
+        await NetworkManager.Instance.Connect();
     }
 
     void LeaveGaul() {

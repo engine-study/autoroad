@@ -14,7 +14,7 @@ public class WorldUI : SPWindowParent
     }
 
     void Display() {
-        burnerAddress.UpdateField(NetworkManager.LocalAddressNotKey);
+        burnerAddress.UpdateField(NetworkManager.LocalAddress);
         worldContract.UpdateField(MUDHelper.TruncateHash(NetworkManager.WorldAddress) + "(" + NetworkManager.Network.chainId + ") " + NetworkManager.Network.jsonRpcUrl);
         // chainID.UpdateField(NetworkManager.Network.chainId);
     }

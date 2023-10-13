@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud;
-using mud;
+using UniRx;
 using IWorld.ContractDefinition;
-using DefaultNamespace;
+using mudworld;
 
 public class GridMUD : MonoBehaviour {
     public static GridMUD Instance;
@@ -52,15 +52,13 @@ public class GridMUD : MonoBehaviour {
 
     static List<PositionComponent> GetComponentsAtPosition(int x, int y, int layer) {
 
-        var ds = NetworkManager.Instance.ds;
-
         Condition[] conditions = new Condition[] { Condition.Has("x", System.Convert.ToInt64(x)), Condition.Has("y", System.Convert.ToInt64(y)), Condition.Has("layer", System.Convert.ToInt64(layer)) };
-        var allComponentsAtPosition = new Query().In(PositionTable.ID).In(PositionTable.ID, conditions );
-        var recordsWithPosition = ds.RunQuery(allComponentsAtPosition);
+        var allComponentsAtPosition = new Query().In(PositionTable.Table).In(PositionTable.Table, conditions );
+        var recordsWithPosition = NetworkManager.Datastore.RunQuery(allComponentsAtPosition);
 
         List<PositionComponent> components = new List<PositionComponent>();
-        foreach(Record r in recordsWithPosition) {
-            PositionComponent pos = MUDWorld.FindComponent<PositionComponent>(r.key);
+        foreach(RxRecord r in recordsWithPosition) {
+            PositionComponent pos = MUDWorld.FindComponent<PositionComponent>(r.Key);
 
             if(pos == null) {
                 Debug.LogError("Could not find entity");

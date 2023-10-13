@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud;
-using DefaultNamespace;
+using mudworld;
 
 public enum MoveType { None, Obstruction, Hole, Carry, Push, Trap } 
 public class MoveComponent : MUDComponent {

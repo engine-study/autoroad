@@ -1,7 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DefaultNamespace;
+using mudworld;
 using IWorld.ContractDefinition;
 using mud;
 using UniRx;

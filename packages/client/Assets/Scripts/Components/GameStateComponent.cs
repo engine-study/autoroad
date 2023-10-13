@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DefaultNamespace;
+using mudworld;
 using mud;
 using NetworkManager = mud.NetworkManager;
 using Cysharp.Threading.Tasks;

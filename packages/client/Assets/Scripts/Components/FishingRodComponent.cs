@@ -1,5 +1,5 @@
 using UnityEngine;
-using DefaultNamespace;
+using mudworld;
 using mud;
 
 public class FishingRodComponent : PropComponent {

@@ -1,47 +1,39 @@
 import mudConfig from "../mud.config";
-import { AbiTypeToSchemaType, SchemaType } from "@latticexyz/schema-type";
-import { schemaTypesToCSTypeStrings } from "./types";
-import { StoreConfig } from "@latticexyz/store";
-import { WorldConfig } from "@latticexyz/world";
+import { SchemaAbiType } from "@latticexyz/schema-type";
+import { TableField, schemaTypesToCSTypeStrings } from "./types";
 import { writeFileSync, mkdirSync } from "fs";
-import { exec, execSync } from "child_process";
+import { exec } from "child_process";
 import { renderFile } from "ejs";
-import { basename, dirname, extname, join } from "path";
 
-interface Field {
-  key: string;
-  type: string;
-}
+export function createTableDefinition(
+  filePath: string,
+  mudConfig: any,
+  tableName: string,
+  keySchema: { [key: string]: SchemaAbiType },
+  valueSchema: { [key: string]: SchemaAbiType }
+) {
+  const fields: TableField[] = [];
 
-export async function createCSComponents(filePath: string, mudConfig: any, tableName: string, tableData: any) {
-  const fields: Field[] = [];
-  const worldNamespace = tableData.namespace;
-
-  for (const key in tableData.schema) {
-    const abiOrUserType = tableData.schema[key];
-    if (abiOrUserType in AbiTypeToSchemaType) {
-      const schemaType = AbiTypeToSchemaType[abiOrUserType];
-      const typeString = schemaTypesToCSTypeStrings[schemaType];
-      fields.push({ key, type: typeString });
-    } else if (abiOrUserType in mudConfig.enums) {
-      const schemaType = SchemaType.UINT8;
-      fields.push({ key, type: schemaTypesToCSTypeStrings[schemaType] });
-    } else {
-      throw new Error(`Unknown type ${abiOrUserType} for field ${key}`);
-    }
+  for (const key in keySchema) {
+    const keyType = keySchema[key];
+    if (!keyType) throw new Error(`[${tableName}]: Unknown type for field ${key}`);
+    fields.push({ key: key[0] + key.slice(1), type: schemaTypesToCSTypeStrings[keyType] });
   }
 
-  console.log("Generating UniMUD table for " + tableName);
+  for (const key in valueSchema) {
+    const valueType = valueSchema[key];
+    if (!valueType) throw new Error(`[${tableName}]: Unknown type for field ${key}`);
+    fields.push({ key: key[0] + key.slice(1), type: schemaTypesToCSTypeStrings[valueType] });
+  }
+
   renderFile(
     "./unity/templates/DefinitionTemplate.ejs",
     {
-      namespace: "DefaultNamespace",
+      namespace: "mudworld",
       tableClassName: tableName + "Table",
       tableName,
-      tableNamespace: worldNamespace,
-      fields: fields,
+      fields,
     },
-    {},
     (err, str) => {
       console.log("writeFileSync " + filePath);
       writeFileSync(filePath, str);
@@ -49,25 +41,6 @@ export async function createCSComponents(filePath: string, mudConfig: any, table
     }
   );
 }
-
-
-export async function createAssembly(filePath: string, mudConfig: any) {
-
-  renderFile(
-    "./unity/templates/AssemblyTemplate.ejs",
-    {
-      namespace: "DefaultNamespace",
-    },
-    {},
-    (err, str) => {
-      console.log("writeFileSync " + filePath);
-      writeFileSync(filePath, str);
-      if (err) throw err;
-    }
-  );
-}
-
-
 
 async function main() {
   // get args
@@ -75,7 +48,6 @@ async function main() {
   const outputPath = args[0] ?? `../client/Assets/Scripts/codegen`;
   console.log(outputPath);
 
-  // create the folder if it doesn't exist
   try {
     mkdirSync(outputPath, { recursive: true });
     console.log("Directory created successfully.");
@@ -84,14 +56,12 @@ async function main() {
   }
 
   const tables = mudConfig.tables;
-  Object.entries(tables).forEach(async ([tableName, tableData]) => {
+  Object.entries(tables).forEach(([tableName, { keySchema, valueSchema }]) => {
     const filePath = `${outputPath}/${tableName + "Table"}.cs`;
-    await createCSComponents(filePath, mudConfig, tableName, tableData);
+    createTableDefinition(filePath, mudConfig, tableName, keySchema, valueSchema);
   });
 
-  const filePathType = `${outputPath}/DefaultNamespace.asmdef`;
-  await createAssembly(filePathType, mudConfig);
-
+  // formatting
   exec(`dotnet tool run dotnet-csharpier "${outputPath}"`, (err, stdout, stderr) => {
     if (err) {
       console.error(err);

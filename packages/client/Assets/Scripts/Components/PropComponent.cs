@@ -1,5 +1,5 @@
 using UnityEngine;
-using DefaultNamespace;
+using mudworld;
 using mud;
 
 public abstract class PropComponent : MUDComponent {
