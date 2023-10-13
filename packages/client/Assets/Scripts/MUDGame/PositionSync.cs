@@ -11,7 +11,7 @@ public class PositionSync : ComponentSync
     public Action OnMoveUpdate;
     public PositionComponent Pos {get{return pos;}}
     // public AnimationComponent Anim {get{return anim;}}
-    public Vector3 GridPos {get{return transform.position;}}
+    public Vector3 GridPos {get{return gridPos;}}
     public Transform Target {get{return target;}}
     public float MoveLerp {get{return moveLerp;}}
     public bool Moving {get{return moving;}}
@@ -35,7 +35,7 @@ public class PositionSync : ComponentSync
     [Header("Debug")]
     [SerializeField] PositionComponent pos;
     [SerializeField] MoverMUD movement;
-    [SerializeField] Vector3 GridPos;
+    [SerializeField] Vector3 gridPos;
     [SerializeField] Vector3 StartPos;
     [SerializeField] Vector3 TargetPos => pos.Pos; 
     [SerializeField] bool moving = false;    
