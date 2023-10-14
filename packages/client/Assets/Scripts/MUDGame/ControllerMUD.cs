@@ -22,10 +22,12 @@ public class ControllerMUD : SPController {
 
     [Header("MUD")]
     [SerializeField] Transform playerTransform;
-    [SerializeField] GameObject moveMarker;
 
     [Header("FX")]
     [SerializeField] AudioClip[] sfx_bump;
+
+    [Header("Debug")]
+    [SerializeField] PositionSync sync;
 
     System.IDisposable? _disposer;
     MUDEntity mudEntity;
@@ -55,21 +57,20 @@ public class ControllerMUD : SPController {
         base.Init();
 
         // Debug.Log("Controller Init");
-
+        sync = GetComponent<PositionSync>();
         playerScript = GetComponentInParent<PlayerMUD>();
-        playerScript.Position.OnUpdated += ComponentUpdate;
 
-        moveMarker.SetActive(false);
+        if(playerScript) {
+            sync.Pos.OnUpdated += ComponentUpdate;
+        }
+
         controller.enabled = false;
 
         playerTransform = transform;
-        moveMarker.transform.parent = playerScript.Player.transform;
-        moveMarker.transform.position = playerTransform.position;
-
         playerTransform.rotation = Quaternion.Euler(0f, Random.Range(0, 4) * 90f, 0f);
 
-        onchainPos = playerScript.Position.Pos;
-        SetPositionInstant(playerScript.Position.Pos);
+        onchainPos = sync.Pos.Pos;
+        SetPositionInstant(sync.Pos.Pos);
 
         if(playerScript.IsLocalPlayer) {
             SPActionUI.Instance.SpawnAction(walkAction);
@@ -89,7 +90,7 @@ public class ControllerMUD : SPController {
     }
 
     private void OnDestroy() {
-        if (playerScript) { playerScript.Position.OnUpdated -= ComponentUpdate; }
+        if (playerScript) { sync.Pos.OnUpdated -= ComponentUpdate; }
 
         _disposer?.Dispose();
     }
@@ -149,7 +150,7 @@ public class ControllerMUD : SPController {
         
         Vector3 moveTo = onchainPos + inputDir;
 
-        // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(playerScript.Position.Pos + direction + Vector3.up * .25f, .1f);
+        // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(sync.Pos.Pos + direction + Vector3.up * .25f, .1f);
         MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
 
@@ -289,7 +290,6 @@ public class ControllerMUD : SPController {
 
         //ROTATE
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-        moveMarker.transform.position = Vector3.Lerp(moveMarker.transform.position, markerPos + Vector3.up * .1f + Vector3.up * Mathf.Sin(Time.time * 5f) * .1f, .2f);
 
         if(playerTransform.position == moveDest) {
             return;
@@ -321,22 +321,22 @@ public class ControllerMUD : SPController {
     private void ComponentUpdate() {
 
         if (!init) { return; }
-        //|| playerScript.Position.UpdateType == UpdateType.SetRecord
-        if (playerScript.Position.UpdateInfo.Source == UpdateSource.Revert ) {
+        //|| sync.Pos.UpdateType == UpdateType.SetRecord
+        if (sync.Pos.UpdateInfo.Source == UpdateSource.Revert ) {
             Debug.Log("Teleporting", this);
-            SetPositionInstant(playerScript.Position.Pos);
+            SetPositionInstant(sync.Pos.Pos);
         } else {
             //UPDATE ROTATION 
-            if (playerTransform.position != playerScript.Position.Pos) {
-                playerScript.AnimationMUD.Look.SetLookRotation(playerScript.Position.Pos);
+            if (playerTransform.position != sync.Pos.Pos) {
+                playerScript.AnimationMUD.Look.SetLookRotation(sync.Pos.Pos);
             }
         }
 
         //get the actual onchainposition
-        onchainPos = playerScript.Position.Pos;
+        onchainPos = sync.Pos.Pos;
 
         //update our moveDestination, we must always observe the current onchain state
-        moveDest = playerScript.Position.Pos;
+        moveDest = sync.Pos.Pos;
 
       
 
@@ -357,7 +357,7 @@ public class ControllerMUD : SPController {
         // }
 
         // if(Application.isPlaying && init) {
-        //     Gizmos.DrawLine(playerScript.Position.Pos, playerScript.Position.Pos + inputDir);
+        //     Gizmos.DrawLine(sync.Pos.Pos, sync.Pos.Pos + inputDir);
         // }
     }
 

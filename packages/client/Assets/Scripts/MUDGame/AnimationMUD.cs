@@ -27,6 +27,7 @@ public class AnimationMUD : MonoBehaviour
     public SPAnimator Animator;
     public SPController Controller;
     [SerializeField] MUDEntity entity;
+    [SerializeField] MUDComponent ourComponent;
     [SerializeField] ActionComponent actionData;
     [SerializeField] SPLooker looker;
     [SerializeField] IActor actor;
@@ -37,14 +38,18 @@ public class AnimationMUD : MonoBehaviour
         entity = GetComponentInParent<MUDEntity>();
         looker = root.gameObject.AddComponent<SPLooker>();
 
+        ourComponent = GetComponent<MUDComponent>();
+        ourComponent.OnToggle += ToggleDead;
     }
 
     protected virtual void Start() {
 
         Animator = GetComponentInChildren<SPAnimator>(true);
         Controller = GetComponentInChildren<SPController>(true);
+        
         if(Controller == null) {
             Controller = gameObject.AddComponent<SPController>();
+            Controller.Init();
             Controller.ToggleController(false);
         }
 
@@ -77,7 +82,8 @@ public class AnimationMUD : MonoBehaviour
 
         if(entity) entity.OnLoaded -= Init;
         if(actionData) actionData.OnUpdated -= UpdateAction;
-        
+        if(ourComponent) ourComponent.OnToggle -= ToggleDead;
+
     }
 
     void UpdateAction() {
@@ -99,12 +105,16 @@ public class AnimationMUD : MonoBehaviour
         }
     }
 
+    public void ToggleDead() {
+        ToggleRagdoll(!ourComponent.Active);
+    }
+
     public void ToggleRagdoll(bool toggle) {
         
         Controller.Ragdoll(toggle);
 
         if(toggle) {
-            head.parent = transform;
+            head.parent = null;
             headRB.isKinematic = false;
             headRB.velocity = Random.onUnitSphere * .1f;
         } else {
@@ -127,9 +137,13 @@ public class AnimationMUD : MonoBehaviour
             ToggleAction(false, actionEffect);
             actionEffect = null;
             return;
-        } else {
-            if(newEffect.Action != newAction) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
         }
+
+        //check that the action is the right one
+        if(newEffect.Action != newAction) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
+
+        //setup the new movement type instantlye
+        newEffect.ToggleMovement(true, this);
 
         if(WaitAFrame != null) StopCoroutine(WaitAFrame); 
         WaitAFrame = StartCoroutine(AnimationInsanity(newEffect));
@@ -142,18 +156,27 @@ public class AnimationMUD : MonoBehaviour
         //wait a frame so all the positions are synced
         yield return null;
 
-        //if we have a target that is moving (and is not us), wait until it comes to the position
+        //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
         while(actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
 
         //turn off old action
         if (actionEffect != null && newAction.Action != Action) { ToggleAction(false, actionEffect); }
+
+        //turn on new action
         ToggleAction(true, newAction);
 
+        //let it play for a couple seconds
         yield return new WaitForSeconds(2f);
         
         ToggleAction(false, newAction);
 
         WaitAFrame = null;
+    }
+
+    public virtual void ToggleMovement(bool toggle, ActionEffect newEffect) {
+        //play new action if it exists
+        if(newEffect == null) return;
+        newEffect.ToggleMovement(toggle, this);
     }
 
     public virtual void ToggleAction(bool toggle, ActionEffect newEffect) {

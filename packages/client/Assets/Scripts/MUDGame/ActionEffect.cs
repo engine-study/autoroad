@@ -30,6 +30,13 @@ public class ActionEffect : MonoBehaviour {
         if(moveEffect) moveEffect.active = false;
     }
     
+    public virtual void ToggleMovement(bool toggle, AnimationMUD animation) {
+
+        //set the movement 
+        if(movement) animation.PositionSync.SetMovement(movement);
+
+    }
+
     public virtual void Toggle(bool toggle, AnimationMUD animation) {
 
         anim = animation;
@@ -41,10 +48,8 @@ public class ActionEffect : MonoBehaviour {
         }
 
         if(toggle) {
-            
-            //set the movement, LET THIS LINGER, states without movement use the last movement given
-            if(movement) anim.PositionSync.SetMovement(movement);
 
+            //first check if we are moving or not before performing action
             if(anim.PositionSync.Moving) {
                 //play movement animation
                 ToggleMovementEffects(true);
