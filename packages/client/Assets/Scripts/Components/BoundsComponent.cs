@@ -24,8 +24,6 @@ public class BoundsComponent : MUDComponent
 
     protected override void Awake() {
         base.Awake();
-
-        Instance = this;
         borders.gameObject.SetActive(false);
     }
 
@@ -38,6 +36,8 @@ public class BoundsComponent : MUDComponent
 
     protected override IMudTable GetTable() {return new BoundsTable();}
     protected override void UpdateComponent(mud.IMudTable table, UpdateInfo newInfo) {
+
+        Instance = this;
 
         BoundsTable bounds = (BoundsTable)table;
 

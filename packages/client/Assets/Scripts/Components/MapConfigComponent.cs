@@ -29,4 +29,10 @@ public class MapConfigComponent : MUDComponent
         SpawnWidth = playSpawnWidth;
 
     }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        Instance = null;
+    }
+
 }

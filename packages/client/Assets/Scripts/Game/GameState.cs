@@ -81,16 +81,16 @@ public class GameState : MonoBehaviour {
         Debug.Log("---GAMESTATE--- LOAD WORLD");
         mainTables.SpawnTables();
         while(mainTables.Loaded == false) {await UniTask.Delay(100);}
-        while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(100);}
+        while(BoundsComponent.Instance == null || MapConfigComponent.Instance == null || GameStateComponent.Instance == null) {await UniTask.Delay(100);}
 
         //Load all chunks
         Debug.Log("---GAMESTATE--- LOAD CHUNKS");
-        chunkTable.SubscribeAll();
+        chunkTable.Spawn();
         while(ChunkLoader.HasLoadedAllChunks == false) { await UniTask.Delay(100);}
 
         //Load all entities with position component
         Debug.Log("---GAMESTATE--- LOAD ALL");
-        for (int i = 0; i < tables.Length; i++) { tables[i].SubscribeAll(); }
+        for (int i = 0; i < tables.Length; i++) { tables[i].Spawn(); }
 
         await UniTask.Delay(1000);
 

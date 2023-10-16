@@ -1,0 +1,69 @@
+{
+  "manifest": {
+    "name": "applause-button",
+    "description": "A zero-configuration button for adding applause / claps / kudos to web pages and blog-posts",
+    "version": "3.4.0",
+    "main": "dist/applause-button.js",
+    "license": "MIT",
+    "devDependencies": {
+      "babel-core": "^6.26.3",
+      "babel-plugin-external-helpers": "^6.22.0",
+      "babel-preset-env": "^1.6.1",
+      "http-server": "^0.11.1",
+      "jest": "^24.1.0",
+      "jest-puppeteer": "^4.0.0",
+      "node-sass": "^4.9.0",
+      "prettier": "^1.16.4",
+      "prettier-check": "^2.0.0",
+      "puppeteer": "^1.13.0",
+      "rollup": "^0.58.2",
+      "rollup-plugin-babel": "^3.0.4",
+      "rollup-plugin-node-resolve": "^3.3.0",
+      "rollup-plugin-uglify": "^3.0.0",
+      "semantic-release": "^15.4.1",
+      "travis-deploy-once": "^5.0.0",
+      "watch": "^1.0.2"
+    },
+    "scripts": {
+      "test": "yarn run test:prettier && yarn run test:jest",
+      "test:jest": "yarn run build && jest",
+      "test:prettier": "prettier-check src/**/*.js",
+      "test:server": "http-server -p 8081",
+      "watch": "watch \"yarn run build\" src",
+      "build": "yarn run build:scss && yarn run build:js",
+      "build:scss": "node-sass --output-style compressed -o dist src/applause-button.scss",
+      "build:js": "rollup -c",
+      "prepublish": "yarn run build",
+      "travis-deploy-once": "travis-deploy-once",
+      "semantic-release": "semantic-release"
+    },
+    "dependencies": {
+      "document-register-element": "^1.8.1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/ColinEberhardt/applause-button.git"
+    },
+    "jest": {
+      "preset": "jest-puppeteer"
+    },
+    "_registry": "npm",
+    "_loc": "C:\\Users\\Neilson\\AppData\\Local\\Yarn\\Cache\\v6\\npm-applause-button-3.4.0-6f7e6d12a0660f358663eb999c14e7b79d3c4e5c-integrity\\node_modules\\applause-button\\package.json",
+    "readmeFilename": "README.md",
+    "readme": "# Applause Button\n[![Backers on Open Collective](https://opencollective.com/applause-button/backers/badge.svg)](#backers)\n [![Sponsors on Open Collective](https://opencollective.com/applause-button/sponsors/badge.svg)](#sponsors) \n\nA zero-configuration button for adding applause / claps / kudos to web pages and blog-posts.\n\n## Minimal example\n\nThe applause button is a custom element that can be added directly to the page. Here is a minimal example:\n\n```html\n<head>\n  <!-- add the button style & script -->\n  <link rel=\"stylesheet\" href=\"dist/applause-button.css\" />\n  <script src=\"dist/applause-button.js\"></script>\n</head>\n<body>\n  <!-- add the button! -->\n  <applause-button style=\"width: 58px; height: 58px;\"/>\n</body>\n```\n\nThe above will render an applause button, persisting claps and clap counts. \n\nFor more information, visit the [project website](https://colineberhardt.github.io/applause-button/);\n\n## Development\n\nClone this repo and install dependencies via yarn:\n\n~~~\n$ yarn\n~~~\n\nUse `yarn test` to run the test suite. These use Jest as the test runner, and Puppeteer as a headless Chrome instance, allowing the applause button to make API requests (with appropriate responses faked within the test code).\n\nYou can build project and start watching the `src` folder for changes as follows:\n\n~~~\n$ yarn run watch\n~~~\n\nRun `yarn test:server` to start a dev server in another process. \n\n\n\n\n\n\n\n### Releases\n\nAll releases are created automatically via [semantic release](https://github.com/semantic-release/semantic-release) running on Travis.\n\n\n## Contributors\n\nThis project exists thanks to all the people who contribute. \n<a href=\"https://github.com/ColinEberhardt/applause-button/graphs/contributors\"><img src=\"https://opencollective.com/applause-button/contributors.svg?width=890&button=false\" /></a>\n\n\n## Backers\n\nThank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/applause-button#backer)]\n\n<a href=\"https://opencollective.com/applause-button#backers\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/backers.svg?width=890\"></a>\n\n\n## Sponsors\n\nSupport this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/applause-button#sponsor)]\n\n<a href=\"https://opencollective.com/applause-button/sponsor/0/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/0/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/1/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/1/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/2/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/2/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/3/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/3/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/4/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/4/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/5/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/5/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/6/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/6/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/7/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/7/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/8/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/8/avatar.svg\"></a>\n<a href=\"https://opencollective.com/applause-button/sponsor/9/website\" target=\"_blank\"><img src=\"https://opencollective.com/applause-button/sponsor/9/avatar.svg\"></a>\n\n\n",
+    "licenseText": "MIT License\n\nCopyright (c) 2019 Colin Eberhardt\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/applause-button/-/applause-button-3.4.0.tgz#6f7e6d12a0660f358663eb999c14e7b79d3c4e5c",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/applause-button/-/applause-button-3.4.0.tgz",
+    "hash": "6f7e6d12a0660f358663eb999c14e7b79d3c4e5c",
+    "integrity": "sha512-jYx7jSqITBXLQijuQ5aEoxb+PbjD8xCHgjvfWrvFFk/MtM8/DBT7gPHk0wTQPD7+IMwwZLw/9hMK/i5vX5kWEw==",
+    "registry": "npm",
+    "packageName": "applause-button",
+    "cacheIntegrity": "sha512-jYx7jSqITBXLQijuQ5aEoxb+PbjD8xCHgjvfWrvFFk/MtM8/DBT7gPHk0wTQPD7+IMwwZLw/9hMK/i5vX5kWEw== sha1-b35tEqBmDzWGY+uZnBTnt508Tlw="
+  },
+  "registry": "npm",
+  "hash": "6f7e6d12a0660f358663eb999c14e7b79d3c4e5c"
+}

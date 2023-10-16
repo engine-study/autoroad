@@ -1,9 +1,9 @@
 {
-  "name": "mud-template-vanilla",
+  "name": "mud-template-unity",
   "private": true,
   "scripts": {
     "build": "pnpm recursive run build",
-    "dev": "concurrently -n contracts,client -c cyan,magenta \"cd packages/contracts && pnpm run dev\" \"cd packages/client && pnpm run dev\"",
+    "dev": "concurrently -n contracts,unity -c cyan,magenta \"cd packages/contracts && pnpm run dev\" \"cd packages/contracts && pnpm run dev:unity\"",
     "dev:client": "pnpm --filter 'client' run dev",
     "dev:contracts": "pnpm --filter 'contracts' dev",
     "foundry:up": "curl -L https://foundry.paradigm.xyz | bash && bash $HOME/.foundry/bin/foundryup",
@@ -12,7 +12,7 @@
     "test": "pnpm recursive run test"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.0.0-next.8",
+    "@latticexyz/cli": "2.0.0-next.11",
     "@typescript-eslint/eslint-plugin": "5.46.1",
     "@typescript-eslint/parser": "5.46.1",
     "concurrently": "^8.0.1",

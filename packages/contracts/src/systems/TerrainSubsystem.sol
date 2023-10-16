@@ -29,21 +29,27 @@ contract TerrainSubsystem is System {
     return x >= RoadConfig.getLeft() && x <= RoadConfig.getRight();
   }
 
-  function createWorld() public {
+  function sup() public {
+    console.log("sup");
     IWorld world = IWorld(_world());
+  }
+
+  function createWorld() public {
+
+    console.log("creating world");
 
     bool debug = true; 
     bool dummyPlayers = true; 
     bool roadComplete = true; 
 
-    GameState.set(world, int32(-1), 0);
-    GameConfig.set(world, debug, dummyPlayers, roadComplete);
-    MapConfig.set(world, 10, 10, 13);
-    RoadConfig.set(world, 1, 0, 0);
-    Bounds.set(0, 0, -1, 1);
-    Row.set(world, int32(-1));
+    GameState.set(int32(-1), 0);
+    GameConfig.set(debug, dummyPlayers, roadComplete);
+    MapConfig.set(10, 10, 13);
+    RoadConfig.set(1, 0, 0);
+    Bounds.set(0, 0, int32(-1), 1);
+    Row.set(int32(-1));
 
-    bytes32 carriage = world.getCarriageEntity();
+    bytes32 carriage = getCarriageEntity();
     Carriage.set(carriage, true);
     Position.set(carriage, 0, -1, 0);
 
@@ -58,9 +64,11 @@ contract TerrainSubsystem is System {
     up = down + playHeight + int32(-1);
   }
 
+
   function createMile() public {
 
-    IWorld world = IWorld(_world());
+    console.log("creating mile");
+
     int32 mile = GameState.getMiles();
     bytes32 oldChunk = getChunkEntity(mile);
 

@@ -5,7 +5,6 @@ import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { TerrainSubsystem } from "../src/systems/TerrainSubsystem.sol";
-import { MapSubsystem } from "../src/systems/MapSubsystem.sol";
 import { random } from "../src/utility/random.sol";
 
 contract PostDeploy is Script {
@@ -17,8 +16,9 @@ contract PostDeploy is Script {
     vm.startBroadcast(deployerPrivateKey);
 
     //deploys the MapConfig
-    // world.createWorld();
-    // world.createMile();
+    world.sup();
+    world.createWorld();
+    world.createMile();
 
     // some debug to check if our abiencode is working
     // abiTest(worldAddress);
