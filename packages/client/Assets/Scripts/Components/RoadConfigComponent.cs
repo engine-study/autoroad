@@ -21,9 +21,9 @@ public class RoadConfigComponent : MUDComponent
         
         RoadConfigTable update = (RoadConfigTable)table;
 
-        width = (int)update.width;
-        left = (int)update.left;
-        right = (int)update.right;
+        width = (int)update.Width;
+        left = (int)update.Left;
+        right = (int)update.Right;
 
         Width = width;
         Left = left;

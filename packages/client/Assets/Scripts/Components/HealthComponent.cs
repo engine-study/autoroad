@@ -16,13 +16,13 @@ public class HealthComponent : ValueComponent {
         // Entity.Toggle(health > 0);
     }
 
-    protected override float SetValue(IMudTable update) {return (int)((HealthTable)update).value;}
+    protected override float SetValue(IMudTable update) {return (int)((HealthTable)update).Value;}
     protected override StatType SetStat(IMudTable update) {return StatType.Health;}
 
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
         base.UpdateComponent(table,newInfo);
         
-        health = (int)(table as HealthTable).value;
+        health = (int)(table as HealthTable).Value;
         dead = health < 0 || newInfo.UpdateType == UpdateType.DeleteRecord;
     }
 }

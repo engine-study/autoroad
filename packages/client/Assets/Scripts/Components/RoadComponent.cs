@@ -74,12 +74,12 @@ public class RoadComponent : MUDComponent {
         RoadTable roadUpdate = (RoadTable)update;
         // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
-        creditedPlayer = ((string)roadUpdate.filled).ToLower();
-        hasGem = (bool)roadUpdate.gem;
+        creditedPlayer = ((string)roadUpdate.Filled).ToLower();
+        hasGem = (bool)roadUpdate.Gem;
 
         filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
 
-        SetState((RoadState)roadUpdate.state);
+        SetState((RoadState)roadUpdate.State);
 
         if (newInfo.Source == UpdateSource.Optimistic || (Loaded && lastStage != State)) {
 
@@ -105,7 +105,7 @@ public class RoadComponent : MUDComponent {
 
         }
 
-        creditedPlayerDebug = MUDWorld.FindValue<RoadTable>(Entity.Key).filled;
+        creditedPlayerDebug = MUDWorld.FindValue<RoadTable>(Entity.Key).Filled;
 
         lastStage = State;
 

@@ -24,7 +24,7 @@ public class XPComponent : ValueComponent {
         level = -1;
     }
 
-    protected override float SetValue(IMudTable update){return (int)((XPTable)update).value;}
+    protected override float SetValue(IMudTable update){return (int)((XPTable)update).Value;}
     protected override StatType SetStat(IMudTable update) {return StatType.XP;}
 
     protected override IMudTable GetTable() {return new XPTable();}
@@ -33,7 +33,7 @@ public class XPComponent : ValueComponent {
 
         XPTable table = update as XPTable;
 
-        xp = (int)table.value;
+        xp = (int)table.Value;
         level = XPToLevel(xp);
         
         bool levelingUp = lastLevel != -1 && level != lastLevel;

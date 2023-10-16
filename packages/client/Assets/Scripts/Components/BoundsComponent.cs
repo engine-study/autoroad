@@ -41,10 +41,10 @@ public class BoundsComponent : MUDComponent
 
         BoundsTable bounds = (BoundsTable)table;
 
-        Left = (int)bounds.left;
-        Right = (int)bounds.right;
-        Up = (int)bounds.up;
-        Down = (int)bounds.down;
+        Left = (int)bounds.Left;
+        Right = (int)bounds.Right;
+        Up = (int)bounds.Up;
+        Down = (int)bounds.Down;
 
         borderVector = new Vector4(Left, Right, Up, Down);
         borders.SetBorder(borderVector);

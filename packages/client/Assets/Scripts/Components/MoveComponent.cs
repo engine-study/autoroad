@@ -22,7 +22,7 @@ public class MoveComponent : MUDComponent {
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         MoveTable table = (MoveTable)update;
-        MoveType = (MoveType)table.value;
+        MoveType = (MoveType)table.Value;
 
     }
 

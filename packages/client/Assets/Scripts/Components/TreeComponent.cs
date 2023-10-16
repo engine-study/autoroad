@@ -44,7 +44,7 @@ public class TreeComponent : MUDComponent {
 
         TreeTable treeUpdate = (TreeTable)update;
 
-        treeState = treeUpdate.value != null ? (FloraType)(int)treeUpdate.value : treeState;
+        treeState = treeUpdate.Value != null ? (FloraType)(int)treeUpdate.Value : treeState;
 
         // if(newInfo.UpdateType == UpdateType.DeleteRecord) {
         //     gameObject.SetActive(false);

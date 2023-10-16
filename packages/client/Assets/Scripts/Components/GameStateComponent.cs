@@ -24,7 +24,7 @@ public class GameStateComponent : MUDComponent {
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
         GameStateTable table = (GameStateTable)update;
 
-        mile = table.miles != null ? (int)table.miles : mile;
+        mile = table.Miles != null ? (int)table.Miles : mile;
         MILE_COUNT = mile;
 
         Debug.Log("[GAMECOMPONENT] Mile: " + mile);

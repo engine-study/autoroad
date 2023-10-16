@@ -41,10 +41,10 @@ public class ActionComponent : MUDComponent {
 
         ActionTable table = update as ActionTable;
 
-        actionType = (ActionName)table.action;
-        targetPos = new Vector3((int)table.x, 0f, (int)table.y);
+        actionType = (ActionName)table.Action;
+        targetPos = new Vector3((int)table.X, 0f, (int)table.Y);
 
-        targetBytes = ((string)table.target).ToLower();
+        targetBytes = ((string)table.Target).ToLower();
         targetEntity = MUDWorld.FindEntity(targetBytes);
 
         if(targetEntity) {

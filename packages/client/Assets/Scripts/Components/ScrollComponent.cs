@@ -13,7 +13,7 @@ public class ScrollComponent : ValueComponent {
 
     public int scrolls;
 
-    protected override float SetValue(IMudTable update) {return (int)((ScrollTable)update).value;}
+    protected override float SetValue(IMudTable update) {return (int)((ScrollTable)update).Value;}
     protected override StatType SetStat(IMudTable update) {return StatType.Scroll;}
 
     protected override IMudTable GetTable() {return new ScrollTable();}
@@ -21,7 +21,7 @@ public class ScrollComponent : ValueComponent {
         base.UpdateComponent(update,newInfo);
 
         ScrollTable table = update as ScrollTable;
-        scrolls = (int)table.value;
+        scrolls = (int)table.Value;
 
         if(Entity.Key == NetworkManager.LocalAddress) {
             LocalScrolls = scrolls;

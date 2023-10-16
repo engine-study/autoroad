@@ -29,7 +29,7 @@ public class NameComponent : MUDComponent {
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         NameTable table = update as NameTable;
-        playerName = NameUI.TableToName((int)table.first, (int)table.middle, (int)table.last);
+        playerName = NameUI.TableToName((int)table.First, (int)table.Middle, (int)table.Last);
 
         if(Entity.Key == NetworkManager.Instance.addressKey) {
             localName = playerName;

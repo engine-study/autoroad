@@ -19,7 +19,7 @@ public class CoinComponent : ValueComponent {
         base.UpdateComponent(update, newInfo);
 
         CoinageTable table = update as CoinageTable;
-        coins = (int)table.value;
+        coins = (int)table.Value;
 
         if(Entity.Key == NetworkManager.LocalAddress) {
             LocalCoins = coins;
@@ -35,7 +35,7 @@ public class CoinComponent : ValueComponent {
 
     }
 
-    protected override float SetValue(IMudTable mudTable) {return (int)((CoinageTable)mudTable).value;}
+    protected override float SetValue(IMudTable mudTable) {return (int)((CoinageTable)mudTable).Value;}
     protected override string SetString(IMudTable mudTable) {return Value.ToString("000");}
     protected override StatType SetStat(IMudTable mudTable) {return StatType.RoadCoin;}
 

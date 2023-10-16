@@ -65,7 +65,7 @@ public class RockComponent : MUDComponent {
         RockTable rockUpdate = (RockTable)update;
 
         if (rockUpdate == null) { Debug.LogError("No rockUpdate", this);
-        } else { rockType = (RockType)rockUpdate.value;}
+        } else { rockType = (RockType)rockUpdate.Value;}
 
         rockBase.baseName = rockType.ToString();
         Entity.SetName(rockType.ToString());

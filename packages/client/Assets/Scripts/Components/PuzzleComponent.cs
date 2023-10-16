@@ -15,7 +15,7 @@ public class PuzzleComponent : MUDComponent {
 
         PuzzleTable table = update as PuzzleTable;
         
-        completed = (bool)table.complete;
+        completed = (bool)table.Complete;
     }
 
 }

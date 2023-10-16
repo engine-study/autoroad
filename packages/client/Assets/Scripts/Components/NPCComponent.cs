@@ -26,7 +26,7 @@ public class NPCComponent : MUDComponent
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         NPCTable table = update as NPCTable;
-        npc = (NPCType)(int)table.value;
+        npc = (NPCType)(int)table.Value;
      
     }
 
