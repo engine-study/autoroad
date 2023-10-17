@@ -5,14 +5,16 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/index.sol";
 import { Move, Carrying, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/index.sol";
+import { Soldier, Barbarian, Ox, Aggro, Seeker, Archer } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
-import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+import { Actions } from "../utility/actions.sol";
 import { randomCoord } from "../utility/random.sol";
+import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
+import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 import { ActionSystem } from "../systems/ActionSystem.sol";
-import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { RewardSubsystem } from "../systems/RewardSubsystem.sol";
 
 contract SpawnSubsystem is System {
@@ -45,10 +47,49 @@ contract SpawnSubsystem is System {
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y, 0);
-    IWorld(_world()).setAction(entity, ActionType.Spawn, x, y);
+    Actions.setAction(entity, ActionType.Spawn, x, y);
 
   }
-  
+
+  function spawnNPC(bytes32 spawner, int32 x, int32 y, NPCType npcType) public {
+
+    console.log("spawn NPC");
+
+    require(npcType != NPCType.None, "None");
+
+    bytes32 entity = getUniqueEntity();
+    IWorld world = IWorld(_world());
+
+    NPC.set(entity, uint32(npcType));
+
+    if (npcType == NPCType.Player) {
+      spawnPlayerNPC(entity, x, y);
+    } else if (npcType == NPCType.Soldier) {
+      Soldier.set(entity, true);
+      Weight.set(entity, 1);
+      Seeker.set(entity, 2);
+      Aggro.set(entity,1);
+    } else if (npcType == NPCType.Barbarian) {
+      Barbarian.set(entity, true);
+      Weight.set(entity, 1);
+      Seeker.set(entity, 2);
+      Aggro.set(entity,1);
+    } else if (npcType == NPCType.BarbarianArcher) {
+      Barbarian.set(entity, true);
+      Weight.set(entity, 1);
+      Archer.set(entity, 5);
+    } else if (npcType == NPCType.Ox) {
+      Ox.set(entity, true);
+      Weight.set(entity, -5);
+    }
+
+    Move.set(entity, uint32(MoveType.Push));
+    Health.set(entity, 1);
+    Position.set(entity, PositionData(x,y,0));
+
+    Actions.setAction(entity, ActionType.Spawn, x, y);
+  }
+
   function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
     IWorld world = IWorld(_world());
 

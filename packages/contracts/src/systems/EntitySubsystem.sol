@@ -6,9 +6,12 @@ import { System } from "@latticexyz/world/src/System.sol";
 
 import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/index.sol";
 import { NPCType } from "../codegen/common.sol";
+
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+import { Rules } from "../utility/rules.sol";
+
 import { BehaviourSubsystem } from "./BehaviourSubsystem.sol";
-import { MapSubsystem } from "./MapSubsystem.sol";
+
 
 contract EntitySubsystem is System {
 
@@ -22,16 +25,17 @@ contract EntitySubsystem is System {
 
   //find all nearby entities that have tick updates and tick them
   function triggerEntities(bytes32 causedBy, bytes32 player, PositionData memory pos) public {
+
     // console.log("triggerEntities");
+    IWorld world = IWorld(_world());
 
     //only NPC movements trigger entity ticks
     if(NPC.get(player) == uint32(NPCType.None)) {return;}
 
     //if we are off the map we don't trigger NPCs
-    if (IWorld(_world()).onMap(pos.x, pos.y) == false) { return;}
+    if (Rules.onMap(pos.x, pos.y) == false) { return;}
 
     //TODO gas golf, calculate distances and other things here so tickBehaviour doesnt do it
-    IWorld world = IWorld(_world());
     PositionData[] memory positions = neumanNeighborhoodOuter(pos, 2);
     bytes32[] memory entities = activeEntities(positions);
 
@@ -46,7 +50,7 @@ contract EntitySubsystem is System {
 
       //check player is still alive, exit early if not?? 
       //test this pls, what happens if 3 npcs try to kill one player at once
-      // if(world.canDoStuff(player) == false) {return;}
+      // if(Rules.canDoStuff(player) == false) {return;}
     }
   }
 
@@ -54,7 +58,7 @@ contract EntitySubsystem is System {
     // console.log("activeEntities");
     bytes32[] memory neighbors = new bytes32[](positions.length);
     for (uint i = 0; i < positions.length; i++) {
-      bytes32[] memory entities = IWorld(_world()).getKeysAtPosition(positions[i].x, positions[i].y, 0);
+      bytes32[] memory entities = Rules.getKeysAtPosition(IWorld(_world()) ,positions[i].x, positions[i].y, 0);
       if(entities.length > 0) {neighbors[i] = entities[0];}
     }
 

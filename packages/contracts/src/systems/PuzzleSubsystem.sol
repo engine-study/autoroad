@@ -7,9 +7,9 @@ import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData,
 import { Puzzle, Trigger, Miliarium } from "../codegen/index.sol";
 import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/common.sol";
 
+import { Rules } from "../utility/rules.sol";
 import { random, randomFromEntitySeed } from "../utility/random.sol";
 
-import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 
 
@@ -26,7 +26,7 @@ contract PuzzleSubsystem is System {
 
     if(puzzleType == PuzzleType.Miliarium) {
       //search underground for triggers (-1)
-      bytes32[] memory atPosition = world.getKeysAtPosition( pos.x, pos.y, -1);
+      bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
       if(atPosition.length > 0 && Trigger.get(atPosition[0]) == entity) {
         //success, freeze miliarium in place
         Move.set(entity, uint32(MoveType.Obstruction));
@@ -111,7 +111,7 @@ contract PuzzleSubsystem is System {
       pos = getRandomPositionNotRoad(entity, width, up, down, roadSide, attempts);
 
       //don't overwrite Puzzles or Triggers or Obstructions already on road
-      bytes32[] memory atPosition = world.getKeysAtPosition( pos.x, pos.y, 0);
+      bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, 0);
       if(atPosition.length > 0) { 
         //check for obstructions and puzzles
         MoveType move = MoveType(Move.get(atPosition[0]));
@@ -124,7 +124,7 @@ contract PuzzleSubsystem is System {
       
       //check for triggers if still valid
       if(isValid) {
-        atPosition = world.getKeysAtPosition( pos.x, pos.y, -1);
+        atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
         if(atPosition.length > 0) {
           bytes32 trigger = Trigger.get(atPosition[0]);
           if(trigger != bytes32(0)) {

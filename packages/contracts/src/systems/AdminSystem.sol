@@ -6,11 +6,11 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Player, Position, Health, Move, GameState, Coinage, PositionData, PositionTableId } from "../codegen/index.sol";
 import { TerrainType, NPCType } from "../codegen/common.sol";
 
+import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
-import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { PuzzleSubsystem } from "./PuzzleSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 
@@ -36,7 +36,7 @@ contract AdminSystem is System {
   function killPlayerAdmin(int32 x, int32 y) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
     require(isAdmin(entity), "not admin");    
-    bytes32[] memory atPosition = IWorld(_world()).getKeysAtPosition ( x, y, 0 );
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(IWorld(_world()), x, y, 0 );
 
     if(atPosition.length == 0) return;
     IWorld(_world()).kill(entity, atPosition[0], entity, PositionData(x,y,0));

@@ -5,10 +5,6 @@ export default mudConfig({
 
   systems: {
 
-    MapSubsystem: {
-      name: "map",
-      openAccess: false,
-    },
     MoveSubsystem: {
       name: "move",
       openAccess: false,
@@ -27,10 +23,6 @@ export default mudConfig({
     },
     ItemSubsystem: {
       name: "item",
-      openAccess: false,
-    },
-    NPCSubsystem: {
-      name: "npc",
       openAccess: false,
     },
     PuzzleSubsystem: {

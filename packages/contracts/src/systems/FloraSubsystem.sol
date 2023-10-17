@@ -7,6 +7,7 @@ import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { Player, Health, Tree, Seeds, Move } from "../codegen/index.sol";
 import { ActionType, TerrainType, FloraType, MoveType } from "../codegen/common.sol";
 
+import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { randomSeed, randomCoord} from "../utility/random.sol";
 import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
@@ -46,11 +47,11 @@ contract FloraSubsystem is System {
 
   function chop(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
-    bytes32[] memory atPosition = world.getKeysAtPosition(x, y, 0);
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
 
-    require(world.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
+    require(Rules.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
 
     world.setActionTargeted(player, ActionType.Chop, x, y, atPosition[0]);
@@ -82,20 +83,20 @@ contract FloraSubsystem is System {
   
   function plant(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
     uint32 seeds = Seeds.get(player);
     require(seeds > 0, "no seeds");
 
-    require(world.onMap(x, y), "off map");
-    // require(!world.onRoad(x, y), "on road");
+    require(Rules.onMap(x, y), "off map");
+    // require(!Rules.onRoad(x, y), "on road");
 
-    bytes32[] memory atRoad = world.getKeysAtPosition(x, y, -1);
+    bytes32[] memory atRoad = Rules.getKeysAtPosition(world,x, y, -1);
     require(atRoad.length == 0, "road here");
 
     PositionData memory pos = PositionData(x,y,0);
-    bytes32[] memory atPosition = world.getKeysAtPosition(x, y, 0);
-    require(world.canInteractEmpty(player, Position.get(player), pos, atPosition, 1), "bad interact");
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
+    require(Rules.canInteractEmpty(player, Position.get(player), pos, atPosition, 1), "bad interact");
 
     world.setAction(player, ActionType.Plant, x, y);
 

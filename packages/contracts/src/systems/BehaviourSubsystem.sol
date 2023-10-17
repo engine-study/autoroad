@@ -7,10 +7,10 @@ import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Se
 import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
 import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
+import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
 
-import { MapSubsystem } from "./MapSubsystem.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { ActionSystem } from "./ActionSystem.sol";
 
@@ -41,7 +41,7 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
     //walk towards target
     PositionData memory walkPos = addPosition(seekerPos,getVectorNormalized(seekerPos,targetPos));
-    bytes32[] memory atDest = world.getKeysAtPosition(walkPos.x, walkPos.y, 0);
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
     world.moveTo(causedBy, seeker, seekerPos, walkPos, atDest, ActionType.Walking);
   }
 
@@ -88,13 +88,13 @@ contract BehaviourSubsystem is System {
     //check if anything is in the way 
     for (uint i = 1; i < positions.length-1; i++) {
   
-      bytes32[] memory atDest = world.getKeysAtPosition(positions[i].x, positions[i].y, 0);
+      bytes32[] memory atDest = Rules.getKeysAtPosition(world,positions[i].x, positions[i].y, 0);
 
       if(atDest.length > 0) {
         //check if this movetype will intercept the arrow
         //set this to target instead and continue
         MoveType atMove = MoveType(Move.get(atDest[0]));
-        if(world.canPlaceOn(atMove) == false) {
+        if(Rules.canPlaceOn(atMove) == false) {
           targetPos = positions[i];
           target = atDest[0];
         }
