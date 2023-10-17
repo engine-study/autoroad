@@ -64,6 +64,7 @@ public class PositionSync : ComponentSync
         //set up our side of the compnents BEFORE 
         target.position = pos.Pos;
         StartPos = pos.Pos;
+        UpdateGrid(pos.Pos);
 
         if(useLine) {
             line = ((GameObject)(Instantiate(Resources.Load("Prefabs/LinePosition"), transform))).GetComponent<LineRenderer>();

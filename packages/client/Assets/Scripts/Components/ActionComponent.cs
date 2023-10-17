@@ -50,6 +50,8 @@ public class ActionComponent : MUDComponent {
         if(targetEntity) {
             targetSync = targetEntity.GetRootComponent<PositionSync>();
             if(targetSync == null) {Debug.LogError("No pos for action", this);return;}
+        } else {
+            targetSync = null;
         }
 
     }
