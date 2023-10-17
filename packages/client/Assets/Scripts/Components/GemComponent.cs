@@ -1,7 +1,7 @@
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mudworld;
+using mud;
+using mud;
 
 public class GemComponent : ValueComponent {
     public int Gems { get { return gems; } }
@@ -13,7 +13,7 @@ public class GemComponent : ValueComponent {
     [SerializeField] private int gems = 0;
 
 
-    protected override float SetValue(IMudTable update) {return (int)((GemTable)update).value;}
+    protected override float SetValue(IMudTable update) {return (int)((GemTable)update).Value;}
     protected override StatType SetStat(IMudTable update) {return StatType.Gem;}
 
     protected override IMudTable GetTable() {return new GemTable();}
@@ -22,7 +22,7 @@ public class GemComponent : ValueComponent {
 
         GemTable table = update as GemTable;
 
-        gems = (int)table.value;
+        gems = (int)table.Value;
 
         if(Entity.Key == NetworkManager.LocalAddress) {
             LocalGems = gems;

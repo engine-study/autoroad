@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
+using mud;
+using mudworld;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 
@@ -68,18 +68,18 @@ public class RoadComponent : MUDComponent {
     }
 
     protected override IMudTable GetTable() {return new RoadTable();}
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {
 
 
         RoadTable roadUpdate = (RoadTable)update;
         // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
-        creditedPlayer = ((string)roadUpdate.filled).ToLower();
-        hasGem = (bool)roadUpdate.gem;
+        creditedPlayer = ((string)roadUpdate.Filled).ToLower();
+        hasGem = (bool)roadUpdate.Gem;
 
         filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
 
-        SetState((RoadState)roadUpdate.state);
+        SetState((RoadState)roadUpdate.State);
 
         if (newInfo.Source == UpdateSource.Optimistic || (Loaded && lastStage != State)) {
 
@@ -105,7 +105,7 @@ public class RoadComponent : MUDComponent {
 
         }
 
-        creditedPlayerDebug = MUDWorld.FindValue<RoadTable>(Entity.Key).filled;
+        creditedPlayerDebug = MUDWorld.FindValue<RoadTable>(Entity.Key).Filled;
 
         lastStage = State;
 

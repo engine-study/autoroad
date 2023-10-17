@@ -3,118 +3,24 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, Player, Health } from "../codegen/Tables.sol";
-import { Road, Move, Action, Boots, Weight, NPC } from "../codegen/Tables.sol";
-import { PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { RoadState, MoveType, ActionType, NPCType } from "../codegen/Types.sol";
+import { RoadConfig, MapConfig, Position, Player, Health } from "../codegen/index.sol";
+import { Road, Move, Action, Boots, Weight, NPC } from "../codegen/index.sol";
+import { PositionTableId, PositionData } from "../codegen/index.sol";
+import { RoadState, MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 
-import { MapSubsystem } from "./MapSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
 
 contract MoveSubsystem is System {
-  
-  function canDoStuff(bytes32 player) public returns (bool) {
-    //TODO add game pausing global
-    if(Health.get(player) < 1) return false;
-    return true;
-  }
-
-  function canInteract(
-    bytes32 player,
-    PositionData memory playerPos,
-    bytes32[] memory entities,
-    uint distance
-  ) public returns (bool) {
-    require(entities.length > 0, "empty position");
-    //todo check off grid?
-    //TODO this should be a parameter, not get()
-    PositionData memory entityPos = Position.get(entities[0]);
-    require(requireLegalMove(player, playerPos, entityPos, distance), "Bad move");
-
-    return true;
-  }
-
-  function abs(int x) private pure returns (int) {
-    return x >= 0 ? x : -x;
-  }
-
-
-  function requirePushable(bytes32[] memory at) public view {
-    require(at.length > 0, "empty");
-    uint32 move = Move.get(at[0]);
-    require(move == uint32(MoveType.Push), "not push");
-  }
-
-
-  function canWalkOn(bytes32[] memory at) public view returns(bool) {
-    if(at.length == 0) return true;
-    uint32 move = Move.get(at[0]);
-    return(move == uint32(MoveType.None) || move == uint32(MoveType.Trap));
-  }
-
-  function canPlaceOn(MoveType moveAt) public view returns(bool) {
-    return(moveAt == MoveType.None || moveAt == MoveType.Hole || moveAt == MoveType.Trap);
-  }
-
-  function requireCanPlaceOn(bytes32[] memory at) public view {
-    if(at.length == 0) return;
-    MoveType move = MoveType(Move.get(at[0]));
-    require(canPlaceOn(move), "cannot place on");
-  }
-
-  function requireOnMap(bytes32 at, PositionData memory pos) public view {
-    require(onMapOrSpawn(at,pos), "off world");
-  }
-
-  function onMapOrSpawn(bytes32 at, PositionData memory pos) public view returns(bool) {
-    IWorld world = IWorld(_world());
-    if(Player.get(at)) {return world.onWorld(pos.x, pos.y);}
-    else {return world.onMap(pos.x, pos.y);}
-  }
-
-  function requireEmptyOrPushable(bytes32[] memory at) public view returns(bool) {
-    if(at.length == 0) return false;
-    uint32 move = Move.get(at[0]);
-    require(move != uint32(MoveType.Obstruction), "blocked");
-    return move == uint32(MoveType.Push);
-  }
-
-  function canProjectileCross(bytes32 player, PositionData memory from, PositionData memory to, uint distance) public returns(bool) {
-    // checks that the position is below the min and maximum distance and is not diagonal
-    require(from.x == to.x || from.y == to.y, "cannot move diagonally ");
-    require(withinManhattanMinimum(to, from, distance), "too far or too close");
-    return true;
-  }
-
-  function requireLegalMove(bytes32 player, PositionData memory from, PositionData memory to, uint distance) public returns(bool) {
-    // checks that the position is below the min and maximum distance and is not diagonal
-    require(from.x == to.x || from.y == to.y, "cannot move diagonally ");
-    require(withinManhattanMinimum(to, from, distance), "too far or too close");
-    return true;
-  }
-
-  function canInteractEmpty(
-    bytes32 player,
-    PositionData memory playerPos,
-    PositionData memory entityPos,
-    bytes32[] memory entities,
-    uint distance
-  ) public returns (bool) {
-    require(entities.length == 0, "not empty");
-    // checks that positions are where they should be, also that the entities actually have positions
-    require(requireLegalMove(player, entityPos, playerPos, distance), "too far or too close");
-    return true;
-  }
 
   function moveSimple(bytes32 player, int32 x, int32 y) public {
 
     IWorld world = IWorld(_world());
-    require(canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory playerPos = Position.get(player);
     PositionData memory toPos = PositionData(x,y,0);
@@ -122,10 +28,10 @@ contract MoveSubsystem is System {
     doMoveWithBoots(player, player, Position.get(player), PositionData(toPos.x - playerPos.x, toPos.y - playerPos.y, 0));
   }
 
-  //never call directly without requiring canInteract() and canDoStuff()
+  //never call directly without requiring canInteract() and Rules.canDoStuff()
   function moveOrPush(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector) public {
-
-      bytes32[] memory atNext = getKeysWithValue(PositionTableId, Position.encode(startPos.x + vector.x, startPos.y + vector.y, 0));
+      IWorld world = IWorld(_world());
+      bytes32[] memory atNext = Rules.getKeysAtPosition(world,startPos.x + vector.x, startPos.y + vector.y, 0);
       if(atNext.length == 0) { doMoveWithBoots(causedBy, player, startPos, vector);} 
       else { doPush(causedBy, player, startPos, vector); }
       
@@ -142,7 +48,7 @@ contract MoveSubsystem is System {
 
     uint distance = getDistance(startPos, endPos);
     require(distance >= uint(uint32(minDistance)) && distance <= uint(uint32(maxDistance)), "Boots out of range");
-    require(requireLegalMove(player, startPos, endPos, uint(uint32(maxDistance))), "Bad move");
+    require(Rules.requireLegalMove(player, startPos, endPos, uint(uint32(maxDistance))), "Bad move");
     
     doMove(causedBy, player, startPos, endPos);
   }
@@ -158,11 +64,11 @@ contract MoveSubsystem is System {
 
     for (uint i = 1; i < positions.length; i++) {
   
-      bytes32[] memory atDest = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory atDest = Rules.getKeysAtPosition(world,positions[i].x, positions[i].y, 0);
       assert(atDest.length < 2);
 
       //check if valid position
-      bool canWalk = onMapOrSpawn(player, positions[i]) && canWalkOn(atDest);
+      bool canWalk = Rules.onMapOrSpawn(player, positions[i]) && Rules.canWalkOn(atDest);
 
       //if we hit an object or at the end of our walk, break out
       if (canWalk == false) { require(i > 1, "Nowhere to move"); return;}
@@ -170,7 +76,7 @@ contract MoveSubsystem is System {
       moveTo(causedBy, player, positions[i-1], positions[i], atDest, ActionType.Walking);
 
       //if we die while moving we must stop
-      if(canDoStuff(player) == false) { return;}
+      if(Rules.canDoStuff(player) == false) { return;}
     }
 
   }
@@ -180,8 +86,8 @@ contract MoveSubsystem is System {
     PositionData memory playerPos = Position.get(player);
     PositionData memory toPos = PositionData(x,y,0);
 
-    require(canDoStuff(player), "hmm");
-    require(canInteract(player, playerPos, getKeysWithValue(PositionTableId, Position.encode(x, y, 0)), 1), "bad interact");
+    require(Rules.canDoStuff(player), "hmm");
+    require(Rules.canInteract(player, playerPos, Rules.getKeysAtPosition(IWorld(_world()) ,x, y, 0), 1), "bad interact");
 
     doPush(player, player, playerPos, PositionData(toPos.x - playerPos.x,toPos.y - playerPos.y,0));
   }
@@ -199,14 +105,14 @@ contract MoveSubsystem is System {
     uint maxLength = 16;
     bytes32[] memory pushArray = new bytes32[](maxLength);
     PositionData memory pushPos = PositionData(shoverPos.x + vector.x, shoverPos.y + vector.y, 0);
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(shoverPos.x, shoverPos.y, 0));
+    bytes32[] memory atPos = Rules.getKeysAtPosition(world,shoverPos.x, shoverPos.y, 0);
 
     //continue push loop as long as there is something to push
     while (atPos.length > 0) {
       console.logUint(index);
 
       //leave loop early if we get blocked or finally reach a non-pushable space (empty or hole)
-      if(requireEmptyOrPushable(atPos) == false) {
+      if(Rules.requireEmptyOrPushable(atPos) == false) {
         break;
       }
 
@@ -219,10 +125,10 @@ contract MoveSubsystem is System {
       require(totalWeight < 1, "too heavy");
 
       //don't let anything go off map
-      requireOnMap(atPos[0], pushPos);
+      Rules.requireOnMap(atPos[0], pushPos);
 
       //next space
-      atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
+      atPos = Rules.getKeysAtPosition(world,pushPos.x, pushPos.y, 0);
 
       //increment push and check the destination is on map
       index++;
@@ -250,7 +156,7 @@ contract MoveSubsystem is System {
       bytes32 pushed = pushArray[i];
 
       //recalculate at position everytime
-      atPos = getKeysWithValue(PositionTableId, Position.encode(pushPos.x, pushPos.y, 0));
+      atPos = Rules.getKeysAtPosition(world,pushPos.x, pushPos.y, 0);
       moveTo(causer, pushed, shoverPos, pushPos, atPos, ActionType.Push);
 
       pushPos.x -= vector.x;
@@ -285,13 +191,13 @@ contract MoveSubsystem is System {
       MoveType moveTypeAtDest = MoveType(Move.get(atDest[0]));
 
       //we soft fail bad moves and exit out of them
-      if(canPlaceOn(moveTypeAtDest) == false) {return;}
+      if(Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
 
       //check if we survive the move through terrain
       if(handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest) == false) {return;}
 
       //if we're still alive, move into the position (this will trigger an entity update too)
-      if(canDoStuff(entity)) {
+      if(Rules.canDoStuff(entity)) {
         setPosition(causedBy, entity, to, actionType);
       }
 
@@ -352,14 +258,14 @@ contract MoveSubsystem is System {
 
 
   function teleport(bytes32 player, int32 x, int32 y) public {
-    require(canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
-    require(world.onWorld(x, y), "offworld");
+    require(Rules.onWorld(x, y), "offworld");
 
     PositionData memory startPos = Position.get(player);
     PositionData memory endPos = PositionData(x, y, 0);
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPos = Rules.getKeysAtPosition(world,x, y, 0);
     moveTo(player, player, startPos, endPos, atPos, ActionType.Teleport);
   }
 

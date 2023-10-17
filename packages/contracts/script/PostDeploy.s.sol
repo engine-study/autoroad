@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.21;
 
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { GameState, GameConfig, MapConfig, RoadConfig } from "../src/codegen/Tables.sol";
-import { positionToEntityKey } from "../src/utility/positionToEntityKey.sol";
 import { TerrainSubsystem } from "../src/systems/TerrainSubsystem.sol";
-import { MapSubsystem } from "../src/systems/MapSubsystem.sol";
 import { random } from "../src/utility/random.sol";
 
 contract PostDeploy is Script {
@@ -19,12 +16,13 @@ contract PostDeploy is Script {
     vm.startBroadcast(deployerPrivateKey);
 
     //deploys the MapConfig
-    world.createWorld(worldAddress);
+    world.sup();
+    world.createWorld();
     world.createMile();
 
     // some debug to check if our abiencode is working
     // abiTest(worldAddress);
-    randomTest(worldAddress);
+    // randomTest(worldAddress);
     
     vm.stopBroadcast();
   }

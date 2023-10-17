@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
     public class PlayerSync : MonoBehaviour
     {

@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
+using mud;
+using mudworld;
 
 public class PositionSync : ComponentSync
 {

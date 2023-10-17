@@ -1,17 +1,16 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MITTypes.sol
+pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seeker, Move} from "../codegen/Tables.sol";
-import { Soldier, Barbarian, Archer} from "../codegen/Tables.sol";
-import { ActionType, NPCType, MoveType } from "../codegen/Types.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seeker, Move} from "../codegen/index.sol";
+import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
+import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
+import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
 
-import { MapSubsystem } from "./MapSubsystem.sol";
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { ActionSystem } from "./ActionSystem.sol";
 
@@ -42,7 +41,7 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
     //walk towards target
     PositionData memory walkPos = addPosition(seekerPos,getVectorNormalized(seekerPos,targetPos));
-    bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(walkPos.x, walkPos.y, 0));
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
     world.moveTo(causedBy, seeker, seekerPos, walkPos, atDest, ActionType.Walking);
   }
 
@@ -89,13 +88,13 @@ contract BehaviourSubsystem is System {
     //check if anything is in the way 
     for (uint i = 1; i < positions.length-1; i++) {
   
-      bytes32[] memory atDest = getKeysWithValue( PositionTableId, Position.encode(positions[i].x, positions[i].y, 0));
+      bytes32[] memory atDest = Rules.getKeysAtPosition(world,positions[i].x, positions[i].y, 0);
 
       if(atDest.length > 0) {
         //check if this movetype will intercept the arrow
         //set this to target instead and continue
         MoveType atMove = MoveType(Move.get(atDest[0]));
-        if(world.canPlaceOn(atMove) == false) {
+        if(Rules.canPlaceOn(atMove) == false) {
           targetPos = positions[i];
           target = atDest[0];
         }

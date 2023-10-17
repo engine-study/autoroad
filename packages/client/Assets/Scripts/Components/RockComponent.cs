@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
-using mud.Unity;
+using mud;
+using mudworld;
+using mud;
 using IWorld.ContractDefinition;
 
 public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, Miliarium, Lapis, Saxum, Columna, _Count }
@@ -60,12 +60,12 @@ public class RockComponent : MUDComponent {
     }
 
     protected override IMudTable GetTable() { return new RockTable(); }
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {
 
         RockTable rockUpdate = (RockTable)update;
 
         if (rockUpdate == null) { Debug.LogError("No rockUpdate", this);
-        } else { rockType = (RockType)rockUpdate.value;}
+        } else { rockType = (RockType)rockUpdate.Value;}
 
         rockBase.baseName = rockType.ToString();
         Entity.SetName(rockType.ToString());

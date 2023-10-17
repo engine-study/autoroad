@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using mud.Client;
-using mud.Unity;
+using mud;
+using mud;
 using Unity.VisualScripting;
 using UnityEngine;
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using IWorld.ContractDefinition;
-using mud.Client;
+using mud;
 
 public class StoreUI : SPWindowParent
 {

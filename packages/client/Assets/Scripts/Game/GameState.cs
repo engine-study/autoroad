@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using mud.Unity;
-using DefaultNamespace;
+using mud;
+using mud;
+using mudworld;
 using IWorld.ContractDefinition;
 using System;
 using Cysharp.Threading.Tasks;
@@ -54,8 +54,8 @@ public class GameState : MonoBehaviour {
         Instance = null;
     }
 
-    void JoinGaul() {
-        NetworkManager.Instance.Connect();
+    async void JoinGaul() {
+        await NetworkManager.Instance.Connect();
     }
 
     void LeaveGaul() {
@@ -81,16 +81,16 @@ public class GameState : MonoBehaviour {
         Debug.Log("---GAMESTATE--- LOAD WORLD");
         mainTables.SpawnTables();
         while(mainTables.Loaded == false) {await UniTask.Delay(100);}
-        while(BoundsComponent.Instance == null && MapConfigComponent.Instance == null && GameStateComponent.Instance == null) {await UniTask.Delay(100);}
+        while(BoundsComponent.Instance == null || MapConfigComponent.Instance == null || GameStateComponent.Instance == null) {await UniTask.Delay(100);}
 
         //Load all chunks
         Debug.Log("---GAMESTATE--- LOAD CHUNKS");
-        chunkTable.SubscribeAll();
+        chunkTable.Spawn();
         while(ChunkLoader.HasLoadedAllChunks == false) { await UniTask.Delay(100);}
 
         //Load all entities with position component
         Debug.Log("---GAMESTATE--- LOAD ALL");
-        for (int i = 0; i < tables.Length; i++) { tables[i].SubscribeAll(); }
+        for (int i = 0; i < tables.Length; i++) { tables[i].Spawn(); }
 
         await UniTask.Delay(1000);
 

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
-using mud.Unity;
-using mud.Client;
+using mud;
+using mud;
 using System;
 
 public class EquipmentComponent : Equipment

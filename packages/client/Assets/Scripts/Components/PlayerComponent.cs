@@ -1,8 +1,8 @@
 
 using UnityEngine;
-using mud.Client;
-using NetworkManager = mud.Unity.NetworkManager;
-using DefaultNamespace;
+using mud;
+using NetworkManager = mud.NetworkManager;
+using mudworld;
 using IWorld.ContractDefinition;
 using System.Numerics;
 using System;
@@ -27,7 +27,7 @@ public class PlayerComponent : MUDComponent {
     [Header("Debug")]
     [SerializeField] HealthComponent health;
     [SerializeField] PositionComponent position;
-    [SerializeField] GameEventComponent gameEvent;
+
     int lastHealth;
     bool wasAlive = false;
 
@@ -36,7 +36,7 @@ public class PlayerComponent : MUDComponent {
 
         PlayerCount++;
 
-        isLocalPlayer = Entity.Key == NetworkManager.LocalAddress;
+        isLocalPlayer = Entity.Key == NetworkManager.LocalKey;
         if (IsLocalPlayer) {
             LocalPlayer = this;
             OnPlayerSpawn?.Invoke();
@@ -51,7 +51,6 @@ public class PlayerComponent : MUDComponent {
 
         if(health) { health.OnUpdated -= CheckHealth;}
         if(position) { position.OnUpdated -= CheckPosition;}
-        if(gameEvent) { gameEvent.OnUpdated -= PlayerEvent;}
 
     }
 
@@ -72,12 +71,6 @@ public class PlayerComponent : MUDComponent {
 
     }
 
-    void AddGameEvents() {
-        gameEvent = Entity.GetMUDComponent<GameEventComponent>();
-        gameEvent.OnUpdated += PlayerEvent;
-
-    }
-
     
     protected override void OnDestroy() {
         base.OnDestroy();
@@ -85,13 +78,6 @@ public class PlayerComponent : MUDComponent {
         if(isLocalPlayer) {
             LocalPlayer = null;
         }
-    }
-
-
-    void PlayerEvent() {
-        string eventName = gameEvent.GameEvent;
-
-        playerScript.Resources.fx_spawn.Play();
     }
 
     void CheckHealth() {

@@ -3,14 +3,15 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/Tables.sol";
-import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Scroll, Seeds, Boots, Weight, NPC } from "../codegen/Tables.sol";
-import { PositionTableId, PositionData } from "../codegen/Tables.sol";
-import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/Types.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/index.sol";
+import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Scroll, Seeds, Boots, Weight, NPC } from "../codegen/index.sol";
+import { PositionTableId, PositionData } from "../codegen/index.sol";
+import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/common.sol";
+
+import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
-import { MapSubsystem } from "./MapSubsystem.sol";
+
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
@@ -22,14 +23,14 @@ contract ToolSubsystem is System {
   //forces a player to push
   function stick(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory playerPos = Position.get(player);
     PositionData memory stickPos = PositionData(x, y, 0);
 
     //check initial push is good
-    bytes32[] memory atStick = getKeysWithValue(PositionTableId, Position.encode(stickPos.x, stickPos.y, 0));
-    require(world.canInteract(player, playerPos, atStick, 1), "bad interact");
+    bytes32[] memory atStick = Rules.getKeysAtPosition(world,stickPos.x, stickPos.y, 0);
+    require(Rules.canInteract(player, playerPos, atStick, 1), "bad interact");
     
     PositionData memory vector = PositionData(stickPos.x - playerPos.x, stickPos.y - playerPos.y, 0);
     world.moveOrPush(player, atStick[0], stickPos, vector);
@@ -38,8 +39,8 @@ contract ToolSubsystem is System {
 
   function shovel(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
-    require(world.onRoad(x, y), "off road");
+    require(Rules.canDoStuff(player), "hmm");
+    require(Rules.onRoad(x, y), "off road");
     require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
 
     world.spawnShoveledRoad(player, x,y);
@@ -49,10 +50,10 @@ contract ToolSubsystem is System {
 
   function melee(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory pos = PositionData(x, y, 0);
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
     require(atPosition.length > 0, "attacking an empty spot");
     require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
 
@@ -72,11 +73,11 @@ contract ToolSubsystem is System {
   
   function mine(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
 
-    require(world.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
+    require(Rules.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
 
     uint32 rockState = Rock.get(atPosition[0]);
 
@@ -103,16 +104,16 @@ contract ToolSubsystem is System {
 
   function fish(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory startPos = Position.get(player);
     PositionData memory fishPos = PositionData(x, y, 0);
 
     //check initial push is good
-    bytes32[] memory atPos = getKeysWithValue(PositionTableId, Position.encode(fishPos.x, fishPos.y, 0));
-    require(world.canInteract(player, startPos, atPos, 1), "bad interact");
+    bytes32[] memory atPos = Rules.getKeysAtPosition(world,fishPos.x, fishPos.y, 0);
+    require(Rules.canInteract(player, startPos, atPos, 1), "bad interact");
     require(Weight.get(atPos[0]) <= 0, "too heavy");
-    world.requirePushable(atPos);
+    Rules.requirePushable(atPos);
 
     //set player action
     world.setActionTargeted(player, ActionType.Fishing, x, y, atPos[0]);
@@ -120,10 +121,10 @@ contract ToolSubsystem is System {
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
     
-    bytes32[] memory atDest = getKeysWithValue(PositionTableId, Position.encode(endPos.x, endPos.y, 0));
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world,endPos.x, endPos.y, 0);
     if(atDest.length > 0) {
-      world.requireOnMap(atDest[0], endPos);
-      world.requireCanPlaceOn(atDest);
+      Rules.requireOnMap(atDest[0], endPos);
+      Rules.requireCanPlaceOn(atDest);
     }
 
     //move other player
@@ -133,7 +134,7 @@ contract ToolSubsystem is System {
   
   function teleportScroll(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(world.canDoStuff(player), "hmm");
+    require(Rules.canDoStuff(player), "hmm");
 
     //remove scrolls
     uint32 scrolls = Scroll.get(player);

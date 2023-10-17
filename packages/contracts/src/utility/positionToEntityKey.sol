@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.21;
 
 
 function positionToEntityKey(int32 x, int32 y) pure returns (bytes32) {

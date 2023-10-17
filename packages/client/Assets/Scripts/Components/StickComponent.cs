@@ -1,6 +1,6 @@
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
+using mudworld;
+using mud;
 
 public class StickComponent : PropComponent {
 

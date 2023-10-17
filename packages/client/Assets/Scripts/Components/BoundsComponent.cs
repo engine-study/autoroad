@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
+using mudworld;
+using mud;
 
 public class BoundsComponent : MUDComponent
 {
 
 
-    public static bool OnWorld(mud.Client.MUDEntity entity, Vector3 pos) {
+    public static bool OnWorld(mud.MUDEntity entity, Vector3 pos) {
         if (entity.GetMUDComponent<PlayerComponent>()) { return MapConfigComponent.OnMap(pos); }
         else return OnBounds(pos); 
     }
@@ -24,8 +24,6 @@ public class BoundsComponent : MUDComponent
 
     protected override void Awake() {
         base.Awake();
-
-        Instance = this;
         borders.gameObject.SetActive(false);
     }
 
@@ -37,14 +35,16 @@ public class BoundsComponent : MUDComponent
     public static void ShowBorder() {if(Instance) {Instance.borders.gameObject.SetActive(false); Instance.borders.gameObject.SetActive(true);}}
 
     protected override IMudTable GetTable() {return new BoundsTable();}
-    protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
+    protected override void UpdateComponent(mud.IMudTable table, UpdateInfo newInfo) {
+
+        Instance = this;
 
         BoundsTable bounds = (BoundsTable)table;
 
-        Left = (int)bounds.left;
-        Right = (int)bounds.right;
-        Up = (int)bounds.up;
-        Down = (int)bounds.down;
+        Left = (int)bounds.Left;
+        Right = (int)bounds.Right;
+        Up = (int)bounds.Up;
+        Down = (int)bounds.Down;
 
         borderVector = new Vector4(Left, Right, Up, Down);
         borders.SetBorder(borderVector);

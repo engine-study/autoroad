@@ -1,18 +1,19 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
+import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Action, Name, Player, Health} from "../codegen/Tables.sol";
-import { ActionType, PaymentType } from "../codegen/Types.sol";
-import { Position, PositionTableId, PositionData } from "../codegen/Tables.sol";
+import { Action, Name, Player, Health} from "../codegen/index.sol";
+import { ActionType, PaymentType } from "../codegen/common.sol";
+import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 
+import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
 import { ToolSubsystem } from "../systems/ToolSubsystem.sol";
-import { MapSubsystem } from "../systems/MapSubsystem.sol";
 import { SpawnSubsystem } from "../systems/SpawnSubsystem.sol";
 import { FloraSubsystem } from "../systems/FloraSubsystem.sol";
 import { TerrainSubsystem } from "../systems/TerrainSubsystem.sol";
@@ -36,7 +37,7 @@ contract ActionSystem is System {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
     PositionData memory pos = Position.get(entity);
-    world.kill(entity, entity, entity, pos);
+    // SystemSwitch.call(abi.encodeCall(world.kill(entity, entity, entity, pos);
 
   } 
 
@@ -46,9 +47,9 @@ contract ActionSystem is System {
     bool playerExists = Player.get(entity);
 
     if (playerExists) { require(Health.get(entity) == -1, "not dead, can't respawn");}
-    require(world.onSpawn(x,y), "out of spawn");
+    require(Rules.onSpawn(x,y), "out of spawn");
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
     require(atPosition.length < 1, "occupied");
 
     world.spawnPlayer(entity, x, y, false);
@@ -62,8 +63,14 @@ contract ActionSystem is System {
 
   function helpSummon() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
+
+    console.log("callSummonMile");
     IWorld world = IWorld(_world());
-    world.summonMile(player, false);
+    // SystemSwitch.call("terrain", abi.encodeCall(MoveSubsystem.summonMile, (player, false)));
+    //return abi.decode(SystemSwitch.call(SYSTEM_ID, abi.encodeCall(UniqueEntitySystem.getUniqueEntity, ())), (bytes32));
+    SystemSwitch.call(abi.encodeCall(world.summonMile, (player, false)));
+
+    // IWorld(world).summonMile(player, false);
   }
 
   function buy(uint32 id, PaymentType payment) public {
@@ -117,11 +124,12 @@ contract ActionSystem is System {
 
   }
 
+  //todo can't call these directly
   function setActionTargeted(bytes32 player, ActionType newAction, int32 x, int32 y, bytes32 target) public {
-    Action.emitEphemeral(player, uint32(newAction), x, y, target);
+    Action.set(player, uint32(newAction), x, y, target);
   }
 
   function setAction(bytes32 player, ActionType newAction, int32 x, int32 y) public {
-    Action.emitEphemeral(player, uint32(newAction), x, y, bytes32(0));
+    Action.set(player, uint32(newAction), x, y, bytes32(0));
   }
 }

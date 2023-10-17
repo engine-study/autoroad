@@ -1,6 +1,6 @@
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
+using mudworld;
+using mud;
 using System.Collections.Generic;
 using System;
 public class PositionComponent : MUDComponent {
@@ -70,9 +70,9 @@ public class PositionComponent : MUDComponent {
 
         PositionTable table = update as PositionTable;
 
-        layer = (int)table.layer;
+        layer = (int)table.Layer;
 
-        position2D = new Vector2((int)table.x, (int)table.y);
+        position2D = new Vector2((int)table.X, (int)table.Y);
         position3D = new Vector3(position2D.x, 0f, position2D.y);
         position3DLayer = new Vector3(position2D.x, layer, position2D.y);
 

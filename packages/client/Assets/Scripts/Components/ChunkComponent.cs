@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
+using mud;
+using mudworld;
 using Cysharp.Threading.Tasks;
 using UnityEngine.UI;
 using Unity.VisualScripting;
@@ -86,10 +86,10 @@ public class ChunkComponent : MUDComponent {
         // Debug.Log("Chunk: " + eventType.ToString());
         ChunkTable table = (ChunkTable)update;
 
-        completed = table.completed != null ? (bool)table.completed : completed;
-        spawned = table.spawned != null ? (bool)table.spawned : spawned;
-        mileNumber = table.mile != null ? (int)table.mile : mileNumber;
-        roads = table.roads != null ? (int)table.roads : roads;
+        completed = table.Completed != null ? (bool)table.Completed : completed;
+        spawned = table.Spawned != null ? (bool)table.Spawned : spawned;
+        mileNumber = table.Mile != null ? (int)table.Mile : mileNumber;
+        roads = table.Roads != null ? (int)table.Roads : roads;
 
         // Debug.Log("MileSafe " + table.mileNumber.GetValueOrDefault(), this);
         // Debug.Log("MileTest " + table.mileNumber, this);

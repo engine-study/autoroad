@@ -1,10 +1,10 @@
 using UnityEngine;
 
-using mud.Client;
+using mud;
 using UniRx;
 using ObservableExtensions = UniRx.ObservableExtensions;
 
-using DefaultNamespace;
+using mudworld;
 
 public class PositionManager : TableManager {
    

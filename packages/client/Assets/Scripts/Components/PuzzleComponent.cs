@@ -1,7 +1,7 @@
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mudworld;
+using mud;
+using mud;
 using System;
 
 public class PuzzleComponent : MUDComponent {
@@ -15,7 +15,7 @@ public class PuzzleComponent : MUDComponent {
 
         PuzzleTable table = update as PuzzleTable;
         
-        completed = (bool)table.complete;
+        completed = (bool)table.Complete;
     }
 
 }

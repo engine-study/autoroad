@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
+using mud;
+using mudworld;
 
 public class MapConfigComponent : MUDComponent
 {
@@ -20,13 +20,19 @@ public class MapConfigComponent : MUDComponent
 
         MapConfigTable update = table as MapConfigTable;
 
-        playWidth = (int)update.playWidth;
-        playHeight = (int)update.playHeight;
-        playSpawnWidth = (int)update.playSpawnWidth;
+        playWidth = (int)update.PlayWidth;
+        playHeight = (int)update.PlayHeight;
+        playSpawnWidth = (int)update.PlaySpawnWidth;
 
         Width = playWidth;
         Height = playHeight;
         SpawnWidth = playSpawnWidth;
 
     }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        Instance = null;
+    }
+
 }

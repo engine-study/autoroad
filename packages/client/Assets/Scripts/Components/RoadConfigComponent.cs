@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
+using mud;
+using mudworld;
 
 public class RoadConfigComponent : MUDComponent
 {
@@ -15,15 +15,15 @@ public class RoadConfigComponent : MUDComponent
     public static bool OnRoad(int x, int y) {return x >= Left && x <= Right;}
 
     protected override IMudTable GetTable() {return new RoadConfigTable();}
-    protected override void UpdateComponent(mud.Client.IMudTable table, UpdateInfo newInfo) {
+    protected override void UpdateComponent(mud.IMudTable table, UpdateInfo newInfo) {
 
         Instance = this;
         
         RoadConfigTable update = (RoadConfigTable)table;
 
-        width = (int)update.width;
-        left = (int)update.left;
-        right = (int)update.right;
+        width = (int)update.Width;
+        left = (int)update.Left;
+        right = (int)update.Right;
 
         Width = width;
         Left = left;

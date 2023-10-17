@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using DefaultNamespace;
-using mud.Client;
+using mudworld;
+using mud;
 using UnityEngine;
 
 public enum NPCType {None, Player, Soldier, Barbarian, Ox, BarbarianArcher}
@@ -26,7 +26,7 @@ public class NPCComponent : MUDComponent
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         NPCTable table = update as NPCTable;
-        npc = (NPCType)(int)table.value;
+        npc = (NPCType)(int)table.Value;
      
     }
 

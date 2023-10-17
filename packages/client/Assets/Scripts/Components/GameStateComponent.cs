@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
-using NetworkManager = mud.Unity.NetworkManager;
+using mudworld;
+using mud;
+using NetworkManager = mud.NetworkManager;
 using Cysharp.Threading.Tasks;
 using UniRx;
 
@@ -22,9 +22,12 @@ public class GameStateComponent : MUDComponent {
 
     protected override IMudTable GetTable() {return new GameStateTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+
+        Instance = this;
+
         GameStateTable table = (GameStateTable)update;
 
-        mile = table.miles != null ? (int)table.miles : mile;
+        mile = table.Miles != null ? (int)table.Miles : mile;
         MILE_COUNT = mile;
 
         Debug.Log("[GAMECOMPONENT] Mile: " + mile);
@@ -40,11 +43,6 @@ public class GameStateComponent : MUDComponent {
 
         lastMile = MILE_COUNT;
 
-    }
-
-    protected override void Awake() {
-        base.Awake();
-        Instance = this;
     }
 
     protected override void OnDestroy() {

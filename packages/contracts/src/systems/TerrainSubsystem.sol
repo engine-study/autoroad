@@ -4,64 +4,58 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/Tables.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/Tables.sol";
-import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/Tables.sol";
-import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/Types.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/index.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/index.sol";
+import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/index.sol";
+import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/common.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
 import { EntitySubsystem } from "./EntitySubsystem.sol";
 import { FloraSubsystem } from "./FloraSubsystem.sol";
-import { NPCSubsystem } from "./NPCSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { randomCoord } from "../utility/random.sol";
+import { Rules } from "../utility/rules.sol";
 
 contract TerrainSubsystem is System {
   //updateRow
   //finishRow
 
-  function onRoad(int32 x, int32 y) public returns (bool) {
-    // bound to map
-    return x >= RoadConfig.getLeft() && x <= RoadConfig.getRight();
+
+  function sup() public {
+    console.log("sup");
   }
 
-  function createWorld(address worldAddress) public {
-    IWorld world = IWorld(worldAddress);
+  function createWorld() public {
+
+    console.log("creating world");
 
     bool debug = true; 
     bool dummyPlayers = true; 
     bool roadComplete = true; 
 
-    GameState.set(world, int32(-1), 0);
-    GameConfig.set(world, debug, dummyPlayers, roadComplete);
-    MapConfig.set(world, 10, 10, 13);
-    RoadConfig.set(world, 1, 0, 0);
-    Bounds.set(0, 0, -1, 1);
-    Row.set(world, int32(-1));
+    GameState.set(int32(-1), 0);
+    GameConfig.set(debug, dummyPlayers, roadComplete);
+    MapConfig.set(10, 10, 13);
+    RoadConfig.set(1, 0, 0);
+    Bounds.set(0, 0, int32(-1), 1);
+    Row.set(int32(-1));
 
-    bytes32 carriage = world.getCarriageEntity();
+    bytes32 carriage = getCarriageEntity();
     Carriage.set(carriage, true);
     Position.set(carriage, 0, -1, 0);
 
   }
 
-  function getMileBounds(int32 mile) public returns(int32 left, int32 right, int32 up, int32 down) {
-    right = MapConfig.getPlayWidth();
-    left = int32(-right);
-    
-    int32 playHeight = MapConfig.getPlayHeight();
-    down = mile * playHeight;
-    up = down + playHeight + int32(-1);
-  }
 
   function createMile() public {
 
-    IWorld world = IWorld(_world());
+    console.log("creating mile");
+
     int32 mile = GameState.getMiles();
     bytes32 oldChunk = getChunkEntity(mile);
 
@@ -79,17 +73,20 @@ contract TerrainSubsystem is System {
     GameState.set(mile, 0);
     // GameState.setMiles(mile);
 
-    //create the chunk
-    bytes32 newChunk = getChunkEntity(mile);
-    Chunk.set(newChunk, mile, false, false,  0, 0);
-
     //move carriage to top of mile
     int32 height = MapConfig.getPlayHeight();
     Position.set(getCarriageEntity(), 0, ((mile+1) * height) + 1, 0);
 
+    //create the chunk
+    bytes32 newChunk = getChunkEntity(mile);
+    Chunk.set(newChunk, mile, false, false,  0, 0);
+
   }
 
   function summonMile(bytes32 causedBy, bool summonAll) public {
+
+    console.log("summonMile");
+    console.log("lets go");
 
     //check if chunk is already spawned
     int32 mile = GameState.getMiles();
@@ -103,8 +100,7 @@ contract TerrainSubsystem is System {
     //calculate new map bounds based on chunk
     //eventually maybe should use Bounds to calculate so we can add rest sections?
 
-    IWorld world = IWorld(_world());
-    (int32 left, int32 right, int32 up, int32 down) = getMileBounds(mile);
+    (int32 left, int32 right, int32 up, int32 down) = Rules.getMileBounds(mile);
     int32 row = Row.get();
 
     if(summonAll) {
@@ -122,12 +118,10 @@ contract TerrainSubsystem is System {
 
   function mileIsReady(bytes32 causedBy, int32 mile, int32 left, int32 right, int32 up, int32 down) private {
 
-    IWorld world = IWorld(_world());
-
     console.log("mile ready");
 
     console.log("create puzzle");
-    world.createRandomPuzzle(causedBy, right, up, down);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createRandomPuzzle, (causedBy, right, up, down)));
     
     //set bounds 
     Bounds.set(left, right, up, down);
@@ -138,6 +132,8 @@ contract TerrainSubsystem is System {
   }
 
   function summonRow(bytes32 causedBy, int32 left, int32 right, int32 up, int32 down) public returns(int32 row) {
+
+    console.log("summon row");
 
     row = Row.get();
     row++;
@@ -151,6 +147,8 @@ contract TerrainSubsystem is System {
     
   function spawnRow(bytes32 causedBy, int32 width, int32 y) private {
     
+    console.log("spawn row");
+
     IWorld world = IWorld(_world());
 
     GameConfigData memory config = GameConfig.get();
@@ -166,7 +164,6 @@ contract TerrainSubsystem is System {
 
       uint noiseCoord = randomCoord(0, 2000, x, y);
 
-
       if(noiseCoord < 1000) {
         //TERRAIN
         TerrainType terrainType = TerrainType.None;
@@ -178,10 +175,10 @@ contract TerrainSubsystem is System {
         } else if (noiseCoord > 200 && noiseCoord <= 225) {
           terrainType = TerrainType.HeavyBoy;
         } else if (noiseCoord > 225 && noiseCoord <= 250) {
-          if (world.onRoad(x, y)) { continue;}
+          if (Rules.onRoad(x, y)) { continue; }
           terrainType = TerrainType.HeavyHeavyBoy;
         } else if (noiseCoord > 300 && noiseCoord <= 325) {
-          if (world.onRoad(x, y)) { continue;}
+          if (Rules.onRoad(x, y)) { continue; }
           terrainType = TerrainType.Pillar;
         } 
         if(terrainType != TerrainType.None) {
@@ -205,24 +202,20 @@ contract TerrainSubsystem is System {
         }
 
         if(npcType != NPCType.None) {
-          world.spawnNPC(causedBy, x, y, npcType);
+          SystemSwitch.call(abi.encodeCall(world.spawnNPC, (causedBy, x, y, npcType)));
         }
       }
     
     }
   }
 
-  function procGenAt(int32 x, int32 y) private {
-    
-  }
-
-  function getRoadEntity(int32 x, int32 y) public view returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
-  function getChunkEntity(int32 mile) public view returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
-  function getCarriageEntity() public view returns(bytes32) {return keccak256(abi.encode("Carriage"));}
+  function getRoadEntity(int32 x, int32 y) public pure returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
+  function getChunkEntity(int32 mile) public pure returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
+  function getCarriageEntity() public pure returns(bytes32) {return keccak256(abi.encode("Carriage"));}
 
   function contemplateMile(int32 mileNumber) public {
     
-    (int32 left, int32 right, int32 up, int32 down) = getMileBounds(mileNumber);
+    (int32 left, int32 right, int32 up, int32 down) = Rules.getMileBounds(mileNumber);
 
     for (int32 y = down; y <= up; y++) {
       for (int32 x = left; x <= right; x++) {
@@ -232,15 +225,18 @@ contract TerrainSubsystem is System {
 
         uint noiseCoord = randomCoord(0, 100, x, y);
 
+        //TODO golf and fix
         if (noiseCoord < 5) {
-          IWorld(_world()).giveRoadReward(road);
+          SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadReward, (road)));
         }
       }
     }
   }
 
   function spawnTerrain(bytes32 player, int32 x, int32 y, TerrainType tType) public {
-    
+
+    console.log("spawn terrain");
+
     IWorld world = IWorld(_world());
     bytes32 entity = getUniqueEntity();
 
@@ -249,7 +245,7 @@ contract TerrainSubsystem is System {
       Weight.set(entity, 1);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
-      world.spawnFlora(player, entity, x, y);
+      SystemSwitch.call(abi.encodeCall(world.spawnFlora, (player, entity, x, y)));
     } else if (tType == TerrainType.HeavyBoy) {
       Rock.set(entity, uint32(RockType.Heavy));
       Boulder.set(entity, true);
@@ -279,13 +275,15 @@ contract TerrainSubsystem is System {
   }
 
   function deleteAtRequire(PositionData memory pos) public {
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y, pos.layer));
+    IWorld world = IWorld(_world());
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,pos.x, pos.y, pos.layer);
     require(atPosition.length > 0, "Nothing to delete");
     Position.deleteRecord(atPosition[0]);
   }
 
   function deleteAt(PositionData memory pos) public {
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(pos.x, pos.y, pos.layer));
+    IWorld world = IWorld(_world());
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,pos.x, pos.y, pos.layer);
     if(atPosition.length > 0) Position.deleteRecord(atPosition[0]);
   }
 
@@ -307,7 +305,7 @@ contract TerrainSubsystem is System {
 
   function spawnRoad(bytes32 player, int32 x, int32 y, RoadState state) public {
     IWorld world = IWorld(_world());
-    require(world.onRoad(x, y), "off road");
+    require(Rules.onRoad(x, y), "off road");
 
     bytes32 road = getRoadEntity(x,y);
     Position.set(road, x, y, -1);
@@ -376,8 +374,9 @@ contract TerrainSubsystem is System {
   }
 
   function spawnShoveledRoad(bytes32 player, int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
 
-    bytes32[] memory atPosition = getKeysWithValue(PositionTableId, Position.encode(x, y, 0));
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
     require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 entity = getRoadEntity(x,y);

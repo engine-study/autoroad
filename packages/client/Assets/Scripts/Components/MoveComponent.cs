@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
+using mud;
+using mudworld;
 
 public enum MoveType { None, Obstruction, Hole, Carry, Push, Trap } 
 public class MoveComponent : MUDComponent {
@@ -22,7 +22,7 @@ public class MoveComponent : MUDComponent {
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         MoveTable table = (MoveTable)update;
-        MoveType = (MoveType)table.value;
+        MoveType = (MoveType)table.Value;
 
     }
 

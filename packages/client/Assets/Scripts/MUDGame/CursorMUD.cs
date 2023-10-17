@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
+using mud;
 using System;
 
 public class CursorMUD : MonoBehaviour {
@@ -29,17 +29,25 @@ public class CursorMUD : MonoBehaviour {
     [SerializeField] Vector3 rawMousePos;
     [SerializeField] Vector3 mousePos, lastPos;
     [SerializeField] Vector3 gridPos, lastGridPos;
-    [SerializeField] mud.Client.MUDEntity hover, lastHover;
+    [SerializeField] mud.MUDEntity hover, lastHover;
     [SerializeField] PositionComponent pos;
     [SerializeField] SPBase baseObject;
 
 
+
     void Awake() {
         Instance = this;
+        enabled = false;
+        SPEvents.OnServerLoaded += Init;
     }
 
     void OnDestroy() {
         Instance = null;
+        SPEvents.OnServerLoaded -= Init;
+    }
+
+    void Init() {
+        enabled = true;
     }
 
     void Update() {
@@ -86,7 +94,7 @@ public class CursorMUD : MonoBehaviour {
 
         // hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
         
-        if(!mud.Unity.NetworkManager.Initialized)
+        if(!mud.NetworkManager.Initialized)
             return;
 
         if(SPUIBase.IsPointerOverUIElement) {
@@ -97,7 +105,7 @@ public class CursorMUD : MonoBehaviour {
 
         if (lastHover != hover) {
 
-            pos = hover != null && hover is mud.Client.MUDEntity ? (hover as mud.Client.MUDEntity).GetMUDComponent<PositionComponent>() : null;
+            pos = hover != null && hover is mud.MUDEntity ? (hover as mud.MUDEntity).GetMUDComponent<PositionComponent>() : null;
             baseObject = hover != null ? hover.GetComponentInChildren<SPBase>() : null;
 
             OnLeaveEntity?.Invoke(lastHover);

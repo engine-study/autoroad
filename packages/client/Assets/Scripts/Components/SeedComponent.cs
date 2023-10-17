@@ -1,7 +1,7 @@
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mudworld;
+using mud;
+using mud;
 
 public class SeedComponent : ValueComponent {
 
@@ -11,7 +11,7 @@ public class SeedComponent : ValueComponent {
 
     public int seeds;
 
-    protected override float SetValue(IMudTable update) {return (int)((SeedsTable)update).value;}
+    protected override float SetValue(IMudTable update) {return (int)((SeedsTable)update).Value;}
     protected override StatType SetStat(IMudTable update) {return StatType.Seed;}
 
     protected override IMudTable GetTable() {return new SeedsTable();}
@@ -19,7 +19,7 @@ public class SeedComponent : ValueComponent {
         base.UpdateComponent(update,newInfo);
 
         SeedsTable table = update as SeedsTable;
-        seeds = (int)table.value;
+        seeds = (int)table.Value;
 
         if(Entity.Key == NetworkManager.LocalAddress) {
             LocalCount = seeds;

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+    
+    <link rel="icon" href="favicon.png" type="image/png" />
+
+    <meta property="og:title" content="Gaul" />
+    <meta property="og:url" content="http://engine.study/" />
+    <meta property="og:description" content="A big machine." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="http://engine.study/images/Engine.png" />
+    <meta property="og:image:width" content="580" />
+    <meta property="og:image:height" content="582" />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@engine_study" />
+    <meta name="twitter:title" content="engine.study" />
+    <meta name="twitter:description" content="A big machine." />
+    <meta name="twitter:image" content="http://engine.study/images/Engine.png" />
+    <meta name="twitter:image:alt" content="engine.study" />
+    
+    <meta name="description" content="A big machine." />
+    <meta name="keywords" content="Gaul, Autonomous Worlds, MUD, video game, web3, fully onchain game" />
+    <meta name="author" content="Engine" />
+    
+    <meta name="google-site-verification" content="Etv5zTdgCb8qQZp85iR9ThkYZZ_wGdoZFvWclokbbSQ" />
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D6Q34BMXQK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-D6Q34BMXQK');
+    </script>
+     
+    <link rel="stylesheet" href="applause-button/dist/applause-button.css" />
+    <script src="applause-button/dist/applause-button.js"></script>
+
+    <!--
+    <script> 
+        const images = ["https://engine.study/images/landing1.jpg", "https://engine.study/images/landing2.jpg", "https://engine.study/images/landing3.jpg"];
+
+        document.addEventListener('DOMContentLoaded', _ => {
+          const randImageIndex = ~~(Math.random() * images.length);
+          document.getElementById('randImg').src = images[randImageIndex];
+        });
+        
+    </script>
+    -->
+    
+    
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{{ PRODUCT_NAME }}}</title>
+    <link rel="shortcut icon" href="favicon.png"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <script src="network.js"></script>
+    <link rel="manifest" href="./manifest.json"/>
+    <link rel="stylesheet" href="style.css"/>
+
+    
+</head>
+
+<body>
+
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    
+    
+    
+    <div id="container">
+    
+
+        <div id="content">
+    
+            <div id="root"></div>
+            
+            <div id="unity-container" class="unity-desktop">
+                
+                <canvas id="unity-canvas" width="720" height="720"></canvas>
+                
+                <div id="canvas-overlays">
+                    
+                    
+                    <div id="unity-loading-bar">     
+                        <div id="unity-progress-bar-empty">
+                        <div id="unity-progress-bar-full"></div>
+                        <p style="text-align: center; color: #999;">Might take a minute.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="game-splash" class="splash" style="display: none;">
+                       <div class="unity-warning-text">Coming <a href="https://twitter.com/engine_study" target="_blank">soon</a>.</div>
+                    </div>
+
+                    
+                    <div class="splash">
+                        <div class="unity-warning-text" id="unity-mobile-warning-text">Mobile devices are not supported.</div>
+                        <div class="unity-warning-text" id="unity-waitlist-text">Add your name to the waitlist.</div>
+
+                    </div>
+                </div>
+               
+            </div>
+            
+            <!-- <div id="text">
+                
+                <applause-button color="black" url="http://engine.study"></applause-button>
+                
+                <br />
+
+                <!--
+                <ul>
+    
+                    <li><a data-tf-slider="OPg5052y" data-tf-width="550" data-tf-iframe-props="title=Dark Pools Whitelist" data-tf-medium="snippet" style="color:blue;text-decoration:underline;cursor:pointer;">Mailing List</a><script src="//embed.typeform.com/next/embed.js"></script></li>
+                    
+                    <br/>
+                    
+                    <li><a href="http://engine.scrnprnt.ca" target="_blank">Writing</a></li>
+                    
+                </ul>
+                
+
+            </div> -->
+            
+            <!--
+
+            <br />
+            <br />
+            
+            <img width="50%" id="randImg" src=""/>
+            -->
+
+            
+        </div>
+    </div>
+
+    <script>
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+    var config = {
+    dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+    frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+    codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+    #if MEMORY_FILENAME
+    memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+    #endif
+    #if SYMBOLS_FILENAME
+    symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+    #endif
+    streamingAssetsUrl: "StreamingAssets",
+    companyName: "{{{ COMPANY_NAME }}}",
+    productName: "{{{ PRODUCT_NAME }}}",
+    productVersion: "{{{ PRODUCT_VERSION }}}",
+    };
+
+    var container = document.querySelector("#unity-container");
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingParent = document.querySelector("#canvas-overlays");
+    var loadingBarParent = document.querySelector("#unity-loading-bar");
+    var progressBarFull = document.querySelector("#unity-progress-bar-full");
+    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+    var mobileWarning = document.querySelector("#unity-mobile-warning-text");
+    var gameSplash = document.querySelector("#game-splash");
+    
+    const canFullscreen = (function() {
+    for (const key of [
+        'exitFullscreen',
+        'webkitExitFullscreen',
+        'webkitCancelFullScreen',
+        'mozCancelFullScreen',
+        'msExitFullscreen',
+      ]) {
+      if (key in document) {
+        return true;
+      }
+    }
+    return false;
+    }());
+        
+    // By default Unity keeps WebGL canvas render target size matched with
+    // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+    // Set this to false if you want to decouple this synchronization from
+    // happening inside the engine, and you would instead like to size up
+    // the canvas DOM size and WebGL render target sizes yourself.
+    // config.matchWebGLToCanvasSize = false; 
+        
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        
+        console.log("mobile warning");
+        container.className = "unity-mobile";
+        
+        // Avoid draining fillrate performance on mobile devices,
+        // and default/override low DPI mode on mobile browsers.
+        config.devicePixelRatio = 1;
+        mobileWarning.style.display = "none";
+        //mobileWarning.style.display = "block";
+        
+        /*
+        setTimeout(() => {
+            mobileWarning.style.display = "none";
+        }, 5000);
+        */
+        
+    } else {
+        console.log("init resize");
+        //resizeGame();
+    }
+
+    #if BACKGROUND_FILENAME
+    canvas.style.background = "url('" + buildUrl + "/{{{ BACKGROUND_FILENAME.replace(/'/g, '%27') }}}') center / cover";
+    #endif
+    
+    loadingParent.style.display = "block";
+
+    if(gameSplash.style.display == "block" || mobileWarning.style.display == "block") {
+        
+        console.log("splash shown or mobile phone");
+        loadingBarParent.style.display = "none";
+
+    } else {
+        
+        console.log("loading game");
+
+        var script = document.createElement("script");
+        
+        script.src = loaderUrl;
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                progressBarFull.style.width = ((100 * progress)+10) + "%";
+            }).then((unityInstance) => {
+                
+                loadingParent.style.display = "none";
+                
+                /*
+                if (canFullscreen) {
+                    if (!hideFullScreenButton) {
+                      fullscreenButton.style.display = "";
+                    }
+                    fullscreenButton.onclick = () => {
+                      unityInstance.SetFullscreen(1);
+                    };
+                  }
+                */
+                
+                //focus helpers
+                //method one, toggle the player as disconnected when they change tabs
+                /*
+                document.addEventListener('visibilitychange', function () {
+                    if (document.visibilityState == "hidden") {
+                        SendMessage("Mother", "ToggleFocusOff");
+                    } else {
+                        SendMessage("Mother", "ToggleFocusOn");
+                    }
+                });
+                */
+
+                //method two, send acknowledgements to server
+                var isActive;
+
+                document.addEventListener('visibilitychange', function () {
+                if (document.visibilityState == "hidden") {
+                    isActive = setInterval(function() { unityInstance.SendMessage("Mother", "FocusUpdate"); }, 250);
+                } else {
+                    clearInterval(isActive);
+                    isActive = false;
+                }
+                });
+                
+            }).catch((message) => {
+              alert(message);
+            });
+        };
+
+        document.body.appendChild(script);
+        
+    }
+    
+    //canvas.onload = resizeGame;
+    //canvas.onresize = resizeGame;
+    //window.addEventListener('resize', resizeGame);
+    
+    function resizeGame() {
+
+        var width = window.innerWidth;
+        if(width%2!=0) {width -= 1};
+        var height = window.innerHeight;
+        if(height%2!=0) {height -= 1};
+
+        container.style.width = width + 'px';
+        container.style.height = height + 'px';
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        console.log("resolution update");
+        console.log(width);
+        console.log(height);
+
+    }
+
+    </script>
+    
+</body>
+</html>

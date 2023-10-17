@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using mud.Client;
-using DefaultNamespace;
+using mud;
+using mudworld;
 using IWorld.ContractDefinition;
 public abstract class MoverComponent : MUDComponent {
 
@@ -32,6 +32,6 @@ public abstract class MoverComponent : MUDComponent {
 
     // }
 
-    protected override void UpdateComponent(mud.Client.IMudTable update, UpdateInfo newInfo) {}
+    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {}
     
 }

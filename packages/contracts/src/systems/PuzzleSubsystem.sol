@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/Tables.sol";
-import { Puzzle, Trigger, Miliarium } from "../codegen/Tables.sol";
-import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/Types.sol";
+import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/index.sol";
+import { Puzzle, Trigger, Miliarium } from "../codegen/index.sol";
+import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/common.sol";
 
-import { MapSubsystem } from "./MapSubsystem.sol";
+import { Rules } from "../utility/rules.sol";
+import { random, randomFromEntitySeed } from "../utility/random.sol";
+
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 
-import { random, randomFromEntitySeed } from "../utility/random.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 contract PuzzleSubsystem is System {
 
@@ -22,13 +22,15 @@ contract PuzzleSubsystem is System {
     //we aren't a puzzle, skip this trigger
     if(puzzleType == PuzzleType.None) return;
 
+    IWorld world = IWorld(_world());
+
     if(puzzleType == PuzzleType.Miliarium) {
       //search underground for triggers (-1)
-      bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, -1));
+      bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
       if(atPosition.length > 0 && Trigger.get(atPosition[0]) == entity) {
         //success, freeze miliarium in place
         Move.set(entity, uint32(MoveType.Obstruction));
-        IWorld(_world()).givePuzzleReward(causedBy);
+        world.givePuzzleReward(causedBy);
         //TODO set to single setter
         Puzzle.set(entity, uint32(puzzleType), true);
       }
@@ -97,6 +99,7 @@ contract PuzzleSubsystem is System {
   //finds a position and deletes the object on it
   function findEmptyPositionInArea(bytes32 entity, int32 width, int32 up, int32 down, int32 roadSide) public returns(PositionData memory pos) {
 
+    IWorld world = IWorld(_world());
     console.log("find empty pos");
 
     bool isValid = false;
@@ -108,7 +111,7 @@ contract PuzzleSubsystem is System {
       pos = getRandomPositionNotRoad(entity, width, up, down, roadSide, attempts);
 
       //don't overwrite Puzzles or Triggers or Obstructions already on road
-      bytes32[] memory atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, 0));
+      bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, 0);
       if(atPosition.length > 0) { 
         //check for obstructions and puzzles
         MoveType move = MoveType(Move.get(atPosition[0]));
@@ -121,7 +124,7 @@ contract PuzzleSubsystem is System {
       
       //check for triggers if still valid
       if(isValid) {
-        atPosition = getKeysWithValue( PositionTableId, Position.encode(pos.x, pos.y, -1));
+        atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
         if(atPosition.length > 0) {
           bytes32 trigger = Trigger.get(atPosition[0]);
           if(trigger != bytes32(0)) {

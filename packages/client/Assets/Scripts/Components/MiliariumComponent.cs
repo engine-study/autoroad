@@ -1,7 +1,7 @@
 using UnityEngine;
-using DefaultNamespace;
-using mud.Client;
-using mud.Unity;
+using mudworld;
+using mud;
+using mud;
 using System;
 
 public class MiliariumComponent : MUDComponent {
