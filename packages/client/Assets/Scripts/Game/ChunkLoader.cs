@@ -71,8 +71,10 @@ public class ChunkLoader : MonoBehaviour
         
         Debug.Log("[CHUNK]: Loading " + newMile, this);
 
-        string chunkEntity = MUDHelper.Keccak256("Chunk", (int)newMile);
-        ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
+        // string chunkEntity = MUDHelper.Keccak256("Chunk", (int)newMile);
+        // ChunkComponent newChunk = MUDWorld.FindComponent<ChunkComponent>(chunkEntity);
+
+        ChunkLoader.Chunks.TryGetValue(newMile, out ChunkComponent newChunk);
 
         if(newChunk == null) {
             Debug.LogError("Couldn't load mile " + newMile, this);
