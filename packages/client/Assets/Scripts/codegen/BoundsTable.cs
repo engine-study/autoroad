@@ -3,30 +3,40 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class BoundsTableUpdate : TypedRecordUpdate<Tuple<BoundsTable?, BoundsTable?>> { }
-
     public class BoundsTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Bounds");
+        public class BoundsTableUpdate : RecordUpdate
+        {
+            public int? Left;
+            public int? PreviousLeft;
+            public int? Right;
+            public int? PreviousRight;
+            public int? Up;
+            public int? PreviousUp;
+            public int? Down;
+            public int? PreviousDown;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Bounds";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public long? left;
-        public long? right;
-        public long? up;
-        public long? down;
+        public int? Left;
+        public int? Right;
+        public int? Up;
+        public int? Down;
 
         public override Type TableType()
         {
@@ -46,19 +56,19 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (left != other.left)
+            if (Left != other.Left)
             {
                 return false;
             }
-            if (right != other.right)
+            if (Right != other.Right)
             {
                 return false;
             }
-            if (up != other.up)
+            if (Up != other.Up)
             {
                 return false;
             }
-            if (down != other.down)
+            if (Down != other.Down)
             {
                 return false;
             }
@@ -67,115 +77,105 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            left = (long)(int)functionParameters[0];
+            Left = (int)functionParameters[0];
 
-            right = (long)(int)functionParameters[1];
+            Right = (int)functionParameters[1];
 
-            up = (long)(int)functionParameters[2];
+            Up = (int)functionParameters[2];
 
-            down = (long)(int)functionParameters[3];
+            Down = (int)functionParameters[3];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetBoundsTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            BoundsTable mudTable = new BoundsTable();
 
-            var leftValue = (long)table["left"];
-            left = leftValue;
-            var rightValue = (long)table["right"];
-            right = rightValue;
-            var upValue = (long)table["up"];
-            up = upValue;
-            var downValue = (long)table["down"];
-            down = downValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            BoundsTableUpdate update = (BoundsTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Left = (int)property["left"];
+            Right = (int)property["right"];
+            Up = (int)property["up"];
+            Down = (int)property["down"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentLeftTyped = null;
+            int? previousLeftTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("left"))
+            {
+                currentLeftTyped = (int)currentValue["left"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("left"))
+            {
+                previousLeftTyped = (int)previousValue["left"];
+            }
+            int? currentRightTyped = null;
+            int? previousRightTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("right"))
+            {
+                currentRightTyped = (int)currentValue["right"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("right"))
+            {
+                previousRightTyped = (int)previousValue["right"];
+            }
+            int? currentUpTyped = null;
+            int? previousUpTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("up"))
+            {
+                currentUpTyped = (int)currentValue["up"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("up"))
+            {
+                previousUpTyped = (int)previousValue["up"];
+            }
+            int? currentDownTyped = null;
+            int? previousDownTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("down"))
+            {
+                currentDownTyped = (int)currentValue["down"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("down"))
+            {
+                previousDownTyped = (int)previousValue["down"];
+            }
+
             return new BoundsTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Left = currentLeftTyped,
+                PreviousLeft = previousLeftTyped,
+                Right = currentRightTyped,
+                PreviousRight = previousRightTyped,
+                Up = currentUpTyped,
+                PreviousUp = previousUpTyped,
+                Down = currentDownTyped,
+                PreviousDown = previousDownTyped,
             };
-        }
-
-        public static Tuple<BoundsTable?, BoundsTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            BoundsTable? current = null;
-            BoundsTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new BoundsTable
-                    {
-                        left = value.Item1.TryGetValue("left", out var leftVal)
-                            ? (long)leftVal
-                            : default,
-                        right = value.Item1.TryGetValue("right", out var rightVal)
-                            ? (long)rightVal
-                            : default,
-                        up = value.Item1.TryGetValue("up", out var upVal) ? (long)upVal : default,
-                        down = value.Item1.TryGetValue("down", out var downVal)
-                            ? (long)downVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new BoundsTable
-                    {
-                        left = null,
-                        right = null,
-                        up = null,
-                        down = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new BoundsTable
-                    {
-                        left = value.Item2.TryGetValue("left", out var leftVal)
-                            ? (long)leftVal
-                            : default,
-                        right = value.Item2.TryGetValue("right", out var rightVal)
-                            ? (long)rightVal
-                            : default,
-                        up = value.Item2.TryGetValue("up", out var upVal) ? (long)upVal : default,
-                        down = value.Item2.TryGetValue("down", out var downVal)
-                            ? (long)downVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new BoundsTable
-                    {
-                        left = null,
-                        right = null,
-                        up = null,
-                        down = null,
-                    };
-                }
-            }
-
-            return new Tuple<BoundsTable?, BoundsTable?>(current, previous);
         }
     }
 }

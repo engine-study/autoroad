@@ -3,28 +3,34 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class BootsTableUpdate : TypedRecordUpdate<Tuple<BootsTable?, BootsTable?>> { }
-
     public class BootsTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Boots");
+        public class BootsTableUpdate : RecordUpdate
+        {
+            public int? MinMove;
+            public int? PreviousMinMove;
+            public int? MaxMove;
+            public int? PreviousMaxMove;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Boots";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public long? minMove;
-        public long? maxMove;
+        public int? MinMove;
+        public int? MaxMove;
 
         public override Type TableType()
         {
@@ -44,11 +50,11 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (minMove != other.minMove)
+            if (MinMove != other.MinMove)
             {
                 return false;
             }
-            if (maxMove != other.maxMove)
+            if (MaxMove != other.MaxMove)
             {
                 return false;
             }
@@ -57,85 +63,71 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            minMove = (long)(int)functionParameters[0];
+            MinMove = (int)functionParameters[0];
 
-            maxMove = (long)(int)functionParameters[1];
+            MaxMove = (int)functionParameters[1];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetBootsTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            BootsTable mudTable = new BootsTable();
 
-            var minMoveValue = (long)table["minMove"];
-            minMove = minMoveValue;
-            var maxMoveValue = (long)table["maxMove"];
-            maxMove = maxMoveValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            BootsTableUpdate update = (BootsTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            MinMove = (int)property["minMove"];
+            MaxMove = (int)property["maxMove"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentMinMoveTyped = null;
+            int? previousMinMoveTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("minmove"))
+            {
+                currentMinMoveTyped = (int)currentValue["minmove"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("minmove"))
+            {
+                previousMinMoveTyped = (int)previousValue["minmove"];
+            }
+            int? currentMaxMoveTyped = null;
+            int? previousMaxMoveTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("maxmove"))
+            {
+                currentMaxMoveTyped = (int)currentValue["maxmove"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("maxmove"))
+            {
+                previousMaxMoveTyped = (int)previousValue["maxmove"];
+            }
+
             return new BootsTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                MinMove = currentMinMoveTyped,
+                PreviousMinMove = previousMinMoveTyped,
+                MaxMove = currentMaxMoveTyped,
+                PreviousMaxMove = previousMaxMoveTyped,
             };
-        }
-
-        public static Tuple<BootsTable?, BootsTable?> MapUpdates(Tuple<Property?, Property?> value)
-        {
-            BootsTable? current = null;
-            BootsTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new BootsTable
-                    {
-                        minMove = value.Item1.TryGetValue("minMove", out var minMoveVal)
-                            ? (long)minMoveVal
-                            : default,
-                        maxMove = value.Item1.TryGetValue("maxMove", out var maxMoveVal)
-                            ? (long)maxMoveVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new BootsTable { minMove = null, maxMove = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new BootsTable
-                    {
-                        minMove = value.Item2.TryGetValue("minMove", out var minMoveVal)
-                            ? (long)minMoveVal
-                            : default,
-                        maxMove = value.Item2.TryGetValue("maxMove", out var maxMoveVal)
-                            ? (long)maxMoveVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new BootsTable { minMove = null, maxMove = null, };
-                }
-            }
-
-            return new Tuple<BootsTable?, BootsTable?>(current, previous);
         }
     }
 }

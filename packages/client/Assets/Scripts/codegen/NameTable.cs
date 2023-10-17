@@ -3,30 +3,40 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class NameTableUpdate : TypedRecordUpdate<Tuple<NameTable?, NameTable?>> { }
-
     public class NameTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Name");
+        public class NameTableUpdate : RecordUpdate
+        {
+            public bool? Named;
+            public bool? PreviousNamed;
+            public int? First;
+            public int? PreviousFirst;
+            public int? Middle;
+            public int? PreviousMiddle;
+            public int? Last;
+            public int? PreviousLast;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Name";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public bool? named;
-        public ulong? first;
-        public ulong? middle;
-        public ulong? last;
+        public bool? Named;
+        public int? First;
+        public int? Middle;
+        public int? Last;
 
         public override Type TableType()
         {
@@ -46,19 +56,19 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (named != other.named)
+            if (Named != other.Named)
             {
                 return false;
             }
-            if (first != other.first)
+            if (First != other.First)
             {
                 return false;
             }
-            if (middle != other.middle)
+            if (Middle != other.Middle)
             {
                 return false;
             }
-            if (last != other.last)
+            if (Last != other.Last)
             {
                 return false;
             }
@@ -67,117 +77,105 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            named = (bool)functionParameters[0];
+            Named = (bool)functionParameters[0];
 
-            first = (ulong)(int)functionParameters[1];
+            First = (int)functionParameters[1];
 
-            middle = (ulong)(int)functionParameters[2];
+            Middle = (int)functionParameters[2];
 
-            last = (ulong)(int)functionParameters[3];
+            Last = (int)functionParameters[3];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetNameTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            NameTable mudTable = new NameTable();
 
-            var namedValue = (bool)table["named"];
-            named = namedValue;
-            var firstValue = (ulong)table["first"];
-            first = firstValue;
-            var middleValue = (ulong)table["middle"];
-            middle = middleValue;
-            var lastValue = (ulong)table["last"];
-            last = lastValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            NameTableUpdate update = (NameTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Named = (bool)property["named"];
+            First = (int)property["first"];
+            Middle = (int)property["middle"];
+            Last = (int)property["last"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            bool? currentNamedTyped = null;
+            bool? previousNamedTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("named"))
+            {
+                currentNamedTyped = (bool)currentValue["named"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("named"))
+            {
+                previousNamedTyped = (bool)previousValue["named"];
+            }
+            int? currentFirstTyped = null;
+            int? previousFirstTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("first"))
+            {
+                currentFirstTyped = (int)currentValue["first"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("first"))
+            {
+                previousFirstTyped = (int)previousValue["first"];
+            }
+            int? currentMiddleTyped = null;
+            int? previousMiddleTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("middle"))
+            {
+                currentMiddleTyped = (int)currentValue["middle"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("middle"))
+            {
+                previousMiddleTyped = (int)previousValue["middle"];
+            }
+            int? currentLastTyped = null;
+            int? previousLastTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("last"))
+            {
+                currentLastTyped = (int)currentValue["last"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("last"))
+            {
+                previousLastTyped = (int)previousValue["last"];
+            }
+
             return new NameTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Named = currentNamedTyped,
+                PreviousNamed = previousNamedTyped,
+                First = currentFirstTyped,
+                PreviousFirst = previousFirstTyped,
+                Middle = currentMiddleTyped,
+                PreviousMiddle = previousMiddleTyped,
+                Last = currentLastTyped,
+                PreviousLast = previousLastTyped,
             };
-        }
-
-        public static Tuple<NameTable?, NameTable?> MapUpdates(Tuple<Property?, Property?> value)
-        {
-            NameTable? current = null;
-            NameTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new NameTable
-                    {
-                        named = value.Item1.TryGetValue("named", out var namedVal)
-                            ? (bool)namedVal
-                            : default,
-                        first = value.Item1.TryGetValue("first", out var firstVal)
-                            ? (ulong)firstVal
-                            : default,
-                        middle = value.Item1.TryGetValue("middle", out var middleVal)
-                            ? (ulong)middleVal
-                            : default,
-                        last = value.Item1.TryGetValue("last", out var lastVal)
-                            ? (ulong)lastVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new NameTable
-                    {
-                        named = null,
-                        first = null,
-                        middle = null,
-                        last = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new NameTable
-                    {
-                        named = value.Item2.TryGetValue("named", out var namedVal)
-                            ? (bool)namedVal
-                            : default,
-                        first = value.Item2.TryGetValue("first", out var firstVal)
-                            ? (ulong)firstVal
-                            : default,
-                        middle = value.Item2.TryGetValue("middle", out var middleVal)
-                            ? (ulong)middleVal
-                            : default,
-                        last = value.Item2.TryGetValue("last", out var lastVal)
-                            ? (ulong)lastVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new NameTable
-                    {
-                        named = null,
-                        first = null,
-                        middle = null,
-                        last = null,
-                    };
-                }
-            }
-
-            return new Tuple<NameTable?, NameTable?>(current, previous);
         }
     }
 }

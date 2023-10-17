@@ -3,29 +3,37 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class RoadTableUpdate : TypedRecordUpdate<Tuple<RoadTable?, RoadTable?>> { }
-
     public class RoadTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Road");
+        public class RoadTableUpdate : RecordUpdate
+        {
+            public int? State;
+            public int? PreviousState;
+            public string? Filled;
+            public string? PreviousFilled;
+            public bool? Gem;
+            public bool? PreviousGem;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Road";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public ulong? state;
-        public string? filled;
-        public bool? gem;
+        public int? State;
+        public string? Filled;
+        public bool? Gem;
 
         public override Type TableType()
         {
@@ -45,15 +53,15 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (state != other.state)
+            if (State != other.State)
             {
                 return false;
             }
-            if (filled != other.filled)
+            if (Filled != other.Filled)
             {
                 return false;
             }
-            if (gem != other.gem)
+            if (Gem != other.Gem)
             {
                 return false;
             }
@@ -62,105 +70,88 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            state = (ulong)(int)functionParameters[0];
+            State = (int)functionParameters[0];
 
-            filled = (string)functionParameters[1];
+            Filled = (string)functionParameters[1];
 
-            gem = (bool)functionParameters[2];
+            Gem = (bool)functionParameters[2];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetRoadTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            RoadTable mudTable = new RoadTable();
 
-            var stateValue = (ulong)table["state"];
-            state = stateValue;
-            var filledValue = (string)table["filled"];
-            filled = filledValue;
-            var gemValue = (bool)table["gem"];
-            gem = gemValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            RoadTableUpdate update = (RoadTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            State = (int)property["state"];
+            Filled = (string)property["filled"];
+            Gem = (bool)property["gem"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentStateTyped = null;
+            int? previousStateTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("state"))
+            {
+                currentStateTyped = (int)currentValue["state"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("state"))
+            {
+                previousStateTyped = (int)previousValue["state"];
+            }
+            string? currentFilledTyped = null;
+            string? previousFilledTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("filled"))
+            {
+                currentFilledTyped = (string)currentValue["filled"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("filled"))
+            {
+                previousFilledTyped = (string)previousValue["filled"];
+            }
+            bool? currentGemTyped = null;
+            bool? previousGemTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("gem"))
+            {
+                currentGemTyped = (bool)currentValue["gem"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("gem"))
+            {
+                previousGemTyped = (bool)previousValue["gem"];
+            }
+
             return new RoadTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                State = currentStateTyped,
+                PreviousState = previousStateTyped,
+                Filled = currentFilledTyped,
+                PreviousFilled = previousFilledTyped,
+                Gem = currentGemTyped,
+                PreviousGem = previousGemTyped,
             };
-        }
-
-        public static Tuple<RoadTable?, RoadTable?> MapUpdates(Tuple<Property?, Property?> value)
-        {
-            RoadTable? current = null;
-            RoadTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new RoadTable
-                    {
-                        state = value.Item1.TryGetValue("state", out var stateVal)
-                            ? (ulong)stateVal
-                            : default,
-                        filled = value.Item1.TryGetValue("filled", out var filledVal)
-                            ? (string)filledVal
-                            : default,
-                        gem = value.Item1.TryGetValue("gem", out var gemVal)
-                            ? (bool)gemVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new RoadTable
-                    {
-                        state = null,
-                        filled = null,
-                        gem = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new RoadTable
-                    {
-                        state = value.Item2.TryGetValue("state", out var stateVal)
-                            ? (ulong)stateVal
-                            : default,
-                        filled = value.Item2.TryGetValue("filled", out var filledVal)
-                            ? (string)filledVal
-                            : default,
-                        gem = value.Item2.TryGetValue("gem", out var gemVal)
-                            ? (bool)gemVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new RoadTable
-                    {
-                        state = null,
-                        filled = null,
-                        gem = null,
-                    };
-                }
-            }
-
-            return new Tuple<RoadTable?, RoadTable?>(current, previous);
         }
     }
 }

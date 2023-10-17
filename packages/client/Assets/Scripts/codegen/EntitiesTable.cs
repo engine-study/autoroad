@@ -3,28 +3,34 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class EntitiesTableUpdate : TypedRecordUpdate<Tuple<EntitiesTable?, EntitiesTable?>> { }
-
     public class EntitiesTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Entities");
+        public class EntitiesTableUpdate : RecordUpdate
+        {
+            public string[]? Width;
+            public string[]? PreviousWidth;
+            public string[]? Height;
+            public string[]? PreviousHeight;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Entities";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public string[]? width;
-        public string[]? height;
+        public string[]? Width;
+        public string[]? Height;
 
         public override Type TableType()
         {
@@ -44,11 +50,11 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (width != other.width)
+            if (Width != other.Width)
             {
                 return false;
             }
-            if (height != other.height)
+            if (Height != other.Height)
             {
                 return false;
             }
@@ -57,87 +63,71 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            width = (string[])functionParameters[0];
+            Width = (string[])functionParameters[0];
 
-            height = (string[])functionParameters[1];
+            Height = (string[])functionParameters[1];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetEntitiesTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            EntitiesTable mudTable = new EntitiesTable();
 
-            var widthValue = (string[])table["width"];
-            width = widthValue;
-            var heightValue = (string[])table["height"];
-            height = heightValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            EntitiesTableUpdate update = (EntitiesTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Width = (string[])property["width"];
+            Height = (string[])property["height"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            string[]? currentWidthTyped = null;
+            string[]? previousWidthTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("width"))
+            {
+                currentWidthTyped = (string[])currentValue["width"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("width"))
+            {
+                previousWidthTyped = (string[])previousValue["width"];
+            }
+            string[]? currentHeightTyped = null;
+            string[]? previousHeightTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("height"))
+            {
+                currentHeightTyped = (string[])currentValue["height"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("height"))
+            {
+                previousHeightTyped = (string[])previousValue["height"];
+            }
+
             return new EntitiesTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Width = currentWidthTyped,
+                PreviousWidth = previousWidthTyped,
+                Height = currentHeightTyped,
+                PreviousHeight = previousHeightTyped,
             };
-        }
-
-        public static Tuple<EntitiesTable?, EntitiesTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            EntitiesTable? current = null;
-            EntitiesTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new EntitiesTable
-                    {
-                        width = value.Item1.TryGetValue("width", out var widthVal)
-                            ? (string[])widthVal
-                            : default,
-                        height = value.Item1.TryGetValue("height", out var heightVal)
-                            ? (string[])heightVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new EntitiesTable { width = null, height = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new EntitiesTable
-                    {
-                        width = value.Item2.TryGetValue("width", out var widthVal)
-                            ? (string[])widthVal
-                            : default,
-                        height = value.Item2.TryGetValue("height", out var heightVal)
-                            ? (string[])heightVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new EntitiesTable { width = null, height = null, };
-                }
-            }
-
-            return new Tuple<EntitiesTable?, EntitiesTable?>(current, previous);
         }
     }
 }

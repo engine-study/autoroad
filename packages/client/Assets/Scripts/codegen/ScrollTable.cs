@@ -3,27 +3,31 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class ScrollTableUpdate : TypedRecordUpdate<Tuple<ScrollTable?, ScrollTable?>> { }
-
     public class ScrollTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Scroll");
+        public class ScrollTableUpdate : RecordUpdate
+        {
+            public int? Value;
+            public int? PreviousValue;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Scroll";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public ulong? value;
+        public int? Value;
 
         public override Type TableType()
         {
@@ -43,7 +47,7 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (value != other.value)
+            if (Value != other.Value)
             {
                 return false;
             }
@@ -52,77 +56,54 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (ulong)(int)functionParameters[0];
+            Value = (int)functionParameters[0];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetScrollTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            ScrollTable mudTable = new ScrollTable();
 
-            var valueValue = (ulong)table["value"];
-            value = valueValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            ScrollTableUpdate update = (ScrollTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Value = (int)property["value"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentValueTyped = null;
+            int? previousValueTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("value"))
+            {
+                currentValueTyped = (int)currentValue["value"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("value"))
+            {
+                previousValueTyped = (int)previousValue["value"];
+            }
+
             return new ScrollTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Value = currentValueTyped,
+                PreviousValue = previousValueTyped,
             };
-        }
-
-        public static Tuple<ScrollTable?, ScrollTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            ScrollTable? current = null;
-            ScrollTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new ScrollTable
-                    {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new ScrollTable { value = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new ScrollTable
-                    {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (ulong)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new ScrollTable { value = null, };
-                }
-            }
-
-            return new Tuple<ScrollTable?, ScrollTable?>(current, previous);
         }
     }
 }

@@ -3,29 +3,37 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class MapConfigTableUpdate
-        : TypedRecordUpdate<Tuple<MapConfigTable?, MapConfigTable?>> { }
-
     public class MapConfigTable : IMudTable
     {
-        public readonly static TableId ID = new("", "MapConfig");
+        public class MapConfigTableUpdate : RecordUpdate
+        {
+            public int? PlayWidth;
+            public int? PreviousPlayWidth;
+            public int? PlayHeight;
+            public int? PreviousPlayHeight;
+            public int? PlaySpawnWidth;
+            public int? PreviousPlaySpawnWidth;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "MapConfig";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public long? playArea;
-        public long? spawnArea;
+        public int? PlayWidth;
+        public int? PlayHeight;
+        public int? PlaySpawnWidth;
 
         public override Type TableType()
         {
@@ -45,11 +53,15 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (playArea != other.playArea)
+            if (PlayWidth != other.PlayWidth)
             {
                 return false;
             }
-            if (spawnArea != other.spawnArea)
+            if (PlayHeight != other.PlayHeight)
+            {
+                return false;
+            }
+            if (PlaySpawnWidth != other.PlaySpawnWidth)
             {
                 return false;
             }
@@ -58,87 +70,88 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            playArea = (long)(int)functionParameters[0];
+            PlayWidth = (int)functionParameters[0];
 
-            spawnArea = (long)(int)functionParameters[1];
+            PlayHeight = (int)functionParameters[1];
+
+            PlaySpawnWidth = (int)functionParameters[2];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetMapConfigTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            MapConfigTable mudTable = new MapConfigTable();
 
-            var playAreaValue = (long)table["playArea"];
-            playArea = playAreaValue;
-            var spawnAreaValue = (long)table["spawnArea"];
-            spawnArea = spawnAreaValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            MapConfigTableUpdate update = (MapConfigTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            PlayWidth = (int)property["playWidth"];
+            PlayHeight = (int)property["playHeight"];
+            PlaySpawnWidth = (int)property["playSpawnWidth"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentPlayWidthTyped = null;
+            int? previousPlayWidthTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("playwidth"))
+            {
+                currentPlayWidthTyped = (int)currentValue["playwidth"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("playwidth"))
+            {
+                previousPlayWidthTyped = (int)previousValue["playwidth"];
+            }
+            int? currentPlayHeightTyped = null;
+            int? previousPlayHeightTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("playheight"))
+            {
+                currentPlayHeightTyped = (int)currentValue["playheight"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("playheight"))
+            {
+                previousPlayHeightTyped = (int)previousValue["playheight"];
+            }
+            int? currentPlaySpawnWidthTyped = null;
+            int? previousPlaySpawnWidthTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("playspawnwidth"))
+            {
+                currentPlaySpawnWidthTyped = (int)currentValue["playspawnwidth"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("playspawnwidth"))
+            {
+                previousPlaySpawnWidthTyped = (int)previousValue["playspawnwidth"];
+            }
+
             return new MapConfigTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                PlayWidth = currentPlayWidthTyped,
+                PreviousPlayWidth = previousPlayWidthTyped,
+                PlayHeight = currentPlayHeightTyped,
+                PreviousPlayHeight = previousPlayHeightTyped,
+                PlaySpawnWidth = currentPlaySpawnWidthTyped,
+                PreviousPlaySpawnWidth = previousPlaySpawnWidthTyped,
             };
-        }
-
-        public static Tuple<MapConfigTable?, MapConfigTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            MapConfigTable? current = null;
-            MapConfigTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new MapConfigTable
-                    {
-                        playArea = value.Item1.TryGetValue("playArea", out var playAreaVal)
-                            ? (long)playAreaVal
-                            : default,
-                        spawnArea = value.Item1.TryGetValue("spawnArea", out var spawnAreaVal)
-                            ? (long)spawnAreaVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new MapConfigTable { playArea = null, spawnArea = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new MapConfigTable
-                    {
-                        playArea = value.Item2.TryGetValue("playArea", out var playAreaVal)
-                            ? (long)playAreaVal
-                            : default,
-                        spawnArea = value.Item2.TryGetValue("spawnArea", out var spawnAreaVal)
-                            ? (long)spawnAreaVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new MapConfigTable { playArea = null, spawnArea = null, };
-                }
-            }
-
-            return new Tuple<MapConfigTable?, MapConfigTable?>(current, previous);
         }
     }
 }

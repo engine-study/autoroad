@@ -3,27 +3,31 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class CarryingTableUpdate : TypedRecordUpdate<Tuple<CarryingTable?, CarryingTable?>> { }
-
     public class CarryingTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Carrying");
+        public class CarryingTableUpdate : RecordUpdate
+        {
+            public string? Value;
+            public string? PreviousValue;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Carrying";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public string? value;
+        public string? Value;
 
         public override Type TableType()
         {
@@ -43,7 +47,7 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (value != other.value)
+            if (Value != other.Value)
             {
                 return false;
             }
@@ -52,77 +56,54 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (string)functionParameters[0];
+            Value = (string)functionParameters[0];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetCarryingTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            CarryingTable mudTable = new CarryingTable();
 
-            var valueValue = (string)table["value"];
-            value = valueValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            CarryingTableUpdate update = (CarryingTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Value = (string)property["value"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            string? currentValueTyped = null;
+            string? previousValueTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("value"))
+            {
+                currentValueTyped = (string)currentValue["value"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("value"))
+            {
+                previousValueTyped = (string)previousValue["value"];
+            }
+
             return new CarryingTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Value = currentValueTyped,
+                PreviousValue = previousValueTyped,
             };
-        }
-
-        public static Tuple<CarryingTable?, CarryingTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            CarryingTable? current = null;
-            CarryingTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new CarryingTable
-                    {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (string)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new CarryingTable { value = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new CarryingTable
-                    {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (string)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new CarryingTable { value = null, };
-                }
-            }
-
-            return new Tuple<CarryingTable?, CarryingTable?>(current, previous);
         }
     }
 }

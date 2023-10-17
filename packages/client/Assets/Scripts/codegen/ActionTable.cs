@@ -3,30 +3,40 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class ActionTableUpdate : TypedRecordUpdate<Tuple<ActionTable?, ActionTable?>> { }
-
     public class ActionTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Action");
+        public class ActionTableUpdate : RecordUpdate
+        {
+            public int? Action;
+            public int? PreviousAction;
+            public int? X;
+            public int? PreviousX;
+            public int? Y;
+            public int? PreviousY;
+            public string? Target;
+            public string? PreviousTarget;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Action";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public ulong? action;
-        public long? x;
-        public long? y;
-        public string? target;
+        public int? Action;
+        public int? X;
+        public int? Y;
+        public string? Target;
 
         public override Type TableType()
         {
@@ -46,19 +56,19 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (action != other.action)
+            if (Action != other.Action)
             {
                 return false;
             }
-            if (x != other.x)
+            if (X != other.X)
             {
                 return false;
             }
-            if (y != other.y)
+            if (Y != other.Y)
             {
                 return false;
             }
-            if (target != other.target)
+            if (Target != other.Target)
             {
                 return false;
             }
@@ -67,111 +77,105 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            action = (ulong)(int)functionParameters[0];
+            Action = (int)functionParameters[0];
 
-            x = (long)(int)functionParameters[1];
+            X = (int)functionParameters[1];
 
-            y = (long)(int)functionParameters[2];
+            Y = (int)functionParameters[2];
 
-            target = (string)functionParameters[3];
+            Target = (string)functionParameters[3];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetActionTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            ActionTable mudTable = new ActionTable();
 
-            var actionValue = (ulong)table["action"];
-            action = actionValue;
-            var xValue = (long)table["x"];
-            x = xValue;
-            var yValue = (long)table["y"];
-            y = yValue;
-            var targetValue = (string)table["target"];
-            target = targetValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            ActionTableUpdate update = (ActionTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Action = (int)property["action"];
+            X = (int)property["x"];
+            Y = (int)property["y"];
+            Target = (string)property["target"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentActionTyped = null;
+            int? previousActionTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("action"))
+            {
+                currentActionTyped = (int)currentValue["action"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("action"))
+            {
+                previousActionTyped = (int)previousValue["action"];
+            }
+            int? currentXTyped = null;
+            int? previousXTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("x"))
+            {
+                currentXTyped = (int)currentValue["x"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("x"))
+            {
+                previousXTyped = (int)previousValue["x"];
+            }
+            int? currentYTyped = null;
+            int? previousYTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("y"))
+            {
+                currentYTyped = (int)currentValue["y"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("y"))
+            {
+                previousYTyped = (int)previousValue["y"];
+            }
+            string? currentTargetTyped = null;
+            string? previousTargetTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("target"))
+            {
+                currentTargetTyped = (string)currentValue["target"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("target"))
+            {
+                previousTargetTyped = (string)previousValue["target"];
+            }
+
             return new ActionTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Action = currentActionTyped,
+                PreviousAction = previousActionTyped,
+                X = currentXTyped,
+                PreviousX = previousXTyped,
+                Y = currentYTyped,
+                PreviousY = previousYTyped,
+                Target = currentTargetTyped,
+                PreviousTarget = previousTargetTyped,
             };
-        }
-
-        public static Tuple<ActionTable?, ActionTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            ActionTable? current = null;
-            ActionTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new ActionTable
-                    {
-                        action = value.Item1.TryGetValue("action", out var actionVal)
-                            ? (ulong)actionVal
-                            : default,
-                        x = value.Item1.TryGetValue("x", out var xVal) ? (long)xVal : default,
-                        y = value.Item1.TryGetValue("y", out var yVal) ? (long)yVal : default,
-                        target = value.Item1.TryGetValue("target", out var targetVal)
-                            ? (string)targetVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new ActionTable
-                    {
-                        action = null,
-                        x = null,
-                        y = null,
-                        target = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new ActionTable
-                    {
-                        action = value.Item2.TryGetValue("action", out var actionVal)
-                            ? (ulong)actionVal
-                            : default,
-                        x = value.Item2.TryGetValue("x", out var xVal) ? (long)xVal : default,
-                        y = value.Item2.TryGetValue("y", out var yVal) ? (long)yVal : default,
-                        target = value.Item2.TryGetValue("target", out var targetVal)
-                            ? (string)targetVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new ActionTable
-                    {
-                        action = null,
-                        x = null,
-                        y = null,
-                        target = null,
-                    };
-                }
-            }
-
-            return new Tuple<ActionTable?, ActionTable?>(current, previous);
         }
     }
 }

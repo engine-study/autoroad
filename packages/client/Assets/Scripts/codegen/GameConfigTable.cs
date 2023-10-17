@@ -3,30 +3,37 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class GameConfigTableUpdate
-        : TypedRecordUpdate<Tuple<GameConfigTable?, GameConfigTable?>> { }
-
     public class GameConfigTable : IMudTable
     {
-        public readonly static TableId ID = new("", "GameConfig");
+        public class GameConfigTableUpdate : RecordUpdate
+        {
+            public bool? Debug;
+            public bool? PreviousDebug;
+            public bool? DummyPlayers;
+            public bool? PreviousDummyPlayers;
+            public bool? RoadComplete;
+            public bool? PreviousRoadComplete;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "GameConfig";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public bool? debug;
-        public bool? dummyPlayers;
-        public bool? roadComplete;
+        public bool? Debug;
+        public bool? DummyPlayers;
+        public bool? RoadComplete;
 
         public override Type TableType()
         {
@@ -46,15 +53,15 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (debug != other.debug)
+            if (Debug != other.Debug)
             {
                 return false;
             }
-            if (dummyPlayers != other.dummyPlayers)
+            if (DummyPlayers != other.DummyPlayers)
             {
                 return false;
             }
-            if (roadComplete != other.roadComplete)
+            if (RoadComplete != other.RoadComplete)
             {
                 return false;
             }
@@ -63,119 +70,88 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            debug = (bool)functionParameters[0];
+            Debug = (bool)functionParameters[0];
 
-            dummyPlayers = (bool)functionParameters[1];
+            DummyPlayers = (bool)functionParameters[1];
 
-            roadComplete = (bool)functionParameters[2];
+            RoadComplete = (bool)functionParameters[2];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetGameConfigTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            GameConfigTable mudTable = new GameConfigTable();
 
-            var debugValue = (bool)table["debug"];
-            debug = debugValue;
-            var dummyPlayersValue = (bool)table["dummyPlayers"];
-            dummyPlayers = dummyPlayersValue;
-            var roadCompleteValue = (bool)table["roadComplete"];
-            roadComplete = roadCompleteValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            GameConfigTableUpdate update = (GameConfigTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Debug = (bool)property["debug"];
+            DummyPlayers = (bool)property["dummyPlayers"];
+            RoadComplete = (bool)property["roadComplete"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            bool? currentDebugTyped = null;
+            bool? previousDebugTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("debug"))
+            {
+                currentDebugTyped = (bool)currentValue["debug"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("debug"))
+            {
+                previousDebugTyped = (bool)previousValue["debug"];
+            }
+            bool? currentDummyPlayersTyped = null;
+            bool? previousDummyPlayersTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("dummyplayers"))
+            {
+                currentDummyPlayersTyped = (bool)currentValue["dummyplayers"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("dummyplayers"))
+            {
+                previousDummyPlayersTyped = (bool)previousValue["dummyplayers"];
+            }
+            bool? currentRoadCompleteTyped = null;
+            bool? previousRoadCompleteTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("roadcomplete"))
+            {
+                currentRoadCompleteTyped = (bool)currentValue["roadcomplete"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("roadcomplete"))
+            {
+                previousRoadCompleteTyped = (bool)previousValue["roadcomplete"];
+            }
+
             return new GameConfigTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Debug = currentDebugTyped,
+                PreviousDebug = previousDebugTyped,
+                DummyPlayers = currentDummyPlayersTyped,
+                PreviousDummyPlayers = previousDummyPlayersTyped,
+                RoadComplete = currentRoadCompleteTyped,
+                PreviousRoadComplete = previousRoadCompleteTyped,
             };
-        }
-
-        public static Tuple<GameConfigTable?, GameConfigTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            GameConfigTable? current = null;
-            GameConfigTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new GameConfigTable
-                    {
-                        debug = value.Item1.TryGetValue("debug", out var debugVal)
-                            ? (bool)debugVal
-                            : default,
-                        dummyPlayers = value.Item1.TryGetValue(
-                            "dummyPlayers",
-                            out var dummyPlayersVal
-                        )
-                            ? (bool)dummyPlayersVal
-                            : default,
-                        roadComplete = value.Item1.TryGetValue(
-                            "roadComplete",
-                            out var roadCompleteVal
-                        )
-                            ? (bool)roadCompleteVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new GameConfigTable
-                    {
-                        debug = null,
-                        dummyPlayers = null,
-                        roadComplete = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new GameConfigTable
-                    {
-                        debug = value.Item2.TryGetValue("debug", out var debugVal)
-                            ? (bool)debugVal
-                            : default,
-                        dummyPlayers = value.Item2.TryGetValue(
-                            "dummyPlayers",
-                            out var dummyPlayersVal
-                        )
-                            ? (bool)dummyPlayersVal
-                            : default,
-                        roadComplete = value.Item2.TryGetValue(
-                            "roadComplete",
-                            out var roadCompleteVal
-                        )
-                            ? (bool)roadCompleteVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new GameConfigTable
-                    {
-                        debug = null,
-                        dummyPlayers = null,
-                        roadComplete = null,
-                    };
-                }
-            }
-
-            return new Tuple<GameConfigTable?, GameConfigTable?>(current, previous);
         }
     }
 }

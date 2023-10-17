@@ -3,27 +3,31 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class LogTableUpdate : TypedRecordUpdate<Tuple<LogTable?, LogTable?>> { }
-
     public class LogTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Log");
+        public class LogTableUpdate : RecordUpdate
+        {
+            public bool? Value;
+            public bool? PreviousValue;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Log";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public bool? value;
+        public bool? Value;
 
         public override Type TableType()
         {
@@ -43,7 +47,7 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (value != other.value)
+            if (Value != other.Value)
             {
                 return false;
             }
@@ -52,75 +56,54 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (bool)functionParameters[0];
+            Value = (bool)functionParameters[0];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetLogTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            LogTable mudTable = new LogTable();
 
-            var valueValue = (bool)table["value"];
-            value = valueValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            LogTableUpdate update = (LogTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Value = (bool)property["value"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            bool? currentValueTyped = null;
+            bool? previousValueTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("value"))
+            {
+                currentValueTyped = (bool)currentValue["value"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("value"))
+            {
+                previousValueTyped = (bool)previousValue["value"];
+            }
+
             return new LogTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Value = currentValueTyped,
+                PreviousValue = previousValueTyped,
             };
-        }
-
-        public static Tuple<LogTable?, LogTable?> MapUpdates(Tuple<Property?, Property?> value)
-        {
-            LogTable? current = null;
-            LogTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new LogTable
-                    {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (bool)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new LogTable { value = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new LogTable
-                    {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (bool)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new LogTable { value = null, };
-                }
-            }
-
-            return new Tuple<LogTable?, LogTable?>(current, previous);
         }
     }
 }

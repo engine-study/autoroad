@@ -3,27 +3,31 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class EthTableUpdate : TypedRecordUpdate<Tuple<EthTable?, EthTable?>> { }
-
     public class EthTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Eth");
+        public class EthTableUpdate : RecordUpdate
+        {
+            public System.Numerics.BigInteger? Value;
+            public System.Numerics.BigInteger? PreviousValue;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Eth";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public System.Numerics.BigInteger? value;
+        public System.Numerics.BigInteger? Value;
 
         public override Type TableType()
         {
@@ -43,7 +47,7 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (value != other.value)
+            if (Value != other.Value)
             {
                 return false;
             }
@@ -52,75 +56,54 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            value = (System.Numerics.BigInteger)functionParameters[0];
+            Value = (System.Numerics.BigInteger)functionParameters[0];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetEthTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            EthTable mudTable = new EthTable();
 
-            var valueValue = (System.Numerics.BigInteger)table["value"];
-            value = valueValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            EthTableUpdate update = (EthTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Value = (System.Numerics.BigInteger)property["value"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            System.Numerics.BigInteger? currentValueTyped = null;
+            System.Numerics.BigInteger? previousValueTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("value"))
+            {
+                currentValueTyped = (System.Numerics.BigInteger)currentValue["value"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("value"))
+            {
+                previousValueTyped = (System.Numerics.BigInteger)previousValue["value"];
+            }
+
             return new EthTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Value = currentValueTyped,
+                PreviousValue = previousValueTyped,
             };
-        }
-
-        public static Tuple<EthTable?, EthTable?> MapUpdates(Tuple<Property?, Property?> value)
-        {
-            EthTable? current = null;
-            EthTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new EthTable
-                    {
-                        value = value.Item1.TryGetValue("value", out var valueVal)
-                            ? (System.Numerics.BigInteger)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new EthTable { value = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new EthTable
-                    {
-                        value = value.Item2.TryGetValue("value", out var valueVal)
-                            ? (System.Numerics.BigInteger)valueVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new EthTable { value = null, };
-                }
-            }
-
-            return new Tuple<EthTable?, EthTable?>(current, previous);
         }
     }
 }

@@ -3,34 +3,31 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class StatsTableUpdate : TypedRecordUpdate<Tuple<StatsTable?, StatsTable?>> { }
-
     public class StatsTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Stats");
+        public class StatsTableUpdate : RecordUpdate
+        {
+            public int? StartingMile;
+            public int? PreviousStartingMile;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Stats";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public long? startingMile;
-        public long? kills;
-        public long? deaths;
-        public long? moves;
-        public long? mined;
-        public long? pushed;
-        public long? shoveled;
-        public long? completed;
+        public int? StartingMile;
 
         public override Type TableType()
         {
@@ -50,35 +47,7 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (startingMile != other.startingMile)
-            {
-                return false;
-            }
-            if (kills != other.kills)
-            {
-                return false;
-            }
-            if (deaths != other.deaths)
-            {
-                return false;
-            }
-            if (moves != other.moves)
-            {
-                return false;
-            }
-            if (mined != other.mined)
-            {
-                return false;
-            }
-            if (pushed != other.pushed)
-            {
-                return false;
-            }
-            if (shoveled != other.shoveled)
-            {
-                return false;
-            }
-            if (completed != other.completed)
+            if (StartingMile != other.StartingMile)
             {
                 return false;
             }
@@ -87,171 +56,54 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            startingMile = (long)(int)functionParameters[0];
-
-            kills = (long)(int)functionParameters[1];
-
-            deaths = (long)(int)functionParameters[2];
-
-            moves = (long)(int)functionParameters[3];
-
-            mined = (long)(int)functionParameters[4];
-
-            pushed = (long)(int)functionParameters[5];
-
-            shoveled = (long)(int)functionParameters[6];
-
-            completed = (long)(int)functionParameters[7];
+            StartingMile = (int)functionParameters[0];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetStatsTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            StatsTable mudTable = new StatsTable();
 
-            var startingMileValue = (long)table["startingMile"];
-            startingMile = startingMileValue;
-            var killsValue = (long)table["kills"];
-            kills = killsValue;
-            var deathsValue = (long)table["deaths"];
-            deaths = deathsValue;
-            var movesValue = (long)table["moves"];
-            moves = movesValue;
-            var minedValue = (long)table["mined"];
-            mined = minedValue;
-            var pushedValue = (long)table["pushed"];
-            pushed = pushedValue;
-            var shoveledValue = (long)table["shoveled"];
-            shoveled = shoveledValue;
-            var completedValue = (long)table["completed"];
-            completed = completedValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            StatsTableUpdate update = (StatsTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            StartingMile = (int)property["startingMile"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentStartingMileTyped = null;
+            int? previousStartingMileTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("startingmile"))
+            {
+                currentStartingMileTyped = (int)currentValue["startingmile"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("startingmile"))
+            {
+                previousStartingMileTyped = (int)previousValue["startingmile"];
+            }
+
             return new StatsTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                StartingMile = currentStartingMileTyped,
+                PreviousStartingMile = previousStartingMileTyped,
             };
-        }
-
-        public static Tuple<StatsTable?, StatsTable?> MapUpdates(Tuple<Property?, Property?> value)
-        {
-            StatsTable? current = null;
-            StatsTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new StatsTable
-                    {
-                        startingMile = value.Item1.TryGetValue(
-                            "startingMile",
-                            out var startingMileVal
-                        )
-                            ? (long)startingMileVal
-                            : default,
-                        kills = value.Item1.TryGetValue("kills", out var killsVal)
-                            ? (long)killsVal
-                            : default,
-                        deaths = value.Item1.TryGetValue("deaths", out var deathsVal)
-                            ? (long)deathsVal
-                            : default,
-                        moves = value.Item1.TryGetValue("moves", out var movesVal)
-                            ? (long)movesVal
-                            : default,
-                        mined = value.Item1.TryGetValue("mined", out var minedVal)
-                            ? (long)minedVal
-                            : default,
-                        pushed = value.Item1.TryGetValue("pushed", out var pushedVal)
-                            ? (long)pushedVal
-                            : default,
-                        shoveled = value.Item1.TryGetValue("shoveled", out var shoveledVal)
-                            ? (long)shoveledVal
-                            : default,
-                        completed = value.Item1.TryGetValue("completed", out var completedVal)
-                            ? (long)completedVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new StatsTable
-                    {
-                        startingMile = null,
-                        kills = null,
-                        deaths = null,
-                        moves = null,
-                        mined = null,
-                        pushed = null,
-                        shoveled = null,
-                        completed = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new StatsTable
-                    {
-                        startingMile = value.Item2.TryGetValue(
-                            "startingMile",
-                            out var startingMileVal
-                        )
-                            ? (long)startingMileVal
-                            : default,
-                        kills = value.Item2.TryGetValue("kills", out var killsVal)
-                            ? (long)killsVal
-                            : default,
-                        deaths = value.Item2.TryGetValue("deaths", out var deathsVal)
-                            ? (long)deathsVal
-                            : default,
-                        moves = value.Item2.TryGetValue("moves", out var movesVal)
-                            ? (long)movesVal
-                            : default,
-                        mined = value.Item2.TryGetValue("mined", out var minedVal)
-                            ? (long)minedVal
-                            : default,
-                        pushed = value.Item2.TryGetValue("pushed", out var pushedVal)
-                            ? (long)pushedVal
-                            : default,
-                        shoveled = value.Item2.TryGetValue("shoveled", out var shoveledVal)
-                            ? (long)shoveledVal
-                            : default,
-                        completed = value.Item2.TryGetValue("completed", out var completedVal)
-                            ? (long)completedVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new StatsTable
-                    {
-                        startingMile = null,
-                        kills = null,
-                        deaths = null,
-                        moves = null,
-                        mined = null,
-                        pushed = null,
-                        shoveled = null,
-                        completed = null,
-                    };
-                }
-            }
-
-            return new Tuple<StatsTable?, StatsTable?>(current, previous);
         }
     }
 }

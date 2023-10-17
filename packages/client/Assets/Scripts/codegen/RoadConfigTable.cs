@@ -3,31 +3,37 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class RoadConfigTableUpdate
-        : TypedRecordUpdate<Tuple<RoadConfigTable?, RoadConfigTable?>> { }
-
     public class RoadConfigTable : IMudTable
     {
-        public readonly static TableId ID = new("", "RoadConfig");
+        public class RoadConfigTableUpdate : RecordUpdate
+        {
+            public int? Width;
+            public int? PreviousWidth;
+            public int? Left;
+            public int? PreviousLeft;
+            public int? Right;
+            public int? PreviousRight;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "RoadConfig";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public ulong? width;
-        public ulong? height;
-        public long? left;
-        public long? right;
+        public int? Width;
+        public int? Left;
+        public int? Right;
 
         public override Type TableType()
         {
@@ -47,19 +53,15 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (width != other.width)
+            if (Width != other.Width)
             {
                 return false;
             }
-            if (height != other.height)
+            if (Left != other.Left)
             {
                 return false;
             }
-            if (left != other.left)
-            {
-                return false;
-            }
-            if (right != other.right)
+            if (Right != other.Right)
             {
                 return false;
             }
@@ -68,119 +70,88 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            width = (ulong)(int)functionParameters[0];
+            Width = (int)functionParameters[0];
 
-            height = (ulong)(int)functionParameters[1];
+            Left = (int)functionParameters[1];
 
-            left = (long)(int)functionParameters[2];
-
-            right = (long)(int)functionParameters[3];
+            Right = (int)functionParameters[2];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetRoadConfigTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            RoadConfigTable mudTable = new RoadConfigTable();
 
-            var widthValue = (ulong)table["width"];
-            width = widthValue;
-            var heightValue = (ulong)table["height"];
-            height = heightValue;
-            var leftValue = (long)table["left"];
-            left = leftValue;
-            var rightValue = (long)table["right"];
-            right = rightValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            RoadConfigTableUpdate update = (RoadConfigTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Width = (int)property["width"];
+            Left = (int)property["left"];
+            Right = (int)property["right"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentWidthTyped = null;
+            int? previousWidthTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("width"))
+            {
+                currentWidthTyped = (int)currentValue["width"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("width"))
+            {
+                previousWidthTyped = (int)previousValue["width"];
+            }
+            int? currentLeftTyped = null;
+            int? previousLeftTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("left"))
+            {
+                currentLeftTyped = (int)currentValue["left"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("left"))
+            {
+                previousLeftTyped = (int)previousValue["left"];
+            }
+            int? currentRightTyped = null;
+            int? previousRightTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("right"))
+            {
+                currentRightTyped = (int)currentValue["right"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("right"))
+            {
+                previousRightTyped = (int)previousValue["right"];
+            }
+
             return new RoadConfigTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Width = currentWidthTyped,
+                PreviousWidth = previousWidthTyped,
+                Left = currentLeftTyped,
+                PreviousLeft = previousLeftTyped,
+                Right = currentRightTyped,
+                PreviousRight = previousRightTyped,
             };
-        }
-
-        public static Tuple<RoadConfigTable?, RoadConfigTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            RoadConfigTable? current = null;
-            RoadConfigTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new RoadConfigTable
-                    {
-                        width = value.Item1.TryGetValue("width", out var widthVal)
-                            ? (ulong)widthVal
-                            : default,
-                        height = value.Item1.TryGetValue("height", out var heightVal)
-                            ? (ulong)heightVal
-                            : default,
-                        left = value.Item1.TryGetValue("left", out var leftVal)
-                            ? (long)leftVal
-                            : default,
-                        right = value.Item1.TryGetValue("right", out var rightVal)
-                            ? (long)rightVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new RoadConfigTable
-                    {
-                        width = null,
-                        height = null,
-                        left = null,
-                        right = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new RoadConfigTable
-                    {
-                        width = value.Item2.TryGetValue("width", out var widthVal)
-                            ? (ulong)widthVal
-                            : default,
-                        height = value.Item2.TryGetValue("height", out var heightVal)
-                            ? (ulong)heightVal
-                            : default,
-                        left = value.Item2.TryGetValue("left", out var leftVal)
-                            ? (long)leftVal
-                            : default,
-                        right = value.Item2.TryGetValue("right", out var rightVal)
-                            ? (long)rightVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new RoadConfigTable
-                    {
-                        width = null,
-                        height = null,
-                        left = null,
-                        right = null,
-                    };
-                }
-            }
-
-            return new Tuple<RoadConfigTable?, RoadConfigTable?>(current, previous);
         }
     }
 }

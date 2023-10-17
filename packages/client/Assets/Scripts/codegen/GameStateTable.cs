@@ -3,29 +3,34 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class GameStateTableUpdate
-        : TypedRecordUpdate<Tuple<GameStateTable?, GameStateTable?>> { }
-
     public class GameStateTable : IMudTable
     {
-        public readonly static TableId ID = new("", "GameState");
+        public class GameStateTableUpdate : RecordUpdate
+        {
+            public int? Miles;
+            public int? PreviousMiles;
+            public int? Unused;
+            public int? PreviousUnused;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "GameState";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public long? miles;
-        public long? playerCount;
+        public int? Miles;
+        public int? Unused;
 
         public override Type TableType()
         {
@@ -45,11 +50,11 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (miles != other.miles)
+            if (Miles != other.Miles)
             {
                 return false;
             }
-            if (playerCount != other.playerCount)
+            if (Unused != other.Unused)
             {
                 return false;
             }
@@ -58,87 +63,71 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            miles = (long)(int)functionParameters[0];
+            Miles = (int)functionParameters[0];
 
-            playerCount = (long)(int)functionParameters[1];
+            Unused = (int)functionParameters[1];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetGameStateTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            GameStateTable mudTable = new GameStateTable();
 
-            var milesValue = (long)table["miles"];
-            miles = milesValue;
-            var playerCountValue = (long)table["playerCount"];
-            playerCount = playerCountValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            GameStateTableUpdate update = (GameStateTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Miles = (int)property["miles"];
+            Unused = (int)property["unused"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentMilesTyped = null;
+            int? previousMilesTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("miles"))
+            {
+                currentMilesTyped = (int)currentValue["miles"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("miles"))
+            {
+                previousMilesTyped = (int)previousValue["miles"];
+            }
+            int? currentUnusedTyped = null;
+            int? previousUnusedTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("unused"))
+            {
+                currentUnusedTyped = (int)currentValue["unused"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("unused"))
+            {
+                previousUnusedTyped = (int)previousValue["unused"];
+            }
+
             return new GameStateTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Miles = currentMilesTyped,
+                PreviousMiles = previousMilesTyped,
+                Unused = currentUnusedTyped,
+                PreviousUnused = previousUnusedTyped,
             };
-        }
-
-        public static Tuple<GameStateTable?, GameStateTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            GameStateTable? current = null;
-            GameStateTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new GameStateTable
-                    {
-                        miles = value.Item1.TryGetValue("miles", out var milesVal)
-                            ? (long)milesVal
-                            : default,
-                        playerCount = value.Item1.TryGetValue("playerCount", out var playerCountVal)
-                            ? (long)playerCountVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new GameStateTable { miles = null, playerCount = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new GameStateTable
-                    {
-                        miles = value.Item2.TryGetValue("miles", out var milesVal)
-                            ? (long)milesVal
-                            : default,
-                        playerCount = value.Item2.TryGetValue("playerCount", out var playerCountVal)
-                            ? (long)playerCountVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new GameStateTable { miles = null, playerCount = null, };
-                }
-            }
-
-            return new Tuple<GameStateTable?, GameStateTable?>(current, previous);
         }
     }
 }

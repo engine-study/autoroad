@@ -3,28 +3,34 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class PuzzleTableUpdate : TypedRecordUpdate<Tuple<PuzzleTable?, PuzzleTable?>> { }
-
     public class PuzzleTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Puzzle");
+        public class PuzzleTableUpdate : RecordUpdate
+        {
+            public int? PuzzleType;
+            public int? PreviousPuzzleType;
+            public bool? Complete;
+            public bool? PreviousComplete;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Puzzle";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public ulong? puzzleType;
-        public bool? complete;
+        public int? PuzzleType;
+        public bool? Complete;
 
         public override Type TableType()
         {
@@ -44,11 +50,11 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (puzzleType != other.puzzleType)
+            if (PuzzleType != other.PuzzleType)
             {
                 return false;
             }
-            if (complete != other.complete)
+            if (Complete != other.Complete)
             {
                 return false;
             }
@@ -57,87 +63,71 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            puzzleType = (ulong)(int)functionParameters[0];
+            PuzzleType = (int)functionParameters[0];
 
-            complete = (bool)functionParameters[1];
+            Complete = (bool)functionParameters[1];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetPuzzleTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            PuzzleTable mudTable = new PuzzleTable();
 
-            var puzzleTypeValue = (ulong)table["puzzleType"];
-            puzzleType = puzzleTypeValue;
-            var completeValue = (bool)table["complete"];
-            complete = completeValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            PuzzleTableUpdate update = (PuzzleTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            PuzzleType = (int)property["puzzleType"];
+            Complete = (bool)property["complete"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentPuzzleTypeTyped = null;
+            int? previousPuzzleTypeTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("puzzletype"))
+            {
+                currentPuzzleTypeTyped = (int)currentValue["puzzletype"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("puzzletype"))
+            {
+                previousPuzzleTypeTyped = (int)previousValue["puzzletype"];
+            }
+            bool? currentCompleteTyped = null;
+            bool? previousCompleteTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("complete"))
+            {
+                currentCompleteTyped = (bool)currentValue["complete"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("complete"))
+            {
+                previousCompleteTyped = (bool)previousValue["complete"];
+            }
+
             return new PuzzleTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                PuzzleType = currentPuzzleTypeTyped,
+                PreviousPuzzleType = previousPuzzleTypeTyped,
+                Complete = currentCompleteTyped,
+                PreviousComplete = previousCompleteTyped,
             };
-        }
-
-        public static Tuple<PuzzleTable?, PuzzleTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            PuzzleTable? current = null;
-            PuzzleTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new PuzzleTable
-                    {
-                        puzzleType = value.Item1.TryGetValue("puzzleType", out var puzzleTypeVal)
-                            ? (ulong)puzzleTypeVal
-                            : default,
-                        complete = value.Item1.TryGetValue("complete", out var completeVal)
-                            ? (bool)completeVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new PuzzleTable { puzzleType = null, complete = null, };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new PuzzleTable
-                    {
-                        puzzleType = value.Item2.TryGetValue("puzzleType", out var puzzleTypeVal)
-                            ? (ulong)puzzleTypeVal
-                            : default,
-                        complete = value.Item2.TryGetValue("complete", out var completeVal)
-                            ? (bool)completeVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new PuzzleTable { puzzleType = null, complete = null, };
-                }
-            }
-
-            return new Tuple<PuzzleTable?, PuzzleTable?>(current, previous);
         }
     }
 }

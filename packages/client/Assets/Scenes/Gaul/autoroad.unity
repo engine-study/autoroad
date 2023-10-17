@@ -1128,10 +1128,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1654696020}
     m_Modifications:
-    - target: {fileID: 2366010, guid: 73279914125a17047a1cb0b682e90141, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: bfe1d62fa5cb4d04887cd9d179e77ffa, type: 2}
     - target: {fileID: 2955202497243787563, guid: 4333d870306bd1e42a59dc594a6a9fde, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -1188,6 +1184,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2366010, guid: 73279914125a17047a1cb0b682e90141, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bfe1d62fa5cb4d04887cd9d179e77ffa, type: 2}
     m_RemovedComponents:
     - {fileID: 6455442, guid: 73279914125a17047a1cb0b682e90141, type: 3}
     m_RemovedGameObjects: []
@@ -1412,13 +1412,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   componentPrefab: {fileID: 887154974638645543, guid: a34254a59a3dd7845b586282bc8292e2, type: 3}
-  subscribeInsert: 1
-  subscribeUpdate: 1
-  subscribeDelete: 1
   AutoSpawn: 0
-  deletedRecordDestroysEntity: 0
   LogTable: 1
   components: []
+  hasRegistered: 0
+  hasSpawned: 0
 --- !u!1001 &114903657
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8371,13 +8369,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   componentPrefab: {fileID: 3471065316492532668, guid: d980dc259b6a55a40a59303ed46aef6f, type: 3}
-  subscribeInsert: 1
-  subscribeUpdate: 1
-  subscribeDelete: 1
   AutoSpawn: 0
-  deletedRecordDestroysEntity: 0
   LogTable: 1
   components: []
+  hasRegistered: 0
+  hasSpawned: 0
 --- !u!1001 &427732732
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39934,13 +39930,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   componentPrefab: {fileID: 5348944994237342613, guid: 9476fa914b9acad42b5792396d5e2ccd, type: 3}
-  subscribeInsert: 1
-  subscribeUpdate: 1
-  subscribeDelete: 1
   AutoSpawn: 0
-  deletedRecordDestroysEntity: 0
   LogTable: 1
   components: []
+  hasRegistered: 0
+  hasSpawned: 0
 --- !u!1 &1213489893
 GameObject:
   m_ObjectHideFlags: 0
@@ -41384,13 +41378,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   componentPrefab: {fileID: 7101948436885318763, guid: 28f37ae1f9d564b4b9c3725066bfa61a, type: 3}
-  subscribeInsert: 1
-  subscribeUpdate: 1
-  subscribeDelete: 1
   AutoSpawn: 0
-  deletedRecordDestroysEntity: 0
   LogTable: 0
   components: []
+  hasRegistered: 0
+  hasSpawned: 0
 --- !u!1 &1265678052
 GameObject:
   m_ObjectHideFlags: 0
@@ -42536,7 +42528,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61eb358273ebe42428ec519b5dd39b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoSpawn: 0
   spawnTables:
   - {fileID: 1787066033087531766, guid: 23a296bf95185364bbd8a8368dc5d97d, type: 3}
   - {fileID: 5952638462309608961, guid: 22e14e7660fecaf409a6327e0f095484, type: 3}
@@ -42544,7 +42535,6 @@ MonoBehaviour:
   - {fileID: 4010848538143310066, guid: 9be2056a0e8fe2f46880c48217870e7e, type: 3}
   - {fileID: 3191844862812636519, guid: 4fc8adf45b2bc1e44bfdbcd6b089d1dc, type: 3}
   - {fileID: 2189738813310324464, guid: f4ae706acbd00c7499c8744b724b3ea7, type: 3}
-  - {fileID: 3820491778102972747, guid: 1afbed6a21423dc48bab08440c22b1e8, type: 3}
   - {fileID: 5650571335107367827, guid: a0972e080cdc04b4583af09e6087c97b, type: 3}
   - {fileID: 378270646931629764, guid: 79c7c7a450cd26545a594bbdcd153a7d, type: 3}
   - {fileID: 6232110463889642377, guid: 0fc1be4bd00fa244f849d7d4d8c7b6f1, type: 3}
@@ -42567,8 +42557,10 @@ MonoBehaviour:
   - {fileID: 4405741007940278476, guid: 9d240c1920d232642a9d6a6e38640a8e, type: 3}
   - {fileID: 2628842198360724426, guid: 691b414de82f4444fb9864d9a5c7b047, type: 3}
   - {fileID: 1920555593128566380, guid: 2233e296beee3e541a5b66e261e5a4f7, type: 3}
-  debugAllTables: 0
-  loaded: 0
+  AutoSpawn: 0
+  logAllTables: 0
+  syncing: 0
+  tables: []
 --- !u!1001 &1332366756
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47010,13 +47002,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   componentPrefab: {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
-  subscribeInsert: 1
-  subscribeUpdate: 1
-  subscribeDelete: 1
   AutoSpawn: 0
-  deletedRecordDestroysEntity: 0
   LogTable: 1
   components: []
+  hasRegistered: 0
+  hasSpawned: 0
 --- !u!1001 &1518754725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66661,13 +66651,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   componentPrefab: {fileID: 6533145143532920457, guid: f920297f9462d66459360c062b63eb2e, type: 3}
-  subscribeInsert: 1
-  subscribeUpdate: 1
-  subscribeDelete: 1
   AutoSpawn: 0
-  deletedRecordDestroysEntity: 0
   LogTable: 0
   components: []
+  hasRegistered: 0
+  hasSpawned: 0
 --- !u!4 &2120511091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6632599699831637729, guid: 2f4077546d5be6c47b7693a191db08a7, type: 3}
@@ -71096,6 +71084,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2989369141968846104, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
       propertyPath: Optimistic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712842461510900550, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
+      propertyPath: autoConnect
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7180575907617087376, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}

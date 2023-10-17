@@ -3,31 +3,43 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class ChunkTableUpdate : TypedRecordUpdate<Tuple<ChunkTable?, ChunkTable?>> { }
-
     public class ChunkTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Chunk");
+        public class ChunkTableUpdate : RecordUpdate
+        {
+            public int? Mile;
+            public int? PreviousMile;
+            public bool? Spawned;
+            public bool? PreviousSpawned;
+            public bool? Completed;
+            public bool? PreviousCompleted;
+            public int? Roads;
+            public int? PreviousRoads;
+            public System.Numerics.BigInteger? BlockCompleted;
+            public System.Numerics.BigInteger? PreviousBlockCompleted;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Chunk";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public bool? completed;
-        public long? mile;
-        public ulong? pieces;
-        public System.Numerics.BigInteger? blockCompleted;
-        public bool? spawned;
+        public int? Mile;
+        public bool? Spawned;
+        public bool? Completed;
+        public int? Roads;
+        public System.Numerics.BigInteger? BlockCompleted;
 
         public override Type TableType()
         {
@@ -47,23 +59,23 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (completed != other.completed)
+            if (Mile != other.Mile)
             {
                 return false;
             }
-            if (mile != other.mile)
+            if (Spawned != other.Spawned)
             {
                 return false;
             }
-            if (pieces != other.pieces)
+            if (Completed != other.Completed)
             {
                 return false;
             }
-            if (blockCompleted != other.blockCompleted)
+            if (Roads != other.Roads)
             {
                 return false;
             }
-            if (spawned != other.spawned)
+            if (BlockCompleted != other.BlockCompleted)
             {
                 return false;
             }
@@ -72,135 +84,124 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            completed = (bool)functionParameters[0];
+            Mile = (int)functionParameters[0];
 
-            mile = (long)(int)functionParameters[1];
+            Spawned = (bool)functionParameters[1];
 
-            pieces = (ulong)(int)functionParameters[2];
+            Completed = (bool)functionParameters[2];
 
-            blockCompleted = (System.Numerics.BigInteger)functionParameters[3];
+            Roads = (int)functionParameters[3];
 
-            spawned = (bool)functionParameters[4];
+            BlockCompleted = (System.Numerics.BigInteger)functionParameters[4];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetChunkTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            ChunkTable mudTable = new ChunkTable();
 
-            var completedValue = (bool)table["completed"];
-            completed = completedValue;
-            var mileValue = (long)table["mile"];
-            mile = mileValue;
-            var piecesValue = (ulong)table["pieces"];
-            pieces = piecesValue;
-            var blockCompletedValue = (System.Numerics.BigInteger)table["blockCompleted"];
-            blockCompleted = blockCompletedValue;
-            var spawnedValue = (bool)table["spawned"];
-            spawned = spawnedValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            ChunkTableUpdate update = (ChunkTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            Mile = (int)property["mile"];
+            Spawned = (bool)property["spawned"];
+            Completed = (bool)property["completed"];
+            Roads = (int)property["roads"];
+            BlockCompleted = (System.Numerics.BigInteger)property["blockCompleted"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentMileTyped = null;
+            int? previousMileTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("mile"))
+            {
+                currentMileTyped = (int)currentValue["mile"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("mile"))
+            {
+                previousMileTyped = (int)previousValue["mile"];
+            }
+            bool? currentSpawnedTyped = null;
+            bool? previousSpawnedTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("spawned"))
+            {
+                currentSpawnedTyped = (bool)currentValue["spawned"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("spawned"))
+            {
+                previousSpawnedTyped = (bool)previousValue["spawned"];
+            }
+            bool? currentCompletedTyped = null;
+            bool? previousCompletedTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("completed"))
+            {
+                currentCompletedTyped = (bool)currentValue["completed"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("completed"))
+            {
+                previousCompletedTyped = (bool)previousValue["completed"];
+            }
+            int? currentRoadsTyped = null;
+            int? previousRoadsTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("roads"))
+            {
+                currentRoadsTyped = (int)currentValue["roads"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("roads"))
+            {
+                previousRoadsTyped = (int)previousValue["roads"];
+            }
+            System.Numerics.BigInteger? currentBlockCompletedTyped = null;
+            System.Numerics.BigInteger? previousBlockCompletedTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("blockcompleted"))
+            {
+                currentBlockCompletedTyped = (System.Numerics.BigInteger)
+                    currentValue["blockcompleted"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("blockcompleted"))
+            {
+                previousBlockCompletedTyped = (System.Numerics.BigInteger)
+                    previousValue["blockcompleted"];
+            }
+
             return new ChunkTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                Mile = currentMileTyped,
+                PreviousMile = previousMileTyped,
+                Spawned = currentSpawnedTyped,
+                PreviousSpawned = previousSpawnedTyped,
+                Completed = currentCompletedTyped,
+                PreviousCompleted = previousCompletedTyped,
+                Roads = currentRoadsTyped,
+                PreviousRoads = previousRoadsTyped,
+                BlockCompleted = currentBlockCompletedTyped,
+                PreviousBlockCompleted = previousBlockCompletedTyped,
             };
-        }
-
-        public static Tuple<ChunkTable?, ChunkTable?> MapUpdates(Tuple<Property?, Property?> value)
-        {
-            ChunkTable? current = null;
-            ChunkTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new ChunkTable
-                    {
-                        completed = value.Item1.TryGetValue("completed", out var completedVal)
-                            ? (bool)completedVal
-                            : default,
-                        mile = value.Item1.TryGetValue("mile", out var mileVal)
-                            ? (long)mileVal
-                            : default,
-                        pieces = value.Item1.TryGetValue("pieces", out var piecesVal)
-                            ? (ulong)piecesVal
-                            : default,
-                        blockCompleted = value.Item1.TryGetValue(
-                            "blockCompleted",
-                            out var blockCompletedVal
-                        )
-                            ? (System.Numerics.BigInteger)blockCompletedVal
-                            : default,
-                        spawned = value.Item1.TryGetValue("spawned", out var spawnedVal)
-                            ? (bool)spawnedVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new ChunkTable
-                    {
-                        completed = null,
-                        mile = null,
-                        pieces = null,
-                        blockCompleted = null,
-                        spawned = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new ChunkTable
-                    {
-                        completed = value.Item2.TryGetValue("completed", out var completedVal)
-                            ? (bool)completedVal
-                            : default,
-                        mile = value.Item2.TryGetValue("mile", out var mileVal)
-                            ? (long)mileVal
-                            : default,
-                        pieces = value.Item2.TryGetValue("pieces", out var piecesVal)
-                            ? (ulong)piecesVal
-                            : default,
-                        blockCompleted = value.Item2.TryGetValue(
-                            "blockCompleted",
-                            out var blockCompletedVal
-                        )
-                            ? (System.Numerics.BigInteger)blockCompletedVal
-                            : default,
-                        spawned = value.Item2.TryGetValue("spawned", out var spawnedVal)
-                            ? (bool)spawnedVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new ChunkTable
-                    {
-                        completed = null,
-                        mile = null,
-                        pieces = null,
-                        blockCompleted = null,
-                        spawned = null,
-                    };
-                }
-            }
-
-            return new Tuple<ChunkTable?, ChunkTable?>(current, previous);
         }
     }
 }

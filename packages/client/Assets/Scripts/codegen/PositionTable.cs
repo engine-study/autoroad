@@ -3,29 +3,37 @@
 #nullable enable
 using System;
 using mud;
-using mud.Network.schemas;
-using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace mudworld
 {
-    public class PositionTableUpdate : TypedRecordUpdate<Tuple<PositionTable?, PositionTable?>> { }
-
     public class PositionTable : IMudTable
     {
-        public readonly static TableId ID = new("", "Position");
+        public class PositionTableUpdate : RecordUpdate
+        {
+            public int? X;
+            public int? PreviousX;
+            public int? Y;
+            public int? PreviousY;
+            public int? Layer;
+            public int? PreviousLayer;
+        }
 
-        public override TableId GetTableId()
+        public readonly static string ID = "Position";
+        public static RxTable Table
+        {
+            get { return NetworkManager.Instance.ds.store[ID]; }
+        }
+
+        public override string GetTableId()
         {
             return ID;
         }
 
-        public long? x;
-        public long? y;
-        public long? layer;
+        public int? X;
+        public int? Y;
+        public int? Layer;
 
         public override Type TableType()
         {
@@ -45,15 +53,15 @@ namespace DefaultNamespace
             {
                 return false;
             }
-            if (x != other.x)
+            if (X != other.X)
             {
                 return false;
             }
-            if (y != other.y)
+            if (Y != other.Y)
             {
                 return false;
             }
-            if (layer != other.layer)
+            if (Layer != other.Layer)
             {
                 return false;
             }
@@ -62,99 +70,88 @@ namespace DefaultNamespace
 
         public override void SetValues(params object[] functionParameters)
         {
-            x = (long)(int)functionParameters[0];
+            X = (int)functionParameters[0];
 
-            y = (long)(int)functionParameters[1];
+            Y = (int)functionParameters[1];
 
-            layer = (long)(int)functionParameters[2];
+            Layer = (int)functionParameters[2];
         }
 
-        public override void RecordToTable(Record record)
+        public static IObservable<RecordUpdate> GetPositionTableUpdates()
         {
-            var table = record.value;
-            //bool hasValues = false;
+            PositionTable mudTable = new PositionTable();
 
-            var xValue = (long)table["x"];
-            x = xValue;
-            var yValue = (long)table["y"];
-            y = yValue;
-            var layerValue = (long)table["layer"];
-            layer = layerValue;
+            return NetworkManager.Instance.sync.onUpdate
+                .Where(update => update.Table.Name == ID)
+                .Select(recordUpdate =>
+                {
+                    return mudTable.RecordUpdateToTyped(recordUpdate);
+                });
         }
 
-        public override IMudTable RecordUpdateToTable(RecordUpdate tableUpdate)
+        public override void PropertyToTable(Property property)
         {
-            PositionTableUpdate update = (PositionTableUpdate)tableUpdate;
-            return update?.TypedValue.Item1;
+            X = (int)property["x"];
+            Y = (int)property["y"];
+            Layer = (int)property["layer"];
         }
 
-        public override RecordUpdate CreateTypedRecord(RecordUpdate newUpdate)
+        public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
+            var currentValue = recordUpdate.CurrentRecordValue as Property;
+            var previousValue = recordUpdate.PreviousRecordValue as Property;
+            int? currentXTyped = null;
+            int? previousXTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("x"))
+            {
+                currentXTyped = (int)currentValue["x"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("x"))
+            {
+                previousXTyped = (int)previousValue["x"];
+            }
+            int? currentYTyped = null;
+            int? previousYTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("y"))
+            {
+                currentYTyped = (int)currentValue["y"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("y"))
+            {
+                previousYTyped = (int)previousValue["y"];
+            }
+            int? currentLayerTyped = null;
+            int? previousLayerTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("layer"))
+            {
+                currentLayerTyped = (int)currentValue["layer"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("layer"))
+            {
+                previousLayerTyped = (int)previousValue["layer"];
+            }
+
             return new PositionTableUpdate
             {
-                TableId = newUpdate.TableId,
-                Key = newUpdate.Key,
-                Value = newUpdate.Value,
-                TypedValue = MapUpdates(newUpdate.Value)
+                Table = recordUpdate.Table,
+                CurrentRecordValue = recordUpdate.CurrentRecordValue,
+                PreviousRecordValue = recordUpdate.PreviousRecordValue,
+                CurrentRecordKey = recordUpdate.CurrentRecordKey,
+                PreviousRecordKey = recordUpdate.PreviousRecordKey,
+                Type = recordUpdate.Type,
+                X = currentXTyped,
+                PreviousX = previousXTyped,
+                Y = currentYTyped,
+                PreviousY = previousYTyped,
+                Layer = currentLayerTyped,
+                PreviousLayer = previousLayerTyped,
             };
-        }
-
-        public static Tuple<PositionTable?, PositionTable?> MapUpdates(
-            Tuple<Property?, Property?> value
-        )
-        {
-            PositionTable? current = null;
-            PositionTable? previous = null;
-
-            if (value.Item1 != null)
-            {
-                try
-                {
-                    current = new PositionTable
-                    {
-                        x = value.Item1.TryGetValue("x", out var xVal) ? (long)xVal : default,
-                        y = value.Item1.TryGetValue("y", out var yVal) ? (long)yVal : default,
-                        layer = value.Item1.TryGetValue("layer", out var layerVal)
-                            ? (long)layerVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    current = new PositionTable
-                    {
-                        x = null,
-                        y = null,
-                        layer = null,
-                    };
-                }
-            }
-
-            if (value.Item2 != null)
-            {
-                try
-                {
-                    previous = new PositionTable
-                    {
-                        x = value.Item2.TryGetValue("x", out var xVal) ? (long)xVal : default,
-                        y = value.Item2.TryGetValue("y", out var yVal) ? (long)yVal : default,
-                        layer = value.Item2.TryGetValue("layer", out var layerVal)
-                            ? (long)layerVal
-                            : default,
-                    };
-                }
-                catch (InvalidCastException)
-                {
-                    previous = new PositionTable
-                    {
-                        x = null,
-                        y = null,
-                        layer = null,
-                    };
-                }
-            }
-
-            return new Tuple<PositionTable?, PositionTable?>(current, previous);
         }
     }
 }
