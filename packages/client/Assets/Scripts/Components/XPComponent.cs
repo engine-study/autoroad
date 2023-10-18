@@ -38,7 +38,7 @@ public class XPComponent : ValueComponent {
         
         bool levelingUp = lastLevel != -1 && level != lastLevel;
         
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
 
             LocalXP = xp;
             LocalLevel = level;

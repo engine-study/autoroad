@@ -13,8 +13,8 @@ import { Actions } from "../utility/actions.sol";
 import { randomCoord } from "../utility/random.sol";
 import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
-import { ActionSystem } from "../systems/ActionSystem.sol";
 import { RewardSubsystem } from "../systems/RewardSubsystem.sol";
 
 contract SpawnSubsystem is System {
@@ -58,7 +58,6 @@ contract SpawnSubsystem is System {
     require(npcType != NPCType.None, "None");
 
     bytes32 entity = getUniqueEntity();
-    IWorld world = IWorld(_world());
 
     NPC.set(entity, uint32(npcType));
 
@@ -99,10 +98,10 @@ contract SpawnSubsystem is System {
     Health.set(target, -1);
 
     //set to dead
-    world.setAction(target, ActionType.Dead, pos.x, pos.y);
+    Actions.setAction(target, ActionType.Dead, pos.x, pos.y);
 
     //rewards
-    world.killRewards(causedBy, target, attacker);
+    SystemSwitch.call(abi.encodeCall(world.killRewards, (causedBy, target, attacker)));
 
     //spawn bones
     // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));

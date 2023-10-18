@@ -9,6 +9,7 @@ import { PositionTableId, PositionData } from "../codegen/index.sol";
 import { RoadState, MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
+import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
 
@@ -240,7 +241,7 @@ contract MoveSubsystem is System {
     IWorld world = IWorld(_world());
 
     //game will get the action movement type before we move
-    world.setAction(entity, action, pos.x, pos.y);
+    Actions.setAction(entity, action, pos.x, pos.y);
 
     //we move
     Position.set(entity, pos);

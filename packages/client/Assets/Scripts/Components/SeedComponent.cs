@@ -21,7 +21,7 @@ public class SeedComponent : ValueComponent {
         SeedsTable table = update as SeedsTable;
         seeds = (int)table.Value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalCount = seeds;
             OnLocalUpdate?.Invoke();
         }

@@ -7,11 +7,10 @@ import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData,
 import { Puzzle, Trigger, Miliarium } from "../codegen/index.sol";
 import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/common.sol";
 
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { Rules } from "../utility/rules.sol";
+import { Actions } from "../utility/actions.sol";
 import { random, randomFromEntitySeed } from "../utility/random.sol";
-
-import { TerrainSubsystem } from "./TerrainSubsystem.sol";
-
 
 contract PuzzleSubsystem is System {
 
@@ -30,7 +29,8 @@ contract PuzzleSubsystem is System {
       if(atPosition.length > 0 && Trigger.get(atPosition[0]) == entity) {
         //success, freeze miliarium in place
         Move.set(entity, uint32(MoveType.Obstruction));
-        world.givePuzzleReward(causedBy);
+        SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));
+
         //TODO set to single setter
         Puzzle.set(entity, uint32(puzzleType), true);
       }
@@ -69,15 +69,15 @@ contract PuzzleSubsystem is System {
 
     IWorld world = IWorld(_world());
 
-    bytes32 mil = world.getRoadEntity(-5, up);
-    bytes32 trigger = world.getRoadEntity(5, up);
+    bytes32 mil = Actions.getRoadEntity(-5, up);
+    bytes32 trigger = Actions.getRoadEntity(5, up);
 
     console.log("miliarium");
 
     PositionData memory pos = findEmptyPositionInArea(mil, width, up, down, roadSide);
     
     //delete whatever was there and place puzzle
-    world.deleteAt(pos);
+    Actions.deleteAt(world, pos);
     Position.set(mil, pos);
     Miliarium.set(mil, true);
     Weight.set(mil, 1);

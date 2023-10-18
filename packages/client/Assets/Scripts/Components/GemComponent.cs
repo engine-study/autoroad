@@ -24,7 +24,7 @@ public class GemComponent : ValueComponent {
 
         gems = (int)table.Value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalGems = gems;
             OnLocalUpdate?.Invoke();
         }

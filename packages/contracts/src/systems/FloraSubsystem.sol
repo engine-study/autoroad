@@ -8,6 +8,7 @@ import { Player, Health, Tree, Seeds, Move } from "../codegen/index.sol";
 import { ActionType, TerrainType, FloraType, MoveType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
+import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { randomSeed, randomCoord} from "../utility/random.sol";
 import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
@@ -54,7 +55,7 @@ contract FloraSubsystem is System {
     require(Rules.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
 
-    world.setActionTargeted(player, ActionType.Chop, x, y, atPosition[0]);
+    Actions.setActionTargeted(player, ActionType.Chop, x, y, atPosition[0]);
 
     int32 health = Health.get(atPosition[0]);
     health--;
@@ -98,7 +99,7 @@ contract FloraSubsystem is System {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
     require(Rules.canInteractEmpty(player, Position.get(player), pos, atPosition, 1), "bad interact");
 
-    world.setAction(player, ActionType.Plant, x, y);
+    Actions.setAction(player, ActionType.Plant, x, y);
 
     Seeds.set(player, seeds-1);
     world.spawnTerrain(player, x, y, TerrainType.Tree);

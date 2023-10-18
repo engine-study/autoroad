@@ -9,8 +9,10 @@ import { PositionTableId, PositionData } from "../codegen/index.sol";
 import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
+import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
 import { SpawnSubsystem } from "./SpawnSubsystem.sol";
@@ -33,7 +35,7 @@ contract ToolSubsystem is System {
     require(Rules.canInteract(player, playerPos, atStick, 1), "bad interact");
     
     PositionData memory vector = PositionData(stickPos.x - playerPos.x, stickPos.y - playerPos.y, 0);
-    world.moveOrPush(player, atStick[0], stickPos, vector);
+    SystemSwitch.call(abi.encodeCall(world.moveOrPush, (player, atStick[0], stickPos, vector)));
 
   }
 
@@ -43,8 +45,8 @@ contract ToolSubsystem is System {
     require(Rules.onRoad(x, y), "off road");
     require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
 
-    world.spawnShoveledRoad(player, x,y);
-    world.setAction(player, ActionType.Shoveling, x, y);
+    SystemSwitch.call(abi.encodeCall(world.spawnShoveledRoad, (player, x,y)));
+    Actions.setAction(player, ActionType.Shoveling, x, y);
 
   }
 
@@ -60,12 +62,12 @@ contract ToolSubsystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
-    world.setActionTargeted(player, ActionType.Melee, x, y, atPosition[0]);
+    Actions.setActionTargeted(player, ActionType.Melee, x, y, atPosition[0]);
 
     health--;
 
     if (health <= 0) {
-      world.kill(player, atPosition[0], player, pos);
+      SystemSwitch.call(abi.encodeCall(world.kill, (player, atPosition[0], player, pos)));
     } else {
       Health.set(atPosition[0], health);
     }
@@ -88,7 +90,7 @@ contract ToolSubsystem is System {
     rockState++;
 
     Rock.set(atPosition[0], rockState);
-    world.setActionTargeted(player, ActionType.Mining, x, y, atPosition[0]);
+    Actions.setActionTargeted(player, ActionType.Mining, x, y, atPosition[0]);
 
     //give rocks that are mined a pushable component
     if (rockState == uint32(RockType.Statumen)) {
@@ -116,7 +118,7 @@ contract ToolSubsystem is System {
     Rules.requirePushable(atPos);
 
     //set player action
-    world.setActionTargeted(player, ActionType.Fishing, x, y, atPos[0]);
+    Actions.setActionTargeted(player, ActionType.Fishing, x, y, atPos[0]);
 
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
@@ -128,7 +130,7 @@ contract ToolSubsystem is System {
     }
 
     //move other player
-    world.moveTo(player, atPos[0], startPos, endPos, atDest, ActionType.Hop);
+    SystemSwitch.call(abi.encodeCall(world.moveTo, (player, atPos[0], startPos, endPos, atDest, ActionType.Hop)));
 
   }
   
@@ -141,7 +143,7 @@ contract ToolSubsystem is System {
     require(scrolls > uint32(0), "not enough scrolls");
     Scroll.set(player, scrolls - 1);
 
-    world.teleport(player, x, y);
+    SystemSwitch.call(abi.encodeCall(world.teleport, (player, x, y)));
 
   }
 

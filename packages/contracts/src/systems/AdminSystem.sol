@@ -7,7 +7,9 @@ import { Player, Position, Health, Move, GameState, Coinage, PositionData, Posit
 import { TerrainType, NPCType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
+import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { TerrainSubsystem } from "./TerrainSubsystem.sol";
@@ -56,7 +58,7 @@ contract AdminSystem is System {
   function deleteAdmin(int32 x, int32 y, int32 layer) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).deleteAtRequire(PositionData(x,y, layer));
+    Actions.deleteAtRequire(IWorld(_world()), PositionData(x,y, layer));
   }
 
   function spawnPuzzleAdmin() public {

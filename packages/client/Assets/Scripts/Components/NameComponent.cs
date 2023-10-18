@@ -8,15 +8,15 @@ public class NameComponent : MUDComponent {
 
     public static Action OnLocalName;
     public string Name { get { return playerName; } }
-    public static string LocalName {get{return localName;}}
-    private static string localName = null;
+    public static string LocalName;
 
     [Header("Name")]
     [SerializeField] private string playerName;
+    [SerializeField] private string localNameDebug;
 
     protected override void OnDestroy() {
         base.OnDestroy();
-        localName = null;
+        LocalName = null;
     }
 
     protected override void PostInit() {
@@ -31,8 +31,9 @@ public class NameComponent : MUDComponent {
         NameTable table = update as NameTable;
         playerName = NameUI.TableToName((int)table.First, (int)table.Middle, (int)table.Last);
 
-        if(Entity.Key == NetworkManager.Instance.addressKey) {
-            localName = playerName;
+        if(Entity.Key == NetworkManager.LocalKey) {
+            LocalName = playerName;
+            localNameDebug = playerName;
             OnLocalName?.Invoke();
         }
     }

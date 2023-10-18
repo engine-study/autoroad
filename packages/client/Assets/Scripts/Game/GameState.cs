@@ -109,17 +109,20 @@ public class GameState : MonoBehaviour {
     }
     async UniTask PlayGameLoop() {
 
+        Debug.Log("--Initialize--");
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
         while(ChunkLoader.ActiveChunk == null) { await UniTask.Delay(200); }
 
         //wait until the map is setup
+        Debug.Log("--Spawn Map--");
         while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
             if(SPGlobal.IsDebug) { if(await TxManager.SendDirect<HelpSummonFunction>() == false) {await UniTask.Delay(1000);}}
         }
 
-        //wait for name table
+        //wait for name table        
+        Debug.Log("--Make Name--");
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
-        NameTable localName = MUDWorld.FindValue<NameTable>(NetworkManager.LocalAddress);
+        NameComponent localName = MUDWorld.FindComponent<NameComponent>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //NAMING
@@ -129,7 +132,11 @@ public class GameState : MonoBehaviour {
             if (SPGlobal.IsDebug) {
 
                 Debug.Log("Making Name");
-                while(await MotherUI.Mother.playerCreate.MakeName() == false) {await UniTask.Delay(2000);}
+                while(localName == null) {
+                    if(await MotherUI.Mother.playerCreate.MakeName() == false) await UniTask.Delay(1000);
+                    localName = MUDWorld.FindComponent<NameComponent>(NetworkManager.LocalKey);
+                }
+
 
             } else {
                 Debug.Log("Choosing Name");
@@ -139,6 +146,8 @@ public class GameState : MonoBehaviour {
             //wait for the name
             while(string.IsNullOrEmpty(NameComponent.LocalName)) {await UniTask.Delay(500);}
 
+        } else {
+            Debug.Log("Has Name");
         }
         
         //wait for name component to spawn
@@ -147,13 +156,13 @@ public class GameState : MonoBehaviour {
         //wait for player table
         while(MUDWorld.FindTable<PlayerComponent>().Loaded == false) {await UniTask.Delay(500);}
         while(MUDWorld.FindTable<HealthComponent>().Loaded == false) {await UniTask.Delay(500);}
-        PlayerTable playerTable = MUDWorld.FindValue<PlayerTable>(NetworkManager.LocalAddress);
-        HealthComponent healthComponent = MUDWorld.FindComponent<HealthComponent>(NetworkManager.LocalAddress);
+        PlayerComponent player = MUDWorld.FindComponent<PlayerComponent>(NetworkManager.LocalKey);
+        HealthComponent healthComponent = MUDWorld.FindComponent<HealthComponent>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //SPAWNING
         //-----------------------------------------------------------------------
-        if (playerTable == null || healthComponent == null || healthComponent.Health < 1) {
+        if (player == null || healthComponent == null || healthComponent.Health < 1) {
 
             if(SPGlobal.IsDebug) {
                 int x = BoundsComponent.Right + 1;

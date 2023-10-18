@@ -21,7 +21,7 @@ public class CoinComponent : ValueComponent {
         CoinageTable table = update as CoinageTable;
         coins = (int)table.Value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalCoins = coins;
             OnLocalUpdate?.Invoke();
         }

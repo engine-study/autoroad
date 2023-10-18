@@ -8,6 +8,7 @@ import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
 import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
+import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
 
@@ -72,7 +73,7 @@ contract BehaviourSubsystem is System {
     if(canAggroEntity(attacker, target) == false) {return;}
 
     //kill target
-    world.setActionTargeted(attacker, ActionType.Melee, targetPos.x, targetPos.y, target);
+    Actions.setActionTargeted(attacker, ActionType.Melee, targetPos.x, targetPos.y, target);
     world.kill(causedBy, target, attacker, targetPos);
   }
 
@@ -101,7 +102,7 @@ contract BehaviourSubsystem is System {
       }
     }
 
-    world.setActionTargeted(attacker, ActionType.Bow, targetPos.x, targetPos.y, target);
+    Actions.setActionTargeted(attacker, ActionType.Bow, targetPos.x, targetPos.y, target);
 
     //kill target if it is NPC
     uint32 npc = NPC.get(target);

@@ -23,7 +23,7 @@ public class ScrollComponent : ValueComponent {
         ScrollTable table = update as ScrollTable;
         scrolls = (int)table.Value;
 
-        if(Entity.Key == NetworkManager.LocalAddress) {
+        if(Entity.Key == NetworkManager.LocalKey) {
             LocalScrolls = scrolls;
             OnLocalUpdate?.Invoke();
         }
