@@ -117,7 +117,7 @@ public class PositionSync : ComponentSync
 
         distance = Vector3.Distance(StartPos, TargetPos);
 
-        Debug.Log(gameObject.name + " MOVE: Start (" + (movement ? movement.name : "/") + ")", this);
+        // Debug.Log(gameObject.name + " MOVE: Start (" + (movement ? movement.name : "/") + ")", this);
 
         // if(action && !wasMoving) {action.PlayAnimation(true);}
         if(line) line.enabled = useLine;
