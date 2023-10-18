@@ -105,7 +105,7 @@ public class RoadComponent : MUDComponent {
 
         }
 
-        creditedPlayerDebug = MUDWorld.FindValue<RoadTable>(Entity.Key)?.Filled;
+        creditedPlayerDebug = MUDWorld.MakeTable<RoadTable>(Entity.Key)?.Filled;
 
         lastStage = State;
 

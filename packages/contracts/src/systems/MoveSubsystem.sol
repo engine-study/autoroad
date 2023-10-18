@@ -236,8 +236,8 @@ contract MoveSubsystem is System {
     IWorld world = IWorld(_world());
 
     //game will get the action movement type before we move
-    // Actions.setAction(entity, action, pos.x, pos.y);
-    Action.set(entity, uint32(action), pos.x, pos.y, bytes32(0));
+    Actions.setAction(entity, action, pos.x, pos.y);
+    // Action.set(entity, uint32(action), pos.x, pos.y, bytes32(0));
 
     //we move
     Position.set(entity, pos);

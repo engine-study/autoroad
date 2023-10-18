@@ -71,6 +71,15 @@ public class PositionSync : ComponentSync
             line.enabled = false;
         }
 
+        #if UNITY_EDITOR
+        //sanity check
+        PositionTable recordTable = IMudTable.MakeTable<PositionTable>(Pos.Entity.Key);
+        PositionTable componentTable = (PositionTable)Pos.ActiveTable;
+        if(componentTable.Equals(recordTable) == false) {
+            Debug.LogError("Position mismatch", this);
+        }
+        #endif
+
         ourComponent.Toggle(IsVisible(), false);
 
     }
