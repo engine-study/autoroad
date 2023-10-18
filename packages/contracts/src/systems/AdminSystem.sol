@@ -26,13 +26,13 @@ contract AdminSystem is System {
   function spawnTerrainAdmin(int32 x, int32 y, TerrainType terrainType) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnTerrain(player, x, y, terrainType);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnTerrain,(player, x, y, terrainType)));
   }
 
   function spawnNPCAdmin(int32 x, int32 y, NPCType npcType) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnNPC(player, x, y, npcType);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnNPC,(player, x, y, npcType)));
   }
 
   function killPlayerAdmin(int32 x, int32 y) public {
@@ -41,7 +41,7 @@ contract AdminSystem is System {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(IWorld(_world()), x, y, 0 );
 
     if(atPosition.length == 0) return;
-    IWorld(_world()).kill(entity, atPosition[0], entity, PositionData(x,y,0));
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).kill,(entity, atPosition[0], entity, PositionData(x,y,0))));
   }
 
   function destroyPlayerAdmin() public {
@@ -64,54 +64,54 @@ contract AdminSystem is System {
   function spawnPuzzleAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).createPuzzleOnMile(player);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createPuzzleOnMile,(player)));
   }
 
   function spawnMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).createMile();
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createMile,()));
   }
 
   function finishMileAdmin() public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).debugMile(player);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).debugMile,(player)));
   }
 
   function spawnFinishedRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnDebugRoad(player, x, y);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnDebugRoad,(player, x, y)));
   }
 
   function spawnShoveledRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).spawnShoveledRoad(player, x, y);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnShoveledRoad,(player, x, y)));
   }
 
   function addCoinsAdmin(int32 amount) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).giveCoins(player, amount);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveCoins,(player, amount)));
   }
   
   function addXPAdmin(uint256 amount) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).giveXP(player, amount);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveXP,(player, amount)));
   }
 
   function addGemXP(int32 amount) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).giveGem(player, amount);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveGem,(player, amount)));
   }
 
   function teleportAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    IWorld(_world()).teleport(player, x, y);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).teleport,(player, x, y)));
   }
 }

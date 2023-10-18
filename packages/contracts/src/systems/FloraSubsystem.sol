@@ -12,6 +12,7 @@ import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { randomSeed, randomCoord} from "../utility/random.sol";
 import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 
@@ -102,7 +103,7 @@ contract FloraSubsystem is System {
     Actions.setAction(player, ActionType.Plant, x, y);
 
     Seeds.set(player, seeds-1);
-    world.spawnTerrain(player, x, y, TerrainType.Tree);
+    SystemSwitch.call(abi.encodeCall(world.spawnTerrain, (player, x, y, TerrainType.Tree)));
 
   }
 }

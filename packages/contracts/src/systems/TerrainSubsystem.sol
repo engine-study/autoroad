@@ -282,7 +282,7 @@ contract TerrainSubsystem is System {
     Position.set(pushed, pos.x, pos.y, -2);
 
     //reward the player
-    IWorld(_world()).giveRoadFilledReward(player);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadFilledReward, (player)));
     updateChunk();
 
   }
@@ -372,7 +372,7 @@ contract TerrainSubsystem is System {
     Move.set(entity, uint32(MoveType.Hole));
     Position.set(entity, x, y, 0);
 
-    IWorld(_world()).giveRoadShoveledReward(player);
+    SystemSwitch.call(abi.encodeCall(world.giveRoadShoveledReward, (player)));
   }
 
   

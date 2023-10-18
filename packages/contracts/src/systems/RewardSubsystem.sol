@@ -12,12 +12,12 @@ contract RewardSubsystem is System {
     IWorld world = IWorld(_world());
 
     //reward the Player and NPC for their actions
-    uint32 attackerType = NPC.get(attacker);
-    uint32 targetType = NPC.get(target);
+    NPCType attackerType = NPCType(NPC.get(attacker));
+    NPCType targetType = NPCType(NPC.get(target));
 
-    if(targetType == uint32(NPCType.Barbarian)) {
-      if(Player.get(causedBy)) { world.giveKilledBarbarianReward(causedBy);}
-      if(attackerType == uint32(NPCType.Soldier)) world.giveKilledBarbarianReward(attacker);
+    if(targetType == NPCType.Barbarian) {
+      if(Player.get(causedBy)) { giveKilledBarbarianReward(causedBy);}
+      if(attackerType != NPCType.None) giveKilledBarbarianReward(attacker);
     }
   }
 

@@ -12,15 +12,12 @@ import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
-
-import { TerrainSubsystem } from "./TerrainSubsystem.sol";
-import { EntitySubsystem } from "./EntitySubsystem.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 contract MoveSubsystem is System {
 
   function moveSimple(bytes32 player, int32 x, int32 y) public {
 
-    IWorld world = IWorld(_world());
     require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory playerPos = Position.get(player);
@@ -39,7 +36,6 @@ contract MoveSubsystem is System {
   }
 
   function doMoveWithBoots(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector) private {
-    IWorld world = IWorld(_world());
 
     int32 minDistance = Boots.getMinMove(player);
     int32 maxDistance = Boots.getMaxMove(player);
@@ -55,7 +51,6 @@ contract MoveSubsystem is System {
   }
 
   function doMove(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory endPos) private {
-    IWorld world = IWorld(_world());
 
     // get all the positions in the line we are walking (including starting position)
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
@@ -65,7 +60,7 @@ contract MoveSubsystem is System {
 
     for (uint i = 1; i < positions.length; i++) {
   
-      bytes32[] memory atDest = Rules.getKeysAtPosition(world,positions[i].x, positions[i].y, 0);
+      bytes32[] memory atDest = Rules.getKeysAtPosition(IWorld(_world()),positions[i].x, positions[i].y, 0);
       assert(atDest.length < 2);
 
       //check if valid position
@@ -212,19 +207,19 @@ contract MoveSubsystem is System {
 
       //spawn road, move pushed thing to under road
       if(Road.getState(atDest[0]) == uint32(RoadState.Shoveled)) {
-        world.spawnRoadFromPlayer(causedBy, entity, atDest[0], to);
+        SystemSwitch.call(abi.encodeCall(world.spawnRoadFromPlayer, (causedBy, entity, atDest[0], to)));
       }
             
       //kill if it was an NPC
       if(NPC.get(entity) > 0) { 
-        world.kill(causedBy, entity, causedBy, to);
+        SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
         return false;
       }
 
     } else if(moveTypeAtDest == MoveType.Trap) {
       if(NPC.get(entity) > 0) { 
         //kill if it was an NPC
-        world.kill(causedBy, entity, causedBy, to);
+        SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
         return false;
       } else {
         //otherwise trap is destroyed with no effect
@@ -252,8 +247,8 @@ contract MoveSubsystem is System {
     //we have to be careful not to infinite loop here 
     //(ie. an entity moves that triggers a move that triggers a move)
 
-    world.triggerEntities(causedBy, entity, pos);
-    world.triggerPuzzles(causedBy, entity, pos);
+    SystemSwitch.call(abi.encodeCall(world.triggerEntities, (causedBy, entity, pos)));
+    SystemSwitch.call(abi.encodeCall(world.triggerPuzzles, (causedBy, entity, pos)));
 
   }
 

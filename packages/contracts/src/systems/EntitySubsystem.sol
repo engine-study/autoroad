@@ -7,11 +7,9 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/index.sol";
 import { NPCType } from "../codegen/common.sol";
 
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { Rules } from "../utility/rules.sol";
-
-import { BehaviourSubsystem } from "./BehaviourSubsystem.sol";
-
 
 contract EntitySubsystem is System {
 
@@ -44,7 +42,7 @@ contract EntitySubsystem is System {
 
       //tick npcs
       NPCType npcType = NPCType(NPC.get(entities[i]));
-      if(npcType > NPCType.None) {world.tickBehaviour(causedBy, player, entities[i], pos, positions[i]);}
+      if(npcType > NPCType.None) {SystemSwitch.call(abi.encodeCall(world.tickBehaviour, (causedBy, player, entities[i], pos, positions[i])));}
 
       //tick other things possible (resources, idk)
 

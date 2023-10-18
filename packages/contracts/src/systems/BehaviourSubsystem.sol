@@ -11,6 +11,7 @@ import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { ActionSystem } from "./ActionSystem.sol";
@@ -43,7 +44,7 @@ contract BehaviourSubsystem is System {
     //walk towards target
     PositionData memory walkPos = addPosition(seekerPos,getVectorNormalized(seekerPos,targetPos));
     bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
-    world.moveTo(causedBy, seeker, seekerPos, walkPos, atDest, ActionType.Walking);
+    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, seeker, seekerPos, walkPos, atDest, ActionType.Walking)));
   }
 
   function canAggroEntity(bytes32 attacker, bytes32 target) public returns(bool) {
@@ -74,7 +75,7 @@ contract BehaviourSubsystem is System {
 
     //kill target
     Actions.setActionTargeted(attacker, ActionType.Melee, targetPos.x, targetPos.y, target);
-    world.kill(causedBy, target, attacker, targetPos);
+    SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, target, attacker, targetPos)));
   }
 
   function doArrow(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory targetPos, PositionData memory attackerPos) public {
@@ -107,7 +108,7 @@ contract BehaviourSubsystem is System {
     //kill target if it is NPC
     uint32 npc = NPC.get(target);
     if(npc > 0) {
-      world.kill(causedBy, target, attacker, targetPos);
+      SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, target, attacker, targetPos)));
     }
 
   }
