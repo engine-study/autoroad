@@ -23,25 +23,27 @@ public class GameStateComponent : MUDComponent {
     protected override IMudTable GetTable() {return new GameStateTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
-        Instance = this;
+        if(Instance == null) {
+            Instance = this;
+            Entity.SetName("WORLD");
+            Entity.transform.parent = null;
+        }
 
         GameStateTable table = (GameStateTable)update;
+
+        lastMile = MILE_COUNT;
 
         mile = table.Miles != null ? (int)table.Miles : mile;
         MILE_COUNT = mile;
 
         Debug.Log("[GAMECOMPONENT] Mile: " + mile);
 
-        Entity.SetName("WORLD");
-        Entity.transform.parent = null;
-
-
         OnGameStateUpdated?.Invoke();
-        if(Loaded && MILE_COUNT != lastMile && lastMile != -1) {
+
+        if(PlayerComponent.LocalPlayer && MILE_COUNT != lastMile && lastMile != -1) {
             OnMileCompleted?.Invoke((int)lastMile);
         }
 
-        lastMile = MILE_COUNT;
 
     }
 

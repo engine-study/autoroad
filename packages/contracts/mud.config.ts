@@ -243,7 +243,7 @@ export default mudConfig({
     // },
 
     Action: {
-      offchainOnly: true,
+      // offchainOnly: true,
       dataStruct: false,
       valueSchema: {
         action: "uint32",

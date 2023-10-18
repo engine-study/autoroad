@@ -5,6 +5,7 @@ using mud;
 using UniRx;
 using IWorld.ContractDefinition;
 using mudworld;
+using System.Linq;
 
 public class GridMUD : MonoBehaviour {
     public static GridMUD Instance;
@@ -12,9 +13,11 @@ public class GridMUD : MonoBehaviour {
 
     [Header("Grid")]
     public bool useQuery = false; 
+    [SerializeField] Vector3 position;
     [SerializeField] PositionComponent firstComponent;
     [SerializeField] List<MUDComponent> positions;
     [SerializeField] List<PositionComponent> componentsAt;
+    [SerializeField] int recordsFound;
     TableManager positionTable;
     private Dictionary<string, MUDComponent> positionDictionary = new Dictionary<string, MUDComponent>();
     private Dictionary<MUDComponent, string> componentDictionary = new Dictionary<MUDComponent, string>();
@@ -31,6 +34,7 @@ public class GridMUD : MonoBehaviour {
     }
 
     void OnDestroy() {
+
         Instance = null;
         // TableDictionary.OnTableToggle -= Init;
         CursorMUD.OnGridPosition -= UpdateComponents;
@@ -46,30 +50,58 @@ public class GridMUD : MonoBehaviour {
 
     void UpdateComponents(Vector3 newPos) {
         if(GameState.GamePlaying == false) {return;}
-        componentsAt = GetComponentsAtPosition((int)newPos.x, (int)newPos.z, (int)newPos.y);
+        position = newPos;
+        componentsAt = GetComponentsAtPosition((int)position.x, (int)position.z, (int)position.y);
         firstComponent = componentsAt.Count > 0 ? componentsAt[0] : null;
     }
 
-    static List<PositionComponent> GetComponentsAtPosition(int x, int y, int layer) {
+    List<PositionComponent> GetComponents(int x, int y, int layer) {
 
-        Condition[] conditions = new Condition[] { Condition.Has("x", System.Convert.ToInt64(x)), Condition.Has("y", System.Convert.ToInt64(y)), Condition.Has("layer", System.Convert.ToInt64(layer)) };
-        var allComponentsAtPosition = new Query().In(PositionTable.Table).In(PositionTable.Table, conditions );
-        var recordsWithPosition = NetworkManager.Datastore.RunQuery(allComponentsAtPosition);
+        Condition[] conditions = new Condition[3];
+        conditions[0] = Condition.Has("x", System.Convert.ToInt32(x)); 
+        conditions[1] = Condition.Has("y", System.Convert.ToInt32(y));
+        conditions[2] = Condition.Has("layer", System.Convert.ToInt32(layer));
+
+        // Debug.Log("All positions");
+
+        // var allPositions = new Query().In(PositionTable.Table);
+        // var r1 = NetworkManager.Datastore.RunQuery(allPositions);
+        // Debug.Log(r1.Count());
+
+        // Debug.Log("All positions in positions");
+
+        // var allPosInPos = new Query().In(PositionTable.Table).In(PositionTable.Table);
+        // var r2 = NetworkManager.Datastore.RunQuery(allPosInPos);
+        // Debug.Log(r2.Count());
+
+        // Debug.Log("All positions in positions with condition");
+
+        var allPosCondition = new Query().In(PositionTable.Table).In(PositionTable.Table, conditions );
+        var r3 = NetworkManager.Datastore.RunQuery(allPosCondition);
+        // Debug.Log(r3.Count());
+
+        // Debug.Log("All positions with condition");
+
+        // var pCon = new Query().In(PositionTable.Table, conditions );
+        // var r4 = NetworkManager.Datastore.RunQuery(pCon);
+        // Debug.Log(r4.Count());
+
 
         List<PositionComponent> components = new List<PositionComponent>();
-        foreach(RxRecord r in recordsWithPosition) {
+        
+        foreach(RxRecord r in r3) {
+            recordsFound++;
             PositionComponent pos = MUDWorld.FindComponent<PositionComponent>(r.Key);
-
-            if(pos == null) {
-                Debug.LogError("Could not find entity");
-                continue;
-            }
+            if(pos == null) {Debug.LogError("Could not find entity");continue;}
             components.Add(pos);
         }
 
         return components;
     }
 
+    static List<PositionComponent> GetComponentsAtPosition(int x, int y, int layer) {
+        return Instance.GetComponents(x,y,layer);
+    }
 
     public static MUDEntity GetEntityAt(Vector3 newPos) {
 

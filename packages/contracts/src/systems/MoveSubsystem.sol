@@ -236,7 +236,8 @@ contract MoveSubsystem is System {
     IWorld world = IWorld(_world());
 
     //game will get the action movement type before we move
-    Actions.setAction(entity, action, pos.x, pos.y);
+    // Actions.setAction(entity, action, pos.x, pos.y);
+    Action.set(entity, uint32(action), pos.x, pos.y, bytes32(0));
 
     //we move
     Position.set(entity, pos);
@@ -262,7 +263,9 @@ contract MoveSubsystem is System {
     PositionData memory startPos = Position.get(player);
     PositionData memory endPos = PositionData(x, y, 0);
     bytes32[] memory atPos = Rules.getKeysAtPosition(world,x, y, 0);
+
     moveTo(player, player, startPos, endPos, atPos, ActionType.Teleport);
+
   }
 
 

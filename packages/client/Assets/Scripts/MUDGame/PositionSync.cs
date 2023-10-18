@@ -139,7 +139,7 @@ public class PositionSync : ComponentSync
 
         UpdateGrid(pos.Pos);
 
-        Debug.Log(gameObject.name + " MOVE: End (" + (movement ? movement.name : "/") + ")", this);
+        // Debug.Log(gameObject.name + " MOVE: End (" + (movement ? movement.name : "/") + ")", this);
 
         // if(action && wasMoving) {action.PlayAnimation(false);}
         if(line) line.enabled = false;

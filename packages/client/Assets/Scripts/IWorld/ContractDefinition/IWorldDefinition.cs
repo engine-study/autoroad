@@ -289,24 +289,6 @@ namespace IWorld.ContractDefinition
         public virtual int Layer { get; set; }
     }
 
-    public partial class DeleteAtFunction : DeleteAtFunctionBase { }
-
-    [Function("deleteAt")]
-    public class DeleteAtFunctionBase : FunctionMessage
-    {
-        [Parameter("tuple", "pos", 1)]
-        public virtual PositionData Pos { get; set; }
-    }
-
-    public partial class DeleteAtRequireFunction : DeleteAtRequireFunctionBase { }
-
-    [Function("deleteAtRequire")]
-    public class DeleteAtRequireFunctionBase : FunctionMessage
-    {
-        [Parameter("tuple", "pos", 1)]
-        public virtual PositionData Pos { get; set; }
-    }
-
     public partial class DeleteRecordFunction : DeleteRecordFunctionBase { }
 
     [Function("deleteRecord")]
@@ -426,23 +408,6 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
-    }
-
-    public partial class GetCarriageEntityFunction : GetCarriageEntityFunctionBase { }
-
-    [Function("getCarriageEntity", "bytes32")]
-    public class GetCarriageEntityFunctionBase : FunctionMessage
-    {
-
-    }
-
-    public partial class GetChunkEntityFunction : GetChunkEntityFunctionBase { }
-
-    [Function("getChunkEntity", "bytes32")]
-    public class GetChunkEntityFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "mile", 1)]
-        public virtual int Mile { get; set; }
     }
 
     public partial class GetDynamicFieldFunction : GetDynamicFieldFunctionBase { }
@@ -603,17 +568,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] TableId { get; set; }
         [Parameter("bytes32[]", "keyTuple", 2)]
         public virtual List<byte[]> KeyTuple { get; set; }
-    }
-
-    public partial class GetRoadEntityFunction : GetRoadEntityFunctionBase { }
-
-    [Function("getRoadEntity", "bytes32")]
-    public class GetRoadEntityFunctionBase : FunctionMessage
-    {
-        [Parameter("int32", "x", 1)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
-        public virtual int Y { get; set; }
     }
 
     public partial class GetStaticFieldFunction : GetStaticFieldFunctionBase { }
@@ -1157,38 +1111,6 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("int32", "amount", 1)]
         public virtual int Amount { get; set; }
-    }
-
-    public partial class SetActionFunction : SetActionFunctionBase { }
-
-    [Function("setAction")]
-    public class SetActionFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "player", 1)]
-        public virtual byte[] Player { get; set; }
-        [Parameter("uint8", "newAction", 2)]
-        public virtual byte NewAction { get; set; }
-        [Parameter("int32", "x", 3)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 4)]
-        public virtual int Y { get; set; }
-    }
-
-    public partial class SetActionTargetedFunction : SetActionTargetedFunctionBase { }
-
-    [Function("setActionTargeted")]
-    public class SetActionTargetedFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "player", 1)]
-        public virtual byte[] Player { get; set; }
-        [Parameter("uint8", "newAction", 2)]
-        public virtual byte NewAction { get; set; }
-        [Parameter("int32", "x", 3)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 4)]
-        public virtual int Y { get; set; }
-        [Parameter("bytes32", "target", 5)]
-        public virtual byte[] Target { get; set; }
     }
 
     public partial class SetDynamicFieldFunction : SetDynamicFieldFunctionBase { }
@@ -2147,10 +2069,6 @@ namespace IWorld.ContractDefinition
 
 
 
-
-
-
-
     public partial class FindEmptyPositionInAreaOutputDTO : FindEmptyPositionInAreaOutputDTOBase { }
 
     [FunctionOutput]
@@ -2165,24 +2083,6 @@ namespace IWorld.ContractDefinition
 
 
 
-
-    public partial class GetCarriageEntityOutputDTO : GetCarriageEntityOutputDTOBase { }
-
-    [FunctionOutput]
-    public class GetCarriageEntityOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("bytes32", "", 1)]
-        public virtual byte[] ReturnValue1 { get; set; }
-    }
-
-    public partial class GetChunkEntityOutputDTO : GetChunkEntityOutputDTOBase { }
-
-    [FunctionOutput]
-    public class GetChunkEntityOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("bytes32", "", 1)]
-        public virtual byte[] ReturnValue1 { get; set; }
-    }
 
     public partial class GetDynamicFieldOutputDTO : GetDynamicFieldOutputDTOBase { }
 
@@ -2300,15 +2200,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] DynamicData { get; set; }
     }
 
-    public partial class GetRoadEntityOutputDTO : GetRoadEntityOutputDTOBase { }
-
-    [FunctionOutput]
-    public class GetRoadEntityOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("bytes32", "", 1)]
-        public virtual byte[] ReturnValue1 { get; set; }
-    }
-
     public partial class GetStaticFieldOutputDTO : GetStaticFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -2403,10 +2294,6 @@ namespace IWorld.ContractDefinition
         [Parameter("tuple[]", "", 1)]
         public virtual List<PositionData> ReturnValue1 { get; set; }
     }
-
-
-
-
 
 
 

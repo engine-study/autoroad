@@ -26,6 +26,8 @@ public class GameState : MonoBehaviour {
 
     [Header("Game")]
     [SerializeField] TableSpawner mainTables;
+    [SerializeField] TableSpawner visualTables;
+    [SerializeField] TableSpawner mileTables;
     [SerializeField] TableManager chunkTable;
     [SerializeField] TableManager [] tables;
     [SerializeField] RecieverMUD reciever;
@@ -81,7 +83,7 @@ public class GameState : MonoBehaviour {
         Debug.Log("---GAMESTATE--- LOAD WORLD");
         mainTables.SpawnTables();
         while(mainTables.Loaded == false) {await UniTask.Delay(100);}
-        while(BoundsComponent.Instance == null || MapConfigComponent.Instance == null || GameStateComponent.Instance == null) {await UniTask.Delay(100);}
+        while(BoundsComponent.Instance == null || MapConfigComponent.Instance == null || GameStateComponent.Instance == null || RoadConfigComponent.Instance == null) {await UniTask.Delay(100);}
 
         //Load all chunks
         Debug.Log("---GAMESTATE--- LOAD CHUNKS");

@@ -689,58 +689,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAdminFunction, cancellationToken);
         }
 
-        public Task<string> DeleteAtRequestAsync(DeleteAtFunction deleteAtFunction)
-        {
-             return ContractHandler.SendRequestAsync(deleteAtFunction);
-        }
-
-        public Task<TransactionReceipt> DeleteAtRequestAndWaitForReceiptAsync(DeleteAtFunction deleteAtFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtFunction, cancellationToken);
-        }
-
-        public Task<string> DeleteAtRequestAsync(PositionData pos)
-        {
-            var deleteAtFunction = new DeleteAtFunction();
-                deleteAtFunction.Pos = pos;
-            
-             return ContractHandler.SendRequestAsync(deleteAtFunction);
-        }
-
-        public Task<TransactionReceipt> DeleteAtRequestAndWaitForReceiptAsync(PositionData pos, CancellationTokenSource cancellationToken = null)
-        {
-            var deleteAtFunction = new DeleteAtFunction();
-                deleteAtFunction.Pos = pos;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtFunction, cancellationToken);
-        }
-
-        public Task<string> DeleteAtRequireRequestAsync(DeleteAtRequireFunction deleteAtRequireFunction)
-        {
-             return ContractHandler.SendRequestAsync(deleteAtRequireFunction);
-        }
-
-        public Task<TransactionReceipt> DeleteAtRequireRequestAndWaitForReceiptAsync(DeleteAtRequireFunction deleteAtRequireFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtRequireFunction, cancellationToken);
-        }
-
-        public Task<string> DeleteAtRequireRequestAsync(PositionData pos)
-        {
-            var deleteAtRequireFunction = new DeleteAtRequireFunction();
-                deleteAtRequireFunction.Pos = pos;
-            
-             return ContractHandler.SendRequestAsync(deleteAtRequireFunction);
-        }
-
-        public Task<TransactionReceipt> DeleteAtRequireRequestAndWaitForReceiptAsync(PositionData pos, CancellationTokenSource cancellationToken = null)
-        {
-            var deleteAtRequireFunction = new DeleteAtRequireFunction();
-                deleteAtRequireFunction.Pos = pos;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteAtRequireFunction, cancellationToken);
-        }
-
         public Task<string> DeleteRecordRequestAsync(DeleteRecordFunction deleteRecordFunction)
         {
              return ContractHandler.SendRequestAsync(deleteRecordFunction);
@@ -1005,31 +953,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(fishFunction, cancellationToken);
         }
 
-        public Task<byte[]> GetCarriageEntityQueryAsync(GetCarriageEntityFunction getCarriageEntityFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryAsync<GetCarriageEntityFunction, byte[]>(getCarriageEntityFunction, blockParameter);
-        }
-
-        
-        public Task<byte[]> GetCarriageEntityQueryAsync(BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryAsync<GetCarriageEntityFunction, byte[]>(null, blockParameter);
-        }
-
-        public Task<byte[]> GetChunkEntityQueryAsync(GetChunkEntityFunction getChunkEntityFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryAsync<GetChunkEntityFunction, byte[]>(getChunkEntityFunction, blockParameter);
-        }
-
-        
-        public Task<byte[]> GetChunkEntityQueryAsync(int mile, BlockParameter blockParameter = null)
-        {
-            var getChunkEntityFunction = new GetChunkEntityFunction();
-                getChunkEntityFunction.Mile = mile;
-            
-            return ContractHandler.QueryAsync<GetChunkEntityFunction, byte[]>(getChunkEntityFunction, blockParameter);
-        }
-
         public Task<byte[]> GetDynamicFieldQueryAsync(GetDynamicFieldFunction getDynamicFieldFunction, BlockParameter blockParameter = null)
         {
             return ContractHandler.QueryAsync<GetDynamicFieldFunction, byte[]>(getDynamicFieldFunction, blockParameter);
@@ -1219,21 +1142,6 @@ namespace IWorld.Service
                 getRecordFunction.KeyTuple = keyTuple;
             
             return ContractHandler.QueryDeserializingToObjectAsync<GetRecordFunction, GetRecordOutputDTO>(getRecordFunction, blockParameter);
-        }
-
-        public Task<byte[]> GetRoadEntityQueryAsync(GetRoadEntityFunction getRoadEntityFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryAsync<GetRoadEntityFunction, byte[]>(getRoadEntityFunction, blockParameter);
-        }
-
-        
-        public Task<byte[]> GetRoadEntityQueryAsync(int x, int y, BlockParameter blockParameter = null)
-        {
-            var getRoadEntityFunction = new GetRoadEntityFunction();
-                getRoadEntityFunction.X = x;
-                getRoadEntityFunction.Y = y;
-            
-            return ContractHandler.QueryAsync<GetRoadEntityFunction, byte[]>(getRoadEntityFunction, blockParameter);
         }
 
         public Task<byte[]> GetStaticFieldQueryAsync(GetStaticFieldFunction getStaticFieldFunction, BlockParameter blockParameter = null)
@@ -2477,72 +2385,6 @@ namespace IWorld.Service
                 sendCoinsFunction.Amount = amount;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(sendCoinsFunction, cancellationToken);
-        }
-
-        public Task<string> SetActionRequestAsync(SetActionFunction setActionFunction)
-        {
-             return ContractHandler.SendRequestAsync(setActionFunction);
-        }
-
-        public Task<TransactionReceipt> SetActionRequestAndWaitForReceiptAsync(SetActionFunction setActionFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setActionFunction, cancellationToken);
-        }
-
-        public Task<string> SetActionRequestAsync(byte[] player, byte newAction, int x, int y)
-        {
-            var setActionFunction = new SetActionFunction();
-                setActionFunction.Player = player;
-                setActionFunction.NewAction = newAction;
-                setActionFunction.X = x;
-                setActionFunction.Y = y;
-            
-             return ContractHandler.SendRequestAsync(setActionFunction);
-        }
-
-        public Task<TransactionReceipt> SetActionRequestAndWaitForReceiptAsync(byte[] player, byte newAction, int x, int y, CancellationTokenSource cancellationToken = null)
-        {
-            var setActionFunction = new SetActionFunction();
-                setActionFunction.Player = player;
-                setActionFunction.NewAction = newAction;
-                setActionFunction.X = x;
-                setActionFunction.Y = y;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setActionFunction, cancellationToken);
-        }
-
-        public Task<string> SetActionTargetedRequestAsync(SetActionTargetedFunction setActionTargetedFunction)
-        {
-             return ContractHandler.SendRequestAsync(setActionTargetedFunction);
-        }
-
-        public Task<TransactionReceipt> SetActionTargetedRequestAndWaitForReceiptAsync(SetActionTargetedFunction setActionTargetedFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setActionTargetedFunction, cancellationToken);
-        }
-
-        public Task<string> SetActionTargetedRequestAsync(byte[] player, byte newAction, int x, int y, byte[] target)
-        {
-            var setActionTargetedFunction = new SetActionTargetedFunction();
-                setActionTargetedFunction.Player = player;
-                setActionTargetedFunction.NewAction = newAction;
-                setActionTargetedFunction.X = x;
-                setActionTargetedFunction.Y = y;
-                setActionTargetedFunction.Target = target;
-            
-             return ContractHandler.SendRequestAsync(setActionTargetedFunction);
-        }
-
-        public Task<TransactionReceipt> SetActionTargetedRequestAndWaitForReceiptAsync(byte[] player, byte newAction, int x, int y, byte[] target, CancellationTokenSource cancellationToken = null)
-        {
-            var setActionTargetedFunction = new SetActionTargetedFunction();
-                setActionTargetedFunction.Player = player;
-                setActionTargetedFunction.NewAction = newAction;
-                setActionTargetedFunction.X = x;
-                setActionTargetedFunction.Y = y;
-                setActionTargetedFunction.Target = target;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(setActionTargetedFunction, cancellationToken);
         }
 
         public Task<string> SetDynamicFieldRequestAsync(SetDynamicFieldFunction setDynamicFieldFunction)

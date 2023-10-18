@@ -29,6 +29,12 @@ public class RoadConfigComponent : MUDComponent
         Left = left;
         Right = right;
     }
+    
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        Instance = null;
+
+    }
 
 
 }
