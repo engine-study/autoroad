@@ -262,7 +262,9 @@ contract MoveSubsystem is System {
 
     PositionData memory startPos = Position.get(player);
     PositionData memory endPos = PositionData(x, y, 0);
+    
     bytes32[] memory atPos = Rules.getKeysAtPosition(world,x, y, 0);
+    Rules.requireCanPlaceOn(atPos);
 
     moveTo(player, player, startPos, endPos, atPos, ActionType.Teleport);
 
