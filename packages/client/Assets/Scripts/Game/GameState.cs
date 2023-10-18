@@ -81,7 +81,7 @@ public class GameState : MonoBehaviour {
 
         //Load world states
         Debug.Log("---GAMESTATE--- LOAD WORLD");
-        mainTables.SpawnTables();
+        await mainTables.Spawn();
         while(mainTables.Loaded == false) {await UniTask.Delay(100);}
         while(BoundsComponent.Instance == null || MapConfigComponent.Instance == null || GameStateComponent.Instance == null || RoadConfigComponent.Instance == null) {await UniTask.Delay(100);}
 

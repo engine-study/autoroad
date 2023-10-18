@@ -5,6 +5,7 @@ using mud;
 using mud;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public class LoadingUI : SPWindowParent
 {
@@ -54,10 +55,22 @@ public class LoadingUI : SPWindowParent
             }
         }
 
-        if(NetworkManager.Instance.ds == null) {
+        if(NetworkManager.Initialized == false) {
             text.text = "Connecting to network" + dotString;
         } else {
-            text.text = TableDictionary.Tables.Count + " tables loaded" + dotString;
+            // text.text = TableDictionary.Tables.Count + " tables loaded" + dotString;
+            string loadText = "";
+            if(TableManager.LatestTable) {
+                loadText =  TableManager.LatestTable.ToString().Substring(0, TableManager.LatestTable.ToString().IndexOf("Table")) + " Table";
+            }
+            // for(int i = 0; i < TableDictionary.Tables.Count; i++) {
+            //     if(TableDictionary.Tables[i].Loaded == false) {
+            //         loadText = TableDictionary.Tables.Count > 0 ? TableDictionary.Tables[0].ToString().Substring(0,TableDictionary.Tables[0].ToString().IndexOf("Table")) + " Table" : "";
+            //         break;
+            //     }
+            // }
+
+            text.text = $"Loading {loadText}{dotString}";
         }
 
 
