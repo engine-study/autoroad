@@ -30,6 +30,7 @@ public class PositionSync : ComponentSync
     [SerializeField] private bool parentTransformToEntity;
     private LineRenderer line;
     SPLerpCurve lerp;
+    Vector3 debugPos;
 
     
     [Header("Debug")]
@@ -64,6 +65,8 @@ public class PositionSync : ComponentSync
         //set up our side of the compnents BEFORE 
         target.position = pos.Pos;
         StartPos = pos.Pos;
+        debugPos = pos.Pos;
+        
         UpdateGrid(pos.Pos);
 
         if(useLine) {
@@ -73,10 +76,16 @@ public class PositionSync : ComponentSync
 
         #if UNITY_EDITOR
         //sanity check
-        PositionTable recordTable = IMudTable.MakeTable<PositionTable>(Pos.Entity.Key);
-        PositionTable componentTable = (PositionTable)Pos.ActiveTable;
-        if(componentTable.Equals(recordTable) == false) {
-            Debug.LogError("Position mismatch", this);
+        if(Pos.UpdateInfo.UpdateType == UpdateType.DeleteRecord) {
+            if(IMudTable.MakeTable<PositionTable>(Pos.Entity.Key) != null) {
+                Debug.LogError("Position mismatch", this);
+            }
+        } else {
+            PositionTable recordTable = IMudTable.MakeTable<PositionTable>(Pos.Entity.Key);
+            PositionTable componentTable = (PositionTable)Pos.ActiveTable;
+            if(componentTable.Equals(recordTable) == false) {
+                Debug.LogError("Position mismatch", this);
+            }
         }
         #endif
 
@@ -224,14 +233,22 @@ public class PositionSync : ComponentSync
         if(Application.isPlaying && Pos) {
 
             Gizmos.color = Moving ? Color.yellow : Color.green - Color.black * .5f;
-            Gizmos.DrawWireCube(GridPos, Vector3.one * .9f - Vector3.up * .88f);
+            Gizmos.DrawWireCube(GridPos, Vector3.one * .9f - Vector3.up * .89f);
 
             if(Moving) {
                 Gizmos.DrawLine(transform.position + Vector3.up * .1f, Pos.Pos + Vector3.up * .1f);
                 Gizmos.DrawWireSphere(Pos.Pos + Vector3.up * .1f, .1f);
+                
+                debugPos = Vector3.Lerp(debugPos, Pos.Pos, .1f);
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireCube(debugPos, Vector3.one * .8f - Vector3.up * .79f);
+
+            } else {
+                debugPos = Pos.Pos;
             }
+
+
         }
-        
     }
 
 }

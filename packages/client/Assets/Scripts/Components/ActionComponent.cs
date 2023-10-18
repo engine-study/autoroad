@@ -24,7 +24,6 @@ public class ActionComponent : MUDComponent {
     protected override void PostInit() {
         base.PostInit();
 
-
         if (Entity.Key == NetworkManager.LocalKey) {
             LocalState = this;
         }
@@ -47,11 +46,13 @@ public class ActionComponent : MUDComponent {
         targetBytes = ((string)table.Target).ToLower();
         targetEntity = MUDWorld.FindEntity(targetBytes);
 
-        if(targetEntity) {
-            targetSync = targetEntity.GetRootComponent<PositionSync>();
-            if(targetSync == null) {Debug.LogError("No pos for action", this);return;}
-        } else {
-            targetSync = null;
+        if(Loaded) {
+            if(targetEntity) {
+                targetSync = targetEntity.GetRootComponent<PositionSync>();
+                if(targetSync == null) {Debug.LogError("No pos for action", this);return;}
+            } else {
+                targetSync = null;
+            }
         }
 
     }
