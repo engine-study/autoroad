@@ -41,12 +41,12 @@ public class ChunkComponent : MUDComponent {
     //     contributors: "bytes32[]",
 
     public void Toggle(bool toggle) {
-        mile.Toggle(toggle);
+        mile.ToggleVisible(toggle);
         entityParent.gameObject.SetActive(toggle);
     }
 
-    public void Highlight(bool toggle) {
-        mile.Highlight(toggle);
+    public void ToggleCurrentMile(bool toggle) {
+        mile.ToggleCurrentMile(toggle);
     }
 
     void RegisterChunk() {
@@ -66,7 +66,7 @@ public class ChunkComponent : MUDComponent {
         gameObject.name = "CHUNK - " + mileNumber;
         transform.position = Vector3.forward * mileNumber * MapConfigComponent.Height;
 
-        Highlight(false);
+        ToggleCurrentMile(false);
 
         mile.Init(this);
 

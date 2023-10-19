@@ -80,7 +80,7 @@ public class MotherUI : SPUIInstance {
         
         SPEvents.OnServerLoaded += ShowMainMenu;
         SPEvents.OnGameReady += GameReady;
-        SPEvents.OnPlayGame += PlayGame;
+        SPEvents.OnPlayGame += OnStartGame;
 
     }
 
@@ -100,7 +100,7 @@ public class MotherUI : SPUIInstance {
 
         SPEvents.OnServerLoaded -= ShowMainMenu;
         SPEvents.OnGameReady -= GameReady;
-        SPEvents.OnPlayGame -= PlayGame;
+        SPEvents.OnPlayGame -= OnStartGame;
 
         TxManager.OnSend -= SendTx;
         TxManager.OnTransaction -= UpdateWheel;
@@ -181,17 +181,6 @@ public class MotherUI : SPUIInstance {
         Mother.game.ToggleWindow(toggle);
     }
 
-    void PlayGame() {
-        nameAndSpawnScreen.SetActive(true);
-    }
-    
-
-    public void StartPlaying() {
-        ToggleGame(true);
-        WorldScroll.Instance.SetToPlayerMile();
-        nameAndSpawnScreen.SetActive(false);
-    }
-
     public static void FollowPlayer(bool zoom = false) {
         SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
         if(zoom) {SPCamera.SetFOVGlobal(4f);}
@@ -228,8 +217,19 @@ public class MotherUI : SPUIInstance {
         map.ToggleWindowOpen();
         menu.ToggleWindowOpen();
 
-        Debug.Log("Main Menu", this);
+        Debug.Log("Showing Main Menu", this);
 
+    }
+
+    //display screens for account, name selection, etc.
+    void OnStartGame() {
+        nameAndSpawnScreen.SetActive(true);
+    }
+    
+    public void OnLocalPlayerReady() {
+        ToggleGame(true);
+        WorldScroll.Instance.SetToPlayerMile();
+        nameAndSpawnScreen.SetActive(false);
     }
 
 

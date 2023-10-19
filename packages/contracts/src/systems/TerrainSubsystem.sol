@@ -238,9 +238,11 @@ contract TerrainSubsystem is System {
     bytes32 entity = getUniqueEntity();
 
     if (tType == TerrainType.Rock) {
-      Rock.set(entity, uint32(RockType.Raw));
+      // Rock.set(entity, uint32(RockType.Raw));
+      // Move.set(entity, uint32(MoveType.Obstruction));
+      Rock.set(entity, uint32(RockType.Statumen));
+      Move.set(entity, uint32(MoveType.Push));
       Weight.set(entity, 1);
-      Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Tree) {
       SystemSwitch.call(abi.encodeCall(world.spawnFlora, (player, entity, x, y)));
     } else if (tType == TerrainType.HeavyBoy) {

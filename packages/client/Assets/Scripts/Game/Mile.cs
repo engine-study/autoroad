@@ -16,6 +16,7 @@ public class Mile : MonoBehaviour
     [SerializeField] Transform spawnLeft, spawnRight;
     [SerializeField] Transform rowParent;
     [SerializeField] Borders border;
+    [SerializeField] GameObject terrain;
     [SerializeField] GameObject [] highlights;
     [SerializeField] RowComponent rowPrefab;
     [SerializeField] RowComponent[] rows;
@@ -37,12 +38,13 @@ public class Mile : MonoBehaviour
         Init();
     }
 
-    public void Toggle(bool toggle) {
+    public void ToggleVisible(bool toggle) {
         rowParent.gameObject.SetActive(toggle);
         roadMesh.SetActive(!toggle);
+        terrain.SetActive(toggle);
     }
 
-    public void Highlight(bool toggle) {
+    public void ToggleCurrentMile(bool toggle) {
         border.gameObject.SetActive(toggle);
         for(int i = 0; i < highlights.Length; i++) {highlights[i].SetActive(toggle);}
     }
@@ -57,7 +59,7 @@ public class Mile : MonoBehaviour
 
         while (MapConfigComponent.Instance == null || RoadConfigComponent.Instance == null) { await UniTask.Delay(100); }
 
-        Highlight(false);
+        ToggleCurrentMile(false);
 
         isRealChunk = chunk != null;
         roadMesh.SetActive(!isRealChunk);

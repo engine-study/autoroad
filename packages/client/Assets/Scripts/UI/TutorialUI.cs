@@ -79,7 +79,7 @@ public class TutorialUI : SPWindowParent
             }
         }
 
-        SPCamera.ToggleScroll(!toggle);
+        CameraControls.ToggleScroll(!toggle);
 
         OnTutorial?.Invoke(toggle);
 

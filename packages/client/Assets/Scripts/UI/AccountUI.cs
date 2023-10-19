@@ -31,7 +31,7 @@ public class AccountUI : SPWindow
     protected override void OnEnable() {
         base.OnEnable();
 
-        eth.SetValue(StatType.Eth, 0f);
+        eth.SetValue(StatType.Eth, "?");
         update = StartCoroutine(GetBalance());
 
     }
@@ -52,8 +52,6 @@ public class AccountUI : SPWindow
 
             eth.SetValue(StatType.Eth, ethBalance);
             
-            Debug.Log("Eth: " + ethBalance);
-
             yield return new WaitForSeconds(1f);
         }
 

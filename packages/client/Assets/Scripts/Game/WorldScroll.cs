@@ -111,7 +111,7 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdateInput() {
         
-        if (SPUIBase.CanInput && !SPUIBase.IsPointerOverUIElement && SPUIBase.IsMouseOnScreen && SPInput.ModifierKey == false && Input.mouseScrollDelta.y != 0f) {
+        if (SPUIBase.CanInput && Input.GetKey(KeyCode.LeftControl) && !SPUIBase.IsPointerOverUIElement && SPUIBase.IsMouseOnScreen && Input.mouseScrollDelta.y != 0f) {
             if(Input.mouseScrollDelta.y != 0f) {mileUI.ToggleWindowOpen();}
             mileScroll = GetSoftClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
@@ -244,9 +244,9 @@ public class WorldScroll : MonoBehaviour {
 
         mile = newMile;
 
-        if(focusedChunk != null) {focusedChunk.Highlight(false);}
+        if(focusedChunk != null) {focusedChunk.ToggleCurrentMile(false);}
         focusedChunk = ChunkLoader.Chunks[mile];
-        focusedChunk.Highlight(true);
+        focusedChunk.ToggleCurrentMile(true);
 
         mileHeading.UpdateField("Mile " + (int)(newMile+1));
         mileUI.ToggleWindowOpen();

@@ -103,12 +103,23 @@ public class GameState : MonoBehaviour {
 
     public static async void PlayGame() {
 
+        Debug.Log("Start playing");
+
         Instance.gamePlaying = true;
+
+        Debug.Log("OnPlayGame.Invoke()");
         SPEvents.OnPlayGame?.Invoke();
-                
-        await Instance.PlayGameLoop();
+
+        Debug.Log("PlayGameLoop()");
+
+        await Instance.PlayAwait();
 
     }
+
+    async UniTask PlayAwait() {
+        await PlayGameLoop();
+    }
+
     async UniTask PlayGameLoop() {
 
         Debug.Log("--Initialize--");
@@ -119,6 +130,7 @@ public class GameState : MonoBehaviour {
         Debug.Log("--Spawn Map--");
         while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
             if(SPGlobal.IsDebug) { if(await TxManager.SendDirect<HelpSummonFunction>() == false) {await UniTask.Delay(1000);}}
+            else {await UniTask.Delay(1000);}
         }
 
         //wait for name table        
@@ -189,7 +201,7 @@ public class GameState : MonoBehaviour {
             // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
         }
 
-        MotherUI.Mother.StartPlaying();
+        MotherUI.Mother.OnLocalPlayerReady();
 
     }
 

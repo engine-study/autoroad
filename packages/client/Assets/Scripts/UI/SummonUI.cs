@@ -6,8 +6,8 @@ public class SummonUI : SPWindow
 {
     protected override void Awake() {
         base.Awake();
-        ChunkComponent.OnChunkUpdate += UpdateSummon;
         UpdateSummon();
+        ChunkComponent.OnChunkUpdate += UpdateSummon;
     }
     protected override void OnDestroy() {
         base.OnDestroy();
