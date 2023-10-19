@@ -18,6 +18,7 @@ public class MotherUI : SPUIInstance {
     public LoadingUI loadingScreen;
     public GameObject nameAndSpawnScreen;
     public SPActionWheelUI wheel;
+    public AccountUI accountCreate;
     public NameOptionUI playerCreate;
     public SpawningUI spawning;
     public RespawnUI respawn;
@@ -71,6 +72,7 @@ public class MotherUI : SPUIInstance {
         wheel.Init();
 
         ToggleLoading(true);
+        ToggleAccountCreation(false);
         TogglePlayerCreation(false);
         TogglePlayerSpawning(false);
         ToggleRespawn(false);
@@ -163,10 +165,14 @@ public class MotherUI : SPUIInstance {
     public static void ToggleLoading(bool toggle) {
         Mother.loadingScreen.Toggle(toggle);
     }
+
+    public static void ToggleAccountCreation(bool toggle) {
+        Mother.accountCreate.ToggleWindow(toggle);
+    }
+
     public static void TogglePlayerCreation(bool toggle) {
         Mother.playerCreate.ToggleWindow(toggle);
     }
-
 
     public static void ToggleRespawn(bool toggle) {
         Mother.respawn.ToggleWindow(toggle);

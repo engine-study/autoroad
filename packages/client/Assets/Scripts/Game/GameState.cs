@@ -7,6 +7,8 @@ using mudworld;
 using IWorld.ContractDefinition;
 using System;
 using Cysharp.Threading.Tasks;
+using Nethereum.Model;
+
 
 
 #if UNITY_EDITOR
@@ -20,9 +22,11 @@ public class GameState : MonoBehaviour {
     public static bool GameReady {get{return Instance.gameReady;}}
     public static bool GamePlaying {get{return Instance.gamePlaying;}}
 
+    [Header("Account")]
+    [SerializeField] string account;
+
     [Header("Test")]
     [SerializeField] bool freshStart = false; 
-    [SerializeField] bool autoJoin = false; 
 
     [Header("Game")]
     [SerializeField] TableSpawner mainTables;
@@ -41,11 +45,13 @@ public class GameState : MonoBehaviour {
     [SerializeField] bool gamePlaying = false; 
 
     void Awake() {
+
         Instance = this;
         editorObjects.SetActive(false);
         
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
+        
     }
     
     void OnDestroy() {
@@ -56,27 +62,18 @@ public class GameState : MonoBehaviour {
         Instance = null;
     }
 
-    async void JoinGaul() {
-        await NetworkManager.Instance.Connect();
-    }
-
     void LeaveGaul() {
         gameReady = false;
     }
 
-    async void Start() {
-        await Init();
-    }
-
-    async UniTask Init() {
+    private async void Start() {
         await GameSetup();
+        await NetworkManager.Instance.CreateNetwork();
         await LoadMap();
     }
 
     async UniTask LoadMap() {
 
-        //Load network
-        if(autoJoin) { JoinGaul();}
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
 
         //Load world states
@@ -106,11 +103,7 @@ public class GameState : MonoBehaviour {
         Debug.Log("Start playing");
 
         Instance.gamePlaying = true;
-
-        Debug.Log("OnPlayGame.Invoke()");
         SPEvents.OnPlayGame?.Invoke();
-
-        Debug.Log("PlayGameLoop()");
 
         await Instance.PlayAwait();
 
@@ -126,13 +119,31 @@ public class GameState : MonoBehaviour {
         while(NetworkManager.Initialized == false) {await UniTask.Delay(100);}
         while(ChunkLoader.ActiveChunk == null) { await UniTask.Delay(200); }
 
-        //wait until the map is setup
-        Debug.Log("--Spawn Map--");
-        while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
-            if(SPGlobal.IsDebug) { if(await TxManager.SendDirect<HelpSummonFunction>() == false) {await UniTask.Delay(1000);}}
-            else {await UniTask.Delay(1000);}
-        }
+        await SetAccount();
 
+        await SetName();
+
+        await SetTutorial();
+
+        await SetFirstMile();
+        
+        await SetPlayer();
+
+        MotherUI.Mother.OnLocalPlayerReady();
+
+    }
+
+    async UniTask SetAccount() {
+    
+        //wait for name table        
+        Debug.Log("--Make Account--");
+        MotherUI.ToggleAccountCreation(true);
+
+        while(AccountUI.Instance.Account == null) {await UniTask.Delay(500);}
+
+    }
+
+    async UniTask SetName() {
         //wait for name table        
         Debug.Log("--Make Name--");
         while(MUDWorld.FindTable<NameComponent>()?.Loaded == false) {await UniTask.Delay(500);}
@@ -166,7 +177,23 @@ public class GameState : MonoBehaviour {
         
         //wait for name component to spawn
         while(NameComponent.LocalName == null) {await UniTask.Delay(500);}
+    }
 
+    async UniTask SetTutorial() {
+
+    }
+
+    async UniTask SetFirstMile() {
+        //wait until the map is setup
+        Debug.Log("--Spawn Map--");
+        while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
+            if(SPGlobal.IsDebug) { if(await TxManager.SendDirect<HelpSummonFunction>() == false) {await UniTask.Delay(1000);}}
+            else {await UniTask.Delay(1000);}
+        }
+
+    }
+            
+    async UniTask SetPlayer() {
         //wait for player table
         while(MUDWorld.FindTable<PlayerComponent>().Loaded == false) {await UniTask.Delay(500);}
         while(MUDWorld.FindTable<HealthComponent>().Loaded == false) {await UniTask.Delay(500);}
@@ -200,8 +227,6 @@ public class GameState : MonoBehaviour {
             // Debug.Log("Spawning debug road", this);
             // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
         }
-
-        MotherUI.Mother.OnLocalPlayerReady();
 
     }
 
