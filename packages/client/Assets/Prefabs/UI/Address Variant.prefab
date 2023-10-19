@@ -52,6 +52,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3138240714195584496, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
+      propertyPath: link
+      value: https://etherscan.io/address/
+      objectReference: {fileID: 0}
+    - target: {fileID: 3138240714195584496, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
+      propertyPath: prefix
+      value: https://etherscan.io/address/
+      objectReference: {fileID: 0}
+    - target: {fileID: 3138240714195584496, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
+      propertyPath: selectable
+      value: 
+      objectReference: {fileID: 167590311107794809}
     - target: {fileID: 3550337012052821787, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -71,15 +83,27 @@ PrefabInstance:
     - target: {fileID: 4250887999658932505, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5396758702800501113}
+      objectReference: {fileID: 1378123271719840656}
     - target: {fileID: 4250887999658932505, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Copy
+      value: OpenSelectableText
       objectReference: {fileID: 0}
     - target: {fileID: 4250887999658932505, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SPCopyToClipboard, study.engine.studio
+      value: SPOpenLink, study.engine.studio
       objectReference: {fileID: 0}
+    - target: {fileID: 4629659305215383910, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
+      propertyPath: link
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4629659305215383910, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
+      propertyPath: prefix
+      value: https://etherscan.io/address/
+      objectReference: {fileID: 0}
+    - target: {fileID: 4629659305215383910, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
+      propertyPath: selectable
+      value: 
+      objectReference: {fileID: 167590311107794809}
     - target: {fileID: 5982292223429773219, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
       propertyPath: m_text
       value: 0x4763B99f1990a746a9944BF331672d9D0024d627
@@ -205,6 +229,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1378123271719840656 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4629659305215383910, guid: e69da4b1686d80946a6812f23a442cf8, type: 3}
+  m_PrefabInstance: {fileID: 5989727355768058614}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6588653593338276221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d9a85d309d51b439f1294b6705fb9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6588653593338276221 stripped
