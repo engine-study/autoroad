@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class PlayerUI : SPWindowParent
 {
+    [Header("Player")]
     public SPActionUI actions;
     public LevelUI level;
     public SPBar slider;

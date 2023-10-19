@@ -3,50 +3,43 @@ using System.Collections.Generic;
 using mud;
 using UnityEngine;
 
-public class ProfileUI : SPWindowParent
+public class ProfileUI : EntityUI
 {
+    public static ProfileUI Instance;
+
     [Header("Profile")]
-    public PlayerUI playerUI;
     public SPInputField nameField;
     public SPInputField publicKeyField;
+    public SPButton addressField;
 
-    protected override void Awake() {
-        base.Awake();
+    public override void Init() {
 
-        NameComponent.OnLocalName += UpdateName;
-        NetworkManager.OnInitialized += UpdateAddress;
-    }
+        Instance = this;
 
+        if(hasInit) {return;}
 
-    public override void ToggleWindow(bool toggle)
-    {
-        base.ToggleWindow(toggle);
-        if(toggle) {
-            playerUI.ShowLevel();
-        }
+        base.Init();
     }
 
     protected override void OnDestroy() {
         base.OnDestroy();
 
-        NameComponent.OnLocalName -= UpdateName;
-        NetworkManager.OnInitialized -= UpdateAddress;
+        Instance = null;
+    }
+
+    protected override void UpdateEntity() {
+        base.UpdateEntity();
+
+        nameField.UpdateField(Entity.Name);
+        publicKeyField.UpdateField(Entity.Key);
+
+        PlayerComponent pc = Entity.GetMUDComponent<PlayerComponent>();
+        addressField.ToggleWindow(pc != null);
+        addressField.UpdateField(pc?.Address);
 
     }
 
-    protected override void Start() {
-        base.Start();
 
-        UpdateAddress();
-        UpdateName();
-    }
 
-    void UpdateAddress() {
-        publicKeyField.UpdateField(NetworkManager.LocalAddress);
-    }
-
-    void UpdateName() {
-        nameField.UpdateField(NameComponent.LocalName);
-    }
 
 }

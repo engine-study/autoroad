@@ -189,6 +189,7 @@ public class MotherUI : SPUIInstance {
     public void StartPlaying() {
         ToggleGame(true);
         WorldScroll.Instance.SetToPlayerMile();
+        nameAndSpawnScreen.SetActive(false);
     }
 
     public static void FollowPlayer(bool zoom = false) {

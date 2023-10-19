@@ -127,7 +127,7 @@ public class AnimationMUD : MonoBehaviour
 
     public virtual void EnterState(ActionName newAction) {
 
-        Debug.Log(actionData.Entity.Name + " [ANIM]: [" + newAction.ToString().ToUpper() + "] (" + (int)actionData.Position.x + "," + (int)actionData.Position.z + ")", this);
+        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)actionData.Position.x},{(int)actionData.Position.z}", this);
         ActionEffect newEffect = LoadAction(newAction.ToString());
 
         //look at the new thing

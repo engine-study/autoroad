@@ -7,10 +7,16 @@ public class HoverPolish : MonoBehaviour
 {
     
     void Start() {
+        SPEvents.OnServerLoaded += Init;
+    }
+
+    void Init() {
         CursorMUD.OnHoverEntity += AddActions;
         CursorMUD.OnLeaveEntity += RemoveActions;
     }
+
     void OnDestroy() {
+        SPEvents.OnServerLoaded -= Init;
         CursorMUD.OnHoverEntity -= AddActions;
         CursorMUD.OnLeaveEntity -= RemoveActions;
     }
@@ -25,9 +31,12 @@ public class HoverPolish : MonoBehaviour
 
     void ToggleActions(bool toggle, MUDEntity newEntity) {
         
+        ProfileUI.Instance.SetEntity(newEntity);
+
         if(newEntity == null) {
             return;
         }
+
 
         SPBase baseObject = newEntity.GetComponentInChildren<SPBase>();
 

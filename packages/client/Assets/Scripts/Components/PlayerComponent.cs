@@ -14,8 +14,11 @@ public class PlayerComponent : MUDComponent {
     public static int PlayerCount;
     public static PlayerComponent LocalPlayer;
     public static System.Action OnPlayerSpawn;
+
+
     public bool IsLocalPlayer { get { return isLocalPlayer; } }
     public bool IsDead {get{return health.IsDead;}}
+    public string Address {get{return address;}}
     public PlayerMUD PlayerScript {get{return playerScript;}}
 
     [Header("Player")]
@@ -25,6 +28,7 @@ public class PlayerComponent : MUDComponent {
     [SerializeField] AudioClip [] sfx_hitSound;
 
     [Header("Debug")]
+    [SerializeField] string address;
     [SerializeField] HealthComponent health;
     [SerializeField] PositionComponent position;
 
@@ -57,6 +61,8 @@ public class PlayerComponent : MUDComponent {
 
     protected override IMudTable GetTable() {return new PlayerTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
+
+        address = "0x" + Entity.Key.Substring(Entity.Key.Length - 20);
 
     }
 

@@ -66,7 +66,7 @@ public class CursorMUD : MonoBehaviour {
             mousePos = Vector3.MoveTowards(visuals.position, rawMousePos, 50f * Time.deltaTime);
         }
 
-        if(SPUIBase.IsPointerOverUIElement) {
+        if(SPUIBase.IsPointerOverUIElement || SPUIBase.IsMouseOnScreen == false) {
             return;
         }
         

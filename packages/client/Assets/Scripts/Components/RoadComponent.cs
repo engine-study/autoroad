@@ -74,7 +74,7 @@ public class RoadComponent : MUDComponent {
         RoadTable roadUpdate = (RoadTable)update;
         // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
-        creditedPlayer = ((string)roadUpdate.Filled).ToLower();
+        creditedPlayer = (string)roadUpdate.Filled;
         hasGem = (bool)roadUpdate.Gem;
 
         filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
