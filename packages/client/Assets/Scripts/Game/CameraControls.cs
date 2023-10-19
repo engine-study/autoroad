@@ -47,23 +47,16 @@ public class CameraControls : MonoBehaviour
             }
             
         }    
-        
 
         if(SPUIBase.IsMouseOnScreen && canScroll) {
 
             if(Input.GetKey(KeyCode.LeftControl)) {
                 
-                scrollRot += Input.mouseScrollDelta.y * rotateSensitivity * Time.deltaTime;
-                scrollLock = Mathf.Round(scrollRot / rotateRound) * rotateRound;
-                // scrollLock = Mathf.Round(scrollRot);
-
-                // rotation = rotation * Quaternion.Euler(Vector3.up * Input.mouseScrollDelta.y * 25f);
-                // transform.Rotate(0f,Input.mouseScrollDelta.y * 25f,0f);
+                // scrollRot += Input.mouseScrollDelta.y * rotateSensitivity * Time.deltaTime;
+                // scrollLock = Mathf.Round(scrollRot / rotateRound) * rotateRound;
 
             } else if(SPInput.ModifierKey == false) {
-
                 SPCamera.SetFOVGlobal(SPCamera.I.FOV + Input.mouseScrollDelta.y * -scrollSensitivity);
-
             }
         }
         

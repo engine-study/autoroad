@@ -60999,6 +60999,7 @@ GameObject:
   - component: {fileID: 1921785920}
   - component: {fileID: 1921785921}
   - component: {fileID: 1921785922}
+  - component: {fileID: 1921785923}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -61070,6 +61071,20 @@ MonoBehaviour:
   scrollLock: 0
   canScroll: 1
   inCinematic: 0
+--- !u!114 &1921785923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921785919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d3e40901d2ef8a4187cb582806b1e0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 10
+  rotationSpeed: 0.5
 --- !u!1 &1925883599
 GameObject:
   m_ObjectHideFlags: 0

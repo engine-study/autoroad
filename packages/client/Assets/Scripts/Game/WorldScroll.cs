@@ -117,21 +117,19 @@ public class WorldScroll : MonoBehaviour {
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
         
-        if (SPUIBase.CanInput && !SPUIBase.IsPointerOverUIElement && !SPInput.ModifierKey && Input.GetMouseButtonDown(1)) {
+        // if (SPUIBase.CanInput && !SPUIBase.IsPointerOverUIElement && !SPInput.ModifierKey && Input.GetMouseButtonDown(1)) {
+        //     ToggleCameraOnPlayer(false);
 
-            ToggleCameraOnPlayer(false);
-
-            //focus on whatever we select
-            if (CursorMUD.Base) {
-                SPCamera.SetFollow(CursorMUD.Base.Root);
-            } else {
-                SPCamera.SetFollow(null);
-                float x = Mathf.Clamp(SPInput.MousePlanePos.x, BoundsComponent.Left, BoundsComponent.Right);
-                float z = Mathf.Clamp(SPInput.MousePlanePos.z, BoundsComponent.Down, BoundsComponent.Up);
-                SPCamera.SetTarget(new Vector3(x, 0f, z));
-            }
-
-        }
+        //     //focus on whatever we select
+        //     if (CursorMUD.Base) {
+        //         SPCamera.SetFollow(CursorMUD.Base.Root);
+        //     } else {
+        //         SPCamera.SetFollow(null);
+        //         float x = Mathf.Clamp(SPInput.MousePlanePos.x, BoundsComponent.Left, BoundsComponent.Right);
+        //         float z = Mathf.Clamp(SPInput.MousePlanePos.z, BoundsComponent.Down, BoundsComponent.Up);
+        //         SPCamera.SetTarget(new Vector3(x, 0f, z));
+        //     }
+        // }
 
         if (SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
             SetToPlayerMile(true);

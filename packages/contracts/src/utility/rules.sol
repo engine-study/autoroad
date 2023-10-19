@@ -14,10 +14,10 @@ library Rules {
 
   function onSpawn(int32 x, int32 y) internal view returns (bool) {
     int32 up = Bounds.getUp();
-    int32 down = Bounds.getDown();
+    // int32 down = Bounds.getDown();
     int32 playWidth = MapConfig.getPlayWidth();
     int32 spawnWidth = MapConfig.getPlaySpawnWidth();
-    return (x > playWidth && x <= spawnWidth) && (y <= up && y >= down);
+    return (x > playWidth && x <= spawnWidth) && (y <= up && y >= 0);
   }
 
   function getKeysAtPosition(IWorld world, int32 x, int32 y, int32 layer) internal view returns(bytes32[] memory) {
