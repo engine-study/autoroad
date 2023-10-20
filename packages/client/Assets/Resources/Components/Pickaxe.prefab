@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4804594667757243883}
-  - component: {fileID: 2189738813310324464}
+  - component: {fileID: 1339794998447739099}
   m_Layer: 0
   m_Name: Pickaxe
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2189738813310324464
+--- !u!114 &1339794998447739099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,11 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6548323407892955302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cbc1677a57be504698e453bd380818f, type: 3}
+  m_Script: {fileID: 11500000, guid: e6dd7c817b865e34a9d408e56fc1a3e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents:
-  - {fileID: 5348944994237342613, guid: 9476fa914b9acad42b5792396d5e2ccd, type: 3}
+  requiredComponents: []
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0

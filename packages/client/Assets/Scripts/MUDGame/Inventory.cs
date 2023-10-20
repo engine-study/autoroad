@@ -15,6 +15,9 @@ public class Inventory : MonoBehaviour
         entity = GetComponentInParent<MUDEntity>();
         if(entity == null) return;
 
+        items = new List<InventorySlot>();
+        itemDict = new Dictionary<string, InventorySlot>();
+
         for(int i = 0; i < entity.Components.Count; i++) {
             AddToInventory(entity.Components[i]);
         }
@@ -29,12 +32,12 @@ public class Inventory : MonoBehaviour
     }
 
     void AddToInventory(MUDComponent c) {
-        if(c.GetType() != typeof(ValueComponent)) {return;}
+        if(c.GetType().IsSubclassOf(typeof(ValueComponent)) == false) {return;}
         Ingest((ValueComponent)c);
     }
 
     void UpdateInventory(MUDComponent c, UpdateInfo i) {
-        if(c.GetType() != typeof(ValueComponent)) {return;}
+        if(c.GetType().IsSubclassOf(typeof(ValueComponent)) == false) {return;}
         Ingest((ValueComponent)c);
     }
 
