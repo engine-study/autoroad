@@ -950,6 +950,7 @@ GameObject:
   - component: {fileID: 7059414568470599779}
   - component: {fileID: 1296994577823181757}
   - component: {fileID: 9167716392334012856}
+  - component: {fileID: 6900937372760625159}
   m_Layer: 0
   m_Name: Terrain Repeating
   m_TagString: Untagged
@@ -1030,6 +1031,18 @@ TerrainCollider:
   serializedVersion: 2
   m_TerrainData: {fileID: 15600000, guid: a279ce954d1583a4990eda66109362da, type: 2}
   m_EnableTreeColliders: 0
+--- !u!114 &6900937372760625159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7684862223304557090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e99b3322e0d06664fafb410b7a7b425d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7770532989990216352
 GameObject:
   m_ObjectHideFlags: 0

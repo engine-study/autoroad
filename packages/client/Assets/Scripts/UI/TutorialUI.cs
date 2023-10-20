@@ -71,7 +71,7 @@ public class TutorialUI : SPWindowParent
     void Update() {
         if(tutorialText.HasReachedFinal) {
             if(Input.GetKeyDown(KeyCode.Escape)) {
-                ToggleWindowClose();
+                CompleteTutorial();
             }
         }
     }
@@ -111,7 +111,7 @@ public class TutorialUI : SPWindowParent
         
         PlayerPrefs.SetString(tutorial, "true");
         PlayerPrefs.Save();
-
+        Toggle(false);
     }
 
     void ShowTutorial() {

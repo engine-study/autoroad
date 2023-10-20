@@ -1332,7 +1332,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &87664070
 Transform:
   m_ObjectHideFlags: 0
@@ -3965,6 +3965,7 @@ GameObject:
   - component: {fileID: 228126985}
   - component: {fileID: 228126987}
   - component: {fileID: 228126986}
+  - component: {fileID: 228126988}
   m_Layer: 0
   m_Name: MileUnknown
   m_TagString: Untagged
@@ -3980,7 +3981,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 228126984}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -16.5, y: 0, z: -0.5}
+  m_LocalPosition: {x: -16.5, y: -0.02, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4003,7 +4004,7 @@ TerrainCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_TerrainData: {fileID: 15600000, guid: f03b3008c31432346a9a0593ac315cba, type: 2}
   m_EnableTreeColliders: 1
@@ -4045,6 +4046,18 @@ Terrain:
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
+--- !u!114 &228126988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228126984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e99b3322e0d06664fafb410b7a7b425d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &236231033
 GameObject:
   m_ObjectHideFlags: 0
@@ -26042,11 +26055,11 @@ PrefabInstance:
       objectReference: {fileID: 409098746}
     - target: {fileID: 6877134849872795125, guid: 2f12e42958082a5448facf780005924f, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleWindow
+      value: CompleteTutorial
       objectReference: {fileID: 0}
     - target: {fileID: 6877134849872795125, guid: 2f12e42958082a5448facf780005924f, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SPWindow, study.engine.studio
+      value: TutorialUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6877134849872795125, guid: 2f12e42958082a5448facf780005924f, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -39809,9 +39822,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f81524fb4724d4cb445f038a81f0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  account: 
   newGame: 0
-  skipMenu: 1
+  skipMenu: 0
   mainTables: {fileID: 1273645192}
   visualTables: {fileID: 0}
   mileTables: {fileID: 0}
@@ -57637,6 +57649,7 @@ GameObject:
   - component: {fileID: 1755091614}
   - component: {fileID: 1755091616}
   - component: {fileID: 1755091615}
+  - component: {fileID: 1755091617}
   m_Layer: 0
   m_Name: Terrain -1
   m_TagString: Untagged
@@ -57717,6 +57730,18 @@ Terrain:
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
+--- !u!114 &1755091617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755091613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e99b3322e0d06664fafb410b7a7b425d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1760165729
 GameObject:
   m_ObjectHideFlags: 0
@@ -60625,7 +60650,7 @@ MonoBehaviour:
   maxFOV: 20
   shakeFalloff: 10
   screenshotSize: 1
-  fov: 7
+  fov: 20
   follow: 1
   followTransform: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
@@ -64291,7 +64316,7 @@ Camera:
   far clip plane: 150
   field of view: 15
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 20
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -67018,7 +67043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 488818311025724108, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6392306158663181893, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: s_error

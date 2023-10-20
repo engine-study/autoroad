@@ -24,9 +24,6 @@ public class GameState : MonoBehaviour {
     public static bool GameReady {get{return Instance.gameReady;}}
     public static bool GamePlaying {get{return Instance.gamePlaying;}}
 
-    [Header("Account")]
-    [SerializeField] string account;
-
     [Header("Test")]
     public bool newGame = false; 
     public bool skipMenu = false; 
@@ -139,7 +136,7 @@ public class GameState : MonoBehaviour {
     async UniTask SetAccount() {
     
         if(skipMenu) {
-
+            //use the default that NetworkManager gives us
         } else {
             //wait for name table        
             Debug.Log("--Make Account--");
@@ -164,8 +161,8 @@ public class GameState : MonoBehaviour {
             if (SPGlobal.IsDebug) {
 
                 Debug.Log("Making Name");
-                while(localName == null) {
-                    if(await MotherUI.Mother.playerCreate.MakeName() == false) await UniTask.Delay(1000);
+                while(localName == null) {  
+                    if(await MotherUI.Mother.playerCreate.MakeName() == false) {await UniTask.Delay(1000);}
                     localName = MUDWorld.FindComponent<NameComponent>(NetworkManager.LocalKey);
                 }
 
@@ -219,7 +216,8 @@ public class GameState : MonoBehaviour {
                 int x = BoundsComponent.Right + 1;
                 int y = BoundsComponent.Up;
                 Debug.Log("Spawning player at " + x + "," + y);
-                if (await TxManager.SendUntilPasses<SpawnFunction>( PositionComponent.PositionToTransaction(new Vector3(x,0,y)) ) == false) { Debug.LogError("Couldn't spawn"); }
+                while (await TxManager.SendDirect<SpawnFunction>( PositionComponent.PositionToTransaction(new Vector3(x,0,y)) ) == false) { y--; Debug.LogError("Couldn't spawn"); await UniTask.Delay(1000); }
+                
 
             } else {
                 Debug.Log("Choosing spawn");
