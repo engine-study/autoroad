@@ -8,15 +8,15 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class CarryingTable : IMudTable
+    public class SwordTable : IMudTable
     {
-        public class CarryingTableUpdate : RecordUpdate
+        public class SwordTableUpdate : RecordUpdate
         {
-            public string? Value;
-            public string? PreviousValue;
+            public bool? Value;
+            public bool? PreviousValue;
         }
 
-        public readonly static string ID = "Carrying";
+        public readonly static string ID = "Sword";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -27,21 +27,21 @@ namespace mudworld
             return ID;
         }
 
-        public string? Value;
+        public bool? Value;
 
         public override Type TableType()
         {
-            return typeof(CarryingTable);
+            return typeof(SwordTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(CarryingTableUpdate);
+            return typeof(SwordTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            CarryingTable other = (CarryingTable)obj;
+            SwordTable other = (SwordTable)obj;
 
             if (other == null)
             {
@@ -56,12 +56,12 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            Value = (string)functionParameters[0];
+            Value = (bool)functionParameters[0];
         }
 
-        public static IObservable<RecordUpdate> GetCarryingTableUpdates()
+        public static IObservable<RecordUpdate> GetSwordTableUpdates()
         {
-            CarryingTable mudTable = new CarryingTable();
+            SwordTable mudTable = new SwordTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -73,27 +73,27 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            Value = (string)property["value"];
+            Value = (bool)property["value"];
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            string? currentValueTyped = null;
-            string? previousValueTyped = null;
+            bool? currentValueTyped = null;
+            bool? previousValueTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("value"))
             {
-                currentValueTyped = (string)currentValue["value"];
+                currentValueTyped = (bool)currentValue["value"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("value"))
             {
-                previousValueTyped = (string)previousValue["value"];
+                previousValueTyped = (bool)previousValue["value"];
             }
 
-            return new CarryingTableUpdate
+            return new SwordTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,

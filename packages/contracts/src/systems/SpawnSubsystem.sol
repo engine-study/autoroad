@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Pickaxe,Shovel } from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seeker, Archer } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
@@ -33,10 +33,15 @@ contract SpawnSubsystem is System {
       Coinage.set(entity, 0);
       Eth.set(entity, 10000);
       Weight.set(entity, -1);
-      Boots.set(entity, 3, 3);
+
       NPC.set(entity, uint32(NPCType.Player));
       NPC.set(entity, uint32(NPCType.Player));
       XP.set(entity, 0);
+
+      Shovel.set(entity, true);
+      Pickaxe.set(entity, true);
+      Boots.set(entity, 3, 3);
+      
 
       int32 mileJoined = GameState.getMiles();
 

@@ -142,7 +142,7 @@ public class GameState : MonoBehaviour {
         Debug.Log("--Make Account--");
         MotherUI.ToggleAccountCreation(true);
 
-        while(AccountUI.Instance.Account == null) {await UniTask.Delay(500);}
+        while(MotherUI.Mother.accountCreate.Account == null) {await UniTask.Delay(500);}
 
     }
 
