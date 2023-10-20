@@ -70,18 +70,18 @@ public class StatUI : EntityUI
         button.Image.sprite = Sprites[(int)newType];
 
         if(useColors) {
-
+            
             if(IsValue) {
-                bg.color = float.Parse(newStat) >= 0f ? RewardColor : PenaltyColor;
+                bgColor = float.Parse(newStat) >= 0f ? RewardColor : PenaltyColor;
             } else if(IsWeight) {
-                if(Colors[(int)newType].a > 0f) {bg.color = Colors[(int)newType];}
+                if(Colors[(int)newType].a > 0f) {bgColor = Colors[(int)newType];}
             } else {
-                if(Colors[(int)newType].a > 0f) {bg.color = Colors[(int)newType];}
+                if(Colors[(int)newType].a > 0f) {bgColor = Colors[(int)newType];}
             }
+
+            ApplyGraphics();
+
         }
-
-
-
     }
 
 }

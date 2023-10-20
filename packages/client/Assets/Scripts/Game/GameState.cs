@@ -138,11 +138,15 @@ public class GameState : MonoBehaviour {
 
     async UniTask SetAccount() {
     
-        //wait for name table        
-        Debug.Log("--Make Account--");
-        MotherUI.ToggleAccountCreation(true);
+        if(skipMenu) {
 
-        while(MotherUI.Mother.accountCreate.Account == null) {await UniTask.Delay(500);}
+        } else {
+            //wait for name table        
+            Debug.Log("--Make Account--");
+            MotherUI.ToggleAccountCreation(true);
+
+            while(MotherUI.Mother.accountCreate.Account == null) {await UniTask.Delay(500);}
+        }
 
     }
 
@@ -184,7 +188,7 @@ public class GameState : MonoBehaviour {
 
     async UniTask SetTutorial() {
 
-        if(MotherUI.Mother.tutorial.hasCompleted) return;
+        if(MotherUI.Mother.tutorial.hasCompleted || skipMenu) return;
         MotherUI.Mother.tutorial.ToggleWindowOpen();
 
         while(MotherUI.Mother.tutorial.Active) {await UniTask.Delay(100);}

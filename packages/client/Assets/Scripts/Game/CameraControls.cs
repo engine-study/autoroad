@@ -104,14 +104,14 @@ public class CameraControls : MonoBehaviour
         _isMoving = Input.GetMouseButton(0);
         _isRotating = Input.GetMouseButton(1);
 
-        if(Input.GetMouseButtonDown(0)) {
+        if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) {
             startPos = currentPos;
         }
 
         bool input = _isMoving || _isRotating;
 
         timeDown = input ? timeDown + Time.deltaTime : 0f;
-        if(Vector2.Distance(currentPos, startPos) < 10f) {return;}
+        if(Vector2.Distance(currentPos, startPos) < 1f) {return;}
 
         if (_isMoving && canPan) {
 

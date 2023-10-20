@@ -38,6 +38,13 @@ public class StatsList : EntityUI
         if(showWeight) {ShowMove();}
         if(showRewards) {ShowRewards();}
 
+        bool showRect = false;
+        for(int i = 0; i < rect.childCount; i++) {
+            if(rect.GetChild(i).gameObject.activeSelf) {showRect = true; break;}
+        }
+
+        ToggleWindow(showRect);
+
     }
 
     public void ShowMove() {
