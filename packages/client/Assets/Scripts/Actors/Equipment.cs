@@ -6,6 +6,7 @@ using mud;
 
 public class Equipment : SPInteract {
 
+    public string Name {get{return item.Name;}}
     public MUDEntity Entity {get{return us?.Entity;}}
     public GameObject Sender {get{return Actor.Owner().gameObject;}}
 
@@ -15,7 +16,7 @@ public class Equipment : SPInteract {
     public MUDComponent requiredComponent;
 
     [Header("Debug")]
-    [SerializeField] protected MUDComponent us;
+    [SerializeField] protected MUDComponent us; //could be player, barbarian, soldier, etc.
     public bool canUse = false;
 
 

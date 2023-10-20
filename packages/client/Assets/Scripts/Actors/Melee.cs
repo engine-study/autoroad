@@ -23,7 +23,7 @@ public class Melee : Equipment
         
         Debug.Log("MELEEING");
         Vector3 melee = transform.position;
-        return await ActionsMUD.ActionTx(us.Entity, ActionName.Melee, melee);
+        return await ActionsMUD.ActionTx(Entity, ActionName.Melee, melee);
     }
     
 }

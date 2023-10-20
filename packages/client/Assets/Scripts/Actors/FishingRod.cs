@@ -35,7 +35,7 @@ public class FishingRod : Equipment {
         // updates.Add(ActionsMUD.ActionOptimistic(CursorMUD.Entity, ActionName.Hop, pushToPos));
         // updates.Add(ActionsMUD.PositionOptimistic(CursorMUD.Entity, pushToPos));
         
-        return await ActionsMUD.ActionTx(us.Entity, ActionName.Fishing, CursorMUD.GridPos);
+        return await ActionsMUD.ActionTx(Entity, ActionName.Fishing, CursorMUD.GridPos);
 
     }
 

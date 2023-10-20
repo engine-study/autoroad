@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour {
     public Dictionary<string, InventorySlot> itemDict;
 
     public bool HasItem(GaulItem item) {
-        itemDict.TryGetValue(item.itemName, out InventorySlot slot);
+        itemDict.TryGetValue(item.Name, out InventorySlot slot);
         return slot?.amount > 0;
     }
 
@@ -63,12 +63,12 @@ public class Inventory : MonoBehaviour {
 
         InventorySlot slot = null;
 
-        if(itemDict.ContainsKey(v.Item.itemName)) {
-            slot = itemDict[v.Item.itemName];
+        if(itemDict.ContainsKey(v.ItemName)) {
+            slot = itemDict[v.ItemName];
         } else {
             slot = new InventorySlot { item = v.Item};
 
-            itemDict.Add(v.Item.itemName, slot);
+            itemDict.Add(v.ItemName, slot);
             items.Add(slot);
         }
 

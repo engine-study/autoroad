@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ToolUI : SPWindowParent
@@ -24,8 +25,23 @@ public class ToolUI : SPWindowParent
     }
 
     void SetupInventory() {
+
         equipment = PlayerMUD.MUDPlayer.Equipment;
         inventory = PlayerMUD.MUDPlayer.GetComponent<Inventory>();
+
+        var equipments = equipment.Equipment.Values.ToArray();
+
+        for(int i = 0; i < tools.Count; i++) {
+
+            if(i >= equipments.Length) {tools[i].ToggleWindowClose(); continue;}
+
+            tools[i].Setup(inventory);
+            tools[i].input.SetKey(SPInput.GetAlphaKey(i));
+            tools[i].ToggleSelected(i == 0);
+
+            tools[i].SetEquipment(equipments[i]);
+        }
+
     }
 
     protected override void OnDestroy() {

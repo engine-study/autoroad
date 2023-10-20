@@ -6,6 +6,7 @@ using mudworld;
 using IWorld.ContractDefinition;
 public abstract class ValueComponent : MUDComponent {
 
+    public string ItemName {get{return item.Name;}}
     public GaulItem Item {get{return item;}}
     public float Value {get{return value;}}
     public string String {get{return valueString;}}

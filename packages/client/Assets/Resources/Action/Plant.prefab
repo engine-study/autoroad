@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3653350776689582279}
+  - component: {fileID: 4808029971721189383}
   - component: {fileID: 4365800825117509602}
   m_Layer: 0
   m_Name: Plant
@@ -24,14 +25,42 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4466500384606693821}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4808029971721189383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466500384606693821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 047834299498b804da584aa01cb21e4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action: {fileID: 11400000, guid: b5bbd58cef42d4047ba8a8fce224dd0f, type: 2}
+  state: {fileID: 0}
+  interacting: 0
+  targetGO: {fileID: 0}
+  actorScript: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  actionName: 9
+  item: {fileID: 11400000, guid: 0ddbb689ef0a4c64c983f0f9d9d483b8, type: 2}
+  requiredComponent: {fileID: 0}
+  us: {fileID: 0}
+  canUse: 0
 --- !u!114 &4365800825117509602
 MonoBehaviour:
   m_ObjectHideFlags: 0

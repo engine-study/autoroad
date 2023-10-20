@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9156692568323461962}
+  - component: {fileID: 2525286609054866553}
   - component: {fileID: 3601972137399515104}
   m_Layer: 0
   m_Name: Shoveling
@@ -32,6 +33,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2525286609054866553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4912840525320302579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e09af2772515494ea52fa01215be8a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action: {fileID: 11400000, guid: d09b5cca64a660343ac5fdfeabfad9ba, type: 2}
+  state: {fileID: 0}
+  interacting: 0
+  targetGO: {fileID: 0}
+  actorScript: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  actionName: 4
+  item: {fileID: 11400000, guid: 26ad4ba0a3b06034f8862e644bb789be, type: 2}
+  requiredComponent: {fileID: 0}
+  us: {fileID: 0}
+  canUse: 0
 --- !u!114 &3601972137399515104
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class StoreItemUI : SPWindow
     public void SetItem(GaulItem newItem) {
 
         item = newItem;
-        itemText.UpdateField(item.itemName);
+        itemText.UpdateField(item.Name);
 
         buyButtonCoin.SetValue( StatType.RoadCoin, item.value.price);
         buyButtonGem.SetValue( StatType.Gem, item.value.gem);

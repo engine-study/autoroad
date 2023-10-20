@@ -22,7 +22,7 @@ public class Push : Equipment
 
         //can try optimistic
 
-        return await ActionsMUD.ActionTx(us.Entity, ActionName.Push, new Vector3(x, 0, y));
+        return await ActionsMUD.ActionTx(Entity, ActionName.Push, new Vector3(x, 0, y));
     }
 
 }

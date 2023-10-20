@@ -8,7 +8,7 @@ public class OxComponent : MoverComponent {
 
     protected override void PostInit() {
         base.PostInit();
-        Entity.SetName("Ox");
+        Entity.SetName("Chaddius");
     }
 
     protected override void InitDestroy() {

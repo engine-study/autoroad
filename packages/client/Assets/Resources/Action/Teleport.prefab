@@ -14806,6 +14806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3881562429025360194}
+  - component: {fileID: 3852633436545416096}
   - component: {fileID: 2720062876982333785}
   m_Layer: 0
   m_Name: Teleport
@@ -14821,7 +14822,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6314687621118773999}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -14830,6 +14831,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3852633436545416096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6314687621118773999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cac15c5855a792498cf3e8008c225bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action: {fileID: 11400000, guid: a8f77cbd4043be74899f1b67303d802c, type: 2}
+  state: {fileID: 0}
+  interacting: 0
+  targetGO: {fileID: 0}
+  actorScript: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  actionName: 12
+  item: {fileID: 11400000, guid: 863af1a557914984790fc4d245d79fc6, type: 2}
+  requiredComponent: {fileID: 0}
+  us: {fileID: 0}
+  canUse: 0
 --- !u!114 &2720062876982333785
 MonoBehaviour:
   m_ObjectHideFlags: 0

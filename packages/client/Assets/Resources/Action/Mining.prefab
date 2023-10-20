@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7649406094260804047}
+  - component: {fileID: 1196337582932744187}
   - component: {fileID: 7180325627068679505}
   m_Layer: 0
   m_Name: Mining
@@ -32,6 +33,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1196337582932744187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9150902704839842077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9381831617420843a4840cda69f797e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action: {fileID: 11400000, guid: d55458b104cac5a4b954f4c4a26d8691, type: 2}
+  state: {fileID: 0}
+  interacting: 0
+  targetGO: {fileID: 0}
+  actorScript: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  actionName: 3
+  item: {fileID: 11400000, guid: 8796a69590ea66f40ad99ec13f5fbdc5, type: 2}
+  requiredComponent: {fileID: 5117984663886283829, guid: a743baee3ef63a2488055572b3a8eaa4, type: 3}
+  us: {fileID: 0}
+  canUse: 0
 --- !u!114 &7180325627068679505
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,11 +8,12 @@ public enum ItemType { GameplayStashable, GameplayEquipment, Cosmetic, PayedCosm
 [CreateAssetMenu(fileName = "Item", menuName = "Gaul/Item", order = 1)]
 public class GaulItem : ScriptableObject {
 
+    public string Name {get{return itemName;}}
     public bool InMileRange {get{return mileRange == Vector2.zero || (GameStateComponent.MILE_COUNT >= mileRange.x && GameStateComponent.MILE_COUNT <= mileRange.y);}}
     public bool HighEnoughLevel {get{return XPComponent.LocalLevel >= minLevel;}}
     
     [Header("Item")]
-    public string itemName = "Item";
+    [SerializeField] string itemName = "Item";
     [TextArea(1,5)] public string itemDescription = "";
     public Sprite itemSprite;
 

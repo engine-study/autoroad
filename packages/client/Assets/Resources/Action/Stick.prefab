@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6589919977404771493}
+  - component: {fileID: 977866050873952484}
   - component: {fileID: 72944959468843034}
   m_Layer: 0
   m_Name: Stick
@@ -32,6 +33,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &977866050873952484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3886129426995369941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 166787b93eca79344893642ca5df0817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action: {fileID: 11400000, guid: b1ca9791cba55aa40a7ef010d291b398, type: 2}
+  state: {fileID: 0}
+  interacting: 0
+  targetGO: {fileID: 0}
+  actorScript: {fileID: 0}
+  OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  actionName: 5
+  item: {fileID: 11400000, guid: e74d8b4aef6685d4e8897e2636d10749, type: 2}
+  requiredComponent: {fileID: 7854098582000433893, guid: 135ce94ab023ef8409ebcf67ffa01a91, type: 3}
+  us: {fileID: 0}
+  canUse: 0
 --- !u!114 &72944959468843034
 MonoBehaviour:
   m_ObjectHideFlags: 0

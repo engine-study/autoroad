@@ -6,10 +6,11 @@ using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 using System;
 
-public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow}
+public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow, Swap}
 public class ActionsMUD : MonoBehaviour
 {
     public static ActionsMUD LocalActions;
+    public Dictionary<string, Equipment> Equipment {get{return equipmentDict;}}
 
     [Header("Equipment")]
     [EnumNamedArray( typeof(ActionName) )]
@@ -28,7 +29,7 @@ public class ActionsMUD : MonoBehaviour
 
         equipment = new List<Equipment>();
         equipmentDict = new Dictionary<string, Equipment>();
-        
+
         player = GetComponentInParent<PlayerMUD>();
 
         if(player.HasLoaded) Init();
