@@ -44,20 +44,22 @@ public class GaulDebug : MonoBehaviour
         
         if(toggle == on) return;
 
+        enabled = toggle;
+
         on = toggle;
         debugParent.SetActive(toggle);   
 
         if(toggle) {
             CursorMUD.OnGridPosition += UpdateDebug;
         } else {
-            CursorMUD.OnGridPosition += UpdateDebug;
+            CursorMUD.OnGridPosition -= UpdateDebug;
         }
                 
     }
     
     void Update() {
 
-        if(Application.isPlaying) UpdatePlayMode();
+        UpdatePlayMode();
 
     }
 
@@ -82,6 +84,7 @@ public class GaulDebug : MonoBehaviour
     }
 
     void UpdatePlayMode() {
+        
         debugString = "";
 
         if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt)) {

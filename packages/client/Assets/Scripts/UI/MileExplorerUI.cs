@@ -140,7 +140,7 @@ public class MileExplorerUI : SPWindowParent
             SPUIBase.ToggleMotherUI(!toggle);
         }
 
-        CameraControls.ToggleScroll(!toggle);
+        CameraControls.ToggleZoom(!toggle);
 
 
     }

@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class SummonUI : SPWindow
 {
-    protected override void Awake() {
-        base.Awake();
+    public override void Init() {
+        if(HasInit) {return;}
+        base.Init();
+
+        ToggleWindowClose();
+
         UpdateSummon();
         ChunkComponent.OnChunkUpdate += UpdateSummon;
     }

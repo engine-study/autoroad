@@ -77,7 +77,7 @@ public class NameOptionUI : SPWindowParent {
 
         parent.SetActive(false);
 
-        MotherUI.TogglePlayerCreation(false);
+        MotherUI.ToggleNameSelection(false);
 
         //spawn transaction
         bool didSpawn = await SpawnTx();
@@ -85,7 +85,7 @@ public class NameOptionUI : SPWindowParent {
         if (didSpawn) {
             // SPUIBase.PlaySound(sfx_wagon);
         } else {
-            MotherUI.TogglePlayerCreation(true);
+            MotherUI.ToggleNameSelection(true);
             spawning = false;
             parent.SetActive(true);
         }

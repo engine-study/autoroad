@@ -12,16 +12,29 @@ public class TutorialUI : SPWindowParent
     [SerializeField] Transform tutorialTransform;
     [SerializeField] GameObject [] tutorials;
     [SerializeField] AudioClip startClip, endClip;
+
+    [Header("Debug")]
+    public bool hasCompleted = false;
+
     float vertical = 1f;
     float distance = 25f;
     bool hasStarted = false;
     Vector3 targetPos;
+    string tutorial = "tutorial";
+    public override void Init() {
 
-    protected override void Awake() {
-        base.Awake();
+        if(HasInit) {return;}
+        base.Init();
 
         for(int i = 0; i < tutorials.Length; i++) {
             tutorials[i].transform.localPosition = Vector3.zero;
+        }
+
+        hasCompleted = false;
+        var completed = PlayerPrefs.GetString(tutorial);
+
+        if (!string.IsNullOrWhiteSpace(completed)){
+            hasCompleted = true;
         }
 
         tutorialText.OnUpdated += ShowTutorial;
@@ -55,6 +68,14 @@ public class TutorialUI : SPWindowParent
 
     }
 
+    void Update() {
+        if(tutorialText.HasReachedFinal) {
+            if(Input.GetKeyDown(KeyCode.Escape)) {
+                ToggleWindowClose();
+            }
+        }
+    }
+
     void Toggle(bool toggle) {
 
         tutorialParent.SetActive(toggle);
@@ -79,14 +100,21 @@ public class TutorialUI : SPWindowParent
             }
         }
 
-        CameraControls.ToggleScroll(!toggle);
+        CameraControls.ToggleZoom(!toggle);
+        CameraControls.TogglePan(!toggle);
 
         OnTutorial?.Invoke(toggle);
 
     }
 
-    void ShowTutorial() {
+    public void CompleteTutorial() {
+        
+        PlayerPrefs.SetString(tutorial, "true");
+        PlayerPrefs.Save();
 
+    }
+
+    void ShowTutorial() {
 
         for(int i = 0; i < tutorials.Length; i++) {
             tutorials[i].SetActive(i == tutorialText.Index);

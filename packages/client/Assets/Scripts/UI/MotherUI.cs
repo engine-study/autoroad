@@ -11,9 +11,6 @@ public class MotherUI : SPUIInstance {
     public static MotherUI Mother;
     public static SPActionWheelUI ActionWheel {get { return Mother.wheel; } }
 
-    [Header("Options")]
-    [SerializeField] bool fastStart = false; 
-
     [Header("UI")]
     public LoadingUI loadingScreen;
     public GameObject nameAndSpawnScreen;
@@ -31,7 +28,6 @@ public class MotherUI : SPUIInstance {
 
     [Header("Game")]
     public GameUI game;
-    public MapUI map;
     public MileComplete mileComplete;
     public StoreUI store;
     public SPWindow debugButton;
@@ -48,8 +44,6 @@ public class MotherUI : SPUIInstance {
     public AudioClip sfx_txRevert;
 
 
-
-
     protected override void Awake() {
         base.Awake();
 
@@ -60,7 +54,6 @@ public class MotherUI : SPUIInstance {
         nameAndSpawnScreen.SetActive(false);
 
         profile.ToggleWindowClose();
-        map.ToggleWindowClose();
         menu.ToggleWindowClose();
         spectate.ToggleWindowClose();
 
@@ -73,7 +66,7 @@ public class MotherUI : SPUIInstance {
 
         ToggleLoading(true);
         ToggleAccountCreation(false);
-        TogglePlayerCreation(false);
+        ToggleNameSelection(false);
         TogglePlayerSpawning(false);
         ToggleRespawn(false);
 
@@ -170,7 +163,7 @@ public class MotherUI : SPUIInstance {
         Mother.accountCreate.ToggleWindow(toggle);
     }
 
-    public static void TogglePlayerCreation(bool toggle) {
+    public static void ToggleNameSelection(bool toggle) {
         Mother.playerCreate.ToggleWindow(toggle);
     }
 
@@ -203,8 +196,7 @@ public class MotherUI : SPUIInstance {
 
     IEnumerator MainMenuCoroutine() {
 
-        if(fastStart) {
-            map.ToggleWindowOpen();
+        if(GameState.Instance.skipMenu) {
             menu.ToggleWindowOpen();
             ToggleLoading(false);
 
@@ -220,7 +212,6 @@ public class MotherUI : SPUIInstance {
         yield return new WaitForSeconds(2f);
 
         SPUIBase.PlaySound(sfx_mainMenu);
-        map.ToggleWindowOpen();
         menu.ToggleWindowOpen();
 
         Debug.Log("Showing Main Menu", this);

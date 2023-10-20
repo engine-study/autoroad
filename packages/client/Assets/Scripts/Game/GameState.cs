@@ -8,6 +8,8 @@ using IWorld.ContractDefinition;
 using System;
 using Cysharp.Threading.Tasks;
 using Nethereum.Model;
+using UniRx;
+
 
 
 
@@ -26,7 +28,8 @@ public class GameState : MonoBehaviour {
     [SerializeField] string account;
 
     [Header("Test")]
-    [SerializeField] bool freshStart = false; 
+    public bool newGame = false; 
+    public bool skipMenu = false; 
 
     [Header("Game")]
     [SerializeField] TableSpawner mainTables;
@@ -165,7 +168,7 @@ public class GameState : MonoBehaviour {
 
             } else {
                 Debug.Log("Choosing Name");
-                MotherUI.TogglePlayerCreation(true);
+                MotherUI.ToggleNameSelection(true);
             }
 
             //wait for the name
@@ -181,14 +184,17 @@ public class GameState : MonoBehaviour {
 
     async UniTask SetTutorial() {
 
+        if(MotherUI.Mother.tutorial.hasCompleted) return;
+        MotherUI.Mother.tutorial.ToggleWindowOpen();
+
+        while(MotherUI.Mother.tutorial.Active) {await UniTask.Delay(100);}
     }
 
     async UniTask SetFirstMile() {
         //wait until the map is setup
         Debug.Log("--Spawn Map--");
         while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
-            if(SPGlobal.IsDebug) { if(await TxManager.SendDirect<HelpSummonFunction>() == false) {await UniTask.Delay(1000);}}
-            else {await UniTask.Delay(1000);}
+            if(await TxManager.SendDirect<HelpSummonFunction>() == false) {await UniTask.Delay(1000);}
         }
 
     }
@@ -234,8 +240,9 @@ public class GameState : MonoBehaviour {
     async UniTask GameSetup() {
         
         //destroy the player if we want to simulate the login sequence
-        if (freshStart) {
-            await TxManager.SendQueue<DestroyPlayerAdminFunction>();
+        if (newGame) {
+            PlayerPrefs.DeleteAll();
+            // await TxManager.SendQueue<DestroyPlayerAdminFunction>();
             //while(player is not null) {}
         }
 
