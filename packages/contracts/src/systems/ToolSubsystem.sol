@@ -4,7 +4,8 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/index.sol";
-import { Road, Move, Action, Carrying, Rock, Tree, Bones, Name, Scroll, Seeds, Boots, Weight, NPC } from "../codegen/index.sol";
+import { Road, Move, Action, Rock, Scroll, Seeds, Boots, Weight, NPC } from "../codegen/index.sol";
+import { Shovel, Pickaxe, Stick, FishingRod, Sword} from "../codegen/index.sol";
 import { PositionTableId, PositionData } from "../codegen/index.sol";
 import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
@@ -25,6 +26,7 @@ contract ToolSubsystem is System {
   //forces a player to push
   function stick(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
+    require(Stick.get(player), "no stick");
     require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory playerPos = Position.get(player);
@@ -41,6 +43,7 @@ contract ToolSubsystem is System {
 
   function shovel(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
+    require(Shovel.get(player), "no shovel");
     require(Rules.canDoStuff(player), "hmm");
     require(Rules.onRoad(x, y), "off road");
     require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
@@ -52,6 +55,7 @@ contract ToolSubsystem is System {
 
   function melee(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
+    require(Sword.get(player), "no Sword");
     require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory pos = PositionData(x, y, 0);
@@ -75,6 +79,7 @@ contract ToolSubsystem is System {
   
   function mine(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
+    require(Pickaxe.get(player), "no Pickaxe");
     require(Rules.canDoStuff(player), "hmm");
 
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
@@ -106,6 +111,7 @@ contract ToolSubsystem is System {
 
   function fish(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
+    require(FishingRod.get(player), "no FishingRod");
     require(Rules.canDoStuff(player), "hmm");
 
     PositionData memory startPos = Position.get(player);
@@ -137,12 +143,10 @@ contract ToolSubsystem is System {
   function teleportScroll(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
     require(Rules.canDoStuff(player), "hmm");
-
-    //remove scrolls
     uint32 scrolls = Scroll.get(player);
     require(scrolls > uint32(0), "not enough scrolls");
-    Scroll.set(player, scrolls - 1);
 
+    Scroll.set(player, scrolls - 1);
     SystemSwitch.call(abi.encodeCall(world.teleport, (player, x, y)));
 
   }

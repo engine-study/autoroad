@@ -169,7 +169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3380346333242925706
 Transform:
   m_ObjectHideFlags: 0
@@ -389,9 +389,9 @@ MonoBehaviour:
   playerScript: {fileID: 592219380604067791}
   sfx_hitSound:
   - {fileID: 8300000, guid: 8f423d80a2384a84ebf4fa459c4e2916, type: 3}
+  address: 
   health: {fileID: 0}
   position: {fileID: 0}
-  gameEvent: {fileID: 0}
 --- !u!114 &1902969769342666736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,6 +425,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 592219380604067791}
+  mainCollider: {fileID: 0}
+  controller: {fileID: 0}
+  animator: {fileID: 0}
+  rb: {fileID: 0}
+  velocity: {fileID: 0}
   rigidbodies: []
   grounded: 0
   bumped: 0
@@ -446,11 +451,11 @@ MonoBehaviour:
   walkAction: {fileID: 6819035568640496617}
   pushAction: {fileID: 8686894057738085968}
   playerTransform: {fileID: 0}
-  moveMarker: {fileID: 1902544159680851214}
   sfx_bump:
   - {fileID: 8300000, guid: 27a774bfddb203942a5100d641d37384, type: 3}
   - {fileID: 8300000, guid: 4b2e7ac8ee2f22a409eaadbf7a337909, type: 3}
   - {fileID: 8300000, guid: a294fa733fd95db4590a60279b319781, type: 3}
+  sync: {fileID: 0}
 --- !u!114 &8849826572147316809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,6 +582,7 @@ MonoBehaviour:
   parentTransformToEntity: 1
   pos: {fileID: 0}
   movement: {fileID: 0}
+  gridPos: {x: 0, y: 0, z: 0}
   StartPos: {x: 0, y: 0, z: 0}
   moving: 0
   moveLerp: 0
@@ -594,11 +600,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba76f97fcfe0f7458e9acf3587f66bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2243986332771371095}
-  action: 0
+  root: {fileID: 0}
   actionEffect: {fileID: 0}
+  PositionSync: {fileID: 0}
+  Animator: {fileID: 0}
+  Controller: {fileID: 0}
   entity: {fileID: 0}
-  actionComponent: {fileID: 0}
+  ourComponent: {fileID: 0}
+  actionData: {fileID: 0}
+  looker: {fileID: 0}
 --- !u!114 &5778510077542902211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -817,7 +827,8 @@ MonoBehaviour:
   baseEquipment:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 3576323133495739383}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 1442630704522070475}
   - {fileID: 280045079999324278}
   - {fileID: 2902068070347510194}
@@ -827,7 +838,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 1109723294861298092}
   - {fileID: 0}
-  - {fileID: 8677290009412671634}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   equipment: []
@@ -953,7 +965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1379806157842434035
 Transform:
   m_ObjectHideFlags: 0

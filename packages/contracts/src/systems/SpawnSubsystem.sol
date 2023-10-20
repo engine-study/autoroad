@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/index.sol";
-import { Move, Carrying, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth } from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seeker, Archer } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/common.sol";

@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action, Conscription, Weight } from "../codegen/index.sol";
-import { Coinage, Gem, Eth, XP, Scroll, Stick, Robe, Head, Boots, FishingRod } from "../codegen/index.sol";
+import { Coinage, Gem, Eth, XP, Scroll, Stick, Sword, Robe, Head, Boots, FishingRod, ScrollSwap, Seeds } from "../codegen/index.sol";
 import { ActionType, PaymentType } from "../codegen/common.sol";
 
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
@@ -62,6 +62,17 @@ contract ItemSubsystem is System {
       } else if (id == 6) { //conscription
         pay(player, 0, 0, 10000000000000000, payment, 0);
         Conscription.set(player, true);
+      } else if (id == 7) { //loincloth
+        pay(player, 0, 0, 10000000000000000, payment, 0);
+        Conscription.set(player, true);
+      } else if (id == 8) { //seed
+        pay(player, 10, 0, 0, payment, 0);
+        uint32 seeds = Seeds.get(player);
+        Seeds.set(player, seeds+1);
+      } else if (id == 9) { //swapscroll
+        pay(player, 20, 0, 0, payment, 0);
+        uint32 scrolls = ScrollSwap.get(player);
+        ScrollSwap.set(player, scrolls + 1);
       } 
     
     } 

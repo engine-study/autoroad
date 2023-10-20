@@ -163,17 +163,6 @@ export default mudConfig({
     Seeker: "uint32",
     Aggro: "uint32",
 
-    //items
-    Shovel: "bool",
-    Pickaxe: "bool",
-    Bones: "bool",
-    Stick: "bool",
-    Robe: "int32",
-    Head: "int32",
-    Scroll: "uint32",
-    Coinage: "int32",
-    Weight: "int32",
-
     //puzzle components try to be moved onto triggers (ie. Miliarli )
     Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool"},},
     Trigger: "bytes32",
@@ -192,16 +181,32 @@ export default mudConfig({
     Active: "bool",
     Player: "bool",
     Move: "uint32",
-    Carrying: "bytes32",
-    FishingRod: "bool",
-    Boots: {valueSchema: {minMove: "int32", maxMove: "int32",},},
-
+    
     //properties
     Damage: "int32",
     Health: "int32",
-    Seeds: "uint32",
+    Weight: "int32",
+    
+    //value
+    Coinage: "int32",
+    XP: "uint256",
     Gem: "int32",
     Eth: "uint256",
+    Seeds: "uint32",
+    Conscription: "bool",
+
+    //items
+    Shovel: "bool",
+    Pickaxe: "bool",
+    Stick: "bool",
+    Sword: "bool",
+    Bones: "bool",
+    Robe: "int32",
+    Head: "int32",
+    Scroll: "uint32",
+    ScrollSwap: "uint32",
+    FishingRod: "bool",
+    Boots: {valueSchema: {minMove: "int32", maxMove: "int32",},},
 
     //unique objects
     Rock: "uint32",
@@ -209,8 +214,6 @@ export default mudConfig({
     Tree: "uint32",
     Log: "bool",
     Ox: "bool",
-    Conscription: "bool",
-    XP: "uint256",
 
     //Behaviour 
     //Flee: "bool", (this will probably cause infinite loops) if a seeker chases a fleer

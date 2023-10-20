@@ -9,6 +9,9 @@ public abstract class Equipment : MonoBehaviour {
     public SPActor Sender {get{return sender;}}
     public SPInteract Interact {get{return interact;}}
 
+    [Header("Item")]
+    public GaulItem gaul;
+
     [Header("Debug")]
     public MUDComponent ourComponent;
     public bool canUse = false;
