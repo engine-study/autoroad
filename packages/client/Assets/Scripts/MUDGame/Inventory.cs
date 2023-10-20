@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using mud;
-using NBitcoin;
+using System;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
-{
+public class Inventory : MonoBehaviour {
 
     public static Inventory LocalInventory;
+    public Action OnUpdated;
+    public Action<InventorySlot> OnUpdatedSlot;
 
     [Header("Debug")]
     public bool localInventory;
@@ -73,6 +74,8 @@ public class Inventory : MonoBehaviour
 
         slot.amount = (int)v.Value;        
 
+        OnUpdated?.Invoke();
+        OnUpdatedSlot?.Invoke(slot);
     }
 
 

@@ -5,9 +5,8 @@ using UnityEngine;
 public class ToolSlotUI : SPWindow
 {
     [Header("Slot")]
-    public Equipment equipment;
-    public GaulItem item;
-
+    public Equipment inventory;
+    
     public void SetEquipment(Equipment e) {
         
     }

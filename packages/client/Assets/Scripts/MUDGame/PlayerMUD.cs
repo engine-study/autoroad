@@ -5,10 +5,11 @@ using mud;
 
 public class PlayerMUD : SPPlayer
 {
+    public static PlayerMUD MUDPlayer {get{return (PlayerMUD)LocalPlayer;}}
     public PlayerComponent Player{get{return playerComponent;}}
     public PositionComponent Position{get{return positionComponent;}}
     public PositionSync Sync{get{return positionSync;}}
-    public ActionsMUD Actions{get{return actions;}}
+    public ActionsMUD Equipment{get{return actions;}}
     public AnimationMUD AnimationMUD{get{return animMud;}}
     protected override bool Input(){ return base.Input() && GameState.GamePlaying && GameState.GameReady && !PlayerComponent.LocalPlayer.IsDead && TxManager.CanSendTx; }
 
@@ -56,9 +57,6 @@ public class PlayerMUD : SPPlayer
 
         if(playerComponent.IsLocalPlayer) {
             SetLocalPlayer(this);
-        }
-        
-        if(IsLocalPlayer) {
             Actor.OnActionEnd += ActionCursorUpdate;
             positionSync.OnMoveEnd += MoveEndUpdate;
         }

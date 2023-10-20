@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud;
-using mud;
 using IWorld.ContractDefinition;
-using Nethereum.Contracts;
 using Cysharp.Threading.Tasks;
+using System;
 
 public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow}
 public class ActionsMUD : MonoBehaviour
 {
     public static ActionsMUD LocalActions;
 
-    [EnumNamedArray( typeof(ActionName) )]
-
     [Header("Equipment")]
+    [EnumNamedArray( typeof(ActionName) )]
     [SerializeField] List<Equipment> baseEquipment;
     [SerializeField] List<Equipment> local;
 
@@ -23,11 +21,14 @@ public class ActionsMUD : MonoBehaviour
     [SerializeField] PlayerMUD player;
     [SerializeField] PositionComponent position;
     [SerializeField] List<Equipment> equipment;
-
+    [SerializeField] Dictionary<string, Equipment> equipmentDict;
 
 
     void Awake() {
 
+        equipment = new List<Equipment>();
+        equipmentDict = new Dictionary<string, Equipment>();
+        
         player = GetComponentInParent<PlayerMUD>();
 
         if(player.HasLoaded) Init();
@@ -37,10 +38,14 @@ public class ActionsMUD : MonoBehaviour
 
     public void ToggleEquipment(bool toggle, Equipment newEquipment) {
 
+        if(newEquipment == null) {Debug.LogError("null", this); return;}
+
         if(toggle && !equipment.Contains(newEquipment)) {
             equipment.Add(newEquipment);
+            equipmentDict.Add(newEquipment.name, newEquipment);
         } else {
             equipment.Remove(newEquipment);
+            equipmentDict.Remove(newEquipment.name);
         }
 
     }

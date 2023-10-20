@@ -4,12 +4,35 @@ using UnityEngine;
 
 public class ToolUI : SPWindowParent
 {
-
+    public static ToolUI Instance;
     [Header("Tools")]
     public List<ToolSlotUI> tools;
 
     [Header("Debug")]
     public ToolSlotUI active;
+    public Inventory inventory;
+    public ActionsMUD equipment;
+
+    public override void Init() {
+        if(HasInit) {return;}
+        base.Init();
+
+        Instance = this;
+
+        SPEvents.OnLocalPlayerSpawn += SetupInventory;
+
+    }
+
+    void SetupInventory() {
+        equipment = PlayerMUD.MUDPlayer.Equipment;
+        inventory = PlayerMUD.MUDPlayer.GetComponent<Inventory>();
+    }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        Instance = null;
+    }
+
 
     void Update() {
         UpdateTools();

@@ -15,6 +15,8 @@ public class CameraControls : MonoBehaviour
     [Header("Pan")]
     public bool canPan = true;
     [SerializeField] private float movementSpeed = 10.0f;
+    [SerializeField] private float fovMultiplier = 5.0f;
+    [SerializeField] private float fovMax = 25f;
 
     [Header("Rotate")]
     public bool canRotate = true;
@@ -120,6 +122,8 @@ public class CameraControls : MonoBehaviour
 
             var position = transform.right * (_delta.x * -movementSpeed);
             position += transform.forward * (_delta.y * -movementSpeed);
+            // position *= 1f + (fovMultiplier * Mathf.Clamp01(1f - (SPCamera.I.FOV / fovMax)));
+
             position = transform.position + position * Time.deltaTime;
 
             position.x = Mathf.Clamp(position.x, BoundsComponent.Left, BoundsComponent.Right);
