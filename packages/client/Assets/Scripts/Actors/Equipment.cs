@@ -23,13 +23,14 @@ public class Equipment : SPInteract {
 
         canUse = base.IsInteractable() && gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
         bool hasItem = canUse && (item == null || Inventory.LocalInventory.HasItem(item));
-        bool hasRequiredComponent = canUse && ((requiredComponent == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(requiredComponent.GetType())));
+        bool hasRequiredComponent = canUse && ((requiredComponent == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
         return canUse && hasRequiredComponent && hasItem; 
     }
 
     protected override void Awake() {
         base.Awake();
         us = GetComponentInParent<MUDComponent>();
+        ToggleActor(true, us.GetComponent<IActor>());
     }
 
     public override void Interact(bool toggle, IActor newActor) {

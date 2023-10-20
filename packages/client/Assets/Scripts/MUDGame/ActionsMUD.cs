@@ -20,7 +20,6 @@ public class ActionsMUD : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] bool hasInit;
-    [SerializeField] PlayerComponent playerComponent;
     [SerializeField] PlayerMUD player;
     [SerializeField] PositionComponent position;
     [SerializeField] List<Equipment> equipment;
@@ -29,10 +28,10 @@ public class ActionsMUD : MonoBehaviour
 
     void Awake() {
 
-        playerComponent = GetComponentInParent<PlayerComponent>();
-        
-        if(playerComponent.Loaded) Init();
-        else playerComponent.OnPostInit += Init;
+        player = GetComponentInParent<PlayerMUD>();
+
+        if(player.HasLoaded) Init();
+        else player.OnPostInit += Init;
         
     }
 
@@ -49,7 +48,7 @@ public class ActionsMUD : MonoBehaviour
     void OnDestroy() {
 
         if(player) {
-            playerComponent.OnPostInit -= Init;
+            player.OnPostInit -= Init;
             (player.Controller as ControllerMUD).OnFinishedMove -= AddPositionActions;
         }
 
@@ -63,10 +62,9 @@ public class ActionsMUD : MonoBehaviour
     void Init() {
 
         hasInit = true;
-        player = playerComponent.GetComponent<PlayerMUD>();
 
         //exit now if we aren't a localplayer, disable our actions
-        if (!playerComponent.IsLocalPlayer) {gameObject.SetActive(false); return;}
+        if (!player.IsLocalPlayer) {gameObject.SetActive(false); return;}
 
         //add equipment
         foreach(Equipment e in baseEquipment) {
@@ -96,6 +94,7 @@ public class ActionsMUD : MonoBehaviour
     void AddGridActions(Vector3 newPos) {
         for(int i = 0; i < equipment.Count; i++) {
             equipment[i].transform.position = newPos;
+            equipment[i].ToggleActor(true, player.Actor);
             player.Reciever.ToggleInteractableManual(equipment[i].IsInteractable(), equipment[i]);
         }
     }

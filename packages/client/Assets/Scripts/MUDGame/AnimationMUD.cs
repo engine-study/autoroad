@@ -145,12 +145,29 @@ public class AnimationMUD : MonoBehaviour
         //setup the new movement type instantlye
         newEffect.ToggleMovement(true, this);
 
-        if(WaitAFrame != null) StopCoroutine(WaitAFrame); 
-        WaitAFrame = StartCoroutine(AnimationInsanity(newEffect));
+        if(Animation != null) StopCoroutine(Animation); 
+
+        if(entity.IsLocal) {
+            //assume we're already in the action because we had to have cast it?
+            Animation = StartCoroutine(AnimationInsanityLocal(newEffect));
+        } else {
+            //wait for target to move into place, then do animation
+            Animation = StartCoroutine(AnimationInsanity(newEffect));
+        }
         
     }   
 
-    Coroutine WaitAFrame;
+
+    IEnumerator AnimationInsanityLocal(ActionEffect newAction) {
+
+        ToggleAction(true, newAction);
+        yield return null;
+        ToggleAction(false, newAction);
+        Animation = null;
+
+    }
+
+    Coroutine Animation;
     IEnumerator AnimationInsanity(ActionEffect newAction) {
 
         //wait a frame so all the positions are synced
@@ -170,7 +187,7 @@ public class AnimationMUD : MonoBehaviour
         
         ToggleAction(false, newAction);
 
-        WaitAFrame = null;
+        Animation = null;
     }
 
     public virtual void ToggleMovement(bool toggle, ActionEffect newEffect) {
@@ -210,7 +227,7 @@ public class AnimationMUD : MonoBehaviour
     }
 
     void OnDrawGizmos() {
-        if(actionData && WaitAFrame != null) {
+        if(actionData && Animation != null) {
         
             // if(actionData.Action != ActionName.None && actionData.Position != transform.position) {
             //     Gizmos.color = Color.green;

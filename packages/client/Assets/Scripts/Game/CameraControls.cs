@@ -113,7 +113,10 @@ public class CameraControls : MonoBehaviour
         timeDown = input ? timeDown + Time.deltaTime : 0f;
         if(Vector2.Distance(currentPos, startPos) < 1f) {return;}
 
+
         if (_isMoving && canPan) {
+
+            SPCamera.SetFollow(null);
 
             var position = transform.right * (_delta.x * -movementSpeed);
             position += transform.forward * (_delta.y * -movementSpeed);
