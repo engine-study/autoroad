@@ -8,9 +8,9 @@ using IWorld.ContractDefinition;
 public class Push : Equipment
 {
     
-    public override bool CanUse() 
+    public override bool IsInteractable() 
     {
-        bool canUse = base.CanUse();
+        bool canUse = base.IsInteractable();
         return canUse;
     }
 
@@ -22,7 +22,7 @@ public class Push : Equipment
 
         //can try optimistic
 
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Push, new Vector3(x, 0, y));
+        return await ActionsMUD.ActionTx(us.Entity, ActionName.Push, new Vector3(x, 0, y));
     }
 
 }

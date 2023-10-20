@@ -7,8 +7,8 @@ using Cysharp.Threading.Tasks;
 using mud;
 public class FishingRod : Equipment {
     
-    public override bool CanUse() {
-        bool canUse = base.CanUse();
+    public override bool IsInteractable() {
+        bool canUse = base.IsInteractable();
 
         MUDEntity e = CursorMUD.Entity;
 
@@ -35,7 +35,7 @@ public class FishingRod : Equipment {
         // updates.Add(ActionsMUD.ActionOptimistic(CursorMUD.Entity, ActionName.Hop, pushToPos));
         // updates.Add(ActionsMUD.PositionOptimistic(CursorMUD.Entity, pushToPos));
         
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Fishing, CursorMUD.GridPos);
+        return await ActionsMUD.ActionTx(us.Entity, ActionName.Fishing, CursorMUD.GridPos);
 
     }
 

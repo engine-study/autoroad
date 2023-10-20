@@ -12,20 +12,21 @@ public class ToolUI : SPWindowParent
     public ToolSlotUI active;
 
     void Update() {
-        
-
-    }
-
-    void UpdateInput() {
-        int newTool = SPInput.GetNumber();
-        if(newTool == -1) {return;}
-    
-
+        UpdateTools();
     }
 
     public void AddTool(Equipment e) {
-        
+
     }
+
+    void UpdateTools() {
+        int newTool = SPInput.GetNumber();
+        if(newTool == -1) return;
+        if(newTool >= tools.Count || tools[newTool] == null) return;
+
+        SetTool(tools[newTool]);
+    }
+
 
     public void SetTool(ToolSlotUI newTool) {
 

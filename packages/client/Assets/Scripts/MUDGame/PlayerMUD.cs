@@ -26,9 +26,6 @@ public class PlayerMUD : SPPlayer
 
     [Header("Debug")]
     [SerializeField] private PositionComponent positionComponent;
-    [SerializeField] private HealthComponent healthComponent;
-    [SerializeField] private GemComponent gemComponent;
-    [SerializeField] private ActionComponent action;
 
     public override void Init() {
         base.Init();
@@ -53,17 +50,9 @@ public class PlayerMUD : SPPlayer
         positionComponent = playerComponent.Entity.GetMUDComponent<PositionComponent>();
         transform.position = positionComponent.Pos;
 
-        action = MUDWorld.FindOrMakeComponent<ActionComponent>(playerComponent.Entity);
-        healthComponent = playerComponent.Entity.GetMUDComponent<HealthComponent>();
-        gemComponent = playerComponent.Entity.GetMUDComponent<GemComponent>();
-
         baseName = MUDHelper.TruncateHash(playerComponent.Entity.Key);
 
         // Debug.Log("Player Network Init");
-
-        if(healthComponent.Health < 0) {
-            Root.gameObject.SetActive(false);
-        }
 
         if(playerComponent.IsLocalPlayer) {
             SetLocalPlayer(this);

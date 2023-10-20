@@ -1,19 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using mud;
+using NBitcoin;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
 
+    public static Inventory LocalInventory;
+
     [Header("Debug")]
+    public bool localInventory;
     public MUDEntity entity;
     public List<InventorySlot> items;
     public Dictionary<string, InventorySlot> itemDict;
 
+    public bool HasItem(GaulItem item) {
+        itemDict.TryGetValue(item.itemName, out InventorySlot slot);
+        return slot?.amount > 0;
+    }
+
     void Start() {
         entity = GetComponentInParent<MUDEntity>();
         if(entity == null) return;
+
+        if(entity.IsLocal) {LocalInventory = this; localInventory = true;}
 
         items = new List<InventorySlot>();
         itemDict = new Dictionary<string, InventorySlot>();
@@ -27,8 +38,11 @@ public class Inventory : MonoBehaviour
     }
 
     void OnDestroy() {
-        entity.OnComponentAdded -= AddToInventory;
-        entity.OnComponentUpdated -= UpdateInventory;
+
+        if(entity) {
+            entity.OnComponentAdded -= AddToInventory;
+            entity.OnComponentUpdated -= UpdateInventory;
+        }
     }
 
     void AddToInventory(MUDComponent c) {
@@ -48,12 +62,12 @@ public class Inventory : MonoBehaviour
 
         InventorySlot slot = null;
 
-        if(itemDict.ContainsKey(v.Item.name)) {
-            slot = itemDict[v.Item.name];
+        if(itemDict.ContainsKey(v.Item.itemName)) {
+            slot = itemDict[v.Item.itemName];
         } else {
             slot = new InventorySlot { item = v.Item};
 
-            itemDict.Add(v.Item.name, slot);
+            itemDict.Add(v.Item.itemName, slot);
             items.Add(slot);
         }
 

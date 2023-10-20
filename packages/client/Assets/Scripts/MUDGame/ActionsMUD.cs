@@ -10,30 +10,35 @@ using Cysharp.Threading.Tasks;
 public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow}
 public class ActionsMUD : MonoBehaviour
 {
+    public static ActionsMUD LocalActions;
+
     [EnumNamedArray( typeof(ActionName) )]
-    [SerializeField] List<Equipment> baseEquipment;
 
     [Header("Equipment")]
-    [SerializeField] List<Equipment> equipment;
+    [SerializeField] List<Equipment> baseEquipment;
     [SerializeField] List<Equipment> local;
 
-    PlayerMUD player;
-    PositionComponent position;
-    float distanceToPlayer = 999f;
+    [Header("Debug")]
+    [SerializeField] bool hasInit;
+    [SerializeField] PlayerComponent playerComponent;
+    [SerializeField] PlayerMUD player;
+    [SerializeField] PositionComponent position;
+    [SerializeField] List<Equipment> equipment;
 
 
 
     void Awake() {
 
-        player = GetComponentInParent<PlayerMUD>();
-        player.OnPostInit += Init;
+        playerComponent = GetComponentInParent<PlayerComponent>();
+        
+        if(playerComponent.Loaded) Init();
+        else playerComponent.OnPostInit += Init;
         
     }
 
     public void ToggleEquipment(bool toggle, Equipment newEquipment) {
 
         if(toggle && !equipment.Contains(newEquipment)) {
-            newEquipment.SetActor(player.Actor);
             equipment.Add(newEquipment);
         } else {
             equipment.Remove(newEquipment);
@@ -44,7 +49,7 @@ public class ActionsMUD : MonoBehaviour
     void OnDestroy() {
 
         if(player) {
-            player.OnPostInit -= Init;
+            playerComponent.OnPostInit -= Init;
             (player.Controller as ControllerMUD).OnFinishedMove -= AddPositionActions;
         }
 
@@ -57,21 +62,19 @@ public class ActionsMUD : MonoBehaviour
 
     void Init() {
 
+        hasInit = true;
+        player = playerComponent.GetComponent<PlayerMUD>();
+
+        //exit now if we aren't a localplayer, disable our actions
+        if (!playerComponent.IsLocalPlayer) {gameObject.SetActive(false); return;}
+
         //add equipment
         foreach(Equipment e in baseEquipment) {
             if (e == null) { continue; }
             ToggleEquipment(true, e);
         }
 
-        for(int i = 0; i < local.Count; i++) {local[i].gameObject.SetActive(player.IsLocalPlayer);}
-
-        if (!player.IsLocalPlayer) {
-            foreach(Equipment e in baseEquipment) {
-                if (e == null) { continue; }
-                e.gameObject.SetActive(false);
-            }
-            return;
-        }
+        LocalActions = this;
 
         gameObject.transform.parent = null;
         gameObject.transform.position = Vector3.zero;
@@ -93,7 +96,7 @@ public class ActionsMUD : MonoBehaviour
     void AddGridActions(Vector3 newPos) {
         for(int i = 0; i < equipment.Count; i++) {
             equipment[i].transform.position = newPos;
-            player.Reciever.ToggleInteractableManual(equipment[i].CanUse(), equipment[i].Interact);
+            player.Reciever.ToggleInteractableManual(equipment[i].IsInteractable(), equipment[i]);
         }
     }
 

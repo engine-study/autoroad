@@ -4,43 +4,54 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using mud;
 
-public abstract class Equipment : MonoBehaviour {
+public class Equipment : SPInteract {
 
-    public SPActor Sender {get{return sender;}}
-    public SPInteract Interact {get{return interact;}}
+    public MUDEntity Entity {get{return us?.Entity;}}
+    public GameObject Sender {get{return Actor.Owner().gameObject;}}
 
     [Header("Item")]
+    public ActionName actionName;
     public GaulItem item;
+    public MUDComponent requiredComponent;
 
     [Header("Debug")]
-    public MUDComponent ourComponent;
+    [SerializeField] protected MUDComponent us;
     public bool canUse = false;
-    SPActor sender;
-    [SerializeField] SPInteract interact;
 
-    protected virtual void Awake() {
-        ourComponent = GetComponentInParent<MUDComponent>();
-        Interact.OnInteractToggle += UseEquipment;
+
+    public override bool IsInteractable() {
+
+        canUse = base.IsInteractable() && gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
+        bool hasItem = canUse && (item == null || Inventory.LocalInventory.HasItem(item));
+        bool hasRequiredComponent = canUse && ((requiredComponent == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(requiredComponent.GetType())));
+        return canUse && hasRequiredComponent && hasItem; 
     }
 
-    void UseEquipment(bool toggle, IActor actor) {
+    protected override void Awake() {
+        base.Awake();
+        us = GetComponentInParent<MUDComponent>();
+    }
+
+    public override void Interact(bool toggle, IActor newActor) {
+        base.Interact(toggle, newActor);
+
         if(toggle) {
             Use();
         }
     }
-
-    public void SetActor(SPActor newActor) {
-        sender = newActor;
-    }
     
     public void UseState(bool toggle) {
-        interact.Action().DoCast(toggle, sender);
+        Action().DoCast(toggle, Actor);
     }
+    
+    public virtual async UniTask<bool> Use() {
 
-    public virtual bool CanUse() {
-        return gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && interact.Action().TryAction(sender, interact);
+        int x = (int)CursorMUD.GridPos.x;
+        int y = (int)CursorMUD.GridPos.z;
+
+        Debug.Log(actionName.ToString() + ": " + x + "," + y);
+                
+        return await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity, actionName, new Vector3(x, 0, y));
     }
-
-    public abstract UniTask<bool> Use();
 
 }

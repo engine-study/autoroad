@@ -8,8 +8,8 @@ using Cysharp.Threading.Tasks;
 public class Melee : Equipment
 {
 
-    public override bool CanUse() {
-        bool canUse = base.CanUse();
+    public override bool IsInteractable() {
+        bool canUse = base.IsInteractable();
 
         mud.MUDEntity e = CursorMUD.Entity;
         if(e == null) return false;
@@ -23,7 +23,7 @@ public class Melee : Equipment
         
         Debug.Log("MELEEING");
         Vector3 melee = transform.position;
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Melee, melee);
+        return await ActionsMUD.ActionTx(us.Entity, ActionName.Melee, melee);
     }
     
 }

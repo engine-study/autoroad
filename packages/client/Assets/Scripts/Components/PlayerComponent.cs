@@ -22,7 +22,6 @@ public class PlayerComponent : MUDComponent {
     public PlayerMUD PlayerScript {get{return playerScript;}}
 
     [Header("Player")]
-    [SerializeField] bool spawned;
     [SerializeField] bool isLocalPlayer;
     [SerializeField] PlayerMUD playerScript;
     [SerializeField] AudioClip [] sfx_hitSound;

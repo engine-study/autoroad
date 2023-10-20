@@ -8,8 +8,8 @@ using mud;
 
 public class Shovel : Equipment
 {
-    public override bool CanUse() {
-        bool canUse = base.CanUse();
+    public override bool IsInteractable() {
+        bool canUse = base.IsInteractable();
         return canUse && GridMUD.GetEntityAt(CursorMUD.GridPos - Vector3.up) == null && RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
     }
 

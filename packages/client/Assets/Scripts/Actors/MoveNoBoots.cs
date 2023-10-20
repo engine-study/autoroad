@@ -8,9 +8,9 @@ using IWorld.ContractDefinition;
 public class MoveNoBoots : Equipment
 {
     
-    public override bool CanUse() 
+    public override bool IsInteractable() 
     {
-        bool canUse = base.CanUse();
+        bool canUse = base.IsInteractable();
 
         return canUse;
 
@@ -24,7 +24,7 @@ public class MoveNoBoots : Equipment
 
         //can try optimistic
 
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Walking, new Vector3(x, 0, y));
+        return await ActionsMUD.ActionTx(us.Entity, ActionName.Walking, new Vector3(x, 0, y));
     }
 
 }

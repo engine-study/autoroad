@@ -8,8 +8,8 @@ using Cysharp.Threading.Tasks;
 public class Stick : Equipment
 {
 
-    public override bool CanUse() {
-        bool canUse = base.CanUse();
+    public override bool IsInteractable() {
+        bool canUse = base.IsInteractable();
 
         MUDEntity e = CursorMUD.Entity;
         if(e == null) return false;
@@ -36,7 +36,7 @@ public class Stick : Equipment
         // updates.Add(TxManager.MakeOptimistic(ourPosition, PositionComponent.PositionToOptimistic(pushObject)));
         // updates.Add(TxManager.MakeOptimistic(theirPosition, PositionComponent.PositionToOptimistic(pushToPos)));
 
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Stick, transform.position);
+        return await ActionsMUD.ActionTx(us.Entity, ActionName.Stick, transform.position);
     }
     
 }

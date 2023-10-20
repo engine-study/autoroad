@@ -8,8 +8,8 @@ using mud;
 
 public class Mining : Equipment
 {
-    public override bool CanUse() {
-        bool canUse = base.CanUse();
+    public override bool IsInteractable() {
+        bool canUse = base.IsInteractable();
         RockComponent rock = CursorMUD.Entity?.GetMUDComponent<RockComponent>();
         return canUse && CursorMUD.Entity != null && rock != null && rock.RockType < RockType.Nucleus;
     }

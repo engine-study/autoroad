@@ -9,9 +9,9 @@ using IWorld.ContractDefinition;
 public class Plant : Equipment
 {
     
-    public override bool CanUse() 
+    public override bool IsInteractable() 
     {
-        bool canUse = base.CanUse();
+        bool canUse = base.IsInteractable();
         bool onBounds = PositionComponent.OnMap(transform.position);
         // bool onRoad = RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z);
 
@@ -27,7 +27,7 @@ public class Plant : Equipment
 
         //can try optimistic
 
-        return await ActionsMUD.ActionTx(ourComponent.Entity, ActionName.Plant, new Vector3(x, 0, y));
+        return await ActionsMUD.ActionTx(us.Entity, ActionName.Plant, new Vector3(x, 0, y));
     }
 
 }

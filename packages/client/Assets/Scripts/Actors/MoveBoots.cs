@@ -8,15 +8,6 @@ using IWorld.ContractDefinition;
 public class MoveBoots : Equipment
 {
     
-    public override bool CanUse() 
-    {
-        bool canUse = base.CanUse();
-
-        return canUse;
-
-    }
-
-    
     public override async UniTask<bool> Use() {
         
         int x = (int)transform.position.x;
