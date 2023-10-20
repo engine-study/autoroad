@@ -2,7 +2,7 @@ using UnityEngine;
 using mudworld;
 using mud;
 
-public abstract class PropComponent : MUDComponent {
+public abstract class PropComponent : ValueComponent {
 
     [Header("Prop")]
     public SPAnimationProp propPrefab;
@@ -17,5 +17,9 @@ public abstract class PropComponent : MUDComponent {
         player.Animator.ToggleProp(true, propPrefab);
 
     }
+
+    protected override StatType SetStat(IMudTable update){ return StatType.None; }
+    protected override float SetValue(IMudTable update) {return 1;}
+    protected override string SetString(IMudTable update){ return "";}
 
 }

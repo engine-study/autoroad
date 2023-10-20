@@ -28,8 +28,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8272519444004648024}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,89 +46,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents:
   - {fileID: 5348944994237342613, guid: 9476fa914b9acad42b5792396d5e2ccd, type: 3}
+  entity: {fileID: 0}
+  hasInit: 0
+  loaded: 0
+  isActive: 0
+  spawnInfo:
+    entity: {fileID: 0}
+    source: 0
+    table: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
   networkInfo:
     updateType: 0
     source: 0
-  hasInit: 0
-  loaded: 0
-  propPrefab: {fileID: 1380931024518563946}
---- !u!1001 &3239962518990284994
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4804594667757243883}
-    m_Modifications:
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_RootOrder
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3774599616287364722, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7264731011502917816, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-      propertyPath: m_Name
-      value: FishingProp
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
---- !u!114 &1380931024518563946 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4601735223216971944, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-  m_PrefabInstance: {fileID: 3239962518990284994}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1e53af09817f4144ad4b943239cca78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &8272519444004648024 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6790104582783917210, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}
-  m_PrefabInstance: {fileID: 3239962518990284994}
-  m_PrefabAsset: {fileID: 0}
+  lastInfo:
+    updateType: 0
+    source: 0
+  item: {fileID: 11400000, guid: fed2b89e2bb267342a8c50702fe143e6, type: 2}
+  value: 0
+  valueString: 
+  statType: 0
+  propPrefab: {fileID: 4601735223216971944, guid: e0731fbd1ca86804a9af5e0a2f25f8f6, type: 3}

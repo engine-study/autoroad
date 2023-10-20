@@ -11,18 +11,22 @@ public class GaulItem : ScriptableObject {
     public bool InMileRange {get{return mileRange == Vector2.zero || (GameStateComponent.MILE_COUNT >= mileRange.x && GameStateComponent.MILE_COUNT <= mileRange.y);}}
     public bool HighEnoughLevel {get{return XPComponent.LocalLevel >= minLevel;}}
     
+    [Header("Item")]
     public string itemName = "Item";
-    public int ID = -1;
+    [TextArea(1,5)] public string itemDescription = "";
     public Sprite itemSprite;
 
-    [TextArea(1,5)]
-    public string itemDescription = "";
+    [Header("Info")]
     public ItemType itemType;
-    public Currency value;
+    public int ID = -1;
+    
+    [Header("Store")]
+    public bool canBuy = false;
     public bool isRare;
-    public int minLevel = 0;
-
     public Vector2 mileRange = Vector2.zero;
+    public int minLevel = 0;
+    public Currency value;
+
 
     public string FullDescription() {
         return "<b><size=32>" + itemName + "</size></b> - <size=28>" + ItemTypeString(itemType) + "</size>\n" + itemDescription;

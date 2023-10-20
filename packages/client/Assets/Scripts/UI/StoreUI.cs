@@ -24,17 +24,19 @@ public class StoreUI : SPWindowParent
     protected override void Start() {
         base.Start();
 
-        object[] itemObjects = Resources.LoadAll("Data/Store");
         itemPrefab.ToggleWindowClose();
 
         for(int i =0; i < itemTypeHeaders.Length; i++) {
             itemTypeHeaders[i].UpdateField(GaulItem.ItemTypeString((ItemType)i));
         }
 
+        object[] itemObjects = Resources.LoadAll("Data/Store");
+
         for (int i = 0; i < itemObjects.Length; i++) {
 
             GaulItem newItemInfo = itemObjects[i] as GaulItem;
             if (newItemInfo == null) { Debug.LogError("Don't put other objects in the Data/Store folder pls."); }
+            if (newItemInfo.canBuy == false) { continue; }
             
             itemInfo.Add(newItemInfo);
 

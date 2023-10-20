@@ -13,6 +13,7 @@ public class XPComponent : ValueComponent {
     public static System.Action OnLocalLevelUp;
     public static System.Action OnLevelUp;
 
+    [Header("XP")]
     [SerializeField] int xp;
     [SerializeField] int level = -1;
     [SerializeField] int lastLevel = -1;

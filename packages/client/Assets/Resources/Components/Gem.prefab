@@ -46,14 +46,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredComponents: []
+  entity: {fileID: 0}
+  hasInit: 0
+  loaded: 0
+  isActive: 0
+  spawnInfo:
+    entity: {fileID: 0}
+    source: 0
+    table: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
   networkInfo:
     updateType: 0
     source: 0
-  hasInit: 0
-  loaded: 0
+  lastInfo:
+    updateType: 0
+    source: 0
+  item: {fileID: 11400000, guid: 2ea9d88e6d7eaf646a33b214bd6723dd, type: 2}
+  value: 0
+  valueString: 
+  statType: 0
   gems: 0
 --- !u!114 &1472302387032795878
 MonoBehaviour:
@@ -67,6 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872bfe9da31aa864abaf17a2cb5a05da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: {x: 0.5, y: 0.75}
   rotation: {x: 0, y: 0, z: 0}
   sfx_spawn:
   - {fileID: 8300000, guid: d46c1f4450862af46b718952267977c7, type: 3}

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4394577890626575312
+--- !u!1 &6548323407892955302
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,43 +8,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4230480725700995669}
-  - component: {fileID: 3191844862812636519}
+  - component: {fileID: 4804594667757243883}
+  - component: {fileID: 2189738813310324464}
   m_Layer: 0
-  m_Name: Coinage
+  m_Name: Shovel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4230480725700995669
+--- !u!4 &4804594667757243883
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4394577890626575312}
+  m_GameObject: {fileID: 6548323407892955302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3191844862812636519
+--- !u!114 &2189738813310324464
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4394577890626575312}
+  m_GameObject: {fileID: 6548323407892955302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97f594f391152984cbe8b410702ca0c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 2cbc1677a57be504698e453bd380818f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents: []
+  requiredComponents:
+  - {fileID: 5348944994237342613, guid: 9476fa914b9acad42b5792396d5e2ccd, type: 3}
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -62,10 +63,8 @@ MonoBehaviour:
   lastInfo:
     updateType: 0
     source: 0
-  item: {fileID: 11400000, guid: 3bcb567c69285f84482450ab4c17c1e1, type: 2}
+  item: {fileID: 11400000, guid: 26ad4ba0a3b06034f8862e644bb789be, type: 2}
   value: 0
   valueString: 
-  type: 0
-  position: {fileID: 0}
-  coins: 0
-  lastCoins: 0
+  statType: 0
+  propPrefab: {fileID: 1444949574962551401, guid: 5d0600822d661f540af58c5a01710d59, type: 3}

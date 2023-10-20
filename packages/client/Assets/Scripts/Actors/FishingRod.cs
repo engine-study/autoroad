@@ -5,8 +5,7 @@ using mud;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 using mud;
-public class FishingRod : Equipment
-{
+public class FishingRod : Equipment {
     
     public override bool CanUse() {
         bool canUse = base.CanUse();

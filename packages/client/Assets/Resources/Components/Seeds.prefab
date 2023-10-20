@@ -46,13 +46,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredComponents: []
   entity: {fileID: 0}
-  tableManager: {fileID: 0}
+  hasInit: 0
+  loaded: 0
+  isActive: 0
+  spawnInfo:
+    entity: {fileID: 0}
+    source: 0
+    table: {fileID: 0}
   updateInfo:
     updateType: 0
     source: 0
   networkInfo:
     updateType: 0
     source: 0
-  hasInit: 0
-  loaded: 0
-  count: 0
+  lastInfo:
+    updateType: 0
+    source: 0
+  item: {fileID: 11400000, guid: 0ddbb689ef0a4c64c983f0f9d9d483b8, type: 2}
+  value: 0
+  valueString: 
+  statType: 0
+  seeds: 0

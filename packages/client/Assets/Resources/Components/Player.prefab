@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca71dd0ab54e10f42abe08511e4d8a63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 3521123712879269700}
@@ -149,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166787b93eca79344893642ca5df0817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 5368561938334236944}
@@ -219,6 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9381831617420843a4840cda69f797e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 1213519046495480021}
@@ -288,6 +291,7 @@ GameObject:
   - component: {fileID: 2202057137487621039}
   - component: {fileID: 7552157436396032579}
   - component: {fileID: 4442232486771419755}
+  - component: {fileID: 7229539101243256359}
   - component: {fileID: 5778510077542902211}
   m_Layer: 6
   m_Name: Player
@@ -609,6 +613,20 @@ MonoBehaviour:
   ourComponent: {fileID: 0}
   actionData: {fileID: 0}
   looker: {fileID: 0}
+--- !u!114 &7229539101243256359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677262704773998369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15387bb0bd9199240af501950eb44ca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 0}
+  items: []
 --- !u!114 &5778510077542902211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,6 +723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c16505f390b884780e83b0ee7e8bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 8686894057738085968}
@@ -775,6 +794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82fc371078b4cc4c89fab93ed73dd20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 5916935216422990927}
@@ -945,6 +965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e09af2772515494ea52fa01215be8a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 8394964874783954427}
@@ -1015,6 +1036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c339828eed6797469e9f26dd8ff0fc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 3995134369058425196}
@@ -1132,6 +1154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73fcbe785f4b9e34b93065b5e0258965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 6819035568640496617}
@@ -1202,6 +1225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af972b3d921ab948886cfc24220e1c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 8392049000430121374}
@@ -1571,6 +1595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047834299498b804da584aa01cb21e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 4185614968181234515}
@@ -1845,6 +1870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cac15c5855a792498cf3e8008c225bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   ourComponent: {fileID: 0}
   canUse: 0
   interact: {fileID: 2650649764276697101}

@@ -58,6 +58,8 @@ public class StatsList : EntityUI
 
     public void SetStat(bool toggle, StatType stat, float value) {
 
+        if(stat == StatType.None) {return;}
+
         if(toggle) {
             //find or create a stat
             int index = (int)stat;

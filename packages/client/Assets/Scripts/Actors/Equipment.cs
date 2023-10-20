@@ -10,7 +10,7 @@ public abstract class Equipment : MonoBehaviour {
     public SPInteract Interact {get{return interact;}}
 
     [Header("Item")]
-    public GaulItem gaul;
+    public GaulItem item;
 
     [Header("Debug")]
     public MUDComponent ourComponent;

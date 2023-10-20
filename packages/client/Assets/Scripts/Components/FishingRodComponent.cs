@@ -9,4 +9,6 @@ public class FishingRodComponent : PropComponent {
         FishingRodTable table = update as FishingRodTable;
     }
 
+    protected override StatType SetStat(IMudTable mudTable) {return StatType.None;}
+
 }
