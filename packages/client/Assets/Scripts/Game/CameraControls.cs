@@ -115,9 +115,9 @@ public class CameraControls : MonoBehaviour
 
         bool input = _isMoving || _isRotating;
 
-        if(input) {
+        if(input && (SPPlayer.LocalPlayer == null || SPPlayer.LocalPlayer?.Actor?.ActionState == ActionState.Idle)) {
             if(!hasMovedEnough) {
-                hasMovedEnough = Vector2.Distance(currentPos, startPos) > 50f;
+                hasMovedEnough = Vector2.Distance(currentPos, startPos) > 5f;
                 if(hasMovedEnough) {
                     startPos = currentPos;
                 }

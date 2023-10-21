@@ -81,10 +81,6 @@ public class PlayerMUD : SPPlayer
     void ActionCursorUpdate(ActionEndState endState) { CursorMUD.ForceCursorUpdate();}
     void MoveEndUpdate() { CursorMUD.ForceCursorUpdate();}
 
-    public void UseTool() {
-        Actor.InputClick(0, Reciever.TargetInteract);
-    }
-
     protected override void UpdateInput() {
         base.UpdateInput();
 

@@ -6,10 +6,11 @@ using UnityEngine;
 public class ToolUI : SPWindowParent
 {
     public static ToolUI Instance;
-    public ToolSlotUI Tool;
+    public ToolSlotUI Tool {get{return tool;}}
     
     [Header("Tools")]
     public List<ToolSlotUI> tools;
+    public AudioClip [] sfx_equip;
 
     [Header("Debug")]
     public ToolSlotUI tool;
@@ -86,9 +87,16 @@ public class ToolUI : SPWindowParent
     public void SetActiveTool(ToolSlotUI newTool) {
 
         if(tool != null) {tool.ToggleSelected(false);}
+        if(newTool.Unlocked == false) {tool = null; return;}
 
         tool = newTool;
         tool.ToggleSelected(true);
+
+
+        newTool.equipment.ActionScript.EndAction(PlayerMUD.LocalPlayer.Actor, ActionEndState.Canceled);
+        // PlayerMUD.LocalPlayer.Animator.ToggleProp(newTool.equipment.item)
+
+        SPUIBase.PlaySound(sfx_equip);
 
     }
 }

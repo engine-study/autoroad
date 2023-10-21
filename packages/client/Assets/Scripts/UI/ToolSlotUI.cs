@@ -14,10 +14,11 @@ public class ToolSlotUI : SPWindow
     public Sprite unknown;
 
     [Header("Debug")]
+    public bool Unlocked;
+    public bool Usable;
     public Inventory inv;
     public Equipment equipment;
     public InventorySlot invSlot;
-
 
     public void ToggleSelected(bool toggle) {
         selected.SetActive(toggle);
@@ -52,12 +53,16 @@ public class ToolSlotUI : SPWindow
     }
 
     public void UpdateDisplay() {
-        UpdateInteractable(CanUse());
-        SetUnlocked(CanDisplay());
+
+        Usable = CanUse();
+        Unlocked = CanDisplay();
+
+        UpdateInteractable(Usable);
+        SetUnlocked(Unlocked);
     }
 
     void UpdateInteractable(bool toggle) {
-        group.alpha = toggle ? 1f : .75f;
+        group.alpha = toggle ? 1f : .5f;
     }
 
     void SetUnlocked(bool toggle) {
@@ -71,7 +76,7 @@ public class ToolSlotUI : SPWindow
             hoverText.description = "";
         }
 
-        group.alpha = toggle ? group.alpha : .5f;
+        group.alpha = toggle ? group.alpha : .2f;
 
     }
 
