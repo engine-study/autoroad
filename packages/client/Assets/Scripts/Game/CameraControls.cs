@@ -37,7 +37,6 @@ public class CameraControls : MonoBehaviour
     private Vector2 startPos;
     private Quaternion startRot;
     Quaternion rot;
-    float timeDown = 0f;
 
     void Awake() {
         I = this;
@@ -96,6 +95,8 @@ public class CameraControls : MonoBehaviour
         
     }
 
+    bool hasStarted, hasMovedEnough;
+
     void UpdateDrag() {
 
         lastPos = currentPos;
@@ -108,13 +109,25 @@ public class CameraControls : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) {
             startPos = currentPos;
+            hasStarted = true;
+            hasMovedEnough = false;
         }
 
         bool input = _isMoving || _isRotating;
 
-        timeDown = input ? timeDown + Time.deltaTime : 0f;
-        if(Vector2.Distance(currentPos, startPos) < 1f) {return;}
+        if(input) {
+            if(!hasMovedEnough) {
+                hasMovedEnough = Vector2.Distance(currentPos, startPos) > 50f;
+                if(hasMovedEnough) {
+                    startPos = currentPos;
+                }
+            }
+        } else {
+            hasStarted = false;
+            hasMovedEnough = false;
+        }
 
+        if(!input || !hasStarted || !hasMovedEnough) {return;}
 
         if (_isMoving && canPan) {
 
