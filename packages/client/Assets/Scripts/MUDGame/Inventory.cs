@@ -21,9 +21,18 @@ public class Inventory : MonoBehaviour {
         return slot?.amount > 0;
     }
 
-    void Start() {
+    void Awake() {
+
         entity = GetComponentInParent<MUDEntity>();
         if(entity == null) return;
+
+        if(entity.Loaded) Init();
+        else entity.OnLoaded += Init;
+
+    
+    }
+
+    void Init() {
 
         if(entity.IsLocal) {LocalInventory = this; localInventory = true;}
 
@@ -36,11 +45,13 @@ public class Inventory : MonoBehaviour {
 
         entity.OnComponentAdded += AddToInventory;
         entity.OnComponentUpdated += UpdateInventory;
+        
     }
 
     void OnDestroy() {
 
         if(entity) {
+            entity.OnLoaded -= Init;
             entity.OnComponentAdded -= AddToInventory;
             entity.OnComponentUpdated -= UpdateInventory;
         }

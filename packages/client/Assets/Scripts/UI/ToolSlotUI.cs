@@ -11,6 +11,7 @@ public class ToolSlotUI : SPWindow
     public GameObject selected;
     public SPInputPrompt input;
     public CanvasGroup group;
+    public Sprite unknown;
 
     [Header("Debug")]
     public Inventory inv;
@@ -25,12 +26,12 @@ public class ToolSlotUI : SPWindow
 
     public void Setup(Inventory i) {
         inv = i;
-        inv.OnUpdated += UpdateCanUse;
+        inv.OnUpdated += UpdateDisplay;
     }
 
     protected override void OnDestroy() {
         base.OnDestroy();
-        if(inv) inv.OnUpdated -= UpdateCanUse;
+        if(inv) inv.OnUpdated -= UpdateDisplay;
     }
 
     public void SetEquipment(Equipment e) {
@@ -39,11 +40,7 @@ public class ToolSlotUI : SPWindow
 
         if(e.item == null) {Debug.LogError($"{e.name} does not have an item."); return;}
 
-        button.Image.sprite = e.item.itemSprite ?? button.Image.sprite;
-        hoverText.description = e.item.FullDescription();
-
-        UpdateCanUse();
-        UpdateVisibility();
+        UpdateDisplay();
     }
 
     bool CanDisplay() {
@@ -51,19 +48,31 @@ public class ToolSlotUI : SPWindow
     }
 
     bool CanUse() {
-         return equipment.IsInteractable();
+        return equipment.IsInteractable();
     }
 
-    void UpdateCanUse() {
-        UpdateCanUse(CanUse());
+    public void UpdateDisplay() {
+        UpdateInteractable(CanUse());
+        SetUnlocked(CanDisplay());
     }
 
-    void UpdateCanUse(bool toggle) {
-        group.alpha = toggle ? 1f : .5f;
+    void UpdateInteractable(bool toggle) {
+        group.alpha = toggle ? 1f : .75f;
     }
 
-    void UpdateVisibility() {
-        ToggleWindow(CanDisplay());
+    void SetUnlocked(bool toggle) {
+        if(toggle) {
+            button.Image.sprite = equipment.item.itemSprite ?? button.Image.sprite;            
+            button.ToggleState(SPSelectableState.Default);
+            hoverText.description = equipment.item.FullDescription();
+        } else {
+            button.Image.sprite = unknown;
+            button.ToggleState(SPSelectableState.Disabled);
+            hoverText.description = "";
+        }
+
+        group.alpha = toggle ? group.alpha : .5f;
+
     }
 
 

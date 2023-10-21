@@ -81,6 +81,9 @@ public class PlayerMUD : SPPlayer
     void ActionCursorUpdate(ActionEndState endState) { CursorMUD.ForceCursorUpdate();}
     void MoveEndUpdate() { CursorMUD.ForceCursorUpdate();}
 
+    public void UseTool() {
+        Actor.InputClick(0, Reciever.TargetInteract);
+    }
 
     protected override void UpdateInput() {
         base.UpdateInput();
@@ -89,8 +92,8 @@ public class PlayerMUD : SPPlayer
             return;
         }
 
-        if (Reciever.TargetGO) {
-            // Actor.InputClick(0, Reciever.TargetInteract);
+        if(ToolUI.Instance.Tool) {
+            Actor.InputClick(0, ToolUI.Instance.Tool.equipment);
         }
 
         if((Controller as ControllerMUD).MovementInput || Sync.Moving) {

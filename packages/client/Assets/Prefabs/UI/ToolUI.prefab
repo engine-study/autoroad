@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7699684007393402529}
   - component: {fileID: 7012163002458204752}
   - component: {fileID: 8282746056159893423}
+  - component: {fileID: 2682685592945344124}
+  - component: {fileID: 7635232389933909458}
   m_Layer: 5
   m_Name: Tools
   m_TagString: Untagged
@@ -27,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 899158320790865695}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3840344823597039295}
@@ -37,14 +39,16 @@ RectTransform:
   - {fileID: 5797850552586762927}
   - {fileID: 5196869238420171138}
   - {fileID: 8271335205237875873}
+  - {fileID: 8112208191518930491}
+  - {fileID: 3066412314408031410}
   m_Father: {fileID: 3040641741230722006}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 70}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &7012163002458204752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,11 +62,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 6
+    m_Left: 5
+    m_Right: 5
+    m_Top: 5
+    m_Bottom: 5
+  m_ChildAlignment: 7
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -85,6 +89,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 0
+--- !u!222 &2682685592945344124
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899158320790865695}
+  m_CullTransparentMesh: 1
+--- !u!114 &7635232389933909458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899158320790865695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.2509804}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 911250e76ad69344bb7c0d046da23c92, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 75
 --- !u!1 &2686190291923339806
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,9 +156,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8112208191518930491}
-  - {fileID: 3066412314408031410}
+  m_Children: []
   m_Father: {fileID: 3040641741230722006}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -252,6 +292,7 @@ MonoBehaviour:
   loading: {fileID: 0}
   addSubcanvas: 1
   addRaycaster: 1
+  Tool: {fileID: 0}
   tools:
   - {fileID: 5681666514222251094}
   - {fileID: 5385765581277982011}
@@ -262,7 +303,7 @@ MonoBehaviour:
   - {fileID: 674237405608470088}
   - {fileID: 794509902659712210}
   - {fileID: 5844798283886401115}
-  active: {fileID: 0}
+  tool: {fileID: 0}
   inventory: {fileID: 0}
   equipment: {fileID: 0}
 --- !u!1001 &642276839425369016
@@ -501,7 +542,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1476319429230120759}
+    m_TransformParent: {fileID: 7699684007393402529}
     m_Modifications:
     - target: {fileID: 2408466546997937959, guid: c6ca95e3cdfb7d74fa87225c0c8b8a6f, type: 3}
       propertyPath: m_text
@@ -739,7 +780,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1476319429230120759}
+    m_TransformParent: {fileID: 7699684007393402529}
     m_Modifications:
     - target: {fileID: 3198317495444496263, guid: c6ca95e3cdfb7d74fa87225c0c8b8a6f, type: 3}
       propertyPath: m_fontSize

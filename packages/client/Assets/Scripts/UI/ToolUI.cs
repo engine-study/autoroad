@@ -6,11 +6,13 @@ using UnityEngine;
 public class ToolUI : SPWindowParent
 {
     public static ToolUI Instance;
+    public ToolSlotUI Tool;
+    
     [Header("Tools")]
     public List<ToolSlotUI> tools;
 
     [Header("Debug")]
-    public ToolSlotUI active;
+    public ToolSlotUI tool;
     public Inventory inventory;
     public ActionsMUD equipment;
 
@@ -19,15 +21,29 @@ public class ToolUI : SPWindowParent
         base.Init();
 
         Instance = this;
-
         SPEvents.OnLocalPlayerSpawn += SetupInventory;
 
     }
 
     void SetupInventory() {
+        if(PlayerMUD.MUDPlayer.Equipment.hasInit) SetupEquipment();
+        PlayerMUD.MUDPlayer.Equipment.OnInit += SetupEquipment;
+    }
+
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        Instance = null;
+        SPEvents.OnLocalPlayerSpawn -= SetupInventory;
+    }
+
+
+    void SetupEquipment() {
 
         equipment = PlayerMUD.MUDPlayer.Equipment;
         inventory = PlayerMUD.MUDPlayer.GetComponent<Inventory>();
+
+        if(equipment.EquipmentList.Count < 1) {Debug.LogError("No equipment");}
 
         var equipments = equipment.Equipment.Values.ToArray();
 
@@ -37,16 +53,11 @@ public class ToolUI : SPWindowParent
 
             tools[i].Setup(inventory);
             tools[i].input.SetKey(SPInput.GetAlphaKey(i));
-            tools[i].ToggleSelected(i == 0);
+            tools[i].ToggleSelected(false);
 
             tools[i].SetEquipment(equipments[i]);
         }
 
-    }
-
-    protected override void OnDestroy() {
-        base.OnDestroy();
-        Instance = null;
     }
 
 
@@ -54,20 +65,30 @@ public class ToolUI : SPWindowParent
         UpdateTools();
     }
 
-    public void AddTool(Equipment e) {
-
-    }
-
     void UpdateTools() {
+
         int newTool = SPInput.GetNumber();
         if(newTool == -1) return;
         if(newTool >= tools.Count || tools[newTool] == null) return;
 
-        SetTool(tools[newTool]);
+        SetActiveTool(tools[newTool]);
     }
 
+    public void UpdateAllActions() {
 
-    public void SetTool(ToolSlotUI newTool) {
+        if(!HasInit) return;
+
+        for(int i = 0; i < tools.Count; i++) {
+            tools[i].UpdateDisplay();
+        }
+    }
+
+    public void SetActiveTool(ToolSlotUI newTool) {
+
+        if(tool != null) {tool.ToggleSelected(false);}
+
+        tool = newTool;
+        tool.ToggleSelected(true);
 
     }
 }

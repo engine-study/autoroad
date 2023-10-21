@@ -10,7 +10,9 @@ public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Wal
 public class ActionsMUD : MonoBehaviour
 {
     public static ActionsMUD LocalActions;
+    public Action OnInit;
     public Dictionary<string, Equipment> Equipment {get{return equipmentDict;}}
+    public List<Equipment> EquipmentList {get{return equipment;}}
 
     [Header("Equipment")]
     [EnumNamedArray( typeof(ActionName) )]
@@ -18,7 +20,7 @@ public class ActionsMUD : MonoBehaviour
     [SerializeField] List<Equipment> local;
 
     [Header("Debug")]
-    [SerializeField] bool hasInit;
+    public bool hasInit;
     [SerializeField] PlayerMUD player;
     [SerializeField] PositionComponent position;
     [SerializeField] List<Equipment> equipment;
@@ -37,32 +39,14 @@ public class ActionsMUD : MonoBehaviour
         
     }
 
-    public void ToggleEquipment(bool toggle, Equipment newEquipment) {
-
-        if(newEquipment == null) {Debug.LogError("null", this); return;}
-
-        if(toggle && !equipment.Contains(newEquipment)) {
-            equipment.Add(newEquipment);
-            equipmentDict.Add(newEquipment.name, newEquipment);
-        } else {
-            equipment.Remove(newEquipment);
-            equipmentDict.Remove(newEquipment.name);
-        }
-
-    }
-
     void OnDestroy() {
 
         if(player) {
             player.OnPostInit -= Init;
-            (player.Controller as ControllerMUD).OnFinishedMove -= AddPositionActions;
+            (player.Controller as ControllerMUD).OnFinishedMove -= UpdateActions;
         }
-
-        CursorMUD.OnGridPosition -= AddGridActions;
-
-        if(position) {
-            position.OnUpdated -= AddPositionActions;
-        }
+        CursorMUD.OnGridPosition -= GiveActionsAt;
+        if(position) { position.OnUpdated -= UpdateActions;}
     }
 
     void Init() {
@@ -85,24 +69,43 @@ public class ActionsMUD : MonoBehaviour
 
         position = player.Position;
 
-        position.OnUpdated += AddPositionActions;
-        (player.Controller as ControllerMUD).OnFinishedMove += AddPositionActions;
-        CursorMUD.OnGridPosition += AddGridActions;
+        position.OnUpdated += UpdateActions;
+        (player.Controller as ControllerMUD).OnFinishedMove += UpdateActions;
+        CursorMUD.OnGridPosition += GiveActionsAt;
+
+        OnInit?.Invoke();
 
     }
 
+    public void ToggleEquipment(bool toggle, Equipment newEquipment) {
+
+        if(newEquipment == null) {Debug.LogError("null", this); return;}
+
+        if(toggle && !equipment.Contains(newEquipment)) {
+            equipment.Add(newEquipment);
+            equipmentDict.Add(newEquipment.name, newEquipment);
+        } else {
+            equipment.Remove(newEquipment);
+            equipmentDict.Remove(newEquipment.name);
+        }
+
+    }
+
+
     //everytime player updates position we should recalculate the actions
-    void AddPositionActions() {
-        AddGridActions(CursorMUD.GridPos);
+    void UpdateActions() {
+        GiveActionsAt(CursorMUD.GridPos);
     }
 
     //add actions base on what we encounter on the grid
-    void AddGridActions(Vector3 newPos) {
+    void GiveActionsAt(Vector3 newPos) {
         for(int i = 0; i < equipment.Count; i++) {
             equipment[i].transform.position = newPos;
             equipment[i].ToggleActor(true, player.Actor);
             player.Reciever.ToggleInteractableManual(equipment[i].IsInteractable(), equipment[i]);
         }
+
+        ToolUI.Instance?.UpdateAllActions();
     }
 
 
