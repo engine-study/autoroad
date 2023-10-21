@@ -60,6 +60,15 @@ library Rules {
     return true;
   }
 
+  function requireInteractable( 
+    bytes32 player,
+    PositionData memory playerPos,
+    bytes32[] memory entities,
+    uint distance
+  ) internal {
+    require(canInteract(player, playerPos, entities, distance), "bad interact");
+  }
+
   function canInteract(
     bytes32 player,
     PositionData memory playerPos,

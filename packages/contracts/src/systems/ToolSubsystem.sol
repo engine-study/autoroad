@@ -34,8 +34,10 @@ contract ToolSubsystem is System {
 
     //check initial push is good
     bytes32[] memory atStick = Rules.getKeysAtPosition(world,stickPos.x, stickPos.y, 0);
-    require(Rules.canInteract(player, playerPos, atStick, 1), "bad interact");
     
+    Rules.requireInteractable(player, playerPos, atStick, 1);
+    Rules.requirePushable(atStick);
+
     PositionData memory vector = PositionData(stickPos.x - playerPos.x, stickPos.y - playerPos.y, 0);
     SystemSwitch.call(abi.encodeCall(world.moveOrPush, (player, atStick[0], stickPos, vector)));
 
