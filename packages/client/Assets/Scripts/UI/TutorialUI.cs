@@ -69,16 +69,16 @@ public class TutorialUI : SPWindowParent
     }
 
     void Update() {
-        if(tutorialText.HasReachedFinal) {
-            if(Input.GetKeyDown(KeyCode.Escape)) {
-                CompleteTutorial();
-            }
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+            CompleteTutorial();
         }
     }
 
     void Toggle(bool toggle) {
 
         tutorialParent.SetActive(toggle);
+
+        if(!hasStarted) return;
 
         if(toggle) {
 
@@ -92,12 +92,11 @@ public class TutorialUI : SPWindowParent
 
         } else {
             //todo set to world scroll
-            if(hasStarted) {
-                SPCamera.SetFollow(null);
-                SPCamera.SetTarget(Vector3.zero);
-                SPCamera.SetFOVGlobal(10f);
-                SPUIBase.ToggleMotherUI(true);
-            }
+            SPCamera.SetFollow(null);
+            SPCamera.SetTarget(Vector3.zero);
+            SPCamera.SetFOVGlobal(10f);
+            SPUIBase.ToggleMotherUI(true);
+            
         }
 
         CameraControls.ToggleZoom(!toggle);

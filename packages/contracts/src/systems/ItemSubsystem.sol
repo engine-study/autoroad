@@ -82,7 +82,7 @@ contract ItemSubsystem is System {
         pay(player, 20, 0, 0, payment, 0);
         Pickaxe.set(player, true);
       } 
-      else if (id == 16) { //sword
+      else if (id == 14) { //sword
         pay(player, 100, 0, 0, payment, 0);
         Sword.set(player, true);
       } 

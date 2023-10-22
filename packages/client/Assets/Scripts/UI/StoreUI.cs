@@ -52,6 +52,7 @@ public class StoreUI : SPWindowParent
 
         XPComponent.OnLocalLevelUp += UpdateStore;
         CoinComponent.OnLocalUpdate += UpdateStore;
+        Inventory.LocalInventory.OnUpdated += UpdateStore;
     }
 
     public override void ToggleWindow(bool toggle)
@@ -68,6 +69,7 @@ public class StoreUI : SPWindowParent
         base.OnDestroy();
         XPComponent.OnLocalLevelUp -= UpdateStore;
         CoinComponent.OnLocalUpdate -= UpdateStore;
+        if(Inventory.LocalInventory) Inventory.LocalInventory.OnUpdated -= UpdateStore;
     }
 
     public void Buy(GaulItem buyItem, PaymentType paymentType) {
