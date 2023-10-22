@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
-import { Player, Health, Tree, Seeds, Move, Pickaxe } from "../codegen/index.sol";
+import { Player, Health, Tree, Seeds, Move, Axe } from "../codegen/index.sol";
 import { ActionType, TerrainType, FloraType, MoveType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
@@ -49,7 +49,7 @@ contract FloraSubsystem is System {
 
   function chop(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-    require(Pickaxe.get(player), "no Pickaxe");
+    require(Axe.get(player), "no Axe");
     require(Rules.canDoStuff(player), "hmm");
 
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);

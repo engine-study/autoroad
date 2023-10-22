@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Pickaxe,Shovel } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Pickaxe,Shovel, Axe } from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seeker, Archer } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
@@ -40,6 +40,7 @@ contract SpawnSubsystem is System {
 
       Shovel.set(entity, true);
       Pickaxe.set(entity, true);
+      Axe.set(entity, true);
       Boots.set(entity, 3, 3);
       
 

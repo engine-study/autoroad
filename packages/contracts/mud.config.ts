@@ -199,6 +199,7 @@ export default mudConfig({
     //items
     Shovel: "bool",
     Pickaxe: "bool",
+    Axe: "bool",
     Stick: "bool",
     Sword: "bool",
     Bones: "bool",
