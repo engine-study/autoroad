@@ -28,7 +28,7 @@ public class PositionSync : ComponentSync
     [Header("Line")]
     [SerializeField] private bool useLine;
     [SerializeField] private bool parentTransformToEntity;
-    private LineRenderer line;
+    private SPLine line;
     SPLerpCurve lerp;
     Vector3 debugPos;
 
@@ -70,8 +70,8 @@ public class PositionSync : ComponentSync
         UpdateGrid(pos.Pos);
 
         if(useLine) {
-            line = ((GameObject)(Instantiate(Resources.Load("Prefabs/LinePosition"), transform))).GetComponent<LineRenderer>();
-            line.enabled = false;
+            line = Instantiate(Resources.Load<GameObject>("LinePosition"), transform).GetComponent<SPLine>();
+            line.Toggle(false);
         }
 
         #if UNITY_EDITOR
@@ -138,7 +138,7 @@ public class PositionSync : ComponentSync
         // Debug.Log(gameObject.name + " MOVE: Start (" + (movement ? movement.name : "/") + ")", this);
 
         // if(action && !wasMoving) {action.PlayAnimation(true);}
-        if(line) line.enabled = useLine;
+        if(line) line.Toggle(useLine);
 
         OnMoveStart?.Invoke();
     }
@@ -160,7 +160,7 @@ public class PositionSync : ComponentSync
         // Debug.Log(gameObject.name + " MOVE: End (" + (movement ? movement.name : "/") + ")", this);
 
         // if(action && wasMoving) {action.PlayAnimation(false);}
-        if(line) line.enabled = false;
+        if(line) line.Toggle(false);
         if(hideAfterLoaded) { ourComponent.Toggle(IsVisible());}
 
         OnMoveEnd?.Invoke();
@@ -195,7 +195,6 @@ public class PositionSync : ComponentSync
         }
     }
     
-
     void UpdateMovement() {
 
         if(movement) {
@@ -219,7 +218,7 @@ public class PositionSync : ComponentSync
     void UpdateState() {
         if(useLine) {
             Vector3[] positions = new Vector3[] { target.position + Vector3.up * .05f, TargetPos + Vector3.up * .05f, TargetPos };
-            line.SetPositions(positions);
+            line.Line.SetPositions(positions);
         }
 
         //turn off for efficiency until next update

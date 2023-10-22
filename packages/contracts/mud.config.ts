@@ -165,7 +165,8 @@ export default mudConfig({
 
     //puzzle components try to be moved onto triggers (ie. Miliarli )
     Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool"},},
-    Trigger: "bytes32",
+    Linker: "bytes32",
+    Trigger: "bool",
     Miliarium: "bool",
 
     Position: {

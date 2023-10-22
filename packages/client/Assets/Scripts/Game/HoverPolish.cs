@@ -33,10 +33,11 @@ public class HoverPolish : MonoBehaviour
         
         ProfileUI.Instance.SetEntity(newEntity);
 
-        if(newEntity == null) {
-            return;
-        }
+        if(newEntity == null) { return;}
 
+        for(int i = 0; i < newEntity.transform.childCount; i++) {
+            newEntity.transform.GetChild(i).SendMessage("Hover", toggle, SendMessageOptions.DontRequireReceiver);
+        }
 
         SPBase baseObject = newEntity.GetComponentInChildren<SPBase>();
 

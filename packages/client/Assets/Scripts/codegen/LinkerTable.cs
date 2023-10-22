@@ -8,15 +8,15 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class TriggerTable : IMudTable
+    public class LinkerTable : IMudTable
     {
-        public class TriggerTableUpdate : RecordUpdate
+        public class LinkerTableUpdate : RecordUpdate
         {
-            public bool? Value;
-            public bool? PreviousValue;
+            public string? Value;
+            public string? PreviousValue;
         }
 
-        public readonly static string ID = "Trigger";
+        public readonly static string ID = "Linker";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -27,21 +27,21 @@ namespace mudworld
             return ID;
         }
 
-        public bool? Value;
+        public string? Value;
 
         public override Type TableType()
         {
-            return typeof(TriggerTable);
+            return typeof(LinkerTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(TriggerTableUpdate);
+            return typeof(LinkerTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            TriggerTable other = (TriggerTable)obj;
+            LinkerTable other = (LinkerTable)obj;
 
             if (other == null)
             {
@@ -56,12 +56,12 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            Value = (bool)functionParameters[0];
+            Value = (string)functionParameters[0];
         }
 
-        public static IObservable<RecordUpdate> GetTriggerTableUpdates()
+        public static IObservable<RecordUpdate> GetLinkerTableUpdates()
         {
-            TriggerTable mudTable = new TriggerTable();
+            LinkerTable mudTable = new LinkerTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -73,27 +73,27 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            Value = (bool)property["value"];
+            Value = (string)property["value"];
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            bool? currentValueTyped = null;
-            bool? previousValueTyped = null;
+            string? currentValueTyped = null;
+            string? previousValueTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("value"))
             {
-                currentValueTyped = (bool)currentValue["value"];
+                currentValueTyped = (string)currentValue["value"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("value"))
             {
-                previousValueTyped = (bool)previousValue["value"];
+                previousValueTyped = (string)previousValue["value"];
             }
 
-            return new TriggerTableUpdate
+            return new LinkerTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,

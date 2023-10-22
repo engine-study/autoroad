@@ -38,6 +38,7 @@ public class GameState : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] GameObject editorObjects;
+    [SerializeField] GameObject [] qualityObjects;
 
     [Header("Debug")]
     [SerializeField] PlayerMUD localPlayer;
@@ -49,9 +50,11 @@ public class GameState : MonoBehaviour {
         Instance = this;
         editorObjects.SetActive(false);
         
+        ToggleQuality(false);
+
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
-        
+
     }
     
     void OnDestroy() {
@@ -267,6 +270,16 @@ public class GameState : MonoBehaviour {
 
     void MileCompletion() {
 
+    }
+
+    public void ToggleQuality() {
+        ToggleQuality(!qualityObjects[0].activeSelf);
+    }
+
+    public void ToggleQuality(bool toggle) {
+        for(int i = 0; i < qualityObjects.Length; i++) {
+            qualityObjects[i].SetActive(toggle);
+        }
     }
 
     void Update() {

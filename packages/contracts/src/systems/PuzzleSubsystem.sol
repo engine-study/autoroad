@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/index.sol";
-import { Puzzle, Trigger, Miliarium } from "../codegen/index.sol";
+import { Puzzle, Trigger, Linker, Miliarium } from "../codegen/index.sol";
 import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/common.sol";
 
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
@@ -24,15 +24,18 @@ contract PuzzleSubsystem is System {
     IWorld world = IWorld(_world());
 
     if(puzzleType == PuzzleType.Miliarium) {
+
+      bytes32 target = Linker.get(entity);
       //search underground for triggers (-1)
       bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
-      if(atPosition.length > 0 && Trigger.get(atPosition[0]) == entity) {
+      if(atPosition.length > 0 && atPosition[0] == target) {
         //success, freeze miliarium in place
         Move.set(entity, uint32(MoveType.Obstruction));
-        SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));
-
         //TODO set to single setter
         Puzzle.set(entity, uint32(puzzleType), true);
+
+        SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));
+
       }
     }
 
@@ -84,6 +87,7 @@ contract PuzzleSubsystem is System {
     Move.set(mil, uint32(MoveType.Push));
     Rock.set(mil, uint32(RockType.Miliarium));
     Puzzle.set(mil, uint32(PuzzleType.Miliarium), false);
+    Linker.set(mil, trigger);
 
     console.log("trigger");
 
@@ -92,7 +96,7 @@ contract PuzzleSubsystem is System {
     pos.layer = int32(-1);
 
     Position.set(trigger, pos);
-    Trigger.set(trigger, mil);
+    Trigger.set(trigger, true);
 
   }
 
@@ -126,8 +130,8 @@ contract PuzzleSubsystem is System {
       if(isValid) {
         atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
         if(atPosition.length > 0) {
-          bytes32 trigger = Trigger.get(atPosition[0]);
-          if(trigger != bytes32(0)) {
+          bool trigger = Trigger.get(atPosition[0]);
+          if(trigger) {
             isValid = false;
             console.log("trigger blocked");
           }
