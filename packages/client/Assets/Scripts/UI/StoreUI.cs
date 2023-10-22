@@ -16,6 +16,7 @@ public class StoreUI : SPWindowParent
     [EnumNamedArray( typeof(ItemType) )]
     public SPButton [] itemTypeHeaders;
     public AudioClip [] sfx_buy;
+    int newItemCount;
 
     [Header("Debug")]
     public List<GaulItem> itemInfo = new List<GaulItem>();
@@ -56,7 +57,11 @@ public class StoreUI : SPWindowParent
     public override void ToggleWindow(bool toggle)
     {
         base.ToggleWindow(toggle);
-        notification.ToggleWindowClose();
+
+        if(toggle) {
+            notification.ToggleWindowClose();
+            newItemCount = 0;
+        }
     }
 
     protected override void OnDestroy() {
@@ -85,9 +90,12 @@ public class StoreUI : SPWindowParent
         }
 
         if(newChildCount > childCount) {
-            notification.UpdateField((newChildCount - childCount).ToString());
-            notification.ToggleWindow(true);
+            newItemCount += newChildCount - childCount;
+            notification.UpdateField(newItemCount.ToString());
         }
+
+        notification.ToggleWindow(!Active && newItemCount > 0);
+
     }
 
     public void BuyItem(int itemID, PaymentType payment) {

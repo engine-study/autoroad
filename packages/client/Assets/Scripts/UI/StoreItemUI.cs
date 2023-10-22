@@ -53,10 +53,13 @@ public class StoreItemUI : SPWindow
     }
 
     public void CanBuy() {
-        bool display = item.HighEnoughLevel && item.InMileRange;
-        ToggleWindow(display);
 
-        if(!display) {return;}
+        bool isValid = item.HighEnoughLevel && item.InMileRange;
+        bool doesNotOwn = item.itemType == ItemType.GameplayStashable || Inventory.LocalInventory.ItemUnlocked(item) == false;
+        
+        ToggleWindow(isValid && doesNotOwn);
+
+        if(!isValid || !doesNotOwn) {return;}
 
         buyButtonCoin.Button.ToggleState(CoinComponent.LocalCoins >= item.value.price ? SPSelectableState.Default : SPSelectableState.Disabled);
         buyButtonGem.Button.ToggleState(GemComponent.LocalGems >= item.value.gem ? SPSelectableState.Default : SPSelectableState.Disabled);

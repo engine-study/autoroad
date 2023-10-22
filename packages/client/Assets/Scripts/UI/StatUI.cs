@@ -43,7 +43,7 @@ public class StatUI : EntityUI
     }
 
     public static string StatToString(StatType statType, float value) {
-        if(statType == StatType.RoadCoin) { return ((int)value).ToString("#00");
+        if(statType == StatType.RoadCoin) { return ((int)value).ToString("000");
         } else if(statType == StatType.Eth) { return value.ToString("##0.00");
         } else if(statType == StatType.Level) { return value.ToString("#0");
         } else { return ((int)value).ToString("00");}
