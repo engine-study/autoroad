@@ -217,8 +217,7 @@ public class PositionSync : ComponentSync
 
     void UpdateState() {
         if(useLine) {
-            Vector3[] positions = new Vector3[] { target.position + Vector3.up * .05f, TargetPos + Vector3.up * .05f, TargetPos };
-            line.Line.SetPositions(positions);
+            line.SetTarget(target.position, TargetPos);
         }
 
         //turn off for efficiency until next update

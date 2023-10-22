@@ -5004,8 +5004,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isEnabled: 1
   visuals: {fileID: 0}
-  audio:
-  - {fileID: 8300000, guid: 58b3cacfc2ab0654e99724bccd98e633, type: 3}
+  audio: []
 --- !u!1 &5433351887020534391
 GameObject:
   m_ObjectHideFlags: 0
@@ -5015,7 +5014,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5145126301438485240}
-  - component: {fileID: 284220652587847222}
   - component: {fileID: 397978721466990755}
   - component: {fileID: 7800530330611325697}
   m_Layer: 0
@@ -5040,22 +5038,6 @@ Transform:
   m_Father: {fileID: 21441754346876725}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &284220652587847222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5433351887020534391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed1843469695c124fa2a2fd71ce77c3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isEnabled: 1
-  visuals: {fileID: 0}
-  audio:
-  - {fileID: 8300000, guid: 58b3cacfc2ab0654e99724bccd98e633, type: 3}
 --- !u!198 &397978721466990755
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -14890,7 +14872,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8120847071710013315}
-  - component: {fileID: 5051241719547805743}
   - component: {fileID: 4055255476916938282}
   - component: {fileID: 6154368322168176987}
   m_Layer: 0
@@ -14915,22 +14896,6 @@ Transform:
   m_Father: {fileID: 6822390995543822390}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5051241719547805743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6891696034886956517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed1843469695c124fa2a2fd71ce77c3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isEnabled: 1
-  visuals: {fileID: 0}
-  audio:
-  - {fileID: 8300000, guid: 58b3cacfc2ab0654e99724bccd98e633, type: 3}
 --- !u!198 &4055255476916938282
 ParticleSystem:
   m_ObjectHideFlags: 0

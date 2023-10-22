@@ -26,8 +26,12 @@ public class PropBow : SPAnimationProp
 
                 SPAnimator targetAnimator = mud.ActionData.Target.Pos.Entity.GetRootComponent<AnimationMUD>()?.Animator;
     
-                if(targetAnimator) { newArrow.target = targetAnimator.Head; } 
-                else { newArrow.target = mud.ActionData.Target.Target; }
+                if(targetAnimator) { 
+                    newArrow.target = targetAnimator.Head; 
+                    newArrow.targetAnimator = targetAnimator;
+                } else { 
+                    newArrow.target = mud.ActionData.Target.Target; 
+                }
 
             } else {
                 newArrow.pos = Animator.transform.position + Animator.transform.forward * 10f + Vector3.up;

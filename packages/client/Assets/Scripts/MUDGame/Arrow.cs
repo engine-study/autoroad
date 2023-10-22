@@ -13,6 +13,7 @@ public class Arrow : MonoBehaviour {
 
     [Header("Debug")]
     public Transform target;
+    public SPAnimator targetAnimator;
     public Vector3 pos;
     public Vector3 inaccuracy = Vector3.zero;
     public Rigidbody rb;
@@ -45,8 +46,11 @@ public class Arrow : MonoBehaviour {
         SPCamera.AddShake(.05f,transform.position);
         if(rb) Destroy(rb);
 
+
         transform.parent = other.transform;
-        effects?.PlayDisabled();
+        if(targetAnimator) { targetAnimator.SetToAnimatorLayer(gameObject);}
+        
+        effects?.Spawn(false);
 
 
         target = null;

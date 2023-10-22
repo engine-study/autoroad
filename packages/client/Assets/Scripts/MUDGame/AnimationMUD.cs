@@ -127,7 +127,7 @@ public class AnimationMUD : MonoBehaviour
 
     public virtual void EnterState(ActionName newAction) {
 
-        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)actionData.Position.x},{(int)actionData.Position.z}", this);
+        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)actionData.Position.x},{(int)actionData.Position.z})", this);
         ActionEffect newEffect = LoadAction(newAction.ToString());
 
         //look at the new thing
@@ -149,7 +149,8 @@ public class AnimationMUD : MonoBehaviour
 
         if(entity.IsLocal) {
             //assume we're already in the action because we had to have cast it?
-            Animation = StartCoroutine(AnimationInsanityLocal(newEffect));
+            // Animation = StartCoroutine(AnimationInsanityLocal(newEffect));
+            Animation = StartCoroutine(AnimationInsanity(newEffect));
         } else {
             //wait for target to move into place, then do animation
             Animation = StartCoroutine(AnimationInsanity(newEffect));
@@ -213,10 +214,11 @@ public class AnimationMUD : MonoBehaviour
         
         if(newAction == null) {
 
-            object resource = Resources.Load("Action/" + action);
+            GameObject resource = Resources.Load<GameObject>("Action/" + action);
             if(resource == null) return null;
 
-            newAction = Instantiate((resource as GameObject), transform).GetComponent<ActionEffect>();
+            newAction = Instantiate(resource, transform).GetComponent<ActionEffect>();
+            newAction.name = newAction.Action.ToString();
             newAction.transform.localPosition = Vector3.zero;
             newAction.transform.localRotation = Quaternion.identity;
             

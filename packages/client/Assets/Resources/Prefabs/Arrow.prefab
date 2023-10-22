@@ -297,7 +297,7 @@ Transform:
   - {fileID: 8434434030189943415}
   - {fileID: 9163371223027243939}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3047052623480410671
 MonoBehaviour:
@@ -319,6 +319,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b1448322f96d89d4994d0478cc3ffd47, type: 3}
   - {fileID: 8300000, guid: 57b4635c75fbf9d4aac35a7be5154e88, type: 3}
   target: {fileID: 0}
+  targetAnimator: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
   inaccuracy: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
@@ -330,7 +331,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9222825043168814243}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -438,7 +439,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7749277b8040ea748b1e7ddfd13aff93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
   onEffects: {fileID: 5731141018049896806}
   offEffects: {fileID: 7072190515997804881}
 --- !u!54 &8804027021124453769

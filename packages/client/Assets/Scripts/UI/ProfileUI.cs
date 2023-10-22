@@ -8,6 +8,7 @@ public class ProfileUI : EntityUI
     public static ProfileUI Instance;
 
     [Header("Profile")]
+    public SPButton header;
     public SPInputField nameField;
     public SPInputField publicKeyField;
     public SPButton addressField;
@@ -30,6 +31,7 @@ public class ProfileUI : EntityUI
     protected override void UpdateEntity() {
         base.UpdateEntity();
 
+        header.UpdateField(Entity.Name);
         nameField.UpdateField(Entity.Name);
         publicKeyField.UpdateField(Entity.Key);
 

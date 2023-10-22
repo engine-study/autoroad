@@ -8,7 +8,7 @@ public class ActionEffect : MonoBehaviour {
 
     public ActionName Action {get{return actionName;}}
     [Header("Action")]
-    [SerializeField] public ActionName actionName;
+    [SerializeField] ActionName actionName;
 
     [Header("Movement")]
     public MoverMUD movement;
@@ -26,8 +26,8 @@ public class ActionEffect : MonoBehaviour {
     [SerializeField] protected AnimationMUD anim;
 
     void Awake() {
-        if(effect) effect.active = false;
-        if(moveEffect) moveEffect.active = false;
+        if(effect) effect.ToggleActive(false);
+        if(moveEffect) moveEffect.ToggleActive(false);
     }
     
     public virtual void ToggleMovement(bool toggle, AnimationMUD animation) {
@@ -40,6 +40,8 @@ public class ActionEffect : MonoBehaviour {
     public virtual void Toggle(bool toggle, AnimationMUD animation) {
 
         anim = animation;
+
+        Debug.Log($"[A-Toggle]: {anim.ActionData.Entity.Name} [{gameObject.name}] {toggle}", this);
 
         //first time setup
         if (active != toggle) {
@@ -77,29 +79,30 @@ public class ActionEffect : MonoBehaviour {
 
     protected virtual void ToggleMovementEffects(bool toggle) {
 
+        Debug.Log($"[A-Move]: {anim.ActionData.Entity.Name} [{gameObject.name}] {toggle}", this);
+
         if(toggle) {
-            moveEffect?.PlayEnabled();
+            moveEffect?.Spawn(true);
             PlayAnimation(movementClip);
         } else {
-            moveEffect?.PlayDisabled();
+            moveEffect?.Spawn(false);
             ToggleActionEffects(true);
-    
         }
 
     }
 
     protected virtual void ToggleActionEffects(bool toggle) {
 
-        Debug.Log(gameObject.name + ": " + toggle, this);
+        Debug.Log($"[A-Action]: {anim.ActionData.Entity.Name} [{gameObject.name}] {toggle}", this);
 
         if(toggle) {
 
-            effect?.PlayEnabled();
+            effect?.Spawn(true);
             PlayAnimation(actionClip);
 
         } else {
         
-            effect?.PlayDisabled();
+            effect?.Spawn(false);
             // PlayAnimation("");
         }
 
