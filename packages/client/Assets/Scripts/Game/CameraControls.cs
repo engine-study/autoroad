@@ -107,7 +107,7 @@ public class CameraControls : MonoBehaviour
         _isMoving = Input.GetMouseButton(0);
         _isRotating = Input.GetMouseButton(1);
 
-        if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) {
+        if(SPUIBase.IsPointerOverUIElement == false && Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) {
             startPos = currentPos;
             hasStarted = true;
             hasMovedEnough = false;

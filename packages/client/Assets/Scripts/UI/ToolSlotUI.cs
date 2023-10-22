@@ -9,10 +9,12 @@ public class ToolSlotUI : SPWindow
     public SPHoverDescription hoverText;
     public GameObject selected;
     public SPInputPrompt input;
+    public GameObject unlocked;
     public CanvasGroup group;
     public Sprite unknown;
 
     [Header("Debug")]
+    public bool HasEnough;
     public bool Unlocked;
     public bool Usable;
     public Inventory inv;
@@ -43,18 +45,18 @@ public class ToolSlotUI : SPWindow
         UpdateDisplay();
     }
 
-    bool CanDisplay() {
-        return inv.HasItem(equipment.item);
+    bool HasUnlocked() {
+        return inv.ItemUnlocked(equipment.item);
     }
 
-    bool CanUse() {
+    bool IsUsable() {
         return equipment.IsInteractable();
     }
 
     public void UpdateDisplay() {
 
-        Usable = CanUse();
-        Unlocked = CanDisplay();
+        Usable = IsUsable();
+        Unlocked = HasUnlocked();
 
         UpdateInteractable(Usable);
         SetUnlocked(Unlocked);
@@ -74,6 +76,8 @@ public class ToolSlotUI : SPWindow
             button.ToggleState(SPSelectableState.Disabled);
             hoverText.description = "";
         }
+
+        unlocked.SetActive(toggle);
 
         group.alpha = toggle ? group.alpha : .2f;
 

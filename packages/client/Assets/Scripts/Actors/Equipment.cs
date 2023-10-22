@@ -23,7 +23,7 @@ public class Equipment : SPInteract {
     public override bool IsInteractable() {
 
         canUse = base.IsInteractable() && gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
-        bool hasItem = canUse && (item == null || Inventory.LocalInventory.HasItem(item));
+        bool hasItem = canUse && (item == null || Inventory.LocalInventory.ItemIsUsable(item));
         bool hasRequiredComponent = canUse && ((requiredComponent == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
         return canUse && hasRequiredComponent && hasItem; 
     }

@@ -88,8 +88,12 @@ MonoBehaviour:
   hoverText: {fileID: 786643628482921532}
   selected: {fileID: 5462224865205947355}
   input: {fileID: 1470211259463862724}
+  unlocked: {fileID: 8305523977158975056}
   group: {fileID: 6899222948046726878}
-  unknown: {fileID: 1602832430, guid: 0a3f787563a26a445a608e4cff6a5148, type: 3}
+  unknown: {fileID: 406820813, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
+  HasEnough: 0
+  Unlocked: 0
+  Usable: 0
   inv: {fileID: 0}
   equipment: {fileID: 0}
   invSlot:
@@ -823,5 +827,10 @@ PrefabInstance:
 --- !u!224 &882462460753249987 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8754990157418655817, guid: a25dfd63f59bac24aaf6ee6df78474d4, type: 3}
+  m_PrefabInstance: {fileID: 8448994549567223434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8305523977158975056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 433469034393413850, guid: a25dfd63f59bac24aaf6ee6df78474d4, type: 3}
   m_PrefabInstance: {fileID: 8448994549567223434}
   m_PrefabAsset: {fileID: 0}

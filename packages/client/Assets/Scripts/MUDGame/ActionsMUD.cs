@@ -17,6 +17,7 @@ public class ActionsMUD : MonoBehaviour
     [Header("Equipment")]
     [EnumNamedArray( typeof(ActionName) )]
     [SerializeField] List<Equipment> baseEquipment;
+    [SerializeField] List<Equipment> organizedEquipment;
     [SerializeField] List<Equipment> local;
 
     [Header("Debug")]
@@ -57,7 +58,7 @@ public class ActionsMUD : MonoBehaviour
         if (!player.IsLocalPlayer) {gameObject.SetActive(false); return;}
 
         //add equipment
-        foreach(Equipment e in baseEquipment) {
+        foreach(Equipment e in organizedEquipment) {
             if (e == null) { continue; }
             ToggleEquipment(true, e);
         }

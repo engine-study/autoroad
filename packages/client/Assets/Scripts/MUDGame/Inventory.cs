@@ -16,9 +16,18 @@ public class Inventory : MonoBehaviour {
     public List<InventorySlot> items;
     public Dictionary<string, InventorySlot> itemDict;
 
-    public bool HasItem(GaulItem item) {
+    public bool ItemIsUsable(GaulItem item) {
+        InventorySlot slot = GetItemSlot(item);
+        return slot != null ? slot.amount > 0 : false;
+    }
+
+    public bool ItemUnlocked(GaulItem item) {
+        return GetItemSlot(item) != null;
+    }
+
+    public InventorySlot GetItemSlot(GaulItem item) {
         itemDict.TryGetValue(item.Name, out InventorySlot slot);
-        return slot?.amount > 0;
+        return slot;
     }
 
     void Awake() {

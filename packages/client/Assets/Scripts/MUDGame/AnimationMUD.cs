@@ -113,15 +113,15 @@ public class AnimationMUD : MonoBehaviour
         
         Controller.Ragdoll(toggle);
 
-        // if(toggle) {
-        //     head.parent = null;
-        //     headRB.isKinematic = false;
-        //     headRB.velocity = Random.onUnitSphere * .1f;
-        // } else {
-        //     //set head back to where its supposed to be
-        //     headRB.isKinematic = true;
-        //     ToggleSimple(isSimple);
-        // }
+        if(toggle) {
+            // head.parent = null;
+            headRB.isKinematic = true;
+            headRB.velocity = Random.onUnitSphere * .1f;
+        } else {
+            //set head back to where its supposed to be
+            headRB.isKinematic = true;
+            ToggleSimple(isSimple);
+        }
 
     }
 
