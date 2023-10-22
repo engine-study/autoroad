@@ -8,6 +8,7 @@ public class StoreUI : SPWindowParent
 {
 
     [Header("Store")]
+    public SPButton notification;
     public StoreItemUI itemPrefab;
     public RectTransform itemRect;
 
@@ -52,6 +53,12 @@ public class StoreUI : SPWindowParent
         CoinComponent.OnLocalUpdate += UpdateStore;
     }
 
+    public override void ToggleWindow(bool toggle)
+    {
+        base.ToggleWindow(toggle);
+        notification.ToggleWindowClose();
+    }
+
     protected override void OnDestroy() {
         base.OnDestroy();
         XPComponent.OnLocalLevelUp -= UpdateStore;
@@ -77,8 +84,9 @@ public class StoreUI : SPWindowParent
 
         }
 
-        if(childCount != newChildCount) {
-            //strobe button
+        if(newChildCount > childCount) {
+            notification.UpdateField((newChildCount - childCount).ToString());
+            notification.ToggleWindow(true);
         }
     }
 

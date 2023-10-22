@@ -59,6 +59,8 @@ public class ToolUI : SPWindowParent
             tools[i].SetEquipment(equipments[i]);
         }
 
+        // inventory.OnUpdated += DOsomethign
+
     }
 
 

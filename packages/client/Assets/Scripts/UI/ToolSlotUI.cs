@@ -9,6 +9,7 @@ public class ToolSlotUI : SPWindow
     public SPHoverDescription hoverText;
     public GameObject selected;
     public SPInputPrompt input;
+    public StatUI number;
     public GameObject unlocked;
     public CanvasGroup group;
     public Sprite unknown;
@@ -39,8 +40,8 @@ public class ToolSlotUI : SPWindow
     public void SetEquipment(Equipment e) {
 
         equipment = e;
-
         if(e.item == null) {Debug.LogError($"{e.name} does not have an item."); return;}
+
 
         UpdateDisplay();
     }
@@ -60,6 +61,11 @@ public class ToolSlotUI : SPWindow
 
         UpdateInteractable(Usable);
         SetUnlocked(Unlocked);
+
+        bool showStatNumber = Unlocked && equipment.item.itemType == ItemType.GameplayStashable;
+        number.ToggleWindow(showStatNumber);
+
+        if(showStatNumber) { number.SetValue(StatType.Level, inv.GetItemSlot(equipment.item).amount);} 
     }
 
     void UpdateInteractable(bool toggle) {
