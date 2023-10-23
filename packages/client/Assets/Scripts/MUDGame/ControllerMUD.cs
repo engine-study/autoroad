@@ -121,7 +121,7 @@ public class ControllerMUD : SPController {
 
     float minTime = 0f;
     float transactionWait = 1f;
-    float cancelWait = .5f;
+    float cancelWait = 1f;
     Vector3 moveDest, inputDir;
     bool input, wasInputting;
     void UpdateInput() {

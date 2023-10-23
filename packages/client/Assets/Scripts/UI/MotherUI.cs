@@ -141,7 +141,7 @@ public class MotherUI : SPUIInstance {
 
     public static void TransactionSuccess() {
         ActionWheel.ActionRelease(ActionEndState.Success, true);
-        SPUIBase.PlaySound(Mother.sfx_txSuccess);
+        // SPUIBase.PlaySound(Mother.sfx_txSuccess);
     }
 
     public static void TransactionFailed() {

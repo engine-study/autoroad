@@ -51,7 +51,7 @@ public class GridMUD : MonoBehaviour {
     void UpdateComponents(Vector3 newPos) {
         if(GameState.GamePlaying == false) {return;}
         position = newPos;
-        componentsAt = GetComponentsAtPosition((int)position.x, (int)position.z, (int)position.y);
+        componentsAt = GetComponentsAtPosition(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z), Mathf.RoundToInt(position.y));
         firstComponent = componentsAt.Count > 0 ? componentsAt[0] : null;
     }
 
@@ -99,14 +99,14 @@ public class GridMUD : MonoBehaviour {
         return components;
     }
 
-    static List<PositionComponent> GetComponentsAtPosition(int x, int y, int layer) {
-        return Instance.GetComponents(x,y,layer);
+    static List<PositionComponent> GetComponentsAtPosition(float x, float y, float layer) {
+        return Instance.GetComponents(Mathf.RoundToInt(x),Mathf.RoundToInt(y),Mathf.RoundToInt(layer));
     }
 
     public static MUDEntity GetEntityAt(Vector3 newPos) {
 
         if(Instance.useQuery) {
-            List<PositionComponent> comps = GetComponentsAtPosition((int)newPos.x, (int)newPos.z, (int)newPos.y);
+            List<PositionComponent> comps = GetComponentsAtPosition(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.z), Mathf.RoundToInt(newPos.y));
             return comps.Count > 0 ? comps[0].Entity : null;
         } else {
             MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; 
