@@ -8,11 +8,23 @@ public class MapConfigComponent : MUDComponent
 {
 
     public static MapConfigComponent Instance;
-    public static bool OnMap(Vector3 newPos) { return OnMap(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.z)); }
-    public static bool OnMap(int x, int y) {return x >= -SpawnWidth && x <= SpawnWidth && y <= BoundsComponent.Up && y >= 0;}
+
+    
+    public static bool OnWorldOrMap(MUDEntity entity, Vector3 pos) {
+        if (entity.GetMUDComponent<PlayerComponent>()) { return OnWorld(pos); }
+        else return OnMap(pos); 
+    }
+
+    //MAP
+    public static bool OnMap(Vector3 pos) { return OnMap(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z)); }
+    public static bool OnMap(int x, int y) {return x >= BoundsComponent.Left && x <= BoundsComponent.Right && y <= BoundsComponent.Up && y >= 0;}
+
+    //WORLD
+    public static bool OnWorld(Vector3 newPos) { return OnWorld(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.z)); }
+    public static bool OnWorld(int x, int y) {return x >= -SpawnWidth && x <= SpawnWidth && y <= BoundsComponent.Up && y >= 0;}
 
     public static int Width, Height, SpawnWidth;
-    [SerializeField] private int playWidth, playHeight, playSpawnWidth;
+    [SerializeField] private int width, height, playSpawnWidth;
     protected override IMudTable GetTable() {return new MapConfigTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
 
@@ -20,12 +32,12 @@ public class MapConfigComponent : MUDComponent
 
         MapConfigTable update = table as MapConfigTable;
 
-        playWidth = (int)update.PlayWidth;
-        playHeight = (int)update.PlayHeight;
+        width = (int)update.PlayWidth;
+        height = (int)update.PlayHeight;
         playSpawnWidth = (int)update.PlaySpawnWidth;
 
-        Width = playWidth;
-        Height = playHeight;
+        Width = width;
+        Height = height;
         SpawnWidth = playSpawnWidth;
 
     }

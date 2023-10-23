@@ -7,14 +7,8 @@ using mud;
 public class BoundsComponent : MUDComponent
 {
 
+    public static bool OnBounds(int x, int y) {return x >= Left && x <= Right && y <= Up && y >= Down;}
 
-    public static bool OnWorld(mud.MUDEntity entity, Vector3 pos) {
-        if (entity.GetMUDComponent<PlayerComponent>()) { return MapConfigComponent.OnMap(pos); }
-        else return OnBounds(pos); 
-    }
-
-    public static bool OnBounds(Vector3 pos) { return OnBounds(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z)); }
-    public static bool OnBounds(int x, int y) {return x >= Left && x <= Right && y <= Up && y >= 0;}
     public static int Left, Right, Up, Down;
     public static BoundsComponent Instance;
 
@@ -35,7 +29,7 @@ public class BoundsComponent : MUDComponent
     public static void ShowBorder() {if(Instance) {Instance.borders.gameObject.SetActive(false); Instance.borders.gameObject.SetActive(true);}}
 
     protected override IMudTable GetTable() {return new BoundsTable();}
-    protected override void UpdateComponent(mud.IMudTable table, UpdateInfo newInfo) {
+    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
 
         Instance = this;
 

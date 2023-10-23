@@ -158,7 +158,7 @@ public class ControllerMUD : SPController {
         playerScript.AnimationMUD.Look.SetLookRotation(moveTo);
 
         Vector3 moveMinimum = onchainPos + inputDir;
-        if(!MapConfigComponent.OnMap((int)moveMinimum.x, (int)moveMinimum.z)) {
+        if(!MapConfigComponent.OnWorld((int)moveMinimum.x, (int)moveMinimum.z)) {
             BoundsComponent.ShowBorder();
             return;
         }
@@ -180,8 +180,8 @@ public class ControllerMUD : SPController {
                 MoveComponent destMoveComponent = destinationEntity.GetMUDComponent<MoveComponent>();
                 PlayerComponent player = destinationEntity.GetMUDComponent<PlayerComponent>();
 
-                if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction || (player == null && !MapConfigComponent.OnMap(pushToPos+inputDir))) {
-                    FailedMove(pushToPos);
+                if(pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction || (player == null && !MapConfigComponent.OnWorldOrMap(destinationEntity, pushToPos+inputDir))) {
+                    FailedMove(destinationEntity, pushToPos);
                     return;
                 } else if(destMoveComponent.MoveType != MoveType.Push) {
                     break;
@@ -213,7 +213,7 @@ public class ControllerMUD : SPController {
         } else {
 
             if(moveComponent != null && (moveComponent.MoveType == MoveType.Obstruction || moveComponent.MoveType == MoveType.Hole)) {
-                FailedMove(moveTo);
+                FailedMove(sync.Pos.Entity, moveTo);
                 return;
             }
 
@@ -244,11 +244,9 @@ public class ControllerMUD : SPController {
 
     }
 
-    public void FailedMove(Vector3 proposedPosition) {
+    public void FailedMove(MUDEntity e, Vector3 proposedPosition) {
         
-        if(!BoundsComponent.OnBounds((int)proposedPosition.x, (int)proposedPosition.z)) {
-            BoundsComponent.ShowBorder();
-        }
+        PositionComponent.OnWorldOrMap(e, proposedPosition, true);
 
         Debug.Log("Move Tx Canceled");
         MotherUI.TransactionFailed();
@@ -258,7 +256,7 @@ public class ControllerMUD : SPController {
 
     public void TeleportMUD(Vector3 position, bool admin = false) {
 
-        if(PositionComponent.OnMap(position, true) == false) {return;}
+        if(PositionComponent.OnWorld(position, true) == false) {return;}
 
         moveDest = position;
 

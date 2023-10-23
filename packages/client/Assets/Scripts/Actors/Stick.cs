@@ -20,7 +20,7 @@ public class Stick : Equipment
         Vector3 pushObject = transform.position;
         Vector3 pushToPos = transform.position + (transform.position - Sender.transform.position).normalized;
 
-        bool onBounds = PositionComponent.OnWorld(e, pushToPos);
+        bool onBounds = PositionComponent.OnWorldOrMap(e, pushToPos);
         return canUse && onBounds && npc != null && moveType != null && moveType.MoveType == MoveType.Push; 
     }
     

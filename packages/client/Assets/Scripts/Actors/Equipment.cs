@@ -22,7 +22,7 @@ public class Equipment : SPInteract {
 
     public override bool IsInteractable() {
 
-        canUse = base.IsInteractable() && gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
+        canUse = base.IsInteractable() && MapConfigComponent.OnWorld(transform.position) && gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
         bool hasItem = canUse && (item == null || Inventory.LocalInventory.ItemIsUsable(item));
         bool hasRequiredComponent = canUse && ((requiredComponent == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
         return canUse && hasRequiredComponent && hasItem; 
@@ -48,8 +48,8 @@ public class Equipment : SPInteract {
     
     public virtual async UniTask<bool> Use() {
 
-        int x = (int)CursorMUD.GridPos.x;
-        int y = (int)CursorMUD.GridPos.z;
+        int x = Mathf.RoundToInt(transform.position.x);
+        int y = Mathf.RoundToInt(transform.position.z);
 
         Debug.Log(actionName.ToString() + ": " + x + "," + y);
                 

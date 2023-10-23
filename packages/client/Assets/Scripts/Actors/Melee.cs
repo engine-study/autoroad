@@ -11,11 +11,11 @@ public class Melee : Equipment
     public override bool IsInteractable() {
         bool canUse = base.IsInteractable();
 
-        mud.MUDEntity e = CursorMUD.Entity;
+        MUDEntity e = CursorMUD.Entity;
         if(e == null) return false;
         
-        NPCComponent npc = e?.GetMUDComponent<NPCComponent>();
-        bool onBounds = PositionComponent.OnMap(transform.position);
+        NPCComponent npc = e.GetMUDComponent<NPCComponent>();
+        bool onBounds = PositionComponent.OnWorldOrMap(e, transform.position);
         return canUse && onBounds && npc != null; 
     }
     

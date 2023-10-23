@@ -20,7 +20,7 @@ public class FishingRod : Equipment {
         Vector3 pushObject = transform.position;
         Vector3 pushToPos = Sender.transform.position - (transform.position - Sender.transform.position).normalized;
 
-        if(!PositionComponent.OnWorld(e, pushToPos)) {return false;}
+        if(!PositionComponent.OnWorldOrMap(e, pushToPos)) {return false;}
 
         return canUse && moveType != null && moveType.MoveType == MoveType.Push && (weight == null || weight.Weight <= 0);
     }

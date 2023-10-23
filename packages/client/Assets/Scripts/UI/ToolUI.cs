@@ -89,10 +89,17 @@ public class ToolUI : SPWindowParent
     public void SetActiveTool(ToolSlotUI newTool) {
 
         if(tool != null) {tool.ToggleSelected(false);}
-        if(newTool.Unlocked == false) {tool = null; return;}
+
+        //show selection UI
+        newTool.ToggleSelected(true);
+
+        //don't set if we haven't unlocked
+        if(newTool.Unlocked == false) {
+            tool = null; 
+            return;
+        }
 
         tool = newTool;
-        tool.ToggleSelected(true);
 
 
         newTool.equipment.ActionScript.EndAction(PlayerMUD.LocalPlayer.Actor, ActionEndState.Canceled);
