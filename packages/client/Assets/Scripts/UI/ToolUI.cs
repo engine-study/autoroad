@@ -90,9 +90,6 @@ public class ToolUI : SPWindowParent
 
         if(tool != null) {tool.ToggleSelected(false);}
 
-        //show selection UI
-        newTool.ToggleSelected(true);
-
         //don't set if we haven't unlocked
         if(newTool.Unlocked == false) {
             tool = null; 
@@ -100,11 +97,13 @@ public class ToolUI : SPWindowParent
         }
 
         tool = newTool;
+        
+        //show selection UI
+        newTool.ToggleSelected(true);
 
-
-        newTool.equipment.ActionScript.EndAction(PlayerMUD.LocalPlayer.Actor, ActionEndState.Canceled);
+        //hack to toggle the prop on
         // PlayerMUD.LocalPlayer.Animator.ToggleProp(newTool.equipment.item)
-
+        newTool.equipment.ActionScript.EndAction(PlayerMUD.LocalPlayer.Actor, ActionEndState.Canceled);
         SPUIBase.PlaySound(sfx_equip);
 
     }
