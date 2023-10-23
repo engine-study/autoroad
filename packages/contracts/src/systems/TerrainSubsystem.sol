@@ -270,8 +270,8 @@ contract TerrainSubsystem is System {
 
   function spawnRoadFromPlayer(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
 
-    bool pushedPlayer = Player.get(pushed);
-    RoadState state = pushedPlayer ? RoadState.Bones : RoadState.Paved;
+    bool pushedNPC = NPC.get(pushed) > 0;
+    RoadState state = pushedNPC ? RoadState.Bones : RoadState.Paved;
 
     spawnRoad(player, pos.x, pos.y, state);
 

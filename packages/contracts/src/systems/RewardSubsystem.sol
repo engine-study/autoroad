@@ -15,8 +15,9 @@ contract RewardSubsystem is System {
     NPCType attackerType = NPCType(NPC.get(attacker));
     NPCType targetType = NPCType(NPC.get(target));
 
+    //TODO can they double dip if attacker and causedBy are the same?
     if(targetType == NPCType.Barbarian) {
-      if(Player.get(causedBy)) { giveKilledBarbarianReward(causedBy);}
+      if(NPC.get(causedBy) > 0 && causedBy != attacker) { giveKilledBarbarianReward(causedBy);}
       if(attackerType != NPCType.None) giveKilledBarbarianReward(attacker);
     }
   }

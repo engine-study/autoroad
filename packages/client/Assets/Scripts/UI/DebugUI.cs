@@ -7,7 +7,7 @@ using IWorld.ContractDefinition;
 public class DebugUI : SPWindowParent
 {
     public void RespawnPlayer() {
-        TxManager.SendDirect<KillPlayerAdminFunction>(PositionComponent.PositionToTransaction(CursorMUD.GridPos));
+        TxManager.SendDirect<KillPlayerAdminFunction>(PositionComponent.PositionToTransaction(SPPlayer.LocalPlayer.transform.position));
     }
 
     public void MegaSummonMile() {
