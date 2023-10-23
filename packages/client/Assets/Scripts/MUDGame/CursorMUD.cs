@@ -101,6 +101,7 @@ public class CursorMUD : MonoBehaviour {
             hover = null;
         } else {
             hover = GridMUD.GetEntityAt(mousePos);
+            if(hover == null) hover = GridMUD.GetEntityAt(mousePos + Vector3.down);
         }
 
         if (lastHover != hover) {

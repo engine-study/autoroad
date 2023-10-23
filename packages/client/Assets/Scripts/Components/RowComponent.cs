@@ -110,7 +110,7 @@ public class RowComponent : MonoBehaviour {
         }
 
         for (int i = 0; i < spawnedRoads.Length; i++) {
-            if (spawnedRoads[i] == null || spawnedRoads[i].State < RoadState.Paved) {
+            if (spawnedRoads[i] == null || spawnedRoads[i].State < RoadState.Pavimentum) {
                 return false;
             }
         }

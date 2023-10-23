@@ -6,7 +6,7 @@ using mudworld;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 
-public enum RoadState { None,Shoveled,Statumen,Rudus,Nucleas,Paved, Bones }
+public enum RoadState { Path, Ditch , Statumen, Rudus, Nucleas, Pavimentum, Ossimentum }
 
 public class RoadComponent : MUDComponent {
 
@@ -35,12 +35,12 @@ public class RoadComponent : MUDComponent {
     [SerializeField] PlayerComponent filledBy;
     [SerializeField] Vector2Int localPos;
 
-    RoadState lastStage = RoadState.None;
+    RoadState lastStage = RoadState.Path;
 
 
     protected override void Awake() {
         base.Awake();
-        state = RoadState.None;
+        state = RoadState.Path;
     }
 
     protected override void PostInit() {
@@ -65,6 +65,7 @@ public class RoadComponent : MUDComponent {
         localPos = new Vector2Int((int)pos.Pos.x, (int)pos.Pos.z - mileNumber * MapConfigComponent.Height);
         chunk = ChunkLoader.Chunks[mileNumber];
         chunk.Mile.AddRoadComponent(Entity.Key, this, localPos.x, localPos.y);
+
     }
 
     protected override IMudTable GetTable() {return new RoadTable();}
@@ -86,16 +87,16 @@ public class RoadComponent : MUDComponent {
             flash = gameObject.GetComponent<SPFlashShake>() ?? gameObject.AddComponent<SPFlashShake>();
             flash.SetTarget(stages[(int)State]);
             
-            if (State == RoadState.Shoveled) {
+            if (State == RoadState.Ditch) {
                 fx_spawn.Play();
                 SPAudioSource.Play(transform.position, sfx_digs);
             }
 
             //only fire the big gun events if we're confirmed an onchain
             if(newInfo.Source == UpdateSource.Onchain) {
-                if(State >= RoadState.Paved) {
+                if(State >= RoadState.Pavimentum) {
                     ToggleComplete(true);
-                } else if(lastStage >= RoadState.Paved) {
+                } else if(lastStage >= RoadState.Pavimentum) {
                     //somehow we reverted, this should not be possible
                     Debug.LogError("Not complete anymore", this);
                     ToggleComplete(false);
@@ -139,7 +140,7 @@ public class RoadComponent : MUDComponent {
 
         if(Loaded) {
             for (int i = 0; i < stages.Length; i++) {
-                stages[i].SetActive((i == (int)State && i < (int)RoadState.Paved) || (i == (int)RoadState.Shoveled && State >= RoadState.Paved));
+                stages[i].SetActive((i == (int)State && i < (int)RoadState.Pavimentum) || (i == (int)RoadState.Ditch && State >= RoadState.Pavimentum));
             }
         } else  {
             for (int i = 0; i < stages.Length; i++) {
@@ -147,7 +148,7 @@ public class RoadComponent : MUDComponent {
             }
         }
 
-        Entity.SetName(newState == RoadState.Shoveled ? "Ditch" : "Road");
+        Entity.SetName(state.ToString());
 
     }
 

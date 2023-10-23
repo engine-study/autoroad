@@ -10,7 +10,7 @@ public class Shovel : Equipment
 {
     public override bool IsInteractable() {
         bool canUse = base.IsInteractable();
-        return canUse && GridMUD.GetEntityAt(CursorMUD.GridPos - Vector3.up) == null && RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z) && CursorMUD.Entity == null; //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
+        return canUse && RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z); //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
     }
 
     public override async UniTask<bool> Use() {
