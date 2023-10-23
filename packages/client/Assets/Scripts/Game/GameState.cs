@@ -47,6 +47,10 @@ public class GameState : MonoBehaviour {
 
     void Awake() {
 
+        if (newGame) {
+            PlayerPrefs.DeleteAll();
+        }
+
         Instance = this;
         editorObjects.SetActive(false);
         
@@ -248,7 +252,6 @@ public class GameState : MonoBehaviour {
         
         //destroy the player if we want to simulate the login sequence
         if (newGame) {
-            PlayerPrefs.DeleteAll();
             // await TxManager.SendQueue<DestroyPlayerAdminFunction>();
             //while(player is not null) {}
         }

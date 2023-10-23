@@ -63,7 +63,6 @@ public class MotherUI : SPUIInstance {
         hover.Init();
         mileComplete.Init();
 
-        tutorial.Init();
         
         wheel.Init();
 
@@ -79,6 +78,14 @@ public class MotherUI : SPUIInstance {
         SPEvents.OnServerLoaded += ShowMainMenu;
         SPEvents.OnGameReady += GameReady;
         SPEvents.OnPlayGame += OnStartGame;
+
+    }
+
+    protected override void Start() {
+        base.Start();
+
+        tutorial.Init();
+        tutorial.ToggleWindowClose();
 
     }
 
@@ -103,13 +110,6 @@ public class MotherUI : SPUIInstance {
         TxManager.OnSend -= SendTx;
         TxManager.OnTransaction -= UpdateWheel;
         TxUpdate.OnUpdated -= UpdateWheelOptimistic;
-
-    }
-
-    protected override void Start() {
-        base.Start();
-                
-        tutorial.ToggleWindowClose();
 
     }
 

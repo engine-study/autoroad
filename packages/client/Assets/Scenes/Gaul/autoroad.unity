@@ -6516,7 +6516,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -12.499939}
+  m_AnchoredPosition: {x: 0, y: -12.499817}
   m_SizeDelta: {x: -100, y: -75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &440508197
@@ -18609,7 +18609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f81524fb4724d4cb445f038a81f0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGame: 0
+  newGame: 1
   skipMenu: 0
   mainTables: {fileID: 1273645192}
   visualTables: {fileID: 0}
@@ -37331,6 +37331,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3944446061361552661, guid: 80526e907c20e2a42afabc75d3350df5, type: 3}
+      propertyPath: customTheme
+      value: 
+      objectReference: {fileID: 11400000, guid: e90b5ce749c0e674589eb7ff319a5712, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

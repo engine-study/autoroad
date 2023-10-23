@@ -12,6 +12,7 @@ public class TutorialUI : SPWindowParent
     [SerializeField] Transform tutorialTransform;
     [SerializeField] GameObject [] tutorials;
     [SerializeField] AudioClip startClip, endClip;
+    [SerializeField] SPButton complete;
 
     [Header("Debug")]
     public bool hasCompleted = false;
@@ -67,6 +68,9 @@ public class TutorialUI : SPWindowParent
     }
 
     void Update() {
+
+        complete.ToggleWindow(tutorialText.HasReachedFinal);
+        
         if(Input.GetKeyDown(KeyCode.Escape)) {
             CompleteTutorial();
         }
@@ -74,6 +78,7 @@ public class TutorialUI : SPWindowParent
 
     void Toggle(bool toggle) {
 
+        complete.ToggleWindowClose();
         tutorialParent.SetActive(toggle);
 
         if(!hasStarted) return;
