@@ -39,8 +39,7 @@ public class TreeComponent : MUDComponent {
         if(health) health.OnUpdated -= TreeHit;
     }
     
-    protected override IMudTable GetTable() {return new TreeTable();}
-    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         TreeTable treeUpdate = (TreeTable)update;
 
@@ -117,19 +116,4 @@ public class TreeComponent : MUDComponent {
         Entity.Toggle(false);
     }
 
-    public void Chop() {
-        ChopTree(Entity);
-    }
-
-    public async void ChopTree(MUDEntity entity) {
-        List<TxUpdate> updates = new List<TxUpdate>();
-        
-        updates.Add(TxManager.MakeOptimistic(health, health.Health - 1));
-
-        if(health.Health - 1 <= 0) {
-            updates.Add(TxManager.MakeOptimisticDelete(pos) );
-        }
-
-        await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity, ActionName.Chop, transform.position, updates);
-    }
 }

@@ -20,7 +20,7 @@ public abstract class MoverComponent : MUDComponent {
         }
         
         anim = GetComponentInChildren<SPAnimationMover>();
-        // ToggleRequiredComponent(true, MUDWorld.FindPrefab<PositionComponent>());
+
     }
     
     // protected override void PostInit() {

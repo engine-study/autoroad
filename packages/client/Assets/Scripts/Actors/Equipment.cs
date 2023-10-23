@@ -24,7 +24,7 @@ public class Equipment : SPInteract {
 
         entity = GridMUD.GetEntityAt(transform.position);
         entityUnder = GridMUD.GetEntityAt(transform.position + Vector3.down);
-        canUse = base.IsInteractable() && MapConfigComponent.OnWorldOrMap(entity, transform.position) && gameObject.activeInHierarchy && entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
+        canUse = base.IsInteractable() && MapConfigComponent.OnWorld(transform.position) && gameObject.activeInHierarchy && entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
         bool hasItem = canUse && (item == null || Inventory.LocalInventory.ItemIsUsable(item));
         bool hasRequiredComponent = canUse && ((requiredComponent == null && entity == null) || (entity != null && entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
         canUse = canUse && hasRequiredComponent && hasItem;

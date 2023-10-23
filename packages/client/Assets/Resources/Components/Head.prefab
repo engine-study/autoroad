@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5209224381163900232}
-  - component: {fileID: 6232110463889642377}
+  - component: {fileID: 5288600917751335645}
   m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
@@ -35,9 +35,9 @@ Transform:
   - {fileID: 3207655554034716850}
   - {fileID: 3324230437709716678}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6232110463889642377
+--- !u!114 &5288600917751335645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,11 +46,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6756204372397519100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db8f93a0b891864a846df8c8b3cd0d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bcff649615509f49beacc3fd0108c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredComponents:
-  - {fileID: 3884099145852168455, guid: 9476fa914b9acad42b5792396d5e2ccd, type: 3}
+  table: {fileID: 11400000, guid: f93f8a0676935094ab0a5a61f395c3c5, type: 2}
+  requiredComponents: []
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -68,7 +68,14 @@ MonoBehaviour:
   lastInfo:
     updateType: 0
     source: 0
+  item: {fileID: 11400000, guid: 73431b9a69ebe1047b36659553366453, type: 2}
+  value: 0
+  valueString: 
+  statType: 0
+  cosmetic: 1
   body: {fileID: 2832211998390807966}
+  bodies: []
+  costumeIndex: 0
 --- !u!1001 &1910277118990725677
 PrefabInstance:
   m_ObjectHideFlags: 0

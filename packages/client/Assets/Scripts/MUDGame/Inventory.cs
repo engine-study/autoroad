@@ -79,20 +79,22 @@ public class Inventory : MonoBehaviour {
     void Ingest(ValueComponent v) {
 
         if(v == null) return;
-        if(v.Item == null) return;
+        if(v.Items == null || v.Items.Count == 0) return;
 
-        InventorySlot slot = null;
-
-        if(itemDict.ContainsKey(v.ItemName)) {
-            slot = itemDict[v.ItemName];
-        } else {
-            slot = new InventorySlot { item = v.Item};
-
-            itemDict.Add(v.ItemName, slot);
-            items.Add(slot);
+        for(int i = 0; i < v.Items.Count; i++) {
+            ToggleItem(true, v.Items[i]);
         }
 
-        slot.amount = (int)v.Value;        
+    }
+
+    void ToggleItem(bool toggle, InventorySlot slot) {
+
+        if(itemDict.ContainsKey(slot.item.Name)) {
+
+        } else {
+            itemDict.Add(slot.item.Name, slot);
+            items.Add(slot);
+        }
 
         OnUpdated?.Invoke();
         OnUpdatedSlot?.Invoke(slot);

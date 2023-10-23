@@ -9820,7 +9820,6 @@ GameObject:
   - component: {fileID: 2157176825217558094}
   - component: {fileID: 997573086543759682}
   - component: {fileID: 7660926120888702201}
-  - component: {fileID: 6673810008873035476}
   - component: {fileID: 7914227973324968193}
   - component: {fileID: 1144799137104425165}
   m_Layer: 0
@@ -9875,6 +9874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c25e50c1b73444fa8abab85fc67c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  table: {fileID: 11400000, guid: f4034d86bcd0c374780ffd85b5e23357, type: 2}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   - {fileID: 77022645062805081, guid: 219b049c5faf436428e270937e831a80, type: 3}
@@ -9912,40 +9912,6 @@ MonoBehaviour:
   sfx_falls:
   - {fileID: 8300000, guid: 99741cb3eb211fd48864e5091f8566fe, type: 3}
   treeState: 0
---- !u!114 &6673810008873035476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3815789320356983192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5a50ec2e4e5044b91120b4fa04f8db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: 7c0d9b0122320cd4a99eb6c6269b076d, type: 2}
-  state: {fileID: 0}
-  interacting: 0
-  targetGO: {fileID: 0}
-  OnStartEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7660926120888702201}
-        m_TargetAssemblyTypeName: TreeComponent, Assembly-CSharp
-        m_MethodName: Chop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnEndEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &7914227973324968193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9972,6 +9938,7 @@ MonoBehaviour:
   parentTransformToEntity: 0
   pos: {fileID: 0}
   movement: {fileID: 0}
+  gridPos: {x: 0, y: 0, z: 0}
   StartPos: {x: 0, y: 0, z: 0}
   moving: 0
   moveLerp: 0
@@ -24781,10 +24748,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0504cc0f4638db41a51576555488a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
   onEffects: {fileID: 4840927286953316620}
   offEffects: {fileID: 2075494483679534248}
-  hasInit: 0
   component: {fileID: 0}
 --- !u!1 &8183683794286969672
 GameObject:
