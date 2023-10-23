@@ -10,6 +10,7 @@ public class GameUI : SPWindowParent
 {
 
     public StatUI coins;
+    public StatUI gems;
     public StatUI scrolls;
     public StatUI seeds;
     public SPButton storeButton;
@@ -23,11 +24,13 @@ public class GameUI : SPWindowParent
         base.Init();
 
         UpdateCoins();
+        UpdateGems();
         UpdateScrolls();
         UpdateSeeds();
 
         teleportUI.ToggleWindowClose();
 
+        GemComponent.OnLocalUpdate += UpdateGems;
         CoinComponent.OnLocalUpdate += UpdateCoins;
         ScrollComponent.OnLocalUpdate += UpdateScrolls;
         SeedComponent.OnLocalUpdate += UpdateSeeds;
@@ -40,6 +43,11 @@ public class GameUI : SPWindowParent
         ScrollComponent.OnLocalUpdate -= UpdateScrolls;
         SeedComponent.OnLocalUpdate -= UpdateSeeds;
 
+    }
+
+    void UpdateGems() {
+        gems.SetValue(GemComponent.LocalGems.ToString("00"));
+        SPStrobeUI.ToggleStrobe(gems);
     }
 
     void UpdateCoins() {

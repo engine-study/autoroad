@@ -138,7 +138,9 @@ public class GameState : MonoBehaviour {
 
     async UniTask SetAccount() {
     
-        if(skipMenu) {
+        bool hasSigned = PlayerPrefs.GetString("signed") == NetworkManager.LocalAddress;
+
+        if(skipMenu || hasSigned) {
             //use the default that NetworkManager gives us
         } else {
             //wait for name table        

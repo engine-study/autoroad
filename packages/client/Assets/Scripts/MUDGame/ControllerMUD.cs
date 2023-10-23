@@ -145,6 +145,8 @@ public class ControllerMUD : SPController {
 
         bool noModifiers = !SPInput.ModifierKey;
         inputDir = new Vector3(Mathf.RoundToInt(Input.GetAxis("Horizontal")), 0f, Mathf.RoundToInt(Input.GetAxis("Vertical")));
+        if(inputDir.x != 0f) inputDir.z = 0f;
+        
         inputDir = SPHelper.IsometricToWorld(inputDir);
         input = noModifiers && (inputDir.x != 0 || inputDir.z != 0);
 
@@ -163,8 +165,10 @@ public class ControllerMUD : SPController {
         playerScript.AnimationMUD.Look.SetLookRotation(moveTo);
 
         Vector3 moveMinimum = onchainPos + inputDir;
+
         if(!MapConfigComponent.OnWorld((int)moveMinimum.x, (int)moveMinimum.z)) {
             BoundsComponent.ShowBorder();
+            FailedMove(sync.Pos.Entity, moveMinimum);
             return;
         }
         

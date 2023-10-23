@@ -41,6 +41,7 @@ public class MotherUI : SPUIInstance {
     public AudioClip sfx_mainMenu;
     public AudioClip sfx_loaded;
     public AudioClip sfx_txSent;
+    public AudioClip sfx_txSuccess;
     public AudioClip sfx_txRevert;
 
 
@@ -140,6 +141,7 @@ public class MotherUI : SPUIInstance {
 
     public static void TransactionSuccess() {
         ActionWheel.ActionRelease(ActionEndState.Success, true);
+        SPUIBase.PlaySound(Mother.sfx_txSuccess);
     }
 
     public static void TransactionFailed() {

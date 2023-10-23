@@ -74,17 +74,22 @@ public class AccountUI : SPWindow
 
         if(selected == null) {return;}
         confirm.ToggleWindowClose();
+
         Sign();
 
     }
 
     async UniTask Sign() {
-        DidSup(await TxManager.SendDirect<SupFunction>());
+        DidSign(await TxManager.SendDirect<SupFunction>());
     }
     
-    public void DidSup(bool sup) {
+    public void DidSign(bool sup) {
         
         if(sup) {
+        
+            PlayerPrefs.SetString("signed", NetworkManager.LocalAddress);
+            PlayerPrefs.Save();
+            
             //done, we have a legit account
             account = selected.account;
             // NetworkManager.Instance.SetAccount(account);
