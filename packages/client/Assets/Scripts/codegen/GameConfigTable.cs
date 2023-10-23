@@ -16,8 +16,6 @@ namespace mudworld
             public bool? PreviousDebug;
             public bool? DummyPlayers;
             public bool? PreviousDummyPlayers;
-            public bool? RoadComplete;
-            public bool? PreviousRoadComplete;
         }
 
         public readonly static string ID = "GameConfig";
@@ -33,7 +31,6 @@ namespace mudworld
 
         public bool? Debug;
         public bool? DummyPlayers;
-        public bool? RoadComplete;
 
         public override Type TableType()
         {
@@ -61,10 +58,6 @@ namespace mudworld
             {
                 return false;
             }
-            if (RoadComplete != other.RoadComplete)
-            {
-                return false;
-            }
             return true;
         }
 
@@ -73,8 +66,6 @@ namespace mudworld
             Debug = (bool)functionParameters[0];
 
             DummyPlayers = (bool)functionParameters[1];
-
-            RoadComplete = (bool)functionParameters[2];
         }
 
         public static IObservable<RecordUpdate> GetGameConfigTableUpdates()
@@ -93,7 +84,6 @@ namespace mudworld
         {
             Debug = (bool)property["debug"];
             DummyPlayers = (bool)property["dummyPlayers"];
-            RoadComplete = (bool)property["roadComplete"];
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
@@ -124,18 +114,6 @@ namespace mudworld
             {
                 previousDummyPlayersTyped = (bool)previousValue["dummyplayers"];
             }
-            bool? currentRoadCompleteTyped = null;
-            bool? previousRoadCompleteTyped = null;
-
-            if (currentValue != null && currentValue.ContainsKey("roadcomplete"))
-            {
-                currentRoadCompleteTyped = (bool)currentValue["roadcomplete"];
-            }
-
-            if (previousValue != null && previousValue.ContainsKey("roadcomplete"))
-            {
-                previousRoadCompleteTyped = (bool)previousValue["roadcomplete"];
-            }
 
             return new GameConfigTableUpdate
             {
@@ -149,8 +127,6 @@ namespace mudworld
                 PreviousDebug = previousDebugTyped,
                 DummyPlayers = currentDummyPlayersTyped,
                 PreviousDummyPlayers = previousDummyPlayersTyped,
-                RoadComplete = currentRoadCompleteTyped,
-                PreviousRoadComplete = previousRoadCompleteTyped,
             };
         }
     }

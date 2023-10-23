@@ -18,6 +18,7 @@ public class NameOptionUI : SPWindowParent {
     public SPButton[] buttons;
     public AudioClip[] sfx_rollPlayer, sfx_acceptPlayer, sfx_select;
     public AudioClip sfx_wagon;
+    public SPButton confirm;
 
     // bool spawning = false;
     protected override void Start() {
@@ -35,6 +36,8 @@ public class NameOptionUI : SPWindowParent {
         }
 
         selection = -1;
+        confirm.ToggleWindowClose();
+
         Name = null;
 
         for (int i = 0; i < buttons.Length; i++) {
@@ -113,6 +116,9 @@ public class NameOptionUI : SPWindowParent {
         Name = names[selection];
 
         buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Underline | TMPro.FontStyles.Bold;
+
+        confirm.ToggleWindowOpen();
+        confirm.ToggleState(SPSelectableState.Default);
 
         SPUIBase.PlaySound(sfx_select);
     }

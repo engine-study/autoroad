@@ -100,10 +100,16 @@ public class ActionsMUD : MonoBehaviour
 
     //add actions base on what we encounter on the grid
     void GiveActionsAt(Vector3 newPos) {
+        int actions = 0;
         for(int i = 0; i < equipment.Count; i++) {
             equipment[i].transform.position = newPos;
             equipment[i].ToggleActor(true, player.Actor);
-            player.Reciever.ToggleInteractableManual(equipment[i].IsInteractable(), equipment[i]);
+
+            bool IsInteractable = equipment[i].IsInteractable();
+            if(IsInteractable) actions++;
+
+            player.Reciever.ToggleInteractableManual(IsInteractable, equipment[i]);
+
         }
 
         ToolUI.Instance?.UpdateAllActions();

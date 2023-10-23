@@ -31,11 +31,11 @@ contract TerrainSubsystem is System {
     console.log("creating world");
 
     bool debug = true; 
-    bool dummyPlayers = true; 
+    bool dummyPlayers = false; 
     bool roadComplete = true; 
 
     GameState.set(int32(-1), 0);
-    GameConfig.set(debug, dummyPlayers, roadComplete);
+    GameConfig.set(debug, dummyPlayers);
     MapConfig.set(10, 10, 13);
     RoadConfig.set(1, 0, 0);
     Bounds.set(0, 0, int32(-1), 1);
@@ -185,13 +185,13 @@ contract TerrainSubsystem is System {
         //NPCS
         NPCType npcType = NPCType.None;
 
-        if (noiseCoord > 1000 && noiseCoord <= 1010) {
+        if (noiseCoord > 1000 && noiseCoord <= 1025) {
           npcType = NPCType.Ox;
-        } else if (noiseCoord > 1100 && noiseCoord <= 1150) {
+        } else if (y > 10 && noiseCoord > 1100 && noiseCoord <= 1150) {
           npcType = NPCType.Soldier;
-        } else if (noiseCoord > 1200 && noiseCoord < 1250) {
+        } else if(y > 20 && noiseCoord > 1200 && noiseCoord < 1250) {
           npcType = NPCType.Barbarian;
-        } else if (noiseCoord > 1300 && noiseCoord <= 1350) {
+        } else if (y > 30 && noiseCoord > 1300 && noiseCoord <= 1325) {
           npcType = NPCType.BarbarianArcher;
         } else if (config.dummyPlayers && noiseCoord > 1500 && noiseCoord <= 1550) {
           npcType = NPCType.Player;
@@ -203,6 +203,10 @@ contract TerrainSubsystem is System {
       }
     
     }
+  }
+
+  function procProgression(int32 width, int32 y) private {
+
   }
 
   function contemplateMile(int32 mileNumber) public {

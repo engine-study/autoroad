@@ -84,6 +84,8 @@ public class ToolUI : SPWindowParent
         for(int i = 0; i < tools.Count; i++) {
             tools[i].UpdateDisplay();
         }
+
+        UpdateCursor();
     }
 
     public void SetActiveTool(ToolSlotUI newTool) {
@@ -106,6 +108,12 @@ public class ToolUI : SPWindowParent
         newTool.equipment.ActionScript.EndAction(PlayerMUD.LocalPlayer.Actor, ActionEndState.Canceled);
         SPUIBase.PlaySound(sfx_equip);
 
+        UpdateCursor();
+
+    }
+
+    void UpdateCursor() {
+        SPCursorTexture.UpdateCursor(Tool && Tool.Usable ? SPCursorState.HandAction : SPCursorState.Default);
     }
 }
 

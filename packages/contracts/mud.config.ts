@@ -66,7 +66,6 @@ export default mudConfig({
       valueSchema: {
         debug: "bool",
         dummyPlayers: "bool",
-        roadComplete: "bool",
       },
     },
 

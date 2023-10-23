@@ -7,15 +7,17 @@ public class ToolSlotUI : SPWindow
     [Header("Slot")]
     public SPButton button;
     public SPHoverDescription hoverText;
-    public GameObject selected;
     public SPInputPrompt input;
     public StatUI number;
+    public GameObject defaultBG;
+    public GameObject canUseBG;
+    public GameObject selectedBG;
     public GameObject unlocked;
     public CanvasGroup group;
     public Sprite unknown;
 
     [Header("Debug")]
-    public bool HasEnough;
+    public bool IsSelected;
     public bool Unlocked;
     public bool Usable;
     public Inventory inv;
@@ -23,8 +25,13 @@ public class ToolSlotUI : SPWindow
     public InventorySlot invSlot;
 
     public void ToggleSelected(bool toggle) {
-        selected.SetActive(toggle);
-        input.ToggleWindow(!toggle);
+
+        IsSelected = toggle;
+        selectedBG.SetActive(toggle);
+
+        if(inv && equipment) {
+            UpdateDisplay();
+        }
     }
 
     public void Setup(Inventory i) {
@@ -59,7 +66,7 @@ public class ToolSlotUI : SPWindow
         Usable = IsUsable();
         Unlocked = HasUnlocked();
 
-        UpdateInteractable(Usable);
+        SetCanUse(Usable);
         SetUnlocked(Unlocked);
 
         bool showStatNumber = Unlocked && equipment.item.itemType == ItemType.GameplayStashable;
@@ -68,8 +75,9 @@ public class ToolSlotUI : SPWindow
         if(showStatNumber) { number.SetValue(StatType.Level, inv.GetItemSlot(equipment.item).amount);} 
     }
 
-    void UpdateInteractable(bool toggle) {
+    void SetCanUse(bool toggle) {
         group.alpha = toggle ? 1f : .5f;
+        canUseBG.SetActive(toggle && !IsSelected);
     }
 
     void SetUnlocked(bool toggle) {
@@ -84,6 +92,9 @@ public class ToolSlotUI : SPWindow
         }
 
         unlocked.SetActive(toggle);
+
+        input.ToggleWindow(!IsSelected && toggle);
+        defaultBG.SetActive(!IsSelected && !Usable);
 
         group.alpha = toggle ? group.alpha : .2f;
 
