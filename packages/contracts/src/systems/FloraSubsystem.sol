@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
-import { Player, Health, Tree, Seeds, Move, Axe } from "../codegen/index.sol";
+import { Player, Health, Tree, Seeds, Move, Axe, Road } from "../codegen/index.sol";
 import { ActionType, TerrainType, FloraType, MoveType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
@@ -93,8 +93,8 @@ contract FloraSubsystem is System {
     require(Rules.onMap(x, y), "off map");
     // require(!Rules.onRoad(x, y), "on road");
 
-    bytes32[] memory atRoad = Rules.getKeysAtPosition(world,x, y, -1);
-    require(atRoad.length == 0, "road here");
+    bytes32 roadEntity = Actions.getRoadEntity(x, y);
+    require(Road.getState(roadEntity) == 0, "road here");
 
     PositionData memory pos = PositionData(x,y,0);
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);

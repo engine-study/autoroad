@@ -1,10 +1,7 @@
 
 using UnityEngine;
 using mud;
-using NetworkManager = mud.NetworkManager;
 using mudworld;
-using IWorld.ContractDefinition;
-using System.Numerics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +10,7 @@ public class PlayerComponent : MUDComponent {
 
     public static int PlayerCount;
     public static PlayerComponent LocalPlayer;
-    public static System.Action OnPlayerSpawn;
+    public static Action OnPlayerSpawn;
 
 
     public bool IsLocalPlayer { get { return isLocalPlayer; } }

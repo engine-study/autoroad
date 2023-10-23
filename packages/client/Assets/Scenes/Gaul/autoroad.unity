@@ -6516,7 +6516,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -12.499817}
+  m_AnchoredPosition: {x: 0, y: -12.499908}
   m_SizeDelta: {x: -100, y: -75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &440508197
@@ -18824,7 +18824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newGame: 0
-  skipMenu: 0
+  skipMenu: 1
   mainTables: {fileID: 1273645192}
   visualTables: {fileID: 0}
   mileTables: {fileID: 0}
@@ -30408,6 +30408,7 @@ MonoBehaviour:
   lastPos: {x: 0, y: 0, z: 0}
   gridPos: {x: 0, y: 0, z: 0}
   lastGridPos: {x: 0, y: 0, z: 0}
+  underHover: {fileID: 0}
   hover: {fileID: 0}
   lastHover: {fileID: 0}
   pos: {fileID: 0}
@@ -36174,7 +36175,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 488818311025724108, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: debug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6392306158663181893, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: s_error

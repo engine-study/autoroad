@@ -160,8 +160,8 @@ public class GaulDebug : MonoBehaviour
         }
 
 
-        if(CursorMUD.Entity is mud.MUDEntity) {
-            mud.MUDEntity m = (mud.MUDEntity)CursorMUD.Entity;
+        if(CursorMUD.Entity is MUDEntity) {
+            MUDEntity m = (MUDEntity)CursorMUD.Entity;
             PlayerComponent player = m.GetMUDComponent<PlayerComponent>();
             // if(player) {debugString += "\n" + playerCom}
 

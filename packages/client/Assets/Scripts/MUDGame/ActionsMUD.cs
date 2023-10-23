@@ -149,7 +149,7 @@ public class ActionsMUD : MonoBehaviour
         if (updates == null) { updates = new List<TxUpdate>(); }
         updates.Add(ActionOptimistic(entity, action, atPos));
 
-        return TxManager.Send<ActionFunction>(updates, ActionsMUD.ActionParameters(action, atPos)); 
+        return TxManager.Send<ActionFunction>(updates, ActionParameters(action, atPos)); 
 
     }
 

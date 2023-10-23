@@ -19,7 +19,7 @@ public class Melee : Equipment
         return canUse && onBounds && npc != null; 
     }
     
-    public override async UniTask<bool> Use() {
+    public override async UniTask<bool> SendTx() {
         
         Debug.Log("MELEEING");
         Vector3 melee = transform.position;

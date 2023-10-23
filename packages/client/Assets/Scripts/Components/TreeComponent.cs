@@ -121,7 +121,7 @@ public class TreeComponent : MUDComponent {
         ChopTree(Entity);
     }
 
-    public async void ChopTree(mud.MUDEntity entity) {
+    public async void ChopTree(MUDEntity entity) {
         List<TxUpdate> updates = new List<TxUpdate>();
         
         updates.Add(TxManager.MakeOptimistic(health, health.Health - 1));

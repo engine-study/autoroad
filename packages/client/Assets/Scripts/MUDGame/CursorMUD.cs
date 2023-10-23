@@ -12,6 +12,7 @@ public class CursorMUD : MonoBehaviour {
     public static Vector3 WorldPos { get { return Instance.mousePos; } }
     public static Vector3 GridPos { get { return Instance.gridPos; } }
     public static MUDEntity Entity { get { return Instance.hover; } }
+    public static MUDEntity EntityUnder { get { return Instance.underHover; } }
     public static PositionComponent Position { get { return Instance.pos; } }
     public static SPBase Base { get { return Instance.baseObject; } }
     public static Action<MUDEntity> OnHoverEntity;
@@ -29,7 +30,7 @@ public class CursorMUD : MonoBehaviour {
     [SerializeField] Vector3 rawMousePos;
     [SerializeField] Vector3 mousePos, lastPos;
     [SerializeField] Vector3 gridPos, lastGridPos;
-    [SerializeField] mud.MUDEntity hover, lastHover;
+    [SerializeField] MUDEntity underHover, hover, lastHover;
     [SerializeField] PositionComponent pos;
     [SerializeField] SPBase baseObject;
 
@@ -94,26 +95,30 @@ public class CursorMUD : MonoBehaviour {
 
         // hover = MUDHelper.GetMUDEntityFromRadius(mousePos, .1f);
         
-        if(!mud.NetworkManager.Initialized)
+        if(!NetworkManager.Initialized)
             return;
+
 
         if(SPUIBase.IsPointerOverUIElement) {
             hover = null;
+            underHover = null;
         } else {
             hover = GridMUD.GetEntityAt(mousePos);
-            if(hover == null) hover = GridMUD.GetEntityAt(mousePos + Vector3.down);
+            underHover = GridMUD.GetEntityAt(mousePos + Vector3.down);
         }
 
-        if (lastHover != hover) {
+        MUDEntity newHover = hover != null ? hover : underHover;
 
-            pos = hover != null && hover is mud.MUDEntity ? (hover as mud.MUDEntity).GetMUDComponent<PositionComponent>() : null;
-            baseObject = hover != null ? hover.GetComponentInChildren<SPBase>() : null;
+        if (lastHover != newHover) {
+
+            pos = hover?.GetMUDComponent<PositionComponent>();
+            baseObject = hover?.GetComponentInChildren<SPBase>();
 
             OnLeaveEntity?.Invoke(lastHover);
-            OnHoverEntity?.Invoke(hover);
+            OnHoverEntity?.Invoke(newHover);
         }
 
-        lastHover = hover;
+        lastHover = newHover;
 
     }
 

@@ -92,7 +92,7 @@ public class PlayerMUD : SPPlayer
             Actor.InputClick(0, ToolUI.Instance.Tool.equipment);
         }
 
-        if((Controller as ControllerMUD).MovementInput || Sync.Moving) {
+        if((Controller as ControllerMUD).MovementInput || Sync.Moving || Actor.ActionState != ActionState.Idle) {
             Animator.IK.SetLook(null);
         } else {
             //update rotation based on mouseInput

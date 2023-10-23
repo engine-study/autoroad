@@ -4,16 +4,15 @@ using UnityEngine;
 using mud;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
-using mud;
 
 public class Shovel : Equipment
 {
     public override bool IsInteractable() {
-        bool canUse = base.IsInteractable();
-        return canUse && RoadConfigComponent.OnRoad((int)transform.position.x, (int)transform.position.z); //distanceToPlayer > .5f && distanceToPlayer <= 1f && 
+        canUse = base.IsInteractable() && RoadConfigComponent.OnRoad(transform.position) && CursorMUD.EntityUnder != null && CursorMUD.EntityUnder.GetMUDComponent<RoadComponent>()?.State == RoadState.Path; //distanceToPlayer > .5f && distanceToPlayer <= 1f &&
+        return canUse;
     }
 
-    public override async UniTask<bool> Use() {
+    public override async UniTask<bool> SendTx() {
 
         int x = (int)CursorMUD.GridPos.x;
         int y = (int)CursorMUD.GridPos.z;

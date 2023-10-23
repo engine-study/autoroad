@@ -14,7 +14,7 @@ public class Mining : Equipment
         return canUse && CursorMUD.Entity != null && rock != null && rock.RockType < RockType.Nucleus;
     }
 
-    public override async UniTask<bool> Use() {
+    public override async UniTask<bool> SendTx() {
     
         // RockComponent rock = CursorMUD.Entity.GetMUDComponent<RockComponent>();
         return await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity, ActionName.Mining, transform.position);

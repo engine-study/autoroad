@@ -20,7 +20,7 @@ public class Plant : Equipment
     }
 
     
-    public override async UniTask<bool> Use() {
+    public override async UniTask<bool> SendTx() {
         
         int x = (int)transform.position.x;
         int y = (int)transform.position.z;

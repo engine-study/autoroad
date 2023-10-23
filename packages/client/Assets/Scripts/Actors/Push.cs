@@ -8,21 +8,8 @@ using IWorld.ContractDefinition;
 public class Push : Equipment
 {
     
-    public override bool IsInteractable() 
-    {
-        bool canUse = base.IsInteractable();
-        return canUse;
-    }
-
-    
-    public override async UniTask<bool> Use() {
-        
-        int x = (int)transform.position.x;
-        int y = (int)transform.position.z;
-
-        //can try optimistic
-
-        return await ActionsMUD.ActionTx(Entity, ActionName.Push, new Vector3(x, 0, y));
+    public override bool IsInteractable()  {
+        return base.IsInteractable();
     }
 
 }

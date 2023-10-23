@@ -25,7 +25,7 @@ public class FishingRod : Equipment {
         return canUse && moveType != null && moveType.MoveType == MoveType.Push && (weight == null || weight.Weight <= 0);
     }
     
-    public override async UniTask<bool> Use() {
+    public override async UniTask<bool> SendTx() {
         
         Debug.Log("Fishing");
 

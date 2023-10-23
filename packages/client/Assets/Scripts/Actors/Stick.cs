@@ -24,7 +24,7 @@ public class Stick : Equipment
         return canUse && onBounds && npc != null && moveType != null && moveType.MoveType == MoveType.Push; 
     }
     
-    public override async UniTask<bool> Use() {
+    public override async UniTask<bool> SendTx() {
         
         Debug.Log("STICKING");
 

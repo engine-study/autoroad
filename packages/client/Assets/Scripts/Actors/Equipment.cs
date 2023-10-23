@@ -17,7 +17,7 @@ public class Equipment : SPInteract {
 
     [Header("Debug")]
     [SerializeField] protected MUDComponent us; //could be player, barbarian, soldier, etc.
-    public bool canUse = false;
+    [SerializeField] protected bool canUse = false;
 
 
     public override bool IsInteractable() {
@@ -25,7 +25,8 @@ public class Equipment : SPInteract {
         canUse = base.IsInteractable() && MapConfigComponent.OnWorld(transform.position) && gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
         bool hasItem = canUse && (item == null || Inventory.LocalInventory.ItemIsUsable(item));
         bool hasRequiredComponent = canUse && ((requiredComponent == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
-        return canUse && hasRequiredComponent && hasItem; 
+        canUse = canUse && hasRequiredComponent && hasItem;
+        return canUse; 
     }
 
     protected override void Awake() {
@@ -38,7 +39,7 @@ public class Equipment : SPInteract {
         base.Interact(toggle, newActor);
 
         if(toggle) {
-            Use();
+            SendTx();
         }
     }
     
@@ -46,7 +47,7 @@ public class Equipment : SPInteract {
         Action().DoCast(toggle, Actor);
     }
     
-    public virtual async UniTask<bool> Use() {
+    public virtual async UniTask<bool> SendTx() {
 
         int x = Mathf.RoundToInt(transform.position.x);
         int y = Mathf.RoundToInt(transform.position.z);
