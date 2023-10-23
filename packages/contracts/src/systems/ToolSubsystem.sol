@@ -49,8 +49,8 @@ contract ToolSubsystem is System {
     require(Shovel.get(player), "no shovel");
     require(Rules.canDoStuff(player), "hmm");
     require(Rules.onRoad(x, y), "off road");
-    require(withinManhattanDistance(PositionData(x, y, 0), Position.get(player), 1), "too far");
-
+    Rules.canInteractEmpty(player, Position.get(player), PositionData(x, y, 0),Rules.getKeysAtPosition(world,x, y, 0), 1);
+    
     SystemSwitch.call(abi.encodeCall(world.spawnShoveledRoad, (player, x,y)));
     Actions.setAction(player, ActionType.Shoveling, x, y);
 

@@ -223,8 +223,6 @@ namespace IWorld.ContractDefinition
         public virtual int Up { get; set; }
         [Parameter("int32", "down", 4)]
         public virtual int Down { get; set; }
-        [Parameter("int32", "roadSide", 5)]
-        public virtual int RoadSide { get; set; }
     }
 
     public partial class CreatePuzzleOnMileFunction : CreatePuzzleOnMileFunctionBase { }
@@ -243,8 +241,25 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("int32", "right", 2)]
+        [Parameter("uint8", "puzzle", 2)]
+        public virtual byte Puzzle { get; set; }
+        [Parameter("int32", "right", 3)]
         public virtual int Right { get; set; }
+        [Parameter("int32", "up", 4)]
+        public virtual int Up { get; set; }
+        [Parameter("int32", "down", 5)]
+        public virtual int Down { get; set; }
+    }
+
+    public partial class CreateStatuePuzzleFunction : CreateStatuePuzzleFunctionBase { }
+
+    [Function("createStatuePuzzle")]
+    public class CreateStatuePuzzleFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("int32", "width", 2)]
+        public virtual int Width { get; set; }
         [Parameter("int32", "up", 3)]
         public virtual int Up { get; set; }
         [Parameter("int32", "down", 4)]
@@ -1246,6 +1261,17 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class SpawnEmptyRoadFunction : SpawnEmptyRoadFunctionBase { }
+
+    [Function("spawnEmptyRoad")]
+    public class SpawnEmptyRoadFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class SpawnFinishedRoadAdminFunction : SpawnFinishedRoadAdminFunctionBase { }
 
     [Function("spawnFinishedRoadAdmin")]
@@ -1503,10 +1529,6 @@ namespace IWorld.ContractDefinition
         public virtual int Left { get; set; }
         [Parameter("int32", "right", 3)]
         public virtual int Right { get; set; }
-        [Parameter("int32", "up", 4)]
-        public virtual int Up { get; set; }
-        [Parameter("int32", "down", 5)]
-        public virtual int Down { get; set; }
     }
 
     public partial class SupFunction : SupFunctionBase { }
@@ -2046,6 +2068,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class CreatorOutputDTO : CreatorOutputDTOBase { }
 
     [FunctionOutput]
@@ -2294,6 +2318,8 @@ namespace IWorld.ContractDefinition
         [Parameter("tuple[]", "", 1)]
         public virtual List<PositionData> ReturnValue1 { get; set; }
     }
+
+
 
 
 

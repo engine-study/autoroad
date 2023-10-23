@@ -6,7 +6,7 @@ using mudworld;
 using mud;
 using IWorld.ContractDefinition;
 
-public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, Miliarium, Lapis, Saxum, Columna, _Count }
+public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, Miliarium, Lapis, Saxum, Columna, Statuae, _Count }
 public class RockComponent : MUDComponent {
 
     public RockType RockType {get { return rockType; } }
@@ -16,6 +16,7 @@ public class RockComponent : MUDComponent {
     [SerializeField] GameObject visualParent;
     [SerializeField] SPBase rockBase;
     [SerializeField] SPFlashShake flash;
+    [EnumNamedArray( typeof(RockType) )]
     [SerializeField] GameObject[] stages;
     [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles, fx_fillExplosion;
     [SerializeField] AudioClip[] sfx_slide, sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
@@ -71,7 +72,7 @@ public class RockComponent : MUDComponent {
         Entity.SetName(rockType.ToString());
 
         for (int i = 0; i < stages.Length; i++) {
-            stages[i].SetActive(i == (int)rockType);
+            stages[i]?.SetActive(i == (int)rockType);
         }
         
         if(Loaded) {

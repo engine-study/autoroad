@@ -52,10 +52,10 @@ export default mudConfig({
     TerrainType: ["None", "Rock", "Mine", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Miliarium"],
     NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
-    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar"],
+    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
-    PuzzleType: ["None", "Miliarium", "Bearer", "Count"],
+    PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Count"],
     PaymentType: ["None", "Coins", "Gems", "Eth"],
   },
 
@@ -230,21 +230,9 @@ export default mudConfig({
     },
 
     Carriage: "bool",
-    Row: { 
-      keySchema: {}, 
-      valueSchema: { 
-        value : "int32",
-      },
-    },
+    Row: {  keySchema: {},  valueSchema: { value : "int32", },},
+    Puzzles: {  keySchema: {},  valueSchema: { value : "int32", },},
 
-    // Item: {
-    //   dataStruct: false,
-    //   valueSchema: {
-    //     name: "string",
-    //     id: "uint32",
-    //     equipped: "bool",
-    //   },
-    // },
 
     Action: {
       // offchainOnly: true,

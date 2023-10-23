@@ -100,14 +100,15 @@ contract TerrainSubsystem is System {
     int32 row = Row.get();
 
     if(summonAll) {
-      while(row < up) {row = summonRow(causedBy, left, right, up, down);}
+      while(row < up) {row = summonRow(causedBy, left, right);}
     } else {
       //summon another row, until we have summoned all of them
-      row = summonRow(causedBy, left, right, up, down);
+      row = summonRow(causedBy, left, right);
     }
 
     //complete the mile, set the new bounds
     if(row < up) {return;}
+
     mileIsReady(causedBy, mile, left, right, up, down);
 
   }
@@ -117,8 +118,10 @@ contract TerrainSubsystem is System {
     console.log("mile ready");
 
     console.log("create puzzle");
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createRandomPuzzle, (causedBy, right, up, down)));
-    
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createMiliarium, (causedBy, right, up, down)));
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
+
     //set bounds 
     Bounds.set(left, right, up, down);
 
@@ -127,7 +130,7 @@ contract TerrainSubsystem is System {
     Chunk.set(chunkEntity, mile, true, false, 0, 0);
   }
 
-  function summonRow(bytes32 causedBy, int32 left, int32 right, int32 up, int32 down) public returns(int32 row) {
+  function summonRow(bytes32 causedBy, int32 left, int32 right) public returns(int32 row) {
 
     console.log("summon row");
 
@@ -135,6 +138,7 @@ contract TerrainSubsystem is System {
     row++;
 
     spawnRow(causedBy, right, row);
+    spawnEmptyRoad(0,row);
 
     Row.set(row);
     return row;
@@ -358,17 +362,19 @@ contract TerrainSubsystem is System {
     finishMile(chunk, currentMile, pieces);
   }
 
+  function spawnEmptyRoad(int32 x, int32 y) public {
+    bytes32 entity = Actions.getRoadEntity(x,y);
+    Road.set(entity, uint32(RoadState.None), 0, false);
+    Position.set(entity, x, y, -1);
+  }
+
   function spawnShoveledRoad(bytes32 player, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
-
-    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
-    require(atPosition.length < 1, "trying to dig an occupied spot");
 
     bytes32 entity = Actions.getRoadEntity(x,y);
     require(Road.getState(entity) == uint32(RoadState.None), "road");
 
     //TODO setState
-    // Road.setState(entity, uint32(RoadState.Shoveled));
     Road.set(entity, uint32(RoadState.Shoveled), 0, false);
     Move.set(entity, uint32(MoveType.Hole));
     Position.set(entity, x, y, 0);

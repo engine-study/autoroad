@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/index.sol";
-import { Puzzle, Trigger, Linker, Miliarium } from "../codegen/index.sol";
+import { Puzzles, Puzzle, Trigger, Linker, Miliarium } from "../codegen/index.sol";
 import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/common.sol";
 
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
@@ -41,39 +41,80 @@ contract PuzzleSubsystem is System {
 
   }
 
+
+
   function createPuzzleOnMile(bytes32 causedBy) public {
     int32 playWidth = MapConfig.getPlayWidth();
     int32 up = Bounds.getUp();
     int32 down = Bounds.getDown();
-    createRandomPuzzle(causedBy, playWidth, up, down);
+    createMiliarium(causedBy, playWidth, up, down);
   }
 
 
-  function createRandomPuzzle(bytes32 causedBy, int32 right, int32 up, int32 down ) public {
+  function createRandomPuzzle(bytes32 causedBy, PuzzleType puzzle, int32 right, int32 up, int32 down ) public {
     
     // IWorld world = IWorld(_world());
     PuzzleType puzzleType = PuzzleType(random(0, uint32(PuzzleType.Count)));
-
     console.log("create puzzle");
 
     //use mile number to spawn puzzles?
     // int32 mileNumber = GameState.getMiles();
 
-    if (true || puzzleType == PuzzleType.Miliarium) {
-        int32 roadRight = RoadConfig.getRight();
-        createMiliarium(causedBy, right, up, down, roadRight );
-    } else if(puzzleType == PuzzleType.Bearer) {
-        // createBearer(causedBy);
+    if (puzzleType == PuzzleType.Miliarium) {
+        createMiliarium(causedBy, right, up, down);
+    } else {
+        createStatuePuzzle(causedBy, right, up, down);
     }
 
   }
 
-  function createMiliarium(bytes32 causedBy, int32 width, int32 up, int32 down, int32 roadSide) public {
+  function createStatuePuzzle(bytes32 causedBy, int32 width, int32 up, int32 down) public {
+    
+    IWorld world = IWorld(_world());
+    int32 puzzle = Puzzles.get();
+    int32 roadSide = RoadConfig.getRight();
+
+    bytes32 mil = Actions.getRoadEntity(-99, puzzle);
+    bytes32 trigger = Actions.getRoadEntity(99, puzzle);
+
+    console.log("statue");
+
+    PositionData memory pos = findEmptyPositionInArea(mil, width, up, down, roadSide);
+    
+    //delete whatever was there and place puzzle
+    Actions.deleteAt(world, pos);
+
+    //spawn statue
+    Position.set(mil, pos);
+    Miliarium.set(mil, true);
+    Weight.set(mil, 1);
+    Move.set(mil, uint32(MoveType.Push));
+    Rock.set(mil, uint32(RockType.Statuae));
+    Puzzle.set(mil, uint32(PuzzleType.Statuae), false);
+    Linker.set(mil, trigger);
+
+    console.log("trigger");
+
+    //put triggers underground
+    pos = findEmptyPositionInArea(trigger, width, up, down, roadSide);
+    pos.layer = int32(-1);
+
+    Position.set(trigger, pos);
+    Trigger.set(trigger, true);
+
+    //increment puzzle count
+    Puzzles.set(puzzle+1);
+
+  }
+
+  function createMiliarium(bytes32 causedBy, int32 width, int32 up, int32 down) public {
 
     IWorld world = IWorld(_world());
+    int32 puzzle = Puzzles.get();
+    int32 roadSide = RoadConfig.getRight();
 
-    bytes32 mil = Actions.getRoadEntity(-5, up);
-    bytes32 trigger = Actions.getRoadEntity(5, up);
+    bytes32 mil = Actions.getRoadEntity(-99, puzzle);
+    bytes32 trigger = Actions.getRoadEntity(99, puzzle);
 
     console.log("miliarium");
 
@@ -92,12 +133,13 @@ contract PuzzleSubsystem is System {
     console.log("trigger");
 
     //put triggers underground
-    pos = findEmptyPositionInArea(trigger, width, up, down, roadSide);
-    pos.layer = int32(-1);
+    pos = PositionData(roadSide + 1, down + 4, -1);
 
     Position.set(trigger, pos);
     Trigger.set(trigger, true);
-
+    
+    //increment puzzle count
+    Puzzles.set(puzzle+1);
   }
 
   //finds a position and deletes the object on it
