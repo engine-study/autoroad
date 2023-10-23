@@ -14,20 +14,18 @@ public class CameraControls : MonoBehaviour
 
     [Header("Pan")]
     public bool canPan = true;
-    [SerializeField] private float movementSpeed = 10.0f;
-    [SerializeField] private float fovMultiplier = 5.0f;
-    [SerializeField] private float fovMax = 25f;
+    [SerializeField] float movementSpeed = 100.0f;
+    [SerializeField] Vector2 fovMultiply = new Vector2(1f,10f);
 
     [Header("Rotate")]
     public bool canRotate = true;
-    [SerializeField] private float rotationSpeed = 0.5f;
+    [SerializeField] float rotationSpeed = 50f;
 
     [Header("Misc")]
     [SerializeField] bool inCinematic = false; 
 
-
-    private Vector2 _delta;
-
+    [Header("Debug")]
+    [SerializeField] Vector2 _delta;
     private bool _isMoving;
     private bool _isRotating;
 
@@ -100,7 +98,7 @@ public class CameraControls : MonoBehaviour
     void UpdateDrag() {
 
         lastPos = currentPos;
-        currentPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        currentPos = new Vector2(Input.mousePosition.x/(float)Screen.width, Input.mousePosition.y/(float)Screen.height);
 
         _delta = currentPos - lastPos;
 
@@ -117,7 +115,7 @@ public class CameraControls : MonoBehaviour
 
         if(input && (SPPlayer.LocalPlayer == null || SPPlayer.LocalPlayer?.Actor?.ActionState == ActionState.Idle)) {
             if(!hasMovedEnough) {
-                hasMovedEnough = Vector2.Distance(currentPos, startPos) > 5f;
+                hasMovedEnough = Vector2.Distance(currentPos, startPos) > .01f;
                 if(hasMovedEnough) {
                     startPos = currentPos;
                 }
@@ -135,12 +133,15 @@ public class CameraControls : MonoBehaviour
 
             var position = transform.right * (_delta.x * -movementSpeed);
             position += transform.forward * (_delta.y * -movementSpeed);
-            // position *= 1f + (fovMultiplier * Mathf.Clamp01(1f - (SPCamera.I.FOV / fovMax)));
+
+            float distanceMultiplier =  Mathf.Lerp(fovMultiply.x, fovMultiply.y, Mathf.InverseLerp(SPCamera.I.FOVClamp.x, SPCamera.I.FOVClamp.y, SPCamera.I.FOV));
+
+            position *= distanceMultiplier;
 
             position = transform.position + position * Time.deltaTime;
 
-            position.x = Mathf.Clamp(position.x, BoundsComponent.Left, BoundsComponent.Right);
-            position.z = Mathf.Clamp(position.z, BoundsComponent.Down, BoundsComponent.Up);
+            position.x = Mathf.Clamp(position.x, BoundsComponent.Left * 2f, BoundsComponent.Right * 2f);
+            position.z = Mathf.Clamp(position.z, BoundsComponent.Down - 10f, BoundsComponent.Up + 10f);
 
             SPCamera.SetTarget(position);
 

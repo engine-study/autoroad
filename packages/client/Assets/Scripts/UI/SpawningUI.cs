@@ -26,18 +26,22 @@ public class SpawningUI : SPWindowParent
 
     protected override void OnEnable() {
         base.OnEnable();
-
         CursorMUD.OnGridPosition += UpdateCursor;
-        
+    }
+
+    protected override void OnDisable() {
+        base.OnDisable();
+        CursorMUD.OnGridPosition -= UpdateCursor;
     }
 
     public override void ToggleWindow(bool toggle) {
         base.ToggleWindow(toggle);
 
         if(toggle) {
+
             SPCamera.SetFollow(null);
             SPCamera.SetFOVGlobal(10f);
-            SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.right * MapConfigComponent.Width);
+            SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.right * MapConfigComponent.SpawnWidth);
 
             nameButton.UpdateField(NameComponent.LocalName);
 
@@ -50,18 +54,12 @@ public class SpawningUI : SPWindowParent
             cursor.transform.localScale = Vector3.one;
         }
 
+        // CameraControls.TogglePan(!toggle);
         
         scene.SetActive(toggle);
         cursor.SetActive(toggle);
         spawnZone.SetActive(toggle);
 
-
-    }
-
-    protected override void OnDisable() {
-        base.OnDisable();
-
-        CursorMUD.OnGridPosition -= UpdateCursor;
 
     }
 

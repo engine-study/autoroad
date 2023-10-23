@@ -30,7 +30,7 @@ contract SpawnSubsystem is System {
 
     if(!playerExists) {
       Player.set(entity, true);
-      Coinage.set(entity, 0);
+      Coinage.set(entity, 10);
       Eth.set(entity, 10000);
       Weight.set(entity, -1);
 
