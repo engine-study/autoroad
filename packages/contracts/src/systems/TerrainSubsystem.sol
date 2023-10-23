@@ -25,12 +25,7 @@ import { randomCoord } from "../utility/random.sol";
 contract TerrainSubsystem is System {
   //updateRow
   //finishRow
-
-
-  function sup() public {
-    console.log("sup");
-  }
-
+  
   function createWorld() public {
 
     console.log("creating world");

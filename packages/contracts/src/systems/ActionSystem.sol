@@ -13,13 +13,11 @@ import { Rules } from "../utility/rules.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
-import { MoveSubsystem } from "../systems/MoveSubsystem.sol";
-import { ToolSubsystem } from "../systems/ToolSubsystem.sol";
-import { SpawnSubsystem } from "../systems/SpawnSubsystem.sol";
-import { FloraSubsystem } from "../systems/FloraSubsystem.sol";
-import { TerrainSubsystem } from "../systems/TerrainSubsystem.sol";
-
 contract ActionSystem is System {
+
+  function sup() public {
+    console.log("sup");
+  }
 
   function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));

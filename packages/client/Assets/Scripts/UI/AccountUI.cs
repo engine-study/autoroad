@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using mud;
 using UnityEngine;
 using Nethereum.Web3.Accounts;
+using Cysharp.Threading.Tasks;
+using IWorld.ContractDefinition;
 
 
 public class AccountUI : SPWindow
@@ -57,17 +59,6 @@ public class AccountUI : SPWindow
         SelectAccount(newAccount);
     }
 
-    public void ConfirmAccount() {
-
-        if(selected == null) {return;}
-        
-        account = selected.account;
-        NetworkManager.Instance.SetAccount(account);
-        
-        ToggleWindowClose();
-
-    }
-
     public void SelectAccount(AccountField newAccount) {
 
         if(selected != null) {
@@ -77,7 +68,34 @@ public class AccountUI : SPWindow
         selected = newAccount;
         selected.address.ButtonText.fontStyle = TMPro.FontStyles.Underline;
 
-
     }   
+
+    public void ConfirmAccount() {
+
+        if(selected == null) {return;}
+        confirm.ToggleWindowClose();
+        Sign();
+
+    }
+
+    async UniTask Sign() {
+        DidSup(await TxManager.SendDirect<SupFunction>());
+    }
+    
+    public void DidSup(bool sup) {
+        
+        if(sup) {
+            //done, we have a legit account
+            account = selected.account;
+            // NetworkManager.Instance.SetAccount(account);
+            ToggleWindowClose();
+
+        } else {
+            //try again, TX sign didn't go through
+            confirm.ToggleWindowOpen();
+        }
+
+    }
+
 
 }

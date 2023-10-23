@@ -15,10 +15,10 @@ public class TutorialUI : SPWindowParent
 
     [Header("Debug")]
     public bool hasCompleted = false;
+    public bool hasStarted = false;
 
     float vertical = 1f;
     float distance = 25f;
-    bool hasStarted = false;
     Vector3 targetPos;
     string tutorial = "tutorial";
     public override void Init() {
@@ -63,9 +63,7 @@ public class TutorialUI : SPWindowParent
 
     public override void ToggleWindow(bool toggle) {
         base.ToggleWindow(toggle);
-
         Toggle(toggle);
-
     }
 
     void Update() {
@@ -110,7 +108,7 @@ public class TutorialUI : SPWindowParent
         
         PlayerPrefs.SetString(tutorial, "true");
         PlayerPrefs.Save();
-        Toggle(false);
+        ToggleWindow(false);
     }
 
     void ShowTutorial() {

@@ -4,7 +4,6 @@ pragma solidity >=0.8.21;
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { TerrainSubsystem } from "../src/systems/TerrainSubsystem.sol";
 import { random } from "../src/utility/random.sol";
 
 contract PostDeploy is Script {
