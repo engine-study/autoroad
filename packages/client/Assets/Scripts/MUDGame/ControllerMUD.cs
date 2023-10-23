@@ -18,6 +18,8 @@ public class ControllerMUD : SPController {
     [Header("Actions")]
     [SerializeField] SPInteract walkAction;
     [SerializeField] SPInteract pushAction;
+    [SerializeField] GameObject marker;
+    [SerializeField] GameObject good, bad;
     SPInteract currentAction;
 
     [Header("MUD")]
@@ -35,11 +37,9 @@ public class ControllerMUD : SPController {
 
     Vector3 onchainPos;
     Vector3 lastOnchainPos = Vector3.down;
-    Vector3 lastPos, lookVector;
+    Vector3 lastPos;
     Quaternion lookRotation;
-    Vector3 markerPos;
     float alive = 0f;
-    float keyDown = 0f;
     float rotationSpeed = 720f;
     float distance;
     int moveDistance = 3;
@@ -77,6 +77,8 @@ public class ControllerMUD : SPController {
             SPActionUI.Instance.SpawnAction(pushAction);
         }
 
+        marker.SetActive(false);
+
         init = true;
 
     }
@@ -86,6 +88,7 @@ public class ControllerMUD : SPController {
         playerTransform.position = newPos;
         moveDest = newPos;
         lastOnchainPos = newPos;
+        lastPos = newPos;
 
     }
 
@@ -105,13 +108,15 @@ public class ControllerMUD : SPController {
 
         alive += Time.deltaTime;
 
-        if(!playerScript.Alive) {
-            return;
-        }
+        if(!playerScript.Alive) {return;}
 
         UpdateInput();
         UpdatePosition();
 
+    }
+    
+    void LateUpdate() {
+        UpdateMarker();
     }
 
     float minTime = 0f;
@@ -236,11 +241,25 @@ public class ControllerMUD : SPController {
         player.Actor.InputAction(!wasInputting, true, currentAction);
         wasInputting = true;
 
+        bad.SetActive(false);
+        good.SetActive(true);
+
+
         if(player.Actor.ActionState >= ActionState.Acting) {
             Debug.Log("MOVE: " + currentAction.gameObject.name);
-            markerPos = moveDest;
             minTime = transactionWait;
         }
+
+    }
+
+    void UpdateMarker() {
+
+        marker.SetActive((input || minTime > 0f) && currentAction != null && sync.Moving == false);
+
+        if(!marker.activeInHierarchy) return;
+
+        marker.transform.position = transform.position + inputDir;
+        marker.transform.rotation = Quaternion.identity;
 
     }
 
@@ -252,6 +271,11 @@ public class ControllerMUD : SPController {
         MotherUI.TransactionFailed();
         player?.Animator.PlayClip("Hit");
         minTime = cancelWait;
+        input = false;
+
+        bad.SetActive(true);
+        good.SetActive(false);
+
     }
 
     public void TeleportMUD(Vector3 position, bool admin = false) {

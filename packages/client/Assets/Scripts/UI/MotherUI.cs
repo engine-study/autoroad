@@ -61,6 +61,8 @@ public class MotherUI : SPUIInstance {
         explorer.ToggleWindowClose();
         hover.Init();
         mileComplete.Init();
+
+        tutorial.Init();
         
         wheel.Init();
 

@@ -6513,7 +6513,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -12.5}
+  m_AnchoredPosition: {x: 0, y: -12.4999695}
   m_SizeDelta: {x: -100, y: -75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &440508197
@@ -13704,6 +13704,7 @@ GameObject:
   - component: {fileID: 915266013}
   - component: {fileID: 915266012}
   - component: {fileID: 915266011}
+  - component: {fileID: 915266014}
   m_Layer: 5
   m_Name: FullscreenUI
   m_TagString: Untagged
@@ -13796,6 +13797,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &915266014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915266009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd3c64bc73b53547b5d8d8e1b83eb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &924766253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18439,7 +18452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f81524fb4724d4cb445f038a81f0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGame: 1
+  newGame: 0
   skipMenu: 0
   mainTables: {fileID: 1273645192}
   visualTables: {fileID: 0}
@@ -19073,6 +19086,7 @@ GameObject:
   - component: {fileID: 1265678056}
   - component: {fileID: 1265678055}
   - component: {fileID: 1265678054}
+  - component: {fileID: 1265678057}
   m_Layer: 5
   m_Name: ForegroundUI
   m_TagString: Untagged
@@ -19164,6 +19178,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1265678057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265678052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd3c64bc73b53547b5d8d8e1b83eb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1268133488 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4987099743905953932, guid: 69b44054b5999cc45a02e93ba4eacef8, type: 3}
@@ -22749,6 +22775,7 @@ GameObject:
   - component: {fileID: 1500045292}
   - component: {fileID: 1500045291}
   - component: {fileID: 1500045290}
+  - component: {fileID: 1500045294}
   m_Layer: 5
   m_Name: WorldSpaceUI
   m_TagString: Untagged
@@ -22854,6 +22881,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 1500045292}
   raycaster: {fileID: 1500045290}
+--- !u!114 &1500045294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500045288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd3c64bc73b53547b5d8d8e1b83eb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1501724350 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3951435493763817496, guid: 4f3e6b2621c9c044080cfecfae24e49a, type: 3}
@@ -37607,7 +37646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5712842461510900550, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
       propertyPath: networkType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5712842461510900550, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
       propertyPath: uniqueWallets
