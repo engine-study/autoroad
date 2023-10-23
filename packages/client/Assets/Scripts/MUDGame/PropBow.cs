@@ -30,7 +30,7 @@ public class PropBow : SPAnimationProp
                     newArrow.target = targetAnimator.Head; 
                     newArrow.targetAnimator = targetAnimator;
                 } else { 
-                    newArrow.target = mud.ActionData.Target.Target; 
+                    newArrow.pos = mud.ActionData.Target.Target.position + Vector3.up; 
                 }
 
             } else {
