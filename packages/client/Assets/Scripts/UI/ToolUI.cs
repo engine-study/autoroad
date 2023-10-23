@@ -95,6 +95,7 @@ public class ToolUI : SPWindowParent
         //don't set if we haven't unlocked
         if(newTool.Unlocked == false) {
             tool = null; 
+            UpdateCursor();
             return;
         }
 
