@@ -9,15 +9,8 @@ using mud;
 public class Mining : Equipment
 {
     public override bool IsInteractable() {
-        bool canUse = base.IsInteractable();
-        RockComponent rock = CursorMUD.Entity?.GetMUDComponent<RockComponent>();
-        return canUse && CursorMUD.Entity != null && rock != null && rock.RockType < RockType.Nucleus;
-    }
-
-    public override async UniTask<bool> SendTx() {
-    
-        // RockComponent rock = CursorMUD.Entity.GetMUDComponent<RockComponent>();
-        return await ActionsMUD.ActionTx(PlayerComponent.LocalPlayer.Entity, ActionName.Mining, transform.position);
+        canUse = base.IsInteractable() && entity?.GetMUDComponent<RockComponent>()?.RockType < RockType.Nucleus;
+        return canUse;
     }
 
 }

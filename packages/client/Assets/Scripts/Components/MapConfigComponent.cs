@@ -11,7 +11,7 @@ public class MapConfigComponent : MUDComponent
 
     
     public static bool OnWorldOrMap(MUDEntity entity, Vector3 pos) {
-        if (entity.GetMUDComponent<PlayerComponent>()) { return OnWorld(pos); }
+        if (entity?.GetMUDComponent<PlayerComponent>()) { return OnWorld(pos); }
         else return OnMap(pos); 
     }
 

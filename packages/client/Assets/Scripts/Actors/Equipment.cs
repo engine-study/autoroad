@@ -17,14 +17,16 @@ public class Equipment : SPInteract {
 
     [Header("Debug")]
     [SerializeField] protected MUDComponent us; //could be player, barbarian, soldier, etc.
+    [SerializeField] protected MUDEntity entity, entityUnder;
     [SerializeField] protected bool canUse = false;
-
 
     public override bool IsInteractable() {
 
-        canUse = base.IsInteractable() && MapConfigComponent.OnWorld(transform.position) && gameObject.activeInHierarchy && CursorMUD.Entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
+        entity = GridMUD.GetEntityAt(transform.position);
+        entityUnder = GridMUD.GetEntityAt(transform.position + Vector3.down);
+        canUse = base.IsInteractable() && MapConfigComponent.OnWorldOrMap(entity, transform.position) && gameObject.activeInHierarchy && entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
         bool hasItem = canUse && (item == null || Inventory.LocalInventory.ItemIsUsable(item));
-        bool hasRequiredComponent = canUse && ((requiredComponent == null && CursorMUD.Entity == null) || (CursorMUD.Entity != null && CursorMUD.Entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
+        bool hasRequiredComponent = canUse && ((requiredComponent == null && entity == null) || (entity != null && entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
         canUse = canUse && hasRequiredComponent && hasItem;
         return canUse; 
     }
