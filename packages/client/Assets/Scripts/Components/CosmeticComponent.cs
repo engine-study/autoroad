@@ -12,6 +12,7 @@ public class CosmeticComponent : ValueComponent
 
     [Header("Debug")]
     [SerializeField] protected int costumeIndex;
+    [SerializeField] protected PlayerMUD player;
 
     protected override void Init(SpawnInfo newInfo) {
         base.Init(newInfo);
@@ -21,11 +22,8 @@ public class CosmeticComponent : ValueComponent
     protected override void PostInit() {
         base.PostInit();
 
-        Cosmetic head = Entity.GetMUDComponent<PlayerComponent>().PlayerScript.headCosmetic;
-        head.SetNewBody(body);
-
-        Cosmetic robeCosmetic = Entity.GetMUDComponent<PlayerComponent>().PlayerScript.bodyCosmetic;
-        robeCosmetic.SetNewBody(body);
+        player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
+        player.SetCosmetic(cosmetic, body);
         
     }
 

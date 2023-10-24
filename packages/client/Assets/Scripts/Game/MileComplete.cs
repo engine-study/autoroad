@@ -87,7 +87,7 @@ public class MileComplete : SPWindowParent
                 if(road == null || road.Gem == false) { continue; }
                 if(road.FilledBy == null) { Debug.LogError("No player credited?", road); continue; }
                 PlayerMUD player = road.FilledBy.PlayerScript;
-                SPResourceJuicy gem = SPResourceJuicy.SpawnResource("Prefabs/Gem", player.headCosmetic.bodyParent, road.transform.position + Vector3.up, Quaternion.identity);
+                SPResourceJuicy gem = SPResourceJuicy.SpawnResource("Prefabs/Gem", player.Animator.Head, road.transform.position + Vector3.up, Quaternion.identity);
 
                 players.Add(player);
                 roads.Add(road);
@@ -127,7 +127,7 @@ public class MileComplete : SPWindowParent
         gem.SendResource();
         while (gem != null) { yield return null; }
 
-        SPCamera.SetFollow(player.headCosmetic.bodyParent);
+        SPCamera.SetFollow(player.Animator.Head);
         yield return new WaitForSeconds(.5f);
 
     }

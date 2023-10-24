@@ -18,11 +18,10 @@ public class PlayerMUD : SPPlayer
     [SerializeField] private PositionSync positionSync;
     [SerializeField] private ActionsMUD actions;
     [SerializeField] private AnimationMUD animMud;
-    [SerializeField] public Cosmetic bodyCosmetic;
-    [SerializeField] public Cosmetic headCosmetic;
-    [SerializeField] public Cosmetic capeCosmetic;
-    [SerializeField] public Cosmetic backpackCosmetic;
-    Cosmetic [] cosmetics;
+
+
+    [EnumNamedArray( typeof(CosmeticType) )]
+    [SerializeField] public Cosmetic [] cosmetics;
     [SerializeField] AudioClip [] sfx_equip;
 
     [Header("Debug")]
@@ -35,8 +34,7 @@ public class PlayerMUD : SPPlayer
         if(Player.Loaded) DoNetworkInit();
         else Player.OnLoaded += DoNetworkInit;
 
-        cosmetics = new Cosmetic[] {bodyCosmetic, headCosmetic, capeCosmetic, backpackCosmetic};
-        for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated += Equip;}
+        for(int i = 1; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated += Equip;}
 
     }
 
@@ -75,6 +73,9 @@ public class PlayerMUD : SPPlayer
 
     }
     
+    public void SetCosmetic (CosmeticType cosmetic, GameObject newCos) {
+        cosmetics[(int)cosmetic].SetNewBody(newCos);
+    }
     void Equip() {SPAudioSource.Play(Root.position, sfx_equip);}
 
     //refresh what available actions we have

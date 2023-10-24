@@ -82,6 +82,7 @@ public class Inventory : MonoBehaviour {
         if(v.Items == null || v.Items.Count == 0) return;
 
         for(int i = 0; i < v.Items.Count; i++) {
+            if(v.Items[i].item == null) continue;
             ToggleItem(true, v.Items[i]);
         }
 
