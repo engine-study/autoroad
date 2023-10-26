@@ -107,6 +107,7 @@ contract ToolSubsystem is System {
     //become shovelable once we are broken down enough
     else if (rockState >= uint32(RockType.Pavimentum)) {
       Position.deleteRecord(atPosition[0]);
+      Health.deleteRecord(atPosition[0]);
       // Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
   }

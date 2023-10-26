@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
-import { Action, Position, PositionData } from "../codegen/index.sol";
+import { Action, Position, PositionData, Health } from "../codegen/index.sol";
 import { ActionType } from "../codegen/common.sol";
 import { Rules } from "./rules.sol";
 
@@ -19,11 +19,15 @@ library Actions {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,pos.x, pos.y, pos.layer);
     require(atPosition.length > 0, "Nothing to delete");
     Position.deleteRecord(atPosition[0]);
+    Health.deleteRecord(atPosition[0]);
   }
 
   function deleteAt(IWorld world, PositionData memory pos) internal {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,pos.x, pos.y, pos.layer);
-    if(atPosition.length > 0) Position.deleteRecord(atPosition[0]);
+    if(atPosition.length == 0) return;
+    Position.deleteRecord(atPosition[0]);
+    Health.deleteRecord(atPosition[0]);
+
   }
   
   function getRoadEntity(int32 x, int32 y) internal pure returns(bytes32) {return keccak256(abi.encode("Road", x, y));}

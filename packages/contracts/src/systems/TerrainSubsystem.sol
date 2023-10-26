@@ -240,6 +240,8 @@ contract TerrainSubsystem is System {
     IWorld world = IWorld(_world());
     bytes32 entity = getUniqueEntity();
 
+    Health.set(entity,1);
+
     if (tType == TerrainType.Rock) {
       // Rock.set(entity, uint32(RockType.Raw));
       // Move.set(entity, uint32(MoveType.Obstruction));
@@ -265,12 +267,13 @@ contract TerrainSubsystem is System {
       Boulder.set(entity, true);
       Weight.set(entity, 99);
       Move.set(entity, uint32(MoveType.Obstruction));
-    }else if (tType == TerrainType.Road) {
+    } else if (tType == TerrainType.Road) {
       spawnFinishedRoad(player, x, y, RoadState.Paved);
     } else if (tType == TerrainType.Hole) {
       spawnShoveledRoad(player, x, y);
     } 
 
+    
     //get rid of this hack pls
     if(tType != TerrainType.None && tType != TerrainType.Road && tType != TerrainType.Hole) {
       Position.set(entity, x, y, 0);
@@ -372,6 +375,7 @@ contract TerrainSubsystem is System {
 
     //placing pushed object under road
     Position.set(pushed, pos.x, pos.y, -2);
+    Health.set(pushed, -1);
 
     spawnFinishedRoad(causedBy, pos.x, pos.y, state);
 

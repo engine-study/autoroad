@@ -193,7 +193,7 @@ contract MoveSubsystem is System {
       if(handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest) == false) {return;}
 
       //if we're still alive after handleMoveType, move into the position (this will trigger an entity update too)
-      if(NPC.get(entity) == 0 || Rules.canDoStuff(entity)) {
+      if(Rules.canDoStuff(entity)) {
         setPosition(causedBy, entity, to, actionType);
       }
 
@@ -222,8 +222,9 @@ contract MoveSubsystem is System {
         SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
         return false;
       } else {
-        //otherwise trap is destroyed with no effect
+        //otherwise trap is destroyed with no effect to pushed object
         Position.deleteRecord(atDest[0]);
+        Health.deleteRecord(atDest[0]);
       }
     }
 

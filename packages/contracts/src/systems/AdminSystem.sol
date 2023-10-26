@@ -51,7 +51,7 @@ contract AdminSystem is System {
 
     Player.deleteRecord(entity);
     Position.deleteRecord(entity);
-    Health.set(entity, -1);
+    Health.deleteRecord(entity);
     Move.deleteRecord(entity);
   }
 

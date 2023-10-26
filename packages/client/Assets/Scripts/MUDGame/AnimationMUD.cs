@@ -186,7 +186,7 @@ public class AnimationMUD : MonoBehaviour
         ToggleAction(true, newAction);
 
         //let it play for a couple seconds
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(entity.IsLocal ? 1f : 2f);
         
         ToggleAction(false, newAction);
 

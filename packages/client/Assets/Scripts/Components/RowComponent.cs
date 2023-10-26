@@ -14,7 +14,7 @@ public class RowComponent : MonoBehaviour {
     [SerializeField] private GameObject completeEffects;
 
     [Header("Reference")]
-    [SerializeField] private RoadComponent roadPrefab;
+    [SerializeField] private GameObject roadPrefab;
     [SerializeField] private Transform placeHolderParent;
     [SerializeField] private Transform leftSide;
     [SerializeField] private Transform rightSide;
@@ -24,7 +24,7 @@ public class RowComponent : MonoBehaviour {
     [Header("Debug")]
     [SerializeField] public ChunkComponent chunk;
     [SerializeField] private RoadComponent[] spawnedRoads;
-    [SerializeField] private RoadComponent[] roadFiller;
+    [SerializeField] private GameObject[] roadFiller;
 
 
 
@@ -37,7 +37,7 @@ public class RowComponent : MonoBehaviour {
         complete.SetActive(false);
         completeEffects.SetActive(false);
 
-        roadFiller = new RoadComponent[width];
+        roadFiller = new GameObject[width];
         spawnedRoads = new RoadComponent[width];
 
         int left = Mathf.CeilToInt(-width * .5f);
@@ -45,8 +45,9 @@ public class RowComponent : MonoBehaviour {
         int index = 0;
         
         for (int i = left; i <= right; i++) {
-            RoadComponent newRoad = Instantiate(roadPrefab, transform.position + Vector3.right * i, Quaternion.identity, placeHolderParent);
+            GameObject newRoad = Instantiate(roadPrefab, transform.position + Vector3.right * i, Quaternion.identity, placeHolderParent);
             newRoad.name = "Road " + i;
+            newRoad.SetActive(true);
             roadFiller[index] = newRoad;
             index++;
         }
