@@ -115,11 +115,13 @@ public class AnimationMUD : MonoBehaviour
 
         if(toggle) {
             // head.parent = null;
-            headRB.isKinematic = true;
-            headRB.velocity = Random.onUnitSphere * .1f;
+            // headRB.isKinematic = true;
+            // headRB.detectCollisions = false;
+            // headRB.velocity = Random.onUnitSphere * .1f;
         } else {
             //set head back to where its supposed to be
-            headRB.isKinematic = true;
+            // headRB.isKinematic = true;
+            // headRB.isKinematic = false;
             ToggleSimple(isSimple);
         }
 

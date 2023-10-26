@@ -76,7 +76,7 @@ contract FloraSubsystem is System {
 
     if (health <= 0) {
       
-      Health.set(atPosition[0], health);
+      Health.set(atPosition[0], -1);
       Position.deleteRecord(atPosition[0]);
 
       uint32 seedCount = Seeds.get(player);

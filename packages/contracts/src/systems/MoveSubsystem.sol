@@ -192,8 +192,8 @@ contract MoveSubsystem is System {
       //check if we survive the move through terrain
       if(handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest) == false) {return;}
 
-      //if we're still alive, move into the position (this will trigger an entity update too)
-      if(Rules.canDoStuff(entity)) {
+      //if we're still alive after handleMoveType, move into the position (this will trigger an entity update too)
+      if(NPC.get(entity) == 0 || Rules.canDoStuff(entity)) {
         setPosition(causedBy, entity, to, actionType);
       }
 

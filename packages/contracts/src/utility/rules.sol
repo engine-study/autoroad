@@ -54,9 +54,9 @@ library Rules {
     return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up && y >= 0;
   }
 
-  function canDoStuff(bytes32 player) internal returns (bool) {
+  function canDoStuff(bytes32 entity) internal returns (bool) {
     //TODO add game pausing global
-    if(Health.get(player) < 1) return false;
+    if(Health.get(entity) < 1) return false;
     return true;
   }
 
