@@ -67,7 +67,7 @@ public class SpawningUI : SPWindowParent
 
         SPCursorTexture.UpdateCursor(SPCursorState.PointerSlot);
 
-        if(!spawning && Input.GetMouseButtonDown(0) && goodSpawn && !SPUIBase.IsPointerOverUIElement) {
+        if(!spawning && Input.GetMouseButtonUp(0) && goodSpawn && !SPUIBase.IsPointerOverUIElement) {
             Spawn();
         }
     }

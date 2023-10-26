@@ -24,6 +24,8 @@ contract BehaviourSubsystem is System {
 
     console.log("tickBehaviour");
 
+    if(Rules.canDoStuff(entity) == false) {return;}
+    
     //activate all behaviours
     uint32 distance = uint32(getDistance(playerPos, entityPos));
 

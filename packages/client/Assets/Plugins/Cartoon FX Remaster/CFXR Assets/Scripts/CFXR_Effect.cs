@@ -8,9 +8,9 @@
 
 // Use the defines below to globally disable features:
 
-//#define DISABLE_CAMERA_SHAKE
-//#define DISABLE_LIGHTS
-//#define DISABLE_CLEAR_BEHAVIOR
+#define DISABLE_CAMERA_SHAKE
+#define DISABLE_LIGHTS
+#define DISABLE_CLEAR_BEHAVIOR
 
 //--------------------------------------------------------------------------------------------------------------------------------
 
@@ -462,10 +462,10 @@ namespace CartoonFX
 		public void ResetState()
 		{
 			time = 0f;
-			fadingOutStartTime = 0f;
-			isFadingOut = false;
 
 #if !DISABLE_LIGHTS
+			isFadingOut = false;
+			fadingOutStartTime = 0f;
 			if (animatedLights != null)
 			{
 				foreach (var animLight in animatedLights)
@@ -730,7 +730,7 @@ namespace CartoonFX
 					cameraShake.StartShake();
 				}
 #endif
-#if !DISABLE_LIGHTS || !DISABLE_CAMERA_SHAKES
+#if !DISABLE_LIGHTS || !DISABLE_CAMERA_SHAKE
 				Animate(particleTimeUnwrapped);
 
 				if (!parentParticle.isEmitting)
