@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SafeCoroutine.Runtime</name>
+    </assembly>
+    <members>
+        <member name="T:Edelweiss.Coroutine.SafeCoroutine">
+            <summary>
+            Safe coroutine to overcome deficiencies in Unity's coroutines.
+            </summary>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.StateChangeNotifier">
+            <summary>
+            Gets the state change notifier.
+            </summary>
+            <value>The state change notifier.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.State">
+            <summary>
+            Gets the current state of this coroutine.
+            </summary>
+            <value>The current state.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.IsRunning">
+            <summary>
+            Gets a value indicating whether this instance is running.
+            </summary>
+            <value>
+                <c>true</c> if this instance is running; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.IsPaused">
+            <summary>
+            Gets a value indicating whether this instance is paused.
+            </summary>
+            <value>
+                <c>true</c> if this instance is paused; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.IsSelfPaused">
+            <summary>
+            Gets a value indicating whether this instance is self paused.
+            </summary>
+            <value>
+                <c>true</c> if this instance is self paused; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.IsParentPaused">
+            <summary>
+            Gets a value indicating whether this instance is parent paused.
+            </summary>
+            <value>
+                <c>true</c> if this instance is parent paused; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.HasFinished">
+            <summary>
+            Gets a value indicating whether this instance has finished.
+            </summary>
+            <value>
+                <c>true</c> if this instance has finished; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.IsStopped">
+            <summary>
+            Gets a value indicating whether this instance is stopped.
+            </summary>
+            <value>
+                <c>true</c> if this instance is stopped; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.ThrewException">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Edelweiss.Coroutine.SafeCoroutine" /> threw an exception.
+            </summary>
+            <value>
+                <c>true</c> if threw an exception; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.CatchExceptions">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Edelweiss.Coroutine.SafeCoroutine" /> catches exceptions.
+            </summary>
+            <value>
+                <c>true</c> if exceptions are cought; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine.ThrownException">
+            <summary>
+            Gets the thrown exception.
+            </summary>
+            <value>The thrown exception.</value>
+        </member>
+        <member name="M:Edelweiss.Coroutine.SafeCoroutine.Pause">
+            <summary>
+            Pause this instance.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Coroutine.SafeCoroutine.Resume">
+            <summary>
+            Resume this paused instance.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Coroutine.SafeCoroutine.Stop">
+            <summary>
+            Stop this instance.
+            </summary>
+        </member>
+        <member name="T:Edelweiss.Coroutine.SafeCoroutine`1">
+            <summary>
+            Safe coroutine to overcome deficiencies in Unity's coroutines with support for return values.
+            </summary>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine`1.GenericStateChangeNotifier">
+            <summary>
+            Gets the generic state change notifier.
+            </summary>
+            <value>The generic state change notifier.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine`1.Result">
+            <summary>
+            Gets the result.
+            </summary>
+            <value>The result.</value>
+        </member>
+        <member name="P:Edelweiss.Coroutine.SafeCoroutine`1.HasResult">
+            <summary>
+            Gets a value indicating whether this instance has result.
+            </summary>
+            <value>
+                <c>true</c> if this instance has result; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:Edelweiss.Coroutine.SafeCoroutineExtension">
+            <summary>
+            Safe coroutine extension methods.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Coroutine.SafeCoroutineExtension.StartSafeCoroutine(UnityEngine.MonoBehaviour,System.Collections.IEnumerator)">
+            <summary>
+            Starts the safe coroutine.
+            </summary>
+            <returns>The safe coroutine.</returns>
+            <param name="a_MonoBehaviour">A mono behaviour.</param>
+            <param name="a_SafeCoroutine">A safe coroutine.</param>
+        </member>
+        <member name="M:Edelweiss.Coroutine.SafeCoroutineExtension.StartSafeCoroutine``1(UnityEngine.MonoBehaviour,System.Collections.IEnumerator)">
+            <summary>
+            Starts the safe coroutine.
+            </summary>
+            <returns>The safe coroutine.</returns>
+            <param name="a_MonoBehaviour">A mono behaviour.</param>
+            <param name="a_SafeCoroutine">A safe coroutine.</param>
+            <typeparam name="TResult">The result type parameter.</typeparam>
+        </member>
+        <member name="T:Edelweiss.Coroutine.SafeCoroutineState">
+            <summary>
+            Safe coroutine states.
+            </summary>
+        </member>
+        <member name="F:Edelweiss.Coroutine.SafeCoroutineState.Created">
+            <summary>
+            Internal state to fill the gap between the creation and the running.
+            </summary>
+        </member>
+        <member name="F:Edelweiss.Coroutine.SafeCoroutineState.Running">
+            <summary>
+            State for executing coroutines.
+            </summary>
+        </member>
+        <member name="F:Edelweiss.Coroutine.SafeCoroutineState.Paused">
+            <summary>
+            State for paused coroutines.
+            </summary>
+        </member>
+        <member name="F:Edelweiss.Coroutine.SafeCoroutineState.Finished">
+            <summary>
+            State for regularly finished coroutines.
+            </summary>
+        </member>
+        <member name="F:Edelweiss.Coroutine.SafeCoroutineState.Stopped">
+            <summary>
+            State for terminated coroutines which was stopped through a method call on the coroutine.
+            </summary>
+        </member>
+        <member name="F:Edelweiss.Coroutine.SafeCoroutineState.ThrewException">
+            <summary>
+            State for coroutines in which an exception was thrown.
+            </summary>
+        </member>
+    </members>
+</doc>

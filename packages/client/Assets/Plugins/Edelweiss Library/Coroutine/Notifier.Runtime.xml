@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Notifier.Runtime</name>
+    </assembly>
+    <members>
+        <member name="T:Edelweiss.Pattern.CommandNotifier`1">
+            <summary>
+            Command notifier.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`1.Subscribe(System.Action)">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`1.Subscribe(System.Action{`0})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`1.Unsubscribe(System.Action)">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`1.Unsubscribe(System.Action{`0})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="T:Edelweiss.Pattern.CommandNotifier`2">
+            <summary>
+            Command notifier.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`2.Subscribe(System.Action{`1})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`2.Subscribe(System.Action{`0,`1})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`2.Unsubscribe(System.Action{`1})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.CommandNotifier`2.Unsubscribe(System.Action{`0,`1})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="T:Edelweiss.Pattern.ExecutableCommandNotifier`1">
+            <summary>
+            Executable command notifier.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="!:Edelweiss.Pattern.ExecutableCommandNotifier`1" /> class.
+            </summary>
+            <param name="a_Sender">A sender.</param>
+        </member>
+        <member name="P:Edelweiss.Pattern.ExecutableCommandNotifier`1.Sender">
+            <summary>
+            Gets the sender.
+            </summary>
+            <value>The sender.</value>
+        </member>
+        <member name="P:Edelweiss.Pattern.ExecutableCommandNotifier`1.CommandNotifier">
+            <summary>
+            Gets the command notifier.
+            </summary>
+            <value>The command notifier.</value>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`1.IDisposable.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`1.Execute">
+            <summary>
+            Notifies the subscribers.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`1.Subscribe(System.Action)">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`1.Subscribe(System.Action{`0})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`1.Unsubscribe(System.Action)">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`1.Unsubscribe(System.Action{`0})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="T:Edelweiss.Pattern.ExecutableCommandNotifier`2">
+            <summary>
+            Executable command notifier.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`2.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="!:Edelweiss.Pattern.ExecutableCommandNotifier`2" /> class.
+            </summary>
+            <param name="a_Sender">A sender.</param>
+        </member>
+        <member name="P:Edelweiss.Pattern.ExecutableCommandNotifier`2.Sender">
+            <summary>
+            Gets the sender.
+            </summary>
+            <value>The sender.</value>
+        </member>
+        <member name="P:Edelweiss.Pattern.ExecutableCommandNotifier`2.CommandNotifier">
+            <summary>
+            Gets the command notifier.
+            </summary>
+            <value>The command notifier.</value>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`2.IDisposable.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`2.Execute(`1)">
+            <summary>
+            Notifies the subscribers with the provided argument.
+            </summary>
+            <param name="a_Argument">A argument.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`2.Subscribe(System.Action{`1})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`2.Subscribe(System.Action{`0,`1})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`2.Unsubscribe(System.Action{`1})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ExecutableCommandNotifier`2.Unsubscribe(System.Action{`0,`1})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="T:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2">
+            <summary>
+            Modifiable property change notifier.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="!:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2" /> class.
+            </summary>
+            <param name="a_Sender">A sender.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.#ctor(`0,`1)">
+            <summary>
+            Initializes a new instance of the <see cref="!:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2" /> class.
+            </summary>
+            <param name="a_Sender">A sender.</param>
+            <param name="a_Value">A value.</param>
+        </member>
+        <member name="P:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.Sender">
+            <summary>
+            Gets the sender.
+            </summary>
+            <value>The sender.</value>
+        </member>
+        <member name="P:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.Value">
+            <summary>
+            Gets or sets the value of the property.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="P:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.PropertyChangeNotifier">
+            <summary>
+            Gets the property change notifier.
+            </summary>
+            <value>The property change notifier.</value>
+        </member>
+        <member name="M:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.IDisposable.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.Subscribe(System.Action{`1})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.Subscribe(System.Action{`0,`1})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.Unsubscribe(System.Action{`1})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.ModifiablePropertyChangeNotifier`2.Unsubscribe(System.Action{`0,`1})">
+            <summary>
+            Unsubscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="T:Edelweiss.Pattern.PropertyChangeNotifier`2">
+            <summary>
+            Property change notifier.
+            </summary>
+        </member>
+        <member name="M:Edelweiss.Pattern.PropertyChangeNotifier`2.#ctor(Edelweiss.Pattern.ModifiablePropertyChangeNotifier{`0,`1})">
+            <summary>
+            Initializes a new instance of the <see cref="!:Edelweiss.Pattern.PropertyChangeNotifier`2" /> class.
+            </summary>
+            <param name="a_ModifiablePropertyChangeNotifier">A modifiable property change notifier.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.PropertyChangeNotifier`2.Subscribe(System.Action{`1})">
+            <summary>
+            Subscribe the specified subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.PropertyChangeNotifier`2.Subscribe(System.Action{`0,`1})">
+            <summary>
+            Subscribe the specified a_Subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.PropertyChangeNotifier`2.Unsubscribe(System.Action{`1})">
+            <summary>
+            Unsubscribe the specified a_Subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+        <member name="M:Edelweiss.Pattern.PropertyChangeNotifier`2.Unsubscribe(System.Action{`0,`1})">
+            <summary>
+            Unsubscribe the specified a_Subscriber.
+            </summary>
+            <param name="a_Subscriber">A subscriber.</param>
+        </member>
+    </members>
+</doc>

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud;
+using Edelweiss.Coroutine;
 
 public class AnimationMUD : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class AnimationMUD : MonoBehaviour
     Dictionary<string, ActionEffect> effects = new Dictionary<string, ActionEffect>();
 
     [Header("Action Debug")]
+    [SerializeField] ActionName actionName;
     [SerializeField] ActionEffect actionEffect;
 
     [Header("Linked")]
@@ -39,7 +41,7 @@ public class AnimationMUD : MonoBehaviour
         looker = root.gameObject.AddComponent<SPLooker>();
 
         ourComponent = GetComponent<MUDComponent>();
-        ourComponent.OnToggle += ToggleDead;
+        // ourComponent.OnToggle += ToggleDead;
     }
 
     protected virtual void Start() {
@@ -82,7 +84,7 @@ public class AnimationMUD : MonoBehaviour
 
         if(entity) entity.OnLoaded -= Init;
         if(actionData) actionData.OnUpdated -= UpdateAction;
-        if(ourComponent) ourComponent.OnToggle -= ToggleDead;
+        // if(ourComponent) ourComponent.OnToggle -= ToggleDead;
 
     }
 
@@ -105,10 +107,6 @@ public class AnimationMUD : MonoBehaviour
         }
     }
 
-    public void ToggleDead() {
-        ToggleRagdoll(!ourComponent.Active);
-    }
-
     public void ToggleRagdoll(bool toggle) {
         
         Controller.Ragdoll(toggle);
@@ -129,6 +127,8 @@ public class AnimationMUD : MonoBehaviour
 
     public virtual void EnterState(ActionName newAction) {
 
+        actionName = newAction;
+
         Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)actionData.Position.x},{(int)actionData.Position.z})", this);
         ActionEffect newEffect = LoadAction(newAction.ToString());
 
@@ -147,15 +147,15 @@ public class AnimationMUD : MonoBehaviour
         //setup the new movement type instantlye
         newEffect.ToggleMovement(true, this);
 
-        if(Animation != null) StopCoroutine(Animation); 
+        if(Animation != null) actionData.Entity.StopCoroutine(Animation); 
 
         if(entity.IsLocal) {
             //assume we're already in the action because we had to have cast it?
             // Animation = StartCoroutine(AnimationInsanityLocal(newEffect));
-            Animation = StartCoroutine(AnimationInsanity(newEffect));
+            Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
         } else {
             //wait for target to move into place, then do animation
-            Animation = StartCoroutine(AnimationInsanity(newEffect));
+            Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
         }
         
     }   
@@ -173,6 +173,8 @@ public class AnimationMUD : MonoBehaviour
     Coroutine Animation;
     IEnumerator AnimationInsanity(ActionEffect newAction) {
 
+        Debug.Log(actionData.Entity.Name + " START -------------", this);
+
         //wait a frame so all the positions are synced
         yield return null;
 
@@ -182,12 +184,16 @@ public class AnimationMUD : MonoBehaviour
         //turn off old action
         if (actionEffect != null && newAction.Action != Action) { ToggleAction(false, actionEffect); }
 
+        Debug.Log(actionData.Entity.Name + " TOGGLE -------------", this);
+
         //turn on new action
         ToggleAction(true, newAction);
 
         //let it play for a couple seconds
-        yield return new WaitForSeconds(entity.IsLocal ? 1f : 2f);
+        yield return new WaitForSeconds(entity.IsLocal ? 2f : 2f);
         
+        Debug.Log(actionData.Entity.Name + " END -------------", this);
+
         ToggleAction(false, newAction);
 
         Animation = null;
