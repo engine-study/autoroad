@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using UnityEditor;
 #endif
 
-public enum TerrainType {None, Rock, Mine, Tree, HeavyBoy, HeavyHeavyBoy, Pillar, Road, Hole}
+public enum TerrainType {None, Rock, Trap, Tree, HeavyBoy, HeavyHeavyBoy, Pillar, Road, Hole}
 
 public class GaulDebug : MonoBehaviour
 {
@@ -88,11 +88,12 @@ public class GaulDebug : MonoBehaviour
         debugString = "";
 
         if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.RightAlt)) {
-            debugString += "Spawn Mile";
-            if( Input.GetMouseButtonDown(0)) { TxManager.SendQueue<SpawnMileAdminFunction>();}
+            debugString += "Spawn Shoveled Road";
+            if (Input.GetMouseButtonDown(0)) { TxManager.SendDirect<SpawnShoveledRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z)); }
+
         } else if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt)) {
-            debugString += "Finish Current Mile";
-            if (Input.GetMouseButtonDown(0)) { TxManager.SendQueue<FinishMileAdminFunction>(); }
+            debugString += "Spawn Finished Road";
+        if (Input.GetMouseButtonDown(0)) { TxManager.SendDirect<SpawnFinishedRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z)); }
         } else if (Input.GetKey(KeyCode.LeftAlt)) {
             debugString += "LMB: Select \nRMB: Teleport";
 
@@ -173,15 +174,6 @@ public class GaulDebug : MonoBehaviour
 
         actionName.UpdateField(debugString);
 
-        // if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) {
-        //     actionName.UpdateField("Spawn Shoveled Road");
-        //     if (Input.GetMouseButtonDown(0)) { TxManager.Send<SpawnShoveledRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z)); }
-        // }
-
-        // if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) {
-        //     actionName.UpdateField("Spawn Shoveled Road");
-        //     if (Input.GetMouseButtonDown(0)) { TxManager.Send<SpawnShoveledRoadAdminFunction>(System.Convert.ToInt32(CursorMUD.GridPos.x), System.Convert.ToInt32(CursorMUD.GridPos.z)); }
-        // }
     }
 
 

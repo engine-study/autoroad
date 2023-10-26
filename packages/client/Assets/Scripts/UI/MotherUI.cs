@@ -184,8 +184,10 @@ public class MotherUI : SPUIInstance {
         Mother.game.ToggleWindow(toggle);
     }
 
-    public static void FollowPlayer(bool zoom = false) {
-        SPCamera.SetFollow(SPPlayer.LocalPlayer.Root);
+    public static void FollowPlayer(bool zoom = false) {FollowPlayer(SPPlayer.LocalPlayer, zoom);}
+    public static void FollowPlayer(SPPlayer player, bool zoom) { FollowTarget(player.Root, zoom);}
+    public static void FollowTarget(Transform target, bool zoom = false) {
+        SPCamera.SetFollow(target);
         if(zoom) {SPCamera.SetFOVGlobal(4f);}
     }
 

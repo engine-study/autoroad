@@ -23,6 +23,12 @@ public class WorldScroll : MonoBehaviour {
     public TextMeshProUGUI mileText;
     public AudioClip sfx_mile;
 
+    [Header("Road Completed")]
+    public GameObject roadParent;
+    public SPHeading roadHeading;
+    public SPButton playerCompleted;
+    public RoadComponent road;
+
     [Header("Game State")]
     [SerializeField] GameObject front;
     [SerializeField] GameObject back;
@@ -46,13 +52,15 @@ public class WorldScroll : MonoBehaviour {
         Instance = this;
         mile = -1;
         playerUI.gameObject.SetActive(false);
-        mileUI.ToggleWindowClose();
 
         GameStateComponent.OnGameStateUpdated += GameStateUpdate;
         SPEvents.OnServerLoaded += InitWorld;
         SPEvents.OnLocalPlayerSpawn += InitPlayer;
 
         TutorialUI.OnTutorial += ToggleTutorial;
+        RoadComponent.OnCompletedRoad += CompleteRoad;
+
+        roadParent.SetActive(false);
 
         enabled = false;
 
@@ -179,13 +187,43 @@ public class WorldScroll : MonoBehaviour {
         enabled = !toggle;
     }
 
+    public void CompleteRoad(RoadComponent completed) {
+
+        //don't show this update on mile completions
+        if(RoadComponent.CompletedRoadCount % MapConfigComponent.Height == 0) return;
+
+        road = completed;
+        roadParent.SetActive(true);
+
+        //TODO use ChunkComponent road completed count
+        string stepCount = ((int)((RoadComponent.CompletedRoadCount%MapConfigComponent.Height) * 100)).ToString();
+        string mileReadout = $"{GameStateComponent.MILE_COUNT} Milia {stepCount} Passus";
+
+        Debug.Log(mileReadout);
+        roadHeading.UpdateField(mileReadout);
+        playerCompleted.UpdateField($"Road advanced by {completed.FilledBy.Entity.Name}");
+
+    }
+
     public void SetToScrollMile() { SetToScrollMile(false);}
     public void SetToPlayerMile() {SetToPlayerMile(false);}
+    public void SetToRoadFinisher() {
+        if(!road?.FilledBy) return; 
+        SetToObject(road.FilledBy.PlayerScript.Root, true);
+    }
 
     public void SetToScrollMile(bool withFX) {
         Debug.Log("SCROLL: Scroll", this);
-        ToggleCameraOnPlayer(false);
+        ToggleCameraOnObject(false, false, null);
         SetMile(Mathf.RoundToInt(mileScroll), withFX);
+    }
+
+    public void SetToObject(Transform target, bool withFX) {
+        
+        mileScroll = GetClampedMile(PositionComponent.PositionToMile(target.position));
+        ToggleCameraOnObject(true, false, target);
+        SetMile(Mathf.RoundToInt(mileScroll), withFX);
+
     }
 
     public void SetToPlayerMile(bool withFX) {
@@ -194,7 +232,7 @@ public class WorldScroll : MonoBehaviour {
 
         mileScroll = playerMile;
 
-        ToggleCameraOnPlayer(true);
+        ToggleCameraOnObject(true, false, PlayerMUD.LocalPlayer.Root);
         SetMile((int)playerMile, withFX);
 
         mileHeading.UpdateField("Mile " + (int)(playerMile+1));
@@ -202,10 +240,10 @@ public class WorldScroll : MonoBehaviour {
         
     }
 
-    public void ToggleCameraOnPlayer(bool toggle, bool changeZoom = false) {
+    public void ToggleCameraOnObject(bool toggle, bool changeZoom, Transform target) {
 
         if(toggle) {
-            MotherUI.FollowPlayer(changeZoom);
+            MotherUI.FollowTarget(target, changeZoom);
         } else {
             if(playerFocus && changeZoom) SPCamera.SetFOVGlobal(10f);
             SPCamera.SetFollow(null);

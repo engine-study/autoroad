@@ -1248,19 +1248,6 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
-    public partial class SpawnDebugRoadFunction : SpawnDebugRoadFunctionBase { }
-
-    [Function("spawnDebugRoad")]
-    public class SpawnDebugRoadFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "credit", 1)]
-        public virtual byte[] Credit { get; set; }
-        [Parameter("int32", "x", 2)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 3)]
-        public virtual int Y { get; set; }
-    }
-
     public partial class SpawnEmptyRoadFunction : SpawnEmptyRoadFunctionBase { }
 
     [Function("spawnEmptyRoad")]
@@ -1270,6 +1257,21 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 2)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class SpawnFinishedRoadFunction : SpawnFinishedRoadFunctionBase { }
+
+    [Function("spawnFinishedRoad")]
+    public class SpawnFinishedRoadFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("uint8", "state", 4)]
+        public virtual byte State { get; set; }
     }
 
     public partial class SpawnFinishedRoadAdminFunction : SpawnFinishedRoadAdminFunctionBase { }
@@ -1287,6 +1289,23 @@ namespace IWorld.ContractDefinition
 
     [Function("spawnFlora")]
     public class SpawnFloraFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("int32", "x", 3)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 4)]
+        public virtual int Y { get; set; }
+        [Parameter("uint8", "floraType", 5)]
+        public virtual byte FloraType { get; set; }
+    }
+
+    public partial class SpawnFloraRandomFunction : SpawnFloraRandomFunctionBase { }
+
+    [Function("spawnFloraRandom")]
+    public class SpawnFloraRandomFunctionBase : FunctionMessage
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
@@ -1370,28 +1389,13 @@ namespace IWorld.ContractDefinition
 
     }
 
-    public partial class SpawnRoadFunction : SpawnRoadFunctionBase { }
+    public partial class SpawnRoadFromPushFunction : SpawnRoadFromPushFunctionBase { }
 
-    [Function("spawnRoad")]
-    public class SpawnRoadFunctionBase : FunctionMessage
+    [Function("spawnRoadFromPush")]
+    public class SpawnRoadFromPushFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
-        public virtual byte[] Player { get; set; }
-        [Parameter("int32", "x", 2)]
-        public virtual int X { get; set; }
-        [Parameter("int32", "y", 3)]
-        public virtual int Y { get; set; }
-        [Parameter("uint8", "state", 4)]
-        public virtual byte State { get; set; }
-    }
-
-    public partial class SpawnRoadFromPlayerFunction : SpawnRoadFromPlayerFunctionBase { }
-
-    [Function("spawnRoadFromPlayer")]
-    public class SpawnRoadFromPlayerFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "player", 1)]
-        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
         [Parameter("bytes32", "pushed", 2)]
         public virtual byte[] Pushed { get; set; }
         [Parameter("bytes32", "road", 3)]

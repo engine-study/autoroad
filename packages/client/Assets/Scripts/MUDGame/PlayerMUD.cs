@@ -11,7 +11,7 @@ public class PlayerMUD : SPPlayer
     public PositionSync Sync{get{return positionSync;}}
     public ActionsMUD Equipment{get{return actions;}}
     public AnimationMUD AnimationMUD{get{return animMud;}}
-    protected override bool Input(){ return base.Input() && GameState.GamePlaying && GameState.GameReady && !PlayerComponent.LocalPlayer.IsDead && TxManager.CanSendTx; }
+    protected override bool Input(){ return base.Input() && GameState.GamePlaying && GameState.GameReady && !PlayerComponent.LocalPlayer.IsDead ; }//&& TxManager.CanSendTx
 
     [Header("MUD")]
     [SerializeField] private PlayerComponent playerComponent;
@@ -69,7 +69,7 @@ public class PlayerMUD : SPPlayer
         Actor.OnActionEnd -= ActionCursorUpdate;
         positionSync.OnMoveEnd -= MoveEndUpdate;
 
-        for(int i = 0; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated -= Equip;}
+        for(int i = 0; i < cosmetics.Length; i++) { if(cosmetics[i]) cosmetics[i].OnUpdated -= Equip;}
 
     }
     

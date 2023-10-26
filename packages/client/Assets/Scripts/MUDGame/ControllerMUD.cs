@@ -120,7 +120,7 @@ public class ControllerMUD : SPController {
     }
 
     float minTime = 0f;
-    float transactionWait = 1f;
+    float transactionWait = .5f;
     float cancelWait = 1f;
     Vector3 moveDest, inputDir;
     bool input, wasInputting;
@@ -153,8 +153,14 @@ public class ControllerMUD : SPController {
         if (!input) {
             if(wasInputting) { player.Actor.InputAction(false, false, currentAction); wasInputting = false;}
             return;
-        }
+        } else if(currentAction && inputDir != lastInputDir){
+            //reset the action if we changed direction
+            wasInputting = false;
+            player.Actor.InputAction(false, false, currentAction);
         
+        }
+
+
         Vector3 moveTo = onchainPos + inputDir;
 
         // MUDEntity e = MUDHelper.GetMUDEntityFromRadius(sync.Pos.Pos + direction + Vector3.up * .25f, .1f);
@@ -171,6 +177,8 @@ public class ControllerMUD : SPController {
             FailedMove(sync.Pos.Entity, moveMinimum);
             return;
         }
+
+
         
         if (moveComponent != null && moveComponent.MoveType == MoveType.Push) {
             
@@ -235,23 +243,20 @@ public class ControllerMUD : SPController {
 
         }
 
-        //reset the action if we changed direction
-        if(inputDir != lastInputDir) {
-            wasInputting = false;
-            player.Actor.InputAction(false, false, currentAction);
-        }
-        lastInputDir = inputDir;
-
+        //send our input finally!
         player.Actor.InputAction(!wasInputting, true, currentAction);
+
+        //update last values
+        lastInputDir = inputDir;
         wasInputting = true;
 
         bad.SetActive(false);
         good.SetActive(true);
 
-
-        if(player.Actor.ActionState >= ActionState.Acting) {
+        if(player.Actor.ActionState != ActionState.Casting) {
             Debug.Log("MOVE: " + currentAction.gameObject.name);
             minTime = transactionWait;
+            wasInputting = false;
         }
 
     }

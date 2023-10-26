@@ -31,6 +31,8 @@ public class ProfileUI : EntityUI
     protected override void UpdateEntity() {
         base.UpdateEntity();
 
+        ToggleWindowClose();
+
         header.UpdateField(Entity.Name);
         nameField.UpdateField(Entity.Name);
         publicKeyField.UpdateField(Entity.Key);

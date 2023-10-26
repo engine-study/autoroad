@@ -10,6 +10,8 @@ public enum RoadState { Path, Ditch , Statumen, Rudus, Nucleas, Pavimentum, Ossi
 
 public class RoadComponent : MUDComponent {
 
+    public static int CompletedRoadCount;
+    public static System.Action<RoadComponent> OnCompletedRoad;
     public RoadState State {get { return state; } }
     public PlayerComponent FilledBy {get { return filledBy; } }
     public int Mile {get { return mileNumber; } }
@@ -67,18 +69,18 @@ public class RoadComponent : MUDComponent {
         chunk.Mile.AddRoadComponent(Entity.Key, this, localPos.x, localPos.y);
 
     }
+    bool isFilled = false;
 
     protected override IMudTable GetTable() {return new RoadTable();}
     protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {
-
 
         RoadTable roadUpdate = (RoadTable)update;
         // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
         creditedPlayer = (string)roadUpdate.Filled;
         hasGem = (bool)roadUpdate.Gem;
-
         filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
+        creditedPlayerDebug = MUDWorld.MakeTable<RoadTable>(Entity.Key)?.Filled;
 
         SetState((RoadState)roadUpdate.State);
 
@@ -102,13 +104,19 @@ public class RoadComponent : MUDComponent {
                     ToggleComplete(false);
                 }
             }
-
-
         }
 
-        creditedPlayerDebug = MUDWorld.MakeTable<RoadTable>(Entity.Key)?.Filled;
+        if(isFilled == false && (int)roadUpdate.State >= (int)RoadState.Pavimentum) {
+            isFilled = true;
+            CompletedRoadCount++;
+            Debug.Log("Completed Road Count: " + CompletedRoadCount, this);
+        }
 
         lastStage = State;
+
+        if(Loaded && FilledBy) {
+            OnCompletedRoad?.Invoke(this);
+        }
 
     }
 

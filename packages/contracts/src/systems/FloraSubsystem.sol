@@ -18,8 +18,9 @@ import { MoveSubsystem } from "./MoveSubsystem.sol";
 
 contract FloraSubsystem is System {
 
-  function spawnFlora(bytes32 player, bytes32 entity, int32 x, int32 y) public {
 
+  function spawnFloraRandom(bytes32 player, bytes32 entity, int32 x, int32 y) public {
+    
     uint noiseCoord = randomCoord(0, 100, x, y);
     // console.log("noise ", noiseCoord);
 
@@ -27,14 +28,24 @@ contract FloraSubsystem is System {
 
     if (noiseCoord < 10) {
       floraType = FloraType.Bramble;
-      Health.set(entity, 1);
-      Move.set(entity, uint32(MoveType.Trap));
     } else if (noiseCoord >= 10 && noiseCoord < 20) {
       floraType = FloraType.Oak;
+    } else {
+      floraType = FloraType.Tree;
+    } 
+
+    spawnFlora(player, entity, x, y, floraType);
+  }
+
+  function spawnFlora(bytes32 player, bytes32 entity, int32 x, int32 y, FloraType floraType ) public {
+
+    if (floraType == FloraType.Bramble) {
+      Health.set(entity, 1);
+      Move.set(entity, uint32(MoveType.Trap));
+    } else if (floraType == FloraType.Oak) {
       Health.set(entity, 3);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else {
-      floraType = FloraType.Tree;
       Health.set(entity, 1);
       Move.set(entity, uint32(MoveType.Obstruction));
     } 
@@ -42,6 +53,7 @@ contract FloraSubsystem is System {
     Tree.set(entity, uint32(floraType));
 
   }
+
 
   function water(int32 x, int32 y) public {
 

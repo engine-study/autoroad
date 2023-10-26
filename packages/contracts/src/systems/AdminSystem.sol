@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Player, Position, Health, Move, GameState, Coinage, PositionData, PositionTableId } from "../codegen/index.sol";
-import { TerrainType, NPCType } from "../codegen/common.sol";
+import { TerrainType, NPCType, RoadState } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
@@ -82,7 +82,8 @@ contract AdminSystem is System {
   function spawnFinishedRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnDebugRoad,(player, x, y)));
+    require(Rules.onRoad(x,y), "not on road");
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnFinishedRoad,(player, x, y, RoadState.Paved)));
   }
 
   function spawnShoveledRoadAdmin(int32 x, int32 y) public {

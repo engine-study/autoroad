@@ -207,7 +207,7 @@ contract MoveSubsystem is System {
 
       //spawn road, move pushed thing to under road
       if(Road.getState(atDest[0]) == uint32(RoadState.Shoveled)) {
-        SystemSwitch.call(abi.encodeCall(world.spawnRoadFromPlayer, (causedBy, entity, atDest[0], to)));
+        SystemSwitch.call(abi.encodeCall(world.spawnRoadFromPush, (causedBy, entity, atDest[0], to)));
       }
             
       //kill if it was an NPC

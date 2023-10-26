@@ -7,7 +7,7 @@ import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/index.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/index.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/index.sol";
-import { TerrainType, RockType, RoadState, MoveType, NPCType } from "../codegen/common.sol";
+import { TerrainType, RockType, RoadState, MoveType, NPCType, FloraType} from "../codegen/common.sol";
 
 import { MoveSubsystem } from "./MoveSubsystem.sol";
 import { RewardSubsystem } from "./RewardSubsystem.sol";
@@ -246,8 +246,10 @@ contract TerrainSubsystem is System {
       Rock.set(entity, uint32(RockType.Statumen));
       Move.set(entity, uint32(MoveType.Push));
       Weight.set(entity, 1);
+    } else if (tType == TerrainType.Trap) {
+      SystemSwitch.call(abi.encodeCall(world.spawnFlora, (player, entity, x, y, FloraType.Bramble)));
     } else if (tType == TerrainType.Tree) {
-      SystemSwitch.call(abi.encodeCall(world.spawnFlora, (player, entity, x, y)));
+      SystemSwitch.call(abi.encodeCall(world.spawnFloraRandom, (player, entity, x, y)));
     } else if (tType == TerrainType.HeavyBoy) {
       Rock.set(entity, uint32(RockType.Heavy));
       Boulder.set(entity, true);
@@ -264,7 +266,7 @@ contract TerrainSubsystem is System {
       Weight.set(entity, 99);
       Move.set(entity, uint32(MoveType.Obstruction));
     }else if (tType == TerrainType.Road) {
-      spawnRoadFromPlayer(player, 0, Actions.getRoadEntity(x,y), PositionData(x,y,0));
+      spawnFinishedRoad(player, x, y, RoadState.Paved);
     } else if (tType == TerrainType.Hole) {
       spawnShoveledRoad(player, x, y);
     } 
@@ -274,34 +276,6 @@ contract TerrainSubsystem is System {
       Position.set(entity, x, y, 0);
     }
 
-  }
-
-  function spawnRoadFromPlayer(bytes32 player, bytes32 pushed, bytes32 road, PositionData memory pos) public {
-
-    bool pushedNPC = NPC.get(pushed) > 0;
-    RoadState state = pushedNPC ? RoadState.Bones : RoadState.Paved;
-
-    spawnRoad(player, pos.x, pos.y, state);
-
-    //hack for making objects push into the road
-    Position.set(pushed, pos.x, pos.y, -2);
-
-    //reward the player
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadFilledReward, (player)));
-    updateChunk();
-
-  }
-
-  function spawnRoad(bytes32 player, int32 x, int32 y, RoadState state) public {
-    IWorld world = IWorld(_world());
-    require(Rules.onRoad(x, y), "off road");
-
-    bytes32 road = Actions.getRoadEntity(x,y);
-    Position.set(road, x, y, -1);
-    //TODO setfilled to save gas
-    // Road.setFilled(road, player);
-    Road.set(road, uint32(state), player, false);
-    Move.set(road, uint32(MoveType.None));
   }
 
   //TODO fix this horrible thing,make it more robust
@@ -336,6 +310,8 @@ contract TerrainSubsystem is System {
   }
 
   function debugMile(bytes32 credit) public {
+    IWorld world = IWorld(_world());
+
     (uint32 roadWidth, int32 left, int32 right) = RoadConfig.get();
     int32 currentMile = GameState.getMiles();
     int32 playHeight = MapConfig.getPlayHeight();
@@ -352,8 +328,15 @@ contract TerrainSubsystem is System {
 
     for (int32 y = yStart; y < yEnd; y++) {
       for (int32 x = left; x <= right; x++) {
-        spawnDebugRoad(credit, x, y);
+
+        bytes32[] memory atPos = Rules.getKeysAtPosition(world, x, y, -1);
+        if(atPos.length == 0) continue;
+        uint32 roadState = Road.getState(atPos[0]);
+        if(roadState >= uint32(RoadState.Paved)) continue;
+        spawnFinishedRoad(credit, x, y, RoadState.Paved);
+
       }
+
     }
 
     bytes32 chunk = Actions.getChunkEntity(currentMile);
@@ -382,11 +365,34 @@ contract TerrainSubsystem is System {
     SystemSwitch.call(abi.encodeCall(world.giveRoadShoveledReward, (player)));
   }
 
-  
-  function spawnDebugRoad(bytes32 credit, int32 x, int32 y) public {
-    bytes32 entity = Actions.getRoadEntity(x,y);
-    bool giveReward = randomCoord(0, 100, x, y) > 90;
-    Position.set(entity, x, y, -1);
-    Road.set(entity, uint32(RoadState.Paved), credit, giveReward);
+  function spawnRoadFromPush(bytes32 causedBy, bytes32 pushed, bytes32 road, PositionData memory pos) public {
+
+    bool pushedNPC = NPC.get(pushed) > 0;
+    RoadState state = pushedNPC ? RoadState.Bones : RoadState.Paved;
+
+    //placing pushed object under road
+    Position.set(pushed, pos.x, pos.y, -2);
+
+    spawnFinishedRoad(causedBy, pos.x, pos.y, state);
+
   }
+
+  function spawnFinishedRoad(bytes32 causedBy, int32 x, int32 y, RoadState state) public {
+    IWorld world = IWorld(_world());
+    require(Rules.onRoad(x, y), "off road");
+
+    bytes32 road = Actions.getRoadEntity(x,y);
+    Position.set(road, x, y, -1);
+    //TODO setfilled to save gas
+    // Road.setFilled(road, player);
+    Road.set(road, uint32(state), causedBy, false);
+    Move.set(road, uint32(MoveType.None));
+
+    //reward the player
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadFilledReward, (causedBy)));
+
+    updateChunk();
+
+  }
+
 }
