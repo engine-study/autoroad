@@ -138,7 +138,7 @@ public class CameraControls : MonoBehaviour
 
             position *= distanceMultiplier;
 
-            position = transform.position + position * Time.deltaTime;
+            position = transform.position + position;
 
             position.x = Mathf.Clamp(position.x, BoundsComponent.Left * 2f, BoundsComponent.Right * 2f);
             position.z = Mathf.Clamp(position.z, BoundsComponent.Down - 10f, BoundsComponent.Up + 10f);
