@@ -54,7 +54,7 @@ public class StoreItemUI : SPWindow
 
     public void CanBuy() {
 
-        bool isValid = item.HighEnoughLevel && item.InMileRange;
+        bool isValid = (item.HighEnoughLevel && item.InMileRange) || SPGlobal.IsDebug;
         bool doesNotOwn = item.itemType == ItemType.GameplayStashable || Inventory.LocalInventory.ItemUnlocked(item) == false;
         
         ToggleWindow(isValid && doesNotOwn);
