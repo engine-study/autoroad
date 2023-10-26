@@ -87,7 +87,7 @@ contract ItemSubsystem is System {
         Sword.set(player, true);
       } 
        else if (id == 16) { //axe
-        pay(player, 5, 0, 0, payment, 0);
+        pay(player, 10, 0, 0, payment, 0);
         Axe.set(player, true);
       } 
     
