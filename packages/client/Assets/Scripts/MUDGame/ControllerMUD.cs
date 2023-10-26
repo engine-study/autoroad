@@ -35,7 +35,7 @@ public class ControllerMUD : SPController {
     MUDEntity mudEntity;
     PlayerMUD playerScript;
 
-    Vector3 onchainPos;
+    Vector3 onchainPos => sync.Pos.Pos;
     Vector3 lastOnchainPos = Vector3.down;
     Vector3 lastPos;
     Quaternion lookRotation;
@@ -69,7 +69,6 @@ public class ControllerMUD : SPController {
         playerTransform = transform;
         playerTransform.rotation = Quaternion.Euler(0f, Random.Range(0, 4) * 90f, 0f);
 
-        onchainPos = sync.Pos.Pos;
         SetPositionInstant(sync.Pos.Pos);
 
         if(playerScript.IsLocalPlayer) {
@@ -120,7 +119,7 @@ public class ControllerMUD : SPController {
     }
 
     float minTime = 0f;
-    float transactionWait = .5f;
+    float transactionWait = .25f;
     float cancelWait = 1f;
     Vector3 moveDest, inputDir;
     bool input, wasInputting;
@@ -139,7 +138,7 @@ public class ControllerMUD : SPController {
         }
 
         //playerTransform.position != _onchainPosition ||
-        if (Vector3.Distance(playerTransform.position, moveDest) > .1f) {
+        if (Vector3.Distance(playerTransform.position, sync.Pos.Pos) > .5f) {
             return;
         }
 
@@ -363,14 +362,9 @@ public class ControllerMUD : SPController {
             }
         }
 
-        //get the actual onchainposition
-        onchainPos = sync.Pos.Pos;
-
         //update our moveDestination, we must always observe the current onchain state
         moveDest = sync.Pos.Pos;
-
       
-
         lastOnchainPos = onchainPos;
 
     }
