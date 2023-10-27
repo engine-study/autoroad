@@ -170,14 +170,14 @@ contract TerrainSubsystem is System {
 
         if (noiseCoord <= 100) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord > 100 && noiseCoord <= 200) {
+        } else if (noiseCoord > 100 && noiseCoord <= 400) {
           terrainType = TerrainType.Rock;
-        } else if (noiseCoord > 200 && noiseCoord <= 225) {
+        } else if (noiseCoord > 500 && noiseCoord <= 525) {
           terrainType = TerrainType.HeavyBoy;
-        } else if (noiseCoord > 225 && noiseCoord <= 250) {
+        } else if (noiseCoord > 525 && noiseCoord <= 550) {
           if (Rules.onRoad(x, y)) { continue; }
           terrainType = TerrainType.HeavyHeavyBoy;
-        } else if (noiseCoord > 300 && noiseCoord <= 325) {
+        } else if (noiseCoord > 900 && noiseCoord <= 925) {
           if (Rules.onRoad(x, y)) { continue; }
           terrainType = TerrainType.Pillar;
         } 
