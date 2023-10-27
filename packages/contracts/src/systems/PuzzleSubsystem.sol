@@ -3,7 +3,7 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock } from "../codegen/index.sol";
+import { MapConfig, RoadConfig, Bounds, Position, PositionTableId, PositionData, GameState, Move, Weight, Rock, Health } from "../codegen/index.sol";
 import { Puzzles, Puzzle, Trigger, Linker, Miliarium } from "../codegen/index.sol";
 import { TerrainType, PuzzleType, MoveType, RockType} from "../codegen/common.sol";
 
@@ -90,6 +90,7 @@ contract PuzzleSubsystem is System {
     Weight.set(mil, 1);
     Move.set(mil, uint32(MoveType.Push));
     Rock.set(mil, uint32(RockType.Statuae));
+    Health.set(mil,1);
     Puzzle.set(mil, uint32(PuzzleType.Statuae), false);
     Linker.set(mil, trigger);
 
