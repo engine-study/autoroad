@@ -95,17 +95,20 @@ public class CameraControls : MonoBehaviour
 
     bool hasStarted, hasMovedEnough;
 
-    void UpdateDrag() {
+    void UpdateDrag()
+    {
 
         lastPos = currentPos;
-        currentPos = new Vector2(Input.mousePosition.x/(float)Screen.width, Input.mousePosition.y/(float)Screen.height);
+        currentPos = new Vector2(Input.mousePosition.x / (float)Screen.width, Input.mousePosition.y / (float)Screen.height);
 
         _delta = currentPos - lastPos;
 
-        _isMoving = Input.GetMouseButton(0);
-        _isRotating = Input.GetMouseButton(1);
+        _isMoving = Input.GetMouseButton(0) && !SPInput.ModifierKey;
+        _isRotating = Input.GetMouseButton(1) || Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftAlt);
+        bool _isMovingDown = Input.GetMouseButtonDown(0);
+        bool _isRotatingDown = Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftAlt));
 
-        if(SPUIBase.IsPointerOverUIElement == false && Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) {
+        if(SPUIBase.IsPointerOverUIElement == false && (_isMovingDown || _isRotatingDown)) {
             startPos = currentPos;
             hasStarted = true;
             hasMovedEnough = false;

@@ -20,6 +20,6 @@ public class FishingRod : Equipment {
 
         if(!PositionComponent.OnWorldOrMap(entity, pushToPos)) {return false;}
 
-        return canUse && moveType != null && moveType.MoveType == MoveType.Push && (weight == null || weight.Weight <= 0);
+        return canUse && moveType != null && moveType.MoveType == MoveType.Push && (weight == null || weight.Weight <= 1);
     }
 }
