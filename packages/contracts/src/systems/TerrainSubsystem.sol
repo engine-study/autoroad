@@ -36,7 +36,7 @@ contract TerrainSubsystem is System {
 
     GameState.set(int32(-1), 0);
     GameConfig.set(debug, dummyPlayers);
-    MapConfig.set(10, 10, 13);
+    MapConfig.set(5, 10, 8);
     RoadConfig.set(1, 0, 0);
     Bounds.set(0, 0, int32(-1), 1);
     Row.set(int32(-1));
