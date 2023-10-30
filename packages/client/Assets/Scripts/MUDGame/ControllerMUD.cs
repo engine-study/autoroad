@@ -87,8 +87,7 @@ public class ControllerMUD : SPController
 
     }
 
-    public void SetPositionInstant(Vector3 newPos)
-    {
+    public void SetPositionInstant(Vector3 newPos) {
 
         playerTransform.position = newPos;
         moveDest = newPos;
@@ -192,6 +191,7 @@ public class ControllerMUD : SPController
         if(moveComponent == null || moveComponent.MoveType == MoveType.Trap || moveComponent.MoveType == MoveType.None) {
             currentAction = walkAction;
             walkAction.transform.position = moveTo;
+            WeightUI.Instance.ToggleWeights(false, null);
         } else {
             bool didPush = CreatePush(onchainPos, inputDir);
             if(didPush) {
@@ -213,8 +213,8 @@ public class ControllerMUD : SPController
         bad.SetActive(false);
         good.SetActive(true);
 
-        if (player.Actor.ActionState != ActionState.Casting)
-        {
+        if (player.Actor.ActionState != ActionState.Casting) {
+            WeightUI.Instance.ToggleWeights(false, null);
             Debug.Log("MOVE: " + currentAction.gameObject.name);
             minTime = transactionWait;
             wasInputting = false;

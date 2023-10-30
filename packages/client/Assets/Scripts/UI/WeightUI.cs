@@ -8,7 +8,7 @@ public class WeightUI : SPWindowParent
 
     [Header("Weight UI")]
     [SerializeField] MoveTypeUI [] moves;
-
+    [SerializeField] List<Mover> activeMovers;
 
     public override void Init() {
         if(HasInit) return;
@@ -25,6 +25,8 @@ public class WeightUI : SPWindowParent
     }
 
     public void ToggleWeights(bool toggle, List<Mover> movers) {
+
+        activeMovers = movers;
 
         ToggleWindow(toggle);
 

@@ -63,8 +63,8 @@ public class MoveTypeUI : MUDComponentUI
 
         if(cannotMove && weight.gameObject.activeInHierarchy) {tooHeavyStrobe.StartStrobe();}
         else {tooHeavyStrobe.StopStrobe();}
-        
-        if(moveType == MoveType.Obstruction && obstruction.gameObject.activeInHierarchy) {obstructing.StartStrobe();}
+
+        if(cannotMove && moveType == MoveType.Obstruction && obstruction.gameObject.activeInHierarchy) {obstructing.StartStrobe();}
         else {obstructing.StopStrobe();}
 
     }
