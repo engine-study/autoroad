@@ -214,7 +214,6 @@ public class ControllerMUD : SPController
         good.SetActive(true);
 
         if (player.Actor.ActionState != ActionState.Casting) {
-            WeightUI.Instance.ToggleWeights(false, null);
             Debug.Log("MOVE: " + currentAction.gameObject.name);
             minTime = transactionWait;
             wasInputting = false;
