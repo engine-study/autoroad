@@ -11,7 +11,7 @@ public class Plant : Equipment
     
     public override bool IsInteractable() 
     {
-        canUse = base.IsInteractable() && entityUnder != null && entityUnder.GetMUDComponent<RoadComponent>()?.State == RoadState.Path;
+        canUse = base.IsInteractable() && (entityUnder == null || entityUnder.GetMUDComponent<RoadComponent>()?.State == RoadState.Path);
         return canUse;
 
     }
