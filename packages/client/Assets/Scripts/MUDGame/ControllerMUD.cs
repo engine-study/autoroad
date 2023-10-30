@@ -181,9 +181,9 @@ public class ControllerMUD : SPController
         MUDEntity e = GridMUD.GetEntityAt(moveTo);
         MoveComponent moveComponent = e?.GetMUDComponent<MoveComponent>();
 
-        if (!MapConfigComponent.OnWorld((int)moveTo.x, (int)moveTo.z)) {
-            BoundsComponent.ShowBorder();
-            FailedMove(sync.Pos.Entity, moveTo);
+        bool onWorld = PositionComponent.OnWorldOrMap(sync.Pos.Entity, moveTo, true);
+        if (!onWorld) {
+            FailedMove();
             return;
         }
 
@@ -198,7 +198,7 @@ public class ControllerMUD : SPController
                 currentAction = pushAction;
                 pushAction.transform.position = moveTo;
             } else { 
-                FailedMove(sync.Pos.Entity, moveTo);
+                FailedMove();
                 return;
             }
         }
@@ -257,6 +257,7 @@ public class ControllerMUD : SPController
 
             if (isObstructed || isOffMap) {
                 WeightUI.Instance.ToggleWeights(true, movers);
+                PositionComponent.OnWorldOrMap(destinationEntity, pushToPos, true);
                 return false;
             }
             
@@ -299,9 +300,7 @@ public class ControllerMUD : SPController
 
     }
 
-    public void FailedMove(MUDEntity e, Vector3 proposedPosition) {
-
-        PositionComponent.OnWorldOrMap(e, proposedPosition, true);
+    public void FailedMove() {
 
         Debug.Log("Move Tx Canceled");
         MotherUI.TransactionFailed();
