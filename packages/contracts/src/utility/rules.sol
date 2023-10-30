@@ -17,7 +17,7 @@ library Rules {
     // int32 down = Bounds.getDown();
     int32 playWidth = MapConfig.getPlayWidth();
     int32 spawnWidth = MapConfig.getPlaySpawnWidth();
-    return (x > playWidth && x <= spawnWidth) && (y <= up && y >= 0);
+    return (x < int32(-playWidth) && x >= int32(-spawnWidth)) && (y <= up && y >= 0);
   }
 
   function getKeysAtPosition(IWorld world, int32 x, int32 y, int32 layer) internal view returns(bytes32[] memory) {

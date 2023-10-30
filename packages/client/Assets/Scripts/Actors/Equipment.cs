@@ -13,6 +13,8 @@ public class Equipment : SPInteract {
     [Header("Item")]
     public ActionName actionName;
     public GaulItem item;
+    [Header("Required")]
+    public bool ignoreRequired = false;
     public MUDComponent requiredComponent;
 
     [Header("Debug")]
@@ -26,7 +28,7 @@ public class Equipment : SPInteract {
         entityUnder = GridMUD.GetEntityAt(transform.position + Vector3.down);
         canUse = base.IsInteractable() && MapConfigComponent.OnWorld(transform.position) && gameObject.activeInHierarchy && entity != PlayerComponent.LocalPlayer.Entity && Action().TryAction(Actor, this);
         bool hasItem = canUse && (item == null || Inventory.LocalInventory.ItemIsUsable(item));
-        bool hasRequiredComponent = canUse && ((requiredComponent == null && entity == null) || (entity != null && entity.ExpectedComponents.Contains(requiredComponent?.GetType())));
+        bool hasRequiredComponent = canUse && (ignoreRequired || ((requiredComponent == null && entity == null) || (entity != null && entity.ExpectedComponents.Contains(requiredComponent?.GetType()))));
         canUse = canUse && hasRequiredComponent && hasItem;
         return canUse; 
     }

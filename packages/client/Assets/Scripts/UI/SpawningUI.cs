@@ -41,12 +41,12 @@ public class SpawningUI : SPWindowParent
 
             SPCamera.SetFollow(null);
             SPCamera.SetFOVGlobal(10f);
-            SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.right * MapConfigComponent.SpawnWidth);
+            SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.left * MapConfigComponent.Width);
 
             nameButton.UpdateField(NameComponent.LocalName);
 
-            spawnZone.transform.position = Vector3.right * (BoundsComponent.Right+.5f) + Vector3.forward * -.5f; //+ Vector3.forward * (BoundsComponent.Down-.5f)
-            spawnZone.transform.localScale = Vector3.up + Vector3.right * (MapConfigComponent.SpawnWidth-MapConfigComponent.Width) + Vector3.forward * MapConfigComponent.Height * (GameStateComponent.MILE_COUNT +1);
+            spawnZone.transform.position = Vector3.left * (BoundsComponent.Right+.5f) + Vector3.forward * -.5f; //+ Vector3.forward * (BoundsComponent.Down-.5f)
+            spawnZone.transform.localScale = Vector3.up + Vector3.left * (MapConfigComponent.SpawnWidth-MapConfigComponent.Width) + Vector3.forward * MapConfigComponent.Height * (GameStateComponent.MILE_COUNT +1);
             
             cursor.transform.parent = CursorMUD.CursorTransform;
             cursor.transform.localPosition = Vector3.zero;
@@ -65,7 +65,9 @@ public class SpawningUI : SPWindowParent
 
     void Update() {
 
-        SPCursorTexture.UpdateCursor(SPCursorState.PointerSlot);
+        if(!SPUIBase.IsPointerOverUIElement) {
+            SPCursorTexture.UpdateCursor(SPCursorState.PointerSlot);
+        }
 
         if(!spawning && Input.GetMouseButtonUp(0) && goodSpawn && !SPUIBase.IsPointerOverUIElement) {
             Spawn();
@@ -79,7 +81,7 @@ public class SpawningUI : SPWindowParent
 
         goodSpawn = true; 
 
-        goodSpawn = y <= BoundsComponent.Up && y >= 0 && x > MapConfigComponent.Width && x <= MapConfigComponent.SpawnWidth;
+        goodSpawn = y <= BoundsComponent.Up && y >= 0 && x < -MapConfigComponent.Width && x >= -MapConfigComponent.SpawnWidth;
         goodSpawn = goodSpawn && CursorMUD.Entity == null;
 
         ok.SetActive(goodSpawn);

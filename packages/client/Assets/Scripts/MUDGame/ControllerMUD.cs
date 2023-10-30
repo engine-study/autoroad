@@ -188,14 +188,22 @@ public class ControllerMUD : SPController
         }
 
         //setup the push or walk
-        if(moveComponent == null || moveComponent.MoveType == MoveType.Trap || moveComponent.MoveType == MoveType.None) {
+        if(moveComponent == null || (moveComponent.MoveType != MoveType.Obstruction && moveComponent.MoveType != MoveType.Push)) {
+
             currentAction = walkAction;
             walkAction.transform.position = moveTo;
             WeightUI.Instance.ToggleWeights(false, null);
+
+            if(moveComponent?.MoveType == MoveType.Hole) {
+                FailedMove();
+                return;
+            }
+
         } else {
+            currentAction = pushAction;
             bool didPush = CreatePush(onchainPos, inputDir);
+
             if(didPush) {
-                currentAction = pushAction;
                 pushAction.transform.position = moveTo;
             } else { 
                 FailedMove();
@@ -257,7 +265,7 @@ public class ControllerMUD : SPController
 
             if (isObstructed || isOffMap) {
                 WeightUI.Instance.ToggleWeights(true, movers);
-                PositionComponent.OnWorldOrMap(destinationEntity, pushToPos, true);
+                PositionComponent.OnWorldOrMap(destinationEntity, pushToPos + pushDirection, true);
                 return false;
             }
             
