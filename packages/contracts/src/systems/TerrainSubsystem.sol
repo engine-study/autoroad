@@ -4,7 +4,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Boulder } from "../codegen/index.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/index.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/index.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/index.sol";
 import { TerrainType, RockType, RoadState, MoveType, NPCType, FloraType} from "../codegen/common.sol";
@@ -254,17 +254,14 @@ contract TerrainSubsystem is System {
       SystemSwitch.call(abi.encodeCall(world.spawnFloraRandom, (player, entity, x, y)));
     } else if (tType == TerrainType.HeavyBoy) {
       Rock.set(entity, uint32(RockType.Heavy));
-      Boulder.set(entity, true);
-      Weight.set(entity, 3);
+      Weight.set(entity, 2);
       Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.HeavyHeavyBoy) {
       Rock.set(entity, uint32(RockType.HeavyHeavy));
-      Boulder.set(entity, true);
-      Weight.set(entity, 5);
+      Weight.set(entity, 3);
       Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.Pillar) {
       Rock.set(entity, uint32(RockType.Pillar));
-      Boulder.set(entity, true);
       Weight.set(entity, 99);
       Move.set(entity, uint32(MoveType.Obstruction));
     } else if (tType == TerrainType.Road) {

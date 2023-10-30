@@ -6,6 +6,7 @@ using mud;
 public class EntityUI : SPWindow
 {
     public MUDEntity Entity {get{return entity;}}
+    public SPWindowPosition Position {get{return position;}}
 
     [Header("Entity")]
     [SerializeField] MUDEntity entity;

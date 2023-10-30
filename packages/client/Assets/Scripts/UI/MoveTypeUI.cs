@@ -6,12 +6,15 @@ using mud;
 public class MoveTypeUI : MUDComponentUI
 {
     [Header("Move")]
-    public bool showObstruction;
     public bool showZeroWeight;
+    public bool showObstruction;
     public SPButton obstruction;
     public StatUI weight;
+    public SPStrobeUI obstructing, tooHeavyStrobe;
 
     [Header("Debug")]
+    public int weightValue;
+    public MoveType moveValue;
     public MoveComponent moveComponent;
     public WeightComponent weightComponent;
 
@@ -24,24 +27,48 @@ public class MoveTypeUI : MUDComponentUI
         weightComponent = Entity.GetMUDComponent<WeightComponent>();
     
         if(moveComponent) {
-
-            if(showObstruction) {obstruction.ToggleWindow(moveComponent.MoveType == MoveType.Obstruction);}
-
-            if(moveComponent.MoveType == MoveType.Push && weightComponent && (showZeroWeight || weightComponent.Weight != 0 )) {
-
-                weight.SetValue(weightComponent.Weight >= 0 ? StatType.Weight : StatType.Strength, Mathf.Abs(weightComponent.Weight).ToString("00"));
-                weight.ToggleWindowOpen();
-            } else {
-                weight.ToggleWindowClose();
-            }
-
-            ToggleWindow(weight.gameObject.activeSelf || obstruction.gameObject.activeSelf);
-            
-
+            SetMove(moveComponent, weightComponent);
         } else {
             ToggleWindowClose();
         }
 
     }
+
+    public void SetMove(MoveComponent m, WeightComponent w) { 
+
+        moveValue = m.MoveType;
+        weightValue = w ? w.Weight : 0;
+
+        SetMove(moveValue, weightValue);
+
+    }
+
+    
+    public void SetMove(MoveType moveType, float wValue, bool cannotMove = false) {
+        
+        StatType statValue = wValue >= 0 ? StatType.Weight : StatType.Strength;
+
+        if(showObstruction) {
+            obstruction.ToggleWindow(moveType == MoveType.Obstruction);
+        }
+
+        if(moveType == MoveType.Push && (showZeroWeight || wValue != 0 )) {
+            weight.SetValue(statValue, Mathf.Abs(wValue).ToString("00"));
+            weight.ToggleWindowOpen();
+        } else {
+            weight.ToggleWindowClose();
+        }
+
+        ToggleWindow(weight.gameObject.activeSelf || obstruction.gameObject.activeSelf);
+
+        if(cannotMove && weight.gameObject.activeInHierarchy) {tooHeavyStrobe.StartStrobe();}
+        else {tooHeavyStrobe.StopStrobe();}
+        
+        if(moveType == MoveType.Obstruction && obstruction.gameObject.activeInHierarchy) {obstructing.StartStrobe();}
+        else {obstructing.StopStrobe();}
+
+    }
+
+
 
 }

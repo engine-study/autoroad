@@ -124,8 +124,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7669067097171603521}
-  - component: {fileID: 3709634647788194482}
-  - component: {fileID: 8963447232859934505}
   m_Layer: 0
   m_Name: Boulder
   m_TagString: Untagged
@@ -149,72 +147,8 @@ Transform:
   - {fileID: 224724298325286419}
   - {fileID: 3440477864667385005}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3709634647788194482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2692374386538251803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f24cd7a56736d940a3a649f08dc533e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  requiredComponents:
-  - {fileID: 2628842198360724426, guid: 691b414de82f4444fb9864d9a5c7b047, type: 3}
-  hasInit: 0
-  loaded: 0
-  spawnInfo:
-    entity: {fileID: 0}
-    source: 0
-    table: {fileID: 0}
-  updateInfo:
-    updateType: 0
-    source: 0
-  networkInfo:
-    updateType: 0
-    source: 0
-  lastInfo:
-    updateType: 0
-    source: 0
-  normal: {fileID: 8329621068692824295}
-  heavy: {fileID: 4135600722279866254}
-  pillar: {fileID: 3313290497887487098}
-  weight: {fileID: 0}
---- !u!114 &8963447232859934505
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2692374386538251803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ee193c86faf2e145926df25a0cded22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncType: 0
-  synced: 0
-  targetComponent: {fileID: 0}
-  target: {fileID: 0}
-  hideIfNoPosition: 1
-  hideIfBelowGround: 1
-  hideAfterLoaded: 1
-  rotateToFace: 0
-  speed: 1
-  rotationSpeed: 720
-  useLine: 0
-  parentTransformToEntity: 0
-  pos: {fileID: 0}
-  movement: {fileID: 0}
-  StartPos: {x: 0, y: 0, z: 0}
-  moving: 0
-  moveLerp: 0
-  distanceMoved: 0
-  distance: 0
 --- !u!1 &3313290497887487098
 GameObject:
   m_ObjectHideFlags: 0

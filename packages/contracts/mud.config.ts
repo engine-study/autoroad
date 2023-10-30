@@ -211,7 +211,6 @@ export default mudConfig({
 
     //unique objects
     Rock: "uint32",
-    Boulder: "bool",
     Tree: "uint32",
     Log: "bool",
     Ox: "bool",
