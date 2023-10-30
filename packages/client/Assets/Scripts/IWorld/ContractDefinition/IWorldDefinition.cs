@@ -177,7 +177,9 @@ namespace IWorld.ContractDefinition
     [Function("contemplateMile")]
     public class ContemplateMileFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "mileNumber", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("int32", "mileNumber", 2)]
         public virtual int MileNumber { get; set; }
     }
 
@@ -387,7 +389,9 @@ namespace IWorld.ContractDefinition
         public virtual int Up { get; set; }
         [Parameter("int32", "down", 4)]
         public virtual int Down { get; set; }
-        [Parameter("int32", "roadSide", 5)]
+        [Parameter("int32", "layer", 5)]
+        public virtual int Layer { get; set; }
+        [Parameter("int32", "roadSide", 6)]
         public virtual int RoadSide { get; set; }
     }
 
@@ -396,11 +400,13 @@ namespace IWorld.ContractDefinition
     [Function("finishMile")]
     public class FinishMileFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "chunk", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "chunk", 2)]
         public virtual byte[] Chunk { get; set; }
-        [Parameter("int32", "currentMile", 2)]
+        [Parameter("int32", "currentMile", 3)]
         public virtual int CurrentMile { get; set; }
-        [Parameter("uint32", "pieces", 3)]
+        [Parameter("uint32", "pieces", 4)]
         public virtual uint Pieces { get; set; }
     }
 
@@ -658,10 +664,10 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Player { get; set; }
     }
 
-    public partial class GiveRoadRewardFunction : GiveRoadRewardFunctionBase { }
+    public partial class GiveRoadLotteryFunction : GiveRoadLotteryFunctionBase { }
 
-    [Function("giveRoadReward")]
-    public class GiveRoadRewardFunctionBase : FunctionMessage
+    [Function("giveRoadLottery")]
+    public class GiveRoadLotteryFunctionBase : FunctionMessage
     {
         [Parameter("bytes32", "road", 1)]
         public virtual byte[] Road { get; set; }
@@ -1687,7 +1693,8 @@ namespace IWorld.ContractDefinition
     [Function("updateChunk")]
     public class UpdateChunkFunctionBase : FunctionMessage
     {
-
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
     }
 
     public partial class WaterFunction : WaterFunctionBase { }

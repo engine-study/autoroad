@@ -424,17 +424,19 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(contemplateMileFunction, cancellationToken);
         }
 
-        public Task<string> ContemplateMileRequestAsync(int mileNumber)
+        public Task<string> ContemplateMileRequestAsync(byte[] causedBy, int mileNumber)
         {
             var contemplateMileFunction = new ContemplateMileFunction();
+                contemplateMileFunction.CausedBy = causedBy;
                 contemplateMileFunction.MileNumber = mileNumber;
             
              return ContractHandler.SendRequestAsync(contemplateMileFunction);
         }
 
-        public Task<TransactionReceipt> ContemplateMileRequestAndWaitForReceiptAsync(int mileNumber, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> ContemplateMileRequestAndWaitForReceiptAsync(byte[] causedBy, int mileNumber, CancellationTokenSource cancellationToken = null)
         {
             var contemplateMileFunction = new ContemplateMileFunction();
+                contemplateMileFunction.CausedBy = causedBy;
                 contemplateMileFunction.MileNumber = mileNumber;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(contemplateMileFunction, cancellationToken);
@@ -881,25 +883,27 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(findEmptyPositionInAreaFunction, cancellationToken);
         }
 
-        public Task<string> FindEmptyPositionInAreaRequestAsync(byte[] entity, int width, int up, int down, int roadSide)
+        public Task<string> FindEmptyPositionInAreaRequestAsync(byte[] entity, int width, int up, int down, int layer, int roadSide)
         {
             var findEmptyPositionInAreaFunction = new FindEmptyPositionInAreaFunction();
                 findEmptyPositionInAreaFunction.Entity = entity;
                 findEmptyPositionInAreaFunction.Width = width;
                 findEmptyPositionInAreaFunction.Up = up;
                 findEmptyPositionInAreaFunction.Down = down;
+                findEmptyPositionInAreaFunction.Layer = layer;
                 findEmptyPositionInAreaFunction.RoadSide = roadSide;
             
              return ContractHandler.SendRequestAsync(findEmptyPositionInAreaFunction);
         }
 
-        public Task<TransactionReceipt> FindEmptyPositionInAreaRequestAndWaitForReceiptAsync(byte[] entity, int width, int up, int down, int roadSide, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> FindEmptyPositionInAreaRequestAndWaitForReceiptAsync(byte[] entity, int width, int up, int down, int layer, int roadSide, CancellationTokenSource cancellationToken = null)
         {
             var findEmptyPositionInAreaFunction = new FindEmptyPositionInAreaFunction();
                 findEmptyPositionInAreaFunction.Entity = entity;
                 findEmptyPositionInAreaFunction.Width = width;
                 findEmptyPositionInAreaFunction.Up = up;
                 findEmptyPositionInAreaFunction.Down = down;
+                findEmptyPositionInAreaFunction.Layer = layer;
                 findEmptyPositionInAreaFunction.RoadSide = roadSide;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(findEmptyPositionInAreaFunction, cancellationToken);
@@ -915,9 +919,10 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(finishMileFunction, cancellationToken);
         }
 
-        public Task<string> FinishMileRequestAsync(byte[] chunk, int currentMile, uint pieces)
+        public Task<string> FinishMileRequestAsync(byte[] causedBy, byte[] chunk, int currentMile, uint pieces)
         {
             var finishMileFunction = new FinishMileFunction();
+                finishMileFunction.CausedBy = causedBy;
                 finishMileFunction.Chunk = chunk;
                 finishMileFunction.CurrentMile = currentMile;
                 finishMileFunction.Pieces = pieces;
@@ -925,9 +930,10 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(finishMileFunction);
         }
 
-        public Task<TransactionReceipt> FinishMileRequestAndWaitForReceiptAsync(byte[] chunk, int currentMile, uint pieces, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> FinishMileRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] chunk, int currentMile, uint pieces, CancellationTokenSource cancellationToken = null)
         {
             var finishMileFunction = new FinishMileFunction();
+                finishMileFunction.CausedBy = causedBy;
                 finishMileFunction.Chunk = chunk;
                 finishMileFunction.CurrentMile = currentMile;
                 finishMileFunction.Pieces = pieces;
@@ -1341,30 +1347,30 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(giveRoadFilledRewardFunction, cancellationToken);
         }
 
-        public Task<string> GiveRoadRewardRequestAsync(GiveRoadRewardFunction giveRoadRewardFunction)
+        public Task<string> GiveRoadLotteryRequestAsync(GiveRoadLotteryFunction giveRoadLotteryFunction)
         {
-             return ContractHandler.SendRequestAsync(giveRoadRewardFunction);
+             return ContractHandler.SendRequestAsync(giveRoadLotteryFunction);
         }
 
-        public Task<TransactionReceipt> GiveRoadRewardRequestAndWaitForReceiptAsync(GiveRoadRewardFunction giveRoadRewardFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> GiveRoadLotteryRequestAndWaitForReceiptAsync(GiveRoadLotteryFunction giveRoadLotteryFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveRoadRewardFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveRoadLotteryFunction, cancellationToken);
         }
 
-        public Task<string> GiveRoadRewardRequestAsync(byte[] road)
+        public Task<string> GiveRoadLotteryRequestAsync(byte[] road)
         {
-            var giveRoadRewardFunction = new GiveRoadRewardFunction();
-                giveRoadRewardFunction.Road = road;
+            var giveRoadLotteryFunction = new GiveRoadLotteryFunction();
+                giveRoadLotteryFunction.Road = road;
             
-             return ContractHandler.SendRequestAsync(giveRoadRewardFunction);
+             return ContractHandler.SendRequestAsync(giveRoadLotteryFunction);
         }
 
-        public Task<TransactionReceipt> GiveRoadRewardRequestAndWaitForReceiptAsync(byte[] road, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> GiveRoadLotteryRequestAndWaitForReceiptAsync(byte[] road, CancellationTokenSource cancellationToken = null)
         {
-            var giveRoadRewardFunction = new GiveRoadRewardFunction();
-                giveRoadRewardFunction.Road = road;
+            var giveRoadLotteryFunction = new GiveRoadLotteryFunction();
+                giveRoadLotteryFunction.Road = road;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveRoadRewardFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveRoadLotteryFunction, cancellationToken);
         }
 
         public Task<string> GiveRoadShoveledRewardRequestAsync(GiveRoadShoveledRewardFunction giveRoadShoveledRewardFunction)
@@ -3663,19 +3669,25 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(updateChunkFunction);
         }
 
-        public Task<string> UpdateChunkRequestAsync()
-        {
-             return ContractHandler.SendRequestAsync<UpdateChunkFunction>();
-        }
-
         public Task<TransactionReceipt> UpdateChunkRequestAndWaitForReceiptAsync(UpdateChunkFunction updateChunkFunction, CancellationTokenSource cancellationToken = null)
         {
              return ContractHandler.SendRequestAndWaitForReceiptAsync(updateChunkFunction, cancellationToken);
         }
 
-        public Task<TransactionReceipt> UpdateChunkRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        public Task<string> UpdateChunkRequestAsync(byte[] causedBy)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync<UpdateChunkFunction>(null, cancellationToken);
+            var updateChunkFunction = new UpdateChunkFunction();
+                updateChunkFunction.CausedBy = causedBy;
+            
+             return ContractHandler.SendRequestAsync(updateChunkFunction);
+        }
+
+        public Task<TransactionReceipt> UpdateChunkRequestAndWaitForReceiptAsync(byte[] causedBy, CancellationTokenSource cancellationToken = null)
+        {
+            var updateChunkFunction = new UpdateChunkFunction();
+                updateChunkFunction.CausedBy = causedBy;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(updateChunkFunction, cancellationToken);
         }
 
         public Task<string> WaterRequestAsync(WaterFunction waterFunction)

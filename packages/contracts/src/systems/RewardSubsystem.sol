@@ -22,30 +22,32 @@ contract RewardSubsystem is System {
     }
   }
 
-  function giveRoadReward(bytes32 road) public {
+  function giveRoadLottery(bytes32 road) public {
 
     //TODO revert after unimud fix
     uint32 roadstate = Road.getState(road);
     bytes32 player = Road.getFilled(road);
+
     // Road.setGem(road, true);
+    //set the road block has a gem
     Road.set(road, roadstate, player, true);
 
     giveGem(player, 1);
     giveCoins(player, 25);
-    giveXP(player, 25);
+
   }
 
   function givePuzzleReward(bytes32 player) public {
     giveGem(player, 1);
     giveCoins(player, Conscription.get(player) ? int32(50) : int32(25));
-    giveXP(player, 100);
+    giveXP(player, 25);
   }
 
   function giveKilledBarbarianReward(bytes32 player) public {
 
     int32 amount = Conscription.get(player) ? int32(20) : int32(10);
     giveCoins(player, amount);
-    giveXP(player, 50);
+    giveXP(player, 25);
 
   }
 

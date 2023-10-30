@@ -20,7 +20,7 @@ import { Rules } from "../utility/rules.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
-import { randomCoord } from "../utility/random.sol";
+import { randomCoord, randomFromEntity } from "../utility/random.sol";
 
 contract TerrainSubsystem is System {
   //updateRow
@@ -213,24 +213,34 @@ contract TerrainSubsystem is System {
 
   }
 
-  function contemplateMile(int32 mileNumber) public {
+  function contemplateMile(bytes32 causedBy, int32 mileNumber) public {
     
     (int32 left, int32 right, int32 up, int32 down) = Rules.getMileBounds(mileNumber);
 
-    for (int32 y = down; y <= up; y++) {
-      for (int32 x = left; x <= right; x++) {
-        bytes32 road = Actions.getRoadEntity(x,y);
+    uint noiseCoord = randomFromEntity(uint(uint32(down)), uint(uint32(up)), causedBy);
+    int32 noiseTile = int32(uint32(noiseCoord));
+    require(noiseTile >= down && noiseTile <= up, "out of range");
 
-        if (Road.getState(road) < uint32(RoadState.Paved)) { continue; }
+    bytes32 road = Actions.getRoadEntity(0, noiseTile);
 
-        uint noiseCoord = randomCoord(0, 100, x, y);
+    require(Road.getState(road) == uint32(RoadState.Paved), "not paved");
 
-        //TODO golf and fix
-        if (noiseCoord < 5) {
-          SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadReward, (road)));
-        }
-      }
-    }
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadLottery, (road)));
+
+    // for (int32 y = down; y <= up; y++) {
+    //   for (int32 x = left; x <= right; x++) {
+    //     bytes32 road = Actions.getRoadEntity(x,y);
+
+    //     if (Road.getState(road) < uint32(RoadState.Paved)) { continue; }
+
+    //     uint noiseCoord = randomCoord(0, 100, x, y);
+
+    //     //TODO golf and fix
+    //     if (noiseCoord < 5) {
+    //       SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadLottery, (road)));
+    //     }
+    //   }
+    // }
   }
 
   function spawnTerrain(bytes32 player, int32 x, int32 y, TerrainType tType) public {
@@ -279,7 +289,7 @@ contract TerrainSubsystem is System {
   }
 
   //TODO fix this horrible thing,make it more robust
-  function updateChunk() public {
+  function updateChunk(bytes32 causedBy) public {
     int32 currentMile = GameState.getMiles();
     bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
 
@@ -291,18 +301,18 @@ contract TerrainSubsystem is System {
 
     //road complete!
     if (pieces >= (roadWidth * uint32(playHeight))) {
-      finishMile(chunk, currentMile, pieces);
+      finishMile(causedBy, chunk, currentMile, pieces);
     } else {
       Chunk.set(chunk, currentMile, true, false, pieces, 0);
     }
   }
 
-  function finishMile(bytes32 chunk, int32 currentMile, uint32 pieces) public {
+  function finishMile(bytes32 causedBy, bytes32 chunk, int32 currentMile, uint32 pieces) public {
     console.log("finish chunk");
     console.logInt(currentMile);
 
     Chunk.set(chunk, currentMile, true, true, pieces, block.number);
-    contemplateMile(currentMile);
+    contemplateMile(causedBy, currentMile);
 
     currentMile += 1;
 
@@ -342,7 +352,7 @@ contract TerrainSubsystem is System {
     bytes32 chunk = Actions.getChunkEntity(currentMile);
     uint32 pieces = roadWidth * uint32(playHeight);
 
-    finishMile(chunk, currentMile, pieces);
+    finishMile(credit, chunk, currentMile, pieces);
   }
 
   function spawnEmptyRoad(int32 x, int32 y) public {
@@ -392,7 +402,7 @@ contract TerrainSubsystem is System {
     //reward the player
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadFilledReward, (causedBy)));
 
-    updateChunk();
+    updateChunk(causedBy);
 
   }
 

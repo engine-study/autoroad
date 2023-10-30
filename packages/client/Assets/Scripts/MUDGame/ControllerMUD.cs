@@ -135,8 +135,7 @@ public class ControllerMUD : SPController
     void UpdateInput()
     {
 
-        if (!hasInit)
-        {
+        if (!hasInit) {
             return;
         }
 
@@ -144,14 +143,12 @@ public class ControllerMUD : SPController
             return;
 
         minTime -= Time.deltaTime;
-        if (minTime > 0f)
-        {
+        if (minTime > 0f) {
             return;
         }
 
         //playerTransform.position != _onchainPosition ||
-        if (Vector3.Distance(playerTransform.position, sync.Pos.Pos) > .5f)
-        {
+        if (Vector3.Distance(playerTransform.position, sync.Pos.Pos) >= 1f) {
             return;
         }
 

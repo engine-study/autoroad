@@ -222,7 +222,7 @@ public class GameState : MonoBehaviour {
         if (player == null || healthComponent == null || healthComponent.Health < 1) {
 
             if(SPGlobal.IsDebug) {
-                int x = BoundsComponent.Right + 1;
+                int x = BoundsComponent.Left - 1;
                 int y = BoundsComponent.Up;
                 Debug.Log("Spawning player at " + x + "," + y);
                 while (await TxManager.SendDirect<SpawnFunction>( PositionComponent.PositionToTransaction(new Vector3(x,0,y)) ) == false) { y--; Debug.LogError("Couldn't spawn"); await UniTask.Delay(1000); }
