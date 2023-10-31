@@ -180,8 +180,6 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdatePlayerPosition() {
 
-        Debug.Log(PlayerMUD.MUDPlayer.Position.Pos);
-
         float newMile = PositionComponent.PositionToMile(PlayerMUD.MUDPlayer.Position.Pos);
 
         Debug.Log($"UPDATE PLAYER: ({playerMile} --> {newMile}) (Max={maxMile})", this);
