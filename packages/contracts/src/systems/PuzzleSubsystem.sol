@@ -199,7 +199,7 @@ contract PuzzleSubsystem is System {
   ) public view returns (PositionData memory pos) {
     //spawn on right side
     pos.x = int32(uint32(randomFromEntitySeed(uint(uint32(roadSide)), uint(uint32(width)), entity, seed)));
-    pos.y = int32(uint32(randomFromEntitySeed(uint(uint32(down)), uint(uint32(up)), entity, seed)));
+    pos.y = int32(uint32(randomFromEntitySeed(uint(uint32(down)), uint(uint32(up)), entity, seed*10)));
     pos.layer = 0;
 
     console.log("get random");
@@ -207,7 +207,7 @@ contract PuzzleSubsystem is System {
     console.logInt(int(pos.y));
 
     //switch what side of the road we spawn on
-    if (random(1, 10) > uint(5)) {
+    if (randomFromEntitySeed(1, 10, entity, seed*100) > uint(5)) {
       pos.x = int32(-pos.x);
     }
   }

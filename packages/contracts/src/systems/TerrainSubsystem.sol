@@ -168,9 +168,9 @@ contract TerrainSubsystem is System {
         //TERRAIN
         TerrainType terrainType = TerrainType.None;
 
-        if (noiseCoord <= 100) {
+        if (noiseCoord <= 200) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord > 100 && noiseCoord <= 400) {
+        } else if (noiseCoord > 200 && noiseCoord <= 500) {
           terrainType = TerrainType.Rock;
         } else if (noiseCoord > 500 && noiseCoord <= 525) {
           terrainType = TerrainType.HeavyBoy;
