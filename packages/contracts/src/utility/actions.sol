@@ -31,6 +31,10 @@ library Actions {
   }
   
   function getRoadEntity(int32 x, int32 y) internal pure returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
+  function getPuzzleEntity(int32 puzzleNumber, bool isTrigger) internal pure returns(bytes32) {
+    if(isTrigger) return keccak256(abi.encode("Trigger", puzzleNumber));
+    else return keccak256(abi.encode("Puzzle", puzzleNumber));
+  }
   function getChunkEntity(int32 mile) internal pure returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
   function getCarriageEntity() internal pure returns(bytes32) {return keccak256(abi.encode("Carriage"));}
 

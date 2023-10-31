@@ -322,7 +322,7 @@ contract TerrainSubsystem is System {
   function debugMile(bytes32 credit) public {
     IWorld world = IWorld(_world());
 
-    (uint32 roadWidth, int32 left, int32 right) = RoadConfig.get();
+    (, int32 left, int32 right) = RoadConfig.get();
     int32 currentMile = GameState.getMiles();
     int32 playHeight = MapConfig.getPlayHeight();
 
@@ -339,9 +339,8 @@ contract TerrainSubsystem is System {
     for (int32 y = yStart; y < yEnd; y++) {
       for (int32 x = left; x <= right; x++) {
 
-        bytes32[] memory atPos = Rules.getKeysAtPosition(world, x, y, -1);
-        if(atPos.length == 0) continue;
-        uint32 roadState = Road.getState(atPos[0]);
+        bytes32 road = Actions.getRoadEntity(x,y);
+        uint32 roadState = Road.getState(road);
         if(roadState >= uint32(RoadState.Paved)) continue;
         spawnFinishedRoad(credit, x, y, RoadState.Paved);
 
@@ -349,10 +348,6 @@ contract TerrainSubsystem is System {
 
     }
 
-    bytes32 chunk = Actions.getChunkEntity(currentMile);
-    uint32 pieces = roadWidth * uint32(playHeight);
-
-    finishMile(credit, chunk, currentMile, pieces);
   }
 
   function spawnEmptyRoad(int32 x, int32 y) public {

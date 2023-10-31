@@ -50,7 +50,7 @@ public class ControllerMUD : SPController
 
     void Awake()
     {
-        mudEntity = GetComponentInParent<MUDEntity>();
+        mudEntity = GetComponentInParent<MUDEntity>(true);
         enabled = false;
         distance = Random.Range(0f, .25f);
     }
@@ -61,7 +61,7 @@ public class ControllerMUD : SPController
 
         // Debug.Log("Controller Init");
         sync = GetComponent<PositionSync>();
-        playerScript = GetComponentInParent<PlayerMUD>();
+        playerScript = GetComponentInParent<PlayerMUD>(true);
 
         if (playerScript)
         {

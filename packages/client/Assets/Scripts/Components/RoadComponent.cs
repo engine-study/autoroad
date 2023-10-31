@@ -109,7 +109,7 @@ public class RoadComponent : MUDComponent {
         if(isFilled == false && (int)roadUpdate.State >= (int)RoadState.Pavimentum) {
             isFilled = true;
             CompletedRoadCount++;
-            Debug.Log("Completed Road Count: " + CompletedRoadCount, this);
+            // Debug.Log("Completed Road Count: " + CompletedRoadCount, this);
         }
 
         lastStage = State;

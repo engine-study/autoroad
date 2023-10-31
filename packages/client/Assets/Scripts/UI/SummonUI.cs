@@ -8,6 +8,7 @@ public class SummonUI : SPWindow
         if(HasInit) {return;}
         base.Init();
 
+        ToggleWindowOpen();
         ToggleWindowClose();
 
         UpdateSummon();
@@ -19,7 +20,7 @@ public class SummonUI : SPWindow
     }
 
     public void UpdateSummon() {
-        gameObject.SetActive(ChunkLoader.ActiveChunk?.Spawned == false);
+        ToggleWindow(ChunkLoader.ActiveChunk?.Spawned == false);
     }
 
 }

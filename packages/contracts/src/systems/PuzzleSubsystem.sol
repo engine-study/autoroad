@@ -60,25 +60,25 @@ contract PuzzleSubsystem is System {
     int32 puzzle = Puzzles.get();
     int32 roadSide = RoadConfig.getRight();
 
-    bytes32 mil = Actions.getRoadEntity(-99, puzzle);
-    bytes32 trigger = Actions.getRoadEntity(99, puzzle);
+    bytes32 statue = Actions.getPuzzleEntity(puzzle, false);
+    bytes32 trigger = Actions.getPuzzleEntity(puzzle, true);
 
     console.log("statue");
 
-    PositionData memory pos = findEmptyPositionInArea(mil, width, up, down, 0, roadSide);
+    PositionData memory pos = findEmptyPositionInArea(statue, width, up, down, 0, roadSide);
 
     //delete whatever was there and place puzzle
     Actions.deleteAt(world, pos);
 
     //spawn statue
-    Position.set(mil, pos);
-    Miliarium.set(mil, true);
-    Weight.set(mil, 1);
-    Move.set(mil, uint32(MoveType.Push));
-    Rock.set(mil, uint32(RockType.Statuae));
-    Health.set(mil, 1);
-    Puzzle.set(mil, uint32(PuzzleType.Statuae), false);
-    Linker.set(mil, trigger);
+    Position.set(statue, pos);
+    Miliarium.set(statue, true);
+    Weight.set(statue, 1);
+    Move.set(statue, uint32(MoveType.Push));
+    Rock.set(statue, uint32(RockType.Statuae));
+    Health.set(statue, 1);
+    Puzzle.set(statue, uint32(PuzzleType.Statuae), false);
+    Linker.set(statue, trigger);
 
     console.log("trigger");
 
@@ -98,8 +98,8 @@ contract PuzzleSubsystem is System {
     int32 puzzle = Puzzles.get();
     int32 roadSide = RoadConfig.getRight();
 
-    bytes32 mil = Actions.getRoadEntity(-99, puzzle);
-    bytes32 trigger = Actions.getRoadEntity(99, puzzle);
+    bytes32 mil = Actions.getPuzzleEntity(puzzle, false);
+    bytes32 trigger = Actions.getPuzzleEntity(puzzle, true);
 
     console.log("miliarium");
 
@@ -190,7 +190,7 @@ contract PuzzleSubsystem is System {
   }
 
   function getRandomPositionNotRoad(
-    bytes32 causedBy,
+    bytes32 entity,
     int32 width,
     int32 up,
     int32 down,
@@ -198,8 +198,8 @@ contract PuzzleSubsystem is System {
     uint seed
   ) public view returns (PositionData memory pos) {
     //spawn on right side
-    pos.x = int32(uint32(randomFromEntitySeed(uint(uint32(roadSide)), uint(uint32(width)), causedBy, seed)));
-    pos.y = int32(uint32(randomFromEntitySeed(uint(uint32(down)), uint(uint32(up)), causedBy, seed)));
+    pos.x = int32(uint32(randomFromEntitySeed(uint(uint32(roadSide)), uint(uint32(width)), entity, seed)));
+    pos.y = int32(uint32(randomFromEntitySeed(uint(uint32(down)), uint(uint32(up)), entity, seed)));
     pos.layer = 0;
 
     console.log("get random");

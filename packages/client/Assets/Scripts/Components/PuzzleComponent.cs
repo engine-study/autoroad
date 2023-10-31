@@ -8,21 +8,24 @@ public enum PuzzleType {None, Miliarium, Bearer, Statuae, Count}
 public class PuzzleComponent : MUDComponent {
 
     [Header("Puzzle")]
+    [SerializeField] SPEnableDisable completeFX;
+
     [EnumNamedArray( typeof(PuzzleType) )]
     [SerializeField] GameObject[] stages;
+    [SerializeField] GameObject[] stagesComplete;
 
     [Header("Debug")]
     public PuzzleType puzzle;
     public bool completed;
 
     [Header("Miliarium")]
-    [SerializeField] GameObject puzzleActive;
-    [SerializeField] GameObject puzzleComplete;
 
     [Header("Statue")]
 
     [Header("Debug")]
+    [SerializeField] PositionSync sync;
     [SerializeField] RockComponent rock;
+
 
     protected override IMudTable GetTable() {return new PuzzleTable();}
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
@@ -32,8 +35,7 @@ public class PuzzleComponent : MUDComponent {
         completed = (bool)table.Complete;
 
         for(int i = 0; i < stages.Length; i++) {if(stages[i] == null) continue; stages[i].SetActive(i == (int)puzzle);}
-
-        UpdatePuzzleState();
+        for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) continue; stagesComplete[i].SetActive(false);}
 
     }
 
@@ -41,17 +43,23 @@ public class PuzzleComponent : MUDComponent {
         base.PostInit();
 
         rock = Entity.GetMUDComponent<RockComponent>();
+        sync = rock.GetComponent<PositionSync>();
+
+        sync.OnMoveEnd += CompletedWhenMoved;
+
         transform.parent = rock.transform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-
-        UpdatePuzzleState();
     
     }
 
-    void UpdatePuzzleState() {
-        puzzleActive.SetActive(!completed);
-        puzzleComplete.SetActive(completed);
+    void CompletedWhenMoved() {
+        if(completed) {
+            completeFX.Spawn(true);
+            for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) continue; stagesComplete[i].SetActive(true);}
+        }
+
+
     }
 
 }

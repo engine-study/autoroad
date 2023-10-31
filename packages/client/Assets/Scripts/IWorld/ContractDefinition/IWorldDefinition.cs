@@ -553,8 +553,8 @@ namespace IWorld.ContractDefinition
     [Function("getRandomPositionNotRoad", typeof(GetRandomPositionNotRoadOutputDTO))]
     public class GetRandomPositionNotRoadFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "causedBy", 1)]
-        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 1)]
+        public virtual byte[] Entity { get; set; }
         [Parameter("int32", "width", 2)]
         public virtual int Width { get; set; }
         [Parameter("int32", "up", 3)]

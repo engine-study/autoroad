@@ -37,14 +37,15 @@ public class WorldScroll : MonoBehaviour {
     [SerializeField] bool playerFocus = false;
     [SerializeField] float maxMile = 0f;
     [SerializeField] int mile = -1;
-    [SerializeField] float mileScroll, lastScroll = -100f;
+    [SerializeField] float playerMile = 0f;
+    [SerializeField] float scrollMile;
     [SerializeField] ChunkComponent focusedChunk;
-    float playerMile = 0f, lastPlayerMile = -1f;
+    float lastPlayerMile = -1f, lastScroll = -100f;
     float targetScroll, targetPlayer;
     bool ready = false;
 
     public float MileDistance { get { return mile * GameStateComponent.MILE_DISTANCE; } }
-    public float MileTotalScroll { get { return mileScroll * GameStateComponent.MILE_DISTANCE; } }
+    public float MileTotalScroll { get { return scrollMile * GameStateComponent.MILE_DISTANCE; } }
     public static float GetMileLerp(float newMile) {return GameStateComponent.MILE_COUNT == 0 ? 1f : Mathf.Clamp01(newMile/GameStateComponent.MILE_COUNT);}
 
     void Awake() {
@@ -82,13 +83,20 @@ public class WorldScroll : MonoBehaviour {
     }
 
     void GameStateUpdate() {
+        
+        // Debug.Log("[SCROLL] Moving furthest mile to " + (int)GameStateComponent.MILE_COUNT);
+        maxMile = (int)GameStateComponent.MILE_COUNT;
+
         if(!ready) {return;}
-        Debug.Log("[SCROLL] Moving furthest mile to " + (int)GameStateComponent.MILE_COUNT);
-        SetFurthestMile((int)GameStateComponent.MILE_COUNT);
+
+        front.transform.position = Vector3.forward * (maxMile * MapConfigComponent.Height + MapConfigComponent.Height);
     }
 
     void InitPlayer() {
 
+        Debug.Log("Init player world scroll");
+        Debug.Log($"Max mile {maxMile}");
+        
         enabled = true;
 
         (PlayerMUD.LocalPlayer as PlayerMUD).Position.OnUpdated += UpdatePlayerPosition;
@@ -121,7 +129,7 @@ public class WorldScroll : MonoBehaviour {
         
         if (SPUIBase.CanInput && Input.GetKey(KeyCode.LeftControl) && !SPUIBase.IsPointerOverUIElement && SPUIBase.IsMouseOnScreen && Input.mouseScrollDelta.y != 0f) {
             if(Input.mouseScrollDelta.y != 0f) {mileUI.ToggleWindowOpen();}
-            mileScroll = GetSoftClampedMile(mileScroll + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
+            scrollMile = GetSoftClampedMile(scrollMile + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
         
@@ -147,21 +155,21 @@ public class WorldScroll : MonoBehaviour {
     void UpdateScroll() {
 
         //magnetism, lerp back to current mile
-        mileScroll = Mathf.MoveTowards(mileScroll, mile, 1f * Time.deltaTime);
-        targetScroll = GetMileLerp(mileScroll);
+        scrollMile = Mathf.MoveTowards(scrollMile, mile, 1f * Time.deltaTime);
+        targetScroll = GetMileLerp(scrollMile);
 
-        bool isInNewMile = Mathf.Abs((mileScroll * GameStateComponent.MILE_DISTANCE) - MileDistance) > GameStateComponent.MILE_DISTANCE * .5f;
-        int newMile = Mathf.RoundToInt(mileScroll);
+        bool isInNewMile = Mathf.Abs((scrollMile * GameStateComponent.MILE_DISTANCE) - MileDistance) > GameStateComponent.MILE_DISTANCE * .5f;
+        int newMile = Mathf.RoundToInt(scrollMile);
         //if we're more than halfway to the next mile, magnet over to it
         if (isInNewMile && newMile != mile) {
             SetToScrollMile(true);
         }
 
-        if (!playerFocus && lastScroll != mileScroll) {
+        if (!playerFocus && lastScroll != scrollMile) {
             SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
         }
 
-        lastScroll = mileScroll;
+        lastScroll = scrollMile;
     }
 
     void UpdateUI() {
@@ -172,7 +180,13 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdatePlayerPosition() {
 
-        playerMile = GetClampedMile(PositionComponent.PositionToMile((PlayerMUD.LocalPlayer as PlayerMUD).Position.Pos));
+        Debug.Log(PlayerMUD.MUDPlayer.Position.Pos);
+
+        float newMile = PositionComponent.PositionToMile(PlayerMUD.MUDPlayer.Position.Pos);
+
+        Debug.Log($"UPDATE PLAYER: ({playerMile} --> {newMile}) (Max={maxMile})", this);
+
+        playerMile = GetClampedMile(newMile);
         targetPlayer = GetMileLerp(playerMile);
 
         if (playerMile != lastPlayerMile) {
@@ -215,14 +229,14 @@ public class WorldScroll : MonoBehaviour {
     public void SetToScrollMile(bool withFX) {
         Debug.Log("SCROLL: Scroll", this);
         ToggleCameraOnObject(false, false, null);
-        SetMile(Mathf.RoundToInt(mileScroll), withFX);
+        SetMile(Mathf.RoundToInt(scrollMile), withFX);
     }
 
     public void SetToObject(Transform target, bool withFX) {
         
-        mileScroll = GetClampedMile(PositionComponent.PositionToMile(target.position));
+        scrollMile = GetClampedMile(PositionComponent.PositionToMile(target.position));
         ToggleCameraOnObject(true, false, target);
-        SetMile(Mathf.RoundToInt(mileScroll), withFX);
+        SetMile(Mathf.RoundToInt(scrollMile), withFX);
 
     }
 
@@ -230,12 +244,13 @@ public class WorldScroll : MonoBehaviour {
 
         Debug.Log("SCROLL: Player", this);
 
-        mileScroll = playerMile;
+        scrollMile = playerMile;
 
         ToggleCameraOnObject(true, false, PlayerMUD.LocalPlayer.Root);
         SetMile((int)playerMile, withFX);
 
         mileHeading.UpdateField("Mile " + (int)(playerMile+1));
+        mileHeading.ToggleWindowOpen();
         mileUI.ToggleWindowOpen();
         
     }
@@ -258,15 +273,9 @@ public class WorldScroll : MonoBehaviour {
 
     }
 
-    public void SetFurthestMile(int newMaxMile) {
-        maxMile = newMaxMile;
-        front.transform.position = Vector3.forward * (maxMile * MapConfigComponent.Height + MapConfigComponent.Height);
-        // back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
-    }
-
     public void SetMile(int newMile, bool withFX = false) {
 
-        Debug.Log("WORLD: (" + mile + ") " + (int)newMile + " / " + (int)maxMile, this);
+        Debug.Log($"WORLD: ({mile} --> {newMile}) (Max={maxMile})", this);
 
         //out of range
         if(newMile > maxMile || newMile < 0f) {
@@ -285,6 +294,7 @@ public class WorldScroll : MonoBehaviour {
         focusedChunk.ToggleCurrentMile(true);
 
         mileHeading.UpdateField("Mile " + (int)(newMile+1));
+        mileHeading.ToggleWindowOpen();
         mileUI.ToggleWindowOpen();
 
         recapButton.ToggleWindow(ChunkLoader.Chunk.Completed);

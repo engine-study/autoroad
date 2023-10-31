@@ -16,7 +16,15 @@ public class CarriageComponent : MUDComponent
         base.PostInit();
 
         sync.OnMoveStart += WagonFX;
+        sync.OnMoveEnd += WagonEndFX;
 
+    }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        
+        sync.OnMoveStart -= WagonFX;
+        sync.OnMoveEnd -= WagonEndFX;
     }
     protected override IMudTable GetTable() {return new CarriageTable();}
     protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {

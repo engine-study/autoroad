@@ -3,7 +3,7 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Player, Position, Health, Move, GameState, Coinage, PositionData, PositionTableId } from "../codegen/index.sol";
+import { Player, Position, Health, Move, GameState, Coinage, PositionData, PositionTableId, Road } from "../codegen/index.sol";
 import { TerrainType, NPCType, RoadState } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
@@ -83,6 +83,8 @@ contract AdminSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
     require(Rules.onRoad(x,y), "not on road");
+    bytes32 road = Actions.getRoadEntity(x,y);
+    require(Road.getState(road) < uint32(RoadState.Paved), "already paved");
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnFinishedRoad,(player, x, y, RoadState.Paved)));
   }
 

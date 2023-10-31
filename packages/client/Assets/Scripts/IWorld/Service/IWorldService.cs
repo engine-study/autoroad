@@ -1140,10 +1140,10 @@ namespace IWorld.Service
             return ContractHandler.QueryDeserializingToObjectAsync<GetRandomPositionNotRoadFunction, GetRandomPositionNotRoadOutputDTO>(getRandomPositionNotRoadFunction, blockParameter);
         }
 
-        public Task<GetRandomPositionNotRoadOutputDTO> GetRandomPositionNotRoadQueryAsync(byte[] causedBy, int width, int up, int down, int roadSide, BigInteger seed, BlockParameter blockParameter = null)
+        public Task<GetRandomPositionNotRoadOutputDTO> GetRandomPositionNotRoadQueryAsync(byte[] entity, int width, int up, int down, int roadSide, BigInteger seed, BlockParameter blockParameter = null)
         {
             var getRandomPositionNotRoadFunction = new GetRandomPositionNotRoadFunction();
-                getRandomPositionNotRoadFunction.CausedBy = causedBy;
+                getRandomPositionNotRoadFunction.Entity = entity;
                 getRandomPositionNotRoadFunction.Width = width;
                 getRandomPositionNotRoadFunction.Up = up;
                 getRandomPositionNotRoadFunction.Down = down;
