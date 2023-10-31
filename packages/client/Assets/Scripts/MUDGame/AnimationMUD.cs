@@ -46,27 +46,27 @@ public class AnimationMUD : MonoBehaviour
 
     protected virtual void Start() {
 
-        Animator = GetComponentInChildren<SPAnimator>(true);
+        if(entity == null) return;
+
+        PositionSync = GetComponentInParent<PositionSync>(true);
+
         Controller = GetComponentInChildren<SPController>(true);
-        
         if(Controller == null) {
             Controller = gameObject.AddComponent<SPController>();
             Controller.Init();
             Controller.ToggleController(false);
         }
 
-        PositionSync = GetComponentInParent<PositionSync>(true);
+        Animator = GetComponentInChildren<SPAnimator>(true);
+        if(Animator) {
+            head = Animator.Head;
+            headRB = head.GetComponent<Rigidbody>();
+            headParent = head.transform.parent;
+            headPosLocal = head.localPosition;
+            headRotLocal = head.localRotation;
+            actor = new ActorAnimator(Animator);
+        }
 
-        actor = new ActorAnimator(Animator);
-
-        head = Animator.Head;
-        headRB = head.GetComponent<Rigidbody>();
-        headParent = head.transform.parent;
-        headPosLocal = head.localPosition;
-        headRotLocal = head.localRotation;
-
-        if(entity == null) return;
-        
         actionData = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
 
         if(entity.Loaded) Init();
@@ -133,7 +133,7 @@ public class AnimationMUD : MonoBehaviour
         ActionEffect newEffect = LoadAction(newAction.ToString());
 
         //look at the new thing
-        looker.SetLookRotation(actionData.Position);
+        looker?.SetLookRotation(actionData.Position);
 
         if(newEffect == null) {
             ToggleAction(false, actionEffect);

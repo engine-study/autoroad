@@ -10653,6 +10653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0504cc0f4638db41a51576555488a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  active: 1
   onEffects: {fileID: 439321787312292411}
   offEffects: {fileID: 439321787312292411}
   component: {fileID: 0}
@@ -10808,6 +10809,7 @@ GameObject:
   - component: {fileID: 5117984663886283829}
   - component: {fileID: 7173250004357761728}
   - component: {fileID: 7201583706257857126}
+  - component: {fileID: 3686348252591319451}
   - component: {fileID: 7397639299022656998}
   m_Layer: 0
   m_Name: Rock
@@ -10847,6 +10849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b22358974b512842a3acb2c8aaeceb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  table: {fileID: 0}
   requiredComponents:
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
   - {fileID: 887154974638645543, guid: a34254a59a3dd7845b586282bc8292e2, type: 3}
@@ -10959,6 +10962,28 @@ MonoBehaviour:
   moveLerp: 0
   distanceMoved: 0
   distance: 0
+--- !u!114 &3686348252591319451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176298541283094271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e77e591581519b408d5dd1e1635b5e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 9162863614637568543}
+  actionName: 0
+  actionEffect: {fileID: 0}
+  PositionSync: {fileID: 0}
+  Animator: {fileID: 0}
+  Controller: {fileID: 0}
+  entity: {fileID: 0}
+  ourComponent: {fileID: 0}
+  actionData: {fileID: 0}
+  looker: {fileID: 0}
 --- !u!114 &7397639299022656998
 MonoBehaviour:
   m_ObjectHideFlags: 0
