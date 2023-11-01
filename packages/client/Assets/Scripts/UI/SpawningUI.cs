@@ -10,7 +10,6 @@ public class SpawningUI : SPWindowParent
 {
     [Header("Spawning")]
     [SerializeField] private SPButton nameButton;
-    [SerializeField] private SPButton spawnButton;
     bool spawning;
     int x;
     int y;
@@ -44,7 +43,7 @@ public class SpawningUI : SPWindowParent
             
             Vector3 spawnPos = Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.left * MapConfigComponent.Width;
             
-            WorldScroll.Instance.SetMile(Mathf.RoundToInt(PositionComponent.PositionToMile(spawnPos)),true);
+            WorldScroll.Instance.SetMile(Mathf.RoundToInt(PositionComponent.PositionToMile(spawnPos)), false, true);
             SPCamera.SetTarget(spawnPos);
 
             nameButton.UpdateField(NameComponent.LocalName);
@@ -91,7 +90,6 @@ public class SpawningUI : SPWindowParent
         ok.SetActive(goodSpawn);
         bad.SetActive(!goodSpawn);
 
-        spawnButton.ToggleState(goodSpawn ? SPSelectableState.Default : SPSelectableState.Disabled);
     }
 
     async void Spawn() {

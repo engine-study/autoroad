@@ -42,9 +42,12 @@ public class StoreUI : SPWindowParent
             
             itemInfo.Add(newItemInfo);
 
-            StoreItemUI newItem = Instantiate(itemPrefab.gameObject, itemRect).GetComponent<StoreItemUI>();
+            SPButton header = itemTypeHeaders[(int)newItemInfo.itemType];
+            
+            StoreItemUI newItem = Instantiate(itemPrefab.gameObject, header.Rect.parent).GetComponent<StoreItemUI>();
+            newItem.transform.SetSiblingIndex(header.transform.GetSiblingIndex()+1);
+
             newItem.store = this;
-            newItem.transform.SetSiblingIndex(itemTypeHeaders[(int)newItemInfo.itemType].transform.GetSiblingIndex()+1);
 
             items.Add(newItem);
             newItem.SetItem(newItemInfo);

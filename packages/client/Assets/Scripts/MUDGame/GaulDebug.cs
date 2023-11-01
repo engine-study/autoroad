@@ -99,7 +99,8 @@ public class GaulDebug : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0)) {
                 #if UNITY_EDITOR
-                Selection.activeGameObject = CursorMUD.Entity?.gameObject;
+                if(CursorMUD.Entity) Selection.activeGameObject = CursorMUD.Entity?.gameObject;
+                else Selection.activeGameObject = CursorMUD.EntityUnder?.gameObject;
                 #endif
             }
             if (Input.GetMouseButtonDown(1)) {(PlayerMUD.LocalPlayer.Controller as ControllerMUD).TeleportMUD(CursorMUD.GridPos, true);}

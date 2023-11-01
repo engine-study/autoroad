@@ -86,6 +86,7 @@ MonoBehaviour:
   address: {fileID: 8469578027178478690}
   eth: {fileID: 3846564808473205888}
   ethBalance: 0
+  addressField: 
 --- !u!1001 &4372901090418598254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -339,6 +340,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 7087150653065803245, guid: 7eb4f75ffddde764f9c3d60f54dc5b9f, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7087150653065803245, guid: 7eb4f75ffddde764f9c3d60f54dc5b9f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1707736601, guid: 047191b6d465c22479a6d8785b845571, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

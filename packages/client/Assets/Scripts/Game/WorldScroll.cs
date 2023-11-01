@@ -77,7 +77,7 @@ public class WorldScroll : MonoBehaviour {
         ready = true;
 
         GameStateUpdate();
-        SetMile(-2);
+        SetMile(Mathf.RoundToInt(minMile), false, true);
 
         enabled = true;
     }
@@ -127,7 +127,7 @@ public class WorldScroll : MonoBehaviour {
 
     void UpdateInput() {
         
-        if (SPUIBase.CanInput && Input.GetKey(KeyCode.LeftControl) && !SPUIBase.IsPointerOverUIElement && SPUIBase.IsMouseOnScreen && Input.mouseScrollDelta.y != 0f) {
+        if (SPUIBase.CanInput && Input.GetKey(KeyCode.LeftControl) && SPUIBase.IsMouseOnScreen && Input.mouseScrollDelta.y != 0f) {
             if(Input.mouseScrollDelta.y != 0f) {mileUI.ToggleWindowOpen();}
             scrollMile = GetSoftClampedMile(scrollMile + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
@@ -274,7 +274,7 @@ public class WorldScroll : MonoBehaviour {
 
     }
 
-    public void SetMile(int newMile, bool withFX = false) {
+    public void SetMile(int newMile, bool withFX = false, bool updateScroll = false) {
 
         Debug.Log($"WORLD: ({mile} --> {newMile}) (Max={maxMile})", this);
 
@@ -286,7 +286,7 @@ public class WorldScroll : MonoBehaviour {
 
         if(newMile < 0) {
 
-            mileHeading.UpdateField("Story");
+            mileHeading.UpdateField("Polis");
             mileHeading.ToggleWindowOpen();
             mileUI.ToggleWindowOpen();
 
@@ -311,6 +311,11 @@ public class WorldScroll : MonoBehaviour {
         }
 
         mile = newMile;
+
+        if(updateScroll) {
+            scrollMile = mile;
+            lastScroll = mile;
+        }
 
         if(withFX) {
             // mileNumber.SetActive(true);
