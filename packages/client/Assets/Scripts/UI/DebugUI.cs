@@ -23,7 +23,7 @@ public class DebugUI : SPWindowParent
     }
 
     public void GiveXP() {
-        TxManager.SendDirect<AddXPAdminFunction>(new System.Numerics.BigInteger(15));
+        TxManager.SendDirect<AddXPAdminFunction>(new System.Numerics.BigInteger(100));
     }
 
     public void GiveGems() {

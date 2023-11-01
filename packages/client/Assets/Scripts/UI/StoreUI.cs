@@ -21,15 +21,17 @@ public class StoreUI : SPWindowParent
     [Header("Debug")]
     public List<GaulItem> itemInfo = new List<GaulItem>();
     public List<StoreItemUI> items = new List<StoreItemUI>();
-    
+    public List<GaulItem>[] itemCategories;
 
     protected override void Start() {
         base.Start();
 
         itemPrefab.ToggleWindowClose();
+        itemCategories = new List<GaulItem>[itemTypeHeaders.Length];
 
         for(int i =0; i < itemTypeHeaders.Length; i++) {
             itemTypeHeaders[i].UpdateField(GaulItem.ItemTypeString((ItemType)i));
+            itemCategories[i] = new List<GaulItem>();
         }
 
         object[] itemObjects = Resources.LoadAll("Data/Store");
@@ -39,19 +41,33 @@ public class StoreUI : SPWindowParent
             GaulItem newItemInfo = itemObjects[i] as GaulItem;
             if (newItemInfo == null) { Debug.LogError("Don't put other objects in the Data/Store folder pls."); }
             if (newItemInfo.canBuy == false) { continue; }
-            
+
             itemInfo.Add(newItemInfo);
-
-            SPButton header = itemTypeHeaders[(int)newItemInfo.itemType];
-            
-            StoreItemUI newItem = Instantiate(itemPrefab.gameObject, header.Rect.parent).GetComponent<StoreItemUI>();
-            newItem.transform.SetSiblingIndex(header.transform.GetSiblingIndex()+1);
-
-            newItem.store = this;
-
-            items.Add(newItem);
-            newItem.SetItem(newItemInfo);
+            itemCategories[(int)newItemInfo.itemType].Add(newItemInfo);
         }
+
+        //sort all items by cost
+        for(int i = 0; i < itemCategories.Length; i++) {
+            itemCategories[i].Sort((a, b) => b.value.CompareTo(a.value));
+        }
+
+        //spawn store objects
+        for(int i = 0; i < itemCategories.Length; i++) {
+        
+            SPButton header = itemTypeHeaders[i];
+
+            for (int j = 0; j < itemCategories[i].Count; j++) {
+                
+                StoreItemUI newItem = Instantiate(itemPrefab.gameObject, header.Rect.parent).GetComponent<StoreItemUI>();
+                newItem.transform.SetSiblingIndex(header.transform.GetSiblingIndex()+1);
+
+                newItem.store = this;
+
+                items.Add(newItem);
+                newItem.SetItem(itemCategories[i][j]);
+            }
+        }
+
 
         XPComponent.OnLocalLevelUp += UpdateStore;
         CoinComponent.OnLocalUpdate += UpdateStore;

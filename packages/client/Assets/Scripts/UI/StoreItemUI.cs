@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class StoreItemUI : SPWindow
 {
+
+    public GaulItem Item {get{return item;}}
+
     [Header("Store Item")]
     [HideInInspector] public StoreUI store;
     [SerializeField] SPButton itemText;

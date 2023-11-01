@@ -58,6 +58,7 @@ public class MotherUI : SPUIInstance {
         Mother = this;
         nameAndSpawnScreen.SetActive(false);
 
+        profile.Init();
         profile.ToggleWindowClose();
         menu.ToggleWindowClose();
         spectate.ToggleWindowClose();

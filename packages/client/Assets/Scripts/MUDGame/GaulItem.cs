@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,11 +40,28 @@ public class GaulItem : ScriptableObject {
 }
 
 [System.Serializable]
-public class Currency {
+public class Currency:IComparable<Currency> {
     public float price = 0;
     public int gem = 0;
     public float eth = 0f;
     public float XP = 0f;
+
+    public int CompareTo(Currency other) {
+        // First compare by coins (price)
+        int priceComparison = price.CompareTo(other.price);
+        if (priceComparison != 0) {
+            return priceComparison;
+        }
+
+        // If coins are equal, compare by gems
+        int gemComparison = gem.CompareTo(other.gem);
+        if (gemComparison != 0) {
+            return gemComparison;
+        }
+
+        // If gems are also equal, finally compare by Ethereum (eth)
+        return eth.CompareTo(other.eth);
+    }
 
     public float StatToValue(StatType statType) {
 
@@ -58,4 +76,6 @@ public class Currency {
         } else return -1;
 
     }
+
+    //TODO add CompareTo
 }
