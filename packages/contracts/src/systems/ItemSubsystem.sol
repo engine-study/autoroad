@@ -38,18 +38,18 @@ contract ItemSubsystem is System {
         Stick.set(player, true);
       } 
       else if (id == 1) { //robe
-        pay(player, 250, 0, 0, payment, 0);
+        pay(player, 0, 1, 0, payment, 0);
         Robe.set(player, 0);
       } 
       else if (id == 2) { //pickelhaube
-        pay(player, 100, 0, 0, payment, 0);
+        pay(player, 0, 1, 0, payment, 0);
         Head.set(player, 0);
       } 
       else if (id == 3) { //fishing rod
         pay(player, 50, 0, 0, payment, 0);
         FishingRod.set(player, true);
       } 
-      else if (id == 4) { //boots
+      else if (id == 4) { //grapeleaf
         pay(player, 100, 0, 0, payment, 0);
         int32 weight = Weight.get(player);
         Weight.set(player, weight - 1);

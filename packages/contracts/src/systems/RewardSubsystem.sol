@@ -12,14 +12,25 @@ contract RewardSubsystem is System {
     IWorld world = IWorld(_world());
 
     //reward the Player and NPC for their actions
-    NPCType attackerType = NPCType(NPC.get(attacker));
-    NPCType targetType = NPCType(NPC.get(target));
+    bool isBarbarian = Barbarian.get(target);
+    if(isBarbarian) {
+      //TODO can they double dip if attacker and causedBy are the same?
+      if(NPC.get(causedBy) > 0 && causedBy != attacker) { giveKillReward(causedBy);}
 
-    //TODO can they double dip if attacker and causedBy are the same?
-    if(targetType == NPCType.Barbarian) {
-      if(NPC.get(causedBy) > 0 && causedBy != attacker) { giveKilledBarbarianReward(causedBy);}
-      if(attackerType != NPCType.None) giveKilledBarbarianReward(attacker);
+      NPCType attackerType = NPCType(NPC.get(attacker));
+      if(attackerType != NPCType.None) giveKillReward(attacker);
+      return;
     }
+
+    bool isSoldier = Soldier.get(target);
+    if(isSoldier) {
+      //do something bad to players for killing their own oldiers
+      // if(NPC.get(causedBy) > 0 && causedBy != attacker) { doSomethingBad;}
+      NPCType attackerType = NPCType(NPC.get(attacker));
+      if(attackerType != NPCType.None) giveKillReward(attacker);
+      return;
+    }
+    
   }
 
   function giveRoadLottery(bytes32 road) public {
@@ -33,39 +44,34 @@ contract RewardSubsystem is System {
     Road.set(road, roadstate, player, true);
 
     giveGem(player, 1);
-    giveCoins(player, 25);
+    giveCoins(player, 50);
 
   }
 
   function givePuzzleReward(bytes32 player) public {
-    giveGem(player, 1);
-    giveCoins(player, Conscription.get(player) ? int32(50) : int32(25));
+    giveCoins(player, Conscription.get(player) ? int32(50) : int32(30));
     giveXP(player, 25);
   }
 
-  function giveKilledBarbarianReward(bytes32 player) public {
-
-    int32 amount = Conscription.get(player) ? int32(20) : int32(10);
+  function giveKillReward(bytes32 player) public {
+    int32 amount = Conscription.get(player) ? int32(50) : int32(30);
     giveCoins(player, amount);
     giveXP(player, 25);
-
-  }
-
-  function giveRoadShoveledReward(bytes32 player) public {
-    int32 amount = Conscription.get(player) ? int32(10) : int32(5);
-
-    giveCoins(player, amount);
-    giveXP(player, 10);
-
   }
 
   function giveRoadFilledReward(bytes32 player) public {
 
     int32 coins = Coinage.get(player);
-    int32 amount = Conscription.get(player) ? int32(30) : int32(15);
+    int32 amount = Conscription.get(player) ? int32(30) : int32(20);
 
     giveCoins(player, amount);
-    giveXP(player, 25);
+    giveXP(player, 20);
+  }
+
+  function giveRoadShoveledReward(bytes32 player) public {
+    int32 amount = Conscription.get(player) ? int32(10) : int32(5);
+    giveCoins(player, amount);
+    giveXP(player, 10);
   }
 
   function giveCoins(bytes32 player, int32 amount) public {

@@ -165,4 +165,5 @@ library Rules {
     require(requireLegalMove(player, entityPos, playerPos, distance), "too far or too close");
     return true;
   }
+
 }
