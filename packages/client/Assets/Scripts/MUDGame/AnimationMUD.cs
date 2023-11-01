@@ -149,13 +149,17 @@ public class AnimationMUD : MonoBehaviour
 
         if(Animation != null) actionData.Entity.StopCoroutine(Animation); 
 
-        if(entity.IsLocal) {
-            //assume we're already in the action because we had to have cast it?
-            // Animation = StartCoroutine(AnimationInsanityLocal(newEffect));
-            Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
+        if(entity.gameObject.activeInHierarchy) {
+            if(entity.IsLocal) {
+                //assume we're already in the action because we had to have cast it?
+                // Animation = StartCoroutine(AnimationInsanityLocal(newEffect));
+                Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
+            } else {
+                //wait for target to move into place, then do animation
+                Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
+            }
         } else {
-            //wait for target to move into place, then do animation
-            Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
+            ToggleAction(true, newEffect);
         }
         
     }   

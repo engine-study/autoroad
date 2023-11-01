@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: RoadGroundSpawn
   m_Shader: {fileID: -6465566751694194690, guid: 0a22afcef02c34245a0f4a22ee3ed598, type: 3}
-  m_Parent: {fileID: 2100000, guid: 6e658fa4130ab884b886c8010482cf97, type: 2}
+  m_Parent: {fileID: 2100000, guid: 0e8bab46b176c38489a5ac88c94731db, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -38,9 +38,10 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Darken: 0.95
-    - _Line: 0.5
+    - _Darken: 1
+    - _Line: 0.75
     - _NormalStrength: 0.5
-    - _TextureScale: 0.05
-    m_Colors: []
+    - _TextureScale: 0.1
+    m_Colors:
+    - _Color: {r: 0.69803923, g: 0.69803923, b: 0.69803923, a: 1}
   m_BuildTextureStacks: []

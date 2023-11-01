@@ -41,7 +41,11 @@ public class SpawningUI : SPWindowParent
 
             SPCamera.SetFollow(null);
             SPCamera.SetFOVGlobal(10f);
-            SPCamera.SetTarget(Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.left * MapConfigComponent.Width);
+            
+            Vector3 spawnPos = Vector3.forward * (BoundsComponent.Down + MapConfigComponent.Height * .5f) + Vector3.left * MapConfigComponent.Width;
+            
+            WorldScroll.Instance.SetMile(Mathf.RoundToInt(PositionComponent.PositionToMile(spawnPos)),true);
+            SPCamera.SetTarget(spawnPos);
 
             nameButton.UpdateField(NameComponent.LocalName);
 

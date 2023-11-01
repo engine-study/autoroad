@@ -23,26 +23,22 @@ public class WorldScroll : MonoBehaviour {
     public TextMeshProUGUI mileText;
     public AudioClip sfx_mile;
 
-    [Header("Road Completed")]
-    public GameObject roadParent;
-    public SPHeading roadHeading;
-    public SPButton playerCompleted;
-    public RoadComponent road;
-
     [Header("Game State")]
     [SerializeField] GameObject front;
-    [SerializeField] GameObject back;
 
     [Header("Debug")]
     [SerializeField] bool playerFocus = false;
     [SerializeField] float maxMile = 0f;
-    [SerializeField] int mile = -1;
+    float minMile = -1f;
+    [SerializeField] int mile = 0;
     [SerializeField] float playerMile = 0f;
     [SerializeField] float scrollMile;
+    [SerializeField] RoadComponent completedRoad;
     [SerializeField] ChunkComponent focusedChunk;
-    float lastPlayerMile = -1f, lastScroll = -100f;
+    float lastPlayerMile = -10000f, lastScroll = -100f;
     float targetScroll, targetPlayer;
     bool ready = false;
+    bool hasPlayer = false;
 
     public float MileDistance { get { return mile * GameStateComponent.MILE_DISTANCE; } }
     public float MileTotalScroll { get { return scrollMile * GameStateComponent.MILE_DISTANCE; } }
@@ -51,7 +47,8 @@ public class WorldScroll : MonoBehaviour {
     void Awake() {
 
         Instance = this;
-        mile = -1;
+
+        mile = -1000;
         playerUI.gameObject.SetActive(false);
 
         GameStateComponent.OnGameStateUpdated += GameStateUpdate;
@@ -60,8 +57,6 @@ public class WorldScroll : MonoBehaviour {
 
         TutorialUI.OnTutorial += ToggleTutorial;
         RoadComponent.OnCompletedRoad += CompleteRoad;
-
-        roadParent.SetActive(false);
 
         enabled = false;
 
@@ -78,8 +73,13 @@ public class WorldScroll : MonoBehaviour {
     }
 
     void InitWorld() {
+
         ready = true;
+
         GameStateUpdate();
+        SetMile(-2);
+
+        enabled = true;
     }
 
     void GameStateUpdate() {
@@ -97,7 +97,7 @@ public class WorldScroll : MonoBehaviour {
         Debug.Log("Init player world scroll");
         Debug.Log($"Max mile {maxMile}");
         
-        enabled = true;
+        hasPlayer = true;
 
         (PlayerMUD.LocalPlayer as PlayerMUD).Position.OnUpdated += UpdatePlayerPosition;
         
@@ -119,10 +119,10 @@ public class WorldScroll : MonoBehaviour {
     }
 
     float GetClampedMile(float newMile) {
-        return Mathf.Clamp(newMile, 0f, maxMile);
+        return Mathf.Clamp(newMile, minMile, maxMile);
     }
     float GetSoftClampedMile(float newMile) {
-        return Mathf.Clamp(newMile, -.5f, maxMile+.5f);
+        return Mathf.Clamp(newMile, minMile - .5f, maxMile+.5f);
     }
 
     void UpdateInput() {
@@ -147,7 +147,8 @@ public class WorldScroll : MonoBehaviour {
         //     }
         // }
 
-        if (SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
+        if (hasPlayer && SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
+            UpdatePlayerPosition();
             SetToPlayerMile(true);
         }
     }
@@ -166,7 +167,12 @@ public class WorldScroll : MonoBehaviour {
         }
 
         if (!playerFocus && lastScroll != scrollMile) {
-            SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
+            if(scrollMile < 0) {
+                //focus on world column
+                SPCamera.SetTarget(Vector3.forward * MileTotalScroll);
+            } else {
+                SPCamera.SetTarget(Vector3.forward * (MileTotalScroll + GameStateComponent.MILE_DISTANCE * .5f));
+            }
         }
 
         lastScroll = scrollMile;
@@ -204,24 +210,21 @@ public class WorldScroll : MonoBehaviour {
         //don't show this update on mile completions
         if(RoadComponent.CompletedRoadCount % MapConfigComponent.Height == 0) return;
 
-        road = completed;
-        roadParent.SetActive(true);
+        completedRoad = completed;
 
         //TODO use ChunkComponent road completed count
         string stepCount = ((int)((RoadComponent.CompletedRoadCount%MapConfigComponent.Height) * 100)).ToString();
         string mileReadout = $"{GameStateComponent.MILE_COUNT} Milia {stepCount} Passus";
 
-        Debug.Log(mileReadout);
-        roadHeading.UpdateField(mileReadout);
-        playerCompleted.UpdateField($"Road advanced by {completed.FilledBy.Entity.Name}");
+        NotificationUI.AddNotification($"Road advanced by {completed.FilledBy.Entity.Name}");
 
     }
 
     public void SetToScrollMile() { SetToScrollMile(false);}
     public void SetToPlayerMile() {SetToPlayerMile(false);}
     public void SetToRoadFinisher() {
-        if(!road?.FilledBy) return; 
-        SetToObject(road.FilledBy.PlayerScript.Root, true);
+        if(!completedRoad?.FilledBy) return; 
+        SetToObject(completedRoad.FilledBy.PlayerScript.Root, true);
     }
 
     public void SetToScrollMile(bool withFX) {
@@ -276,30 +279,39 @@ public class WorldScroll : MonoBehaviour {
         Debug.Log($"WORLD: ({mile} --> {newMile}) (Max={maxMile})", this);
 
         //out of range
-        if(newMile > maxMile || newMile < 0f) {
+        if(newMile > maxMile || newMile < minMile) {
             Debug.LogError("Not valid: " + (int)newMile + " / " + (int)maxMile, this);
             return;
         }
 
-        //LOAD MILE
-        bool loaded = ChunkLoader.LoadMile(newMile);
-        if(loaded == false) { return; }
+        if(newMile < 0) {
+
+            mileHeading.UpdateField("Story");
+            mileHeading.ToggleWindowOpen();
+            mileUI.ToggleWindowOpen();
+
+            recapButton.ToggleWindow(false);
+
+        } else {
+
+            bool loaded = ChunkLoader.LoadMile(newMile);
+            if(loaded == false) { return; }
+
+            if(focusedChunk != null) {focusedChunk.ToggleCurrentMile(false);}
+
+            focusedChunk = ChunkLoader.Chunks[newMile];
+            focusedChunk.ToggleCurrentMile(true);
+
+            mileHeading.UpdateField("Mile " + (int)(newMile+1));
+            mileHeading.ToggleWindowOpen();
+            mileUI.ToggleWindowOpen();
+
+            recapButton.ToggleWindow(ChunkLoader.Chunk.Completed);
+
+        }
 
         mile = newMile;
 
-        if(focusedChunk != null) {focusedChunk.ToggleCurrentMile(false);}
-        focusedChunk = ChunkLoader.Chunks[mile];
-        focusedChunk.ToggleCurrentMile(true);
-
-        mileHeading.UpdateField("Mile " + (int)(newMile+1));
-        mileHeading.ToggleWindowOpen();
-        mileUI.ToggleWindowOpen();
-
-        recapButton.ToggleWindow(ChunkLoader.Chunk.Completed);
-    
-        // front.transform.position = Vector3.forward * (mile * MapConfigComponent.Height + MapConfigComponent.Height);
-        // back.transform.position = Vector3.forward * (mile * MapConfigComponent.Height - MapConfigComponent.Height);
-        
         if(withFX) {
             // mileNumber.SetActive(true);
             // mileText.text = (newMile+1).ToString();
