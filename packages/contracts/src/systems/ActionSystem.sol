@@ -21,12 +21,13 @@ contract ActionSystem is System {
 
   function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
+
     bool hasName = Name.getNamed(entity);
-    
     require(!hasName, "already has name");
-    require(firstName < 36, "first name");
-    require(middleName < 1025, "middle name");
-    require(lastName < 1734, "last name");
+    
+    require(firstName < 143, "first name");
+    require(middleName < 36, "middle name");
+    require(lastName < 1025, "last name");
     
     Name.set(entity, true, firstName, middleName, lastName);
 

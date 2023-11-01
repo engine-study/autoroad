@@ -20,7 +20,6 @@ import { RewardSubsystem } from "../systems/RewardSubsystem.sol";
 contract SpawnSubsystem is System {
     
   function spawnPlayerNPC(bytes32 entity, int32 x, int32 y) public {
-    Name.set(entity, true, uint32(randomCoord(0, 35, x,y)), uint32(randomCoord(0, 1024, x,y+1)), uint32(randomCoord(0, 1733, x,y+2) ));  
     spawnPlayer(entity, x, y, true);
   }
 

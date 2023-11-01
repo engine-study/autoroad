@@ -24,6 +24,8 @@ public class NameOptionUI : SPWindowParent {
     protected override void Start() {
         base.Start();
 
+        Debug.Log( $"Name lengths: {NameUI.adjectives.Length} {NameUI.praenomen.Length} {NameUI.nomen.Length}" );
+
         Roll();
     }
 
@@ -32,7 +34,7 @@ public class NameOptionUI : SPWindowParent {
         names = new NameClass[5];
         
         if(selection > -1) {
-            buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Bold;
+            buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Normal;
         }
 
         selection = -1;
@@ -107,7 +109,7 @@ public class NameOptionUI : SPWindowParent {
     public void Selected(int newSelection) {
 
         if(selection > -1) {
-            buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Bold;
+            buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Normal;
         }
 
         selection = newSelection;
@@ -115,7 +117,7 @@ public class NameOptionUI : SPWindowParent {
         PlayerName = buttons[selection].Text;
         Name = names[selection];
 
-        buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Underline | TMPro.FontStyles.Bold;
+        buttons[selection].ButtonText.fontStyle = TMPro.FontStyles.Underline | TMPro.FontStyles.Normal;
 
         confirm.ToggleWindowOpen();
         confirm.ToggleState(SPSelectableState.Default);
@@ -131,8 +133,8 @@ public class NameClass {
     public int third;
 
     public NameClass() {
-        first = Random.Range(0, NameUI.praenomen.Length);
-        second = Random.Range(0, NameUI.nomen.Length);
-        third = Random.Range(0, NameUI.cognomina.Length);
+        first = Random.Range(0, NameUI.adjectives.Length);
+        second = Random.Range(0, NameUI.praenomen.Length);
+        third = Random.Range(0, NameUI.nomen.Length);
     }
 }

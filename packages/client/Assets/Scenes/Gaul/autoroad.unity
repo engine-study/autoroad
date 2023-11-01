@@ -19737,8 +19737,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f81524fb4724d4cb445f038a81f0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGame: 0
-  skipMenu: 1
+  newGame: 1
+  skipMenu: 0
   mainTables: {fileID: 1273645192}
   visualTables: {fileID: 0}
   mileTables: {fileID: 0}
@@ -24279,8 +24279,8 @@ MonoBehaviour:
   playerFocus: 0
   maxMile: 0
   mile: -1
-  mileScroll: 0
-  lastScroll: -100
+  playerMile: 0
+  scrollMile: 0
   focusedChunk: {fileID: 0}
 --- !u!114 &1466314004
 MonoBehaviour:
@@ -33435,7 +33435,7 @@ MonoBehaviour:
   fovClamp: {x: 2, y: 20}
   shakeFalloff: 10
   screenshotSize: 1
-  fov: 12.5
+  fov: 5
   follow: 1
   followTransform: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
@@ -36293,7 +36293,7 @@ Camera:
   far clip plane: 150
   field of view: 15
   orthographic: 1
-  orthographic size: 12.5
+  orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -38142,7 +38142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 488818311025724108, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6392306158663181893, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: s_error
