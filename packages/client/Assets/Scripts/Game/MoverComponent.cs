@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using mud;
 using mudworld;
-using IWorld.ContractDefinition;
+
 public abstract class MoverComponent : MUDComponent {
 
     SPAnimationMover anim;
@@ -32,6 +29,6 @@ public abstract class MoverComponent : MUDComponent {
 
     // }
 
-    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {}
+    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {}
     
 }

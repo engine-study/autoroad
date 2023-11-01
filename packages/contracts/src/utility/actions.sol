@@ -37,5 +37,6 @@ library Actions {
   }
   function getChunkEntity(int32 mile) internal pure returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
   function getCarriageEntity() internal pure returns(bytes32) {return keccak256(abi.encode("Carriage"));}
+  function getWorldColumnEntity() internal pure returns(bytes32) {return keccak256(abi.encode("WorldColumn"));}
 
 }

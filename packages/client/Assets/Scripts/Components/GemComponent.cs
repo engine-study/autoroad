@@ -1,7 +1,6 @@
 using UnityEngine;
 using mudworld;
 using mud;
-using mud;
 
 public class GemComponent : ValueComponent {
     public int Gems { get { return gems; } }

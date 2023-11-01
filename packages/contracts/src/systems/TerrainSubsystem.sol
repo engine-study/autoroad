@@ -5,7 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/index.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC } from "../codegen/index.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC, WorldColumn } from "../codegen/index.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/index.sol";
 import { TerrainType, RockType, RoadState, MoveType, NPCType, FloraType} from "../codegen/common.sol";
 
@@ -40,6 +40,10 @@ contract TerrainSubsystem is System {
     RoadConfig.set(1, 0, 0);
     Bounds.set(0, 0, int32(-1), 1);
     Row.set(int32(-1));
+
+    bytes32 worldColumn = Actions.getWorldColumnEntity();
+    WorldColumn.set(worldColumn, true);
+    Position.set(worldColumn, 0,-10,0);
 
     bytes32 carriage = Actions.getCarriageEntity();
     Carriage.set(carriage, true);

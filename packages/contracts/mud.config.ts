@@ -229,6 +229,7 @@ export default mudConfig({
     },
 
     Carriage: "bool",
+    WorldColumn: "bool",
     Row: {  keySchema: {},  valueSchema: { value : "int32", },},
     Puzzles: {  keySchema: {},  valueSchema: { value : "int32", },},
 
