@@ -5,6 +5,7 @@ using mud;
 using mudworld;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
+using System;
 
 public enum RoadState { Path, Ditch , Statumen, Rudus, Nucleas, Pavimentum, Ossimentum }
 
@@ -29,6 +30,7 @@ public class RoadComponent : MUDComponent {
 
     [Header("Debug")]
     [SerializeField] int mileNumber;
+    [SerializeField] PositionSync mover;
     [SerializeField] string creditedPlayer;
     [SerializeField] string creditedPlayerDebug;
     [SerializeField] bool hasGem;
@@ -77,33 +79,23 @@ public class RoadComponent : MUDComponent {
         RoadTable roadUpdate = (RoadTable)update;
         // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);
 
+        state = (RoadState)(int)roadUpdate.State;
         creditedPlayer = (string)roadUpdate.Filled;
         hasGem = (bool)roadUpdate.Gem;
         filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
         creditedPlayerDebug = MUDWorld.MakeTable<RoadTable>(Entity.Key)?.Filled;
 
-        SetState((RoadState)roadUpdate.State);
 
-        if (newInfo.Source == UpdateSource.Optimistic || (Loaded && lastStage != State)) {
-
-            flash = gameObject.GetComponent<SPFlashShake>() ?? gameObject.AddComponent<SPFlashShake>();
-            flash.SetTarget(stages[(int)State]);
+        if (Loaded) {
             
-            if (State == RoadState.Ditch) {
-                fx_spawn.Play();
-                SPAudioSource.Play(transform.position, sfx_digs);
+            if(State >= RoadState.Pavimentum && Entity.gameObject.activeInHierarchy) {
+                Entity.StartCoroutine(DelayStateCoroutine());
+            } else if(lastStage != State) {
+                UpdateState(true);
             }
 
-            //only fire the big gun events if we're confirmed an onchain
-            if(newInfo.Source == UpdateSource.Onchain) {
-                if(State >= RoadState.Pavimentum) {
-                    ToggleComplete(true);
-                } else if(lastStage >= RoadState.Pavimentum) {
-                    //somehow we reverted, this should not be possible
-                    Debug.LogError("Not complete anymore", this);
-                    ToggleComplete(false);
-                }
-            }
+        } else {
+            UpdateState(false);
         }
 
         if(isFilled == false && (int)roadUpdate.State >= (int)RoadState.Pavimentum) {
@@ -120,49 +112,45 @@ public class RoadComponent : MUDComponent {
 
     }
 
-    
-    Coroutine completeCoroutine = null;
-    void ToggleComplete(bool toggle) {
-        if(toggle) {
-            completeCoroutine = StartCoroutine(SpawnCoins());
-        } else {
-            if(completeCoroutine != null) {
-                StopCoroutine(completeCoroutine);
-            }
-        }
-    }
+    IEnumerator DelayStateCoroutine() {
 
-    IEnumerator SpawnCoins() {
-        yield return new WaitForSeconds(1f);
-        // PlayerMUD player = EntityDictionary.FindEntity(creditedPlayer)?.GetMUDComponent<PlayerComponent>()?.GetComponent<PlayerMUD>();
-        // if (player == null) {
-        //     Debug.LogError("Couldn't find player " + creditedPlayer, this);
-        //     yield break;
-        // }
-        SetComplete();
-    }
+        Debug.Log("Delay road fill", this);
+        //wait for all positions to update
+        yield return null;
 
-    public void SetState(RoadState newState) {
+        Vector3 underRoadPos = pos.Pos + Vector3.down * 2;
+        mover = GridMUD.GetEntityAt(underRoadPos)?.GetRootComponent<PositionSync>();
         
-        state = newState;
-
-        if(Loaded) {
-            for (int i = 0; i < stages.Length; i++) {
-                stages[i].SetActive((i == (int)State && i < (int)RoadState.Pavimentum) || (i == (int)RoadState.Ditch && State >= RoadState.Pavimentum));
-            }
-        } else  {
-            for (int i = 0; i < stages.Length; i++) {
-                stages[i].SetActive(i == (int)State);
-            }
+        if(mover == null) {
+            Debug.Log("Couldn't find mover at " + underRoadPos, this);
+            UpdateState(true); yield break;
         }
 
+        while(mover.Moving) {yield return null;}
+
+        Debug.Log("Finished filling", this);
+        UpdateState(true);
+    }
+
+    void UpdateState(bool withFX) {
+
+        Debug.Log($"Road new state {State}", this);
+
+        for (int i = 0; i < stages.Length; i++) { stages[i].SetActive(i == (int)State);}
         Entity.SetName(state.ToString());
 
-    }
-
-    public void SetComplete() {
-        for (int i = 0; i < stages.Length; i++) {
-            stages[i].SetActive(i == (int)State);
+        if(withFX) {
+            
+            flash = gameObject.GetComponent<SPFlashShake>() ?? gameObject.AddComponent<SPFlashShake>();
+            flash.SetTarget(stages[(int)State]);
+            
+            if (State == RoadState.Ditch) {
+                fx_spawn.Play();
+                SPAudioSource.Play(transform.position, sfx_digs);
+            } else if(State >= RoadState.Pavimentum) {
+                fx_fill.Play();
+                SPAudioSource.Play(transform.position, sfx_fills);
+            }
         }
     }
 

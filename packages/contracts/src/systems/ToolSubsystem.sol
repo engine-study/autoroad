@@ -63,8 +63,9 @@ contract ToolSubsystem is System {
 
     PositionData memory pos = PositionData(x, y, 0);
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
-    require(atPosition.length > 0, "attacking an empty spot");
-    require(withinManhattanDistance(pos, Position.get(player), 1), "too far to attack");
+    
+    Rules.requireInteractable(player, pos, atPosition, 1);
+    require(NPC.get(atPosition[0]) > 0, "attacking an empty spot");
 
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");

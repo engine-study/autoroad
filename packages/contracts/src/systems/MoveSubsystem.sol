@@ -178,6 +178,8 @@ contract MoveSubsystem is System {
     ActionType actionType
   ) public {
 
+    Actions.setAction(entity, actionType, to.x, to.y);
+
     //simple move, no terrain at destination, exit out of method early
     if(atDest.length == 0) {
       setPosition(causedBy, entity, to, actionType);
@@ -190,7 +192,9 @@ contract MoveSubsystem is System {
       if(Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
 
       //check if we survive the move through terrain
-      if(handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest) == false) {return;}
+      if(handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest, actionType) == false) {
+        return;
+      }
 
       //if we're still alive after handleMoveType, move into the position (this will trigger an entity update too)
       if(Rules.canDoStuff(entity)) {
@@ -200,9 +204,12 @@ contract MoveSubsystem is System {
     }
   }
 
-  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDest, MoveType moveTypeAtDest) public returns(bool) {
+  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDest, MoveType moveTypeAtDest, ActionType actionType) public returns(bool) {
     IWorld world = IWorld(_world());
 
+    //actionType might be useful here (ie. if they are flying or in other weird states)
+
+    //kill or destroy whatever fell into the hole
     if(moveTypeAtDest == MoveType.Hole) {
 
       //spawn road, move pushed thing to under road
@@ -210,22 +217,29 @@ contract MoveSubsystem is System {
         SystemSwitch.call(abi.encodeCall(world.spawnRoadFromPush, (causedBy, entity, atDest[0], to)));
       }
             
+      if(NPC.get(entity) > 0) { 
+        //kill if it was an NPC
+        SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
+      } else {
+        //placing pushed object into the hole
+        Position.set(entity, to.x, to.y, -2);
+        Health.set(entity, -1);
+      }
+
+      return false;
+
+    } else if(moveTypeAtDest == MoveType.Trap) {
+
       //kill if it was an NPC
       if(NPC.get(entity) > 0) { 
         SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
         return false;
-      }
-
-    } else if(moveTypeAtDest == MoveType.Trap) {
-      if(NPC.get(entity) > 0) { 
-        //kill if it was an NPC
-        SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
-        return false;
-      } else {
-        //otherwise trap is destroyed with no effect to pushed object
-        Position.deleteRecord(atDest[0]);
-        Health.deleteRecord(atDest[0]);
-      }
+      } 
+      
+      //otherwise trap is destroyed with no effect to pushed object
+      Position.deleteRecord(atDest[0]);
+      Health.deleteRecord(atDest[0]);
+      
     }
 
     return true;
@@ -235,10 +249,6 @@ contract MoveSubsystem is System {
   function setPosition(bytes32 causedBy, bytes32 entity, PositionData memory pos, ActionType action) public {
 
     IWorld world = IWorld(_world());
-
-    //game will get the action movement type before we move
-    Actions.setAction(entity, action, pos.x, pos.y);
-    // Action.set(entity, uint32(action), pos.x, pos.y, bytes32(0));
 
     //we move
     Position.set(entity, pos);

@@ -378,11 +378,6 @@ contract TerrainSubsystem is System {
 
     bool pushedNPC = NPC.get(pushed) > 0;
     RoadState state = pushedNPC ? RoadState.Bones : RoadState.Paved;
-
-    //placing pushed object under road
-    Position.set(pushed, pos.x, pos.y, -2);
-    Health.set(pushed, -1);
-
     spawnFinishedRoad(causedBy, pos.x, pos.y, state);
 
   }
