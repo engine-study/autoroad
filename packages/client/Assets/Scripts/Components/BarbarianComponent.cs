@@ -27,7 +27,7 @@ public class BarbarianComponent : MoverComponent {
             Entity.SetName("Barbarian");
             animator.SetDefaultProp(propSword);
             animator.SetDefaultController(swordStance);
-        } else if(npc.NPC == NPCType.BarbarianArcher) {
+        } else if(npc.NPC == NPCType.Archer) {
             Entity.SetName("Archer");
             animator.SetDefaultProp(propBow);
             animator.SetDefaultController(bowStance);

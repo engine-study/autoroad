@@ -144,7 +144,7 @@ public class CameraControls : MonoBehaviour
             position = transform.position + position;
 
             position.x = Mathf.Clamp(position.x, BoundsComponent.Left * 2f, BoundsComponent.Right * 2f);
-            position.z = Mathf.Clamp(position.z, BoundsComponent.Down - 10f, BoundsComponent.Up + 10f);
+            position.z = Mathf.Clamp(position.z, -20f, BoundsComponent.Up + 10f);
 
             SPCamera.SetTarget(position);
 

@@ -24,7 +24,7 @@ public class NameOptionUI : SPWindowParent {
     protected override void Start() {
         base.Start();
 
-        Debug.Log( $"Name lengths: {NameUI.adjectives.Length} {NameUI.praenomen.Length} {NameUI.nomen.Length}" );
+        // Debug.Log( $"Name lengths: {NameUI.adjectives.Length} {NameUI.praenomen.Length} {NameUI.nomen.Length}" );
 
         Roll();
     }

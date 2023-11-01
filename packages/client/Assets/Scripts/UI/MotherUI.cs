@@ -37,6 +37,7 @@ public class MotherUI : SPUIInstance {
     public WorldUI playerInfo;
     public ProfileUI profile;
     public SummonUI Summon;
+    public LeaderboardUI Leaderboard;
     public NotificationUI Notification;
     public SPHoverWindow hover;
 
@@ -67,6 +68,7 @@ public class MotherUI : SPUIInstance {
         mileComplete.Init();
         Summon.Init();
         Notification.Init();
+        Leaderboard.Init();
         wheel.Init();
 
         ToggleLoading(true);
