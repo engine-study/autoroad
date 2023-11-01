@@ -4197,7 +4197,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     type: 0
     collisionMode: 0
@@ -4206,7 +4206,7 @@ ParticleSystem:
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
     m_Planes:
-    - {fileID: 0}
+    - {fileID: 9190336162645890776}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -5952,6 +5952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0504cc0f4638db41a51576555488a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  active: 1
   onEffects: {fileID: 8545061092677230838}
   offEffects: {fileID: 0}
   component: {fileID: 0}
@@ -6407,7 +6408,7 @@ Transform:
   - {fileID: 5702532374481376266}
   - {fileID: 6855986279644240663}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6533145143532920457
 MonoBehaviour:
@@ -6451,16 +6452,17 @@ MonoBehaviour:
   - {fileID: 3212469006699447850}
   - {fileID: 1018865144830972187}
   fx_spawn: {fileID: 3444652284618888273}
-  fx_fill: {fileID: 4191612229250602520}
+  fx_fill: {fileID: 3444652284618888273}
   sfx_digs:
   - {fileID: 8300000, guid: d366feb3545048848b439c471946ec36, type: 3}
   - {fileID: 8300000, guid: b1cccf5e485b3c94aa478201110db913, type: 3}
   - {fileID: 8300000, guid: 716941ed1f33ed049b9d77dc5585e561, type: 3}
   sfx_fills:
-  - {fileID: 8300000, guid: d366feb3545048848b439c471946ec36, type: 3}
-  - {fileID: 8300000, guid: b1cccf5e485b3c94aa478201110db913, type: 3}
-  - {fileID: 8300000, guid: 716941ed1f33ed049b9d77dc5585e561, type: 3}
+  - {fileID: 8300000, guid: 11569f3c07bff774aa707e655b3e0177, type: 3}
+  - {fileID: 8300000, guid: aa44c37f59d56d64ea5e08ea74bbbb5e, type: 3}
+  - {fileID: 8300000, guid: 1d62fed449b594e49a5b41bc065e5e32, type: 3}
   mileNumber: 0
+  mover: {fileID: 0}
   creditedPlayer: 
   creditedPlayerDebug: 
   hasGem: 0

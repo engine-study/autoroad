@@ -34,6 +34,14 @@ public class PuzzleComponent : MUDComponent {
         puzzle = (PuzzleType)(int)table.PuzzleType;
         completed = (bool)table.Complete;
 
+        if(completed && Loaded) {
+
+            PlayerComponent filledBy = MUDWorld.FindComponent<PlayerComponent>((string)table.Solver);
+            if(filledBy) {
+                NotificationUI.AddNotification($"Puzzle solved by {filledBy.Entity.Name}");
+            }
+        }
+
         for(int i = 0; i < stages.Length; i++) {if(stages[i] == null) continue; stages[i].SetActive(i == (int)puzzle);}
         for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) continue; stagesComplete[i].SetActive(false);}
 

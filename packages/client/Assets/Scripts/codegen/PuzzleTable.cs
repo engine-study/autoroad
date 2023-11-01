@@ -16,6 +16,8 @@ namespace mudworld
             public int? PreviousPuzzleType;
             public bool? Complete;
             public bool? PreviousComplete;
+            public string? Solver;
+            public string? PreviousSolver;
         }
 
         public readonly static string ID = "Puzzle";
@@ -31,6 +33,7 @@ namespace mudworld
 
         public int? PuzzleType;
         public bool? Complete;
+        public string? Solver;
 
         public override Type TableType()
         {
@@ -58,6 +61,10 @@ namespace mudworld
             {
                 return false;
             }
+            if (Solver != other.Solver)
+            {
+                return false;
+            }
             return true;
         }
 
@@ -66,6 +73,8 @@ namespace mudworld
             PuzzleType = (int)functionParameters[0];
 
             Complete = (bool)functionParameters[1];
+
+            Solver = (string)functionParameters[2];
         }
 
         public static IObservable<RecordUpdate> GetPuzzleTableUpdates()
@@ -84,6 +93,7 @@ namespace mudworld
         {
             PuzzleType = (int)property["puzzleType"];
             Complete = (bool)property["complete"];
+            Solver = (string)property["solver"];
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
@@ -114,6 +124,18 @@ namespace mudworld
             {
                 previousCompleteTyped = (bool)previousValue["complete"];
             }
+            string? currentSolverTyped = null;
+            string? previousSolverTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("solver"))
+            {
+                currentSolverTyped = (string)currentValue["solver"];
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("solver"))
+            {
+                previousSolverTyped = (string)previousValue["solver"];
+            }
 
             return new PuzzleTableUpdate
             {
@@ -127,6 +149,8 @@ namespace mudworld
                 PreviousPuzzleType = previousPuzzleTypeTyped,
                 Complete = currentCompleteTyped,
                 PreviousComplete = previousCompleteTyped,
+                Solver = currentSolverTyped,
+                PreviousSolver = previousSolverTyped,
             };
         }
     }

@@ -85,7 +85,6 @@ public class RoadComponent : MUDComponent {
         filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
         creditedPlayerDebug = MUDWorld.MakeTable<RoadTable>(Entity.Key)?.Filled;
 
-
         if (Loaded) {
             
             if(State >= RoadState.Pavimentum && Entity.gameObject.activeInHierarchy) {
@@ -106,15 +105,11 @@ public class RoadComponent : MUDComponent {
 
         lastStage = State;
 
-        if(Loaded && FilledBy) {
-            OnCompletedRoad?.Invoke(this);
-        }
-
     }
 
     IEnumerator DelayStateCoroutine() {
 
-        Debug.Log("Delay road fill", this);
+        // Debug.Log("Delay road fill", this);
         //wait for all positions to update
         yield return null;
 
@@ -122,19 +117,19 @@ public class RoadComponent : MUDComponent {
         mover = GridMUD.GetEntityAt(underRoadPos)?.GetRootComponent<PositionSync>();
         
         if(mover == null) {
-            Debug.Log("Couldn't find mover at " + underRoadPos, this);
+            // Debug.Log("Couldn't find mover at " + underRoadPos, this);
             UpdateState(true); yield break;
         }
 
         while(mover.Moving) {yield return null;}
 
-        Debug.Log("Finished filling", this);
+        // Debug.Log("Finished filling", this);
         UpdateState(true);
     }
 
     void UpdateState(bool withFX) {
 
-        Debug.Log($"Road new state {State}", this);
+        // Debug.Log($"Road new state {State}", this);
 
         for (int i = 0; i < stages.Length; i++) { stages[i].SetActive(i == (int)State);}
         Entity.SetName(state.ToString());
@@ -151,6 +146,10 @@ public class RoadComponent : MUDComponent {
                 fx_fill.Play();
                 SPAudioSource.Play(transform.position, sfx_fills);
             }
+        }
+
+        if(Loaded && FilledBy) {
+            OnCompletedRoad?.Invoke(this);
         }
     }
 

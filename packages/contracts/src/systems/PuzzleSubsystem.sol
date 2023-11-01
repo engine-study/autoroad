@@ -28,7 +28,7 @@ contract PuzzleSubsystem is System {
       //success, freeze miliarium in place
       Move.set(entity, uint32(MoveType.Obstruction));
       //TODO set to single setter
-      Puzzle.set(entity, uint32(puzzleType), true);
+      Puzzle.set(entity, uint32(puzzleType), true, causedBy);
       SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));
     }
   }
@@ -77,7 +77,7 @@ contract PuzzleSubsystem is System {
     Move.set(statue, uint32(MoveType.Push));
     Rock.set(statue, uint32(RockType.Statuae));
     Health.set(statue, 1);
-    Puzzle.set(statue, uint32(PuzzleType.Statuae), false);
+    Puzzle.set(statue, uint32(PuzzleType.Statuae), false, bytes32(0));
     Linker.set(statue, trigger);
 
     console.log("trigger");
@@ -112,7 +112,7 @@ contract PuzzleSubsystem is System {
     Weight.set(mil, 1);
     Move.set(mil, uint32(MoveType.Push));
     Rock.set(mil, uint32(RockType.Miliarium));
-    Puzzle.set(mil, uint32(PuzzleType.Miliarium), false);
+    Puzzle.set(mil, uint32(PuzzleType.Miliarium), false, bytes32(0));
     Linker.set(mil, trigger);
 
     console.log("trigger");

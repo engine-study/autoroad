@@ -32,7 +32,7 @@ contract SpawnSubsystem is System {
       Coinage.set(entity, 10);
       Eth.set(entity, 10000);
       Weight.set(entity, -1);
-      Conscription.set(entity, true);
+      // Conscription.set(entity, true);
       NPC.set(entity, uint32(NPCType.Player));
       XP.set(entity, 0);
 
