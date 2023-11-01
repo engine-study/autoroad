@@ -89,7 +89,9 @@ public class LeaderboardUI : SPWindowParent
 
     void UpdateXP(MUDComponent c) {
         XPComponent xp = c as XPComponent;
-        LeaderboardSlot ls = leaderDict[c.Entity.Key];
+        leaderDict.TryGetValue(c.Entity.Key, out LeaderboardSlot ls);
+        if(ls == null) return;
+        
         ls.xp = (int)xp.Value;
 
         if(!gameObject.activeInHierarchy) return;

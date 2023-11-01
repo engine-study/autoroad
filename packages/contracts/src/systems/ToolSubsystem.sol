@@ -61,10 +61,10 @@ contract ToolSubsystem is System {
     require(Sword.get(player), "no Sword");
     require(Rules.canDoStuff(player), "hmm");
 
-    PositionData memory pos = PositionData(x, y, 0);
+    PositionData memory playerPos = Position.get(player);
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
-    
-    Rules.requireInteractable(player, pos, atPosition, 1);
+
+    Rules.requireInteractable(player, playerPos, atPosition, 1);
     require(NPC.get(atPosition[0]) > 0, "attacking an empty spot");
 
     int32 health = Health.get(atPosition[0]);
@@ -75,7 +75,8 @@ contract ToolSubsystem is System {
     health--;
 
     if (health <= 0) {
-      SystemSwitch.call(abi.encodeCall(world.kill, (player, atPosition[0], player, pos)));
+      PositionData memory meleePos = PositionData(x, y, 0);
+      SystemSwitch.call(abi.encodeCall(world.kill, (player, atPosition[0], player, meleePos)));
     } else {
       Health.set(atPosition[0], health);
     }
