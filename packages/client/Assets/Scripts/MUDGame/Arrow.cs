@@ -24,6 +24,7 @@ public class Arrow : MonoBehaviour {
 
     void Start() {
         transform.rotation = Quaternion.LookRotation(Target - transform.position);
+        effects?.Spawn(true);
     }
 
     void Update() {
@@ -51,7 +52,6 @@ public class Arrow : MonoBehaviour {
         if(targetAnimator) { targetAnimator.SetToAnimatorLayer(gameObject);}
         
         effects?.Spawn(false);
-
 
         target = null;
         enabled = false;
