@@ -80,7 +80,7 @@ public abstract class ValueComponent : MUDComponent {
             yield break;
         }
 
-        SPResourceJuicy propEffect = SPResourceJuicy.SpawnResource(prefab, pos.Target, pos.Target.position, Quaternion.Euler(0f, Random.Range(0f,360f), 0f));
+        SPResourceJuicy propEffect = SPResourceJuicy.SpawnResource(prefab, pos.Target, pos.Target.position, Quaternion.Euler(-45f, Random.Range(0f,360f), 0f));
         propEffect.offset = Vector3.up * 2f;
 
         GameObject propForEffect = Instantiate(visualPrefab, propEffect.transform.position, propEffect.transform.rotation, propEffect.transform);
@@ -89,7 +89,7 @@ public abstract class ValueComponent : MUDComponent {
         SPHelper.CenterGameObject(propForEffect);
 
         SPRotate rotate = propEffect.gameObject.AddComponent<SPRotate>();
-        rotate.space = Space.Self;
+        rotate.space = Space.World;
         rotate.rotateSpeed = Vector3.up * -180f;
 
         propEffect.SendResource();
