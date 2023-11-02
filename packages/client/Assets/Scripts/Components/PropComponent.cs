@@ -15,6 +15,8 @@ public abstract class PropComponent : ValueComponent {
     protected override void Init(SpawnInfo spawnInfo) {
         base.Init(spawnInfo);
 
+        visualPrefab = propPrefab.gameObject;
+
         //add player as required component
         TableManager table = MUDWorld.FindTable<PlayerComponent>();
         if(table == null) {Debug.LogError("Could not find table " + typeof(PlayerComponent).Name); return;}

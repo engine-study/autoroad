@@ -13,7 +13,7 @@ public abstract class ValueComponent : MUDComponent {
     
     [Header("Value")]
     [SerializeField] GaulItem item;
-    [SerializeField] GameObject visualPrefab;
+    [SerializeField] protected GameObject visualPrefab;
     // [SerializeField] GaulItem [] items;
 
     [Header("Debug")]
@@ -83,7 +83,7 @@ public abstract class ValueComponent : MUDComponent {
         SPResourceJuicy propEffect = SPResourceJuicy.SpawnResource(prefab, pos.Target, pos.Target.position, Quaternion.Euler(0f, Random.Range(0f,360f), 0f));
         
         GameObject propForEffect = Instantiate(visualPrefab, propEffect.transform.position, propEffect.transform.rotation, propEffect.transform);
-        
+
         SPRotate rotate = propForEffect.gameObject.AddComponent<SPRotate>();
         rotate.space = Space.Self;
         rotate.rotateSpeed = Vector3.up * -180f;
