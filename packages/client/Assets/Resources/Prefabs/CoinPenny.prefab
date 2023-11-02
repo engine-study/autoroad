@@ -546,15 +546,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872bfe9da31aa864abaf17a2cb5a05da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {x: 0.9, y: 1}
+  time: 1
+  offset: {x: 0, y: 0, z: 0}
+  arc: {x: 0, y: 0, z: 0}
   rotation: {x: 800, y: 1100, z: 0}
   sfx_spawn:
   - {fileID: 8300000, guid: 80ca992292c0c0f44a8b1d242af6416f, type: 3}
   - {fileID: 8300000, guid: 6b13211b2f32da644b0a281c51122caf, type: 3}
   sfx_recieve:
-  - {fileID: 8300000, guid: 617c9637282a1124ca6d692f0ba34212, type: 3}
-  - {fileID: 8300000, guid: ca46fb1bcd183d54d849c28c3d5a48c1, type: 3}
-  - {fileID: 8300000, guid: 34d72f50fda2ac44996773ab4d222c2e, type: 3}
+  - {fileID: 8300000, guid: 63b1c6b0e15abe24087962458331928b, type: 3}
+  - {fileID: 8300000, guid: a762f2c07ed6ade4fa964f484b5d3ba2, type: 3}
+  - {fileID: 8300000, guid: ed556ed9435856c4fbb5ce09cf51ac82, type: 3}
+  - {fileID: 8300000, guid: d0bb894568b61af40a57481012c45d5f, type: 3}
+  - {fileID: 8300000, guid: 0fffed31d92c0454585a58e65b39b35b, type: 3}
 --- !u!1001 &8024885672192036691
 PrefabInstance:
   m_ObjectHideFlags: 0

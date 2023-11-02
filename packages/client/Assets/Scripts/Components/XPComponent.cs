@@ -66,7 +66,7 @@ public class XPComponent : ValueComponent {
     }
 
     void LevelUpFX() {
-        levelUpFX.transform.position = pos.Target.position + Vector3.up;
+        levelUpFX.transform.position = pos.Target.position + Vector3.up * .75f;
         levelUpFX.Spawn(true);
     }
 

@@ -1269,30 +1269,30 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(giveGemFunction, cancellationToken);
         }
 
-        public Task<string> GiveKilledBarbarianRewardRequestAsync(GiveKilledBarbarianRewardFunction giveKilledBarbarianRewardFunction)
+        public Task<string> GiveKillRewardRequestAsync(GiveKillRewardFunction giveKillRewardFunction)
         {
-             return ContractHandler.SendRequestAsync(giveKilledBarbarianRewardFunction);
+             return ContractHandler.SendRequestAsync(giveKillRewardFunction);
         }
 
-        public Task<TransactionReceipt> GiveKilledBarbarianRewardRequestAndWaitForReceiptAsync(GiveKilledBarbarianRewardFunction giveKilledBarbarianRewardFunction, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> GiveKillRewardRequestAndWaitForReceiptAsync(GiveKillRewardFunction giveKillRewardFunction, CancellationTokenSource cancellationToken = null)
         {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveKilledBarbarianRewardFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveKillRewardFunction, cancellationToken);
         }
 
-        public Task<string> GiveKilledBarbarianRewardRequestAsync(byte[] player)
+        public Task<string> GiveKillRewardRequestAsync(byte[] player)
         {
-            var giveKilledBarbarianRewardFunction = new GiveKilledBarbarianRewardFunction();
-                giveKilledBarbarianRewardFunction.Player = player;
+            var giveKillRewardFunction = new GiveKillRewardFunction();
+                giveKillRewardFunction.Player = player;
             
-             return ContractHandler.SendRequestAsync(giveKilledBarbarianRewardFunction);
+             return ContractHandler.SendRequestAsync(giveKillRewardFunction);
         }
 
-        public Task<TransactionReceipt> GiveKilledBarbarianRewardRequestAndWaitForReceiptAsync(byte[] player, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> GiveKillRewardRequestAndWaitForReceiptAsync(byte[] player, CancellationTokenSource cancellationToken = null)
         {
-            var giveKilledBarbarianRewardFunction = new GiveKilledBarbarianRewardFunction();
-                giveKilledBarbarianRewardFunction.Player = player;
+            var giveKillRewardFunction = new GiveKillRewardFunction();
+                giveKillRewardFunction.Player = player;
             
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveKilledBarbarianRewardFunction, cancellationToken);
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveKillRewardFunction, cancellationToken);
         }
 
         public Task<string> GivePuzzleRewardRequestAsync(GivePuzzleRewardFunction givePuzzleRewardFunction)
@@ -1465,7 +1465,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(handleMoveTypeFunction, cancellationToken);
         }
 
-        public Task<string> HandleMoveTypeRequestAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest)
+        public Task<string> HandleMoveTypeRequestAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest, byte actionType)
         {
             var handleMoveTypeFunction = new HandleMoveTypeFunction();
                 handleMoveTypeFunction.CausedBy = causedBy;
@@ -1473,11 +1473,12 @@ namespace IWorld.Service
                 handleMoveTypeFunction.To = to;
                 handleMoveTypeFunction.AtDest = atDest;
                 handleMoveTypeFunction.MoveTypeAtDest = moveTypeAtDest;
+                handleMoveTypeFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAsync(handleMoveTypeFunction);
         }
 
-        public Task<TransactionReceipt> HandleMoveTypeRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> HandleMoveTypeRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest, byte actionType, CancellationTokenSource cancellationToken = null)
         {
             var handleMoveTypeFunction = new HandleMoveTypeFunction();
                 handleMoveTypeFunction.CausedBy = causedBy;
@@ -1485,6 +1486,7 @@ namespace IWorld.Service
                 handleMoveTypeFunction.To = to;
                 handleMoveTypeFunction.AtDest = atDest;
                 handleMoveTypeFunction.MoveTypeAtDest = moveTypeAtDest;
+                handleMoveTypeFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(handleMoveTypeFunction, cancellationToken);
         }

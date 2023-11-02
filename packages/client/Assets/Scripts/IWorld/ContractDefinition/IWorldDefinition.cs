@@ -637,10 +637,10 @@ namespace IWorld.ContractDefinition
         public virtual int Amount { get; set; }
     }
 
-    public partial class GiveKilledBarbarianRewardFunction : GiveKilledBarbarianRewardFunctionBase { }
+    public partial class GiveKillRewardFunction : GiveKillRewardFunctionBase { }
 
-    [Function("giveKilledBarbarianReward")]
-    public class GiveKilledBarbarianRewardFunctionBase : FunctionMessage
+    [Function("giveKillReward")]
+    public class GiveKillRewardFunctionBase : FunctionMessage
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
@@ -719,6 +719,8 @@ namespace IWorld.ContractDefinition
         public virtual List<byte[]> AtDest { get; set; }
         [Parameter("uint8", "moveTypeAtDest", 5)]
         public virtual byte MoveTypeAtDest { get; set; }
+        [Parameter("uint8", "actionType", 6)]
+        public virtual byte ActionType { get; set; }
     }
 
     public partial class HelpSummonFunction : HelpSummonFunctionBase { }

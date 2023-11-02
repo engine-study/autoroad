@@ -40,6 +40,15 @@ public abstract class ValueComponent : MUDComponent {
         //     slots.Add(new InventorySlot(){item = items[i]});
         // }
     }
+
+
+    protected override void PostInit() {
+        base.PostInit();
+        if(visualPrefab && visualPrefab.transform.IsChildOf(transform)) {
+            visualPrefab.SetActive(false);
+        }
+    }
+
     protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
 
         value = SetValue(update);
@@ -61,10 +70,6 @@ public abstract class ValueComponent : MUDComponent {
     }
 
     
-    protected override void PostInit() {
-        base.PostInit();
-
-    }
 
     IEnumerator SpawnProp() {
 

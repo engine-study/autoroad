@@ -7,6 +7,8 @@ using UnityEngine;
 public class LeaderboardUI : SPWindowParent
 {
     [SerializeField] List<SPButton> names;
+    [SerializeField] List<SPButton> levels;
+    [SerializeField] List<SPButton> xps;
     [SerializeField] List<LeaderboardSlot> leaders;
     [SerializeField] Dictionary<string, LeaderboardSlot> leaderDict;
 
@@ -33,7 +35,7 @@ public class LeaderboardUI : SPWindowParent
         base.ToggleWindow(toggle);
 
         if(toggle) {
-            Sort();
+            UpdateList();
         }
 
     }
@@ -96,20 +98,40 @@ public class LeaderboardUI : SPWindowParent
 
         if(!gameObject.activeInHierarchy) return;
         
-        Sort();
+        UpdateList();
     }
 
-    void Sort() {
+    void UpdateList() {
+        
+        //sort
         leaders.Sort((a, b) => b.xp.CompareTo(a.xp));
+
+        //show text
         for(int i = 0; i < names.Count; i++) {
             if(i < leaders.Count) {
                 names[i].ToggleWindowOpen();
                 int index = i+1;
-                names[i].UpdateField($"{index}  {leaders[i].Name}");
+                names[i].UpdateField(leaders[i].Name);
+                // xps[i].UpdateField(FormatNumber(leaders[i].xp));
+                levels[i].UpdateField(XPComponent.XPToLevel(leaders[i].xp).ToString());
             } else {
                 names[i].ToggleWindowClose();
             }
         }
+        
+    }
+
+    static string FormatNumber(int num) {
+        if (num >= 100000)
+            return FormatNumber(num / 1000) + "K";
+
+        if (num >= 10000)
+            return (num / 1000D).ToString("0.#") + "K";
+
+        if (num >= 1000)
+            return (num / 1000D).ToString("0.#") + "K";
+
+        return num.ToString("#,0");
     }
 
     void LoadXP() {
