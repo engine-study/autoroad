@@ -21,8 +21,8 @@ contract MoveSubsystem is System {
   function moveOrPush(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector, int32 distance) public {
       IWorld world = IWorld(_world());
       bytes32[] memory atNext = Rules.getKeysAtPosition(world,startPos.x + vector.x, startPos.y + vector.y, 0);
-      if(atNext.length == 0) { doMoveDistance(causedBy, player, startPos, vector, distance);} 
-      else { doPush(causedBy, player, startPos, vector); }
+      if(atNext.length > 0 && Rules.isPushable(atNext[0])) { doPush(causedBy, player, startPos, vector); } 
+      else { doMoveDistance(causedBy, player, startPos, vector, distance); }
       
   }
 

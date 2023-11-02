@@ -90,8 +90,12 @@ library Rules {
 
   function requirePushable(bytes32[] memory at) internal view {
     require(at.length > 0, "empty");
-    uint32 move = Move.get(at[0]);
-    require(move == uint32(MoveType.Push), "not push");
+    require(isPushable(at[0]), "not push");
+  }
+
+  function isPushable(bytes32 pushable) internal view returns (bool) {
+    uint32 move = Move.get(pushable);
+    return move == uint32(MoveType.Push);
   }
 
   function canWalkOn(MoveType moveAt) internal view returns (bool) {
@@ -120,6 +124,7 @@ library Rules {
     }
   }
 
+  //complex, returns true if pushable, false if not pushable, but requires not obstructed
   function requireEmptyOrPushable(bytes32[] memory at) internal view returns (bool) {
     if (at.length == 0) return false;
     uint32 move = Move.get(at[0]);
