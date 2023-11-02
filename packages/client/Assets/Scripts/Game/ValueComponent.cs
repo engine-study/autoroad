@@ -13,6 +13,7 @@ public abstract class ValueComponent : MUDComponent {
     
     [Header("Value")]
     [SerializeField] GaulItem item;
+    [SerializeField] GameObject visualPrefab;
     // [SerializeField] GaulItem [] items;
 
     [Header("Debug")]
@@ -20,6 +21,7 @@ public abstract class ValueComponent : MUDComponent {
     [SerializeField] string valueString;
     [SerializeField] StatType statType;
     List<InventorySlot> slots;
+    PositionSync pos;
 
     protected abstract float SetValue(IMudTable update);
     protected abstract StatType SetStat(IMudTable update);
@@ -44,8 +46,52 @@ public abstract class ValueComponent : MUDComponent {
 
         //simple inventory
         slots[0].amount = (int)value;
+
+        if(Loaded || SpawnInfo.Source == SpawnSource.InGame) {
+            //do a little spawn animation
+            if(item && visualPrefab && Entity.gameObject.activeInHierarchy) {
+                pos = Entity.GetRootComponent<PositionSync>();
+                if (pos == null) { Debug.LogError("No position sync", this); return; }
+                Entity.StartCoroutine(SpawnProp());
+            }
+        }
         
     }
+
+    
+    protected override void PostInit() {
+        base.PostInit();
+
+    }
+
+    IEnumerator SpawnProp() {
+
+        // Debug.Log($"{gameObject.name} + Spawning", this);
+        
+        yield return new WaitForSeconds(.5f);
+
+        string prefab = null;
+
+        if(item.itemType == ItemType.GameplayStashable) {
+            prefab = "Prefabs/BuyEffectStash";
+        } else if(item.itemType == ItemType.GameplayEquipment) {
+            prefab = "Prefabs/BuyEffectEquipment";
+        } else {
+            yield break;
+        }
+
+        SPResourceJuicy propEffect = SPResourceJuicy.SpawnResource(prefab, pos.Target, pos.Target.position, Quaternion.Euler(0f, Random.Range(0f,360f), 0f));
+        
+        GameObject propForEffect = Instantiate(visualPrefab, propEffect.transform.position, propEffect.transform.rotation, propEffect.transform);
+        
+        SPRotate rotate = propForEffect.gameObject.AddComponent<SPRotate>();
+        rotate.space = Space.Self;
+        rotate.rotateSpeed = Vector3.up * -180f;
+
+        propEffect.SendResource();
+        
+    }
+
 
 
 

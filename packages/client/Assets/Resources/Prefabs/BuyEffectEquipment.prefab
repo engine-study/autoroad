@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7576120047372158156}
   - component: {fileID: 2378172429999497478}
   m_Layer: 0
-  m_Name: PropBuyEffect
+  m_Name: BuyEffectEquipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872bfe9da31aa864abaf17a2cb5a05da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 4
+  time: 5
+  offset: {x: 0, y: 1, z: 0}
   rotation: {x: 0, y: 0, z: 0}
   sfx_spawn:
   - {fileID: 8300000, guid: 38e27b3e67583da41aacede60b5998b8, type: 3}

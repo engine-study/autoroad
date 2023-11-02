@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2d51d28d890de34488f45aab700e18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  table: {fileID: 0}
   requiredComponents: []
   entity: {fileID: 0}
   hasInit: 0
@@ -64,6 +65,7 @@ MonoBehaviour:
     updateType: 0
     source: 0
   item: {fileID: 11400000, guid: 863af1a557914984790fc4d245d79fc6, type: 2}
+  visualPrefab: {fileID: 2534960849799624956}
   value: 0
   valueString: 
   statType: 0
@@ -79,14 +81,13 @@ GameObject:
   - component: {fileID: 1497764316618007442}
   - component: {fileID: 3264885986872982028}
   - component: {fileID: 1920687143319162674}
-  - component: {fileID: 4557134708229529802}
   m_Layer: 0
   m_Name: spellBook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1497764316618007442
 Transform:
   m_ObjectHideFlags: 0
@@ -96,7 +97,7 @@ Transform:
   m_GameObject: {fileID: 2534960849799624956}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 100.000046, y: 100, z: 100.000046}
+  m_LocalScale: {x: 75, y: 75, z: 75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9171133180330391531}
@@ -155,17 +156,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4557134708229529802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2534960849799624956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d5b68faa4f87f46b4899fcb991ddcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotateSpeed: {x: 0, y: 180, z: 0}
-  space: 0
