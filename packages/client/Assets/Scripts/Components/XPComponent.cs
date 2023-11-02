@@ -18,7 +18,7 @@ public class XPComponent : ValueComponent {
     [SerializeField] int level = -1;
     [SerializeField] int lastLevel = -1;
     [SerializeField] SPEnableDisable levelUpFX; 
-    PositionSync pos; 
+    PositionSync posSync; 
 
     protected override void Awake() {
         base.Awake();
@@ -51,10 +51,10 @@ public class XPComponent : ValueComponent {
             if(levelingUp) { OnLocalLevelUp?.Invoke();}
         }
 
-        if(levelingUp) {
+        if(levelingUp && Loaded) {
 
-            pos = Entity.GetRootComponent<PositionSync>();
-            if(pos) {
+            posSync = Entity.GetRootComponent<PositionSync>();
+            if(posSync) {
                 LevelUpFX();
             }
 
@@ -66,7 +66,7 @@ public class XPComponent : ValueComponent {
     }
 
     void LevelUpFX() {
-        levelUpFX.transform.position = pos.Target.position + Vector3.up * .75f;
+        levelUpFX.transform.position = posSync.Target.position + Vector3.up * .75f;
         levelUpFX.Spawn(true);
     }
 

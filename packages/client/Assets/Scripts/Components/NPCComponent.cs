@@ -14,11 +14,15 @@ public class NPCComponent : MUDComponent
 
     [Header("Debug")]
     [SerializeField] NPCType npc;
+    [SerializeField] ActionComponent action;
+    ActionName lastAction = ActionName.None;
 
     protected override void PostInit() {
         base.PostInit();
 
         // SetKit(kits[(int)npc]);
+        action = Entity.GetMUDComponent<ActionComponent>();
+        action.OnUpdated += CheckDead;
 
     }
 
@@ -28,6 +32,21 @@ public class NPCComponent : MUDComponent
         NPCTable table = update as NPCTable;
         npc = (NPCType)(int)table.Value;
      
+    }
+
+    void CheckDead() {
+        
+        //we died somehow
+        if(action.Action == ActionName.Dead && lastAction != action.Action) {
+            if(NPC == NPCType.Player) {
+                NotificationUI.AddNotification($"{Entity.Name} was smote.");
+            } else {
+                NotificationUI.AddNotification($"An NPC {Entity.Name} perished.");
+            }
+        }
+
+        lastAction = action.Action;
+        
     }
 
     public void SetKit(NPCKit newKit) {

@@ -12,6 +12,9 @@ public class PuzzleComponent : MUDComponent {
 
     [EnumNamedArray( typeof(PuzzleType) )]
     [SerializeField] GameObject[] stages;
+    [EnumNamedArray( typeof(PuzzleType) )]
+    [SerializeField] GameObject[] stagesActive;
+    [EnumNamedArray( typeof(PuzzleType) )]
     [SerializeField] GameObject[] stagesComplete;
 
     [Header("Debug")]
@@ -27,26 +30,6 @@ public class PuzzleComponent : MUDComponent {
     [SerializeField] RockComponent rock;
 
 
-    protected override IMudTable GetTable() {return new PuzzleTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
-
-        PuzzleTable table = update as PuzzleTable;
-        puzzle = (PuzzleType)(int)table.PuzzleType;
-        completed = (bool)table.Complete;
-
-        if(completed && Loaded) {
-
-            PlayerComponent filledBy = MUDWorld.FindComponent<PlayerComponent>((string)table.Solver);
-            if(filledBy) {
-                NotificationUI.AddNotification($"Puzzle solved by {filledBy.Entity.Name}");
-            }
-        }
-
-        for(int i = 0; i < stages.Length; i++) {if(stages[i] == null) continue; stages[i].SetActive(i == (int)puzzle);}
-        for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) continue; stagesComplete[i].SetActive(false);}
-
-    }
-
     protected override void PostInit() {
         base.PostInit();
 
@@ -61,10 +44,39 @@ public class PuzzleComponent : MUDComponent {
     
     }
 
+    protected override IMudTable GetTable() {return new PuzzleTable();}
+    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+
+        PuzzleTable table = update as PuzzleTable;
+        puzzle = (PuzzleType)(int)table.PuzzleType;
+        completed = (bool)table.Complete;
+
+        for(int i = 0; i < stages.Length; i++) {if(stages[i] == null) continue; stages[i].SetActive(i == (int)puzzle);}
+
+        if(Loaded) {
+            if(completed) {
+
+                PlayerComponent filledBy = MUDWorld.FindComponent<PlayerComponent>((string)table.Solver);
+                if(filledBy) {
+                    NotificationUI.AddNotification($"Puzzle solved by {filledBy.Entity.Name}");
+                }
+            }
+
+        } else {
+            InstantUpdate();
+        }
+
+    }
+
+    void InstantUpdate() {
+        for(int i = 0; i < stagesActive.Length; i++) {if(stagesActive[i] == null) continue; stagesActive[i].SetActive(!completed);}
+        for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) continue; stagesComplete[i].SetActive(completed);}
+    }
+
     void CompletedWhenMoved() {
         if(completed) {
             completeFX.Spawn(true);
-            for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) continue; stagesComplete[i].SetActive(true);}
+            InstantUpdate();
         }
 
 

@@ -44,34 +44,33 @@ contract RewardSubsystem is System {
     Road.set(road, roadstate, player, true);
 
     giveGem(player, 1);
-    giveCoins(player, 50);
 
   }
 
   function givePuzzleReward(bytes32 player) public {
-    giveCoins(player, Conscription.get(player) ? int32(50) : int32(30));
-    giveXP(player, 25);
+    giveCoins(player, Conscription.get(player) ? int32(50) : int32(25));
+    giveXP(player, 20);
   }
 
   function giveKillReward(bytes32 player) public {
-    int32 amount = Conscription.get(player) ? int32(50) : int32(30);
+    int32 amount = Conscription.get(player) ? int32(50) : int32(25);
     giveCoins(player, amount);
-    giveXP(player, 25);
+    giveXP(player, 20);
   }
 
   function giveRoadFilledReward(bytes32 player) public {
 
     int32 coins = Coinage.get(player);
-    int32 amount = Conscription.get(player) ? int32(30) : int32(20);
+    int32 amount = Conscription.get(player) ? int32(20) : int32(10);
 
     giveCoins(player, amount);
-    giveXP(player, 20);
+    giveXP(player, 10);
   }
 
   function giveRoadShoveledReward(bytes32 player) public {
     int32 amount = Conscription.get(player) ? int32(10) : int32(5);
     giveCoins(player, amount);
-    giveXP(player, 10);
+    giveXP(player, 5);
   }
 
   function giveCoins(bytes32 player, int32 amount) public {
