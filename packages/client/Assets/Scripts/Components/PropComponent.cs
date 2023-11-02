@@ -16,6 +16,7 @@ public abstract class PropComponent : ValueComponent {
         base.Init(spawnInfo);
 
         visualPrefab = propPrefab.gameObject;
+        visualOffset = Vector3.up * 2f;
 
         //add player as required component
         TableManager table = MUDWorld.FindTable<PlayerComponent>();

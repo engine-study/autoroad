@@ -15,6 +15,7 @@ public abstract class ValueComponent : MUDComponent {
     [SerializeField] GaulItem item;
     [SerializeField] protected GameObject visualPrefab;
     // [SerializeField] GaulItem [] items;
+    protected Vector3 visualOffset;
 
     [Header("Debug")]
     [SerializeField] float value;
@@ -34,6 +35,7 @@ public abstract class ValueComponent : MUDComponent {
         if(slots  == null) {slots = new List<InventorySlot>();}
         slots.Add(new InventorySlot(){item = item});
         
+        visualOffset = Vector3.up * 1.5f;
         // for(int i = 0; i < items.Length; i++) {
         //     slots.Add(new InventorySlot(){item = items[i]});
         // }
@@ -81,7 +83,7 @@ public abstract class ValueComponent : MUDComponent {
         }
 
         SPResourceJuicy propEffect = SPResourceJuicy.SpawnResource(prefab, pos.Target, pos.Target.position, Quaternion.Euler(-45f, Random.Range(0f,360f), 0f));
-        propEffect.offset = Vector3.up * 2f;
+        propEffect.offset = visualOffset;
 
         GameObject propForEffect = Instantiate(visualPrefab, propEffect.transform.position, propEffect.transform.rotation, propEffect.transform);
         
