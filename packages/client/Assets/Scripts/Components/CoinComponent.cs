@@ -43,7 +43,6 @@ public class CoinComponent : ValueComponent {
         base.PostInit();
     }
 
-    
     Coroutine spawnCoroutine = null;
     void Spawn(int amount) {
 
@@ -52,8 +51,6 @@ public class CoinComponent : ValueComponent {
         if (position.Target == null) { Debug.LogError("No position target", this); return; }
         spawnCoroutine = StartCoroutine(SpawnCoins(amount));
     }
-
-    
 
     IEnumerator SpawnCoins(int amount) {
 
@@ -93,11 +90,7 @@ public class CoinComponent : ValueComponent {
             coin.SendResource();
             yield return new WaitForSeconds(.1f);
         }
-
     }
-
-
-
     protected override void OnDestroy() {
         base.OnDestroy();
 
