@@ -46,23 +46,23 @@ public class GameUI : SPWindowParent
     }
 
     void UpdateGems() {
-        gems.SetValue(GemComponent.LocalGems.ToString("00"));
+        gems.SetValue(GemComponent.LocalGems);
         SPStrobeUI.ToggleStrobe(gems);
     }
 
     void UpdateCoins() {
-        coins.SetValue(CoinComponent.LocalCoins.ToString("000"));
+        coins.SetValue(CoinComponent.LocalCoins);
         SPStrobeUI.ToggleStrobe(coins);
     }
 
     void UpdateScrolls() {
-        scrolls.SetValue(ScrollComponent.LocalScrolls.ToString("00"));
+        scrolls.SetValue(ScrollComponent.LocalScrolls);
         scrolls.Button.ToggleState(ScrollComponent.LocalScrolls > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
         SPStrobeUI.ToggleStrobe(scrolls);
     }
 
      void UpdateSeeds() {
-        seeds.SetValue(SeedComponent.LocalCount.ToString("00"));
+        seeds.SetValue(SeedComponent.LocalCount);
         seeds.Button.ToggleState(SeedComponent.LocalCount > 0 ? SPSelectableState.Default : SPSelectableState.Disabled);
         SPStrobeUI.ToggleStrobe(seeds);
     }

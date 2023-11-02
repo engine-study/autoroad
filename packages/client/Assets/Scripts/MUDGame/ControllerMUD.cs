@@ -128,7 +128,7 @@ public class ControllerMUD : SPController
     }
 
     float minTime = 0f;
-    float transactionWait = .25f;
+    float transactionWait = .5f;
     float cancelWait = 1f;
     Vector3 moveDest, inputDir;
     bool input, wasInputting;
@@ -148,7 +148,7 @@ public class ControllerMUD : SPController
         }
 
         //playerTransform.position != _onchainPosition ||
-        if (Vector3.Distance(playerTransform.position, sync.Pos.Pos) >= 1f) {
+        if (Vector3.Distance(playerTransform.position, sync.Pos.Pos) > 1f) {
             return;
         }
 
@@ -237,7 +237,7 @@ public class ControllerMUD : SPController
         Vector3 pushToPos = startPush;
         MUDEntity destinationEntity = GridMUD.GetEntityAt(pushToPos);
 
-        while (destinationEntity != null) {
+        while(destinationEntity != null) {
 
             PositionComponent pos = destinationEntity.GetMUDComponent<PositionComponent>();
             MoveComponent destMoveComponent = destinationEntity.GetMUDComponent<MoveComponent>();
@@ -248,6 +248,10 @@ public class ControllerMUD : SPController
 
             bool isObstructed = weightCount > 0 || pos == null || destMoveComponent == null || destMoveComponent.MoveType == MoveType.Obstruction;
             bool isOffMap = !MapConfigComponent.OnWorldOrMap(destinationEntity, pushToPos + pushDirection);
+            
+            if (destMoveComponent != null && destMoveComponent.MoveType != MoveType.Push && destMoveComponent.MoveType != MoveType.Obstruction) {
+                break;
+            }
 
             if(destMoveComponent != null && pos != null) {
                 Mover newMover = new Mover() {
@@ -264,10 +268,6 @@ public class ControllerMUD : SPController
                 WeightUI.Instance.ToggleWeights(true, movers);
                 PositionComponent.OnWorldOrMap(destinationEntity, pushToPos + pushDirection, true);
                 return false;
-            }
-            
-            if (destMoveComponent.MoveType != MoveType.Push) {
-                break;
             }
 
             pushToPos += pushDirection;

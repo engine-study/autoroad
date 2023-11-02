@@ -43,10 +43,10 @@ public class StatUI : EntityUI
     }
 
     public static string StatToString(StatType statType, float value) {
-        if(statType == StatType.RoadCoin) { return ((int)value).ToString("000");
+        if(statType == StatType.RoadCoin) { return FormatNumber((int)value);
         } else if(statType == StatType.Eth) { return value.ToString("##0.00");
         } else if(statType == StatType.Level) { return value.ToString("#0");
-        } else { return ((int)value).ToString("00");}
+        } else { return ((int)value).ToString("#0");}
 
     }
 
@@ -54,8 +54,26 @@ public class StatUI : EntityUI
         SetValue(type, newStat);
     }
 
+    public void SetValue(int newStat) {
+        SetValue(type, (float)newStat);
+    }
+
     public void SetValue(StatType newType, float newStat) {
         SetValue(newType, StatToString(newType, newStat));
+    }
+
+    
+    static string FormatNumber(int num) {
+        if (num >= 100000)
+            return FormatNumber(num / 1000) + "K";
+
+        if (num >= 10000)
+            return (num / 1000D).ToString("0") + "K";
+
+        if (num >= 1000)
+            return (num / 100D).ToString("0") + "K";
+
+        return num.ToString("#,0");
     }
 
     public void SetValue(StatType newType, string newStat) {

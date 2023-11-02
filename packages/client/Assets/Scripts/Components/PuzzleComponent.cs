@@ -19,11 +19,8 @@ public class PuzzleComponent : MUDComponent {
 
     [Header("Debug")]
     public PuzzleType puzzle;
+    public string solvedBy;
     public bool completed;
-
-    [Header("Miliarium")]
-
-    [Header("Statue")]
 
     [Header("Debug")]
     [SerializeField] PositionSync sync;
@@ -42,6 +39,7 @@ public class PuzzleComponent : MUDComponent {
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     
+        InstantUpdate();
     }
 
     protected override IMudTable GetTable() {return new PuzzleTable();}
@@ -50,17 +48,11 @@ public class PuzzleComponent : MUDComponent {
         PuzzleTable table = update as PuzzleTable;
         puzzle = (PuzzleType)(int)table.PuzzleType;
         completed = (bool)table.Complete;
+        solvedBy = (string)table.Solver;
 
-        for(int i = 0; i < stages.Length; i++) {if(stages[i] == null) continue; stages[i].SetActive(i == (int)puzzle);}
+        for(int i = 0; i < stages.Length; i++) {if(stages[i] == null) {continue;} stages[i].SetActive(i == (int)puzzle);}
 
         if(Loaded) {
-            if(completed) {
-
-                PlayerComponent filledBy = MUDWorld.FindComponent<PlayerComponent>((string)table.Solver);
-                if(filledBy) {
-                    NotificationUI.AddNotification($"Puzzle solved by {filledBy.Entity.Name}");
-                }
-            }
 
         } else {
             InstantUpdate();
@@ -69,12 +61,19 @@ public class PuzzleComponent : MUDComponent {
     }
 
     void InstantUpdate() {
-        for(int i = 0; i < stagesActive.Length; i++) {if(stagesActive[i] == null) continue; stagesActive[i].SetActive(!completed);}
-        for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) continue; stagesComplete[i].SetActive(completed);}
+        for(int i = 0; i < stagesActive.Length; i++) {if(stagesActive[i] == null) {continue;} stagesActive[i].SetActive(!completed);}
+        for(int i = 0; i < stagesComplete.Length; i++) {if(stagesComplete[i] == null) {continue;} stagesComplete[i].SetActive(completed);}
     }
 
     void CompletedWhenMoved() {
-        if(completed) {
+
+        if(Loaded && completed) {
+                        
+            PlayerComponent filledBy = MUDWorld.FindComponent<PlayerComponent>(solvedBy);
+            if(filledBy) {
+                NotificationUI.AddNotification($"Puzzle solved by {filledBy.Entity.Name}");
+            }
+            
             completeFX.Spawn(true);
             InstantUpdate();
         }

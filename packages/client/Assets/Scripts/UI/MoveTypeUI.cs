@@ -53,7 +53,7 @@ public class MoveTypeUI : MUDComponentUI
         }
 
         if(moveType == MoveType.Push && (showZeroWeight || wValue != 0 )) {
-            weight.SetValue(statValue, Mathf.Abs(wValue).ToString("00"));
+            weight.SetValue(statValue, Mathf.Abs(wValue));
             weight.ToggleWindowOpen();
         } else {
             weight.ToggleWindowClose();
