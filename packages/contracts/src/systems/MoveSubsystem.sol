@@ -16,9 +16,17 @@ import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.s
 
 contract MoveSubsystem is System {
 
-  function moveSimple(bytes32 player, int32 x, int32 y) public {
+  //never call directly without requiring canInteract() and Rules.canDoStuff()
 
-    require(Rules.canDoStuff(player), "hmm");
+  function moveOrPush(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector, int32 distance) public {
+      IWorld world = IWorld(_world());
+      bytes32[] memory atNext = Rules.getKeysAtPosition(world,startPos.x + vector.x, startPos.y + vector.y, 0);
+      if(atNext.length == 0) { doMoveDistance(causedBy, player, startPos, vector, distance);} 
+      else { doPush(causedBy, player, startPos, vector); }
+      
+  }
+
+  function moveSimple(bytes32 player, int32 x, int32 y) public {
 
     PositionData memory playerPos = Position.get(player);
     PositionData memory toPos = PositionData(x,y,0);
@@ -26,13 +34,15 @@ contract MoveSubsystem is System {
     doMoveWithBoots(player, player, Position.get(player), PositionData(toPos.x - playerPos.x, toPos.y - playerPos.y, 0));
   }
 
-  //never call directly without requiring canInteract() and Rules.canDoStuff()
-  function moveOrPush(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector) public {
-      IWorld world = IWorld(_world());
-      bytes32[] memory atNext = Rules.getKeysAtPosition(world,startPos.x + vector.x, startPos.y + vector.y, 0);
-      if(atNext.length == 0) { doMoveWithBoots(causedBy, player, startPos, vector);} 
-      else { doPush(causedBy, player, startPos, vector); }
-      
+  function moveSimpleDistance(bytes32 player, int32 x, int32 y, int32 distance) public {
+
+    int32 maxDistance = Boots.getMaxMove(player);
+    require(distance <= maxDistance, "Boots out of range");
+
+    PositionData memory playerPos = Position.get(player);
+    PositionData memory toPos = PositionData(x,y,0);
+
+    doMoveDistance(player, player, Position.get(player), PositionData(toPos.x - playerPos.x, toPos.y - playerPos.y, 0), distance);
   }
 
   function doMoveWithBoots(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector) private {
@@ -40,17 +50,19 @@ contract MoveSubsystem is System {
     int32 minDistance = Boots.getMinMove(player);
     int32 maxDistance = Boots.getMaxMove(player);
     if(minDistance == 0 && maxDistance == 0) { minDistance = 1; maxDistance = 1;}
-
-    PositionData memory endPos = PositionData(startPos.x + (vector.x * maxDistance), startPos.y + (vector.y * maxDistance), 0);
-
-    uint distance = getDistance(startPos, endPos);
-    require(distance >= uint(uint32(minDistance)) && distance <= uint(uint32(maxDistance)), "Boots out of range");
-    require(Rules.requireLegalMove(player, startPos, endPos, uint(uint32(maxDistance))), "Bad move");
     
-    doMove(causedBy, player, startPos, endPos);
+    doMoveDistance(causedBy, player, startPos, vector, minDistance);
+  }
+
+  function doMoveDistance(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector, int32 distance) private {
+
+      PositionData memory endPos = PositionData(startPos.x + (vector.x * distance), startPos.y + (vector.y * distance), 0);
+      doMove(causedBy, player, startPos, endPos);
   }
 
   function doMove(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory endPos) private {
+
+    require(Rules.requireLegalMove(player, startPos, endPos, 99), "Bad move");
 
     // get all the positions in the line we are walking (including starting position)
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);
@@ -64,10 +76,15 @@ contract MoveSubsystem is System {
       assert(atDest.length < 2);
 
       //check if valid position
-      bool canWalk = Rules.onMapOrSpawn(player, positions[i]) && Rules.canWalkOn(atDest);
+      bool canWalk = Rules.onMapOrSpawn(player, positions[i]);
+      //don't let players walk into holes themselves, need someone else to force them into holes
 
       //if we hit an object or at the end of our walk, break out
-      if (canWalk == false) { require(i > 1, "Nowhere to move"); return;}
+      if(canWalk && atDest.length > 0) {
+          MoveType moveType = MoveType(Move.get(atDest[0]));
+          canWalk = causedBy == player ? Rules.canWalkOn(moveType) : Rules.canPlaceOn(moveType);
+      }
+      if (!canWalk) { require(i > 1, "Nowhere to move"); return;}
 
       moveTo(causedBy, player, positions[i-1], positions[i], atDest, ActionType.Walking);
 

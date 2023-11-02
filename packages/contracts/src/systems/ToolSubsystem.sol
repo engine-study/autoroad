@@ -40,7 +40,7 @@ contract ToolSubsystem is System {
     require(NPC.get(atStick[0]) > 0, "Not an NPC");
     
     PositionData memory vector = PositionData(stickPos.x - playerPos.x, stickPos.y - playerPos.y, 0);
-    SystemSwitch.call(abi.encodeCall(world.moveOrPush, (player, atStick[0], stickPos, vector)));
+    SystemSwitch.call(abi.encodeCall(world.moveOrPush, (player, atStick[0], stickPos, vector, 3)));
 
   }
 

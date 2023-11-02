@@ -82,6 +82,8 @@ contract ActionSystem is System {
   function action(ActionType newAction, int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
+    
+    require(Rules.canDoStuff(player), "hmm");
 
     if (newAction == ActionType.Idle) {} 
     else if (newAction == ActionType.Mining) {

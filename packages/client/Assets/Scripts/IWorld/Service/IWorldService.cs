@@ -1813,24 +1813,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveOrPushFunction, cancellationToken);
         }
 
-        public Task<string> MoveOrPushRequestAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData vector)
+        public Task<string> MoveOrPushRequestAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData vector, int distance)
         {
             var moveOrPushFunction = new MoveOrPushFunction();
                 moveOrPushFunction.CausedBy = causedBy;
                 moveOrPushFunction.Player = player;
                 moveOrPushFunction.StartPos = startPos;
                 moveOrPushFunction.Vector = vector;
+                moveOrPushFunction.Distance = distance;
             
              return ContractHandler.SendRequestAsync(moveOrPushFunction);
         }
 
-        public Task<TransactionReceipt> MoveOrPushRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData vector, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MoveOrPushRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData vector, int distance, CancellationTokenSource cancellationToken = null)
         {
             var moveOrPushFunction = new MoveOrPushFunction();
                 moveOrPushFunction.CausedBy = causedBy;
                 moveOrPushFunction.Player = player;
                 moveOrPushFunction.StartPos = startPos;
                 moveOrPushFunction.Vector = vector;
+                moveOrPushFunction.Distance = distance;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveOrPushFunction, cancellationToken);
         }
@@ -1863,6 +1865,38 @@ namespace IWorld.Service
                 moveSimpleFunction.Y = y;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(moveSimpleFunction, cancellationToken);
+        }
+
+        public Task<string> MoveSimpleDistanceRequestAsync(MoveSimpleDistanceFunction moveSimpleDistanceFunction)
+        {
+             return ContractHandler.SendRequestAsync(moveSimpleDistanceFunction);
+        }
+
+        public Task<TransactionReceipt> MoveSimpleDistanceRequestAndWaitForReceiptAsync(MoveSimpleDistanceFunction moveSimpleDistanceFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveSimpleDistanceFunction, cancellationToken);
+        }
+
+        public Task<string> MoveSimpleDistanceRequestAsync(byte[] player, int x, int y, int distance)
+        {
+            var moveSimpleDistanceFunction = new MoveSimpleDistanceFunction();
+                moveSimpleDistanceFunction.Player = player;
+                moveSimpleDistanceFunction.X = x;
+                moveSimpleDistanceFunction.Y = y;
+                moveSimpleDistanceFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAsync(moveSimpleDistanceFunction);
+        }
+
+        public Task<TransactionReceipt> MoveSimpleDistanceRequestAndWaitForReceiptAsync(byte[] player, int x, int y, int distance, CancellationTokenSource cancellationToken = null)
+        {
+            var moveSimpleDistanceFunction = new MoveSimpleDistanceFunction();
+                moveSimpleDistanceFunction.Player = player;
+                moveSimpleDistanceFunction.X = x;
+                moveSimpleDistanceFunction.Y = y;
+                moveSimpleDistanceFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(moveSimpleDistanceFunction, cancellationToken);
         }
 
         public Task<string> MoveToRequestAsync(MoveToFunction moveToFunction)

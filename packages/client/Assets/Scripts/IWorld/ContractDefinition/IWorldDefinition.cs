@@ -866,6 +866,8 @@ namespace IWorld.ContractDefinition
         public virtual PositionData StartPos { get; set; }
         [Parameter("tuple", "vector", 4)]
         public virtual PositionData Vector { get; set; }
+        [Parameter("int32", "distance", 5)]
+        public virtual int Distance { get; set; }
     }
 
     public partial class MoveSimpleFunction : MoveSimpleFunctionBase { }
@@ -879,6 +881,21 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class MoveSimpleDistanceFunction : MoveSimpleDistanceFunctionBase { }
+
+    [Function("moveSimpleDistance")]
+    public class MoveSimpleDistanceFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "distance", 4)]
+        public virtual int Distance { get; set; }
     }
 
     public partial class MoveToFunction : MoveToFunctionBase { }
@@ -2291,6 +2308,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

@@ -94,10 +94,8 @@ library Rules {
     require(move == uint32(MoveType.Push), "not push");
   }
 
-  function canWalkOn(bytes32[] memory at) internal view returns (bool) {
-    if (at.length == 0) return true;
-    uint32 move = Move.get(at[0]);
-    return (move == uint32(MoveType.None) || move == uint32(MoveType.Trap));
+  function canWalkOn(MoveType moveAt) internal view returns (bool) {
+    return (moveAt == MoveType.None || moveAt == MoveType.Trap);
   }
 
   function canPlaceOn(MoveType moveAt) internal view returns (bool) {
