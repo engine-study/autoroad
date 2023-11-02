@@ -30,7 +30,7 @@ public class StoreUI : SPWindowParent
         itemCategories = new List<GaulItem>[itemTypeHeaders.Length];
 
         for(int i =0; i < itemTypeHeaders.Length; i++) {
-            itemTypeHeaders[i].UpdateField(GaulItem.ItemTypeString((ItemType)i));
+            // itemTypeHeaders[i].UpdateField(GaulItem.ItemTypeString((ItemType)i));
             itemCategories[i] = new List<GaulItem>();
         }
 
