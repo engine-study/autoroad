@@ -15,11 +15,11 @@ public class MoveNoBoots : Equipment
     
     public override async UniTask<bool> SendTx() {
         
-        int x = (int)transform.position.x;
-        int y = (int)transform.position.z;
+
+        Vector3 normalized = PlayerMUD.MUDPlayer.Position.Pos + (transform.position -  PlayerMUD.MUDPlayer.Position.Pos).normalized;
         int distance = Mathf.RoundToInt(Vector3.Distance(transform.position, PlayerMUD.MUDPlayer.Position.Pos));
 
-        return await TxManager.SendDirect<WalkFunction>(System.Convert.ToInt32(x), System.Convert.ToInt32(y), System.Convert.ToInt32(distance)); 
+        return await TxManager.SendDirect<WalkFunction>(System.Convert.ToInt32(Mathf.RoundToInt(normalized.x)), System.Convert.ToInt32(Mathf.RoundToInt(normalized.z)), System.Convert.ToInt32(distance)); 
 
     }
 

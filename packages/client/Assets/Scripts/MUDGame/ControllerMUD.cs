@@ -157,6 +157,7 @@ public class ControllerMUD : SPController
 
         if(Input.GetMouseButton(1)) {
             inputDir = CursorMUD.GridPos - onchainPos;
+            // inputDir = onchainPos + (CursorMUD.GridPos - onchainPos).normalized;
             inputDistance = Mathf.RoundToInt(Vector3.Distance(CursorMUD.GridPos, onchainPos));
         } else {
             inputDir = new Vector3(Mathf.RoundToInt(Input.GetAxis("Horizontal")), 0f, Mathf.RoundToInt(Input.GetAxis("Vertical")));
@@ -206,7 +207,7 @@ public class ControllerMUD : SPController
 
         } else {
             currentAction = pushAction;
-            bool didPush = CreatePush(onchainPos, inputDir);
+            bool didPush = CreatePush(onchainPos, inputDir.normalized);
 
             if(didPush) {
                 pushAction.transform.position = moveTo;
