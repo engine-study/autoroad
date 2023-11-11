@@ -82,8 +82,8 @@ public class RoadComponent : MUDComponent {
         state = (RoadState)(int)roadUpdate.State;
         creditedPlayer = (string)roadUpdate.Filled;
         hasGem = (bool)roadUpdate.Gem;
-        filledBy = MUDWorld.FindComponent<PlayerComponent>(creditedPlayer);
-        creditedPlayerDebug = MUDWorld.MakeTable<RoadTable>(Entity.Key)?.Filled;
+        filledBy = MUDWorld.FindComponent<PlayerTable, PlayerComponent>(creditedPlayer);
+        creditedPlayerDebug = MUDWorld.GetTable<RoadTable>(Entity.Key)?.Filled;
 
         if (Loaded) {
             

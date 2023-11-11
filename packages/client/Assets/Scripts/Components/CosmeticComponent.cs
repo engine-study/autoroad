@@ -16,7 +16,7 @@ public class CosmeticComponent : ValueComponent
 
     protected override void Init(SpawnInfo newInfo) {
         base.Init(newInfo);
-        ToggleRequiredComponent(true, MUDWorld.FindTable<PlayerComponent>().Prefab);
+        ToggleRequiredComponent(true, MUDWorld.GetManager<PlayerTable>().Prefab);
 
     }
     protected override void PostInit() {

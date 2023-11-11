@@ -3726,6 +3726,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(updateChunkFunction, cancellationToken);
         }
 
+        public Task<string> WalkRequestAsync(WalkFunction walkFunction)
+        {
+             return ContractHandler.SendRequestAsync(walkFunction);
+        }
+
+        public Task<TransactionReceipt> WalkRequestAndWaitForReceiptAsync(WalkFunction walkFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(walkFunction, cancellationToken);
+        }
+
+        public Task<string> WalkRequestAsync(int x, int y, int distance)
+        {
+            var walkFunction = new WalkFunction();
+                walkFunction.X = x;
+                walkFunction.Y = y;
+                walkFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAsync(walkFunction);
+        }
+
+        public Task<TransactionReceipt> WalkRequestAndWaitForReceiptAsync(int x, int y, int distance, CancellationTokenSource cancellationToken = null)
+        {
+            var walkFunction = new WalkFunction();
+                walkFunction.X = x;
+                walkFunction.Y = y;
+                walkFunction.Distance = distance;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(walkFunction, cancellationToken);
+        }
+
         public Task<string> WaterRequestAsync(WaterFunction waterFunction)
         {
              return ContractHandler.SendRequestAsync(waterFunction);

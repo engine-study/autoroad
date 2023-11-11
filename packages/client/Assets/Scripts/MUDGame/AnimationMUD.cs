@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud;
+using mudworld;
 using Edelweiss.Coroutine;
 
 public class AnimationMUD : MonoBehaviour
@@ -67,7 +68,7 @@ public class AnimationMUD : MonoBehaviour
             actor = new ActorAnimator(Animator);
         }
 
-        actionData = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
+        actionData = MUDWorld.FindOrMakeComponent<ActionTable, ActionComponent>(entity);
 
         if(entity.Loaded) Init();
         else entity.OnLoaded += Init;

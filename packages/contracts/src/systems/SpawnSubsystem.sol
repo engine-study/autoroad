@@ -37,7 +37,7 @@ contract SpawnSubsystem is System {
       XP.set(entity, 0);
 
       Shovel.set(entity, true);
-      Boots.set(entity, 1, 1);
+      Boots.set(entity, 1, 3);
       
       int32 mileJoined = GameState.getMiles();
 

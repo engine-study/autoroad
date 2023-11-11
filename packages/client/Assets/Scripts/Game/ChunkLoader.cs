@@ -19,6 +19,7 @@ public class ChunkLoader : MonoBehaviour
     public static ChunkComponent Chunk {get{return Instance.chunk;}}
 
     [Header("Chunks")]
+    [SerializeField] int cullDistance = 2;
     [SerializeField] TableManager pos;
 
     [Header("Debug")]
@@ -87,7 +88,7 @@ public class ChunkLoader : MonoBehaviour
         }
 
         for(int i = 0; i < ChunkList.Count; i++) {
-            bool showChunk = i == newMile || (i >= newMile-1 && i <= newMile+1);
+            bool showChunk = i == newMile || (i >= newMile-cullDistance && i <= newMile+cullDistance);
             ChunkList[i].Toggle(showChunk);
         }
 

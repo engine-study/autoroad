@@ -1716,6 +1716,19 @@ namespace IWorld.ContractDefinition
         public virtual byte[] CausedBy { get; set; }
     }
 
+    public partial class WalkFunction : WalkFunctionBase { }
+
+    [Function("walk")]
+    public class WalkFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+        [Parameter("int32", "distance", 3)]
+        public virtual int Distance { get; set; }
+    }
+
     public partial class WaterFunction : WaterFunctionBase { }
 
     [Function("water")]
@@ -2445,6 +2458,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "version", 1)]
         public virtual byte[] Version { get; set; }
     }
+
+
 
 
 

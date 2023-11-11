@@ -79,6 +79,15 @@ contract ActionSystem is System {
     Actions.setAction(player, ActionType.Buy, pos.x, pos.y);
   }
 
+  function walk(int32 x, int32 y, int32 distance) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    IWorld world = IWorld(_world());
+
+    require(Rules.canDoStuff(player), "hmm");
+
+    SystemSwitch.call(abi.encodeCall(world.moveSimpleDistance, (player, x, y, distance)));
+  }
+
   function action(ActionType newAction, int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());

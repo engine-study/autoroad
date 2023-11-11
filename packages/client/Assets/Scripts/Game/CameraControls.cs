@@ -16,6 +16,8 @@ public class CameraControls : MonoBehaviour
     public bool canPan = true;
     [SerializeField] float movementSpeed = 100.0f;
     [SerializeField] Vector2 fovMultiply = new Vector2(1f,10f);
+    [SerializeField] Vector2 clippingClose = new Vector2(1f,10f);
+    [SerializeField] Vector2 clippingFar = new Vector2(1f,10f);
 
     [Header("Rotate")]
     public bool canRotate = true;
@@ -39,6 +41,10 @@ public class CameraControls : MonoBehaviour
     void Awake() {
         I = this;
         _xRotation = transform.rotation.eulerAngles.x;
+    }
+    
+    void Start() {
+        UpdateClipping();
     }
     
     void OnDestroy() {
@@ -71,8 +77,10 @@ public class CameraControls : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Minus)) {
             SPCamera.SetFOVGlobal(1f);
+            UpdateClipping();
         } else if(Input.GetKeyDown(KeyCode.Equals)) {
             SPCamera.SetFOVGlobal(-1f); 
+            UpdateClipping();
         }
             
         if(Input.GetKeyDown(KeyCode.BackQuote) && (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftControl)) && Application.isEditor) {
@@ -88,9 +96,16 @@ public class CameraControls : MonoBehaviour
 
             } else if(SPInput.ModifierKey == false) {
                 SPCamera.SetFOVGlobal(SPCamera.I.FOV + Input.mouseScrollDelta.y * -scrollSensitivity);
+                UpdateClipping();
             }
         }
         
+    }
+
+    void UpdateClipping() {
+        float fovLerp = Mathf.InverseLerp(SPCamera.I.FOVClamp.x, SPCamera.I.FOVClamp.y, SPCamera.I.FOV);
+        SPCamera.Camera.nearClipPlane = Mathf.Lerp(clippingClose.x, clippingFar.x, fovLerp);
+        SPCamera.Camera.farClipPlane = Mathf.Lerp(clippingClose.y, clippingFar.y, fovLerp);
     }
 
     bool hasStarted, hasMovedEnough;
@@ -137,7 +152,8 @@ public class CameraControls : MonoBehaviour
             var position = transform.right * (_delta.x * -movementSpeed);
             position += transform.forward * (_delta.y * -movementSpeed);
 
-            float distanceMultiplier =  Mathf.Lerp(fovMultiply.x, fovMultiply.y, Mathf.InverseLerp(SPCamera.I.FOVClamp.x, SPCamera.I.FOVClamp.y, SPCamera.I.FOV));
+            float fovLerp = Mathf.InverseLerp(SPCamera.I.FOVClamp.x, SPCamera.I.FOVClamp.y, SPCamera.I.FOV);
+            float distanceMultiplier =  Mathf.Lerp(fovMultiply.x, fovMultiply.y, fovLerp);
 
             position *= distanceMultiplier;
 
@@ -147,6 +163,7 @@ public class CameraControls : MonoBehaviour
             position.z = Mathf.Clamp(position.z, -20f, BoundsComponent.Up + 10f);
 
             SPCamera.SetTarget(position);
+
 
         } else if (_isRotating && canRotate) {
 

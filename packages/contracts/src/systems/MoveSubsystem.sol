@@ -57,12 +57,12 @@ contract MoveSubsystem is System {
   function doMoveDistance(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector, int32 distance) private {
 
       PositionData memory endPos = PositionData(startPos.x + (vector.x * distance), startPos.y + (vector.y * distance), 0);
-      doMove(causedBy, player, startPos, endPos);
+      doMove(causedBy, player, startPos, endPos, distance);
   }
 
-  function doMove(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory endPos) private {
+  function doMove(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory endPos, int32 distance) private {
 
-    require(Rules.requireLegalMove(player, startPos, endPos, 99), "Bad move");
+    require(Rules.requireLegalMove(player, startPos, endPos, uint256(uint32(distance))), "Bad move");
 
     // get all the positions in the line we are walking (including starting position)
     PositionData[] memory positions = lineWalkPositions(startPos, endPos);

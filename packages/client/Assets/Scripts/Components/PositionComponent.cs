@@ -51,7 +51,7 @@ public class PositionComponent : MUDComponent {
         base.Init(newSpawnInfo);
         // anim = MUDWorld.FindOrMakeComponent<AnimationComponent>(newSpawnInfo.Entity.Key);
         isVisible = true;
-        action = MUDWorld.FindOrMakeComponent<ActionComponent>(newSpawnInfo.Entity.Key);
+        action = MUDWorld.FindOrMakeComponent<ActionTable, ActionComponent>(newSpawnInfo.Entity);
     }
 
     protected override void PostInit() {

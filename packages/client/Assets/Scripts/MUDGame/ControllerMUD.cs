@@ -132,6 +132,7 @@ public class ControllerMUD : SPController
     float cancelWait = 1f;
     Vector3 moveDest, inputDir;
     bool input, wasInputting;
+    int inputDistance;
     void UpdateInput()
     {
 
@@ -153,10 +154,17 @@ public class ControllerMUD : SPController
         }
 
         bool noModifiers = !SPInput.ModifierKey;
-        inputDir = new Vector3(Mathf.RoundToInt(Input.GetAxis("Horizontal")), 0f, Mathf.RoundToInt(Input.GetAxis("Vertical")));
-        if (inputDir.x != 0f) inputDir.z = 0f;
 
-        inputDir = SPHelper.IsometricToWorld(inputDir);
+        if(Input.GetMouseButton(1)) {
+            inputDir = CursorMUD.GridPos - onchainPos;
+            inputDistance = Mathf.RoundToInt(Vector3.Distance(CursorMUD.GridPos, onchainPos));
+        } else {
+            inputDir = new Vector3(Mathf.RoundToInt(Input.GetAxis("Horizontal")), 0f, Mathf.RoundToInt(Input.GetAxis("Vertical")));
+            if (inputDir.x != 0f) inputDir.z = 0f;
+            inputDir = SPHelper.IsometricToWorld(inputDir);
+            inputDistance = 1;
+        }
+
         input = noModifiers && (inputDir.x != 0 || inputDir.z != 0);
 
         if (!input) {

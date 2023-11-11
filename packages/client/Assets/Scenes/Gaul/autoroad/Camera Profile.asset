@@ -15,22 +15,22 @@ MonoBehaviour:
   active: 0
   mode:
     m_OverrideState: 1
-    m_Value: 2
-  gaussianStart:
-    m_OverrideState: 0
-    m_Value: 10
-  gaussianEnd:
-    m_OverrideState: 0
-    m_Value: 30
-  gaussianMaxRadius:
-    m_OverrideState: 0
     m_Value: 1
+  gaussianStart:
+    m_OverrideState: 1
+    m_Value: 1
+  gaussianEnd:
+    m_OverrideState: 1
+    m_Value: 2
+  gaussianMaxRadius:
+    m_OverrideState: 1
+    m_Value: 1.5
   highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 77.4
+    m_Value: 0.9
   aperture:
     m_OverrideState: 1
     m_Value: 1
@@ -106,7 +106,7 @@ MonoBehaviour:
   active: 0
   mode:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 1
   neutralHDRRangeReductionMode:
     m_OverrideState: 0
     m_Value: 2
@@ -145,10 +145,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 0
   postExposure:
-    m_OverrideState: 1
-    m_Value: 0.25
+    m_OverrideState: 0
+    m_Value: 1
   contrast:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   colorFilter:
     m_OverrideState: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
   active: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.05
+    m_Value: 0.025
 --- !u!114 &8318069167735033980
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   skipIterations:
     m_OverrideState: 0
     m_Value: 1

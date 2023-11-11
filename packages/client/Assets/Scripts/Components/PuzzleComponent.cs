@@ -69,7 +69,7 @@ public class PuzzleComponent : MUDComponent {
 
         if(Loaded && completed) {
                         
-            PlayerComponent filledBy = MUDWorld.FindComponent<PlayerComponent>(solvedBy);
+            PlayerComponent filledBy = MUDWorld.FindComponent<PlayerTable, PlayerComponent>(solvedBy);
             if(filledBy) {
                 NotificationUI.AddNotification($"Puzzle solved by {filledBy.Entity.Name}");
             }

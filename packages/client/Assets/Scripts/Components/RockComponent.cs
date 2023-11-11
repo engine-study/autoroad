@@ -140,7 +140,7 @@ public class RockComponent : MUDComponent {
         visualParent.SetActive(false);
 
         SPCamera.AddShake(Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .1f, transform.position);
-        RoadComponent road = MUDWorld.FindComponent<RoadComponent>(MUDHelper.Keccak256("Road", (int)posSync.Pos.Pos.x, (int)posSync.Pos.Pos.z));
+        RoadComponent road = MUDWorld.FindComponent<RoadTable, RoadComponent>(MUDHelper.Keccak256("Road", (int)posSync.Pos.Pos.x, (int)posSync.Pos.Pos.z));
 
         if(road == null) {
             Debug.LogError("Can't find road", this);

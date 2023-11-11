@@ -91,7 +91,7 @@ public class GridMUD : MonoBehaviour {
         
         foreach(RxRecord r in r3) {
             recordsFound++;
-            PositionComponent pos = MUDWorld.FindComponent<PositionComponent>(r.Key);
+            PositionComponent pos = MUDWorld.FindComponent<PositionTable, PositionComponent>(r.Key);
             if(pos == null) {Debug.LogError("Could not find entity");continue;}
             components.Add(pos);
         }

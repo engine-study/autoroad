@@ -44,7 +44,7 @@ public class PositionSync : ComponentSync
     [SerializeField] float distanceMoved = 0f;
     [SerializeField] float distance = 0f;
 
-    public override Type MUDComponentType() {return typeof(PositionComponent);}
+    public override Type TableType() {return typeof(PositionTable);}
 
     protected override void InitComponents() {
         base.InitComponents();
@@ -77,11 +77,11 @@ public class PositionSync : ComponentSync
         #if UNITY_EDITOR
         //sanity check
         if(Pos.UpdateInfo.UpdateType == UpdateType.DeleteRecord) {
-            if(IMudTable.MakeTable<PositionTable>(Pos.Entity.Key) != null) {
+            if(IMudTable.GetTable<PositionTable>(Pos.Entity.Key) != null) {
                 Debug.LogError("Position mismatch", this);
             }
         } else {
-            PositionTable recordTable = IMudTable.MakeTable<PositionTable>(Pos.Entity.Key);
+            PositionTable recordTable = IMudTable.GetTable<PositionTable>(Pos.Entity.Key);
             PositionTable componentTable = (PositionTable)Pos.ActiveTable;
             if(componentTable.Equals(recordTable) == false) {
                 Debug.LogError("Position mismatch", this);

@@ -5,6 +5,7 @@ using mud;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 using System;
+using mudworld;
 
 public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow, Swap}
 public class ActionsMUD : MonoBehaviour
@@ -133,12 +134,12 @@ public class ActionsMUD : MonoBehaviour
     }
 
     public static TxUpdate PositionOptimistic(MUDEntity entity, Vector3 atPos) {
-        PositionComponent posComponent = MUDWorld.FindOrMakeComponent<PositionComponent>(entity.Key);
+        PositionComponent posComponent = MUDWorld.FindOrMakeComponent<PositionTable, PositionComponent>(entity);
         return TxManager.MakeOptimistic(posComponent, PositionComponent.PositionToOptimistic(atPos));
     }
 
     public static TxUpdate ActionOptimistic(MUDEntity entity, ActionName action, Vector3 atPos) {
-        ActionComponent actionComponent = MUDWorld.FindOrMakeComponent<ActionComponent>(entity.Key);
+        ActionComponent actionComponent = MUDWorld.FindOrMakeComponent<ActionTable, ActionComponent>(entity);
         return TxManager.MakeOptimistic(actionComponent, action, (int)atPos.x, (int)atPos.z, "0"); 
     }
 

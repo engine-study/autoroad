@@ -19,7 +19,7 @@ public abstract class PropComponent : ValueComponent {
         visualOffset = Vector3.up * 2f;
 
         //add player as required component
-        TableManager table = MUDWorld.FindTable<PlayerComponent>();
+        TableManager table = MUDWorld.GetManager<PlayerTable>();
         if(table == null) {Debug.LogError("Could not find table " + typeof(PlayerComponent).Name); return;}
         if (!RequiredTypes.Contains(table.Prefab.GetType())) {
             // Debug.Log(gameObject.name + " Adding our , thisrequired component.", gameObject);

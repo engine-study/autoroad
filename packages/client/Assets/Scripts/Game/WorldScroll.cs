@@ -150,6 +150,7 @@ public class WorldScroll : MonoBehaviour {
         if (hasPlayer && SPUIBase.CanInput && Input.GetKeyDown(KeyCode.Space)) {
             UpdatePlayerPosition();
             SetToPlayerMile(true);
+            SPCamera.SetTarget(Quaternion.Euler(Vector3.up * 45f));
         }
     }
 
