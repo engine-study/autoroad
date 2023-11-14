@@ -10,17 +10,21 @@ using IWorld.ContractDefinition;
 public class AccountUI : SPWindow
 {
 
+    public const string SIGNATURE = "signed";
     public static AccountUI Instance;
     public Account Account {get{return account;}}
 
     [Header("Account UI")]
     public AccountField prefab;
+    public SPButton newAccountButton;
     public SPButton confirm;
     public List<AccountField> accounts;
 
     [Header("Debug")]
     public AccountField selected;
     public Account account;
+
+    public static bool HAS_SIGNED {get {return PlayerPrefs.GetString(SIGNATURE) == NetworkManager.LocalAddress;}}
 
     public override void Init() {
 
@@ -42,18 +46,17 @@ public class AccountUI : SPWindow
     }
 
     void SetAddress() {
-        CreateAccount(NetworkManager.Instance.Account);
+        LoadAccount(NetworkManager.Account);
     }
 
     public void CreateAccount() {
-        Account account = new Account(Common.GeneratePrivateKey(), NetworkManager.Network.chainId);
-        CreateAccount(account);
+        LoadAccount(NetworkManager.CreateAccount(Common.GeneratePrivateKey(), NetworkManager.Network.chainId));
     }
 
-    public void CreateAccount(Account accountInfo) {
+    public void LoadAccount(Account accountInfo) {
 
         AccountField newAccount = Instantiate(prefab, transform);
-        newAccount.transform.SetSiblingIndex(confirm.transform.GetSiblingIndex()-1);
+        newAccount.transform.SetSiblingIndex(newAccountButton.transform.GetSiblingIndex()-1);
         newAccount.SetAccount(accountInfo);
         newAccount.ToggleWindowOpen();
         SelectAccount(newAccount);
@@ -70,12 +73,20 @@ public class AccountUI : SPWindow
 
     }   
 
-    public void ConfirmAccount() {
+    public async void ConfirmAccount() {
 
         if(selected == null) {return;}
-        confirm.ToggleWindowClose();
+        ToggleWindowClose();
 
-        Sign();
+        await SetNetworkAndDrip();
+
+    }
+
+    async UniTask SetNetworkAndDrip() {
+
+        await NetworkManager.SetAccount(selected.account);
+        await UniTask.Delay(100);
+        await Sign();
 
     }
 
@@ -87,7 +98,7 @@ public class AccountUI : SPWindow
         
         if(sup) {
         
-            PlayerPrefs.SetString("signed", NetworkManager.LocalAddress);
+            PlayerPrefs.SetString(SIGNATURE, NetworkManager.LocalAddress);
             PlayerPrefs.Save();
             
             //done, we have a legit account
@@ -95,12 +106,14 @@ public class AccountUI : SPWindow
             // NetworkManager.Instance.SetAccount(account);
             ToggleWindowClose();
 
+            Debug.Log($"Account signed: {NetworkManager.LocalAddress}");
+
         } else {
             //try again, TX sign didn't go through
-            confirm.ToggleWindowOpen();
+            ToggleWindowOpen();
+            Debug.LogError($"Account didn't sign: {NetworkManager.LocalAddress}");
         }
 
     }
-
 
 }

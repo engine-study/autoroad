@@ -53,7 +53,6 @@ contract ItemSubsystem is System {
         pay(player, 100, 0, 0, payment, 0);
         int32 weight = Weight.get(player);
         Weight.set(player, weight - 1);
-        // Boots.set(player, 1, 3);
       } 
       else if (id == 5) { //scroll
         pay(player, 5, 0, 0, payment, 0);
@@ -85,11 +84,14 @@ contract ItemSubsystem is System {
       else if (id == 14) { //sword
         pay(player, 100, 0, 0, payment, 0);
         Sword.set(player, true);
+      } else if (id == 15) { //boots
+        // pay(player, 100, 0, 0, payment, 0);
+        // Boots.set(player, 1, 3);
       } 
-       else if (id == 16) { //axe
+      else if (id == 16) { //axe
         pay(player, 10, 0, 0, payment, 0);
         Axe.set(player, true);
-      } 
+      }
     
     } 
     

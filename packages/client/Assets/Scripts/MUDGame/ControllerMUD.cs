@@ -133,8 +133,7 @@ public class ControllerMUD : SPController
     Vector3 moveDest, inputDir;
     bool input, wasInputting;
     int inputDistance;
-    void UpdateInput()
-    {
+    void UpdateInput() {
 
         if (!hasInit) {
             return;

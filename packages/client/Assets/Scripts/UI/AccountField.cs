@@ -5,6 +5,7 @@ using Nethereum.Unity.Rpc;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Util;
 using mud;
+using mudworld;
 using Nethereum.Web3.Accounts;
 
 public class AccountField : SPWindow
@@ -40,6 +41,13 @@ public class AccountField : SPWindow
     public void SetAddress(string newAddress) {
         addressField = newAddress;
         address.UpdateField(newAddress);
+        
+        NameTable nameTable = IMudTable.GetTable<NameTable>(NetworkManager.AccountKey(newAddress));
+        if(nameTable == null) {
+            address.UpdateField("New Player");
+        } else {
+            address.UpdateField(NameUI.TableToName((int)nameTable.First, (int)nameTable.Middle, (int)nameTable.Last));
+        }
 
     }
 

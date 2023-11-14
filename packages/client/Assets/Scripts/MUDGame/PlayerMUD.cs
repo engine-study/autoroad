@@ -89,7 +89,7 @@ public class PlayerMUD : SPPlayer
             return;
         }
 
-        if(ToolUI.Instance.Tool) {
+        if(ToolUI.Instance.Tool && !SPInput.ModifierKey) {
             Actor.InputClick(0, ToolUI.Instance.Tool.equipment);
         }
 

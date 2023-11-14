@@ -33,6 +33,8 @@ public class GameState : MonoBehaviour {
     [SerializeField] TableSpawner visualTables;
     [SerializeField] TableSpawner mileTables;
     [SerializeField] TableManager chunkTable;
+    [SerializeField] TableManager playerTable;
+    [SerializeField] TableManager nameTable;
     [SerializeField] TableManager [] tables;
     [SerializeField] RecieverMUD reciever;
 
@@ -142,9 +144,7 @@ public class GameState : MonoBehaviour {
 
     async UniTask SetAccount() {
     
-        bool hasSigned = PlayerPrefs.GetString("signed") == NetworkManager.LocalAddress;
-
-        if(skipMenu || hasSigned) {
+        if(skipMenu || !MainMenuUI.IsNewGame) {
             //use the default that NetworkManager gives us
         } else {
             //wait for name table        
@@ -157,17 +157,23 @@ public class GameState : MonoBehaviour {
     }
 
     async UniTask SetName() {
+
+        nameTable.Spawn();
+
         //wait for name table        
         Debug.Log("--Make Name--");
+
         while(MUDWorld.GetManager<NameTable>()?.Loaded == false) {await UniTask.Delay(500);}
-        NameComponent localName = MUDWorld.FindComponent<NameTable, NameComponent>(NetworkManager.LocalKey);
+        NameTable nameOnchain = IMudTable.GetTable<NameTable>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //NAMING
         //-----------------------------------------------------------------------
-        if (localName == null) {
+        if (nameOnchain == null) {
 
             if (SPGlobal.IsDebug) {
+
+                NameComponent localName = MUDWorld.FindComponent<NameTable, NameComponent>(NetworkManager.LocalKey);
 
                 Debug.Log("Making Name");
                 while(localName == null) {  
@@ -185,7 +191,7 @@ public class GameState : MonoBehaviour {
             while(string.IsNullOrEmpty(NameComponent.LocalName)) {await UniTask.Delay(500);}
 
         } else {
-            Debug.Log("Has Name");
+            Debug.Log($"Has Name {nameOnchain.First}");
         }
         
         //wait for name component to spawn
@@ -201,6 +207,7 @@ public class GameState : MonoBehaviour {
     }
 
     async UniTask SetFirstMile() {
+
         //wait until the map is setup
         Debug.Log("--Spawn Map--");
         while (ChunkLoader.ActiveChunk.MileNumber == 0 && ChunkLoader.ActiveChunk.Spawned == false) { 
@@ -210,16 +217,24 @@ public class GameState : MonoBehaviour {
     }
             
     async UniTask SetPlayer() {
+
+        Debug.Log("--Set Player--");
+
+        playerTable.Spawn();
+
         //wait for player table
         while(MUDWorld.GetManager<PlayerTable>().Loaded == false) {await UniTask.Delay(500);}
         while(MUDWorld.GetManager<HealthTable>().Loaded == false) {await UniTask.Delay(500);}
-        PlayerComponent player = MUDWorld.FindComponent<PlayerTable, PlayerComponent>(NetworkManager.LocalKey);
-        HealthComponent healthComponent = MUDWorld.FindComponent<HealthTable, HealthComponent>(NetworkManager.LocalKey);
+
+        Debug.Log("--Loaded Players--");
+
+        PlayerTable player = IMudTable.GetTable<PlayerTable>(NetworkManager.LocalKey);
+        HealthTable health = IMudTable.GetTable<HealthTable>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //SPAWNING
         //-----------------------------------------------------------------------
-        if (player == null || healthComponent == null || healthComponent.Health < 1) {
+        if (player == null || health == null || health.Value < 1) {
 
             if(SPGlobal.IsDebug) {
                 int x = BoundsComponent.Left - 1;
@@ -237,13 +252,7 @@ public class GameState : MonoBehaviour {
 
         //wait for the player
         while(PlayerMUD.LocalPlayer == null) {await UniTask.Delay(100);}
-
-        //spawn debug road elements
-        while(PlayerComponent.PlayerCount == 0) {await UniTask.Delay(500);}
-        if(PlayerComponent.PlayerCount == 1) {
-            // Debug.Log("Spawning debug road", this);
-            // TxManager.Send<DebugMileFunction>(System.Convert.ToInt32(0));
-        }
+        Debug.Log("--Found LocalPlayer--");
 
     }
 
