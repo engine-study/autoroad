@@ -164,7 +164,7 @@ public class GameState : MonoBehaviour {
         Debug.Log("--Make Name--");
 
         while(MUDWorld.GetManager<NameTable>()?.Loaded == false) {await UniTask.Delay(500);}
-        NameTable nameOnchain = IMudTable.GetTable<NameTable>(NetworkManager.LocalKey);
+        NameTable nameOnchain = MUDTable.GetTable<NameTable>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //NAMING
@@ -228,8 +228,8 @@ public class GameState : MonoBehaviour {
 
         Debug.Log("--Loaded Players--");
 
-        PlayerTable player = IMudTable.GetTable<PlayerTable>(NetworkManager.LocalKey);
-        HealthTable health = IMudTable.GetTable<HealthTable>(NetworkManager.LocalKey);
+        PlayerTable player = MUDTable.GetTable<PlayerTable>(NetworkManager.LocalKey);
+        HealthTable health = MUDTable.GetTable<HealthTable>(NetworkManager.LocalKey);
 
         //-----------------------------------------------------------------------
         //SPAWNING

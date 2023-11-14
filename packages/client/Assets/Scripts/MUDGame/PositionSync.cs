@@ -77,11 +77,11 @@ public class PositionSync : ComponentSync
         #if UNITY_EDITOR
         //sanity check
         if(Pos.UpdateInfo.UpdateType == UpdateType.DeleteRecord) {
-            if(IMudTable.GetTable<PositionTable>(Pos.Entity.Key) != null) {
+            if(MUDTable.GetTable<PositionTable>(Pos.Entity.Key) != null) {
                 Debug.LogError("Position mismatch", this);
             }
         } else {
-            PositionTable recordTable = IMudTable.GetTable<PositionTable>(Pos.Entity.Key);
+            PositionTable recordTable = MUDTable.GetTable<PositionTable>(Pos.Entity.Key);
             PositionTable componentTable = (PositionTable)Pos.ActiveTable;
             if(componentTable.Equals(recordTable) == false) {
                 Debug.LogError("Position mismatch", this);

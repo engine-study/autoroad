@@ -12,11 +12,11 @@ public class GemComponent : ValueComponent {
     [SerializeField] private int gems = 0;
 
 
-    protected override float SetValue(IMudTable update) {return (int)((GemTable)update).Value;}
-    protected override StatType SetStat(IMudTable update) {return StatType.Gem;}
+    protected override float SetValue(MUDTable update) {return (int)((GemTable)update).Value;}
+    protected override StatType SetStat(MUDTable update) {return StatType.Gem;}
 
-    protected override IMudTable GetTable() {return new GemTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new GemTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         base.UpdateComponent(update,newInfo);
 
         GemTable table = update as GemTable;

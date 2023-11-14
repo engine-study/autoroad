@@ -8,7 +8,7 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class CoinageTable : IMudTable
+    public class CoinageTable : MUDTable
     {
         public class CoinageTableUpdate : RecordUpdate
         {

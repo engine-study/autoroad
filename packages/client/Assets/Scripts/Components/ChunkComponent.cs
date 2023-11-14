@@ -80,8 +80,8 @@ public class ChunkComponent : MUDComponent {
 
     }
 
-    protected override IMudTable GetTable() {return new ChunkTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new ChunkTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         // Debug.Log("Chunk: " + eventType.ToString());
         ChunkTable table = (ChunkTable)update;

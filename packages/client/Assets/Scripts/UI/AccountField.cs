@@ -13,6 +13,7 @@ public class AccountField : SPWindow
     [Header("Account")]
     [SerializeField] public SPButton address;
     [SerializeField] public StatUI eth;
+    [SerializeField] public SPOpenLink link;
     [SerializeField] float ethBalance;
     
     [Header("Debug")]
@@ -20,8 +21,6 @@ public class AccountField : SPWindow
     [SerializeField] public string addressField;
 
     Coroutine update;
-
-    // public void SetAccount()
 
 
     protected override void OnEnable() {
@@ -39,10 +38,12 @@ public class AccountField : SPWindow
     }
 
     public void SetAddress(string newAddress) {
+
         addressField = newAddress;
         address.UpdateField(newAddress);
+        link.link = newAddress;
         
-        NameTable nameTable = IMudTable.GetTable<NameTable>(NetworkManager.AccountKey(newAddress));
+        NameTable nameTable = MUDTable.GetTable<NameTable>(NetworkManager.AccountKey(newAddress));
         if(nameTable == null) {
             address.UpdateField("New Player");
         } else {

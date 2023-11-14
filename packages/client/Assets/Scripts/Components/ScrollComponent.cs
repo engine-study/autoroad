@@ -12,11 +12,11 @@ public class ScrollComponent : ValueComponent {
 
     public int scrolls;
 
-    protected override float SetValue(IMudTable update) {return (int)((ScrollTable)update).Value;}
-    protected override StatType SetStat(IMudTable update) {return StatType.Scroll;}
+    protected override float SetValue(MUDTable update) {return (int)((ScrollTable)update).Value;}
+    protected override StatType SetStat(MUDTable update) {return StatType.Scroll;}
 
-    protected override IMudTable GetTable() {return new ScrollTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new ScrollTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         base.UpdateComponent(update,newInfo);
 
         ScrollTable table = update as ScrollTable;

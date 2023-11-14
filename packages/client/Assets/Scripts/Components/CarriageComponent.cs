@@ -26,8 +26,8 @@ public class CarriageComponent : MUDComponent
         sync.OnMoveStart -= WagonFX;
         sync.OnMoveEnd -= WagonEndFX;
     }
-    protected override IMudTable GetTable() {return new CarriageTable();}
-    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new CarriageTable();}
+    protected override void UpdateComponent(MUDTable table, UpdateInfo newInfo) {
         // throw new System.NotImplementedException();
 
         Entity.SetName("Carriage");

@@ -50,7 +50,7 @@ public class AccountUI : SPWindow
     }
 
     public void CreateAccount() {
-        LoadAccount(NetworkManager.CreateAccount(Common.GeneratePrivateKey(), NetworkManager.Network.chainId));
+        LoadAccount(NetworkManager.CreateAccount(Common.GeneratePrivateKey()));
     }
 
     public void LoadAccount(Account accountInfo) {

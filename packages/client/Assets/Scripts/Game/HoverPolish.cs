@@ -39,7 +39,7 @@ public class HoverPolish : MonoBehaviour
             newEntity.transform.GetChild(i).SendMessage("Hover", toggle, SendMessageOptions.DontRequireReceiver);
         }
 
-        SPBase baseObject = newEntity.GetComponentInChildren<SPBase>();
+        SPBase baseObject = null; //newEntity.GetComponentInChildren<SPBase>();
 
         if(baseObject != null) {
             if(baseObject is PlayerMUD) {

@@ -24,9 +24,9 @@ public abstract class ValueComponent : MUDComponent {
     List<InventorySlot> slots;
     PositionSync pos;
 
-    protected abstract float SetValue(IMudTable update);
-    protected abstract StatType SetStat(IMudTable update);
-    protected virtual string SetString(IMudTable update) {return Value.ToString("00");}
+    protected abstract float SetValue(MUDTable update);
+    protected abstract StatType SetStat(MUDTable update);
+    protected virtual string SetString(MUDTable update) {return Value.ToString("00");}
 
 
     protected override void Init(SpawnInfo newSpawnInfo)
@@ -49,7 +49,7 @@ public abstract class ValueComponent : MUDComponent {
         }
     }
 
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         value = SetValue(update);
         valueString = SetString(update);

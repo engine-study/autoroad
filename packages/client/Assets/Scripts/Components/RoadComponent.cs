@@ -73,8 +73,8 @@ public class RoadComponent : MUDComponent {
     }
     bool isFilled = false;
 
-    protected override IMudTable GetTable() {return new RoadTable();}
-    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new RoadTable();}
+    protected override void UpdateComponent(mud.MUDTable update, UpdateInfo newInfo) {
 
         RoadTable roadUpdate = (RoadTable)update;
         // Debug.Log("Road: " + newInfo.UpdateType.ToString() + " , " + newInfo.UpdateSource.ToString(), this);

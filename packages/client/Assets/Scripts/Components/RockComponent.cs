@@ -60,8 +60,8 @@ public class RockComponent : MUDComponent {
         }
     }
 
-    protected override IMudTable GetTable() { return new RockTable(); }
-    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() { return new RockTable(); }
+    protected override void UpdateComponent(mud.MUDTable update, UpdateInfo newInfo) {
 
         RockTable rockUpdate = (RockTable)update;
 

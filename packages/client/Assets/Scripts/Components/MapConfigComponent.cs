@@ -25,8 +25,8 @@ public class MapConfigComponent : MUDComponent
 
     public static int Width, Height, SpawnWidth;
     [SerializeField] private int width, height, playSpawnWidth;
-    protected override IMudTable GetTable() {return new MapConfigTable();}
-    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new MapConfigTable();}
+    protected override void UpdateComponent(MUDTable table, UpdateInfo newInfo) {
 
         Instance = this;
 

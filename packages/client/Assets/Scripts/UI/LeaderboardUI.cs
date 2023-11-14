@@ -63,7 +63,7 @@ public class LeaderboardUI : SPWindowParent
 
         ls.Key = xp.Entity.Key;
         ls.xp = (int)xp.Value;
-        ls.npc = IMudTable.GetTable<NPCTable>(ls.Key);
+        ls.npc = MUDTable.GetTable<NPCTable>(ls.Key);
 
         if(ls.npc == null) {Debug.LogError("Can't find NPC", this); return;}
 
@@ -71,7 +71,7 @@ public class LeaderboardUI : SPWindowParent
         
         if(npc == NPCType.Player) {
 
-            NameTable name = IMudTable.GetTable<NameTable>(ls.Key);
+            NameTable name = MUDTable.GetTable<NameTable>(ls.Key);
             if(name == null) {
                 return;
             }

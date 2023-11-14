@@ -19,8 +19,8 @@ public class GameStateComponent : MUDComponent {
     [SerializeField] protected int mile;
 
 
-    protected override IMudTable GetTable() {return new GameStateTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new GameStateTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         if(Instance == null) {
             Instance = this;

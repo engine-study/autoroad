@@ -29,6 +29,6 @@ public abstract class MoverComponent : MUDComponent {
 
     // }
 
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {}
     
 }

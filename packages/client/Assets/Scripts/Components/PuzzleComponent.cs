@@ -42,8 +42,8 @@ public class PuzzleComponent : MUDComponent {
         InstantUpdate();
     }
 
-    protected override IMudTable GetTable() {return new PuzzleTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new PuzzleTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         PuzzleTable table = update as PuzzleTable;
         puzzle = (PuzzleType)(int)table.PuzzleType;

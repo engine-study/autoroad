@@ -4,6 +4,6 @@ using mud;
 
 public class PickaxeComponent : PropComponent {
  
-    protected override IMudTable GetTable() {return new PickaxeTable();}
+    protected override MUDTable GetTable() {return new PickaxeTable();}
 
 }

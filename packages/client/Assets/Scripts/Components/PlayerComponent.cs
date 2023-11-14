@@ -55,8 +55,8 @@ public class PlayerComponent : MUDComponent {
     }
 
 
-    protected override IMudTable GetTable() {return new PlayerTable();}
-    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new PlayerTable();}
+    protected override void UpdateComponent(MUDTable table, UpdateInfo newInfo) {
 
         address = "0x" + Entity.Key.Substring(Entity.Key.Length - 20);
 

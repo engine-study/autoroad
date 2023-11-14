@@ -27,11 +27,11 @@ public class XPComponent : ValueComponent {
         level = -1;
     }
 
-    protected override float SetValue(IMudTable update){return (int)((XPTable)update).Value;}
-    protected override StatType SetStat(IMudTable update) {return StatType.XP;}
+    protected override float SetValue(MUDTable update){return (int)((XPTable)update).Value;}
+    protected override StatType SetStat(MUDTable update) {return StatType.XP;}
 
-    protected override IMudTable GetTable() {return new XPTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new XPTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         base.UpdateComponent(update,newInfo);
 
         XPTable table = update as XPTable;

@@ -14,8 +14,8 @@ public class CoinComponent : ValueComponent {
     [SerializeField] private int coins = 0;
     [SerializeField] private int lastCoins = 0;
 
-    protected override IMudTable GetTable() {return new CoinageTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new CoinageTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         base.UpdateComponent(update, newInfo);
 
         CoinageTable table = update as CoinageTable;
@@ -35,9 +35,9 @@ public class CoinComponent : ValueComponent {
 
     }
 
-    protected override float SetValue(IMudTable mudTable) {return (int)((CoinageTable)mudTable).Value;}
-    protected override string SetString(IMudTable mudTable) {return Value.ToString("000");}
-    protected override StatType SetStat(IMudTable mudTable) {return StatType.RoadCoin;}
+    protected override float SetValue(MUDTable mudTable) {return (int)((CoinageTable)mudTable).Value;}
+    protected override string SetString(MUDTable mudTable) {return Value.ToString("000");}
+    protected override StatType SetStat(MUDTable mudTable) {return StatType.RoadCoin;}
 
     protected override void PostInit() {
         base.PostInit();

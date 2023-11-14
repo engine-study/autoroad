@@ -9,6 +9,7 @@ public class ToolUI : SPWindowParent
     public ToolSlotUI Tool {get{return tool;}}
     
     [Header("Tools")]
+    public List<GaulItem> toolLayout;
     public List<ToolSlotUI> tools;
     public AudioClip [] sfx_equip;
 

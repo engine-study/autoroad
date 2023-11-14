@@ -29,8 +29,8 @@ public class LogComponent : MUDComponent {
 
     }
 
-    protected override IMudTable GetTable() {return new LogTable();}
-    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo)
+    protected override MUDTable GetTable() {return new LogTable();}
+    protected override void UpdateComponent(mud.MUDTable update, UpdateInfo newInfo)
     {
 
     }

@@ -12,11 +12,11 @@ public class WeightComponent : ValueComponent {
     [Header("Weight")]
     [SerializeField] private int weight;
 
-    protected override float SetValue(IMudTable update) {return Mathf.Abs((int)((WeightTable)update).Value);}
-    protected override StatType SetStat(IMudTable update) {if((int)((WeightTable)update).Value < 0) return StatType.Strength; else return StatType.Weight;}
+    protected override float SetValue(MUDTable update) {return Mathf.Abs((int)((WeightTable)update).Value);}
+    protected override StatType SetStat(MUDTable update) {if((int)((WeightTable)update).Value < 0) return StatType.Strength; else return StatType.Weight;}
     
-    protected override IMudTable GetTable() {return new WeightTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new WeightTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         base.UpdateComponent(update,newInfo);
 
         WeightTable table = update as WeightTable;

@@ -8,7 +8,7 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class TriggerTable : IMudTable
+    public class TriggerTable : MUDTable
     {
         public class TriggerTableUpdate : RecordUpdate
         {

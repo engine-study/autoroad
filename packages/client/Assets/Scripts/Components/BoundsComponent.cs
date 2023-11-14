@@ -28,8 +28,8 @@ public class BoundsComponent : MUDComponent
 
     public static void ShowBorder() {if(Instance) {Instance.borders.gameObject.SetActive(false); Instance.borders.gameObject.SetActive(true);}}
 
-    protected override IMudTable GetTable() {return new BoundsTable();}
-    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new BoundsTable();}
+    protected override void UpdateComponent(MUDTable table, UpdateInfo newInfo) {
 
         Instance = this;
 

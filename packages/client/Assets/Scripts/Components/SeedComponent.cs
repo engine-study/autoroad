@@ -11,11 +11,11 @@ public class SeedComponent : ValueComponent {
 
     public int seeds;
 
-    protected override float SetValue(IMudTable update) {return (int)((SeedsTable)update).Value;}
-    protected override StatType SetStat(IMudTable update) {return StatType.Seed;}
+    protected override float SetValue(MUDTable update) {return (int)((SeedsTable)update).Value;}
+    protected override StatType SetStat(MUDTable update) {return StatType.Seed;}
 
-    protected override IMudTable GetTable() {return new SeedsTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new SeedsTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         base.UpdateComponent(update,newInfo);
 
         SeedsTable table = update as SeedsTable;

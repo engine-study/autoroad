@@ -39,7 +39,7 @@ public class TreeComponent : MUDComponent {
         if(health) health.OnUpdated -= TreeHit;
     }
     
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         TreeTable treeUpdate = (TreeTable)update;
 

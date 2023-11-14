@@ -6,8 +6,8 @@ using mudworld;
 
 public class BonesComponent : MUDComponent
 {
-    protected override IMudTable GetTable() {return new BonesTable();}
-    protected override void UpdateComponent(mud.IMudTable table, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new BonesTable();}
+    protected override void UpdateComponent(mud.MUDTable table, UpdateInfo newInfo) {
 
     }
 

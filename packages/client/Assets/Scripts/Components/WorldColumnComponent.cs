@@ -3,7 +3,7 @@ using mudworld;
 
 public class WorldColumnComponent : MUDComponent
 {
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         Entity.SetName("World Column");
     }
 

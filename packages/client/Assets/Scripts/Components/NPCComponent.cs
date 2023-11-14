@@ -26,8 +26,8 @@ public class NPCComponent : MUDComponent
 
     }
 
-    protected override IMudTable GetTable() {return new NPCTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new NPCTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         NPCTable table = update as NPCTable;
         npc = (NPCType)(int)table.Value;

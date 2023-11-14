@@ -38,6 +38,6 @@ public class BarbarianComponent : MoverComponent {
 
     }
 
-    protected override IMudTable GetTable() {return new BarbarianTable();}
+    protected override MUDTable GetTable() {return new BarbarianTable();}
 
 }

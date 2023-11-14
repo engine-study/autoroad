@@ -110,8 +110,7 @@ public class ControllerMUD : SPController
     }
 
 
-    void Update()
-    {
+    void Update() {
 
         alive += Time.deltaTime;
 
@@ -122,8 +121,7 @@ public class ControllerMUD : SPController
 
     }
 
-    void LateUpdate()
-    {
+    void LateUpdate() {
         UpdateMarker();
     }
 
@@ -133,7 +131,7 @@ public class ControllerMUD : SPController
     Vector3 moveDest, inputDir;
     bool input, wasInputting;
     int inputDistance;
-    void UpdateInput() {
+    public void UpdateInput() {
 
         if (!hasInit) {
             return;

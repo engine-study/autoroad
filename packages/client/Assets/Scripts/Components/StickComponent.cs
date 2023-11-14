@@ -4,5 +4,5 @@ using mud;
 
 public class StickComponent : PropComponent {
 
-    protected override IMudTable GetTable() {return new StickTable();}
+    protected override MUDTable GetTable() {return new StickTable();}
 }

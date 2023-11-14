@@ -46,8 +46,6 @@ public class CursorUI : MonoBehaviour {
         entity = newEntity;
         
         SPCursorTexture.UpdateCursor(newEntity == null ? SPCursorState.Default : SPCursorState.Hand);
-        SPBase newObject = newEntity != null ? newEntity.GetComponentInChildren<SPBase>() : null;
-        baseObject = newObject;
 
         info.SetEntity(newEntity);
         actor.SetEntity(newEntity);

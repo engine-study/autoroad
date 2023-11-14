@@ -42,9 +42,9 @@ public class MiliariumComponent : MUDComponent {
     }
 
 
-    protected override IMudTable GetTable() {return new MiliariumTable();}
+    protected override MUDTable GetTable() {return new MiliariumTable();}
 
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         MiliariumTable table = update as MiliariumTable;
 

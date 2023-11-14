@@ -18,8 +18,8 @@ public class MoveComponent : MUDComponent {
     [SerializeField] SPFlashShake flash;
 
 
-    protected override IMudTable GetTable() { return new MoveTable(); }
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() { return new MoveTable(); }
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         MoveTable table = (MoveTable)update;
         MoveType = (MoveType)table.Value;

@@ -3,5 +3,5 @@ using mudworld;
 using mud;
 
 public class SwordComponent : PropComponent {
-    protected override IMudTable GetTable() {return new SwordTable();}
+    protected override MUDTable GetTable() {return new SwordTable();}
 }

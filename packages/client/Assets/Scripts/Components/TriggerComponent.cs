@@ -16,8 +16,8 @@ public class TriggerComponent : MUDComponent {
         Entity.SetName("Puzzle");
     }
     
-    protected override IMudTable GetTable() {return new TriggerTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new TriggerTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         TriggerTable table = update as TriggerTable;
     }

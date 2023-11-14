@@ -119,9 +119,9 @@ public class CameraControls : MonoBehaviour
         _delta = currentPos - lastPos;
 
         _isMoving = Input.GetMouseButton(0) && !SPInput.ModifierKey;
-        _isRotating = Input.GetMouseButton(1) || Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftShift);
+        _isRotating = (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftShift)); //Input.GetMouseButton(1) || 
         bool _isMovingDown = Input.GetMouseButtonDown(0);
-        bool _isRotatingDown = Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift));
+        bool _isRotatingDown = (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift)); //Input.GetMouseButtonDown(1) || 
 
         if(SPUIBase.IsPointerOverUIElement == false && (_isMovingDown || _isRotatingDown)) {
             startPos = currentPos;

@@ -44,8 +44,8 @@ public class LinkerComponent : MUDComponent {
         start = StartCoroutine(SetCoroutine());
     }
     
-    protected override IMudTable GetTable() {return new LinkerTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new LinkerTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         LinkerTable table = update as LinkerTable;
         targetKey = (string)table.Value;

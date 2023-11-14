@@ -15,7 +15,7 @@ public class ArcherComponent : MUDComponent
         Entity.SetName("Archer");
     }
 
-    protected override IMudTable GetTable() {return new ArcherTable();}
-    protected override void UpdateComponent(IMudTable table, UpdateInfo newInfo) {}
+    protected override MUDTable GetTable() {return new ArcherTable();}
+    protected override void UpdateComponent(MUDTable table, UpdateInfo newInfo) {}
 
 }

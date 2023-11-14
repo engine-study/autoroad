@@ -10,7 +10,13 @@ public class PositionComponent : MUDComponent {
     public Vector3 Pos { get { return position3D; } }
     public Vector3 LastPos { get { return lastPos; } }
     public Vector3 PosLayer { get { return position3DLayer; } }
-    public Transform Target {get { return syncer?.Target; } }
+    public Transform Target {
+        get {   
+            if(syncer == null) {syncer = Entity.GetRootComponent<PositionSync>();}
+            return syncer?.Target;
+        }
+    }
+
     public bool IsVisible {get { return isVisible; } }
     public static object[] PositionToOptimistic(Vector3 newPos) { return new object[] { System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z), System.Convert.ToInt32(newPos.y) }; }
     public static object[] PositionToTransaction(Vector3 newPos) { return new object[] { System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
@@ -57,15 +63,12 @@ public class PositionComponent : MUDComponent {
     protected override void PostInit() {
         base.PostInit();
 
-        //create an animation component right away since they are ephemeral and might not spawn automatically
-        if(syncer == null) {syncer = Entity.GetComponentInChildren<PositionSync>(true);}
-
         OnPositionToggle?.Invoke(IsVisible);
 
     }
 
-    protected override IMudTable GetTable() {return new PositionTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new PositionTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         lastPos = position3D;
 

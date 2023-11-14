@@ -14,8 +14,8 @@ public class RoadConfigComponent : MUDComponent
     [SerializeField] private int width,left,right;
     public static bool OnRoad(Vector3 pos) {return Mathf.RoundToInt(pos.x) >= Left && Mathf.RoundToInt(pos.x) <= Right;}
 
-    protected override IMudTable GetTable() {return new RoadConfigTable();}
-    protected override void UpdateComponent(mud.IMudTable table, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new RoadConfigTable();}
+    protected override void UpdateComponent(mud.MUDTable table, UpdateInfo newInfo) {
 
         Instance = this;
         

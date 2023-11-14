@@ -10,6 +10,6 @@ public class SoldierComponent : MoverComponent
         base.PostInit();
         Entity.SetName("Soldier");
     }
-    protected override IMudTable GetTable() {return new SoldierTable();}
+    protected override MUDTable GetTable() {return new SoldierTable();}
 
 }

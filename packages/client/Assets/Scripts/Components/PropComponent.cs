@@ -9,9 +9,9 @@ public abstract class PropComponent : ValueComponent {
     public SPAnimationProp propPrefab;
 
 
-    protected override StatType SetStat(IMudTable update){ return StatType.None; }
-    protected override float SetValue(IMudTable update) {return 1;}
-    protected override string SetString(IMudTable update){ return "";}
+    protected override StatType SetStat(MUDTable update){ return StatType.None; }
+    protected override float SetValue(MUDTable update) {return 1;}
+    protected override string SetString(MUDTable update){ return "";}
     protected override void Init(SpawnInfo spawnInfo) {
         base.Init(spawnInfo);
 

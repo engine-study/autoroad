@@ -4,6 +4,6 @@ using mud;
 
 public class AxeComponent : PropComponent {
  
-    protected override IMudTable GetTable() {return new AxeTable();}
+    protected override MUDTable GetTable() {return new AxeTable();}
 
 }

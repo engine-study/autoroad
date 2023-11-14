@@ -26,8 +26,8 @@ public class NameComponent : MUDComponent {
         // Entity.SetName(playerName + (playerName == LocalName ? " (YOU)" : ""));
     }
     
-    protected override IMudTable GetTable() {return new NameTable();}
-    protected override void UpdateComponent(IMudTable update, UpdateInfo newInfo) {
+    protected override MUDTable GetTable() {return new NameTable();}
+    protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
         NameTable table = update as NameTable;
         playerName = NameUI.TableToName((int)table.First, (int)table.Middle, (int)table.Last);

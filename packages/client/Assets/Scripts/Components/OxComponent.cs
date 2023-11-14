@@ -16,8 +16,8 @@ public class OxComponent : MoverComponent {
 
     }
 
-    protected override IMudTable GetTable() {return new OxTable();}
-    protected override void UpdateComponent(mud.IMudTable update, UpdateInfo newInfo)
+    protected override MUDTable GetTable() {return new OxTable();}
+    protected override void UpdateComponent(mud.MUDTable update, UpdateInfo newInfo)
     {
         base.UpdateComponent(update, newInfo);
     }
