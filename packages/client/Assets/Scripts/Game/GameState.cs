@@ -56,7 +56,7 @@ public class GameState : MonoBehaviour {
         Instance = this;
         editorObjects.SetActive(false);
         
-        ToggleQuality(false);
+        ToggleQuality(PlayerPrefs.GetInt("quality") == 0);
 
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
@@ -291,6 +291,10 @@ public class GameState : MonoBehaviour {
     }
 
     public void ToggleQuality(bool toggle) {
+
+        PlayerPrefs.SetInt("quality", toggle ? 0 : 1);
+        PlayerPrefs.Save();
+
         for(int i = 0; i < qualityObjects.Length; i++) {
             qualityObjects[i].SetActive(toggle);
         }
