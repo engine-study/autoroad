@@ -10,6 +10,8 @@ public class WorldScroll : MonoBehaviour {
     public static Action OnMile;
     public static WorldScroll Instance;
     public static float Mile {get { return Instance.mile; } }
+    public static float MaxMile {get{return Instance.maxMile;}}
+    public static float MinMile {get{return Instance.minMile;}}
 
     [Header("World Scroll")]
     public SPWindowParent mileUI;
@@ -42,7 +44,7 @@ public class WorldScroll : MonoBehaviour {
 
     public float MileDistance { get { return mile * GameStateComponent.MILE_DISTANCE; } }
     public float MileTotalScroll { get { return scrollMile * GameStateComponent.MILE_DISTANCE; } }
-    public static float GetMileLerp(float newMile) {return GameStateComponent.MILE_COUNT == 0 ? 1f : Mathf.Clamp01(newMile/GameStateComponent.MILE_COUNT);}
+    public static float GetMileLerp(float newMile) {return GameStateComponent.MILE_COUNT == 0 ? 1f : Mathf.InverseLerp(MinMile, MaxMile, newMile);}
 
     void Awake() {
 
