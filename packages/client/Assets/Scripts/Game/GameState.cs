@@ -200,7 +200,8 @@ public class GameState : MonoBehaviour {
 
     async UniTask SetTutorial() {
 
-        if(MotherUI.Mother.tutorial.hasCompleted || skipMenu) return;
+        if(skipMenu || (MainMenuUI.IsNewGame == false && MotherUI.Mother.tutorial.hasCompleted)) return;
+
         MotherUI.Mother.tutorial.ToggleWindowOpen();
 
         while(MotherUI.Mother.tutorial.Active) {await UniTask.Delay(100);}
