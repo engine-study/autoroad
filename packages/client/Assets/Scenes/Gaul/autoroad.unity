@@ -4307,7 +4307,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &282593674
 Transform:
@@ -8826,6 +8826,28 @@ RectTransform:
   m_AnchoredPosition: {x: 325, y: -520}
   m_SizeDelta: {x: 550, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &486203256 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7180575907617087376, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
+  m_PrefabInstance: {fileID: 6642415295597042411}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &486203259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486203256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 977803b8463764443b40d128c3160e23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadFrom: 1
+  worldFilePath: worlds
+  worldURL: https://gaul.app/worlds.json
+  worldAddress: 
+  blockNumber: 0
 --- !u!1 &490494877
 GameObject:
   m_ObjectHideFlags: 0
@@ -14113,7 +14135,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 0
 --- !u!4 &799648060
 Transform:
@@ -19012,7 +19034,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 0
 --- !u!4 &1044542109
 Transform:
@@ -19418,7 +19440,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1049454405
 Transform:
@@ -20561,7 +20583,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3440890833006323896, guid: 366e052ae69e3fd46b914df740c5d2cb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3801182719909742957, guid: 366e052ae69e3fd46b914df740c5d2cb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -23541,8 +23563,6 @@ MonoBehaviour:
   newGame: 0
   skipMenu: 0
   mainTables: {fileID: 1273645192}
-  visualTables: {fileID: 0}
-  mileTables: {fileID: 0}
   chunkTable: {fileID: 1265459090}
   playerTable: {fileID: 1212426689}
   nameTable: {fileID: 736639575}
@@ -23552,6 +23572,7 @@ MonoBehaviour:
   - {fileID: 114520409}
   - {fileID: 2112094895}
   reciever: {fileID: 1832670049}
+  worldLoader: {fileID: 0}
   editorObjects: {fileID: 64449337}
   qualityObjects:
   - {fileID: 1755091613}
@@ -28313,7 +28334,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1494131768
 Transform:
@@ -45483,7 +45504,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!1001 &4284354773570831786
 PrefabInstance:
@@ -45835,7 +45856,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!1001 &5009764056872906809
 PrefabInstance:
@@ -46655,7 +46676,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7180575907617087376, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 486203259}
   m_SourcePrefab: {fileID: 100100000, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
 --- !u!4 &6668552230156656750
 Transform:

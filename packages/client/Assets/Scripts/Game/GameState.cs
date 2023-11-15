@@ -30,13 +30,12 @@ public class GameState : MonoBehaviour {
 
     [Header("Game")]
     [SerializeField] TableSpawner mainTables;
-    [SerializeField] TableSpawner visualTables;
-    [SerializeField] TableSpawner mileTables;
     [SerializeField] TableManager chunkTable;
     [SerializeField] TableManager playerTable;
     [SerializeField] TableManager nameTable;
     [SerializeField] TableManager [] tables;
     [SerializeField] RecieverMUD reciever;
+    [SerializeField] WorldSelector worldLoader;
 
     [Header("UI")]
     [SerializeField] GameObject editorObjects;
@@ -76,6 +75,7 @@ public class GameState : MonoBehaviour {
     }
 
     private async void Start() {
+        await LoadWorld();
         await GameSetup();
         await NetworkManager.Instance.CreateNetwork();
         await LoadMap();
@@ -257,6 +257,9 @@ public class GameState : MonoBehaviour {
 
     }
 
+    async UniTask LoadWorld() {
+        
+    }
 
     async UniTask GameSetup() {
         
