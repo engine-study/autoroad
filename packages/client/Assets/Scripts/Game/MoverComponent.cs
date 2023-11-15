@@ -9,7 +9,6 @@ public abstract class MoverComponent : MUDComponent {
         base.Init(newSpawnInfo);
 
         sync = gameObject.GetComponent<PositionSync>();
-
         if(sync == null) {
             sync = gameObject.AddComponent<PositionSync>();
             sync.SetSyncType(ComponentSync.ComponentSyncType.Lerp);

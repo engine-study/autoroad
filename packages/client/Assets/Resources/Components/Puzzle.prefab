@@ -5134,7 +5134,7 @@ Transform:
   - {fileID: 7612523160511584460}
   - {fileID: 1985252782155193036}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7814506977384768522
 MonoBehaviour:
@@ -5152,6 +5152,7 @@ MonoBehaviour:
   requiredComponents:
   - {fileID: 5117984663886283829, guid: a743baee3ef63a2488055572b3a8eaa4, type: 3}
   - {fileID: 5291061610992434520, guid: 36fd224930a519f4ea8e6ac01133b9b8, type: 3}
+  canPool: 0
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -10458,7 +10459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7612523160511584460
 Transform:
   m_ObjectHideFlags: 0
