@@ -295,8 +295,7 @@ contract TerrainSubsystem is System {
   //TODO fix this horrible thing,make it more robust
   function updateChunk(bytes32 causedBy) public {
     int32 currentMile = GameState.getMiles();
-    bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
-
+    bytes32 chunk = Actions.getChunkEntity(currentMile);
     uint32 pieces = Chunk.getRoads(chunk);
     int32 playHeight = MapConfig.getPlayHeight();
     uint32 roadWidth = RoadConfig.getWidth();

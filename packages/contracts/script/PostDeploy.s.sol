@@ -26,41 +26,30 @@ contract PostDeploy is Script {
     vm.stopBroadcast();
   }
 
-  function abiTest(address worldAddress) public {
-    bytes32 positionHash = keccak256(abi.encode(5, 10));
-    bytes32 worldHash = keccak256(abi.encode(worldAddress));
-    bytes32 combinedHash = keccak256(abi.encode(worldAddress, 5, 10));
-    bytes32 stringInt = keccak256(abi.encode("hello", 5, 10));
 
-    console.logBytes32(worldHash);
-    console.logBytes32(positionHash);
-    console.logBytes32(combinedHash);
-    console.logBytes32(stringInt);
-  }
+  // function randomTest(address worldAddress) public {
 
-  function randomTest(address worldAddress) public {
+  //   console.log("0 - 1");
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
+  //   console.logInt(int(random(0,1)));
 
-    console.log("0 - 1");
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
-    console.logInt(int(random(0,1)));
+  //   console.log("0 - 2");
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
+  //   console.logInt(int(random(0,2)));
 
-    console.log("0 - 2");
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-    console.logInt(int(random(0,2)));
-
-  }
+  // }
 }
