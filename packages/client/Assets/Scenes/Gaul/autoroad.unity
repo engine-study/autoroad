@@ -23572,7 +23572,7 @@ MonoBehaviour:
   - {fileID: 114520409}
   - {fileID: 2112094895}
   reciever: {fileID: 1832670049}
-  worldLoader: {fileID: 0}
+  worldSelector: {fileID: 486203259}
   editorObjects: {fileID: 64449337}
   qualityObjects:
   - {fileID: 1755091613}
@@ -24848,6 +24848,7 @@ MonoBehaviour:
   - {fileID: 2628842198360724426, guid: 691b414de82f4444fb9864d9a5c7b047, type: 3}
   - {fileID: 7386085932332101529, guid: 1d39dd87dc86ea94fa18cd4e6cc8bfb2, type: 3}
   - {fileID: 1920555593128566380, guid: 2233e296beee3e541a5b66e261e5a4f7, type: 3}
+  SpawnEverything: 0
   AutoSpawn: 0
   logAllTables: 0
   syncing: 0
@@ -46655,7 +46656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5712842461510900550, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
       propertyPath: networkType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5712842461510900550, guid: 458bbd003af9c77498e94e3452e653ad, type: 3}
       propertyPath: uniqueWallets

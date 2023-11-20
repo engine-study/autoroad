@@ -35,7 +35,7 @@ public class GameState : MonoBehaviour {
     [SerializeField] TableManager nameTable;
     [SerializeField] TableManager [] tables;
     [SerializeField] RecieverMUD reciever;
-    [SerializeField] WorldSelector worldLoader;
+    [SerializeField] WorldSelector worldSelector;
 
     [Header("UI")]
     [SerializeField] GameObject editorObjects;
@@ -258,7 +258,12 @@ public class GameState : MonoBehaviour {
     }
 
     async UniTask LoadWorld() {
-        
+
+        if(NetworkManager.Instance.networkType == NetworkTypes.NetworkType.Local) {
+            worldSelector.loadFrom = WorldLocation.ResourcesFolder;
+        } else {
+            worldSelector.loadFrom = WorldLocation.URL;
+        }
     }
 
     async UniTask GameSetup() {
