@@ -26,7 +26,7 @@ contract PuzzleSubsystem is System {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
     if (atPosition.length > 0 && atPosition[0] == target) {
       //success, freeze miliarium in place
-      Move.set(entity, uint32(MoveType.Obstruction));
+      Move.set(entity, uint32(MoveType.Permanent));
       //TODO set to single setter
       Puzzle.set(entity, uint32(puzzleType), true, causedBy);
       SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));

@@ -127,9 +127,9 @@ library Rules {
   //complex, returns true if pushable, false if not pushable, but requires not obstructed
   function requireEmptyOrPushable(bytes32[] memory at) internal view returns (bool) {
     if (at.length == 0) return false;
-    uint32 move = Move.get(at[0]);
-    require(move != uint32(MoveType.Obstruction), "blocked");
-    return move == uint32(MoveType.Push);
+    MoveType move = MoveType(Move.get(at[0]));
+    require(move != MoveType.Obstruction && move != MoveType.Permanent, "blocked");
+    return move == MoveType.Push;
   }
 
   function canProjectileCross(

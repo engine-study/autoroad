@@ -53,7 +53,7 @@ export default mudConfig({
     NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae"],
-    MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap"],
+    MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap", "Permanent"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
     PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Count"],
     PaymentType: ["None", "Coins", "Gems", "Eth"],

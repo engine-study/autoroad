@@ -11,6 +11,7 @@ public class MoveTypeUI : MUDComponentUI
     public SPButton obstruction;
     public StatUI weight;
     public SPStrobeUI obstructing, tooHeavyStrobe;
+    public Sprite obstructionSprite, permanentSprite;
 
     [Header("Debug")]
     public int weightValue;
@@ -49,7 +50,8 @@ public class MoveTypeUI : MUDComponentUI
         StatType statValue = wValue >= 0 ? StatType.Weight : StatType.Strength;
 
         if(showObstruction) {
-            obstruction.ToggleWindow(moveType == MoveType.Obstruction);
+            obstruction.Image.sprite = moveType == MoveType.Obstruction ? obstructionSprite : permanentSprite;
+            obstruction.ToggleWindow(moveType == MoveType.Obstruction || moveType == MoveType.Permanent);
         }
 
         if(moveType == MoveType.Push && (showZeroWeight || wValue != 0 )) {
@@ -64,7 +66,7 @@ public class MoveTypeUI : MUDComponentUI
         if(cannotMove && weight.gameObject.activeInHierarchy) {tooHeavyStrobe.StartStrobe();}
         else {tooHeavyStrobe.StopStrobe();}
 
-        if(cannotMove && moveType == MoveType.Obstruction && obstruction.gameObject.activeInHierarchy) {obstructing.StartStrobe();}
+        if(cannotMove && obstruction.gameObject.activeInHierarchy) {obstructing.StartStrobe();}
         else {obstructing.StopStrobe();}
 
     }
