@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9171133180330391531}
-  - component: {fileID: 3118354881521111630}
+  - component: {fileID: 5107075214558803912}
   m_Layer: 0
   m_Name: ScrollSwap
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3118354881521111630
+--- !u!114 &5107075214558803912
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,10 +42,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310445499029513731}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2d51d28d890de34488f45aab700e18e, type: 3}
+  m_Script: {fileID: 11500000, guid: 134ffa084e66bec48b025b56b6de662f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  table: {fileID: 11400000, guid: 8e7b1832d2fdb844198ee9454d58b2c1, type: 2}
   requiredComponents: []
+  canPool: 0
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -64,10 +66,10 @@ MonoBehaviour:
     updateType: 0
     source: 0
   item: {fileID: 11400000, guid: f2630fd45b5ddef44b081931ebe8edfc, type: 2}
+  visualPrefab: {fileID: 0}
   value: 0
   valueString: 
-  statType: 0
-  scrolls: 0
+  statType: 11
 --- !u!1 &2534960849799624956
 GameObject:
   m_ObjectHideFlags: 0

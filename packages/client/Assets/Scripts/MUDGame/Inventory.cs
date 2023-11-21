@@ -66,13 +66,15 @@ public class Inventory : MonoBehaviour {
         }
     }
 
+    bool IsValue(MUDComponent c) {return c is ValueComponent;}
+
     void AddToInventory(MUDComponent c) {
-        if(c.GetType().IsSubclassOf(typeof(ValueComponent)) == false) {return;}
+        if(!IsValue(c)) {return;}
         Ingest((ValueComponent)c);
     }
 
     void UpdateInventory(MUDComponent c, UpdateInfo i) {
-        if(c.GetType().IsSubclassOf(typeof(ValueComponent)) == false) {return;}
+        if(!IsValue(c)) {return;}
         Ingest((ValueComponent)c);
     }
 

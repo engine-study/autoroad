@@ -88,6 +88,7 @@ contract ActionSystem is System {
     SystemSwitch.call(abi.encodeCall(world.moveSimpleDistance, (player, x, y, distance)));
   }
 
+  //this is gross... and wasting gas on if else and systemswitch
   function action(ActionType newAction, int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
@@ -126,6 +127,9 @@ contract ActionSystem is System {
       return;
     } else if (newAction == ActionType.Melee) {
       SystemSwitch.call(abi.encodeCall(world.melee, (player, x, y)));
+      return;
+    } else if (newAction == ActionType.Swap) {
+      SystemSwitch.call(abi.encodeCall(world.swapScroll, (player, x, y)));
       return;
     }
 

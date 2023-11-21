@@ -4,7 +4,7 @@ using UnityEngine;
 using mud;
 using mudworld;
 using IWorld.ContractDefinition;
-public abstract class ValueComponent : MUDComponent {
+public class ValueComponent : MUDComponent {
 
     public List<InventorySlot> Items {get{return slots;}}
     public float Value {get{return value;}}
@@ -24,14 +24,14 @@ public abstract class ValueComponent : MUDComponent {
     List<InventorySlot> slots;
     PositionSync pos;
 
-    protected abstract float SetValue(MUDTable update);
-    protected abstract StatType SetStat(MUDTable update);
+    protected virtual float SetValue(MUDTable update) {return (int)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["value"];}
+    protected virtual StatType SetStat(MUDTable update) {return StatType;}
     protected virtual string SetString(MUDTable update) {return Value.ToString("00");}
 
 
-    protected override void Init(SpawnInfo newSpawnInfo)
-    {
+    protected override void Init(SpawnInfo newSpawnInfo) {
         base.Init(newSpawnInfo);
+
         if(slots  == null) {slots = new List<InventorySlot>();}
         slots.Add(new InventorySlot(){item = item});
         

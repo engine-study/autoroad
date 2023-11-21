@@ -5,7 +5,7 @@ using System;
 using mud;
 using UnityEngine.UI;
 
-public enum StatType {None, RoadCoin, Gem, Eth, XP, Level, Scroll, Seed, Strength, Weight, Health, _Count}
+public enum StatType {None, RoadCoin, Gem, Eth, XP, Level, Scroll, Seed, Strength, Weight, Health, ScrollSwap, _Count}
 public class StatUI : EntityUI
 {
     public SPButton Button{get{return button;}}

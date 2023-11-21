@@ -14,8 +14,8 @@ public class ScrollComponent : ValueComponent {
 
     protected override float SetValue(MUDTable update) {return (int)((ScrollTable)update).Value;}
     protected override StatType SetStat(MUDTable update) {return StatType.Scroll;}
-
     protected override MUDTable GetTable() {return new ScrollTable();}
+
     protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
         base.UpdateComponent(update,newInfo);
 
