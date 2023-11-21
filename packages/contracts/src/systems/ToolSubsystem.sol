@@ -157,4 +157,14 @@ contract ToolSubsystem is System {
 
   }
 
+  function swapScroll(bytes32 player, int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    require(Rules.canDoStuff(player), "hmm");
+    uint32 scrolls = Scroll.get(player);
+    require(scrolls > uint32(0), "not enough scrolls");
+
+    Scroll.set(player, scrolls - 1);
+    SystemSwitch.call(abi.encodeCall(world.teleport, (player, x, y)));
+
+  }
 }
