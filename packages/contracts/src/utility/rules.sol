@@ -106,6 +106,11 @@ library Rules {
     return (moveAt == MoveType.None || moveAt == MoveType.Hole || moveAt == MoveType.Trap);
   }
 
+  //can block projectiles and movement
+  function canBlock(MoveType moveAt) internal view returns (bool) {
+    return moveAt != MoveType.None && moveAt != MoveType.Hole;
+  }
+
   function requireCanPlaceOn(bytes32[] memory at) internal view {
     if (at.length == 0) return;
     MoveType move = MoveType(Move.get(at[0]));
@@ -123,6 +128,8 @@ library Rules {
       return onMap(pos.x, pos.y);
     }
   }
+
+
 
   //complex, returns true if pushable, false if not pushable, but requires not obstructed
   function requireEmptyOrPushable(bytes32[] memory at) internal view returns (bool) {

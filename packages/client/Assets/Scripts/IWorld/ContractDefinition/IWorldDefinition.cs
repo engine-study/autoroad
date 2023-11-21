@@ -1568,6 +1568,19 @@ namespace IWorld.ContractDefinition
 
     }
 
+    public partial class SwapScrollFunction : SwapScrollFunctionBase { }
+
+    [Function("swapScroll")]
+    public class SwapScrollFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class TeleportFunction : TeleportFunctionBase { }
 
     [Function("teleport")]
@@ -1579,6 +1592,8 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
+        [Parameter("uint8", "actionType", 4)]
+        public virtual byte ActionType { get; set; }
     }
 
     public partial class TeleportAdminFunction : TeleportAdminFunctionBase { }
@@ -2458,6 +2473,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "version", 1)]
         public virtual byte[] Version { get; set; }
     }
+
+
 
 
 

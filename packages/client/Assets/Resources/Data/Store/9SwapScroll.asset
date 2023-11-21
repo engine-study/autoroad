@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: 9SwapScroll
   m_EditorClassIdentifier: 
   itemName: Swap Scroll
-  itemDescription: Swap places with any <b><color=red>NPC</color></b> you have line
-    of sight of.
+  itemDescription: Swap places with the nearest <b><color=red>perpendicular</color></b>
+    object.
   itemSprite: {fileID: 1035993252, guid: a54ed7c59ed934744afac573f63d422b, type: 3}
   itemType: 0
   ID: 9
-  canBuy: 0
+  canBuy: 1
   isRare: 0
   mileRange: {x: 0, y: 0}
   minLevel: 4
   value:
-    price: 20
+    price: 10
     gem: 0
     eth: 0
     XP: 0

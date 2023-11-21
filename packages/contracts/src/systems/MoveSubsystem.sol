@@ -282,7 +282,7 @@ contract MoveSubsystem is System {
   }
 
 
-  function teleport(bytes32 player, int32 x, int32 y) public {
+  function teleport(bytes32 player, int32 x, int32 y, ActionType actionType) public {
     require(Rules.canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());
@@ -294,7 +294,7 @@ contract MoveSubsystem is System {
     bytes32[] memory atPos = Rules.getKeysAtPosition(world,x, y, 0);
     Rules.requireCanPlaceOn(atPos);
 
-    moveTo(player, player, startPos, endPos, atPos, ActionType.Teleport);
+    moveTo(player, player, startPos, endPos, atPos, actionType);
 
   }
 

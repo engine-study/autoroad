@@ -73,7 +73,7 @@ contract ItemSubsystem is System {
         Seeds.set(player, seeds+1);
       } 
       else if (id == 9) { //swapscroll
-        pay(player, 20, 0, 0, payment, 0);
+        pay(player, 10, 0, 0, payment, 0);
         uint32 scrolls = ScrollSwap.get(player);
         ScrollSwap.set(player, scrolls + 1);
       } 

@@ -22,6 +22,35 @@ public class PositionComponent : MUDComponent {
     public static object[] PositionToTransaction(Vector3 newPos) { return new object[] { System.Convert.ToInt32(newPos.x), System.Convert.ToInt32(newPos.z)}; }
     public static float PositionToMile(Vector3 position) {return Mathf.Floor(position.z / (float)MapConfigComponent.Height);}
 
+    public static Vector2Int To2D(Vector3 pos) {return new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z));}
+    public static Vector3 ToGrid(Vector3 pos) {return new Vector3Int(Mathf.RoundToInt(pos.x), 0, Mathf.RoundToInt(pos.z));}
+    public static bool IsPerpendicular(Vector3 from, Vector3 to) {
+        Vector2Int us = new Vector2Int(Mathf.RoundToInt(from.x), Mathf.RoundToInt(from.z));
+        Vector2Int them = new Vector2Int(Mathf.RoundToInt(to.x), Mathf.RoundToInt(to.z));
+        return us.x == them.x || us.y == them.y;
+    }
+
+    public static MUDEntity GetFirstObjectAlong(Vector3 from, Vector3 vector) {
+        int panic = 128;
+
+        Vector3 pos = from + vector;
+        while(panic >= 0) {
+
+            panic--;
+
+            if(OnWorld(pos) == false) {return null;}
+            MUDEntity e = GridMUD.GetEntityAt(pos);
+            
+            if(e == null) {
+                pos += vector;
+            } else {
+                return e;
+            }
+        }
+
+        return null;
+    }
+
     public static bool OnWorldOrMap(MUDEntity e, Vector3 pos, bool showFX = false) {
         bool legal = MapConfigComponent.OnWorldOrMap(e, pos);
         

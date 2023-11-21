@@ -3374,6 +3374,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync<SupFunction>(null, cancellationToken);
         }
 
+        public Task<string> SwapScrollRequestAsync(SwapScrollFunction swapScrollFunction)
+        {
+             return ContractHandler.SendRequestAsync(swapScrollFunction);
+        }
+
+        public Task<TransactionReceipt> SwapScrollRequestAndWaitForReceiptAsync(SwapScrollFunction swapScrollFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(swapScrollFunction, cancellationToken);
+        }
+
+        public Task<string> SwapScrollRequestAsync(byte[] player, int x, int y)
+        {
+            var swapScrollFunction = new SwapScrollFunction();
+                swapScrollFunction.Player = player;
+                swapScrollFunction.X = x;
+                swapScrollFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(swapScrollFunction);
+        }
+
+        public Task<TransactionReceipt> SwapScrollRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var swapScrollFunction = new SwapScrollFunction();
+                swapScrollFunction.Player = player;
+                swapScrollFunction.X = x;
+                swapScrollFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(swapScrollFunction, cancellationToken);
+        }
+
         public Task<string> TeleportRequestAsync(TeleportFunction teleportFunction)
         {
              return ContractHandler.SendRequestAsync(teleportFunction);
@@ -3384,22 +3414,24 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportFunction, cancellationToken);
         }
 
-        public Task<string> TeleportRequestAsync(byte[] player, int x, int y)
+        public Task<string> TeleportRequestAsync(byte[] player, int x, int y, byte actionType)
         {
             var teleportFunction = new TeleportFunction();
                 teleportFunction.Player = player;
                 teleportFunction.X = x;
                 teleportFunction.Y = y;
+                teleportFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAsync(teleportFunction);
         }
 
-        public Task<TransactionReceipt> TeleportRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> TeleportRequestAndWaitForReceiptAsync(byte[] player, int x, int y, byte actionType, CancellationTokenSource cancellationToken = null)
         {
             var teleportFunction = new TeleportFunction();
                 teleportFunction.Player = player;
                 teleportFunction.X = x;
                 teleportFunction.Y = y;
+                teleportFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportFunction, cancellationToken);
         }
