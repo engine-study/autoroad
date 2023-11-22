@@ -175,7 +175,7 @@ export default mudConfig({
     Fling: "uint32",
     Animal: "bool",
 
-    //puzzle components try to be moved onto triggers (ie. Miliarli )
+  //puzzle components try to be moved onto triggers (ie. Miliarli )
     Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool", solver:"bytes32"},},
     Linker: "bytes32",
     Trigger: "bool",

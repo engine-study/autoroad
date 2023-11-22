@@ -68,6 +68,8 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
     PositionData memory newPos = addPosition(entityPos,getVectorNormalized(entityPos,targetPos));
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, newPos.x, newPos.y, 0);
+
+    Actions.setActionTargeted(entity, ActionType.Melee, newPos.x, newPos.y, target);
     SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
   }
 

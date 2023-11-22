@@ -885,22 +885,22 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doFlingFunction, cancellationToken);
         }
 
-        public Task<string> DoFlingRequestAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData endPos)
+        public Task<string> DoFlingRequestAsync(byte[] causedBy, byte[] target, PositionData startPos, PositionData endPos)
         {
             var doFlingFunction = new DoFlingFunction();
                 doFlingFunction.CausedBy = causedBy;
-                doFlingFunction.Player = player;
+                doFlingFunction.Target = target;
                 doFlingFunction.StartPos = startPos;
                 doFlingFunction.EndPos = endPos;
             
              return ContractHandler.SendRequestAsync(doFlingFunction);
         }
 
-        public Task<TransactionReceipt> DoFlingRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData endPos, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> DoFlingRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, PositionData startPos, PositionData endPos, CancellationTokenSource cancellationToken = null)
         {
             var doFlingFunction = new DoFlingFunction();
                 doFlingFunction.CausedBy = causedBy;
-                doFlingFunction.Player = player;
+                doFlingFunction.Target = target;
                 doFlingFunction.StartPos = startPos;
                 doFlingFunction.EndPos = endPos;
             

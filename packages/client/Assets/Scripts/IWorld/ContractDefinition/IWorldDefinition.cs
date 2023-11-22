@@ -385,8 +385,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "player", 2)]
-        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
         [Parameter("tuple", "startPos", 3)]
         public virtual PositionData StartPos { get; set; }
         [Parameter("tuple", "endPos", 4)]

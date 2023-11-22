@@ -126,7 +126,7 @@ contract ToolSubsystem is System {
     //check initial push is good
     bytes32[] memory atPos = Rules.getKeysAtPosition(world,fishPos.x, fishPos.y, 0);
     require(Rules.canInteract(player, startPos, atPos, 1), "bad interact");
-    require(Weight.get(atPos[0]) <= Weight.get(player), "too heavy");
+    require(Weight.get(atPos[0]) + Weight.get(player) <= 0, "too heavy");
     Rules.requirePushable(atPos);
 
     //set player action
