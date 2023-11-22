@@ -66,7 +66,7 @@ contract BehaviourSubsystem is System {
     console.log("fling");
 
     IWorld world = IWorld(_world());
-    PositionData memory newPos = addPosition(entityPos, getVectorNormalized(targetPos, entityPos));
+    PositionData memory newPos = addPosition(targetPos, getVectorNormalized(entityPos, targetPos));
 
     Actions.setActionTargeted(entity, ActionType.Melee, newPos.x, newPos.y, target);
     SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
