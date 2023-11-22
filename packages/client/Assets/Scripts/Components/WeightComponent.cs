@@ -6,7 +6,7 @@ using System;
 
 public class WeightComponent : ValueComponent {
 
- 
+    public static int LocalWeight;
     public int Weight {get { return weight; } }
     
     [Header("Weight")]
@@ -21,6 +21,10 @@ public class WeightComponent : ValueComponent {
 
         WeightTable table = update as WeightTable;
         weight = (int)table.Value;
+
+        if(Entity.Key == NetworkManager.LocalKey) {
+            LocalWeight = weight;
+        }
     }
 
 
