@@ -17,6 +17,9 @@ contract EntitySubsystem is System {
     uint256 lastBlock = TickTest.getLastBlock();
     if(block.number == lastBlock) return;
 
+    //set the blocknumber so we can't re-enter
+    TickTest.setLastBlock(block.number);
+    
     IWorld world = IWorld(_world());
     SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, TickTest.getEntities())));
 
@@ -26,7 +29,6 @@ contract EntitySubsystem is System {
     //   SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, entities[i])));
     // }
 
-    TickTest.setLastBlock(block.number);
 
   }
 

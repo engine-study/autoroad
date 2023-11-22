@@ -18,6 +18,7 @@ import { randomDirection } from "../utility/random.sol";
 contract BehaviourSubsystem is System {
 
   function tickEntity(bytes32 causedBy, bytes32 entity) public {
+    
     //perform the tick action that can happen once per block maximum
     tickAction(entity, entity, Position.get(entity));
     //do nothing else for now

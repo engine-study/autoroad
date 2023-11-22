@@ -279,11 +279,16 @@ contract MoveSubsystem is System {
     //only movements onto main game map update stuff
     if(pos.layer != 0) { return; }
       
+    //this should be in handle move really..
+    SystemSwitch.call(abi.encodeCall(world.triggerPuzzles, (causedBy, entity, pos)));
+
+    //set loose all behaviours
     //we have to be careful not to infinite loop here 
     //(ie. an entity moves that triggers a move that triggers a move)
-
     SystemSwitch.call(abi.encodeCall(world.triggerEntities, (causedBy, entity, pos)));
-    SystemSwitch.call(abi.encodeCall(world.triggerPuzzles, (causedBy, entity, pos)));
+
+    //ticks that activate once per block
+    SystemSwitch.call(abi.encodeCall(world.triggerTicks, (causedBy)));
 
   }
 
