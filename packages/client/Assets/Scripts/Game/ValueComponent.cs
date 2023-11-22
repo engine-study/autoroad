@@ -35,7 +35,7 @@ public class ValueComponent : MUDComponent {
         if(slots  == null) {slots = new List<InventorySlot>();}
         slots.Add(new InventorySlot(){item = item});
         
-        visualOffset = Vector3.up * 1.5f;
+        visualOffset = Vector3.up * 1.25f;
         // for(int i = 0; i < items.Length; i++) {
         //     slots.Add(new InventorySlot(){item = items[i]});
         // }

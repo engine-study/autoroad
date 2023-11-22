@@ -17,7 +17,7 @@ public abstract class PropComponent : ValueComponent {
 
         if(propPrefab) {
             visualPrefab = propPrefab.gameObject;
-            visualOffset = Vector3.up * 2f;
+            visualOffset = Vector3.up * 1.5f;
         }
 
         //add player as required component
