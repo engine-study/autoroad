@@ -8,15 +8,15 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class SeekerTable : MUDTable
+    public class WanderTable : MUDTable
     {
-        public class SeekerTableUpdate : RecordUpdate
+        public class WanderTableUpdate : RecordUpdate
         {
             public int? Value;
             public int? PreviousValue;
         }
 
-        public readonly static string ID = "Seeker";
+        public readonly static string ID = "Wander";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -31,17 +31,17 @@ namespace mudworld
 
         public override Type TableType()
         {
-            return typeof(SeekerTable);
+            return typeof(WanderTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(SeekerTableUpdate);
+            return typeof(WanderTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            SeekerTable other = (SeekerTable)obj;
+            WanderTable other = (WanderTable)obj;
 
             if (other == null)
             {
@@ -59,9 +59,9 @@ namespace mudworld
             Value = (int)functionParameters[0];
         }
 
-        public static IObservable<RecordUpdate> GetSeekerTableUpdates()
+        public static IObservable<RecordUpdate> GetWanderTableUpdates()
         {
-            SeekerTable mudTable = new SeekerTable();
+            WanderTable mudTable = new WanderTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -93,7 +93,7 @@ namespace mudworld
                 previousValueTyped = (int)previousValue["value"];
             }
 
-            return new SeekerTableUpdate
+            return new WanderTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,

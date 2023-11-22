@@ -126,7 +126,7 @@ contract ToolSubsystem is System {
     //check initial push is good
     bytes32[] memory atPos = Rules.getKeysAtPosition(world,fishPos.x, fishPos.y, 0);
     require(Rules.canInteract(player, startPos, atPos, 1), "bad interact");
-    require(Weight.get(atPos[0]) <= 1, "too heavy");
+    require(Weight.get(atPos[0]) <= Weight.get(player), "too heavy");
     Rules.requirePushable(atPos);
 
     //set player action
@@ -135,14 +135,7 @@ contract ToolSubsystem is System {
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
     
-    bytes32[] memory atDest = Rules.getKeysAtPosition(world,endPos.x, endPos.y, 0);
-    if(atDest.length > 0) {
-      Rules.requireOnMap(atDest[0], endPos);
-      Rules.requireCanPlaceOn(atDest);
-    }
-
-    //move other player
-    SystemSwitch.call(abi.encodeCall(world.moveTo, (player, atPos[0], startPos, endPos, atDest, ActionType.Hop)));
+    SystemSwitch.call(abi.encodeCall(world.doFling, (player, atPos[0], startPos, endPos)));
 
   }
   

@@ -122,6 +122,23 @@ namespace IWorld.ContractDefinition
         public virtual byte[] CallData { get; set; }
     }
 
+    public partial class CallFlingFunction : CallFlingFunctionBase { }
+
+    [Function("callFling")]
+    public class CallFlingFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "entity", 3)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "targetPos", 4)]
+        public virtual PositionData TargetPos { get; set; }
+        [Parameter("tuple", "entityPos", 5)]
+        public virtual PositionData EntityPos { get; set; }
+    }
+
     public partial class CallFromFunction : CallFromFunctionBase { }
 
     [Function("callFrom", "bytes")]
@@ -181,19 +198,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] CausedBy { get; set; }
         [Parameter("int32", "mileNumber", 2)]
         public virtual int MileNumber { get; set; }
-    }
-
-    public partial class CreateEntitiesFunction : CreateEntitiesFunctionBase { }
-
-    [Function("createEntities")]
-    public class CreateEntitiesFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "chunkEntity", 1)]
-        public virtual byte[] ChunkEntity { get; set; }
-        [Parameter("int32", "playWidth", 2)]
-        public virtual int PlayWidth { get; set; }
-        [Parameter("uint32", "playHeight", 3)]
-        public virtual uint PlayHeight { get; set; }
     }
 
     public partial class CreateItemMappingFunction : CreateItemMappingFunctionBase { }
@@ -317,6 +321,21 @@ namespace IWorld.ContractDefinition
         public virtual List<byte[]> KeyTuple { get; set; }
     }
 
+    public partial class DestroyFunction : DestroyFunctionBase { }
+
+    [Function("destroy")]
+    public class DestroyFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("bytes32", "attacker", 3)]
+        public virtual byte[] Attacker { get; set; }
+        [Parameter("tuple", "pos", 4)]
+        public virtual PositionData Pos { get; set; }
+    }
+
     public partial class DestroyPlayerAdminFunction : DestroyPlayerAdminFunctionBase { }
 
     [Function("destroyPlayerAdmin")]
@@ -359,6 +378,21 @@ namespace IWorld.ContractDefinition
         public virtual PositionData AttackerPos { get; set; }
     }
 
+    public partial class DoFlingFunction : DoFlingFunctionBase { }
+
+    [Function("doFling")]
+    public class DoFlingFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "player", 2)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("tuple", "startPos", 3)]
+        public virtual PositionData StartPos { get; set; }
+        [Parameter("tuple", "endPos", 4)]
+        public virtual PositionData EndPos { get; set; }
+    }
+
     public partial class DoSeekFunction : DoSeekFunctionBase { }
 
     [Function("doSeek")]
@@ -368,12 +402,25 @@ namespace IWorld.ContractDefinition
         public virtual byte[] CausedBy { get; set; }
         [Parameter("bytes32", "target", 2)]
         public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "seeker", 3)]
-        public virtual byte[] Seeker { get; set; }
+        [Parameter("bytes32", "Seek", 3)]
+        public virtual byte[] Seek { get; set; }
         [Parameter("tuple", "targetPos", 4)]
         public virtual PositionData TargetPos { get; set; }
         [Parameter("tuple", "seekerPos", 5)]
         public virtual PositionData SeekerPos { get; set; }
+    }
+
+    public partial class DoWanderFunction : DoWanderFunctionBase { }
+
+    [Function("doWander")]
+    public class DoWanderFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "entityPos", 3)]
+        public virtual PositionData EntityPos { get; set; }
     }
 
     public partial class FindEmptyPositionInAreaFunction : FindEmptyPositionInAreaFunctionBase { }
@@ -715,8 +762,8 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Entity { get; set; }
         [Parameter("tuple", "to", 3)]
         public virtual PositionData To { get; set; }
-        [Parameter("bytes32[]", "atDest", 4)]
-        public virtual List<byte[]> AtDest { get; set; }
+        [Parameter("bytes32", "atDest", 4)]
+        public virtual byte[] AtDest { get; set; }
         [Parameter("uint8", "moveTypeAtDest", 5)]
         public virtual byte MoveTypeAtDest { get; set; }
         [Parameter("uint8", "actionType", 6)]
@@ -1481,6 +1528,15 @@ namespace IWorld.ContractDefinition
         public virtual byte TerrainType { get; set; }
     }
 
+    public partial class SpawnTickerFunction : SpawnTickerFunctionBase { }
+
+    [Function("spawnTicker")]
+    public class SpawnTickerFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "entity", 1)]
+        public virtual byte[] Entity { get; set; }
+    }
+
     public partial class SpliceDynamicDataFunction : SpliceDynamicDataFunctionBase { }
 
     [Function("spliceDynamicData")]
@@ -1620,6 +1676,19 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class TickActionFunction : TickActionFunctionBase { }
+
+    [Function("tickAction")]
+    public class TickActionFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "entityPos", 3)]
+        public virtual PositionData EntityPos { get; set; }
+    }
+
     public partial class TickBehaviourFunction : TickBehaviourFunctionBase { }
 
     [Function("tickBehaviour")]
@@ -1627,14 +1696,25 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "player", 2)]
-        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
         [Parameter("bytes32", "entity", 3)]
         public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "playerPos", 4)]
-        public virtual PositionData PlayerPos { get; set; }
+        [Parameter("tuple", "targetPos", 4)]
+        public virtual PositionData TargetPos { get; set; }
         [Parameter("tuple", "entityPos", 5)]
         public virtual PositionData EntityPos { get; set; }
+    }
+
+    public partial class TickEntityFunction : TickEntityFunctionBase { }
+
+    [Function("tickEntity")]
+    public class TickEntityFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
     }
 
     public partial class TransferBalanceToAddressFunction : TransferBalanceToAddressFunctionBase { }
@@ -1698,6 +1778,15 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Entity { get; set; }
         [Parameter("tuple", "pos", 3)]
         public virtual PositionData Pos { get; set; }
+    }
+
+    public partial class TriggerTicksFunction : TriggerTicksFunctionBase { }
+
+    [Function("triggerTicks")]
+    public class TriggerTicksFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedby", 1)]
+        public virtual byte[] Causedby { get; set; }
     }
 
     public partial class UnregisterStoreHookFunction : UnregisterStoreHookFunctionBase { }
@@ -2151,6 +2240,12 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
+
+
     public partial class FindEmptyPositionInAreaOutputDTO : FindEmptyPositionInAreaOutputDTOBase { }
 
     [FunctionOutput]
@@ -2465,6 +2560,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class StoreVersionOutputDTO : StoreVersionOutputDTOBase { }
 
     [FunctionOutput]
@@ -2473,6 +2570,12 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "version", 1)]
         public virtual byte[] Version { get; set; }
     }
+
+
+
+
+
+
 
 
 

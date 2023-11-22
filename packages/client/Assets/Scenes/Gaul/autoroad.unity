@@ -24816,6 +24816,7 @@ MonoBehaviour:
   AutoSpawn: 0
   logAllTables: 0
   spawnTables:
+  - {fileID: 3090960276094289387, guid: 51e5ac3b154dbee4185369f31b8126a6, type: 3}
   - {fileID: -8320266114722510811, guid: 00a7a82e9496e6449bd813a2cf97cba3, type: 3}
   - {fileID: 1787066033087531766, guid: 23a296bf95185364bbd8a8368dc5d97d, type: 3}
   - {fileID: 5952638462309608961, guid: 22e14e7660fecaf409a6327e0f095484, type: 3}
@@ -38087,7 +38088,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921785919}
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38117,7 +38118,7 @@ MonoBehaviour:
   fovClamp: {x: 2, y: 50}
   shakeFalloff: 10
   screenshotSize: 1
-  fov: 9.5
+  fov: 4.5
   follow: 1
   followTransform: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
@@ -41221,7 +41222,7 @@ Camera:
   far clip plane: 125
   field of view: 15
   orthographic: 1
-  orthographic size: 9.5
+  orthographic size: 4.5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

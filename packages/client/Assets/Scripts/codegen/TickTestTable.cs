@@ -8,17 +8,17 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class EntitiesTable : MUDTable
+    public class TickTestTable : MUDTable
     {
-        public class EntitiesTableUpdate : RecordUpdate
+        public class TickTestTableUpdate : RecordUpdate
         {
             public System.Numerics.BigInteger? LastBlock;
             public System.Numerics.BigInteger? PreviousLastBlock;
-            public string[]? Entities;
-            public string[]? PreviousEntities;
+            public string? Entities;
+            public string? PreviousEntities;
         }
 
-        public readonly static string ID = "Entities";
+        public readonly static string ID = "TickTest";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -30,21 +30,21 @@ namespace mudworld
         }
 
         public System.Numerics.BigInteger? LastBlock;
-        public string[]? Entities;
+        public string? Entities;
 
         public override Type TableType()
         {
-            return typeof(EntitiesTable);
+            return typeof(TickTestTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(EntitiesTableUpdate);
+            return typeof(TickTestTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            EntitiesTable other = (EntitiesTable)obj;
+            TickTestTable other = (TickTestTable)obj;
 
             if (other == null)
             {
@@ -65,12 +65,12 @@ namespace mudworld
         {
             LastBlock = (System.Numerics.BigInteger)functionParameters[0];
 
-            Entities = (string[])functionParameters[1];
+            Entities = (string)functionParameters[1];
         }
 
-        public static IObservable<RecordUpdate> GetEntitiesTableUpdates()
+        public static IObservable<RecordUpdate> GetTickTestTableUpdates()
         {
-            EntitiesTable mudTable = new EntitiesTable();
+            TickTestTable mudTable = new TickTestTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -83,7 +83,7 @@ namespace mudworld
         public override void PropertyToTable(Property property)
         {
             LastBlock = (System.Numerics.BigInteger)property["lastBlock"];
-            Entities = (string[])property["entities"];
+            Entities = (string)property["entities"];
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
@@ -102,20 +102,20 @@ namespace mudworld
             {
                 previousLastBlockTyped = (System.Numerics.BigInteger)previousValue["lastblock"];
             }
-            string[]? currentEntitiesTyped = null;
-            string[]? previousEntitiesTyped = null;
+            string? currentEntitiesTyped = null;
+            string? previousEntitiesTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("entities"))
             {
-                currentEntitiesTyped = (string[])currentValue["entities"];
+                currentEntitiesTyped = (string)currentValue["entities"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("entities"))
             {
-                previousEntitiesTyped = (string[])previousValue["entities"];
+                previousEntitiesTyped = (string)previousValue["entities"];
             }
 
-            return new EntitiesTableUpdate
+            return new TickTestTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,

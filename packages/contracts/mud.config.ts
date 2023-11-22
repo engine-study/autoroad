@@ -50,7 +50,7 @@ export default mudConfig({
   enums: {
     ActionType: ["None", "Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn", "Bow", "Swap"],
     TerrainType: ["None", "Rock", "Trap", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Miliarium"],
-    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher"],
+    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap", "Permanent"],
@@ -146,11 +146,21 @@ export default mudConfig({
       },
     },
 
+    TickTest: {
+      dataStruct: false,
+      keySchema: {},
+      valueSchema: {
+        lastBlock: "uint256",
+        entities: "bytes32",
+      },
+    },
+
     Entities: {
       dataStruct: false,
+      keySchema: {},
       valueSchema: {
-        width: "bytes32[]",
-        height: "bytes32[]",
+        lastBlock: "uint256",
+        entities: "bytes32[]",
       },
     },
 
@@ -159,8 +169,11 @@ export default mudConfig({
     Soldier: "bool",
     Barbarian: "bool",
     Archer: "uint32",
-    Seeker: "uint32",
+    Seek: "uint32",
     Aggro: "uint32",
+    Wander: "uint32",
+    Fling: "uint32",
+    Animal: "bool",
 
     //puzzle components try to be moved onto triggers (ie. Miliarli )
     Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool", solver:"bytes32"},},
@@ -216,7 +229,7 @@ export default mudConfig({
     Ox: "bool",
 
     //Behaviour 
-    //Flee: "bool", (this will probably cause infinite loops) if a seeker chases a fleer
+    //Flee: "bool", (this will probably cause infinite loops) if a Seek chases a fleer
 
     Road: {
       name: "Road",

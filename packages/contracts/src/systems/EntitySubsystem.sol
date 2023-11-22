@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
-import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/index.sol";
+import { Player, Position, PositionTableId, PositionData, Entities, NPC, TickTest } from "../codegen/index.sol";
 import { NPCType } from "../codegen/common.sol";
 
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
@@ -13,12 +13,21 @@ import { Rules } from "../utility/rules.sol";
 
 contract EntitySubsystem is System {
 
-  function createEntities(bytes32 chunkEntity, int32 playWidth, uint32 playHeight) public {
-    //set entities arrays
-    uint256 totalWidth = uint256(uint32(playWidth) + uint32(playWidth) + 1);
-    bytes32[] memory width = new bytes32[](totalWidth);
-    bytes32[] memory height = new bytes32[](uint256(playHeight));
-    Entities.set(chunkEntity, width, height);
+  function triggerTicks(bytes32 causedby) public {
+    uint256 lastBlock = TickTest.getLastBlock();
+    if(block.number == lastBlock) return;
+
+    IWorld world = IWorld(_world());
+    SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, TickTest.getEntities())));
+
+    //tick npcs
+    // bytes32[] memory entities = Entities.getEntities();
+    // for(uint i = 0; i < entities.length; i++) {
+    //   SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, entities[i])));
+    // }
+
+    TickTest.setLastBlock(block.number);
+
   }
 
   //find all nearby entities that have tick updates and tick them

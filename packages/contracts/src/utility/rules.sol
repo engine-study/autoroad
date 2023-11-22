@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
-import { MapConfig, RoadConfig, Bounds } from "../codegen/index.sol";
+import { MapConfig, RoadConfig, Bounds, Weight } from "../codegen/index.sol";
 import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health } from "../codegen/index.sol";
 import { MoveType } from "../codegen/common.sol";
 
@@ -98,16 +98,24 @@ library Rules {
     return move == uint32(MoveType.Push);
   }
 
-  function canWalkOn(MoveType moveAt) internal view returns (bool) {
+  function canSquish(bytes32 incoming, bytes32 target) internal view returns (bool) {
+    return Weight.get(incoming) > Weight.get(target);
+  }
+
+  function canWalkOn(MoveType moveAt) internal pure returns (bool) {
     return (moveAt == MoveType.None || moveAt == MoveType.Trap);
   }
 
-  function canPlaceOn(MoveType moveAt) internal view returns (bool) {
+  function canCrush(MoveType moveAt) internal pure returns (bool) {
+    return moveAt != MoveType.Obstruction && moveAt != MoveType.Permanent;
+  }
+
+  function canPlaceOn(MoveType moveAt) internal pure returns (bool) {
     return (moveAt == MoveType.None || moveAt == MoveType.Hole || moveAt == MoveType.Trap);
   }
 
   //can block projectiles and movement
-  function canBlock(MoveType moveAt) internal view returns (bool) {
+  function canBlock(MoveType moveAt) internal pure returns (bool) {
     return moveAt != MoveType.None && moveAt != MoveType.Hole;
   }
 
@@ -128,7 +136,6 @@ library Rules {
       return onMap(pos.x, pos.y);
     }
   }
-
 
 
   //complex, returns true if pushable, false if not pushable, but requires not obstructed
@@ -159,7 +166,7 @@ library Rules {
   ) internal view returns (bool) {
     // checks that the position is below the min and maximum distance and is not diagonal
     require(from.x == to.x || from.y == to.y, "cannot move diagonally ");
-    require(withinManhattanMinimum(to, from, distance), "too far or too close");
+    require(distance == 0 || withinManhattanMinimum(to, from, distance), "too far or too close");
     return true;
   }
 

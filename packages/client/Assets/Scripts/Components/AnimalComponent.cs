@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeerComponent : MoverComponent
+public class AnimalComponent : MoverComponent
 {
     
 }

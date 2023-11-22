@@ -296,6 +296,40 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(callFunction, cancellationToken);
         }
 
+        public Task<string> CallFlingRequestAsync(CallFlingFunction callFlingFunction)
+        {
+             return ContractHandler.SendRequestAsync(callFlingFunction);
+        }
+
+        public Task<TransactionReceipt> CallFlingRequestAndWaitForReceiptAsync(CallFlingFunction callFlingFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(callFlingFunction, cancellationToken);
+        }
+
+        public Task<string> CallFlingRequestAsync(byte[] causedBy, byte[] target, byte[] entity, PositionData targetPos, PositionData entityPos)
+        {
+            var callFlingFunction = new CallFlingFunction();
+                callFlingFunction.CausedBy = causedBy;
+                callFlingFunction.Target = target;
+                callFlingFunction.Entity = entity;
+                callFlingFunction.TargetPos = targetPos;
+                callFlingFunction.EntityPos = entityPos;
+            
+             return ContractHandler.SendRequestAsync(callFlingFunction);
+        }
+
+        public Task<TransactionReceipt> CallFlingRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, byte[] entity, PositionData targetPos, PositionData entityPos, CancellationTokenSource cancellationToken = null)
+        {
+            var callFlingFunction = new CallFlingFunction();
+                callFlingFunction.CausedBy = causedBy;
+                callFlingFunction.Target = target;
+                callFlingFunction.Entity = entity;
+                callFlingFunction.TargetPos = targetPos;
+                callFlingFunction.EntityPos = entityPos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(callFlingFunction, cancellationToken);
+        }
+
         public Task<string> CallFromRequestAsync(CallFromFunction callFromFunction)
         {
              return ContractHandler.SendRequestAsync(callFromFunction);
@@ -440,36 +474,6 @@ namespace IWorld.Service
                 contemplateMileFunction.MileNumber = mileNumber;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(contemplateMileFunction, cancellationToken);
-        }
-
-        public Task<string> CreateEntitiesRequestAsync(CreateEntitiesFunction createEntitiesFunction)
-        {
-             return ContractHandler.SendRequestAsync(createEntitiesFunction);
-        }
-
-        public Task<TransactionReceipt> CreateEntitiesRequestAndWaitForReceiptAsync(CreateEntitiesFunction createEntitiesFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
-        }
-
-        public Task<string> CreateEntitiesRequestAsync(byte[] chunkEntity, int playWidth, uint playHeight)
-        {
-            var createEntitiesFunction = new CreateEntitiesFunction();
-                createEntitiesFunction.ChunkEntity = chunkEntity;
-                createEntitiesFunction.PlayWidth = playWidth;
-                createEntitiesFunction.PlayHeight = playHeight;
-            
-             return ContractHandler.SendRequestAsync(createEntitiesFunction);
-        }
-
-        public Task<TransactionReceipt> CreateEntitiesRequestAndWaitForReceiptAsync(byte[] chunkEntity, int playWidth, uint playHeight, CancellationTokenSource cancellationToken = null)
-        {
-            var createEntitiesFunction = new CreateEntitiesFunction();
-                createEntitiesFunction.ChunkEntity = chunkEntity;
-                createEntitiesFunction.PlayWidth = playWidth;
-                createEntitiesFunction.PlayHeight = playHeight;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createEntitiesFunction, cancellationToken);
         }
 
         public Task<string> CreateItemMappingRequestAsync(CreateItemMappingFunction createItemMappingFunction)
@@ -751,6 +755,38 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(deleteRecordFunction, cancellationToken);
         }
 
+        public Task<string> DestroyRequestAsync(DestroyFunction destroyFunction)
+        {
+             return ContractHandler.SendRequestAsync(destroyFunction);
+        }
+
+        public Task<TransactionReceipt> DestroyRequestAndWaitForReceiptAsync(DestroyFunction destroyFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(destroyFunction, cancellationToken);
+        }
+
+        public Task<string> DestroyRequestAsync(byte[] causedBy, byte[] target, byte[] attacker, PositionData pos)
+        {
+            var destroyFunction = new DestroyFunction();
+                destroyFunction.CausedBy = causedBy;
+                destroyFunction.Target = target;
+                destroyFunction.Attacker = attacker;
+                destroyFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAsync(destroyFunction);
+        }
+
+        public Task<TransactionReceipt> DestroyRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, byte[] attacker, PositionData pos, CancellationTokenSource cancellationToken = null)
+        {
+            var destroyFunction = new DestroyFunction();
+                destroyFunction.CausedBy = causedBy;
+                destroyFunction.Target = target;
+                destroyFunction.Attacker = attacker;
+                destroyFunction.Pos = pos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(destroyFunction, cancellationToken);
+        }
+
         public Task<string> DestroyPlayerAdminRequestAsync(DestroyPlayerAdminFunction destroyPlayerAdminFunction)
         {
              return ContractHandler.SendRequestAsync(destroyPlayerAdminFunction);
@@ -839,6 +875,38 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doArrowFunction, cancellationToken);
         }
 
+        public Task<string> DoFlingRequestAsync(DoFlingFunction doFlingFunction)
+        {
+             return ContractHandler.SendRequestAsync(doFlingFunction);
+        }
+
+        public Task<TransactionReceipt> DoFlingRequestAndWaitForReceiptAsync(DoFlingFunction doFlingFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(doFlingFunction, cancellationToken);
+        }
+
+        public Task<string> DoFlingRequestAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData endPos)
+        {
+            var doFlingFunction = new DoFlingFunction();
+                doFlingFunction.CausedBy = causedBy;
+                doFlingFunction.Player = player;
+                doFlingFunction.StartPos = startPos;
+                doFlingFunction.EndPos = endPos;
+            
+             return ContractHandler.SendRequestAsync(doFlingFunction);
+        }
+
+        public Task<TransactionReceipt> DoFlingRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] player, PositionData startPos, PositionData endPos, CancellationTokenSource cancellationToken = null)
+        {
+            var doFlingFunction = new DoFlingFunction();
+                doFlingFunction.CausedBy = causedBy;
+                doFlingFunction.Player = player;
+                doFlingFunction.StartPos = startPos;
+                doFlingFunction.EndPos = endPos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(doFlingFunction, cancellationToken);
+        }
+
         public Task<string> DoSeekRequestAsync(DoSeekFunction doSeekFunction)
         {
              return ContractHandler.SendRequestAsync(doSeekFunction);
@@ -849,28 +917,58 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doSeekFunction, cancellationToken);
         }
 
-        public Task<string> DoSeekRequestAsync(byte[] causedBy, byte[] target, byte[] seeker, PositionData targetPos, PositionData seekerPos)
+        public Task<string> DoSeekRequestAsync(byte[] causedBy, byte[] target, byte[] seek, PositionData targetPos, PositionData seekerPos)
         {
             var doSeekFunction = new DoSeekFunction();
                 doSeekFunction.CausedBy = causedBy;
                 doSeekFunction.Target = target;
-                doSeekFunction.Seeker = seeker;
+                doSeekFunction.Seek = seek;
                 doSeekFunction.TargetPos = targetPos;
                 doSeekFunction.SeekerPos = seekerPos;
             
              return ContractHandler.SendRequestAsync(doSeekFunction);
         }
 
-        public Task<TransactionReceipt> DoSeekRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, byte[] seeker, PositionData targetPos, PositionData seekerPos, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> DoSeekRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, byte[] seek, PositionData targetPos, PositionData seekerPos, CancellationTokenSource cancellationToken = null)
         {
             var doSeekFunction = new DoSeekFunction();
                 doSeekFunction.CausedBy = causedBy;
                 doSeekFunction.Target = target;
-                doSeekFunction.Seeker = seeker;
+                doSeekFunction.Seek = seek;
                 doSeekFunction.TargetPos = targetPos;
                 doSeekFunction.SeekerPos = seekerPos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doSeekFunction, cancellationToken);
+        }
+
+        public Task<string> DoWanderRequestAsync(DoWanderFunction doWanderFunction)
+        {
+             return ContractHandler.SendRequestAsync(doWanderFunction);
+        }
+
+        public Task<TransactionReceipt> DoWanderRequestAndWaitForReceiptAsync(DoWanderFunction doWanderFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(doWanderFunction, cancellationToken);
+        }
+
+        public Task<string> DoWanderRequestAsync(byte[] causedBy, byte[] entity, PositionData entityPos)
+        {
+            var doWanderFunction = new DoWanderFunction();
+                doWanderFunction.CausedBy = causedBy;
+                doWanderFunction.Entity = entity;
+                doWanderFunction.EntityPos = entityPos;
+            
+             return ContractHandler.SendRequestAsync(doWanderFunction);
+        }
+
+        public Task<TransactionReceipt> DoWanderRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData entityPos, CancellationTokenSource cancellationToken = null)
+        {
+            var doWanderFunction = new DoWanderFunction();
+                doWanderFunction.CausedBy = causedBy;
+                doWanderFunction.Entity = entity;
+                doWanderFunction.EntityPos = entityPos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(doWanderFunction, cancellationToken);
         }
 
         public Task<string> FindEmptyPositionInAreaRequestAsync(FindEmptyPositionInAreaFunction findEmptyPositionInAreaFunction)
@@ -1465,7 +1563,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(handleMoveTypeFunction, cancellationToken);
         }
 
-        public Task<string> HandleMoveTypeRequestAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest, byte actionType)
+        public Task<string> HandleMoveTypeRequestAsync(byte[] causedBy, byte[] entity, PositionData to, byte[] atDest, byte moveTypeAtDest, byte actionType)
         {
             var handleMoveTypeFunction = new HandleMoveTypeFunction();
                 handleMoveTypeFunction.CausedBy = causedBy;
@@ -1478,7 +1576,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(handleMoveTypeFunction);
         }
 
-        public Task<TransactionReceipt> HandleMoveTypeRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData to, List<byte[]> atDest, byte moveTypeAtDest, byte actionType, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> HandleMoveTypeRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData to, byte[] atDest, byte moveTypeAtDest, byte actionType, CancellationTokenSource cancellationToken = null)
         {
             var handleMoveTypeFunction = new HandleMoveTypeFunction();
                 handleMoveTypeFunction.CausedBy = causedBy;
@@ -3187,6 +3285,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainAdminFunction, cancellationToken);
         }
 
+        public Task<string> SpawnTickerRequestAsync(SpawnTickerFunction spawnTickerFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnTickerFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnTickerRequestAndWaitForReceiptAsync(SpawnTickerFunction spawnTickerFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTickerFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnTickerRequestAsync(byte[] entity)
+        {
+            var spawnTickerFunction = new SpawnTickerFunction();
+                spawnTickerFunction.Entity = entity;
+            
+             return ContractHandler.SendRequestAsync(spawnTickerFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnTickerRequestAndWaitForReceiptAsync(byte[] entity, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnTickerFunction = new SpawnTickerFunction();
+                spawnTickerFunction.Entity = entity;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTickerFunction, cancellationToken);
+        }
+
         public Task<string> SpliceDynamicDataRequestAsync(SpliceDynamicDataFunction spliceDynamicDataFunction)
         {
              return ContractHandler.SendRequestAsync(spliceDynamicDataFunction);
@@ -3494,6 +3618,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(teleportScrollFunction, cancellationToken);
         }
 
+        public Task<string> TickActionRequestAsync(TickActionFunction tickActionFunction)
+        {
+             return ContractHandler.SendRequestAsync(tickActionFunction);
+        }
+
+        public Task<TransactionReceipt> TickActionRequestAndWaitForReceiptAsync(TickActionFunction tickActionFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(tickActionFunction, cancellationToken);
+        }
+
+        public Task<string> TickActionRequestAsync(byte[] causedBy, byte[] entity, PositionData entityPos)
+        {
+            var tickActionFunction = new TickActionFunction();
+                tickActionFunction.CausedBy = causedBy;
+                tickActionFunction.Entity = entity;
+                tickActionFunction.EntityPos = entityPos;
+            
+             return ContractHandler.SendRequestAsync(tickActionFunction);
+        }
+
+        public Task<TransactionReceipt> TickActionRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData entityPos, CancellationTokenSource cancellationToken = null)
+        {
+            var tickActionFunction = new TickActionFunction();
+                tickActionFunction.CausedBy = causedBy;
+                tickActionFunction.Entity = entity;
+                tickActionFunction.EntityPos = entityPos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(tickActionFunction, cancellationToken);
+        }
+
         public Task<string> TickBehaviourRequestAsync(TickBehaviourFunction tickBehaviourFunction)
         {
              return ContractHandler.SendRequestAsync(tickBehaviourFunction);
@@ -3504,28 +3658,56 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(tickBehaviourFunction, cancellationToken);
         }
 
-        public Task<string> TickBehaviourRequestAsync(byte[] causedBy, byte[] player, byte[] entity, PositionData playerPos, PositionData entityPos)
+        public Task<string> TickBehaviourRequestAsync(byte[] causedBy, byte[] target, byte[] entity, PositionData targetPos, PositionData entityPos)
         {
             var tickBehaviourFunction = new TickBehaviourFunction();
                 tickBehaviourFunction.CausedBy = causedBy;
-                tickBehaviourFunction.Player = player;
+                tickBehaviourFunction.Target = target;
                 tickBehaviourFunction.Entity = entity;
-                tickBehaviourFunction.PlayerPos = playerPos;
+                tickBehaviourFunction.TargetPos = targetPos;
                 tickBehaviourFunction.EntityPos = entityPos;
             
              return ContractHandler.SendRequestAsync(tickBehaviourFunction);
         }
 
-        public Task<TransactionReceipt> TickBehaviourRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] player, byte[] entity, PositionData playerPos, PositionData entityPos, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> TickBehaviourRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, byte[] entity, PositionData targetPos, PositionData entityPos, CancellationTokenSource cancellationToken = null)
         {
             var tickBehaviourFunction = new TickBehaviourFunction();
                 tickBehaviourFunction.CausedBy = causedBy;
-                tickBehaviourFunction.Player = player;
+                tickBehaviourFunction.Target = target;
                 tickBehaviourFunction.Entity = entity;
-                tickBehaviourFunction.PlayerPos = playerPos;
+                tickBehaviourFunction.TargetPos = targetPos;
                 tickBehaviourFunction.EntityPos = entityPos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(tickBehaviourFunction, cancellationToken);
+        }
+
+        public Task<string> TickEntityRequestAsync(TickEntityFunction tickEntityFunction)
+        {
+             return ContractHandler.SendRequestAsync(tickEntityFunction);
+        }
+
+        public Task<TransactionReceipt> TickEntityRequestAndWaitForReceiptAsync(TickEntityFunction tickEntityFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(tickEntityFunction, cancellationToken);
+        }
+
+        public Task<string> TickEntityRequestAsync(byte[] causedBy, byte[] entity)
+        {
+            var tickEntityFunction = new TickEntityFunction();
+                tickEntityFunction.CausedBy = causedBy;
+                tickEntityFunction.Entity = entity;
+            
+             return ContractHandler.SendRequestAsync(tickEntityFunction);
+        }
+
+        public Task<TransactionReceipt> TickEntityRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, CancellationTokenSource cancellationToken = null)
+        {
+            var tickEntityFunction = new TickEntityFunction();
+                tickEntityFunction.CausedBy = causedBy;
+                tickEntityFunction.Entity = entity;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(tickEntityFunction, cancellationToken);
         }
 
         public Task<string> TransferBalanceToAddressRequestAsync(TransferBalanceToAddressFunction transferBalanceToAddressFunction)
@@ -3674,6 +3856,32 @@ namespace IWorld.Service
                 triggerPuzzlesFunction.Pos = pos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerPuzzlesFunction, cancellationToken);
+        }
+
+        public Task<string> TriggerTicksRequestAsync(TriggerTicksFunction triggerTicksFunction)
+        {
+             return ContractHandler.SendRequestAsync(triggerTicksFunction);
+        }
+
+        public Task<TransactionReceipt> TriggerTicksRequestAndWaitForReceiptAsync(TriggerTicksFunction triggerTicksFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerTicksFunction, cancellationToken);
+        }
+
+        public Task<string> TriggerTicksRequestAsync(byte[] causedby)
+        {
+            var triggerTicksFunction = new TriggerTicksFunction();
+                triggerTicksFunction.Causedby = causedby;
+            
+             return ContractHandler.SendRequestAsync(triggerTicksFunction);
+        }
+
+        public Task<TransactionReceipt> TriggerTicksRequestAndWaitForReceiptAsync(byte[] causedby, CancellationTokenSource cancellationToken = null)
+        {
+            var triggerTicksFunction = new TriggerTicksFunction();
+                triggerTicksFunction.Causedby = causedby;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerTicksFunction, cancellationToken);
         }
 
         public Task<string> UnregisterStoreHookRequestAsync(UnregisterStoreHookFunction unregisterStoreHookFunction)

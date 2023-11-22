@@ -3,7 +3,7 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seeker, Move} from "../codegen/index.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling} from "../codegen/index.sol";
 import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
 import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
@@ -12,41 +12,73 @@ import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
+import { randomDirection } from "../utility/random.sol";
 
-import { MoveSubsystem } from "./MoveSubsystem.sol";
-import { ActionSystem } from "./ActionSystem.sol";
 
 contract BehaviourSubsystem is System {
 
+  function tickEntity(bytes32 causedBy, bytes32 entity) public {
+    //perform the tick action that can happen once per block maximum
+    tickAction(entity, entity, Position.get(entity));
+    //do nothing else for now
+  }
+
+  function tickAction(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
+
+    if(Wander.get(entity) > 0) { doWander(causedBy, entity, entityPos);} 
+
+  }
+
+  function doWander(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
+    console.log("wander");
+
+    IWorld world = IWorld(_world());
+    //walk towards target
+
+    PositionData memory walkPos = addPosition(entityPos, randomDirection(entity, entityPos.x, entityPos.y, 0));
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
+    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionType.Walking)));
+  }
 
   //out of world positions have been already filtered  at this point, can trust this is hapepning on map
-  function tickBehaviour(bytes32 causedBy, bytes32 player, bytes32 entity, PositionData memory playerPos, PositionData memory entityPos) public {
+  function tickBehaviour(bytes32 causedBy, bytes32 target, bytes32 entity, PositionData memory targetPos, PositionData memory entityPos) public {
 
     console.log("tickBehaviour");
 
     if(Rules.canDoStuff(entity) == false) {return;}
     
     //activate all behaviours
-    uint32 distance = uint32(getDistance(playerPos, entityPos));
+    uint32 distance = uint32(getDistance(targetPos, entityPos));
 
-    //seeker should either trigger or aggro, not both, and check for 0 values
-    uint32 seeker = Seeker.get(entity);
-    if(seeker == distance) { doSeek(causedBy, player, entity, playerPos, entityPos);} 
+    //Seek should either trigger or aggro, not both, and check for 0 values
+    uint32 Fling = Fling.get(entity);
+    if(Fling == distance) { callFling(causedBy, target, entity, targetPos, entityPos);} 
+    uint32 Seek = Seek.get(entity);
+    if(Seek == distance) { doSeek(causedBy, target, entity, targetPos, entityPos);} 
     uint32 aggro = Aggro.get(entity);
-    if(aggro > 0 && aggro == distance) { doAggro(causedBy, player, entity, playerPos, entityPos);}
+    if(aggro > 0 && aggro == distance) { doAggro(causedBy, target, entity, targetPos, entityPos);}
     uint32 archer = Archer.get(entity);
-    if(archer > 0 && archer >= distance) { doArrow(causedBy, player, entity, playerPos, entityPos);}
+    if(archer > 0 && archer >= distance) { doArrow(causedBy, target, entity, targetPos, entityPos);}
 
   }
-  
-  function doSeek(bytes32 causedBy, bytes32 target, bytes32 seeker, PositionData memory targetPos, PositionData memory seekerPos) public {
+
+  function callFling(bytes32 causedBy, bytes32 target, bytes32 entity, PositionData memory targetPos, PositionData memory entityPos) public {
+    console.log("fling");
+
+    IWorld world = IWorld(_world());
+    PositionData memory newPos = addPosition(entityPos,getVectorNormalized(entityPos,targetPos));
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world, newPos.x, newPos.y, 0);
+    SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
+  }
+
+  function doSeek(bytes32 causedBy, bytes32 target, bytes32 Seek, PositionData memory targetPos, PositionData memory seekerPos) public {
     console.log("seek");
 
     IWorld world = IWorld(_world());
     //walk towards target
     PositionData memory walkPos = addPosition(seekerPos,getVectorNormalized(seekerPos,targetPos));
     bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
-    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, seeker, seekerPos, walkPos, atDest, ActionType.Walking)));
+    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, Seek, seekerPos, walkPos, atDest, ActionType.Walking)));
   }
 
   function canAggroEntity(bytes32 attacker, bytes32 target) public returns(bool) {

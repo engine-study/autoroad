@@ -91,7 +91,17 @@ contract MoveSubsystem is System {
       //if we die while moving we must stop
       if(Rules.canDoStuff(player) == false) { return;}
     }
+  }
 
+  function doFling(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory endPos) public {
+    IWorld world = IWorld(_world());
+
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world,endPos.x, endPos.y, 0);
+    bool canFling = atDest.length == 0 || (Rules.canPlaceOn(MoveType(Move.get(atDest[0]))) && Rules.onMapOrSpawn(atDest[0], endPos));
+    
+    if(canFling) {
+      moveTo(causedBy, player, startPos, endPos, atDest, ActionType.Hop);
+    }
   }
 
   function push(bytes32 player, int32 x, int32 y) public {
@@ -206,10 +216,10 @@ contract MoveSubsystem is System {
       MoveType moveTypeAtDest = MoveType(Move.get(atDest[0]));
 
       //we soft fail bad moves and exit out of them
-      if(Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
+      if(actionType != ActionType.Hop && Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
 
       //check if we survive the move through terrain
-      if(handleMoveType(causedBy, entity, to, atDest, moveTypeAtDest, actionType) == false) {
+      if(handleMoveType(causedBy, entity, to, atDest[0], moveTypeAtDest, actionType) == false) {
         return;
       }
 
@@ -221,28 +231,19 @@ contract MoveSubsystem is System {
     }
   }
 
-  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32[] memory atDest, MoveType moveTypeAtDest, ActionType actionType) public returns(bool) {
+  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32 atDest, MoveType moveTypeAtDest, ActionType actionType) public returns(bool) {
     IWorld world = IWorld(_world());
-
-    //actionType might be useful here (ie. if they are flying or in other weird states)
 
     //kill or destroy whatever fell into the hole
     if(moveTypeAtDest == MoveType.Hole) {
 
       //spawn road, move pushed thing to under road
-      if(Road.getState(atDest[0]) == uint32(RoadState.Shoveled)) {
-        SystemSwitch.call(abi.encodeCall(world.spawnRoadFromPush, (causedBy, entity, atDest[0], to)));
-      }
-            
-      if(NPC.get(entity) > 0) { 
-        //kill if it was an NPC
-        SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
-      } else {
-        //placing pushed object into the hole
-        Position.set(entity, to.x, to.y, -2);
-        Health.set(entity, -1);
+      if(Road.getState(atDest) == uint32(RoadState.Shoveled)) {
+        SystemSwitch.call(abi.encodeCall(world.spawnRoadFromPush, (causedBy, entity, atDest, to)));
       }
 
+      //kill
+      SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, entity, causedBy, to)));
       return false;
 
     } else if(moveTypeAtDest == MoveType.Trap) {
@@ -251,11 +252,18 @@ contract MoveSubsystem is System {
       if(NPC.get(entity) > 0) { 
         SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
         return false;
-      } 
+      } else {
+        //otherwise trap is destroyed with no effect to pushed object
+        SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, atDest, causedBy, to)));
+      }
       
-      //otherwise trap is destroyed with no effect to pushed object
-      Position.deleteRecord(atDest[0]);
-      Health.deleteRecord(atDest[0]);
+    } else if(actionType == ActionType.Hop) {
+
+      if(Rules.canCrush(moveTypeAtDest) && Rules.canSquish(entity, atDest)) {
+        SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, atDest, causedBy, to)));
+      } else {
+        return false;
+      }
       
     }
 

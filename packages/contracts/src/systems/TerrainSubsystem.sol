@@ -4,16 +4,10 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 
-import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds } from "../codegen/index.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, Entities, NPC, WorldColumn } from "../codegen/index.sol";
+import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Entities } from "../codegen/index.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, NPC, WorldColumn } from "../codegen/index.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/index.sol";
 import { TerrainType, RockType, RoadState, MoveType, NPCType, FloraType} from "../codegen/common.sol";
-
-import { MoveSubsystem } from "./MoveSubsystem.sol";
-import { RewardSubsystem } from "./RewardSubsystem.sol";
-import { EntitySubsystem } from "./EntitySubsystem.sol";
-import { FloraSubsystem } from "./FloraSubsystem.sol";
-import { SpawnSubsystem } from "./SpawnSubsystem.sol";
 
 import { Actions } from "../utility/actions.sol";
 import { Rules } from "../utility/rules.sol";
@@ -128,6 +122,9 @@ contract TerrainSubsystem is System {
 
     //set bounds 
     Bounds.set(left, right, up, down);
+
+    //reset ticking entities
+    // Entities.setEntities(new bytes32[](0));
 
     console.log("set chunk");
     bytes32 chunkEntity = Actions.getChunkEntity(mile);

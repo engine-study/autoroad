@@ -4,7 +4,7 @@ using mudworld;
 using mud;
 using UnityEngine;
 
-public enum NPCType {None, Player, Soldier, Barbarian, Ox, Archer}
+public enum NPCType {None, Player, Soldier, Barbarian, Ox, Archer, Deer}
 public class NPCComponent : MUDComponent
 {
     public NPCType NPC {get{return npc;}}

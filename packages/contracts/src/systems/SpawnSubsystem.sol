@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Player, Health, GameState, Bounds } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel,Conscription } from "../codegen/index.sol";
-import { Soldier, Barbarian, Ox, Aggro, Seeker, Archer } from "../codegen/index.sol";
+import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal, TickTest } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription } from "../codegen/index.sol";
+import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
@@ -19,6 +19,10 @@ import { RewardSubsystem } from "../systems/RewardSubsystem.sol";
 
 contract SpawnSubsystem is System {
     
+  function spawnTicker(bytes32 entity) public {
+    // Entities.setEntities
+  }
+  
   function spawnPlayerNPC(bytes32 entity, int32 x, int32 y) public {
     spawnPlayer(entity, x, y, true);
   }
@@ -67,12 +71,12 @@ contract SpawnSubsystem is System {
     } else if (npcType == NPCType.Soldier) {
       Soldier.set(entity, true);
       Weight.set(entity, 0);
-      Seeker.set(entity, 2);
+      Seek.set(entity, 2);
       Aggro.set(entity,1);
     } else if (npcType == NPCType.Barbarian) {
       Barbarian.set(entity, true);
       Weight.set(entity, 1);
-      Seeker.set(entity, 2);
+      Seek.set(entity, 2);
       Aggro.set(entity,1);
     } else if (npcType == NPCType.BarbarianArcher) {
       Barbarian.set(entity, true);
@@ -81,6 +85,13 @@ contract SpawnSubsystem is System {
     } else if (npcType == NPCType.Ox) {
       Ox.set(entity, true);
       Weight.set(entity, -5);
+    } else if (npcType == NPCType.Deer) {
+      Animal.set(entity, true);
+      Weight.set(entity, 1);
+      Fling.set(entity, 1);
+      Wander.set(entity, 1);
+      TickTest.setEntities(entity);
+      // Entities.pushEntities(entity);
     }
 
     Move.set(entity, uint32(MoveType.Push));
@@ -88,6 +99,17 @@ contract SpawnSubsystem is System {
     Position.set(entity, PositionData(x,y,0));
 
     Actions.setAction(entity, ActionType.Spawn, x, y);
+  }
+
+  function destroy(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
+    if(NPC.get(target) > 0) { 
+      //kill if it was an NPC
+      kill(causedBy, target, attacker, pos);
+    } else {
+      //destroy
+      Position.set(target, pos.x, pos.y, -2);
+      Health.set(target, -1);
+    }
   }
 
   function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
