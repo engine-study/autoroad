@@ -51,10 +51,10 @@ contract BehaviourSubsystem is System {
     uint32 distance = uint32(getDistance(targetPos, entityPos));
 
     //Seek should either trigger or aggro, not both, and check for 0 values
-    uint32 Fling = Fling.get(entity);
-    if(Fling == distance) { callFling(causedBy, target, entity, targetPos, entityPos);} 
-    uint32 Seek = Seek.get(entity);
-    if(Seek == distance) { doSeek(causedBy, target, entity, targetPos, entityPos);} 
+    uint32 fling = Fling.get(entity);
+    if(fling == distance) { callFling(causedBy, target, entity, targetPos, entityPos);} 
+    uint32 seek = Seek.get(entity);
+    if(seek == distance) { doSeek(causedBy, target, entity, targetPos, entityPos);} 
     uint32 aggro = Aggro.get(entity);
     if(aggro > 0 && aggro == distance) { doAggro(causedBy, target, entity, targetPos, entityPos);}
     uint32 archer = Archer.get(entity);
@@ -66,9 +66,8 @@ contract BehaviourSubsystem is System {
     console.log("fling");
 
     IWorld world = IWorld(_world());
-    PositionData memory newPos = addPosition(entityPos,getVectorNormalized(entityPos,targetPos));
-    bytes32[] memory atDest = Rules.getKeysAtPosition(world, newPos.x, newPos.y, 0);
-
+    PositionData memory newPos = addPosition(entityPos, getVectorNormalized(entityPos,targetPos));
+    
     Actions.setActionTargeted(entity, ActionType.Melee, newPos.x, newPos.y, target);
     SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
   }
@@ -78,8 +77,8 @@ contract BehaviourSubsystem is System {
 
     IWorld world = IWorld(_world());
     //walk towards target
-    PositionData memory walkPos = addPosition(seekerPos,getVectorNormalized(seekerPos,targetPos));
-    bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
+    PositionData memory walkPos = addPosition(seekerPos, getVectorNormalized(seekerPos,targetPos));
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
     SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, Seek, seekerPos, walkPos, atDest, ActionType.Walking)));
   }
 

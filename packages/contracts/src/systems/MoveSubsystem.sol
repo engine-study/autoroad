@@ -96,12 +96,10 @@ contract MoveSubsystem is System {
   function doFling(bytes32 causedBy, bytes32 target, PositionData memory startPos, PositionData memory endPos) public {
     IWorld world = IWorld(_world());
 
-    bytes32[] memory atDest = Rules.getKeysAtPosition(world,endPos.x, endPos.y, 0);
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world, endPos.x, endPos.y, 0);
     bool canFling = atDest.length == 0 || (Rules.canPlaceOn(MoveType(Move.get(atDest[0]))) && Rules.onMapOrSpawn(atDest[0], endPos));
     
-    if(canFling) {
-      moveTo(causedBy, target, startPos, endPos, atDest, ActionType.Hop);
-    }
+    if(canFling) { moveTo(causedBy, target, startPos, endPos, atDest, ActionType.Hop); }
   }
 
   function push(bytes32 player, int32 x, int32 y) public {
@@ -110,9 +108,9 @@ contract MoveSubsystem is System {
     PositionData memory toPos = PositionData(x,y,0);
 
     require(Rules.canDoStuff(player), "hmm");
-    require(Rules.canInteract(player, playerPos, Rules.getKeysAtPosition(IWorld(_world()) ,x, y, 0), 1), "bad interact");
+    require(Rules.canInteract(player, playerPos, Rules.getKeysAtPosition(IWorld(_world()), x, y, 0), 1), "bad interact");
 
-    doPush(player, player, playerPos, PositionData(toPos.x - playerPos.x,toPos.y - playerPos.y,0));
+    doPush(player, player, playerPos, PositionData(toPos.x - playerPos.x, toPos.y - playerPos.y,0));
   }
 
   //push
