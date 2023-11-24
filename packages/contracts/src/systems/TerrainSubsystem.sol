@@ -96,22 +96,23 @@ contract TerrainSubsystem is System {
 
     (int32 left, int32 right, int32 up, int32 down) = Rules.getMileBounds(mile);
     int32 row = Row.get();
+    uint256 difficulty = uint(uint32(mile % 5));
 
     if(summonAll) {
-      while(row < up) {row = summonRow(causedBy, left, right);}
+      while(row < up) {row = summonRow(causedBy, left, right, difficulty);}
     } else {
       //summon another row, until we have summoned all of them
-      row = summonRow(causedBy, left, right);
+      row = summonRow(causedBy, left, right, difficulty);
     }
 
     //complete the mile, set the new bounds
     if(row < up) {return;}
 
-    mileIsReady(causedBy, mile, left, right, up, down);
+    mileIsReady(causedBy, mile, left, right, up, down, difficulty);
 
   }
 
-  function mileIsReady(bytes32 causedBy, int32 mile, int32 left, int32 right, int32 up, int32 down) private {
+  function mileIsReady(bytes32 causedBy, int32 mile, int32 left, int32 right, int32 up, int32 down, uint difficulty) private {
 
     console.log("mile ready");
 
@@ -132,14 +133,12 @@ contract TerrainSubsystem is System {
     Chunk.set(chunkEntity, mile, true, false, 0, 0);
   }
 
-  function summonRow(bytes32 causedBy, int32 left, int32 right) public returns(int32 row) {
+  function summonRow(bytes32 causedBy, int32 left, int32 right, uint difficulty) public returns(int32 row) {
 
     console.log("summon row");
 
     row = Row.get();
     row++;
-
-    uint256 difficulty = uint256(uint32(row)) % 5;
 
     spawnRow(causedBy, right, row, difficulty);
     spawnEmptyRoad(0,row);
@@ -149,7 +148,7 @@ contract TerrainSubsystem is System {
 
   }
     
-  function spawnRow(bytes32 causedBy, int32 width, int32 y, uint256 difficulty) private {
+  function spawnRow(bytes32 causedBy, int32 width, int32 y, uint difficulty) private {
     
     console.log("spawn row");
 

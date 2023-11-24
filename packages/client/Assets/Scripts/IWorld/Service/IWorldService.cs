@@ -3402,22 +3402,24 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(summonRowFunction, cancellationToken);
         }
 
-        public Task<string> SummonRowRequestAsync(byte[] causedBy, int left, int right)
+        public Task<string> SummonRowRequestAsync(byte[] causedBy, int left, int right, BigInteger difficulty)
         {
             var summonRowFunction = new SummonRowFunction();
                 summonRowFunction.CausedBy = causedBy;
                 summonRowFunction.Left = left;
                 summonRowFunction.Right = right;
+                summonRowFunction.Difficulty = difficulty;
             
              return ContractHandler.SendRequestAsync(summonRowFunction);
         }
 
-        public Task<TransactionReceipt> SummonRowRequestAndWaitForReceiptAsync(byte[] causedBy, int left, int right, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SummonRowRequestAndWaitForReceiptAsync(byte[] causedBy, int left, int right, BigInteger difficulty, CancellationTokenSource cancellationToken = null)
         {
             var summonRowFunction = new SummonRowFunction();
                 summonRowFunction.CausedBy = causedBy;
                 summonRowFunction.Left = left;
                 summonRowFunction.Right = right;
+                summonRowFunction.Difficulty = difficulty;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(summonRowFunction, cancellationToken);
         }

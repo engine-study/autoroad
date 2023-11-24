@@ -27,6 +27,9 @@ public class WorldScroll : MonoBehaviour {
 
     [Header("Game State")]
     [SerializeField] GameObject front;
+    [SerializeField] GameObject updateMileText;
+    [SerializeField] GameObject newMileText;
+    [SerializeField] GameObject [] difficultyStars;
 
     [Header("Debug")]
     [SerializeField] bool playerFocus = false;
@@ -52,6 +55,8 @@ public class WorldScroll : MonoBehaviour {
 
         mile = -1000;
         playerUI.gameObject.SetActive(false);
+        updateMileText.SetActive(true);
+        newMileText.SetActive(false);
 
         GameStateComponent.OnGameStateUpdated += GameStateUpdate;
         SPEvents.OnServerLoaded += InitWorld;
@@ -92,6 +97,34 @@ public class WorldScroll : MonoBehaviour {
         if(!ready) {return;}
 
         front.transform.position = Vector3.forward * (maxMile * MapConfigComponent.Height + MapConfigComponent.Height);
+        StartCoroutine(NewMileSummonedCoroutine());
+         
+    }
+
+    IEnumerator NewMileSummonedCoroutine() {
+        updateMileText.SetActive(false);
+        newMileText.SetActive(true);
+
+        //show difficulty
+        int difficulty = (int)maxMile % 5;
+        int showDifficulty = 0;
+
+        for(int i = 0; i < difficultyStars.Length; i++) {
+            difficultyStars[i].SetActive(false);
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        while(showDifficulty < difficulty) {
+            difficultyStars[showDifficulty].SetActive(true);
+            yield return new WaitForSeconds(.25f);
+            showDifficulty++;
+        }
+
+        yield return new WaitForSeconds(5f);
+
+        updateMileText.SetActive(true);
+        newMileText.SetActive(false);
     }
 
     void InitPlayer() {

@@ -1574,6 +1574,8 @@ namespace IWorld.ContractDefinition
         public virtual int Left { get; set; }
         [Parameter("int32", "right", 3)]
         public virtual int Right { get; set; }
+        [Parameter("uint256", "difficulty", 4)]
+        public virtual BigInteger Difficulty { get; set; }
     }
 
     public partial class SupFunction : SupFunctionBase { }

@@ -48,7 +48,7 @@ function randomCoordSeed(uint minNumber, uint maxNumber, int32 x, int32 y, uint 
 } 
 
 function randomDirection(bytes32 entity, int32 x, int32 y, uint seed ) view returns(PositionData memory vector) {
-     uint amount = uint(keccak256(abi.encodePacked(entity, x, y, block.timestamp, msg.sender, block.number, seed))) % (3);
+     uint amount = uint(keccak256(abi.encodePacked(entity, x, y, block.timestamp, msg.sender, block.number, seed))) % (4);
      if(amount == 0) {
           vector = PositionData(1,0,0);
      } else if(amount == 1) {
