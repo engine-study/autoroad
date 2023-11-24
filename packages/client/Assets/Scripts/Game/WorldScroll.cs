@@ -29,6 +29,7 @@ public class WorldScroll : MonoBehaviour {
     [SerializeField] GameObject front;
     [SerializeField] GameObject updateMileText;
     [SerializeField] GameObject newMileText;
+    [SerializeField]  SPHeading newMileHeading;
     [SerializeField] GameObject [] difficultyStars;
 
     [Header("Debug")]
@@ -59,6 +60,7 @@ public class WorldScroll : MonoBehaviour {
         newMileText.SetActive(false);
 
         GameStateComponent.OnGameStateUpdated += GameStateUpdate;
+        ChunkComponent.OnMileSpawned += MileSpawn;
         SPEvents.OnServerLoaded += InitWorld;
         SPEvents.OnLocalPlayerSpawn += InitPlayer;
 
@@ -72,6 +74,7 @@ public class WorldScroll : MonoBehaviour {
     void OnDestroy() {
         Instance = null;
         GameStateComponent.OnGameStateUpdated -= GameStateUpdate;
+        ChunkComponent.OnMileSpawned -= MileSpawn;
         SPEvents.OnServerLoaded -= InitWorld;
         SPEvents.OnLocalPlayerSpawn -= InitPlayer;
 
@@ -97,27 +100,31 @@ public class WorldScroll : MonoBehaviour {
         if(!ready) {return;}
 
         front.transform.position = Vector3.forward * (maxMile * MapConfigComponent.Height + MapConfigComponent.Height);
-        StartCoroutine(NewMileSummonedCoroutine());
          
+    }
+
+    void MileSpawn() {
+        StartCoroutine(NewMileSummonedCoroutine());
     }
 
     IEnumerator NewMileSummonedCoroutine() {
         updateMileText.SetActive(false);
         newMileText.SetActive(true);
 
+        string mileString = ((int)maxMile+1).ToString();
+        newMileHeading.UpdateField($"Mile {mileString} begins");
+
         //show difficulty
         int difficulty = (int)maxMile % 5;
         int showDifficulty = 0;
 
-        for(int i = 0; i < difficultyStars.Length; i++) {
-            difficultyStars[i].SetActive(false);
-        }
+        for(int i = 0; i < difficultyStars.Length; i++) { difficultyStars[i].SetActive(false);}
 
         yield return new WaitForSeconds(1f);
 
-        while(showDifficulty < difficulty) {
+        while(showDifficulty < difficulty+1) {
             difficultyStars[showDifficulty].SetActive(true);
-            yield return new WaitForSeconds(.25f);
+            yield return new WaitForSeconds(.5f);
             showDifficulty++;
         }
 

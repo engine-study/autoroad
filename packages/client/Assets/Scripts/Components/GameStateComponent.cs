@@ -9,6 +9,7 @@ using UniRx;
 public class GameStateComponent : MUDComponent {
 
     public static System.Action OnGameStateUpdated;
+    public static System.Action<int> OnMileSummoned;
     public static System.Action<int> OnMileCompleted;
     public static GameStateComponent Instance;
     public static float MILE_DISTANCE {get { return MapConfigComponent.Height; } }
@@ -42,7 +43,6 @@ public class GameStateComponent : MUDComponent {
         if(PlayerComponent.LocalPlayer && MILE_COUNT != lastMile && lastMile != -1) {
             OnMileCompleted?.Invoke((int)lastMile);
         }
-
 
     }
 

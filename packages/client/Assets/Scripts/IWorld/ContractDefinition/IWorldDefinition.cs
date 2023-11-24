@@ -937,28 +937,6 @@ namespace IWorld.ContractDefinition
         public virtual uint LastName { get; set; }
     }
 
-    public partial class NeumanNeighborhoodFunction : NeumanNeighborhoodFunctionBase { }
-
-    [Function("neumanNeighborhood", typeof(NeumanNeighborhoodOutputDTO))]
-    public class NeumanNeighborhoodFunctionBase : FunctionMessage
-    {
-        [Parameter("tuple", "center", 1)]
-        public virtual PositionData Center { get; set; }
-        [Parameter("int32", "distance", 2)]
-        public virtual int Distance { get; set; }
-    }
-
-    public partial class NeumanNeighborhoodOuterFunction : NeumanNeighborhoodOuterFunctionBase { }
-
-    [Function("neumanNeighborhoodOuter", typeof(NeumanNeighborhoodOuterOutputDTO))]
-    public class NeumanNeighborhoodOuterFunctionBase : FunctionMessage
-    {
-        [Parameter("tuple", "center", 1)]
-        public virtual PositionData Center { get; set; }
-        [Parameter("int32", "distance", 2)]
-        public virtual int Distance { get; set; }
-    }
-
     public partial class PlantFunction : PlantFunctionBase { }
 
     [Function("plant")]
@@ -2399,24 +2377,6 @@ namespace IWorld.ContractDefinition
 
 
 
-
-    public partial class NeumanNeighborhoodOutputDTO : NeumanNeighborhoodOutputDTOBase { }
-
-    [FunctionOutput]
-    public class NeumanNeighborhoodOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("tuple[]", "", 1)]
-        public virtual List<PositionData> ReturnValue1 { get; set; }
-    }
-
-    public partial class NeumanNeighborhoodOuterOutputDTO : NeumanNeighborhoodOuterOutputDTOBase { }
-
-    [FunctionOutput]
-    public class NeumanNeighborhoodOuterOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("tuple[]", "", 1)]
-        public virtual List<PositionData> ReturnValue1 { get; set; }
-    }
 
 
 

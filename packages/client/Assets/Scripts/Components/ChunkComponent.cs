@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 public class ChunkComponent : MUDComponent {
     
     public static System.Action OnChunkUpdate;
+    public static System.Action OnMileSpawned;
     public Transform Objects {get{return entityParent;}}
 
     public Mile Mile {get{return mile;}}
@@ -86,6 +87,8 @@ public class ChunkComponent : MUDComponent {
         // Debug.Log("Chunk: " + eventType.ToString());
         ChunkTable table = (ChunkTable)update;
 
+        bool wasSpawned = spawned;
+
         completed = table.Completed != null ? (bool)table.Completed : completed;
         spawned = table.Spawned != null ? (bool)table.Spawned : spawned;
         mileNumber = table.Mile != null ? (int)table.Mile : mileNumber;
@@ -103,6 +106,10 @@ public class ChunkComponent : MUDComponent {
 
         if(ChunkLoader.ActiveChunk == this) {
             OnChunkUpdate?.Invoke();
+        }
+
+        if(Loaded && mileNumber == GameStateComponent.MILE_COUNT && wasSpawned != spawned) {
+            OnMileSpawned?.Invoke();
         }
 
     }

@@ -2007,34 +2007,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(nameFunction, cancellationToken);
         }
 
-        public Task<NeumanNeighborhoodOutputDTO> NeumanNeighborhoodQueryAsync(NeumanNeighborhoodFunction neumanNeighborhoodFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodFunction, NeumanNeighborhoodOutputDTO>(neumanNeighborhoodFunction, blockParameter);
-        }
-
-        public Task<NeumanNeighborhoodOutputDTO> NeumanNeighborhoodQueryAsync(PositionData center, int distance, BlockParameter blockParameter = null)
-        {
-            var neumanNeighborhoodFunction = new NeumanNeighborhoodFunction();
-                neumanNeighborhoodFunction.Center = center;
-                neumanNeighborhoodFunction.Distance = distance;
-            
-            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodFunction, NeumanNeighborhoodOutputDTO>(neumanNeighborhoodFunction, blockParameter);
-        }
-
-        public Task<NeumanNeighborhoodOuterOutputDTO> NeumanNeighborhoodOuterQueryAsync(NeumanNeighborhoodOuterFunction neumanNeighborhoodOuterFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodOuterFunction, NeumanNeighborhoodOuterOutputDTO>(neumanNeighborhoodOuterFunction, blockParameter);
-        }
-
-        public Task<NeumanNeighborhoodOuterOutputDTO> NeumanNeighborhoodOuterQueryAsync(PositionData center, int distance, BlockParameter blockParameter = null)
-        {
-            var neumanNeighborhoodOuterFunction = new NeumanNeighborhoodOuterFunction();
-                neumanNeighborhoodOuterFunction.Center = center;
-                neumanNeighborhoodOuterFunction.Distance = distance;
-            
-            return ContractHandler.QueryDeserializingToObjectAsync<NeumanNeighborhoodOuterFunction, NeumanNeighborhoodOuterOutputDTO>(neumanNeighborhoodOuterFunction, blockParameter);
-        }
-
         public Task<string> PlantRequestAsync(PlantFunction plantFunction)
         {
              return ContractHandler.SendRequestAsync(plantFunction);
