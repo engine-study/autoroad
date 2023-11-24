@@ -109,7 +109,7 @@ public class PositionComponent : MUDComponent {
         position3D = new Vector3(position2D.x, 0f, position2D.y);
         position3DLayer = new Vector3(position2D.x, layer, position2D.y);
 
-        posInt = new Vector3Int((int)position3D.x, 0, (int)position3D.z);
+        posInt = new Vector3Int((int)table.X, layer, (int)table.Y);
 
         transform.position = position3D;
 

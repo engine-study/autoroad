@@ -9,26 +9,33 @@ using System.Linq;
 
 public class GridMUD : MonoBehaviour {
     public static GridMUD Instance;
-    public static Dictionary<string, MUDComponent> Grid { get { return Instance.positionDictionary; } }
 
     [Header("Grid")]
     public bool useQuery = false; 
     [SerializeField] Vector3 position;
     [SerializeField] PositionComponent firstComponent;
-    [SerializeField] List<MUDComponent> positions;
-    [SerializeField] List<PositionComponent> componentsAt;
-    [SerializeField] int recordsFound;
     TableManager positionTable;
-    private Dictionary<string, MUDComponent> positionDictionary = new Dictionary<string, MUDComponent>();
-    private Dictionary<MUDComponent, string> componentDictionary = new Dictionary<MUDComponent, string>();
+    private Dictionary<string, PositionComponent> pos = new Dictionary<string, PositionComponent>();
 
     void Awake() {
         Instance = this;
-        positions = new List<MUDComponent>();
-        // TableDictionary.OnTableToggle += Init;
+        TableDictionary.OnTableToggle += Init;
         NetworkManager.OnInitialized += Setup;
     }
 
+    void Init(bool toggle, TableManager newTable) {
+        if (toggle && newTable.ComponentType == typeof(PositionComponent)) {
+            positionTable = newTable;
+            positionTable.OnComponentSpawned += AddPosition;
+            TableDictionary.OnTableToggle -= Init;
+        }
+    }
+
+    void AddPosition(MUDComponent newPos) {
+        UpdatePosition(newPos as PositionComponent, newPos.UpdateInfo);
+        newPos.OnUpdatedInfo += UpdatePosition;
+    }
+    
     void Setup() {
         CursorMUD.OnGridPosition += UpdateComponents;
     }
@@ -43,18 +50,37 @@ public class GridMUD : MonoBehaviour {
             positionTable.OnComponentSpawned -= AddPosition;
         }
 
-        for (int i = 0; i < positions.Count; i++) {
-            positions[i].OnUpdatedInfo -= UpdatePosition;
-        }
     }
+    
 
     void UpdateComponents(Vector3 newPos) {
+
         if(GameState.GamePlaying == false) {return;}
         position = newPos;
-        componentsAt = GetComponentsAtPosition(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z), Mathf.RoundToInt(position.y));
-        firstComponent = componentsAt.Count > 0 ? componentsAt[0] : null;
+        firstComponent = GetComponentAt(newPos);
+        
     }
 
+    public static MUDEntity GetEntityAt(Vector3 newPos) {
+        return GetComponentAt(newPos)?.Entity;
+    }    
+
+    public static PositionComponent GetComponentAt(Vector3 newPos) {
+
+        if(Instance.useQuery) {
+            List<PositionComponent> comps = GetComponentsAtPosition(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.z), Mathf.RoundToInt(newPos.y));
+            return comps.Count > 0 ? comps[0] : null;
+        } else {
+            Vector3Int round = new Vector3Int(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.y), Mathf.RoundToInt(newPos.z));
+            Instance.pos.TryGetValue(round.ToString(), out PositionComponent c); 
+            return c; 
+        }
+    }
+    
+    static List<PositionComponent> GetComponentsAtPosition(float x, float y, float layer) {
+        return Instance.GetComponents(Mathf.RoundToInt(x),Mathf.RoundToInt(y),Mathf.RoundToInt(layer));
+    }
+    
     List<PositionComponent> GetComponents(int x, int y, int layer) {
 
         Condition[] conditions = new Condition[3];
@@ -90,7 +116,6 @@ public class GridMUD : MonoBehaviour {
         List<PositionComponent> components = new List<PositionComponent>();
         
         foreach(RxRecord r in r3) {
-            recordsFound++;
             PositionComponent pos = MUDWorld.FindComponent<PositionTable, PositionComponent>(r.Key);
             if(pos == null) {Debug.LogError("Could not find entity");continue;}
             components.Add(pos);
@@ -99,76 +124,27 @@ public class GridMUD : MonoBehaviour {
         return components;
     }
 
-    static List<PositionComponent> GetComponentsAtPosition(float x, float y, float layer) {
-        return Instance.GetComponents(Mathf.RoundToInt(x),Mathf.RoundToInt(y),Mathf.RoundToInt(layer));
-    }
-
-    public static MUDEntity GetEntityAt(Vector3 newPos) {
-
-        if(Instance.useQuery) {
-            List<PositionComponent> comps = GetComponentsAtPosition(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.z), Mathf.RoundToInt(newPos.y));
-            return comps.Count > 0 ? comps[0].Entity : null;
-        } else {
-            MUDComponent c; Grid.TryGetValue(newPos.ToString(), out c); return c?.Entity; 
-        }
-
-    }
-
-
-    void Init(bool toggle, TableManager newTable) {
-        if (toggle && newTable.ComponentType == typeof(PositionComponent)) {
-            positionTable = newTable;
-            positionTable.OnComponentSpawned += AddPosition;
-        }
-    }
-
-    void AddPosition(MUDComponent newPos) {
-        positions.Add(newPos);
-        newPos.OnUpdatedInfo += UpdatePosition;
-    }
-    
     void UpdatePosition(MUDComponent c, UpdateInfo info) {
 
         PositionComponent component = c as PositionComponent;
 
-        if (component == null) {
-            Debug.LogError("Not a position", this);
-            return;
-        }
-
         //only listen to onchain updates
-        if(info.Source != UpdateSource.Onchain) {
-            return;
-        }
+        if(info.Source != UpdateSource.Onchain) { return;}
 
-        string newPosition = component.PosInt.ToString();
-        string oldPosition = componentDictionary.ContainsKey(component) ? componentDictionary[component] : "";
-
-        //Remove the old position from the dictionary
-        if(string.IsNullOrEmpty(oldPosition) == false) {
-
-            if(positionDictionary.ContainsKey(oldPosition)) {
-                Debug.Assert(positionDictionary[oldPosition] == component, "Different component found at old position", component);
-                positionDictionary.Remove(oldPosition);
-            }
-
-            componentDictionary[component] = newPosition;
-
-        } else {
-            componentDictionary.Add(component, newPosition);
-        }
+        string key = component.PosInt.ToString();
 
         //if we deleted the position, do not add it back 
         if(info.UpdateType == UpdateType.DeleteRecord) {
-            return;
+            pos.Remove(key);
+        } else {
+            // Store the position in the dictionary
+            if (pos.ContainsKey(key)) {
+                pos[key] = component;
+            } else {
+                pos.Add(key, component);
+            }
         }
 
-        // Store the position in the dictionary
-        if (positionDictionary.ContainsKey(newPosition)) {
-            Debug.Assert(positionDictionary[newPosition] == component, "New position not empty", positionDictionary[newPosition]);
-        } else {
-            positionDictionary.Add(newPosition, component);
-        }
 
     }
 
@@ -177,9 +153,8 @@ public class GridMUD : MonoBehaviour {
             return;
         }
 
-        foreach(PositionComponent p in componentsAt) {
-            Gizmos.DrawWireSphere(p.Pos, .1f);
-        }
+        if(firstComponent) Gizmos.DrawWireSphere(firstComponent.Pos, .1f);
+        
 
     }
 
