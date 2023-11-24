@@ -17,16 +17,18 @@ public class ChunkLoader : MonoBehaviour
     public static List<ChunkComponent> ChunkList;
     public static int Mile {get{return Instance.mile;}}
     public static ChunkComponent Chunk {get{return Instance.chunk;}}
-
+    public static void SetCull(int newCull) {Instance.cull = newCull; if(ActiveChunk) {LoadMile(Mile);}}
+    public static int CullDistance = 2;
+    
     [Header("Chunks")]
-    [SerializeField] int cullDistance = 2;
     [SerializeField] TableManager pos;
 
     [Header("Debug")]
     [SerializeField] int mile;
+    [SerializeField] int cull = 2;
     [SerializeField] ChunkComponent chunk;
 
-    void Start() {
+    void Awake() {
         Instance = this;
 
         Chunks = new Dictionary<int, ChunkComponent>();
@@ -82,13 +84,8 @@ public class ChunkLoader : MonoBehaviour
             return false; 
         }
 
-        if(chunk && chunk != newChunk) {
-            bool isCloseEnough = Mathf.Abs(chunk.MileNumber - newMile) < 2;
-            chunk.Toggle(isCloseEnough);
-        }
-
         for(int i = 0; i < ChunkList.Count; i++) {
-            bool showChunk = i == newMile || (i >= newMile-cullDistance && i <= newMile+cullDistance);
+            bool showChunk = i == newMile || (i >= newMile-cull && i <= newMile+cull);
             ChunkList[i].Toggle(showChunk);
         }
 

@@ -27,7 +27,6 @@ public class WorldScroll : MonoBehaviour {
 
     [Header("Game State")]
     [SerializeField] GameObject front;
-    [SerializeField] GameObject updateMileText;
     [SerializeField] GameObject newMileText;
     [SerializeField]  SPHeading newMileHeading;
     [SerializeField] GameObject [] difficultyStars;
@@ -56,7 +55,6 @@ public class WorldScroll : MonoBehaviour {
 
         mile = -1000;
         playerUI.gameObject.SetActive(false);
-        updateMileText.SetActive(true);
         newMileText.SetActive(false);
 
         GameStateComponent.OnGameStateUpdated += GameStateUpdate;
@@ -108,7 +106,6 @@ public class WorldScroll : MonoBehaviour {
     }
 
     IEnumerator NewMileSummonedCoroutine() {
-        updateMileText.SetActive(false);
         newMileText.SetActive(true);
 
         string mileString = ((int)maxMile+1).ToString();
@@ -130,7 +127,6 @@ public class WorldScroll : MonoBehaviour {
 
         yield return new WaitForSeconds(5f);
 
-        updateMileText.SetActive(true);
         newMileText.SetActive(false);
     }
 

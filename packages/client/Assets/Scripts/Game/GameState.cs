@@ -55,8 +55,6 @@ public class GameState : MonoBehaviour {
         Instance = this;
         editorObjects.SetActive(false);
         
-        ToggleQuality(PlayerPrefs.GetInt("quality") == 0);
-
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
 
@@ -75,10 +73,18 @@ public class GameState : MonoBehaviour {
     }
 
     private async void Start() {
+
+        LoadSettings();
+
         await LoadWorld();
         await GameSetup();
         await NetworkManager.Instance.CreateNetwork();
         await LoadMap();
+    }
+
+    void LoadSettings() {
+        bool highQuality = PlayerPrefs.GetInt("quality") == 0;
+        ToggleQuality(highQuality);
     }
 
     async UniTask LoadMap() {
@@ -303,6 +309,8 @@ public class GameState : MonoBehaviour {
 
         PlayerPrefs.SetInt("quality", toggle ? 0 : 1);
         PlayerPrefs.Save();
+
+        ChunkLoader.SetCull(toggle ? ChunkLoader.CullDistance : 0);
 
         for(int i = 0; i < qualityObjects.Length; i++) {
             qualityObjects[i].SetActive(toggle);
