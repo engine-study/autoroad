@@ -17,7 +17,7 @@ contract EntitySubsystem is System {
   function triggerTicks(bytes32 causedby) public {
     uint256 lastBlock = TickTest.getLastBlock();
     bytes32 entity = TickTest.getEntities();
-    if(block.number == lastBlock) return;
+    if(block.number == lastBlock) {return;}
 
     //set the blocknumber so we can't re-enter
     TickTest.setLastBlock(block.number);

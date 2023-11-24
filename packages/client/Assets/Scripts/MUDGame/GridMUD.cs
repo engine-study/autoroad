@@ -15,7 +15,8 @@ public class GridMUD : MonoBehaviour {
     [SerializeField] Vector3 position;
     [SerializeField] PositionComponent firstComponent;
     TableManager positionTable;
-    private Dictionary<string, PositionComponent> pos = new Dictionary<string, PositionComponent>();
+    private Dictionary<string, PositionComponent> positions = new Dictionary<string, PositionComponent>();
+    private Dictionary<PositionComponent, string> components = new Dictionary<PositionComponent, string>();
 
     void Awake() {
         Instance = this;
@@ -72,7 +73,7 @@ public class GridMUD : MonoBehaviour {
             return comps.Count > 0 ? comps[0] : null;
         } else {
             Vector3Int round = new Vector3Int(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.y), Mathf.RoundToInt(newPos.z));
-            Instance.pos.TryGetValue(round.ToString(), out PositionComponent c); 
+            Instance.positions.TryGetValue(round.ToString(), out PositionComponent c); 
             return c; 
         }
     }
@@ -126,22 +127,30 @@ public class GridMUD : MonoBehaviour {
 
     void UpdatePosition(MUDComponent c, UpdateInfo info) {
 
-        PositionComponent component = c as PositionComponent;
+        PositionComponent pos = c as PositionComponent;
+        string key = pos.PosInt.ToString();
+
+        //remove old pos
+        if(components.TryGetValue(pos, out string oldPos)) {
+            //remove old position
+            positions.Remove(oldPos);
+            components[pos] = key;
+        } else {
+            components.Add(pos, key);
+        }
 
         //only listen to onchain updates
         if(info.Source != UpdateSource.Onchain) { return;}
 
-        string key = component.PosInt.ToString();
-
         //if we deleted the position, do not add it back 
         if(info.UpdateType == UpdateType.DeleteRecord) {
-            pos.Remove(key);
+            positions.Remove(key);
         } else {
             // Store the position in the dictionary
-            if (pos.ContainsKey(key)) {
-                pos[key] = component;
+            if (positions.ContainsKey(key)) {
+                positions[key] = pos;
             } else {
-                pos.Add(key, component);
+                positions.Add(key, pos);
             }
         }
 

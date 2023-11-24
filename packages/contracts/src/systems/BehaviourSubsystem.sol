@@ -31,15 +31,20 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
 
     //all movement related stuff
+    console.log("tick movement");
     if(Wander.get(entity) > 0) { doWander(causedBy, entity, entityPos);} 
 
-    //all action related stuff    
-    PositionData[] memory positions = neumanNeighborhoodOuter(entityPos, 2);
+    //all action related stuff, refresh position
+    console.log("tick behaviour");
+    entityPos = Position.get(entity);
+
+    PositionData[] memory positions = neumanNeighborhoodOuter(entityPos, 1);
     bytes32[] memory entities = activeEntities(world, positions);
 
     for (uint i = 0; i < positions.length; i++) {
       if (entities[i] == bytes32(0)) {continue;}
-      world.tickBehaviour(causedBy, entity, entities[i], entityPos, positions[i]);
+      console.log("tick");
+      tickBehaviour(causedBy, entities[i], entity, positions[i], entityPos);
     }
 
   }
@@ -52,8 +57,9 @@ contract BehaviourSubsystem is System {
 
     PositionData memory walkPos = addPosition(entityPos, randomDirection(entity, entityPos.x, entityPos.y, 0));
     if (Rules.onMap(walkPos.x, walkPos.y) == false) { return;}
-    bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
     SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionType.Walking)));
+
   }
 
   //out of world positions have been already filtered  at this point, can trust this is hapepning on map
