@@ -28782,6 +28782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af69f3eadb05f2a44a628b34207d1fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollSens: {x: 10, y: 30}
   mileUI: {fileID: 843262358}
   scrollUI: {fileID: 0}
   barUI: {fileID: 905419732}
@@ -38930,11 +38931,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canZoom: 1
-  scrollSensitivity: 1
+  scrollSensitivity: 2
   scrollRot: 0
   canPan: 1
   movementSpeed: 50
-  fovMultiply: {x: 1, y: 7.5}
+  fovMultiply: {x: 1, y: 10}
   clippingClose: {x: 80, y: 105}
   clippingFar: {x: 25, y: 200}
   canRotate: 1

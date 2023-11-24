@@ -14,6 +14,7 @@ public class WorldScroll : MonoBehaviour {
     public static float MinMile {get{return Instance.minMile;}}
 
     [Header("World Scroll")]
+    public Vector2 scrollSens = new Vector2(10f, 15f);
     public SPWindowParent mileUI;
     public UnityEngine.UI.ScrollRect scrollUI;
     public UnityEngine.UI.Scrollbar barUI;
@@ -28,7 +29,7 @@ public class WorldScroll : MonoBehaviour {
     [Header("Game State")]
     [SerializeField] GameObject front;
     [SerializeField] GameObject newMileText;
-    [SerializeField]  SPHeading newMileHeading;
+    [SerializeField] SPHeading newMileHeading;
     [SerializeField] GameObject [] difficultyStars;
 
     [Header("Debug")]
@@ -167,7 +168,7 @@ public class WorldScroll : MonoBehaviour {
         
         if (SPUIBase.CanInput && Input.GetKey(KeyCode.LeftShift) && SPUIBase.IsMouseOnScreen && Input.mouseScrollDelta.y != 0f) {
             if(Input.mouseScrollDelta.y != 0f) {mileUI.ToggleWindowOpen();}
-            scrollMile = GetSoftClampedMile(scrollMile + Input.mouseScrollDelta.y * 10f * Time.deltaTime);
+            scrollMile = GetSoftClampedMile(scrollMile + Input.mouseScrollDelta.y * Mathf.Lerp(scrollSens.x, scrollSens.y, SPCamera.I.Lerp) * Time.deltaTime);
             // scrollLock = Mathf.Round(mileScroll / 90) * 90;
         }
         

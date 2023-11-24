@@ -103,9 +103,8 @@ public class CameraControls : MonoBehaviour
     }
 
     void UpdateClipping() {
-        float fovLerp = Mathf.InverseLerp(SPCamera.I.FOVClamp.x, SPCamera.I.FOVClamp.y, SPCamera.I.FOV);
-        SPCamera.Camera.nearClipPlane = Mathf.Lerp(clippingClose.x, clippingFar.x, fovLerp);
-        SPCamera.Camera.farClipPlane = Mathf.Lerp(clippingClose.y, clippingFar.y, fovLerp);
+        SPCamera.Camera.nearClipPlane = Mathf.Lerp(clippingClose.x, clippingFar.x, SPCamera.I.Lerp);
+        SPCamera.Camera.farClipPlane = Mathf.Lerp(clippingClose.y, clippingFar.y, SPCamera.I.Lerp);
     }
 
     bool hasStarted, hasMovedEnough;
@@ -152,8 +151,7 @@ public class CameraControls : MonoBehaviour
             var position = transform.right * (_delta.x * -movementSpeed);
             position += transform.forward * (_delta.y * -movementSpeed);
 
-            float fovLerp = Mathf.InverseLerp(SPCamera.I.FOVClamp.x, SPCamera.I.FOVClamp.y, SPCamera.I.FOV);
-            float distanceMultiplier =  Mathf.Lerp(fovMultiply.x, fovMultiply.y, fovLerp);
+            float distanceMultiplier =  Mathf.Lerp(fovMultiply.x, fovMultiply.y, SPCamera.I.Lerp);
 
             position *= distanceMultiplier;
 
