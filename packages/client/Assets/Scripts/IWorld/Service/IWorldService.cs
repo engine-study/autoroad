@@ -574,40 +574,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createPuzzleOnMileFunction, cancellationToken);
         }
 
-        public Task<string> CreateRandomPuzzleRequestAsync(CreateRandomPuzzleFunction createRandomPuzzleFunction)
-        {
-             return ContractHandler.SendRequestAsync(createRandomPuzzleFunction);
-        }
-
-        public Task<TransactionReceipt> CreateRandomPuzzleRequestAndWaitForReceiptAsync(CreateRandomPuzzleFunction createRandomPuzzleFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createRandomPuzzleFunction, cancellationToken);
-        }
-
-        public Task<string> CreateRandomPuzzleRequestAsync(byte[] causedBy, byte puzzle, int right, int up, int down)
-        {
-            var createRandomPuzzleFunction = new CreateRandomPuzzleFunction();
-                createRandomPuzzleFunction.CausedBy = causedBy;
-                createRandomPuzzleFunction.Puzzle = puzzle;
-                createRandomPuzzleFunction.Right = right;
-                createRandomPuzzleFunction.Up = up;
-                createRandomPuzzleFunction.Down = down;
-            
-             return ContractHandler.SendRequestAsync(createRandomPuzzleFunction);
-        }
-
-        public Task<TransactionReceipt> CreateRandomPuzzleRequestAndWaitForReceiptAsync(byte[] causedBy, byte puzzle, int right, int up, int down, CancellationTokenSource cancellationToken = null)
-        {
-            var createRandomPuzzleFunction = new CreateRandomPuzzleFunction();
-                createRandomPuzzleFunction.CausedBy = causedBy;
-                createRandomPuzzleFunction.Puzzle = puzzle;
-                createRandomPuzzleFunction.Right = right;
-                createRandomPuzzleFunction.Up = up;
-                createRandomPuzzleFunction.Down = down;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(createRandomPuzzleFunction, cancellationToken);
-        }
-
         public Task<string> CreateStatuePuzzleRequestAsync(CreateStatuePuzzleFunction createStatuePuzzleFunction)
         {
              return ContractHandler.SendRequestAsync(createStatuePuzzleFunction);
@@ -638,6 +604,38 @@ namespace IWorld.Service
                 createStatuePuzzleFunction.Down = down;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createStatuePuzzleFunction, cancellationToken);
+        }
+
+        public Task<string> CreateTickersRequestAsync(CreateTickersFunction createTickersFunction)
+        {
+             return ContractHandler.SendRequestAsync(createTickersFunction);
+        }
+
+        public Task<TransactionReceipt> CreateTickersRequestAndWaitForReceiptAsync(CreateTickersFunction createTickersFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createTickersFunction, cancellationToken);
+        }
+
+        public Task<string> CreateTickersRequestAsync(byte[] causedBy, int width, int up, int down)
+        {
+            var createTickersFunction = new CreateTickersFunction();
+                createTickersFunction.CausedBy = causedBy;
+                createTickersFunction.Width = width;
+                createTickersFunction.Up = up;
+                createTickersFunction.Down = down;
+            
+             return ContractHandler.SendRequestAsync(createTickersFunction);
+        }
+
+        public Task<TransactionReceipt> CreateTickersRequestAndWaitForReceiptAsync(byte[] causedBy, int width, int up, int down, CancellationTokenSource cancellationToken = null)
+        {
+            var createTickersFunction = new CreateTickersFunction();
+                createTickersFunction.CausedBy = causedBy;
+                createTickersFunction.Width = width;
+                createTickersFunction.Up = up;
+                createTickersFunction.Down = down;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createTickersFunction, cancellationToken);
         }
 
         public Task<string> CreateWorldRequestAsync(CreateWorldFunction createWorldFunction)
@@ -971,42 +969,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doWanderFunction, cancellationToken);
         }
 
-        public Task<string> FindEmptyPositionInAreaRequestAsync(FindEmptyPositionInAreaFunction findEmptyPositionInAreaFunction)
-        {
-             return ContractHandler.SendRequestAsync(findEmptyPositionInAreaFunction);
-        }
-
-        public Task<TransactionReceipt> FindEmptyPositionInAreaRequestAndWaitForReceiptAsync(FindEmptyPositionInAreaFunction findEmptyPositionInAreaFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(findEmptyPositionInAreaFunction, cancellationToken);
-        }
-
-        public Task<string> FindEmptyPositionInAreaRequestAsync(byte[] entity, int width, int up, int down, int layer, int roadSide)
-        {
-            var findEmptyPositionInAreaFunction = new FindEmptyPositionInAreaFunction();
-                findEmptyPositionInAreaFunction.Entity = entity;
-                findEmptyPositionInAreaFunction.Width = width;
-                findEmptyPositionInAreaFunction.Up = up;
-                findEmptyPositionInAreaFunction.Down = down;
-                findEmptyPositionInAreaFunction.Layer = layer;
-                findEmptyPositionInAreaFunction.RoadSide = roadSide;
-            
-             return ContractHandler.SendRequestAsync(findEmptyPositionInAreaFunction);
-        }
-
-        public Task<TransactionReceipt> FindEmptyPositionInAreaRequestAndWaitForReceiptAsync(byte[] entity, int width, int up, int down, int layer, int roadSide, CancellationTokenSource cancellationToken = null)
-        {
-            var findEmptyPositionInAreaFunction = new FindEmptyPositionInAreaFunction();
-                findEmptyPositionInAreaFunction.Entity = entity;
-                findEmptyPositionInAreaFunction.Width = width;
-                findEmptyPositionInAreaFunction.Up = up;
-                findEmptyPositionInAreaFunction.Down = down;
-                findEmptyPositionInAreaFunction.Layer = layer;
-                findEmptyPositionInAreaFunction.RoadSide = roadSide;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(findEmptyPositionInAreaFunction, cancellationToken);
-        }
-
         public Task<string> FinishMileRequestAsync(FinishMileFunction finishMileFunction)
         {
              return ContractHandler.SendRequestAsync(finishMileFunction);
@@ -1231,24 +1193,6 @@ namespace IWorld.Service
                 getKeySchemaFunction.TableId = tableId;
             
             return ContractHandler.QueryAsync<GetKeySchemaFunction, byte[]>(getKeySchemaFunction, blockParameter);
-        }
-
-        public Task<GetRandomPositionNotRoadOutputDTO> GetRandomPositionNotRoadQueryAsync(GetRandomPositionNotRoadFunction getRandomPositionNotRoadFunction, BlockParameter blockParameter = null)
-        {
-            return ContractHandler.QueryDeserializingToObjectAsync<GetRandomPositionNotRoadFunction, GetRandomPositionNotRoadOutputDTO>(getRandomPositionNotRoadFunction, blockParameter);
-        }
-
-        public Task<GetRandomPositionNotRoadOutputDTO> GetRandomPositionNotRoadQueryAsync(byte[] entity, int width, int up, int down, int roadSide, BigInteger seed, BlockParameter blockParameter = null)
-        {
-            var getRandomPositionNotRoadFunction = new GetRandomPositionNotRoadFunction();
-                getRandomPositionNotRoadFunction.Entity = entity;
-                getRandomPositionNotRoadFunction.Width = width;
-                getRandomPositionNotRoadFunction.Up = up;
-                getRandomPositionNotRoadFunction.Down = down;
-                getRandomPositionNotRoadFunction.RoadSide = roadSide;
-                getRandomPositionNotRoadFunction.Seed = seed;
-            
-            return ContractHandler.QueryDeserializingToObjectAsync<GetRandomPositionNotRoadFunction, GetRandomPositionNotRoadOutputDTO>(getRandomPositionNotRoadFunction, blockParameter);
         }
 
         public Task<GetRecord1OutputDTO> GetRecordQueryAsync(GetRecord1Function getRecord1Function, BlockParameter blockParameter = null)

@@ -10,7 +10,7 @@ import { TerrainType, PuzzleType, MoveType, RockType } from "../codegen/common.s
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
-import { random, randomFromEntitySeed } from "../utility/random.sol";
+import { findEmptyPositionInArea } from "../utility/grid.sol";
 
 contract PuzzleSubsystem is System {
   function triggerPuzzles(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
@@ -40,21 +40,6 @@ contract PuzzleSubsystem is System {
     createStatuePuzzle(causedBy, playWidth, up, down);
   }
 
-  function createRandomPuzzle(bytes32 causedBy, PuzzleType puzzle, int32 right, int32 up, int32 down) public {
-    // IWorld world = IWorld(_world());
-    PuzzleType puzzleType = PuzzleType(random(0, uint32(PuzzleType.Count)));
-    console.log("create puzzle");
-
-    //use mile number to spawn puzzles?
-    // int32 mileNumber = GameState.getMiles();
-
-    if (puzzleType == PuzzleType.Miliarium) {
-      createMiliarium(causedBy, right, up, down);
-    } else {
-      createStatuePuzzle(causedBy, right, up, down);
-    }
-  }
-
   function createStatuePuzzle(bytes32 causedBy, int32 width, int32 up, int32 down) public {
     IWorld world = IWorld(_world());
     int32 puzzle = Puzzles.get();
@@ -65,7 +50,7 @@ contract PuzzleSubsystem is System {
 
     console.log("statue");
 
-    PositionData memory pos = findEmptyPositionInArea(statue, width, up, down, 0, roadSide);
+    PositionData memory pos = findEmptyPositionInArea(world, statue, width, up, down, 0, roadSide);
 
     //delete whatever was there and place puzzle
     Actions.deleteAt(world, pos);
@@ -83,7 +68,7 @@ contract PuzzleSubsystem is System {
     console.log("trigger");
 
     //put triggers underground
-    pos = findEmptyPositionInArea(trigger, width, up, down, -1, roadSide);
+    pos = findEmptyPositionInArea(world, trigger, width, up, down, -1, roadSide);
     pos.layer = int32(-1);
 
     Position.set(trigger, pos);
@@ -103,7 +88,7 @@ contract PuzzleSubsystem is System {
 
     console.log("miliarium");
 
-    PositionData memory pos = findEmptyPositionInArea(mil, width, up, down, 0, roadSide);
+    PositionData memory pos = findEmptyPositionInArea(world, mil, width, up, down, 0, roadSide);
 
     //delete whatever was there and place puzzle
     Actions.deleteAt(world, pos);
@@ -127,88 +112,4 @@ contract PuzzleSubsystem is System {
     Puzzles.set(puzzle + 1);
   }
 
-  //finds a position and deletes the object on it
-  function findEmptyPositionInArea(
-    bytes32 entity,
-    int32 width,
-    int32 up,
-    int32 down,
-    int32 layer,
-    int32 roadSide
-  ) public returns (PositionData memory pos) {
-    IWorld world = IWorld(_world());
-    console.log("find empty pos");
-
-    bool isValid = false;
-    uint attempts = 0;
-
-    while (isValid == false) {
-      require(attempts < 10, "ran out of valid positions");
-      isValid = true;
-
-      pos = getRandomPositionNotRoad(entity, width, up, down, roadSide, attempts);
-
-      if (layer == 0) {
-
-        //don't overwrite Puzzles already on road
-        bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, 0);
-        if (atPosition.length > 0) {
-          //check for puzzles
-          PuzzleType puzzle = PuzzleType(Puzzle.getPuzzleType(atPosition[0]));
-          if (puzzle != PuzzleType.None) {
-            console.log("puzzle blocked");
-            isValid = false;
-            attempts++;
-            continue;
-          }
-        }
-      } else {
-
-        //don't overwrite triggers already on road
-        if (Rules.onRoad(pos.x, pos.y)) {
-          console.log("road blocked");
-          isValid = false;
-          attempts++;
-          continue;
-        }
-
-        //check for triggers if still valid
-        bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
-        if (atPosition.length > 0) {
-          if (Trigger.get(atPosition[0])) {
-            console.log("trigger blocked");
-            isValid = false;
-            attempts++;
-            continue;
-          }
-        }
-      }
-    }
-
-    return pos;
-
-  }
-
-  function getRandomPositionNotRoad(
-    bytes32 entity,
-    int32 width,
-    int32 up,
-    int32 down,
-    int32 roadSide,
-    uint seed
-  ) public view returns (PositionData memory pos) {
-    //spawn on right side
-    pos.x = int32(uint32(randomFromEntitySeed(uint(uint32(roadSide)), uint(uint32(width)), entity, seed)));
-    pos.y = int32(uint32(randomFromEntitySeed(uint(uint32(down)), uint(uint32(up)), entity, seed*10)));
-    pos.layer = 0;
-
-    console.log("get random");
-    console.logInt(int(pos.x));
-    console.logInt(int(pos.y));
-
-    //switch what side of the road we spawn on
-    if (randomFromEntitySeed(1, 10, entity, seed*100) > uint(5)) {
-      pos.x = int32(-pos.x);
-    }
-  }
 }

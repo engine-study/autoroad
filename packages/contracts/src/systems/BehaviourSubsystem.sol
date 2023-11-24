@@ -73,14 +73,14 @@ contract BehaviourSubsystem is System {
     SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
   }
 
-  function doSeek(bytes32 causedBy, bytes32 target, bytes32 Seek, PositionData memory targetPos, PositionData memory seekerPos) public {
+  function doSeek(bytes32 causedBy, bytes32 target, bytes32 seek, PositionData memory targetPos, PositionData memory seekerPos) public {
     console.log("seek");
 
     IWorld world = IWorld(_world());
     //walk towards target
     PositionData memory walkPos = addPosition(seekerPos, getVectorNormalized(seekerPos,targetPos));
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
-    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, Seek, seekerPos, walkPos, atDest, ActionType.Walking)));
+    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, seek, seekerPos, walkPos, atDest, ActionType.Walking)));
   }
 
   function canAggroEntity(bytes32 attacker, bytes32 target) public returns(bool) {

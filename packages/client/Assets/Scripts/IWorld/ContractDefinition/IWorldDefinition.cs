@@ -240,27 +240,25 @@ namespace IWorld.ContractDefinition
         public virtual byte[] CausedBy { get; set; }
     }
 
-    public partial class CreateRandomPuzzleFunction : CreateRandomPuzzleFunctionBase { }
-
-    [Function("createRandomPuzzle")]
-    public class CreateRandomPuzzleFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "causedBy", 1)]
-        public virtual byte[] CausedBy { get; set; }
-        [Parameter("uint8", "puzzle", 2)]
-        public virtual byte Puzzle { get; set; }
-        [Parameter("int32", "right", 3)]
-        public virtual int Right { get; set; }
-        [Parameter("int32", "up", 4)]
-        public virtual int Up { get; set; }
-        [Parameter("int32", "down", 5)]
-        public virtual int Down { get; set; }
-    }
-
     public partial class CreateStatuePuzzleFunction : CreateStatuePuzzleFunctionBase { }
 
     [Function("createStatuePuzzle")]
     public class CreateStatuePuzzleFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("int32", "width", 2)]
+        public virtual int Width { get; set; }
+        [Parameter("int32", "up", 3)]
+        public virtual int Up { get; set; }
+        [Parameter("int32", "down", 4)]
+        public virtual int Down { get; set; }
+    }
+
+    public partial class CreateTickersFunction : CreateTickersFunctionBase { }
+
+    [Function("createTickers")]
+    public class CreateTickersFunctionBase : FunctionMessage
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
@@ -402,7 +400,7 @@ namespace IWorld.ContractDefinition
         public virtual byte[] CausedBy { get; set; }
         [Parameter("bytes32", "target", 2)]
         public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "Seek", 3)]
+        [Parameter("bytes32", "seek", 3)]
         public virtual byte[] Seek { get; set; }
         [Parameter("tuple", "targetPos", 4)]
         public virtual PositionData TargetPos { get; set; }
@@ -421,25 +419,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Entity { get; set; }
         [Parameter("tuple", "entityPos", 3)]
         public virtual PositionData EntityPos { get; set; }
-    }
-
-    public partial class FindEmptyPositionInAreaFunction : FindEmptyPositionInAreaFunctionBase { }
-
-    [Function("findEmptyPositionInArea", typeof(FindEmptyPositionInAreaOutputDTO))]
-    public class FindEmptyPositionInAreaFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "entity", 1)]
-        public virtual byte[] Entity { get; set; }
-        [Parameter("int32", "width", 2)]
-        public virtual int Width { get; set; }
-        [Parameter("int32", "up", 3)]
-        public virtual int Up { get; set; }
-        [Parameter("int32", "down", 4)]
-        public virtual int Down { get; set; }
-        [Parameter("int32", "layer", 5)]
-        public virtual int Layer { get; set; }
-        [Parameter("int32", "roadSide", 6)]
-        public virtual int RoadSide { get; set; }
     }
 
     public partial class FinishMileFunction : FinishMileFunctionBase { }
@@ -593,25 +572,6 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "tableId", 1)]
         public virtual byte[] TableId { get; set; }
-    }
-
-    public partial class GetRandomPositionNotRoadFunction : GetRandomPositionNotRoadFunctionBase { }
-
-    [Function("getRandomPositionNotRoad", typeof(GetRandomPositionNotRoadOutputDTO))]
-    public class GetRandomPositionNotRoadFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "entity", 1)]
-        public virtual byte[] Entity { get; set; }
-        [Parameter("int32", "width", 2)]
-        public virtual int Width { get; set; }
-        [Parameter("int32", "up", 3)]
-        public virtual int Up { get; set; }
-        [Parameter("int32", "down", 4)]
-        public virtual int Down { get; set; }
-        [Parameter("int32", "roadSide", 5)]
-        public virtual int RoadSide { get; set; }
-        [Parameter("uint256", "seed", 6)]
-        public virtual BigInteger Seed { get; set; }
     }
 
     public partial class GetRecord1Function : GetRecord1FunctionBase { }
@@ -2246,15 +2206,6 @@ namespace IWorld.ContractDefinition
 
 
 
-    public partial class FindEmptyPositionInAreaOutputDTO : FindEmptyPositionInAreaOutputDTOBase { }
-
-    [FunctionOutput]
-    public class FindEmptyPositionInAreaOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("tuple", "pos", 1)]
-        public virtual PositionData Pos { get; set; }
-    }
-
 
 
 
@@ -2340,15 +2291,6 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "keySchema", 1)]
         public virtual byte[] KeySchema { get; set; }
-    }
-
-    public partial class GetRandomPositionNotRoadOutputDTO : GetRandomPositionNotRoadOutputDTOBase { }
-
-    [FunctionOutput]
-    public class GetRandomPositionNotRoadOutputDTOBase : IFunctionOutputDTO 
-    {
-        [Parameter("tuple", "pos", 1)]
-        public virtual PositionData Pos { get; set; }
     }
 
     public partial class GetRecord1OutputDTO : GetRecord1OutputDTOBase { }

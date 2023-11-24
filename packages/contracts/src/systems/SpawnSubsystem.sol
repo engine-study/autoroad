@@ -11,27 +11,25 @@ import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
 
 import { Actions } from "../utility/actions.sol";
 import { randomCoord } from "../utility/random.sol";
+import { findEmptyPositionInArea } from "../utility/grid.sol";
 import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
-import { RewardSubsystem } from "../systems/RewardSubsystem.sol";
 
 contract SpawnSubsystem is System {
-    
   function spawnTicker(bytes32 entity) public {
     // Entities.setEntities
   }
-  
+
   function spawnPlayerNPC(bytes32 entity, int32 x, int32 y) public {
     spawnPlayer(entity, x, y, true);
   }
 
   function spawnPlayer(bytes32 entity, int32 x, int32 y, bool isBot) public {
-
     bool playerExists = Player.get(entity);
 
-    if(!playerExists) {
+    if (!playerExists) {
       Player.set(entity, true);
       Coinage.set(entity, 10);
       Eth.set(entity, 10000);
@@ -42,22 +40,19 @@ contract SpawnSubsystem is System {
 
       Shovel.set(entity, true);
       Boots.set(entity, 1, 3);
-      
+
       int32 mileJoined = GameState.getMiles();
 
       Stats.set(entity, mileJoined);
-
     }
 
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y, 0);
     Actions.setAction(entity, ActionType.Spawn, x, y);
-
   }
 
   function spawnNPC(bytes32 spawner, int32 x, int32 y, NPCType npcType) public {
-
     console.log("spawn NPC");
 
     require(npcType != NPCType.None, "None");
@@ -72,12 +67,12 @@ contract SpawnSubsystem is System {
       Soldier.set(entity, true);
       Weight.set(entity, 0);
       Seek.set(entity, 2);
-      Aggro.set(entity,1);
+      Aggro.set(entity, 1);
     } else if (npcType == NPCType.Barbarian) {
       Barbarian.set(entity, true);
       Weight.set(entity, 1);
       Seek.set(entity, 2);
-      Aggro.set(entity,1);
+      Aggro.set(entity, 1);
     } else if (npcType == NPCType.BarbarianArcher) {
       Barbarian.set(entity, true);
       Weight.set(entity, 1);
@@ -96,13 +91,26 @@ contract SpawnSubsystem is System {
 
     Move.set(entity, uint32(MoveType.Push));
     Health.set(entity, 1);
-    Position.set(entity, PositionData(x,y,0));
+    Position.set(entity, PositionData(x, y, 0));
 
     Actions.setAction(entity, ActionType.Spawn, x, y);
   }
 
+  function createTickers(bytes32 causedBy, int32 width, int32 up, int32 down) public {
+    IWorld world = IWorld(_world());
+    int32 roadSide = RoadConfig.getRight();
+
+    bytes32 entity = getUniqueEntity();
+
+    PositionData memory pos = findEmptyPositionInArea(world, entity, width, up, down, 0, roadSide);
+    Actions.deleteAt(world, pos);
+
+    spawnNPC(causedBy, pos.x, pos.y, NPCType.Deer);
+
+  }
+
   function destroy(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {
-    if(NPC.get(target) > 0) { 
+    if (NPC.get(target) > 0) {
       //kill if it was an NPC
       kill(causedBy, target, attacker, pos);
     } else {
@@ -132,5 +140,4 @@ contract SpawnSubsystem is System {
     // Position.set(bonesEntity, pos);
     // Move.set(bonesEntity, uint32(MoveType.Push));
   }
-
 }

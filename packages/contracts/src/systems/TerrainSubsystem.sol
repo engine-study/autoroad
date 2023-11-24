@@ -119,6 +119,7 @@ contract TerrainSubsystem is System {
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createMiliarium, (causedBy, right, up, down)));
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createTickers, (causedBy, right, up, down)));
 
     //set bounds 
     Bounds.set(left, right, up, down);
@@ -138,7 +139,9 @@ contract TerrainSubsystem is System {
     row = Row.get();
     row++;
 
-    spawnRow(causedBy, right, row);
+    uint256 difficulty = uint256(uint32(row)) % 5;
+
+    spawnRow(causedBy, right, row, difficulty);
     spawnEmptyRoad(0,row);
 
     Row.set(row);
@@ -146,7 +149,7 @@ contract TerrainSubsystem is System {
 
   }
     
-  function spawnRow(bytes32 causedBy, int32 width, int32 y) private {
+  function spawnRow(bytes32 causedBy, int32 width, int32 y, uint256 difficulty) private {
     
     console.log("spawn row");
 
@@ -171,14 +174,14 @@ contract TerrainSubsystem is System {
 
         if (noiseCoord <= 150) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord > 200 && noiseCoord <= 500) {
+        } else if (noiseCoord > 200 && noiseCoord <= 400) {
           terrainType = TerrainType.Rock;
-        } else if (noiseCoord > 500 && noiseCoord <= 525) {
+        } else if (noiseCoord > 500 && noiseCoord <= 600 + difficulty * 5) {
           terrainType = TerrainType.HeavyBoy;
-        } else if (noiseCoord > 525 && noiseCoord <= 550) {
+        } else if (noiseCoord > 700 && noiseCoord <= 750 + difficulty * 10) {
           if (Rules.onRoad(x, y)) { continue; }
           terrainType = TerrainType.HeavyHeavyBoy;
-        } else if (noiseCoord > 900 && noiseCoord <= 925) {
+        } else if (noiseCoord > 900 && noiseCoord <= 950 + difficulty * 10) {
           if (Rules.onRoad(x, y)) { continue; }
           terrainType = TerrainType.Pillar;
         } 
@@ -190,17 +193,18 @@ contract TerrainSubsystem is System {
         //NPCS
         NPCType npcType = NPCType.None;
 
-        if (noiseCoord > 1000 && noiseCoord <= 1025) {
+        if (noiseCoord > 1000 && noiseCoord <= 1100 - difficulty * 20) {
           npcType = NPCType.Ox;
-        } else if (y > 10 && noiseCoord > 1100 && noiseCoord <= 1150) {
+        } else if (difficulty > 0 && noiseCoord > 1100 && noiseCoord <= 1200 - difficulty * 10) {
           npcType = NPCType.Soldier;
-        } else if(y > 20 && noiseCoord > 1200 && noiseCoord < 1250) {
+        } else if(difficulty > 1 && noiseCoord > 1200 && noiseCoord < 1300 + difficulty * 10) {
           npcType = NPCType.Barbarian;
-        } else if (y > 30 && noiseCoord > 1300 && noiseCoord <= 1325) {
+        } else if (difficulty > 2 && noiseCoord > 1400 && noiseCoord <= 1450 + difficulty * 10) {
           npcType = NPCType.BarbarianArcher;
-        } else if (config.dummyPlayers && noiseCoord > 1500 && noiseCoord <= 1550) {
-          npcType = NPCType.Player;
-        }
+        } 
+        // else if (config.dummyPlayers && noiseCoord > 1500 && noiseCoord <= 1550) {
+        //   npcType = NPCType.Player;
+        // }
 
         if(npcType != NPCType.None) {
           SystemSwitch.call(abi.encodeCall(world.spawnNPC, (causedBy, x, y, npcType)));
