@@ -189,3 +189,75 @@ function getRandomPositionNotRoad(
     pos.x = int32(-pos.x);
   }
 }
+
+//ignore the center position
+function neumanNeighborhoodOuter(
+  PositionData memory center,
+  int32 distance
+) pure returns (PositionData[] memory) {
+  uint length = uint((uint32(distance) * 4));
+  uint index = 0;
+  PositionData[] memory neighbors = new PositionData[](length);
+
+  for (int32 x = int32(-distance); x <= distance; x++) {
+    if (x == 0) continue;
+    neighbors[index] = PositionData(center.x + x, center.y, 0);
+    index++;
+  }
+
+  for (int32 y = int32(-distance); y <= distance; y++) {
+    //don't cross over centre twice
+    if (y == 0) continue;
+    neighbors[index] = PositionData(center.x, center.y + y, 0);
+    index++;
+  }
+
+  return neighbors;
+}
+
+function neumanNeighborhood(PositionData memory center, int32 distance) pure returns (PositionData[] memory) {
+  uint length = uint((uint32(distance) * 4) + 1);
+  uint index = 0;
+  PositionData[] memory neighbors = new PositionData[](length);
+
+  for (int32 x = int32(-distance); x <= distance; x++) {
+    neighbors[index] = PositionData(center.x + x, center.y, 0);
+    index++;
+  }
+
+  for (int32 y = int32(-distance); y <= distance; y++) {
+    //don't cross over centre twice
+    if (y == 0) continue;
+    neighbors[index] = PositionData(center.x, center.y + y, 0);
+    index++;
+  }
+
+  return neighbors;
+}
+
+function mooreNeighborhood(PositionData memory center) pure returns (PositionData[] memory) {
+  PositionData[] memory neighbors = new PositionData[](9);
+  uint256 index = 0;
+
+  for (int32 x = -1; x <= 1; x++) {
+    for (int32 y = -1; y <= 1; y++) {
+      neighbors[index] = PositionData(center.x + x, center.y + y, 0);
+      index++;
+    }
+  }
+
+  return neighbors;
+}
+
+function activeEntities(IWorld world, PositionData[] memory positions) view returns (bytes32[] memory) {
+  // console.log("activeEntities");
+  bytes32[] memory neighbors = new bytes32[](positions.length);
+  for (uint i = 0; i < positions.length; i++) {
+    bytes32[] memory entities = Rules.getKeysAtPosition(world, positions[i].x, positions[i].y, 0);
+    if (entities.length > 0) {
+      neighbors[i] = entities[0];
+    }
+  }
+
+  return neighbors;
+}

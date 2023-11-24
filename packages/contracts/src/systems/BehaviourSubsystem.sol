@@ -13,6 +13,7 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { randomDirection } from "../utility/random.sol";
+import { neumanNeighborhoodOuter, activeEntities } from "../utility/grid.sol";
 
 
 contract BehaviourSubsystem is System {
@@ -20,13 +21,26 @@ contract BehaviourSubsystem is System {
   function tickEntity(bytes32 causedBy, bytes32 entity) public {
     
     //perform the tick action that can happen once per block maximum
+    //also notice entity takes credit for its own actions (ignores causedBy)
     tickAction(entity, entity, Position.get(entity));
     //do nothing else for now
   }
 
   function tickAction(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
 
+    IWorld world = IWorld(_world());
+
+    //all movement related stuff
     if(Wander.get(entity) > 0) { doWander(causedBy, entity, entityPos);} 
+
+    //all action related stuff    
+    PositionData[] memory positions = neumanNeighborhoodOuter(entityPos, 2);
+    bytes32[] memory entities = activeEntities(world, positions);
+
+    for (uint i = 0; i < positions.length; i++) {
+      if (entities[i] == bytes32(0)) {continue;}
+      world.tickBehaviour(causedBy, entity, entities[i], entityPos, positions[i]);
+    }
 
   }
 
@@ -37,6 +51,7 @@ contract BehaviourSubsystem is System {
     //walk towards target
 
     PositionData memory walkPos = addPosition(entityPos, randomDirection(entity, entityPos.x, entityPos.y, 0));
+    if (Rules.onMap(walkPos.x, walkPos.y) == false) { return;}
     bytes32[] memory atDest = Rules.getKeysAtPosition(world,walkPos.x, walkPos.y, 0);
     SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionType.Walking)));
   }

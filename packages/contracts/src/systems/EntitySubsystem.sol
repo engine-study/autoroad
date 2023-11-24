@@ -9,12 +9,14 @@ import { NPCType } from "../codegen/common.sol";
 
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
+import { neumanNeighborhoodOuter, activeEntities } from "../utility/grid.sol";
 import { Rules } from "../utility/rules.sol";
 
 contract EntitySubsystem is System {
 
   function triggerTicks(bytes32 causedby) public {
     uint256 lastBlock = TickTest.getLastBlock();
+    bytes32 entity = TickTest.getEntities();
     if(block.number == lastBlock) return;
 
     //set the blocknumber so we can't re-enter
@@ -22,13 +24,6 @@ contract EntitySubsystem is System {
     
     IWorld world = IWorld(_world());
     SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, TickTest.getEntities())));
-
-    //tick npcs
-    // bytes32[] memory entities = Entities.getEntities();
-    // for(uint i = 0; i < entities.length; i++) {
-    //   SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, entities[i])));
-    // }
-
 
   }
 
@@ -46,7 +41,7 @@ contract EntitySubsystem is System {
 
     //TODO gas golf, calculate distances and other things here so tickBehaviour doesnt do it
     PositionData[] memory positions = neumanNeighborhoodOuter(pos, 2);
-    bytes32[] memory entities = activeEntities(positions);
+    bytes32[] memory entities = activeEntities(world, positions);
 
     for (uint i = 0; i < positions.length; i++) {
       if (entities[i] == bytes32(0)) {continue;}
@@ -63,70 +58,4 @@ contract EntitySubsystem is System {
     }
   }
 
-  function activeEntities(PositionData[] memory positions) internal returns (bytes32[] memory) {
-    // console.log("activeEntities");
-    bytes32[] memory neighbors = new bytes32[](positions.length);
-    for (uint i = 0; i < positions.length; i++) {
-      bytes32[] memory entities = Rules.getKeysAtPosition(IWorld(_world()) ,positions[i].x, positions[i].y, 0);
-      if(entities.length > 0) {neighbors[i] = entities[0];}
-    }
-
-    return neighbors;
-  }
-
-    //ignore the center position
-   function neumanNeighborhoodOuter(PositionData memory center, int32 distance) public pure returns (PositionData[] memory) {
-    uint length = uint((uint32(distance) * 4));
-    uint index = 0;
-    PositionData[] memory neighbors = new PositionData[](length);
-
-    for (int32 x = int32(-distance); x <= distance; x++) {
-        if (x == 0) continue;
-      neighbors[index] = PositionData(center.x + x, center.y, 0);
-      index++;
-    }
-
-    for (int32 y = int32(-distance); y <= distance; y++) {
-      //don't cross over centre twice
-      if (y == 0) continue;
-      neighbors[index] = PositionData(center.x, center.y + y, 0);
-      index++;
-    }
-
-    return neighbors;
-  }
-
-  function neumanNeighborhood(PositionData memory center, int32 distance) public pure returns (PositionData[] memory) {
-    uint length = uint((uint32(distance) * 4) + 1);
-    uint index = 0;
-    PositionData[] memory neighbors = new PositionData[](length);
-
-    for (int32 x = int32(-distance); x <= distance; x++) {
-      neighbors[index] = PositionData(center.x + x, center.y, 0);
-      index++;
-    }
-
-    for (int32 y = int32(-distance); y <= distance; y++) {
-      //don't cross over centre twice
-      if (y == 0) continue;
-      neighbors[index] = PositionData(center.x, center.y + y, 0);
-      index++;
-    }
-
-    return neighbors;
-  }
-
-  function mooreNeighborhood(PositionData memory center) internal pure returns (PositionData[] memory) {
-    PositionData[] memory neighbors = new PositionData[](9);
-    uint256 index = 0;
-
-    for (int32 x = -1; x <= 1; x++) {
-      for (int32 y = -1; y <= 1; y++) {
-        neighbors[index] = PositionData(center.x + x, center.y + y, 0);
-        index++;
-      }
-    }
-
-    return neighbors;
-  }
 }
