@@ -3,7 +3,7 @@ using System.Collections;
 using mudworld;
 using mud;
 
-public abstract class PropComponent : ValueComponent {
+public class PropComponent : ValueComponent {
 
     [Header("Prop")]
     public SPAnimationProp propPrefab;

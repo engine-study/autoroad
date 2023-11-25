@@ -20,7 +20,7 @@ public class LinkerComponent : MUDComponent {
 
     protected override void Init(SpawnInfo si) {
         base.Init(si);
-        line.Toggle(false);
+        if(line) line.Toggle(false);
     }
 
     protected override void PostInit() {
