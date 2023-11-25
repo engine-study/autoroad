@@ -44,15 +44,15 @@ public class LinkerComponent : MUDComponent {
         start = StartCoroutine(SetCoroutine());
     }
     
-    protected override MUDTable GetTable() {return new LinkerTable();}
+    protected virtual string SetValue(MUDTable update) {return (string)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["value"];}
     protected override void UpdateComponent(MUDTable update, UpdateInfo newInfo) {
 
-        LinkerTable table = update as LinkerTable;
-        targetKey = (string)table.Value;
+        targetKey = SetValue(update);
         targetEntity = MUDWorld.FindEntity(targetKey);
 
-        if(gameObject.activeInHierarchy)
+        if(gameObject.activeInHierarchy) {
             CreateLink();
+        }
     
     }
 
@@ -79,16 +79,18 @@ public class LinkerComponent : MUDComponent {
         
         if(posSync == null) {Debug.LogError("They don't have pos", this); return;}
 
-        line.SetTarget(ourPos.Target, posSync.Target);
+        if(line) line.SetTarget(ourPos.Target, posSync.Target);
     }
 
     public void Hover(bool toggle) {
         
-        if(toggle) {
-            if(!ourPos || !posSync) {return;}
-            line.Toggle(true);
-        } else {
-            line.Toggle(false);
+        if(line) {
+            if(toggle) {
+                if(!ourPos || !posSync) {return;}
+                line.Toggle(true);
+            } else {
+                line.Toggle(false);
+            }
         }
     }
 

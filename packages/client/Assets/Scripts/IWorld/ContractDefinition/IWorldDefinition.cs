@@ -950,6 +950,19 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class PocketFunction : PocketFunctionBase { }
+
+    [Function("pocket")]
+    public class PocketFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "x", 2)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 3)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class PopFromDynamicFieldFunction : PopFromDynamicFieldFunctionBase { }
 
     [Function("popFromDynamicField")]
@@ -2353,6 +2366,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

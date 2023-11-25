@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using mudworld;
 
-public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow, Swap}
+public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow, Swap, Pocket}
 public class ActionsMUD : MonoBehaviour
 {
     public static ActionsMUD LocalActions;

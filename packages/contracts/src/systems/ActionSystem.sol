@@ -131,6 +131,9 @@ contract ActionSystem is System {
     } else if (newAction == ActionType.Swap) {
       SystemSwitch.call(abi.encodeCall(world.swapScroll, (player, x, y)));
       return;
+    } else if (newAction == ActionType.Pocket) {
+      SystemSwitch.call(abi.encodeCall(world.pocket, (player, x, y)));
+      return;
     }
 
     require(false, "No action found.");

@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } from "../codegen/index.sol";
-import { Road, Move, Action, Rock, Scroll, Seeds, Boots, Weight, NPC, ScrollSwap } from "../codegen/index.sol";
+import { Road, Move, Action, Rock, Scroll, Seeds, Boots, Weight, NPC, ScrollSwap, Pocket, Carry } from "../codegen/index.sol";
 import { Shovel, Pickaxe, Stick, FishingRod, Sword} from "../codegen/index.sol";
 import { PositionTableId, PositionData } from "../codegen/index.sol";
 import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/common.sol";
@@ -182,4 +182,30 @@ contract ToolSubsystem is System {
     ScrollSwap.set(player, scrolls - 1);
 
   }
+
+   function pocket(bytes32 player, int32 x, int32 y) public {
+    IWorld world = IWorld(_world());
+    require(Pocket.get(player), "no Pocket");
+    require(Rules.canDoStuff(player), "hmm");
+
+    bytes32 carry = Carry.get(player);
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world,x, y, 0);
+
+    if(carry == bytes32(0)) {
+
+      require(Rules.canInteract(player, Position.get(player), atDest, 1), "bad interact");
+      Rules.requireIsFairGame(carry);
+
+      Position.deleteRecord(carry);
+      Health.deleteRecord(carry);
+    } else {
+      require(Rules.canInteractEmpty(player, Position.get(player), PositionData(x,y,0), atDest, 1), "bad interact");
+      Position.set(carry, x,y,0);
+      Health.set(carry, 1);
+      Carry.set(player, bytes32(0));
+    }
+
+  }
+
+  
 }

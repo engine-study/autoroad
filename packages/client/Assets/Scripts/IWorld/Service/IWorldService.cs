@@ -2037,6 +2037,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(plantFunction, cancellationToken);
         }
 
+        public Task<string> PocketRequestAsync(PocketFunction pocketFunction)
+        {
+             return ContractHandler.SendRequestAsync(pocketFunction);
+        }
+
+        public Task<TransactionReceipt> PocketRequestAndWaitForReceiptAsync(PocketFunction pocketFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(pocketFunction, cancellationToken);
+        }
+
+        public Task<string> PocketRequestAsync(byte[] player, int x, int y)
+        {
+            var pocketFunction = new PocketFunction();
+                pocketFunction.Player = player;
+                pocketFunction.X = x;
+                pocketFunction.Y = y;
+            
+             return ContractHandler.SendRequestAsync(pocketFunction);
+        }
+
+        public Task<TransactionReceipt> PocketRequestAndWaitForReceiptAsync(byte[] player, int x, int y, CancellationTokenSource cancellationToken = null)
+        {
+            var pocketFunction = new PocketFunction();
+                pocketFunction.Player = player;
+                pocketFunction.X = x;
+                pocketFunction.Y = y;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(pocketFunction, cancellationToken);
+        }
+
         public Task<string> PopFromDynamicFieldRequestAsync(PopFromDynamicFieldFunction popFromDynamicFieldFunction)
         {
              return ContractHandler.SendRequestAsync(popFromDynamicFieldFunction);

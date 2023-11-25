@@ -2,7 +2,7 @@
 pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { MapConfig, RoadConfig, Bounds, Weight } from "../codegen/index.sol";
-import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health } from "../codegen/index.sol";
+import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health, Puzzle } from "../codegen/index.sol";
 import { MoveType } from "../codegen/common.sol";
 
 import { withinManhattanMinimum } from "./grid.sol";
@@ -11,7 +11,6 @@ import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswith
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
 library Rules {
-
   function onSpawn(int32 x, int32 y) internal view returns (bool) {
     int32 up = Bounds.getUp();
     // int32 down = Bounds.getDown();
@@ -20,7 +19,7 @@ library Rules {
     return (x < int32(-playWidth) && x >= int32(-spawnWidth)) && (y <= up && y >= 0);
   }
 
-  function getKeysAtPosition(IWorld world, int32 x, int32 y, int32 layer) internal view returns(bytes32[] memory) {
+  function getKeysAtPosition(IWorld world, int32 x, int32 y, int32 layer) internal view returns (bytes32[] memory) {
     (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicData) = Position.encode(x, y, layer);
     //TODO system switch
     return getKeysWithValue(world, PositionTableId, staticData, encodedLengths, dynamicData);
@@ -31,10 +30,10 @@ library Rules {
     return x >= RoadConfig.getLeft() && x <= RoadConfig.getRight();
   }
 
-  function getMileBounds(int32 mile) internal view returns(int32 left, int32 right, int32 up, int32 down) {
+  function getMileBounds(int32 mile) internal view returns (int32 left, int32 right, int32 up, int32 down) {
     right = MapConfig.getPlayWidth();
     left = int32(-right);
-    
+
     int32 playHeight = MapConfig.getPlayHeight();
     down = mile * playHeight;
     up = down + playHeight + int32(-1);
@@ -56,32 +55,17 @@ library Rules {
 
   function canDoStuff(bytes32 entity) internal returns (bool) {
     //TODO add game pausing global
-    if(Health.get(entity) < 1) return false;
+    if (Health.get(entity) < 1) return false;
     return true;
   }
 
-  function requireInteractable( 
+  function requireInteractable(
     bytes32 player,
     PositionData memory playerPos,
     bytes32[] memory entities,
     uint distance
   ) internal {
     require(canInteract(player, playerPos, entities, distance), "bad interact");
-  }
-
-  function canInteract(
-    bytes32 player,
-    PositionData memory playerPos,
-    bytes32[] memory entities,
-    uint distance
-  ) internal returns (bool) {
-    require(entities.length > 0, "empty position");
-    //todo check off grid?
-    //TODO this should be a parameter, not get()
-    PositionData memory entityPos = Position.get(entities[0]);
-    require(requireLegalMove(player, playerPos, entityPos, distance), "Bad move");
-
-    return true;
   }
 
   function abs(int x) internal pure returns (int) {
@@ -114,6 +98,13 @@ library Rules {
     return (moveAt == MoveType.None || moveAt == MoveType.Hole || moveAt == MoveType.Trap);
   }
 
+  function requireIsFairGame(bytes32 entity) internal view returns (bool) {
+    require(Player.get(entity) == false, "Cannot pocket player");
+    require(Puzzle.getPuzzleType(entity) == 0, "Cannot pocket puzzle");
+    require(Move.get(entity) != uint32(MoveType.Hole), "Cannot pocket hole");
+    return true;
+  }
+
   //can block projectiles and movement
   function canBlock(MoveType moveAt) internal pure returns (bool) {
     return moveAt != MoveType.None && moveAt != MoveType.Hole;
@@ -136,7 +127,6 @@ library Rules {
       return onMap(pos.x, pos.y);
     }
   }
-
 
   //complex, returns true if pushable, false if not pushable, but requires not obstructed
   function requireEmptyOrPushable(bytes32[] memory at) internal view returns (bool) {
@@ -170,6 +160,21 @@ library Rules {
     return true;
   }
 
+  function canInteract(
+    bytes32 player,
+    PositionData memory playerPos,
+    bytes32[] memory entities,
+    uint distance
+  ) internal returns (bool) {
+    require(entities.length > 0, "empty position");
+    //todo check off grid?
+    //TODO this should be a parameter, not get()
+    PositionData memory entityPos = Position.get(entities[0]);
+    require(requireLegalMove(player, playerPos, entityPos, distance), "Bad move");
+
+    return true;
+  }
+
   function canInteractEmpty(
     bytes32 player,
     PositionData memory playerPos,
@@ -182,5 +187,4 @@ library Rules {
     require(requireLegalMove(player, entityPos, playerPos, distance), "too far or too close");
     return true;
   }
-
 }
