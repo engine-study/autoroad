@@ -197,8 +197,8 @@ contract ToolSubsystem is System {
       Rules.requireIsFairGame(carry);
 
       Carry.set(player, atDest[0]);
-      Position.deleteRecord(carry);
-      Health.deleteRecord(carry);
+      Position.set(atDest[0], PositionData(x,y,-2));
+      Health.set(atDest[0], -1);
     } else {
       require(Rules.canInteractEmpty(player, Position.get(player), PositionData(x,y,0), atDest, 1), "bad interact");
       Position.set(carry, x,y,0);
