@@ -58,7 +58,7 @@ public class AccountField : SPWindow
 
         while(true) {
 
-            var balanceRequest = new EthGetBalanceUnityRequest(NetworkManager.Network.jsonRpcUrl);
+            var balanceRequest = new EthGetBalanceUnityRequest(NetworkManager.ActiveNetwork.jsonRpcUrl);
             yield return balanceRequest.SendRequest(addressField, BlockParameter.CreateLatest());
             ethBalance = (float)UnitConversion.Convert.FromWei(balanceRequest.Result.Value);
 

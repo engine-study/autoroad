@@ -19,12 +19,16 @@ using UnityEditor;
 
 public enum GamePhase { Lobby, Game, PostGame, _Count }
 public class GameState : MonoBehaviour {
+
+    public static bool FirstLoad = true;
+    public static NetworkTypes.NetworkType NetworkType;
     public static Action GameStarted;
     public static GameState Instance;
     public static bool GameReady {get{return Instance.gameReady;}}
     public static bool GamePlaying {get{return Instance.gamePlaying;}}
 
     [Header("Test")]
+    public NetworkTypes.NetworkType networkType;
     public bool newGame = false; 
     public bool skipMenu = false; 
 
@@ -54,6 +58,11 @@ public class GameState : MonoBehaviour {
 
         Instance = this;
         editorObjects.SetActive(false);
+
+        if(FirstLoad) {
+            FirstLoad = false;
+            NetworkType = networkType;
+        }
         
         SPEvents.OnLocalPlayerSpawn += RecieverPlayer;
         GameStateComponent.OnGameStateUpdated += GameStateUpdated;
@@ -265,11 +274,14 @@ public class GameState : MonoBehaviour {
 
     async UniTask LoadWorld() {
 
-        // if(NetworkManager.Instance.networkType == NetworkTypes.NetworkType.Local) {
-        //     worldSelector.loadFrom = WorldLocation.ResourcesFolder;
-        // } else {
-        //     worldSelector.loadFrom = WorldLocation.URL;
-        // }
+        NetworkManager.Instance.networkType = NetworkType;
+
+        if(NetworkManager.Instance.networkType == NetworkTypes.NetworkType.Local) {
+            // worldSelector.loadFrom = WorldLocation.ResourcesFolder;
+        } else {
+            // worldSelector.loadFrom = WorldLocation.URL;
+        }
+
     }
 
     async UniTask GameSetup() {

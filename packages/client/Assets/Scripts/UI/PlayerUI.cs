@@ -10,11 +10,12 @@ public class PlayerUI : SPWindowParent
     public SPBar slider;
 
     public override void Init() {
+        if(HasInit) {return;}
         base.Init(); 
+
         SPEvents.OnLocalPlayerSpawn += SetupPlayer;
         XPComponent.OnLocalXPUpdate += UpdateXP;
         XPComponent.OnLocalLevelUp += UpdateLevel;
-
 
         slider.SetFill(0f);
 
@@ -32,6 +33,7 @@ public class PlayerUI : SPWindowParent
 
     protected override void OnDestroy() {
         base.OnDestroy();
+
         SPEvents.OnLocalPlayerSpawn -= SetupPlayer;
         XPComponent.OnLocalXPUpdate -= UpdateXP;
         XPComponent.OnLocalLevelUp -= UpdateLevel;

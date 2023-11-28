@@ -42,10 +42,16 @@ public class ChunkLoader : MonoBehaviour
 
     void OnDestroy() {
         Instance = null;
-             
+            
+        ActiveChunk = null;
         Chunks = null;
         ChunkList = null;
         PositionsOnMiles = null;
+
+        Chunks = null;
+        ChunkList = null;
+        PositionsOnMiles = null;
+
 
         // TableManager pos = MUDWorld.FindTable<PositionComponent>();
         // if(pos) pos.OnComponentSpawned -= PositionsToChunk;

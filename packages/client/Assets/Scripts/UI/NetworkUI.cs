@@ -46,7 +46,7 @@ public class NetworkUI : SPWindow
     }
 
     public void CreateAccount() {
-        Account account = new Account(Common.GeneratePrivateKey(), NetworkManager.Network.chainId);
+        Account account = new Account(Common.GeneratePrivateKey(), NetworkManager.ActiveNetwork.chainId);
         CreateAccount(account);
     }
 

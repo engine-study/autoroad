@@ -88,6 +88,22 @@ public class MotherUI : SPUIInstance {
 
     }
 
+    protected override void OnDestroy() {
+        base.OnDestroy();
+
+        Mother = null;
+        SPGlobal.OnDebug -= OnDebug;
+
+        SPEvents.OnServerLoaded -= ShowMainMenu;
+        SPEvents.OnGameReady -= GameReady;
+        SPEvents.OnPlayGame -= OnStartGame;
+
+        TxManager.OnSend -= SendTx;
+        TxManager.OnTransaction -= UpdateWheel;
+        TxUpdate.OnUpdated -= UpdateWheelOptimistic;
+
+    }
+
     protected override void Start() {
         base.Start();
 
@@ -105,20 +121,6 @@ public class MotherUI : SPUIInstance {
 
     }
 
-    protected override void OnDestroy() {
-        base.OnDestroy();
-
-        Mother = null;
-
-        SPEvents.OnServerLoaded -= ShowMainMenu;
-        SPEvents.OnGameReady -= GameReady;
-        SPEvents.OnPlayGame -= OnStartGame;
-
-        TxManager.OnSend -= SendTx;
-        TxManager.OnTransaction -= UpdateWheel;
-        TxUpdate.OnUpdated -= UpdateWheelOptimistic;
-
-    }
 
     void Update() {
         if(Input.GetKeyDown(KeyCode.BackQuote) && Input.GetKey(KeyCode.LeftShift)) {

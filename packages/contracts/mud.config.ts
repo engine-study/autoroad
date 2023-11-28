@@ -50,7 +50,7 @@ export default mudConfig({
   enums: {
     ActionType: ["None", "Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn", "Bow", "Swap", "Pocket"],
     TerrainType: ["None", "Rock", "Trap", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Miliarium"],
-    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer"],
+    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer", "Taxman"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap", "Permanent"],
@@ -229,6 +229,9 @@ export default mudConfig({
     Tree: "uint32",
     Log: "bool",
     Ox: "bool",
+
+    Treasury: "uint256",
+
 
     //Behaviour 
     //Flee: "bool", (this will probably cause infinite loops) if a Seek chases a fleer
