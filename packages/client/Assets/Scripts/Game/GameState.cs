@@ -265,11 +265,11 @@ public class GameState : MonoBehaviour {
 
     async UniTask LoadWorld() {
 
-        if(NetworkManager.Instance.networkType == NetworkTypes.NetworkType.Local) {
-            worldSelector.loadFrom = WorldLocation.ResourcesFolder;
-        } else {
-            worldSelector.loadFrom = WorldLocation.URL;
-        }
+        // if(NetworkManager.Instance.networkType == NetworkTypes.NetworkType.Local) {
+        //     worldSelector.loadFrom = WorldLocation.ResourcesFolder;
+        // } else {
+        //     worldSelector.loadFrom = WorldLocation.URL;
+        // }
     }
 
     async UniTask GameSetup() {
