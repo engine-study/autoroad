@@ -30,7 +30,7 @@ public class CarriageComponent : MUDComponent
     protected override void UpdateComponent(MUDTable table, UpdateInfo newInfo) {
         // throw new System.NotImplementedException();
 
-        Entity.SetName("Carriage");
+        // Entity.SetName("Carriage");
     }
 
     void WagonFX() {

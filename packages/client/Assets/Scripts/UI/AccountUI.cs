@@ -91,7 +91,9 @@ public class AccountUI : SPWindow
     }
 
     async UniTask Sign() {
-        DidSign(await TxManager.SendDirect<SupFunction>());
+        // DidSign(await TxManager.SendDirect<SupFunction>());
+        DidSign(await TxManager.SendDirect<BuyFunction>(System.Convert.ToUInt32(6), System.Convert.ToByte(PaymentType.Eth)));
+
     }
     
     public void DidSign(bool sup) {

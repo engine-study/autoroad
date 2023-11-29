@@ -3,12 +3,12 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Position, PositionData, Player, Health, GameState, Bounds, Action, Conscription, Weight } from "../codegen/index.sol";
-import { Coinage, Gem, Eth, XP, Scroll, Stick, Pickaxe, Axe, Sword, Robe, Head, Boots, FishingRod, ScrollSwap, Seeds,Pocket,Carry } from "../codegen/index.sol";
-import { ActionType, PaymentType } from "../codegen/common.sol";
+import { Player, Action, Conscription, Weight } from "../codegen/index.sol";
+import { Coinage, Gem, Eth, XP, Scroll, Stick, Pickaxe, Axe, Sword, Robe, Head, Boots, FishingRod, ScrollSwap, Seeds, Pocket } from "../codegen/index.sol";
+import { PaymentType } from "../codegen/common.sol";
 
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { GaulItems } from "../data/GaulItems.sol";
+// import { GaulItems } from "../data/GaulItems.sol";
 
 contract ItemSubsystem is System {
   
@@ -64,8 +64,7 @@ contract ItemSubsystem is System {
         Conscription.set(player, true);
       } 
       else if (id == 7) { //loincloth
-        pay(player, 0, 0, 10000000000000000, payment, 0);
-        Conscription.set(player, true);
+        
       } 
       else if (id == 8) { //seed
         pay(player, 10, 0, 0, payment, 0);
@@ -163,8 +162,6 @@ contract ItemSubsystem is System {
 
 
   function canBuy(int32 price, int32 gems, int32 eth) public returns(bool) {
-
-
 
   }
 

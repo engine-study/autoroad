@@ -159,7 +159,9 @@ public class GameState : MonoBehaviour {
 
     async UniTask SetAccount() {
     
-        if(skipMenu || !MainMenuUI.IsNewGame) {
+        ConscriptionTable pass = MUDWorld.GetTable<ConscriptionTable>(NetworkManager.LocalKey);
+
+        if(pass != null && (bool)pass.Value && (skipMenu || !MainMenuUI.IsNewGame)) {
             //use the default that NetworkManager gives us
         } else {
             //wait for name table        

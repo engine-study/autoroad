@@ -10,6 +10,7 @@ public class RowComponent : MonoBehaviour {
     bool isCompleted = false; 
 
     [Header("Row")]
+    [SerializeField] private GameObject raw;
     [SerializeField] private GameObject complete;
     [SerializeField] private GameObject completeEffects;
 
@@ -34,6 +35,7 @@ public class RowComponent : MonoBehaviour {
 
     public void SpawnRoad(int width) {
 
+        raw.SetActive(true);
         complete.SetActive(false);
         completeEffects.SetActive(false);
 
@@ -101,7 +103,8 @@ public class RowComponent : MonoBehaviour {
 
     void SetCompleted() {
         isCompleted = true;
-        complete.gameObject.SetActive(true);
+        complete.SetActive(true);
+        raw.SetActive(false);
     }
 
     public bool IsCompleted() {
