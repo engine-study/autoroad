@@ -12,14 +12,21 @@ public class SummonUI : SPWindow
         ToggleWindowClose();
 
         UpdateSummon();
+
         ChunkComponent.OnChunkUpdate += UpdateSummon;
     }
-    protected override void Destroy() {
-        base.Destroy();
+    protected override void OnDestroy() {
+        base.OnDestroy();
         ChunkComponent.OnChunkUpdate -= UpdateSummon;
     }
 
     public void UpdateSummon() {
+
+        if(this == null) {
+            OnDestroy();
+            return;
+        }
+
         if(!HasInit) return;
         ToggleWindow(ChunkLoader.ActiveChunk?.Spawned == false);
     }
