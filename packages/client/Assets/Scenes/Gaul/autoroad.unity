@@ -5712,6 +5712,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 589435703}
     m_Modifications:
+    - target: {fileID: 4176706166017608462, guid: 2f4077546d5be6c47b7693a191db08a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4665808087698165073, guid: 2f4077546d5be6c47b7693a191db08a7, type: 3}
       propertyPath: m_LocalScale.z
       value: 10
@@ -5721,6 +5725,10 @@ PrefabInstance:
       value: Mile
       objectReference: {fileID: 0}
     - target: {fileID: 5252045476041477553, guid: 2f4077546d5be6c47b7693a191db08a7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5682066992040374898, guid: 2f4077546d5be6c47b7693a191db08a7, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -39047,10 +39055,10 @@ MonoBehaviour:
   listener: {fileID: 499582936}
   moveSpeed: 5
   rotateSpeed: 360
-  fovClamp: {x: 2, y: 50}
+  fovClamp: {x: 0.5, y: 40}
   shakeFalloff: 10
   screenshotSize: 1
-  fov: 12
+  fov: 9.5
   follow: 1
   followTransform: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
@@ -39074,7 +39082,7 @@ MonoBehaviour:
   canPan: 1
   movementSpeed: 50
   fovMultiply: {x: 1, y: 10}
-  clippingClose: {x: 80, y: 105}
+  clippingClose: {x: 95, y: 105}
   clippingFar: {x: 25, y: 200}
   canRotate: 1
   rotationSpeed: 200
@@ -42079,9 +42087,9 @@ Camera:
     height: 1
   near clip plane: 50
   far clip plane: 125
-  field of view: 15
+  field of view: 9.5
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 9.5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

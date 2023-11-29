@@ -82,15 +82,15 @@ contract ActionSystem is System {
     Actions.setAction(player, ActionType.Buy, pos.x, pos.y);
   }
 
-  // function walk(int32 x, int32 y, int32 distance) public {
-  //   bytes32 player = addressToEntityKey(address(_msgSender()));
-  //   IWorld world = IWorld(_world());
+  function walk(int32 x, int32 y, int32 distance) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    IWorld world = IWorld(_world());
 
-  //   Rules.requirePlayer(player);
-  //   require(Rules.canDoStuff(player), "hmm");
+    Rules.requirePlayer(player);
+    require(Rules.canDoStuff(player), "hmm");
 
-  //   SystemSwitch.call(abi.encodeCall(world.moveSimpleDistance, (player, x, y, distance)));
-  // }
+    SystemSwitch.call(abi.encodeCall(world.moveSimpleDistance, (player, x, y, distance)));
+  }
 
   //this is gross... and wasting gas on if else and systemswitch
   function action(ActionType newAction, int32 x, int32 y) public {
