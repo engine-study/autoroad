@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
-import { MapConfig, RoadConfig, Bounds, Weight } from "../codegen/index.sol";
+import { MapConfig, RoadConfig, Bounds, Weight, Conscription } from "../codegen/index.sol";
 import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health, Puzzle } from "../codegen/index.sol";
 import { MoveType } from "../codegen/common.sol";
 
@@ -53,7 +53,11 @@ library Rules {
     return x >= int32(-spawnWidth) && x <= spawnWidth && y <= up && y >= 0;
   }
 
-  function canDoStuff(bytes32 entity) internal returns (bool) {
+  function requirePlayer(bytes32 entity) internal view returns (bool) {
+    require(Conscription.get(entity), "bot bot bot");
+  }
+
+  function canDoStuff(bytes32 entity) internal view returns (bool) {
     //TODO add game pausing global
     if (Health.get(entity) < 1) return false;
     return true;

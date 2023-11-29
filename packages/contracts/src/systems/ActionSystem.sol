@@ -21,7 +21,6 @@ contract ActionSystem is System {
 
   function name(uint32 firstName, uint32 middleName, uint32 lastName) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
-
     bool hasName = Name.getNamed(entity);
     require(!hasName, "already has name");
     
@@ -35,7 +34,9 @@ contract ActionSystem is System {
 
   function resetPlayer() public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
+    Rules.requirePlayer(entity);
     IWorld world = IWorld(_world());
+
     PositionData memory pos = Position.get(entity);
     SystemSwitch.call(abi.encodeCall(world.kill, (entity, entity, entity, pos)));
 
@@ -44,8 +45,10 @@ contract ActionSystem is System {
   function spawn(int32 x, int32 y) public {
     bytes32 entity = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
-    bool playerExists = Player.get(entity);
 
+    Rules.requirePlayer(entity);
+
+    bool playerExists = Player.get(entity);
     if (playerExists) { require(Health.get(entity) == -1, "not dead, can't respawn");}
     require(Rules.onSpawn(x,y), "out of spawn");
 
@@ -83,6 +86,7 @@ contract ActionSystem is System {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
 
+    Rules.requirePlayer(player);
     require(Rules.canDoStuff(player), "hmm");
 
     SystemSwitch.call(abi.encodeCall(world.moveSimpleDistance, (player, x, y, distance)));
@@ -92,7 +96,8 @@ contract ActionSystem is System {
   function action(ActionType newAction, int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
-    
+
+    Rules.requirePlayer(player);
     require(Rules.canDoStuff(player), "hmm");
 
     if (newAction == ActionType.Idle) {} 
