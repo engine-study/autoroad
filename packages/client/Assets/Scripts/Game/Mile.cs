@@ -10,6 +10,7 @@ public class Mile : MonoBehaviour
     [Header("Mile")]
     [SerializeField] Transform roadParent;
     [SerializeField] GameObject roadMesh;
+    [SerializeField] GameObject completed, unfinished;
     [SerializeField] Transform terrainParent;
     [SerializeField] Transform groundParent;
     [SerializeField] Transform groundLeft, groundRight;
@@ -42,6 +43,11 @@ public class Mile : MonoBehaviour
         rowParent.gameObject.SetActive(toggle);
         roadMesh.SetActive(!toggle);
         terrain.SetActive(toggle);
+
+        if(isRealChunk) {
+            completed.SetActive(!toggle && chunk.Completed);
+            unfinished.SetActive(!toggle && !chunk.Completed);
+        }
     }
 
     public void ToggleCurrentMile(bool toggle) {
@@ -77,8 +83,15 @@ public class Mile : MonoBehaviour
 
                 rows[i] = newRow;
             }
+
+            completed.SetActive(false);
+            unfinished.SetActive(false);
+
         } else {
 
+            completed.SetActive(transform.position.z <= 0f);
+            unfinished.SetActive(transform.position.z >= 0f);
+            
         }
 
 

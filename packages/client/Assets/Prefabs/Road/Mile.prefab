@@ -1,5 +1,88 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &94645349867071118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5742423567392248533}
+  - component: {fileID: 6094501230240011486}
+  - component: {fileID: 7578020723909695480}
+  m_Layer: 0
+  m_Name: Road
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5742423567392248533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94645349867071118}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.005, z: 0.5}
+  m_LocalScale: {x: 3, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1752432062758530461}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!33 &6094501230240011486
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94645349867071118}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &7578020723909695480
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94645349867071118}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 15c42bed231b1564d88c2e8ca8ebd378, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &453337649503100779
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,6 +431,89 @@ Transform:
   m_Father: {fileID: 6632599699831637729}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3604206760580883451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 851708491047270821}
+  - component: {fileID: 4191410728403824284}
+  - component: {fileID: 3644163103304658862}
+  m_Layer: 0
+  m_Name: Road
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &851708491047270821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3604206760580883451}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.005, z: 0.5}
+  m_LocalScale: {x: 3, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7742272414479027595}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!33 &4191410728403824284
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3604206760580883451}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &3644163103304658862
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3604206760580883451}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: dc006ead5c9e1f4458d28f6d5efc3a10, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4000742853546946103
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +543,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7134625536072008943}
+  m_Father: {fileID: 4665808087698165073}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4176706166017608462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7742272414479027595}
+  m_Layer: 0
+  m_Name: Completed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7742272414479027595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4176706166017608462}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 851708491047270821}
   m_Father: {fileID: 4665808087698165073}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -472,6 +670,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roadParent: {fileID: 3870981273973823909}
   roadMesh: {fileID: 7426652507514831048}
+  completed: {fileID: 4176706166017608462}
+  unfinished: {fileID: 5682066992040374898}
   terrainParent: {fileID: 3828313871627172572}
   groundParent: {fileID: 4665808087698165073}
   groundLeft: {fileID: 6394311715313162211}
@@ -568,6 +768,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5682066992040374898
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1752432062758530461}
+  m_Layer: 0
+  m_Name: NotStarted
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1752432062758530461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682066992040374898}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5742423567392248533}
+  m_Father: {fileID: 4665808087698165073}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5908321230274967197
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,6 +1115,8 @@ Transform:
   - {fileID: 2078743663090130465}
   - {fileID: 1913840343752084044}
   - {fileID: 8669344265941086644}
+  - {fileID: 1752432062758530461}
+  - {fileID: 7742272414479027595}
   m_Father: {fileID: 6632599699831637729}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1070,7 +1304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7059414568470599779
 Transform:
   m_ObjectHideFlags: 0
@@ -1503,6 +1737,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: 2.5, y: 0, z: 0}
   maxPos: {x: 2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -1626,6 +1862,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: -2.5, y: 0, z: 0}
   maxPos: {x: -2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -1846,6 +2084,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: 2.5, y: 0, z: 0}
   maxPos: {x: 2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -1969,6 +2209,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: -2.5, y: 0, z: 0}
   maxPos: {x: -2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -2092,6 +2334,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: -2.5, y: 0, z: 0}
   maxPos: {x: -2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -2215,6 +2459,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: 2.5, y: 0, z: 0}
   maxPos: {x: 2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -2338,6 +2584,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: 2.5, y: 0, z: 0}
   maxPos: {x: 2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -2466,6 +2714,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: 2.5, y: 0, z: 0}
   maxPos: {x: 2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -2584,6 +2834,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: -2.5, y: 0, z: 0}
   maxPos: {x: -2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -2712,6 +2964,8 @@ MonoBehaviour:
   usePos: 1
   minPos: {x: -2.5, y: 0, z: 0}
   maxPos: {x: -2.5, y: 0, z: 20}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
