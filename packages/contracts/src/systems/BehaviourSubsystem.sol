@@ -3,7 +3,7 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling} from "../codegen/index.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Cursed} from "../codegen/index.sol";
 import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
 import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
@@ -44,7 +44,7 @@ contract BehaviourSubsystem is System {
     for (uint i = 0; i < positions.length; i++) {
       if (entities[i] == bytes32(0)) {continue;}
       console.log("tick");
-      tickBehaviour(causedBy, entities[i], entity, positions[i], entityPos);
+      tickBehaviour(causedBy, entity, entities[i], entityPos, positions[i]);
     }
 
   }
@@ -63,7 +63,7 @@ contract BehaviourSubsystem is System {
   }
 
   //out of world positions have been already filtered  at this point, can trust this is hapepning on map
-  function tickBehaviour(bytes32 causedBy, bytes32 target, bytes32 entity, PositionData memory targetPos, PositionData memory entityPos) public {
+  function tickBehaviour(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
 
     console.log("tickBehaviour");
 
@@ -74,17 +74,18 @@ contract BehaviourSubsystem is System {
 
     //Seek should either trigger or aggro, not both, and check for 0 values
     uint32 fling = Fling.get(entity);
-    if(fling == distance) { callFling(causedBy, target, entity, targetPos, entityPos);} 
+    if(fling == distance) { callFling(causedBy, entity, target, entityPos, targetPos);} 
     uint32 seek = Seek.get(entity);
-    if(seek == distance) { doSeek(causedBy, target, entity, targetPos, entityPos);} 
+    if(seek == distance) { doSeek(causedBy, entity, target, entityPos, targetPos);} 
     uint32 aggro = Aggro.get(entity);
-    if(aggro > 0 && aggro == distance) { doAggro(causedBy, target, entity, targetPos, entityPos);}
+    if(aggro > 0 && aggro == distance) { doAggro(causedBy, entity, target, entityPos, targetPos);}
     uint32 archer = Archer.get(entity);
-    if(archer > 0 && archer >= distance) { doArrow(causedBy, target, entity, targetPos, entityPos);}
-
+    if(archer > 0 && archer >= distance) { doArrow(causedBy, entity, target, entityPos, targetPos);}
+    uint32 cursed = Cursed.get(entity);
+    if(cursed > 0 && cursed >= distance) { doCurse(causedBy, entity, target, entityPos, targetPos);}
   }
 
-  function callFling(bytes32 causedBy, bytes32 target, bytes32 entity, PositionData memory targetPos, PositionData memory entityPos) public {
+  function callFling(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
     console.log("fling");
 
     IWorld world = IWorld(_world());
@@ -94,7 +95,14 @@ contract BehaviourSubsystem is System {
     SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
   }
 
-  function doSeek(bytes32 causedBy, bytes32 target, bytes32 seek, PositionData memory targetPos, PositionData memory seekerPos) public {
+  function doCurse(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
+    console.log("curse");
+
+    IWorld world = IWorld(_world());
+    SystemSwitch.call(abi.encodeCall(world.doSwap, (causedBy, entity, entityPos, targetPos)));
+  }
+
+  function doSeek(bytes32 causedBy, bytes32 seek, bytes32 target, PositionData memory seekerPos, PositionData memory targetPos) public {
     console.log("seek");
 
     IWorld world = IWorld(_world());
@@ -123,26 +131,26 @@ contract BehaviourSubsystem is System {
     return true;
   }
 
-  function doAggro(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory targetPos, PositionData memory attackerPos) public {
+  function doAggro(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
     console.log("aggro");
     IWorld world = IWorld(_world());
 
     //soldiers don't attack players or other soldiers
-    if(canAggroEntity(attacker, target) == false) {return;}
+    if(canAggroEntity(entity, target) == false) {return;}
 
     //kill target
-    Actions.setActionTargeted(attacker, ActionType.Melee, targetPos.x, targetPos.y, target);
-    SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, target, attacker, targetPos)));
+    Actions.setActionTargeted(entity, ActionType.Melee, targetPos.x, targetPos.y, target);
+    SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, target, entity, targetPos)));
   }
 
-  function doArrow(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory targetPos, PositionData memory attackerPos) public {
+  function doArrow(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
     console.log("archer");
     IWorld world = IWorld(_world());
 
     //soldiers don't attack players or other soldiers
-    if(canAggroEntity(attacker, target) == false) {return;}
+    if(canAggroEntity(entity, target) == false) {return;}
 
-    PositionData[] memory positions = lineWalkPositions(attackerPos, targetPos);
+    PositionData[] memory positions = lineWalkPositions(entityPos, targetPos);
 
     //check if anything is in the way 
     for (uint i = 1; i < positions.length-1; i++) {
@@ -160,12 +168,12 @@ contract BehaviourSubsystem is System {
       }
     }
 
-    Actions.setActionTargeted(attacker, ActionType.Bow, targetPos.x, targetPos.y, target);
+    Actions.setActionTargeted(entity, ActionType.Bow, targetPos.x, targetPos.y, target);
 
     //kill target if it is NPC
     uint32 npc = NPC.get(target);
     if(npc > 0) {
-      SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, target, attacker, targetPos)));
+      SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, target, entity, targetPos)));
     }
 
   }

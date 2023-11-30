@@ -17,6 +17,7 @@ public class AccountUI : SPWindow
     [Header("Account UI")]
     public AccountField prefab;
     public SPButton newAccountButton;
+    public SPInputField accountCopyPaste;
     public SPButton confirm;
     public List<AccountField> accounts;
 
@@ -71,6 +72,7 @@ public class AccountUI : SPWindow
         selected = newAccount;
         selected.address.ButtonText.fontStyle = TMPro.FontStyles.Underline;
 
+        accountCopyPaste.UpdateField(newAccount.account.Address);
     }   
 
     public async void ConfirmAccount() {

@@ -277,7 +277,7 @@ contract TerrainSubsystem is System {
     } else if (tType == TerrainType.Pillar) {
       Rock.set(entity, uint32(RockType.Pillar));
       Weight.set(entity, 99);
-      Move.set(entity, uint32(MoveType.Obstruction));
+      Move.set(entity, uint32(MoveType.Push));
     } else if (tType == TerrainType.Road) {
       spawnFinishedRoad(player, x, y, RoadState.Paved);
     } else if (tType == TerrainType.Hole) {

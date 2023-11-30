@@ -4,7 +4,7 @@ using UnityEngine;
 using mud;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
-using mud;
+using mudworld;
 
 public class Mining : Equipment
 {

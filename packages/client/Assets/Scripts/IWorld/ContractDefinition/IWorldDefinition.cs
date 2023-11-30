@@ -129,14 +129,14 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
-        public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "entity", 3)]
+        [Parameter("bytes32", "entity", 2)]
         public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "targetPos", 4)]
-        public virtual PositionData TargetPos { get; set; }
-        [Parameter("tuple", "entityPos", 5)]
+        [Parameter("bytes32", "target", 3)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
         public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
+        public virtual PositionData TargetPos { get; set; }
     }
 
     public partial class CallFromFunction : CallFromFunctionBase { }
@@ -349,14 +349,14 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("bytes32", "target", 3)]
         public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "attacker", 3)]
-        public virtual byte[] Attacker { get; set; }
-        [Parameter("tuple", "targetPos", 4)]
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
         public virtual PositionData TargetPos { get; set; }
-        [Parameter("tuple", "attackerPos", 5)]
-        public virtual PositionData AttackerPos { get; set; }
     }
 
     public partial class DoArrowFunction : DoArrowFunctionBase { }
@@ -366,14 +366,31 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("bytes32", "target", 3)]
         public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "attacker", 3)]
-        public virtual byte[] Attacker { get; set; }
-        [Parameter("tuple", "targetPos", 4)]
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
         public virtual PositionData TargetPos { get; set; }
-        [Parameter("tuple", "attackerPos", 5)]
-        public virtual PositionData AttackerPos { get; set; }
+    }
+
+    public partial class DoCurseFunction : DoCurseFunctionBase { }
+
+    [Function("doCurse")]
+    public class DoCurseFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("bytes32", "target", 3)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
+        public virtual PositionData TargetPos { get; set; }
     }
 
     public partial class DoFlingFunction : DoFlingFunctionBase { }
@@ -398,14 +415,29 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
-        public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "seek", 3)]
+        [Parameter("bytes32", "seek", 2)]
         public virtual byte[] Seek { get; set; }
+        [Parameter("bytes32", "target", 3)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "seekerPos", 4)]
+        public virtual PositionData SeekerPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
+        public virtual PositionData TargetPos { get; set; }
+    }
+
+    public partial class DoSwapFunction : DoSwapFunctionBase { }
+
+    [Function("doSwap", "bool")]
+    public class DoSwapFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "entityPos", 3)]
+        public virtual PositionData EntityPos { get; set; }
         [Parameter("tuple", "targetPos", 4)]
         public virtual PositionData TargetPos { get; set; }
-        [Parameter("tuple", "seekerPos", 5)]
-        public virtual PositionData SeekerPos { get; set; }
     }
 
     public partial class DoWanderFunction : DoWanderFunctionBase { }
@@ -1649,14 +1681,14 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
-        public virtual byte[] Target { get; set; }
-        [Parameter("bytes32", "entity", 3)]
+        [Parameter("bytes32", "entity", 2)]
         public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "targetPos", 4)]
-        public virtual PositionData TargetPos { get; set; }
-        [Parameter("tuple", "entityPos", 5)]
+        [Parameter("bytes32", "target", 3)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
         public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
+        public virtual PositionData TargetPos { get; set; }
     }
 
     public partial class TickEntityFunction : TickEntityFunctionBase { }
@@ -2178,6 +2210,10 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "", 1)]
         public virtual string ReturnValue1 { get; set; }
     }
+
+
+
+
 
 
 

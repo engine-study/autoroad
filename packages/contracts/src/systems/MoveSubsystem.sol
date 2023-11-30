@@ -96,7 +96,7 @@ contract MoveSubsystem is System {
   function doFling(bytes32 causedBy, bytes32 target, PositionData memory startPos, PositionData memory endPos) public {
     IWorld world = IWorld(_world());
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, endPos.x, endPos.y, 0);
-    bool canFling = Rules.onMapOrSpawn(target, endPos) && MoveType(Move.get(target)) != MoveType.Permanent;
+    bool canFling = Rules.onMapOrSpawn(target, endPos) && MoveType(Move.get(target)) == MoveType.Push;
     
     if(canFling && atDest.length > 0) {
       canFling = Rules.canPlaceOn(MoveType(Move.get(atDest[0])));

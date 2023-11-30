@@ -49,10 +49,10 @@ export default mudConfig({
 
   enums: {
     ActionType: ["None", "Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn", "Bow", "Swap", "Pocket"],
-    TerrainType: ["None", "Rock", "Trap", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Miliarium"],
+    TerrainType: ["None", "Rock", "Trap", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Cursed"],
     NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer", "Taxman"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
-    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae"],
+    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae", "Gremlin", "Amphora"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap", "Permanent"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
     PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Count"],
@@ -173,6 +173,7 @@ export default mudConfig({
     Aggro: "uint32",
     Wander: "uint32",
     Fling: "uint32",
+    Cursed: "uint32",
     Animal: "bool",
 
   //puzzle components try to be moved onto triggers (ie. Miliarli )
@@ -225,6 +226,7 @@ export default mudConfig({
     Boots: {valueSchema: {minMove: "int32", maxMove: "int32",},},
 
     //unique objects
+    EnumTest: {valueSchema: {minMove: "RockType", maxMove: "uint8[]",},},
     Rock: "uint32",
     Tree: "uint32",
     Log: "bool",

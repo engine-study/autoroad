@@ -48,7 +48,7 @@ contract EntitySubsystem is System {
 
       //tick npcs
       NPCType npcType = NPCType(NPC.get(entities[i]));
-      if(npcType > NPCType.None) {SystemSwitch.call(abi.encodeCall(world.tickBehaviour, (causedBy, player, entities[i], pos, positions[i])));}
+      if(npcType > NPCType.None) {SystemSwitch.call(abi.encodeCall(world.tickBehaviour, (causedBy, entities[i], player, positions[i], pos)));}
 
       //tick other things possible (resources, idk)
 

@@ -156,30 +156,40 @@ contract ToolSubsystem is System {
     uint32 scrolls = ScrollSwap.get(player);
     require(scrolls > uint32(0), "not enough scrolls");
 
-    IWorld world = IWorld(_world());
-    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
-    PositionData memory startPos = Position.get(player);
-    require(Rules.canInteract(player, startPos, atPosition, 99), "bad interact");
-
     // get all the positions in the line we are swapping
+    PositionData memory startPos = Position.get(player);
     PositionData memory endPos = PositionData(x, y, 0);
+    
+    if(doSwap(player, player, startPos, endPos)) {
+      ScrollSwap.set(player, scrolls - 1);
+    }
+
+
+  }
+
+  function doSwap(bytes32 causedBy, bytes32 entity, PositionData memory entityPos, PositionData memory targetPos) public returns(bool) {
+    IWorld world = IWorld(_world());
+    
+    bytes32[] memory atPosition = Rules.getKeysAtPosition(world, targetPos.x, targetPos.y, 0);
+    if(Rules.canInteract(entity, entityPos, atPosition, 99) == false) {return false;}
+    
     // PositionData [] memory vector = getVectorNormalized(startPos, endPos)
-    PositionData[] memory positions = lineWalkPositions(startPos, endPos);
+    PositionData[] memory positions = lineWalkPositions(entityPos, targetPos);
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position AND the last position
     for (uint i = 1; i < positions.length-1; i++) {
       bytes32[] memory atDest = Rules.getKeysAtPosition(IWorld(_world()),positions[i].x, positions[i].y, 0);
-      require(atDest.length == 0 || Rules.canBlock(MoveType(Move.get(atDest[0]))) == false, "blocked");
+      if(atDest.length != 0 && Rules.canBlock(MoveType(Move.get(atDest[0])))) {return false;}
     }
 
     //put swap object underground for a second
-    Position.set(atPosition[0], x, y, -2);
+    Position.set(atPosition[0], targetPos.x, targetPos.y, -2);
 
     //move everything into place
-    SystemSwitch.call(abi.encodeCall(world.teleport, (player, x, y, ActionType.Swap)));
-    SystemSwitch.call(abi.encodeCall(world.teleport, (atPosition[0], startPos.x, startPos.y, ActionType.Swap)));
+    SystemSwitch.call(abi.encodeCall(world.teleport, (entity, targetPos.x, targetPos.y, ActionType.Swap)));
+    SystemSwitch.call(abi.encodeCall(world.teleport, (atPosition[0], entityPos.x, entityPos.y, ActionType.Swap)));
 
-    ScrollSwap.set(player, scrolls - 1);
+    return true;
 
   }
 

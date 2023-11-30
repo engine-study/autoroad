@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud;
 using mudworld;
-using mud;
 using IWorld.ContractDefinition;
 
-public enum RockType { None, Rock, Statumen, Pavimentum, Rudus, Nucleus, Miliarium, Lapis, Saxum, Columna, Statuae, _Count }
 public class RockComponent : MUDComponent {
 
     public RockType RockType {get { return rockType; } }
@@ -20,7 +18,7 @@ public class RockComponent : MUDComponent {
     [SerializeField] GameObject[] stages;
     [SerializeField] ParticleSystem fx_break, fx_drag, fx_fillParticles, fx_fillExplosion;
     [SerializeField] AudioClip[] sfx_slide, sfx_drag, sfx_dragBase, sfx_smallBreaks, sfx_bigBreaks, sfx_fillSound, sfx_finalThump;
-    RockType lastStage = RockType._Count;
+    RockType lastStage = RockType.None;
 
     [Header("Debug")]
     [SerializeField] RockType rockType;
@@ -31,7 +29,7 @@ public class RockComponent : MUDComponent {
         base.Awake();
 
         // Debug.Log("Rock Awake", this);
-        rockType = RockType._Count;
+        rockType = RockType.None;
         rockBase = GetComponent<SPBase>();
 
     }
