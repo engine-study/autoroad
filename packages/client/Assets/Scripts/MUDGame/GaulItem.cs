@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using mudworld;
 public enum PaymentType {None, Coins, Gems, Eth}
 public enum ItemType { GameplayStashable, GameplayEquipment, Cosmetic, PayedCosmetic }
 
@@ -20,6 +20,7 @@ public class GaulItem : ScriptableObject {
 
     [Header("Info")]
     public ItemType itemType;
+    public CosmeticType cosmeticType;
     public int ID = -1;
     
     [Header("Store")]
