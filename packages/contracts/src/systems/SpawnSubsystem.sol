@@ -35,10 +35,22 @@ contract SpawnSubsystem is System {
       Eth.set(entity, 10000);
       Weight.set(entity, -1);
 
-      Head.set(entity, 0, new bool[](uint(ArmorSet.Count)));
-      Robe.set(entity, 0, new bool[](uint(ArmorSet.Count)));
-      Effect.set(entity, 0, new bool[](uint(EffectSet.Count)));
-      Material.set(entity, 0, new bool[](uint(MaterialSet.Count)));
+      bool[] memory h = new bool[](uint(ArmorSet.Count));
+      h[0] = true;
+      Head.set(entity, 0, h);
+
+      bool[] memory r = new bool[](uint(ArmorSet.Count));
+      r[0] = true;
+      Robe.set(entity, 0, r);
+
+      bool[] memory e = new bool[](uint(EffectSet.Count));
+      e[0] = true;
+      Effect.set(entity, 0, e);
+
+      bool[] memory m = new bool[](uint(MaterialSet.Count));
+      m[0] = true;
+      Material.set(entity, 0, m);
+
 
       // Conscription.set(entity, true);
       NPC.set(entity, uint32(NPCType.Player));

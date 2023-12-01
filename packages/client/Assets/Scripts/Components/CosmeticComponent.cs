@@ -7,6 +7,7 @@ using mudworld;
 using mud;
 using UnityEditor;
 using IWorld.ContractDefinition;
+using System.Numerics;
 
 public class CosmeticComponent : ValueComponent
 {
@@ -27,11 +28,11 @@ public class CosmeticComponent : ValueComponent
     public static CosmeticComponent [] Cosmetics;
     public Array enumValues;
 
-    public static async void UpdateCosmetic(CosmeticType cosmetic, int index) {
+    public static async void SetCosmetic(CosmeticType cosmetic, int index) {
         Array enumValues = Cosmetics[(int)cosmetic].enumValues;
         Debug.Log($"Setting {cosmetic} to {enumValues.GetValue(index)}");
 
-        await TxManager.SendDirect<DressupFunction>(Convert.ToByte(cosmetic), Convert.ToUInt64(index));
+        await TxManager.SendDirect<DressupFunction>(Convert.ToByte(cosmetic), new BigInteger(index));
     }
 
     protected override void Init(SpawnInfo newInfo) {

@@ -8,6 +8,6 @@ public class InventoryBucketUI : SPWindowEnumSelector
     public CosmeticType cosmetic;
     protected override void UpdatedEnum(int index) {
         base.UpdatedEnum(index);
-        CosmeticComponent.UpdateCosmetic(cosmetic, index);
+        CosmeticComponent.SetCosmetic(cosmetic, index);
     }
 }

@@ -49,11 +49,11 @@ public class Inventory : MonoBehaviour {
         itemDict = new Dictionary<string, InventorySlot>();
 
         for(int i = 0; i < entity.Components.Count; i++) {
-            AddToInventory(entity.Components[i]);
+            AddValueComponent(entity.Components[i]);
         }
 
-        entity.OnComponentAdded += AddToInventory;
-        entity.OnComponentUpdated += UpdateInventory;
+        entity.OnComponentAdded += AddValueComponent;
+        entity.OnComponentUpdated += IngestValueComponent;
         
     }
 
@@ -61,20 +61,20 @@ public class Inventory : MonoBehaviour {
 
         if(entity) {
             entity.OnLoaded -= Init;
-            entity.OnComponentAdded -= AddToInventory;
-            entity.OnComponentUpdated -= UpdateInventory;
+            entity.OnComponentAdded -= AddValueComponent;
+            entity.OnComponentUpdated -= IngestValueComponent;
         }
     }
 
-    bool IsValue(MUDComponent c) {return c is ValueComponent;}
+    bool IsValueComponent(MUDComponent c) {return c is ValueComponent;}
 
-    void AddToInventory(MUDComponent c) {
-        if(!IsValue(c)) {return;}
+    void AddValueComponent(MUDComponent c) {
+        if(!IsValueComponent(c)) {return;}
         Ingest((ValueComponent)c);
     }
 
-    void UpdateInventory(MUDComponent c, UpdateInfo i) {
-        if(!IsValue(c)) {return;}
+    void IngestValueComponent(MUDComponent c, UpdateInfo i) {
+        if(!IsValueComponent(c)) {return;}
         Ingest((ValueComponent)c);
     }
 
