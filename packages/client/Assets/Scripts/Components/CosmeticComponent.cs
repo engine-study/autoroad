@@ -1,46 +1,67 @@
 
 using System.Linq;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using mudworld;
 using mud;
-using VisualDesignCafe.Nature.Materials.Editor;
-using Unity.VisualScripting;
-using WebSocketSharp;
 using UnityEditor;
 
 public class CosmeticComponent : ValueComponent
 {
+    public Renderer Cosmetic {get{return r;}}
+    public GameObject Go {get{return Cosmetic?.gameObject;}}
+
     [Header("Cosmetic")]
     public CosmeticType cosmetic;
-    public BodyPart bodyLink;
-    [SerializeField] GameObject[] cosmetics;
-    [SerializeField] GaulItem[] items;
+    public PlayerBody bodyLink;
 
     [Header("Debug")]
     [SerializeField] int index;
     [SerializeField] bool[] owned;
+    [SerializeField] GaulItem[] items;
     [SerializeField] protected PlayerMUD player;
+    [SerializeField] Renderer r;
 
     protected override void Init(SpawnInfo newInfo) {
         base.Init(newInfo);
+
         ToggleRequiredComponent(true, MUDWorld.GetManager<PlayerTable>().Prefab);
+
+        for(int i = 0; i < transform.childCount; i++) {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+        items = Resources.LoadAll<GaulItem>("Data/Store");
+        slots = new List<InventorySlot>();
+
+        for(int i = 0; i < items.Length ; i++) {
+            if(items[i].bodyPart != bodyLink){continue;}
+            slots.Add(new InventorySlot(){item = items[i]});
+        }
 
     }
     protected override void PostInit() {
         base.PostInit();
 
         player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
-        player.SetCosmetic(cosmetic, cosmetics[index]);
+        player.SetCosmetic(bodyLink, Go);
         
     }
     protected override void UpdateComponent(MUDTable update, UpdateInfo info) {
         base.UpdateComponent(update, info);
-        index = (int)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["index"];
-        owned = ((object[])MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["ownership"]).Cast<bool>().ToArray();
+        index = (int)(uint)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["index"];
+        owned = ((object[])MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["owned"]).Cast<bool>().ToArray();
+
+        slots[index].amount = owned[index] ? 1 : 0;
+
+        r = transform.GetChild(index).GetComponentInChildren<Renderer>(true);
+        visualPrefab = Go;
 
         if(Loaded) {
-            player.SetCosmetic(cosmetic, cosmetics[index]);
+            player.SetCosmetic(bodyLink, Go);
         }
+
     }
     
     protected override StatType SetStat(MUDTable update){ return StatType.None; }

@@ -34,11 +34,11 @@ public class StoreUI : SPWindowParent
             itemCategories[i] = new List<GaulItem>();
         }
 
-        object[] itemObjects = Resources.LoadAll("Data/Store");
+        GaulItem[] itemObjects = Resources.LoadAll<GaulItem>("Data/Store");
 
         for (int i = 0; i < itemObjects.Length; i++) {
 
-            GaulItem newItemInfo = itemObjects[i] as GaulItem;
+            GaulItem newItemInfo = itemObjects[i];
             if (newItemInfo == null) { Debug.LogError("Don't put other objects in the Data/Store folder pls."); }
             if (newItemInfo.canBuy == false) { continue; }
 

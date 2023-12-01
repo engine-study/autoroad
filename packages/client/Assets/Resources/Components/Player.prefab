@@ -256,9 +256,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f194a4a664d7c4e89e4bc086a158e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultBody: {fileID: 7188361630544701105}
+  bodyType: 6
+  defaultBody: {fileID: 0}
   bodyParent: {fileID: 699017521773161998}
   activeBody: {fileID: 0}
+  animator: {fileID: 1763662398599937065}
+  targetMR: {fileID: 0}
+  targetSMR: {fileID: 4975119040284353742}
 --- !u!1 &2580805455293383248
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,9 +363,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f194a4a664d7c4e89e4bc086a158e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bodyType: 5
   defaultBody: {fileID: 0}
-  bodyParent: {fileID: 5630546298076223802}
+  bodyParent: {fileID: 4246148278821940498}
   activeBody: {fileID: 0}
+  animator: {fileID: 1763662398599937065}
+  targetMR: {fileID: 0}
+  targetSMR: {fileID: 0}
 --- !u!1 &3135747119077583875
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,10 +445,12 @@ MonoBehaviour:
   animMud: {fileID: 6112251609978762257}
   cosmetics:
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 5050314643214429208}
-  - {fileID: 125920616817916833}
   - {fileID: 4487376146108627717}
   - {fileID: 3614617055421954153}
+  - {fileID: 125920616817916833}
   sfx_equip:
   - {fileID: 8300000, guid: 175f58b3995444942bc5a66f5a281b48, type: 3}
   positionComponent: {fileID: 0}
@@ -799,9 +809,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f194a4a664d7c4e89e4bc086a158e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bodyType: 3
   defaultBody: {fileID: 0}
   bodyParent: {fileID: 4246148278821940498}
   activeBody: {fileID: 0}
+  animator: {fileID: 1763662398599937065}
+  targetMR: {fileID: 0}
+  targetSMR: {fileID: 0}
 --- !u!1 &4471563936332781798
 GameObject:
   m_ObjectHideFlags: 0
@@ -884,9 +898,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f194a4a664d7c4e89e4bc086a158e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bodyType: 4
   defaultBody: {fileID: 0}
-  bodyParent: {fileID: 5630546298076223802}
+  bodyParent: {fileID: 4246148278821940498}
   activeBody: {fileID: 0}
+  animator: {fileID: 1763662398599937065}
+  targetMR: {fileID: 0}
+  targetSMR: {fileID: 0}
 --- !u!1 &9097609177180554940
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,14 +1362,9 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1778542097137655899, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
   m_PrefabInstance: {fileID: 6509601425427134434}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &5630546298076223802 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1474216426570821336, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
-  m_PrefabInstance: {fileID: 6509601425427134434}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7188361630544701105 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4149205935247577427, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
+--- !u!137 &4975119040284353742 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2260222526554346284, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
   m_PrefabInstance: {fileID: 6509601425427134434}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7746708162956931471

@@ -21,8 +21,8 @@ public class PlayerMUD : SPPlayer
     [SerializeField] private AnimationMUD animMud;
 
 
-    [EnumNamedArray( typeof(CosmeticType) )]
-    [SerializeField] public Cosmetic [] cosmetics;
+    [EnumNamedArray( typeof(PlayerBody) )]
+    [SerializeField] public SPCosmetic [] cosmetics;
     [SerializeField] AudioClip [] sfx_equip;
 
     [Header("Debug")]
@@ -35,7 +35,10 @@ public class PlayerMUD : SPPlayer
         if(Player.Loaded) DoNetworkInit();
         else Player.OnLoaded += DoNetworkInit;
 
-        for(int i = 1; i < cosmetics.Length; i++) {cosmetics[i].OnUpdated += Equip;}
+        for(int i = 1; i < cosmetics.Length; i++) {
+            if(cosmetics[i] == null) continue; 
+            cosmetics[i].OnUpdated += Equip;
+        }
 
     }
 
@@ -74,8 +77,8 @@ public class PlayerMUD : SPPlayer
 
     }
     
-    public void SetCosmetic (CosmeticType cosmetic, GameObject newCos) {
-        cosmetics[(int)cosmetic].SetNewBody(newCos);
+    public void SetCosmetic (PlayerBody bodyType, GameObject newCos) {
+        cosmetics[(int)bodyType].SetCosmetic(newCos);
     }
     void Equip() {SPAudioSource.Play(Root.position, sfx_equip);}
 

@@ -20,7 +20,7 @@ public class GaulItem : ScriptableObject {
 
     [Header("Info")]
     public ItemType itemType;
-    public CosmeticType cosmeticType;
+    public PlayerBody bodyPart;
     public int ID = -1;
     
     [Header("Store")]
