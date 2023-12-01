@@ -2,6 +2,7 @@
 
 #nullable enable
 using System;
+using System.Linq;
 using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
@@ -12,8 +13,8 @@ namespace mudworld
     {
         public class ActionTableUpdate : RecordUpdate
         {
-            public int? Action;
-            public int? PreviousAction;
+            public uint? Action;
+            public uint? PreviousAction;
             public int? X;
             public int? PreviousX;
             public int? Y;
@@ -33,7 +34,7 @@ namespace mudworld
             return ID;
         }
 
-        public int? Action;
+        public uint? Action;
         public int? X;
         public int? Y;
         public string? Target;
@@ -77,7 +78,7 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            Action = (int)functionParameters[0];
+            Action = (uint)functionParameters[0];
 
             X = (int)functionParameters[1];
 
@@ -100,7 +101,7 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            Action = (int)property["action"];
+            Action = (uint)property["action"];
             X = (int)property["x"];
             Y = (int)property["y"];
             Target = (string)property["target"];
@@ -110,17 +111,17 @@ namespace mudworld
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            int? currentActionTyped = null;
-            int? previousActionTyped = null;
+            uint? currentActionTyped = null;
+            uint? previousActionTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("action"))
             {
-                currentActionTyped = (int)currentValue["action"];
+                currentActionTyped = (uint)currentValue["action"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("action"))
             {
-                previousActionTyped = (int)previousValue["action"];
+                previousActionTyped = (uint)previousValue["action"];
             }
             int? currentXTyped = null;
             int? previousXTyped = null;

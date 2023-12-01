@@ -2,6 +2,7 @@
 
 #nullable enable
 using System;
+using System.Linq;
 using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
@@ -12,8 +13,8 @@ namespace mudworld
     {
         public class RoadConfigTableUpdate : RecordUpdate
         {
-            public int? Width;
-            public int? PreviousWidth;
+            public uint? Width;
+            public uint? PreviousWidth;
             public int? Left;
             public int? PreviousLeft;
             public int? Right;
@@ -31,7 +32,7 @@ namespace mudworld
             return ID;
         }
 
-        public int? Width;
+        public uint? Width;
         public int? Left;
         public int? Right;
 
@@ -70,7 +71,7 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            Width = (int)functionParameters[0];
+            Width = (uint)functionParameters[0];
 
             Left = (int)functionParameters[1];
 
@@ -91,7 +92,7 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            Width = (int)property["width"];
+            Width = (uint)property["width"];
             Left = (int)property["left"];
             Right = (int)property["right"];
         }
@@ -100,17 +101,17 @@ namespace mudworld
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            int? currentWidthTyped = null;
-            int? previousWidthTyped = null;
+            uint? currentWidthTyped = null;
+            uint? previousWidthTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("width"))
             {
-                currentWidthTyped = (int)currentValue["width"];
+                currentWidthTyped = (uint)currentValue["width"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("width"))
             {
-                previousWidthTyped = (int)previousValue["width"];
+                previousWidthTyped = (uint)previousValue["width"];
             }
             int? currentLeftTyped = null;
             int? previousLeftTyped = null;

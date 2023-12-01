@@ -2,6 +2,7 @@
 
 #nullable enable
 using System;
+using System.Linq;
 using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
@@ -12,8 +13,8 @@ namespace mudworld
     {
         public class PuzzleTableUpdate : RecordUpdate
         {
-            public int? PuzzleType;
-            public int? PreviousPuzzleType;
+            public uint? PuzzleType;
+            public uint? PreviousPuzzleType;
             public bool? Complete;
             public bool? PreviousComplete;
             public string? Solver;
@@ -31,7 +32,7 @@ namespace mudworld
             return ID;
         }
 
-        public int? PuzzleType;
+        public uint? PuzzleType;
         public bool? Complete;
         public string? Solver;
 
@@ -70,7 +71,7 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            PuzzleType = (int)functionParameters[0];
+            PuzzleType = (uint)functionParameters[0];
 
             Complete = (bool)functionParameters[1];
 
@@ -91,7 +92,7 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            PuzzleType = (int)property["puzzleType"];
+            PuzzleType = (uint)property["puzzleType"];
             Complete = (bool)property["complete"];
             Solver = (string)property["solver"];
         }
@@ -100,17 +101,17 @@ namespace mudworld
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            int? currentPuzzleTypeTyped = null;
-            int? previousPuzzleTypeTyped = null;
+            uint? currentPuzzleTypeTyped = null;
+            uint? previousPuzzleTypeTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("puzzletype"))
             {
-                currentPuzzleTypeTyped = (int)currentValue["puzzletype"];
+                currentPuzzleTypeTyped = (uint)currentValue["puzzletype"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("puzzletype"))
             {
-                previousPuzzleTypeTyped = (int)previousValue["puzzletype"];
+                previousPuzzleTypeTyped = (uint)previousValue["puzzletype"];
             }
             bool? currentCompleteTyped = null;
             bool? previousCompleteTyped = null;

@@ -226,7 +226,7 @@ export default mudConfig({
     Boots: {valueSchema: {minMove: "int32", maxMove: "int32",},},
 
     //unique objects
-    EnumTest: {valueSchema: {minMove: "RockType", maxMove: "uint8[]",},},
+    EnumTest: {valueSchema: {minMove: "NPCType", maxMove: "uint8[]", intSmall: "int32[]", intBig: "int256[]", uintBig: "uint256[]"},},
     Rock: "uint32",
     Tree: "uint32",
     Log: "bool",

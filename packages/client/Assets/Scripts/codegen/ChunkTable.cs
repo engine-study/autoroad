@@ -2,6 +2,7 @@
 
 #nullable enable
 using System;
+using System.Linq;
 using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
@@ -18,8 +19,8 @@ namespace mudworld
             public bool? PreviousSpawned;
             public bool? Completed;
             public bool? PreviousCompleted;
-            public int? Roads;
-            public int? PreviousRoads;
+            public uint? Roads;
+            public uint? PreviousRoads;
             public System.Numerics.BigInteger? BlockCompleted;
             public System.Numerics.BigInteger? PreviousBlockCompleted;
         }
@@ -38,7 +39,7 @@ namespace mudworld
         public int? Mile;
         public bool? Spawned;
         public bool? Completed;
-        public int? Roads;
+        public uint? Roads;
         public System.Numerics.BigInteger? BlockCompleted;
 
         public override Type TableType()
@@ -90,7 +91,7 @@ namespace mudworld
 
             Completed = (bool)functionParameters[2];
 
-            Roads = (int)functionParameters[3];
+            Roads = (uint)functionParameters[3];
 
             BlockCompleted = (System.Numerics.BigInteger)functionParameters[4];
         }
@@ -112,7 +113,7 @@ namespace mudworld
             Mile = (int)property["mile"];
             Spawned = (bool)property["spawned"];
             Completed = (bool)property["completed"];
-            Roads = (int)property["roads"];
+            Roads = (uint)property["roads"];
             BlockCompleted = (System.Numerics.BigInteger)property["blockCompleted"];
         }
 
@@ -156,17 +157,17 @@ namespace mudworld
             {
                 previousCompletedTyped = (bool)previousValue["completed"];
             }
-            int? currentRoadsTyped = null;
-            int? previousRoadsTyped = null;
+            uint? currentRoadsTyped = null;
+            uint? previousRoadsTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("roads"))
             {
-                currentRoadsTyped = (int)currentValue["roads"];
+                currentRoadsTyped = (uint)currentValue["roads"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("roads"))
             {
-                previousRoadsTyped = (int)previousValue["roads"];
+                previousRoadsTyped = (uint)previousValue["roads"];
             }
             System.Numerics.BigInteger? currentBlockCompletedTyped = null;
             System.Numerics.BigInteger? previousBlockCompletedTyped = null;

@@ -2,6 +2,7 @@
 
 #nullable enable
 using System;
+using System.Linq;
 using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
@@ -83,7 +84,7 @@ namespace mudworld
         public override void PropertyToTable(Property property)
         {
             LastBlock = (System.Numerics.BigInteger)property["lastBlock"];
-            Entities = (string[])property["entities"];
+            Entities = ((object[])property["entities"]).Cast<string>().ToArray();
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
@@ -107,12 +108,16 @@ namespace mudworld
 
             if (currentValue != null && currentValue.ContainsKey("entities"))
             {
-                currentEntitiesTyped = (string[])currentValue["entities"];
+                currentEntitiesTyped = ((object[])currentValue["entities"])
+                    .Cast<string>()
+                    .ToArray();
             }
 
             if (previousValue != null && previousValue.ContainsKey("entities"))
             {
-                previousEntitiesTyped = (string[])previousValue["entities"];
+                previousEntitiesTyped = ((object[])previousValue["entities"])
+                    .Cast<string>()
+                    .ToArray();
             }
 
             return new EntitiesTableUpdate

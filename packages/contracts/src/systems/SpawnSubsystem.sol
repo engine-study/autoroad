@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal, TickTest } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, EnumTest } from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
@@ -50,6 +50,19 @@ contract SpawnSubsystem is System {
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y, 0);
     Actions.setAction(entity, ActionType.Spawn, x, y);
+    uint8[] memory array = new uint8[](4);
+    array[0] = 3;
+    array[1] = 6;
+    int32[] memory arrayInt = new int32[](4);
+    arrayInt[0] = 3;
+    arrayInt[1] = 6;
+    int256[] memory arrayBig = new int256[](4);
+    arrayBig[0] = 3;
+    arrayBig[1] = 6;
+    uint256[] memory arrayUintBig = new uint256[](4);
+    arrayUintBig[0] = 3;
+    arrayUintBig[1] = 6;
+    EnumTest.set(entity, NPCType.Player, array, arrayInt, arrayBig, arrayUintBig);
   }
 
   function spawnNPC(bytes32 spawner, int32 x, int32 y, NPCType npcType) public {

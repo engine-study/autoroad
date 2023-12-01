@@ -2,6 +2,7 @@
 
 #nullable enable
 using System;
+using System.Linq;
 using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
@@ -14,12 +15,12 @@ namespace mudworld
         {
             public bool? Named;
             public bool? PreviousNamed;
-            public int? First;
-            public int? PreviousFirst;
-            public int? Middle;
-            public int? PreviousMiddle;
-            public int? Last;
-            public int? PreviousLast;
+            public uint? First;
+            public uint? PreviousFirst;
+            public uint? Middle;
+            public uint? PreviousMiddle;
+            public uint? Last;
+            public uint? PreviousLast;
         }
 
         public readonly static string ID = "Name";
@@ -34,9 +35,9 @@ namespace mudworld
         }
 
         public bool? Named;
-        public int? First;
-        public int? Middle;
-        public int? Last;
+        public uint? First;
+        public uint? Middle;
+        public uint? Last;
 
         public override Type TableType()
         {
@@ -79,11 +80,11 @@ namespace mudworld
         {
             Named = (bool)functionParameters[0];
 
-            First = (int)functionParameters[1];
+            First = (uint)functionParameters[1];
 
-            Middle = (int)functionParameters[2];
+            Middle = (uint)functionParameters[2];
 
-            Last = (int)functionParameters[3];
+            Last = (uint)functionParameters[3];
         }
 
         public static IObservable<RecordUpdate> GetNameTableUpdates()
@@ -101,9 +102,9 @@ namespace mudworld
         public override void PropertyToTable(Property property)
         {
             Named = (bool)property["named"];
-            First = (int)property["first"];
-            Middle = (int)property["middle"];
-            Last = (int)property["last"];
+            First = (uint)property["first"];
+            Middle = (uint)property["middle"];
+            Last = (uint)property["last"];
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
@@ -122,41 +123,41 @@ namespace mudworld
             {
                 previousNamedTyped = (bool)previousValue["named"];
             }
-            int? currentFirstTyped = null;
-            int? previousFirstTyped = null;
+            uint? currentFirstTyped = null;
+            uint? previousFirstTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("first"))
             {
-                currentFirstTyped = (int)currentValue["first"];
+                currentFirstTyped = (uint)currentValue["first"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("first"))
             {
-                previousFirstTyped = (int)previousValue["first"];
+                previousFirstTyped = (uint)previousValue["first"];
             }
-            int? currentMiddleTyped = null;
-            int? previousMiddleTyped = null;
+            uint? currentMiddleTyped = null;
+            uint? previousMiddleTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("middle"))
             {
-                currentMiddleTyped = (int)currentValue["middle"];
+                currentMiddleTyped = (uint)currentValue["middle"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("middle"))
             {
-                previousMiddleTyped = (int)previousValue["middle"];
+                previousMiddleTyped = (uint)previousValue["middle"];
             }
-            int? currentLastTyped = null;
-            int? previousLastTyped = null;
+            uint? currentLastTyped = null;
+            uint? previousLastTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("last"))
             {
-                currentLastTyped = (int)currentValue["last"];
+                currentLastTyped = (uint)currentValue["last"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("last"))
             {
-                previousLastTyped = (int)previousValue["last"];
+                previousLastTyped = (uint)previousValue["last"];
             }
 
             return new NameTableUpdate

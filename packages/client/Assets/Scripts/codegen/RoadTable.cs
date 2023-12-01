@@ -2,6 +2,7 @@
 
 #nullable enable
 using System;
+using System.Linq;
 using mud;
 using UniRx;
 using Property = System.Collections.Generic.Dictionary<string, object>;
@@ -12,8 +13,8 @@ namespace mudworld
     {
         public class RoadTableUpdate : RecordUpdate
         {
-            public int? State;
-            public int? PreviousState;
+            public uint? State;
+            public uint? PreviousState;
             public string? Filled;
             public string? PreviousFilled;
             public bool? Gem;
@@ -31,7 +32,7 @@ namespace mudworld
             return ID;
         }
 
-        public int? State;
+        public uint? State;
         public string? Filled;
         public bool? Gem;
 
@@ -70,7 +71,7 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            State = (int)functionParameters[0];
+            State = (uint)functionParameters[0];
 
             Filled = (string)functionParameters[1];
 
@@ -91,7 +92,7 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            State = (int)property["state"];
+            State = (uint)property["state"];
             Filled = (string)property["filled"];
             Gem = (bool)property["gem"];
         }
@@ -100,17 +101,17 @@ namespace mudworld
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            int? currentStateTyped = null;
-            int? previousStateTyped = null;
+            uint? currentStateTyped = null;
+            uint? previousStateTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("state"))
             {
-                currentStateTyped = (int)currentValue["state"];
+                currentStateTyped = (uint)currentValue["state"];
             }
 
             if (previousValue != null && previousValue.ContainsKey("state"))
             {
-                previousStateTyped = (int)previousValue["state"];
+                previousStateTyped = (uint)previousValue["state"];
             }
             string? currentFilledTyped = null;
             string? previousFilledTyped = null;
