@@ -9,15 +9,15 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class HeadTable : MUDTable
+    public class EffectTable : MUDTable
     {
-        public class HeadTableUpdate : RecordUpdate
+        public class EffectTableUpdate : RecordUpdate
         {
             public bool[]? Value;
             public bool[]? PreviousValue;
         }
 
-        public readonly static string ID = "Head";
+        public readonly static string ID = "Effect";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -32,17 +32,17 @@ namespace mudworld
 
         public override Type TableType()
         {
-            return typeof(HeadTable);
+            return typeof(EffectTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(HeadTableUpdate);
+            return typeof(EffectTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            HeadTable other = (HeadTable)obj;
+            EffectTable other = (EffectTable)obj;
 
             if (other == null)
             {
@@ -60,9 +60,9 @@ namespace mudworld
             Value = (bool[])functionParameters[0];
         }
 
-        public static IObservable<RecordUpdate> GetHeadTableUpdates()
+        public static IObservable<RecordUpdate> GetEffectTableUpdates()
         {
-            HeadTable mudTable = new HeadTable();
+            EffectTable mudTable = new EffectTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -94,7 +94,7 @@ namespace mudworld
                 previousValueTyped = ((object[])previousValue["value"]).Cast<bool>().ToArray();
             }
 
-            return new HeadTableUpdate
+            return new EffectTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,

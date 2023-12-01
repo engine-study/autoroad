@@ -96,6 +96,19 @@ namespace IWorld.ContractDefinition
         public virtual byte Payment { get; set; }
     }
 
+    public partial class BuyCosmeticFunction : BuyCosmeticFunctionBase { }
+
+    [Function("buyCosmetic")]
+    public class BuyCosmeticFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("uint8", "cosmetic", 2)]
+        public virtual byte Cosmetic { get; set; }
+        [Parameter("uint256", "index", 3)]
+        public virtual BigInteger Index { get; set; }
+    }
+
     public partial class BuyItemFunction : BuyItemFunctionBase { }
 
     [Function("buyItem")]
@@ -2157,6 +2170,8 @@ namespace IWorld.ContractDefinition
     public class WorldUnlimiteddelegationnotallowedErrorBase : IErrorDTO
     {
     }
+
+
 
 
 

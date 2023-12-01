@@ -114,4 +114,40 @@ namespace mudworld
         Gems,
         Eth,
     }
+
+    public enum ArmorSet
+    {
+        None,
+        Armor,
+        Barbarian,
+        Wizard,
+        Count,
+    }
+
+    public enum EffectSet
+    {
+        None,
+        Fire,
+        Sparkles,
+        Water,
+        Count,
+    }
+
+    public enum MaterialSet
+    {
+        None,
+        Metal,
+        Oak,
+        Obsidian,
+        Count,
+    }
+
+    public enum CosmeticType
+    {
+        None,
+        Head,
+        Robe,
+        Effect,
+        Material,
+    }
 }

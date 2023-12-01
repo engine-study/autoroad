@@ -4,8 +4,8 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Player, Action, Conscription, Weight } from "../codegen/index.sol";
-import { Coinage, Gem, Eth, XP, Scroll, Stick, Pickaxe, Axe, Sword, Robe, Head, Boots, FishingRod, ScrollSwap, Seeds, Pocket } from "../codegen/index.sol";
-import { PaymentType } from "../codegen/common.sol";
+import { Coinage, Gem, Eth, XP, Scroll, Stick, Pickaxe, Axe, Sword, Robe, Head, Effect, Material, Boots, FishingRod, ScrollSwap, Seeds, Pocket } from "../codegen/index.sol";
+import { PaymentType, CosmeticType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
 
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 // import { GaulItems } from "../data/GaulItems.sol";
@@ -37,14 +37,14 @@ contract ItemSubsystem is System {
         pay(player, 75, 0, 0, payment, 0);
         Stick.set(player, true);
       } 
-      else if (id == 1) { //robe
-        pay(player, 0, 1, 0, payment, 0);
-        Robe.set(player, 0);
-      } 
-      else if (id == 2) { //pickelhaube
-        pay(player, 0, 1, 0, payment, 0);
-        Head.set(player, 0);
-      } 
+      // else if (id == 1) { //robe
+      //   pay(player, 0, 1, 0, payment, 0);
+
+      // } 
+      // else if (id == 2) { //pickelhaube
+      //   pay(player, 0, 1, 0, payment, 0);
+
+      // } 
       else if (id == 3) { //fishing rod
         pay(player, 50, 0, 0, payment, 0);
         FishingRod.set(player, true);
@@ -100,22 +100,60 @@ contract ItemSubsystem is System {
     
     } 
     
-    //OUTFITS
-    // else if(id < 200) {
-    //   if (id == 100) { //leather
-    //     pay(player, 0, 1, 1, payment, 0);
-
-    //   } 
-    //   else if (id == 100) { //etc
-    //     pay(player, 0, 1, 1, payment, 0);
-
-    //   } 
-    // }
-
-    //LIMITED TIME
-    else if(id < 300) {
-
+    // HEAD
+    else if(id < 200) {
+      pay(player, 0, 1, 10000000000000000, payment, 0);
+      buyCosmetic(player, CosmeticType.Head, id-200);
     }
+
+    // ROBE
+    else if(id < 300) {
+      pay(player, 0, 1, 10000000000000000, payment, 0);
+      buyCosmetic(player, CosmeticType.Robe, id-300);
+    }
+    // EFFECTS
+    else if(id < 400) {
+      pay(player, 0, 1, 10000000000000000, payment, 0);
+      buyCosmetic(player, CosmeticType.Effect, id-400);
+    }
+    // MATERIALS
+    else if(id < 500) {
+      pay(player, 0, 1, 10000000000000000, payment, 0);
+      buyCosmetic(player, CosmeticType.Material, id-500);
+    }
+
+  }
+
+  function buyCosmetic(bytes32 player, CosmeticType cosmetic, uint index) public {
+
+    bool[] memory ownership;
+    
+    if(cosmetic == CosmeticType.Head) {
+      ownership = Head.get(player);
+      require(ownership[index] == false, "Already have");
+
+      ownership[index] = true;
+      Head.set(player, ownership);
+    } else if(cosmetic == CosmeticType.Robe) {
+      ownership = Robe.get(player);
+      require(ownership[index] == false, "Already have");
+
+      ownership[index] = true;
+      Robe.set(player, ownership);
+    } else if(cosmetic == CosmeticType.Effect) {
+      ownership = Effect.get(player);
+      require(ownership[index] == false, "Already have");
+
+      ownership[index] = true;
+      Effect.set(player, ownership);
+    } else if(cosmetic == CosmeticType.Material) {
+      ownership = Material.get(player);
+      require(ownership[index] == false, "Already have");
+
+      ownership[index] = true;
+      Material.set(player, ownership);
+    }
+
   }
 
   function pay(bytes32 account, int32 coinPrice, int32 gemPrice, uint256 ethPrice, PaymentType paymentType, int32 minLevel) private {

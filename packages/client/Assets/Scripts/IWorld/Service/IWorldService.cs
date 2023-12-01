@@ -236,6 +236,36 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(buyFunction, cancellationToken);
         }
 
+        public Task<string> BuyCosmeticRequestAsync(BuyCosmeticFunction buyCosmeticFunction)
+        {
+             return ContractHandler.SendRequestAsync(buyCosmeticFunction);
+        }
+
+        public Task<TransactionReceipt> BuyCosmeticRequestAndWaitForReceiptAsync(BuyCosmeticFunction buyCosmeticFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyCosmeticFunction, cancellationToken);
+        }
+
+        public Task<string> BuyCosmeticRequestAsync(byte[] player, byte cosmetic, BigInteger index)
+        {
+            var buyCosmeticFunction = new BuyCosmeticFunction();
+                buyCosmeticFunction.Player = player;
+                buyCosmeticFunction.Cosmetic = cosmetic;
+                buyCosmeticFunction.Index = index;
+            
+             return ContractHandler.SendRequestAsync(buyCosmeticFunction);
+        }
+
+        public Task<TransactionReceipt> BuyCosmeticRequestAndWaitForReceiptAsync(byte[] player, byte cosmetic, BigInteger index, CancellationTokenSource cancellationToken = null)
+        {
+            var buyCosmeticFunction = new BuyCosmeticFunction();
+                buyCosmeticFunction.Player = player;
+                buyCosmeticFunction.Cosmetic = cosmetic;
+                buyCosmeticFunction.Index = index;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(buyCosmeticFunction, cancellationToken);
+        }
+
         public Task<string> BuyItemRequestAsync(BuyItemFunction buyItemFunction)
         {
              return ContractHandler.SendRequestAsync(buyItemFunction);

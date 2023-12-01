@@ -13,8 +13,8 @@ namespace mudworld
     {
         public class RobeTableUpdate : RecordUpdate
         {
-            public int? Value;
-            public int? PreviousValue;
+            public bool[]? Value;
+            public bool[]? PreviousValue;
         }
 
         public readonly static string ID = "Robe";
@@ -28,7 +28,7 @@ namespace mudworld
             return ID;
         }
 
-        public int? Value;
+        public bool[]? Value;
 
         public override Type TableType()
         {
@@ -57,7 +57,7 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            Value = (int)functionParameters[0];
+            Value = (bool[])functionParameters[0];
         }
 
         public static IObservable<RecordUpdate> GetRobeTableUpdates()
@@ -74,24 +74,24 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            Value = (int)property["value"];
+            Value = ((object[])property["value"]).Cast<bool>().ToArray();
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            int? currentValueTyped = null;
-            int? previousValueTyped = null;
+            bool[]? currentValueTyped = null;
+            bool[]? previousValueTyped = null;
 
             if (currentValue != null && currentValue.ContainsKey("value"))
             {
-                currentValueTyped = (int)currentValue["value"];
+                currentValueTyped = ((object[])currentValue["value"]).Cast<bool>().ToArray();
             }
 
             if (previousValue != null && previousValue.ContainsKey("value"))
             {
-                previousValueTyped = (int)previousValue["value"];
+                previousValueTyped = ((object[])previousValue["value"]).Cast<bool>().ToArray();
             }
 
             return new RobeTableUpdate

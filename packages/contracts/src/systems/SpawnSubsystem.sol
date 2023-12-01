@@ -4,10 +4,10 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal, TickTest } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, EnumTest } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, EnumTest } from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
-import { MoveType, ActionType, NPCType } from "../codegen/common.sol";
+import { MoveType, ActionType, NPCType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
 
 import { Actions } from "../utility/actions.sol";
 import { randomCoord } from "../utility/random.sol";
@@ -34,6 +34,12 @@ contract SpawnSubsystem is System {
       Coinage.set(entity, 10);
       Eth.set(entity, 10000);
       Weight.set(entity, -1);
+
+      Head.set(entity, new bool[](uint(ArmorSet.Count)));
+      Robe.set(entity, new bool[](uint(ArmorSet.Count)));
+      Effect.set(entity, new bool[](uint(EffectSet.Count)));
+      Material.set(entity, new bool[](uint(MaterialSet.Count)));
+
       // Conscription.set(entity, true);
       NPC.set(entity, uint32(NPCType.Player));
       XP.set(entity, 0);
@@ -44,25 +50,32 @@ contract SpawnSubsystem is System {
       int32 mileJoined = GameState.getMiles();
 
       Stats.set(entity, mileJoined);
+
+      // uint8[] memory array = new uint8[](4);
+      // array[0] = 3;
+      // array[1] = 6;
+      // int32[] memory arrayInt = new int32[](4);
+      // arrayInt[0] = 3;
+      // arrayInt[1] = 6;
+      // int256[] memory arrayBig = new int256[](4);
+      // arrayBig[0] = 3;
+      // arrayBig[1] = 6;
+      // uint256[] memory arrayUintBig = new uint256[](4);
+      // arrayUintBig[0] = 3;
+      // arrayUintBig[1] = 6;
+      // EnumTest.set(entity, NPCType.Player, array, arrayInt, arrayBig, arrayUintBig);
+
+    } else {
+      // EnumTest.pushMaxMove(entity, 5);
     }
 
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y, 0);
     Actions.setAction(entity, ActionType.Spawn, x, y);
-    uint8[] memory array = new uint8[](4);
-    array[0] = 3;
-    array[1] = 6;
-    int32[] memory arrayInt = new int32[](4);
-    arrayInt[0] = 3;
-    arrayInt[1] = 6;
-    int256[] memory arrayBig = new int256[](4);
-    arrayBig[0] = 3;
-    arrayBig[1] = 6;
-    uint256[] memory arrayUintBig = new uint256[](4);
-    arrayUintBig[0] = 3;
-    arrayUintBig[1] = 6;
-    EnumTest.set(entity, NPCType.Player, array, arrayInt, arrayBig, arrayUintBig);
+    
+
+    
   }
 
   function spawnNPC(bytes32 spawner, int32 x, int32 y, NPCType npcType) public {

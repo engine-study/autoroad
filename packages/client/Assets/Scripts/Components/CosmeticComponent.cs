@@ -1,6 +1,11 @@
+
+using System.Linq;
 using UnityEngine;
 using mudworld;
 using mud;
+using VisualDesignCafe.Nature.Materials.Editor;
+using Unity.VisualScripting;
+using WebSocketSharp;
 
 public enum CosmeticType {None, Head, Body, Effect}
 public class CosmeticComponent : ValueComponent
@@ -8,6 +13,7 @@ public class CosmeticComponent : ValueComponent
     [Header("Cosmetic")]
     public CosmeticType cosmetic;
     public GameObject body;
+    [SerializeField] bool[] owned;
     [SerializeField] GaulItem[] bodies;
 
     [Header("Debug")]
@@ -26,7 +32,10 @@ public class CosmeticComponent : ValueComponent
         player.SetCosmetic(cosmetic, body);
         
     }
-
+    protected override void UpdateComponent(MUDTable update, UpdateInfo info) {
+        base.UpdateComponent(update, info);
+        owned = ((object[])MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["value"]).Cast<bool>().ToArray();
+    }
     
     protected override StatType SetStat(MUDTable update){ return StatType.None; }
     protected override float SetValue(MUDTable update) {return 1;}

@@ -57,6 +57,10 @@ export default mudConfig({
     FloraType: ["None", "Tree", "Oak", "Bramble"],
     PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Count"],
     PaymentType: ["None", "Coins", "Gems", "Eth"],
+    ArmorSet: ["None", "Armor", "Barbarian", "Wizard", "Count"],
+    EffectSet: ["None", "Fire", "Sparkles", "Water", "Count"],
+    MaterialSet: ["None", "Metal", "Oak", "Obsidian", "Count"],
+    CosmeticType: ["None", "Head", "Robe", "Effect", "Material"],
   },
 
   tables: {
@@ -218,8 +222,12 @@ export default mudConfig({
     Pocket: "bool",
     Carry: "bytes32",
     Bones: "bool",
-    Robe: "int32",
-    Head: "int32",
+
+    Head: "bool[]",
+    Robe: "bool[]",
+    Effect: "bool[]",
+    Material: "bool[]",
+
     Scroll: "uint32",
     ScrollSwap: "uint32",
     FishingRod: "bool",

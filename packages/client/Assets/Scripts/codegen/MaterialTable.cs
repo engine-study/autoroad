@@ -9,15 +9,15 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class HeadTable : MUDTable
+    public class MaterialTable : MUDTable
     {
-        public class HeadTableUpdate : RecordUpdate
+        public class MaterialTableUpdate : RecordUpdate
         {
             public bool[]? Value;
             public bool[]? PreviousValue;
         }
 
-        public readonly static string ID = "Head";
+        public readonly static string ID = "Material";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -32,17 +32,17 @@ namespace mudworld
 
         public override Type TableType()
         {
-            return typeof(HeadTable);
+            return typeof(MaterialTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(HeadTableUpdate);
+            return typeof(MaterialTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            HeadTable other = (HeadTable)obj;
+            MaterialTable other = (MaterialTable)obj;
 
             if (other == null)
             {
@@ -60,9 +60,9 @@ namespace mudworld
             Value = (bool[])functionParameters[0];
         }
 
-        public static IObservable<RecordUpdate> GetHeadTableUpdates()
+        public static IObservable<RecordUpdate> GetMaterialTableUpdates()
         {
-            HeadTable mudTable = new HeadTable();
+            MaterialTable mudTable = new MaterialTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -94,7 +94,7 @@ namespace mudworld
                 previousValueTyped = ((object[])previousValue["value"]).Cast<bool>().ToArray();
             }
 
-            return new HeadTableUpdate
+            return new MaterialTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,
