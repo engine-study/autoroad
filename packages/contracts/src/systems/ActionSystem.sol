@@ -5,7 +5,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Action, Name, Player, Health} from "../codegen/index.sol";
-import { ActionType, PaymentType } from "../codegen/common.sol";
+import { ActionType, PaymentType, CosmeticType } from "../codegen/common.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 
 import { Actions } from "../utility/actions.sol";
@@ -142,6 +142,17 @@ contract ActionSystem is System {
     }
 
     require(false, "No action found.");
+
+  }
+
+  function dressup(CosmeticType cosmetic, uint index) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    IWorld world = IWorld(_world());
+
+    Rules.requirePlayer(player);
+    require(Rules.canDoStuff(player), "hmm");
+
+    SystemSwitch.call(abi.encodeCall(world.setCosmetic, (player, cosmetic, index)));
 
   }
 }

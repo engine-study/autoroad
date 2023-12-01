@@ -466,6 +466,17 @@ namespace IWorld.ContractDefinition
         public virtual PositionData EntityPos { get; set; }
     }
 
+    public partial class DressupFunction : DressupFunctionBase { }
+
+    [Function("dressup")]
+    public class DressupFunctionBase : FunctionMessage
+    {
+        [Parameter("uint8", "cosmetic", 1)]
+        public virtual byte Cosmetic { get; set; }
+        [Parameter("uint256", "index", 2)]
+        public virtual BigInteger Index { get; set; }
+    }
+
     public partial class FinishMileFunction : FinishMileFunctionBase { }
 
     [Function("finishMile")]
@@ -1194,6 +1205,19 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("int32", "amount", 1)]
         public virtual int Amount { get; set; }
+    }
+
+    public partial class SetCosmeticFunction : SetCosmeticFunctionBase { }
+
+    [Function("setCosmetic")]
+    public class SetCosmeticFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("uint8", "cosmetic", 2)]
+        public virtual byte Cosmetic { get; set; }
+        [Parameter("uint256", "index", 3)]
+        public virtual BigInteger Index { get; set; }
     }
 
     public partial class SetDynamicFieldFunction : SetDynamicFieldFunctionBase { }
@@ -2256,6 +2280,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class GetDynamicFieldOutputDTO : GetDynamicFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -2417,6 +2443,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

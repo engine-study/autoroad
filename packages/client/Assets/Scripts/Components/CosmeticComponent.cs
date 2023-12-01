@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using mudworld;
 using mud;
 using UnityEditor;
+using IWorld.ContractDefinition;
 
 public class CosmeticComponent : ValueComponent
 {
@@ -23,6 +24,15 @@ public class CosmeticComponent : ValueComponent
     [SerializeField] GaulItem[] items;
     [SerializeField] protected PlayerMUD player;
     [SerializeField] Renderer r;
+    public static CosmeticComponent [] Cosmetics;
+    public Array enumValues;
+
+    public static async void UpdateCosmetic(CosmeticType cosmetic, int index) {
+        Array enumValues = Cosmetics[(int)cosmetic].enumValues;
+        Debug.Log($"Setting {cosmetic} to {enumValues.GetValue(index)}");
+
+        await TxManager.SendDirect<DressupFunction>(Convert.ToByte(cosmetic), Convert.ToUInt64(index));
+    }
 
     protected override void Init(SpawnInfo newInfo) {
         base.Init(newInfo);
@@ -52,7 +62,15 @@ public class CosmeticComponent : ValueComponent
         if (enumType == null || !enumType.IsEnum) {
             Debug.LogError("Invalid enum type " + EnumName, this);
             return;
-        }           
+        }     
+
+        enumValues = Enum.GetValues(enumType);  
+
+        if(Cosmetics == null) {Cosmetics = new CosmeticComponent[Enum.GetValues(typeof(CosmeticType)).Length];}
+
+        if(Entity.Key == NetworkManager.LocalKey) {
+            Cosmetics[(int)cosmetic] = this;
+        }    
     }
 
     protected override void UpdateComponent(MUDTable update, UpdateInfo info) {
@@ -70,9 +88,10 @@ public class CosmeticComponent : ValueComponent
         }
 
     }
+
     
     protected override StatType SetStat(MUDTable update){ return StatType.None; }
-    protected override float SetValue(MUDTable update) {return 1;}
+    protected override float SetValue(MUDTable update) {return 0;}
     protected override string SetString(MUDTable update){ return "";}
 
 }

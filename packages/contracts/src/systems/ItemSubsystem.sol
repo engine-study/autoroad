@@ -167,6 +167,42 @@ contract ItemSubsystem is System {
     }
 
   }
+  
+  function setCosmetic(bytes32 player, CosmeticType cosmetic, uint index) public {
+
+    bool[] memory ownership;
+    
+    if(cosmetic == CosmeticType.Head) {
+
+      require(index < uint(ArmorSet.Count));
+      ownership = Head.getOwned(player);
+      require(ownership[index], "Dont have");
+      Head.set(player, uint8(index), ownership);
+    
+    } else if(cosmetic == CosmeticType.Robe) {
+
+      require(index < uint(ArmorSet.Count));
+      ownership = Robe.getOwned(player);
+      require(ownership[index], "Dont have");
+      Robe.set(player, uint8(index), ownership);
+    
+    } else if(cosmetic == CosmeticType.Effect) {
+
+      require(index < uint(EffectSet.Count));
+      ownership = Effect.getOwned(player);
+      require(ownership[index], "Dont have");
+      Effect.set(player, uint8(index), ownership);
+    
+    } else if(cosmetic == CosmeticType.Material) {
+
+      require(index < uint(MaterialSet.Count));
+      ownership = Material.getOwned(player);
+      require(ownership[index], "Dont have");
+      Material.set(player, uint8(index), ownership);
+    
+    }
+
+  }
 
   function pay(bytes32 account, int32 coinPrice, int32 gemPrice, uint256 ethPrice, PaymentType paymentType, int32 minLevel) private {
     require(paymentType != PaymentType.None, "no payment type set");

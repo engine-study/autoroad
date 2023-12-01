@@ -1065,6 +1065,34 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doWanderFunction, cancellationToken);
         }
 
+        public Task<string> DressupRequestAsync(DressupFunction dressupFunction)
+        {
+             return ContractHandler.SendRequestAsync(dressupFunction);
+        }
+
+        public Task<TransactionReceipt> DressupRequestAndWaitForReceiptAsync(DressupFunction dressupFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(dressupFunction, cancellationToken);
+        }
+
+        public Task<string> DressupRequestAsync(byte cosmetic, BigInteger index)
+        {
+            var dressupFunction = new DressupFunction();
+                dressupFunction.Cosmetic = cosmetic;
+                dressupFunction.Index = index;
+            
+             return ContractHandler.SendRequestAsync(dressupFunction);
+        }
+
+        public Task<TransactionReceipt> DressupRequestAndWaitForReceiptAsync(byte cosmetic, BigInteger index, CancellationTokenSource cancellationToken = null)
+        {
+            var dressupFunction = new DressupFunction();
+                dressupFunction.Cosmetic = cosmetic;
+                dressupFunction.Index = index;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(dressupFunction, cancellationToken);
+        }
+
         public Task<string> FinishMileRequestAsync(FinishMileFunction finishMileFunction)
         {
              return ContractHandler.SendRequestAsync(finishMileFunction);
@@ -2599,6 +2627,36 @@ namespace IWorld.Service
                 sendCoinsFunction.Amount = amount;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(sendCoinsFunction, cancellationToken);
+        }
+
+        public Task<string> SetCosmeticRequestAsync(SetCosmeticFunction setCosmeticFunction)
+        {
+             return ContractHandler.SendRequestAsync(setCosmeticFunction);
+        }
+
+        public Task<TransactionReceipt> SetCosmeticRequestAndWaitForReceiptAsync(SetCosmeticFunction setCosmeticFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setCosmeticFunction, cancellationToken);
+        }
+
+        public Task<string> SetCosmeticRequestAsync(byte[] player, byte cosmetic, BigInteger index)
+        {
+            var setCosmeticFunction = new SetCosmeticFunction();
+                setCosmeticFunction.Player = player;
+                setCosmeticFunction.Cosmetic = cosmetic;
+                setCosmeticFunction.Index = index;
+            
+             return ContractHandler.SendRequestAsync(setCosmeticFunction);
+        }
+
+        public Task<TransactionReceipt> SetCosmeticRequestAndWaitForReceiptAsync(byte[] player, byte cosmetic, BigInteger index, CancellationTokenSource cancellationToken = null)
+        {
+            var setCosmeticFunction = new SetCosmeticFunction();
+                setCosmeticFunction.Player = player;
+                setCosmeticFunction.Cosmetic = cosmetic;
+                setCosmeticFunction.Index = index;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(setCosmeticFunction, cancellationToken);
         }
 
         public Task<string> SetDynamicFieldRequestAsync(SetDynamicFieldFunction setDynamicFieldFunction)
