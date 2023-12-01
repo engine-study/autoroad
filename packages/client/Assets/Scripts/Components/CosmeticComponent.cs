@@ -1,4 +1,4 @@
-
+using System;
 using System.Linq;
 using UnityEngine;
 using System.Collections;
@@ -15,6 +15,7 @@ public class CosmeticComponent : ValueComponent
     [Header("Cosmetic")]
     public CosmeticType cosmetic;
     public PlayerBody bodyLink;
+    public string EnumName;
 
     [Header("Debug")]
     [SerializeField] int index;
@@ -46,8 +47,14 @@ public class CosmeticComponent : ValueComponent
 
         player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
         player.SetCosmetic(bodyLink, Go);
-        
+
+        Type enumType = Type.GetType(EnumName);
+        if (enumType == null || !enumType.IsEnum) {
+            Debug.LogError("Invalid enum type " + EnumName, this);
+            return;
+        }           
     }
+
     protected override void UpdateComponent(MUDTable update, UpdateInfo info) {
         base.UpdateComponent(update, info);
         index = (int)(uint)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["index"];

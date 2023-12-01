@@ -421,11 +421,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4853240895961750788, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 19309730}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &19309732 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4853240895961750789, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
+--- !u!114 &19309735 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8202264658781880215, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 19309730}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &19394638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,9 +1242,10 @@ MonoBehaviour:
     borderWidth: 0.5
     textSize: 18
     paragraphSize: 18
-  EnumName: MaterialSet
-  prefab: {fileID: 19309732}
+  EnumName: mudworld.MaterialSet, mudworld
+  prefab: {fileID: 19309735}
   ignoreLast: 1
+  selected: {fileID: 0}
   windows: []
 --- !u!1001 &50069970
 PrefabInstance:
@@ -3672,11 +3679,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4853240895961750788, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 200063042}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &200063044 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4853240895961750789, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
+--- !u!114 &200063047 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8202264658781880215, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 200063042}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &205998581
 GameObject:
   m_ObjectHideFlags: 0
@@ -14311,12 +14324,12 @@ MonoBehaviour:
   addSubcanvas: 1
   addRaycaster: 1
   views:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  EnumName: CosmeticType
+  - {fileID: 1094108036}
+  - {fileID: 1225104483}
+  - {fileID: 1783228351}
+  - {fileID: 1817546450}
+  - {fileID: 43321466}
+  EnumName: mudworld.CosmeticType, mudworld
   header: {fileID: 25516240}
 --- !u!1 &697105007
 GameObject:
@@ -19645,11 +19658,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4853240895961750788, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 916634036}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &916634038 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4853240895961750789, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
+--- !u!114 &916634041 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8202264658781880215, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 916634036}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &918239546
 GameObject:
   m_ObjectHideFlags: 0
@@ -22505,8 +22524,9 @@ MonoBehaviour:
     textSize: 18
     paragraphSize: 18
   EnumName: 
-  prefab: {fileID: 1253636067188791729}
+  prefab: {fileID: 1253636067188791732}
   ignoreLast: 0
+  selected: {fileID: 0}
   windows: []
 --- !u!1001 &1097155924
 PrefabInstance:
@@ -26549,9 +26569,10 @@ MonoBehaviour:
     borderWidth: 0.5
     textSize: 18
     paragraphSize: 18
-  EnumName: ArmorSet
-  prefab: {fileID: 916634038}
+  EnumName: mudworld.ArmorSet, mudworld
+  prefab: {fileID: 916634041}
   ignoreLast: 1
+  selected: {fileID: 0}
   windows: []
 --- !u!1 &1226245510
 GameObject:
@@ -31115,11 +31136,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4853240895961750788, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 1437230609}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1437230611 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4853240895961750789, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
+--- !u!114 &1437230614 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8202264658781880215, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 1437230609}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1446138440
 GameObject:
   m_ObjectHideFlags: 0
@@ -39817,9 +39844,10 @@ MonoBehaviour:
     borderWidth: 0.5
     textSize: 18
     paragraphSize: 18
-  EnumName: ArmorSet
-  prefab: {fileID: 1437230611}
+  EnumName: mudworld.ArmorSet, mudworld
+  prefab: {fileID: 1437230614}
   ignoreLast: 1
+  selected: {fileID: 0}
   windows: []
 --- !u!1 &1784889188
 GameObject:
@@ -40422,9 +40450,10 @@ MonoBehaviour:
     borderWidth: 0.5
     textSize: 18
     paragraphSize: 18
-  EnumName: EffectSet
-  prefab: {fileID: 200063044}
+  EnumName: mudworld.EffectSet, mudworld
+  prefab: {fileID: 200063047}
   ignoreLast: 1
+  selected: {fileID: 0}
   windows: []
 --- !u!1 &1823722306
 GameObject:
@@ -48496,11 +48525,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4853240895961750788, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 1253636067188791727}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1253636067188791729 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4853240895961750789, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
+--- !u!114 &1253636067188791732 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8202264658781880215, guid: eafff2a58794d314d94f0efcbd7ce180, type: 3}
   m_PrefabInstance: {fileID: 1253636067188791727}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360b29055da72ea478864cbc04eed7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &1628114717329541083
 MeshRenderer:
   m_ObjectHideFlags: 0
