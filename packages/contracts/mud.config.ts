@@ -57,9 +57,9 @@ export default mudConfig({
     FloraType: ["None", "Tree", "Oak", "Bramble"],
     PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Count"],
     PaymentType: ["None", "Coins", "Gems", "Eth"],
-    ArmorSet: ["None", "Armor", "Barbarian", "Wizard", "Count"],
-    EffectSet: ["None", "Fire", "Sparkles", "Water", "Count"],
-    MaterialSet: ["None", "Metal", "Oak", "Obsidian", "Count"],
+    ArmorSet: ["None", "Armor", "Barbarian", "Wizard", "TBD1", "TBD2", "TBD3", "TBD4", "TBD5", "Count"],
+    EffectSet: ["None", "Fire", "Sparkles", "Water", "Leaves", "TBD1", "TBD2", "TBD3", "TBD4", "TBD5", "Count"],
+    MaterialSet: ["None", "Metal", "Oak", "Obsidian", "TBD1", "TBD2", "TBD3", "TBD4", "TBD5", "Count"],
     CosmeticType: ["None", "Head", "Robe", "Effect", "Material"],
   },
 
