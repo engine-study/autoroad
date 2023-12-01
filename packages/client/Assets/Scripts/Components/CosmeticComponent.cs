@@ -6,18 +6,19 @@ using mud;
 using VisualDesignCafe.Nature.Materials.Editor;
 using Unity.VisualScripting;
 using WebSocketSharp;
+using UnityEditor;
 
-public enum CosmeticType {None, Head, Body, Effect}
 public class CosmeticComponent : ValueComponent
 {
     [Header("Cosmetic")]
     public CosmeticType cosmetic;
-    public GameObject body;
-    [SerializeField] bool[] owned;
-    [SerializeField] GaulItem[] bodies;
+    public BodyPart bodyLink;
+    [SerializeField] GameObject[] cosmetics;
+    [SerializeField] GaulItem[] items;
 
     [Header("Debug")]
-    [SerializeField] protected int costumeIndex;
+    [SerializeField] int index;
+    [SerializeField] bool[] owned;
     [SerializeField] protected PlayerMUD player;
 
     protected override void Init(SpawnInfo newInfo) {
@@ -29,12 +30,17 @@ public class CosmeticComponent : ValueComponent
         base.PostInit();
 
         player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
-        player.SetCosmetic(cosmetic, body);
+        player.SetCosmetic(cosmetic, cosmetics[index]);
         
     }
     protected override void UpdateComponent(MUDTable update, UpdateInfo info) {
         base.UpdateComponent(update, info);
-        owned = ((object[])MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["value"]).Cast<bool>().ToArray();
+        index = (int)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["index"];
+        owned = ((object[])MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["ownership"]).Cast<bool>().ToArray();
+
+        if(Loaded) {
+            player.SetCosmetic(cosmetic, cosmetics[index]);
+        }
     }
     
     protected override StatType SetStat(MUDTable update){ return StatType.None; }

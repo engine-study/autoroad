@@ -13,8 +13,10 @@ namespace mudworld
     {
         public class HeadTableUpdate : RecordUpdate
         {
-            public bool[]? Value;
-            public bool[]? PreviousValue;
+            public uint? Index;
+            public uint? PreviousIndex;
+            public bool[]? Owned;
+            public bool[]? PreviousOwned;
         }
 
         public readonly static string ID = "Head";
@@ -28,7 +30,8 @@ namespace mudworld
             return ID;
         }
 
-        public bool[]? Value;
+        public uint? Index;
+        public bool[]? Owned;
 
         public override Type TableType()
         {
@@ -48,7 +51,11 @@ namespace mudworld
             {
                 return false;
             }
-            if (Value != other.Value)
+            if (Index != other.Index)
+            {
+                return false;
+            }
+            if (Owned != other.Owned)
             {
                 return false;
             }
@@ -57,7 +64,9 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            Value = (bool[])functionParameters[0];
+            Index = (uint)functionParameters[0];
+
+            Owned = (bool[])functionParameters[1];
         }
 
         public static IObservable<RecordUpdate> GetHeadTableUpdates()
@@ -74,24 +83,37 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            Value = ((object[])property["value"]).Cast<bool>().ToArray();
+            Index = (uint)property["index"];
+            Owned = ((object[])property["owned"]).Cast<bool>().ToArray();
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            bool[]? currentValueTyped = null;
-            bool[]? previousValueTyped = null;
+            uint? currentIndexTyped = null;
+            uint? previousIndexTyped = null;
 
-            if (currentValue != null && currentValue.ContainsKey("value"))
+            if (currentValue != null && currentValue.ContainsKey("index"))
             {
-                currentValueTyped = ((object[])currentValue["value"]).Cast<bool>().ToArray();
+                currentIndexTyped = (uint)currentValue["index"];
             }
 
-            if (previousValue != null && previousValue.ContainsKey("value"))
+            if (previousValue != null && previousValue.ContainsKey("index"))
             {
-                previousValueTyped = ((object[])previousValue["value"]).Cast<bool>().ToArray();
+                previousIndexTyped = (uint)previousValue["index"];
+            }
+            bool[]? currentOwnedTyped = null;
+            bool[]? previousOwnedTyped = null;
+
+            if (currentValue != null && currentValue.ContainsKey("owned"))
+            {
+                currentOwnedTyped = ((object[])currentValue["owned"]).Cast<bool>().ToArray();
+            }
+
+            if (previousValue != null && previousValue.ContainsKey("owned"))
+            {
+                previousOwnedTyped = ((object[])previousValue["owned"]).Cast<bool>().ToArray();
             }
 
             return new HeadTableUpdate
@@ -102,8 +124,10 @@ namespace mudworld
                 CurrentRecordKey = recordUpdate.CurrentRecordKey,
                 PreviousRecordKey = recordUpdate.PreviousRecordKey,
                 Type = recordUpdate.Type,
-                Value = currentValueTyped,
-                PreviousValue = previousValueTyped,
+                Index = currentIndexTyped,
+                PreviousIndex = previousIndexTyped,
+                Owned = currentOwnedTyped,
+                PreviousOwned = previousOwnedTyped,
             };
         }
     }

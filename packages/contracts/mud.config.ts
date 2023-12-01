@@ -223,10 +223,10 @@ export default mudConfig({
     Carry: "bytes32",
     Bones: "bool",
 
-    Head: "bool[]",
-    Robe: "bool[]",
-    Effect: "bool[]",
-    Material: "bool[]",
+    Head: {dataStruct: false, valueSchema: {index: "uint8", owned: "bool[]",},},
+    Robe: {dataStruct: false, valueSchema: {index: "uint8", owned: "bool[]",},},
+    Effect: {dataStruct: false, valueSchema: {index: "uint8", owned: "bool[]",},},
+    Material: {dataStruct: false, valueSchema: {index: "uint8", owned: "bool[]",},},
 
     Scroll: "uint32",
     ScrollSwap: "uint32",

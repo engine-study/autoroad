@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Offset: {x: 0, y: 0, z: 2}
   m_Size: {x: 0.75, y: 0.75, z: 4}
   m_FadeFactor: 0.25
---- !u!1 &2602436006367894030
+--- !u!1 &2663614731845823368
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -323,22 +323,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 770660653155392519}
-  - component: {fileID: 1714495909849884527}
+  - component: {fileID: 1853645582933546331}
+  - component: {fileID: 3614617055421954153}
   m_Layer: 7
-  m_Name: CapeCosmetic
+  m_Name: MaterialCosmetic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &770660653155392519
+  m_IsActive: 1
+--- !u!4 &1853645582933546331
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2602436006367894030}
+  m_GameObject: {fileID: 2663614731845823368}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -347,13 +347,13 @@ Transform:
   m_Father: {fileID: 1558861782257277804}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1714495909849884527
+--- !u!114 &3614617055421954153
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2602436006367894030}
+  m_GameObject: {fileID: 2663614731845823368}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72f194a4a664d7c4e89e4bc086a158e7, type: 3}
@@ -440,6 +440,7 @@ MonoBehaviour:
   - {fileID: 5050314643214429208}
   - {fileID: 125920616817916833}
   - {fileID: 4487376146108627717}
+  - {fileID: 3614617055421954153}
   sfx_equip:
   - {fileID: 8300000, guid: 175f58b3995444942bc5a66f5a281b48, type: 3}
   positionComponent: {fileID: 0}
@@ -748,6 +749,8 @@ MonoBehaviour:
   usePos: 0
   minPos: {x: 0, y: 0, z: 0}
   maxPos: {x: 0, y: 0, z: 0}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -831,8 +834,7 @@ Transform:
   - {fileID: 7235623832513107732}
   - {fileID: 3669903482948366076}
   - {fileID: 5427469412393192300}
-  - {fileID: 770660653155392519}
-  - {fileID: 6228688684250431560}
+  - {fileID: 1853645582933546331}
   - {fileID: 699017521773161998}
   - {fileID: 1702404354966987545}
   m_Father: {fileID: 2298435120210950492}
@@ -884,53 +886,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultBody: {fileID: 0}
   bodyParent: {fileID: 5630546298076223802}
-  activeBody: {fileID: 0}
---- !u!1 &6754234756648216294
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6228688684250431560}
-  - component: {fileID: 3717596118863761327}
-  m_Layer: 7
-  m_Name: BackpackCosmetic
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6228688684250431560
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6754234756648216294}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.75, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1558861782257277804}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3717596118863761327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6754234756648216294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72f194a4a664d7c4e89e4bc086a158e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultBody: {fileID: 0}
-  bodyParent: {fileID: 6137806830827958018}
   activeBody: {fileID: 0}
 --- !u!1 &9097609177180554940
 GameObject:
@@ -1392,11 +1347,6 @@ GameObject:
 --- !u!4 &5630546298076223802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1474216426570821336, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
-  m_PrefabInstance: {fileID: 6509601425427134434}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6137806830827958018 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1115519188933449952, guid: cac511f91b5c1b849837dd65a39b8309, type: 3}
   m_PrefabInstance: {fileID: 6509601425427134434}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &7188361630544701105 stripped

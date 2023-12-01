@@ -129,29 +129,41 @@ contract ItemSubsystem is System {
     bool[] memory ownership;
     
     if(cosmetic == CosmeticType.Head) {
-      ownership = Head.get(player);
+
+      require(index < uint(ArmorSet.Count));
+      ownership = Head.getOwned(player);
       require(ownership[index] == false, "Already have");
 
       ownership[index] = true;
-      Head.set(player, ownership);
+      Head.set(player, uint8(index), ownership);
+    
     } else if(cosmetic == CosmeticType.Robe) {
-      ownership = Robe.get(player);
+
+      require(index < uint(ArmorSet.Count));
+      ownership = Robe.getOwned(player);
       require(ownership[index] == false, "Already have");
 
       ownership[index] = true;
-      Robe.set(player, ownership);
+      Robe.set(player, uint8(index), ownership);
+    
     } else if(cosmetic == CosmeticType.Effect) {
-      ownership = Effect.get(player);
+
+      require(index < uint(EffectSet.Count));
+      ownership = Effect.getOwned(player);
       require(ownership[index] == false, "Already have");
 
       ownership[index] = true;
-      Effect.set(player, ownership);
+      Effect.set(player, uint8(index), ownership);
+    
     } else if(cosmetic == CosmeticType.Material) {
-      ownership = Material.get(player);
+
+      require(index < uint(MaterialSet.Count));
+      ownership = Material.getOwned(player);
       require(ownership[index] == false, "Already have");
 
       ownership[index] = true;
-      Material.set(player, ownership);
+      Material.set(player, uint8(index), ownership);
+    
     }
 
   }

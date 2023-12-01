@@ -2661,6 +2661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   table: {fileID: 11400000, guid: 9efc36d92ea169449a09754f1559eea3, type: 2}
   requiredComponents: []
+  canPool: 0
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -2679,13 +2680,23 @@ MonoBehaviour:
     updateType: 0
     source: 0
   item: {fileID: 11400000, guid: 08be9b50b54a31c4d8da0ebee38e4e46, type: 2}
+  visualPrefab: {fileID: 0}
   value: 0
   valueString: 
   statType: 0
   cosmetic: 2
-  body: {fileID: 309082613553494405}
-  bodies: []
-  costumeIndex: 0
+  bodyLink: 0
+  cosmetics:
+  - {fileID: 0}
+  - {fileID: 309082613553494405}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  items: []
+  index: 0
+  owned: 
+  player: {fileID: 0}
 --- !u!1 &8205601583479744194
 GameObject:
   m_ObjectHideFlags: 0
