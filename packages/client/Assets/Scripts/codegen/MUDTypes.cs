@@ -121,6 +121,11 @@ namespace mudworld
         Armor,
         Barbarian,
         Wizard,
+        TBD1,
+        TBD2,
+        TBD3,
+        TBD4,
+        TBD5,
         Count,
     }
 
@@ -130,6 +135,12 @@ namespace mudworld
         Fire,
         Sparkles,
         Water,
+        Leaves,
+        TBD1,
+        TBD2,
+        TBD3,
+        TBD4,
+        TBD5,
         Count,
     }
 
@@ -139,6 +150,11 @@ namespace mudworld
         Metal,
         Oak,
         Obsidian,
+        TBD1,
+        TBD2,
+        TBD3,
+        TBD4,
+        TBD5,
         Count,
     }
 
