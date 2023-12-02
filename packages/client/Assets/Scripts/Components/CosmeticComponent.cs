@@ -22,7 +22,6 @@ public class CosmeticComponent : ValueComponent
     [Header("Debug")]
     [SerializeField] int index;
     [SerializeField] bool[] owned;
-    [SerializeField] GaulItem[] items;
     [SerializeField] protected PlayerMUD player;
     [SerializeField] Renderer r;
     public static CosmeticComponent [] Cosmetics;
@@ -44,21 +43,6 @@ public class CosmeticComponent : ValueComponent
             transform.GetChild(i).gameObject.SetActive(false);
         }
 
-        items = Resources.LoadAll<GaulItem>("Data/Store");
-        slots = new List<InventorySlot>();
-
-        for(int i = 0; i < items.Length ; i++) {
-            if(items[i].bodyPart != bodyLink){continue;}
-            slots.Add(new InventorySlot(){item = items[i]});
-        }
-
-    }
-    protected override void PostInit() {
-        base.PostInit();
-
-        player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
-        player.SetCosmetic(bodyLink, Go);
-
         Type enumType = Type.GetType(EnumName);
         if (enumType == null || !enumType.IsEnum) {
             Debug.LogError("Invalid enum type " + EnumName, this);
@@ -66,6 +50,22 @@ public class CosmeticComponent : ValueComponent
         }     
 
         enumValues = Enum.GetValues(enumType);  
+
+        GaulItem[] items = Resources.LoadAll<GaulItem>("Data/Store");
+        slots = new List<InventorySlot>();
+
+        for(int i = 0; i < items.Length ; i++) {
+            if(items[i].bodyPart != bodyLink){continue;}
+            slots.Add(new InventorySlot(){item = items[i]});
+        }
+
+
+    }
+    protected override void PostInit() {
+        base.PostInit();
+
+        player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
+        player.SetCosmetic(bodyLink, Go);
 
         if(Cosmetics == null) {Cosmetics = new CosmeticComponent[Enum.GetValues(typeof(CosmeticType)).Length];}
 
@@ -84,9 +84,16 @@ public class CosmeticComponent : ValueComponent
             slots[i].amount = owned[i] ? 1 : 0;
         }
 
-        r = transform.GetChild(index).GetComponentInChildren<Renderer>(true);
-        visualPrefab = Go;
+        if(index < transform.childCount) {
+            r = transform.GetChild(index).GetComponentInChildren<Renderer>(true);
+            visualPrefab = Go;
+        } else {
+            Debug.LogError("Need to setup " + enumValues.GetValue(index), this);
+            r = null;
+            visualPrefab = null;
+        }
 
+        
         if(Loaded) {
             player.SetCosmetic(bodyLink, Go);
         }
