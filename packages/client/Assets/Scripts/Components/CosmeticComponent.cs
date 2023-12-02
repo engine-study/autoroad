@@ -32,7 +32,7 @@ public class CosmeticComponent : ValueComponent
         Array enumValues = Cosmetics[(int)cosmetic].enumValues;
         Debug.Log($"Setting {cosmetic} to {enumValues.GetValue(index)}");
 
-        await TxManager.SendDirect<DressupFunction>(Convert.ToByte(cosmetic), new BigInteger(index));
+        await TxManager.SendDirect<DressupFunction>(Convert.ToByte(cosmetic), Convert.ToByte(index));
     }
 
     protected override void Init(SpawnInfo newInfo) {
@@ -76,10 +76,13 @@ public class CosmeticComponent : ValueComponent
 
     protected override void UpdateComponent(MUDTable update, UpdateInfo info) {
         base.UpdateComponent(update, info);
+
         index = (int)(uint)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["index"];
         owned = ((object[])MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["owned"]).Cast<bool>().ToArray();
 
-        slots[index].amount = owned[index] ? 1 : 0;
+        for(int i = 0; i < slots.Count; i++) {
+            slots[i].amount = owned[i] ? 1 : 0;
+        }
 
         r = transform.GetChild(index).GetComponentInChildren<Renderer>(true);
         visualPrefab = Go;

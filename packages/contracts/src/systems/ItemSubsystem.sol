@@ -101,23 +101,23 @@ contract ItemSubsystem is System {
     } 
     
     // HEAD
-    else if(id < 200) {
+    else if(id >= 200 && id < 300) {
       pay(player, 0, 1, 10000000000000000, payment, 0);
       buyCosmetic(player, CosmeticType.Head, id-200);
     }
 
     // ROBE
-    else if(id < 300) {
+    else if(id >= 300 && id < 400) {
       pay(player, 0, 1, 10000000000000000, payment, 0);
       buyCosmetic(player, CosmeticType.Robe, id-300);
     }
     // EFFECTS
-    else if(id < 400) {
+    else if(id >= 400 && id < 500) {
       pay(player, 0, 1, 10000000000000000, payment, 0);
       buyCosmetic(player, CosmeticType.Effect, id-400);
     }
     // MATERIALS
-    else if(id < 500) {
+    else if(id >= 500) {
       pay(player, 0, 1, 10000000000000000, payment, 0);
       buyCosmetic(player, CosmeticType.Material, id-500);
     }
@@ -168,7 +168,7 @@ contract ItemSubsystem is System {
 
   }
   
-  function setCosmetic(bytes32 player, CosmeticType cosmetic, uint index) public {
+  function setCosmetic(bytes32 player, CosmeticType cosmetic, uint8 index) public {
 
     bool[] memory ownership;
     
@@ -177,28 +177,28 @@ contract ItemSubsystem is System {
       require(index < uint(ArmorSet.Count));
       ownership = Head.getOwned(player);
       require(ownership[index], "Dont have");
-      Head.set(player, uint8(index), ownership);
+      Head.set(player, index, ownership);
     
     } else if(cosmetic == CosmeticType.Robe) {
 
       require(index < uint(ArmorSet.Count));
       ownership = Robe.getOwned(player);
       require(ownership[index], "Dont have");
-      Robe.set(player, uint8(index), ownership);
+      Robe.set(player, index, ownership);
     
     } else if(cosmetic == CosmeticType.Effect) {
 
       require(index < uint(EffectSet.Count));
       ownership = Effect.getOwned(player);
       require(ownership[index], "Dont have");
-      Effect.set(player, uint8(index), ownership);
+      Effect.set(player, index, ownership);
     
     } else if(cosmetic == CosmeticType.Material) {
 
       require(index < uint(MaterialSet.Count));
       ownership = Material.getOwned(player);
       require(ownership[index], "Dont have");
-      Material.set(player, uint8(index), ownership);
+      Material.set(player, index, ownership);
     
     }
 

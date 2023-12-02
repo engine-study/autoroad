@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour {
     public bool localInventory;
     public MUDEntity entity;
     public List<InventorySlot> items;
-    public Dictionary<string, InventorySlot> itemDict;
+    public Dictionary<int, InventorySlot> itemDict;
 
     public bool ItemIsUsable(GaulItem item) {
         InventorySlot slot = GetItemSlot(item);
@@ -22,11 +22,11 @@ public class Inventory : MonoBehaviour {
     }
 
     public bool ItemUnlocked(GaulItem item) {
-        return GetItemSlot(item) != null;
+        return GetItemSlot(item)?.amount > 0;
     }
 
     public InventorySlot GetItemSlot(GaulItem item) {
-        itemDict.TryGetValue(item.Name, out InventorySlot slot);
+        itemDict.TryGetValue(item.ID, out InventorySlot slot);
         return slot;
     }
 
@@ -46,7 +46,7 @@ public class Inventory : MonoBehaviour {
         if(entity.IsLocal) {LocalInventory = this; localInventory = true;}
 
         items = new List<InventorySlot>();
-        itemDict = new Dictionary<string, InventorySlot>();
+        itemDict = new Dictionary<int, InventorySlot>();
 
         for(int i = 0; i < entity.Components.Count; i++) {
             AddValueComponent(entity.Components[i]);
@@ -92,10 +92,10 @@ public class Inventory : MonoBehaviour {
 
     void ToggleItem(bool toggle, InventorySlot slot) {
 
-        if(itemDict.ContainsKey(slot.item.Name)) {
+        if(itemDict.ContainsKey(slot.item.ID)) {
 
         } else {
-            itemDict.Add(slot.item.Name, slot);
+            itemDict.Add(slot.item.ID, slot);
             items.Add(slot);
         }
 

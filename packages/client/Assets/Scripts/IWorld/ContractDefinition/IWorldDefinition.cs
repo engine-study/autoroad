@@ -473,8 +473,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("uint8", "cosmetic", 1)]
         public virtual byte Cosmetic { get; set; }
-        [Parameter("uint256", "index", 2)]
-        public virtual BigInteger Index { get; set; }
+        [Parameter("uint8", "index", 2)]
+        public virtual byte Index { get; set; }
     }
 
     public partial class FinishMileFunction : FinishMileFunctionBase { }
@@ -1216,8 +1216,8 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Player { get; set; }
         [Parameter("uint8", "cosmetic", 2)]
         public virtual byte Cosmetic { get; set; }
-        [Parameter("uint256", "index", 3)]
-        public virtual BigInteger Index { get; set; }
+        [Parameter("uint8", "index", 3)]
+        public virtual byte Index { get; set; }
     }
 
     public partial class SetDynamicFieldFunction : SetDynamicFieldFunctionBase { }

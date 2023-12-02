@@ -21,8 +21,7 @@ public class ValueComponent : MUDComponent {
     [SerializeField] float value;
     [SerializeField] string valueString;
     [SerializeField] StatType statType;
-    [SerializeField] protected List<InventorySlot> slots
-    ;
+    [SerializeField] protected List<InventorySlot> slots;
     PositionSync pos;
 
     protected virtual float SetValue(MUDTable update) {return (int)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["value"];}
@@ -57,7 +56,9 @@ public class ValueComponent : MUDComponent {
         statType = SetStat(update);
 
         //simple inventory
-        slots[0].amount = (int)value;
+        if(slots.Count == 1) {
+            slots[0].amount = (int)value;
+        }
 
         if(Loaded || SpawnInfo.Source == SpawnSource.InGame) {
             //do a little spawn animation

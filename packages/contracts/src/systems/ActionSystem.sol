@@ -145,7 +145,7 @@ contract ActionSystem is System {
 
   }
 
-  function dressup(CosmeticType cosmetic, uint index) public {
+  function dressup(CosmeticType cosmetic, uint8 index) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
 

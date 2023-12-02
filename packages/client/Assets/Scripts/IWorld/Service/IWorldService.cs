@@ -1075,7 +1075,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(dressupFunction, cancellationToken);
         }
 
-        public Task<string> DressupRequestAsync(byte cosmetic, BigInteger index)
+        public Task<string> DressupRequestAsync(byte cosmetic, byte index)
         {
             var dressupFunction = new DressupFunction();
                 dressupFunction.Cosmetic = cosmetic;
@@ -1084,7 +1084,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(dressupFunction);
         }
 
-        public Task<TransactionReceipt> DressupRequestAndWaitForReceiptAsync(byte cosmetic, BigInteger index, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> DressupRequestAndWaitForReceiptAsync(byte cosmetic, byte index, CancellationTokenSource cancellationToken = null)
         {
             var dressupFunction = new DressupFunction();
                 dressupFunction.Cosmetic = cosmetic;
@@ -2639,7 +2639,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(setCosmeticFunction, cancellationToken);
         }
 
-        public Task<string> SetCosmeticRequestAsync(byte[] player, byte cosmetic, BigInteger index)
+        public Task<string> SetCosmeticRequestAsync(byte[] player, byte cosmetic, byte index)
         {
             var setCosmeticFunction = new SetCosmeticFunction();
                 setCosmeticFunction.Player = player;
@@ -2649,7 +2649,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAsync(setCosmeticFunction);
         }
 
-        public Task<TransactionReceipt> SetCosmeticRequestAndWaitForReceiptAsync(byte[] player, byte cosmetic, BigInteger index, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> SetCosmeticRequestAndWaitForReceiptAsync(byte[] player, byte cosmetic, byte index, CancellationTokenSource cancellationToken = null)
         {
             var setCosmeticFunction = new SetCosmeticFunction();
                 setCosmeticFunction.Player = player;
