@@ -64,14 +64,15 @@ public class CosmeticComponent : ValueComponent
     protected override void PostInit() {
         base.PostInit();
 
-        player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
-        player.SetCosmetic(bodyLink, Go);
-
         if(Cosmetics == null) {Cosmetics = new CosmeticComponent[Enum.GetValues(typeof(CosmeticType)).Length];}
 
         if(Entity.Key == NetworkManager.LocalKey) {
             Cosmetics[(int)cosmetic] = this;
         }    
+        
+        player = Entity.GetMUDComponent<PlayerComponent>().PlayerScript;
+        player.SetCosmetic(bodyLink, Go);
+
     }
 
     protected override void UpdateComponent(MUDTable update, UpdateInfo info) {
