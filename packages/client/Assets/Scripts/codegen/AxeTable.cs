@@ -9,6 +9,7 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
+    [System.Serializable]
     public class AxeTable : MUDTable
     {
         public class AxeTableUpdate : RecordUpdate
