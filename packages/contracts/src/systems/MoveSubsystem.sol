@@ -6,7 +6,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Position, Player, Health } from "../codegen/index.sol";
 import { Road, Move, Action, Boots, Weight, NPC } from "../codegen/index.sol";
 import { PositionTableId, PositionData } from "../codegen/index.sol";
-import { RoadState, MoveType, ActionType, NPCType } from "../codegen/common.sol";
+import { RoadState, MoveType, ActionName, NPCType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
@@ -85,7 +85,7 @@ contract MoveSubsystem is System {
 
       if (!canWalk) { return; }
 
-      moveTo(causedBy, entity, movePos, nextPos, atDest, ActionType.Walking);
+      moveTo(causedBy, entity, movePos, nextPos, atDest, ActionName.Walking);
 
       //if we die while moving we must stop
       if(Rules.canDoStuff(entity) == false) { return; }
@@ -106,7 +106,7 @@ contract MoveSubsystem is System {
       canFling = Rules.canPlaceOn(MoveType(Move.get(atDest[0])));
     }
     
-    if(canFling) { moveTo(causedBy, target, startPos, endPos, atDest, ActionType.Hop); }
+    if(canFling) { moveTo(causedBy, target, startPos, endPos, atDest, ActionName.Hop); }
   }
 
   function push(bytes32 player, int32 x, int32 y) public {
@@ -185,7 +185,7 @@ contract MoveSubsystem is System {
 
       //recalculate at position everytime
       atPos = Rules.getKeysAtPosition(world, pushPos.x, pushPos.y, 0);
-      moveTo(causer, pushed, shoverPos, pushPos, atPos, ActionType.Push);
+      moveTo(causer, pushed, shoverPos, pushPos, atPos, ActionName.Push);
 
       pushPos.x -= vector.x;
       pushPos.y -= vector.y;
@@ -197,7 +197,7 @@ contract MoveSubsystem is System {
     }
 
     //first player to do the push pushes themselves
-    moveTo(causer, player, shoverPos, pushPos, atPos, ActionType.Push);
+    moveTo(causer, player, shoverPos, pushPos, atPos, ActionName.Push);
 
   }
 
@@ -207,7 +207,7 @@ contract MoveSubsystem is System {
     PositionData memory from,
     PositionData memory to,
     bytes32[] memory atDest,
-    ActionType actionType
+    ActionName actionType
   ) public {
 
     Actions.setAction(entity, actionType, to.x, to.y);
@@ -221,7 +221,7 @@ contract MoveSubsystem is System {
       MoveType moveTypeAtDest = MoveType(Move.get(atDest[0]));
 
       //we soft fail bad moves and exit out of them
-      if(actionType != ActionType.Hop && Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
+      if(actionType != ActionName.Hop && Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
 
       //check if we survive the move through terrain
       if(handleMoveType(causedBy, entity, to, atDest[0], moveTypeAtDest, actionType) == false) {
@@ -236,7 +236,7 @@ contract MoveSubsystem is System {
     }
   }
 
-  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32 atDest, MoveType moveTypeAtDest, ActionType actionType) public returns(bool) {
+  function handleMoveType(bytes32 causedBy, bytes32 entity, PositionData memory to, bytes32 atDest, MoveType moveTypeAtDest, ActionName actionType) public returns(bool) {
     IWorld world = IWorld(_world());
 
     //kill or destroy whatever fell into the hole
@@ -262,7 +262,7 @@ contract MoveSubsystem is System {
         SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, atDest, causedBy, to)));
       }
       
-    } else if(actionType == ActionType.Hop) {
+    } else if(actionType == ActionName.Hop) {
 
       if(Rules.canCrush(moveTypeAtDest) && Rules.canSquish(entity, atDest)) {
         SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, atDest, causedBy, to)));
@@ -276,7 +276,7 @@ contract MoveSubsystem is System {
 
   }
 
-  function setPosition(bytes32 causedBy, bytes32 entity, PositionData memory pos, ActionType action) public {
+  function setPosition(bytes32 causedBy, bytes32 entity, PositionData memory pos, ActionName action) public {
 
     IWorld world = IWorld(_world());
 
@@ -300,7 +300,7 @@ contract MoveSubsystem is System {
   }
 
 
-  function teleport(bytes32 player, int32 x, int32 y, ActionType actionType) public {
+  function teleport(bytes32 player, int32 x, int32 y, ActionName actionType) public {
     require(Rules.canDoStuff(player), "hmm");
 
     IWorld world = IWorld(_world());

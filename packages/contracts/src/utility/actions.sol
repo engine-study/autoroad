@@ -2,16 +2,16 @@
 pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { Action, Position, PositionData, Health } from "../codegen/index.sol";
-import { ActionType } from "../codegen/common.sol";
+import { ActionName } from "../codegen/common.sol";
 import { Rules } from "./rules.sol";
 
 library Actions {
 
-  function setAction(bytes32 player, ActionType newAction, int32 x, int32 y) internal {
+  function setAction(bytes32 player, ActionName newAction, int32 x, int32 y) internal {
     Action.set(player, uint32(newAction), x, y, bytes32(0));
   }
 
-  function setActionTargeted(bytes32 player, ActionType newAction, int32 x, int32 y, bytes32 target) internal {
+  function setActionTargeted(bytes32 player, ActionName newAction, int32 x, int32 y, bytes32 target) internal {
     Action.set(player, uint32(newAction), x, y, target);
   }
 

@@ -3,14 +3,15 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Cursed, LastMovement, LastAction} from "../codegen/index.sol";
-import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
-import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
+
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Thrower, Thief, Cursed} from "../codegen/index.sol";
+import { Soldier, Barbarian, Archer, LastMovement, LastAction} from "../codegen/index.sol";
+import { ActionName, NPCType, MoveType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { getDistance, getVectorNormalized, addPosition, lineWalkPositions } from "../utility/grid.sol";
+import { getDistance, getVectorNormalized, addPosition, lineWalkPositions, multiplyPosition } from "../utility/grid.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { randomDirection } from "../utility/random.sol";
 import { neumanNeighborhoodOuter, activeEntities } from "../utility/grid.sol";
@@ -61,9 +62,10 @@ contract BehaviourSubsystem is System {
     PositionData memory walkPos = addPosition(entityPos, randomDirection(entity, entityPos.x, entityPos.y, 0));
     if (Rules.onMap(walkPos.x, walkPos.y) == false) { return;}
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
-    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionType.Walking)));
+    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionName.Walking)));
 
   }
+
 
   //out of world positions have been already filtered  at this point, can trust this is hapepning on map
   function tickBehaviour(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
@@ -89,6 +91,10 @@ contract BehaviourSubsystem is System {
     if(archer > 0 && archer >= distance) { doArrow(causedBy, entity, target, entityPos, targetPos);}
     uint32 cursed = Cursed.get(entity);
     if(cursed > 0 && cursed >= distance) { doCurse(causedBy, entity, target, entityPos, targetPos);}
+    uint32 thief = Thief.get(entity);
+    if(thief > 0 && thief >= distance) { doThief(causedBy, entity, target, entityPos, targetPos);}
+    uint32 thrower = Thrower.get(entity);
+    if(thrower > 0 && thrower >= distance) { doThrower(causedBy, entity, target, entityPos, targetPos);}
  }
 
   function callFling(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
@@ -97,7 +103,7 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
     PositionData memory newPos = addPosition(targetPos, getVectorNormalized(entityPos, targetPos));
 
-    Actions.setActionTargeted(entity, ActionType.Melee, newPos.x, newPos.y, target);
+    Actions.setActionTargeted(entity, ActionName.Melee, newPos.x, newPos.y, target);
     SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
   }
 
@@ -108,6 +114,24 @@ contract BehaviourSubsystem is System {
     SystemSwitch.call(abi.encodeCall(world.doSwap, (causedBy, entity, entityPos, targetPos)));
   }
 
+  function doThief(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
+    console.log("thief");
+    IWorld world = IWorld(_world());
+    SystemSwitch.call(abi.encodeCall(world.softWithdrawCoins, (target, 5)));
+    SystemSwitch.call(abi.encodeCall(world.giveCoins, (entity, 5)));
+  }
+
+  function doThrower(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
+     console.log("throw");
+
+    IWorld world = IWorld(_world());
+    PositionData memory throwStrength = multiplyPosition(getVectorNormalized(targetPos, entityPos), 2);
+    PositionData memory newPos = addPosition(targetPos, throwStrength);
+
+    Actions.setActionTargeted(entity, ActionName.Melee, newPos.x, newPos.y, target);
+    SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, target, targetPos, newPos)));
+  }
+
   function doSeek(bytes32 causedBy, bytes32 seek, bytes32 target, PositionData memory seekerPos, PositionData memory targetPos) public {
     console.log("seek");
 
@@ -115,7 +139,7 @@ contract BehaviourSubsystem is System {
     //walk towards target
     PositionData memory walkPos = addPosition(seekerPos, getVectorNormalized(seekerPos,targetPos));
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
-    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, seek, seekerPos, walkPos, atDest, ActionType.Walking)));
+    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, seek, seekerPos, walkPos, atDest, ActionName.Walking)));
   }
 
   function canAggroEntity(bytes32 attacker, bytes32 target) public returns(bool) {
@@ -145,7 +169,7 @@ contract BehaviourSubsystem is System {
     if(canAggroEntity(entity, target) == false) {return;}
 
     //kill target
-    Actions.setActionTargeted(entity, ActionType.Melee, targetPos.x, targetPos.y, target);
+    Actions.setActionTargeted(entity, ActionName.Melee, targetPos.x, targetPos.y, target);
     SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, target, entity, targetPos)));
   }
 
@@ -174,7 +198,7 @@ contract BehaviourSubsystem is System {
       }
     }
 
-    Actions.setActionTargeted(entity, ActionType.Bow, targetPos.x, targetPos.y, target);
+    Actions.setActionTargeted(entity, ActionName.Bow, targetPos.x, targetPos.y, target);
 
     //kill target if it is NPC
     uint32 npc = NPC.get(target);

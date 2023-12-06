@@ -31,8 +31,14 @@ function addPosition(PositionData memory pos, PositionData memory add) pure retu
   return PositionData(pos.x + add.x, pos.y + add.y, add.layer);
 }
 
+
+
 function subtractPosition(PositionData memory pos, PositionData memory minus) pure returns (PositionData memory) {
   return PositionData(pos.x - minus.x, pos.y - minus.y, minus.layer);
+}
+
+function multiplyPosition(PositionData memory pos, int32 multiply) pure returns (PositionData memory) {
+  return PositionData(pos.x * multiply, pos.y * multiply, pos.layer);
 }
 
 function getVectorNormalized(PositionData memory start, PositionData memory end) pure returns (PositionData memory) {

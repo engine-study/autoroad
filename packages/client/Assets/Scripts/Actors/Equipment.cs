@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using mud;
+using mudworld;
 
 public class Equipment : SPInteract {
 

@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mud;
+using mudworld;
 using IWorld.ContractDefinition;
 using Cysharp.Threading.Tasks;
 using System;
-using mudworld;
 
-public enum ActionName {None, Idle, Dead, Mining, Shoveling, Stick, Fishing, Walking, Buy, Plant, Push, Chop, Teleport, Melee, Hop, Spawn, Bow, Swap, Pocket}
 public class ActionsMUD : MonoBehaviour
 {
     public static ActionsMUD LocalActions;

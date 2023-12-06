@@ -1,10 +1,7 @@
 using UnityEngine;
 using mudworld;
 using mud;
-using mud;
-using System;
 
-public enum PuzzleType {None, Miliarium, Bearer, Statuae, Count}
 public class PuzzleComponent : MUDComponent {
 
     [Header("Puzzle")]

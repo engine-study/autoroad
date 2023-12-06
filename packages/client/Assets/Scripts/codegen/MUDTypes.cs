@@ -2,7 +2,7 @@
 
 namespace mudworld
 {
-    public enum ActionType
+    public enum ActionName
     {
         None,
         Idle,

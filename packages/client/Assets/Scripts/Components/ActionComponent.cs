@@ -1,8 +1,6 @@
 using UnityEngine;
 using mudworld;
 using mud;
-using mud;
-using System;
 
 public class ActionComponent : MUDComponent {
 

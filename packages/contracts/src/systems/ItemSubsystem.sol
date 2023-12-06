@@ -226,6 +226,13 @@ contract ItemSubsystem is System {
 
   }
 
+  function softWithdrawCoins(bytes32 player, int32 amount) public {
+    require(amount > 0, "amount is zero or negative");
+    int32 coins = Coinage.get(player);
+    if(amount > coins) {amount = coins;}
+    Coinage.set(player, coins - amount);
+  }
+
   function withdrawCoins(bytes32 player, int32 amount) private {
     require(amount > 0, "amount is zero or negative");
     int32 coins = Coinage.get(player);

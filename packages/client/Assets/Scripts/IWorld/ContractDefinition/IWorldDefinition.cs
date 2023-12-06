@@ -453,6 +453,40 @@ namespace IWorld.ContractDefinition
         public virtual PositionData TargetPos { get; set; }
     }
 
+    public partial class DoThiefFunction : DoThiefFunctionBase { }
+
+    [Function("doThief")]
+    public class DoThiefFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("bytes32", "target", 3)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
+        public virtual PositionData TargetPos { get; set; }
+    }
+
+    public partial class DoThrowerFunction : DoThrowerFunctionBase { }
+
+    [Function("doThrower")]
+    public class DoThrowerFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("bytes32", "target", 3)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
+        public virtual PositionData TargetPos { get; set; }
+    }
+
     public partial class DoWanderFunction : DoWanderFunctionBase { }
 
     [Function("doWander")]
@@ -1327,6 +1361,17 @@ namespace IWorld.ContractDefinition
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
+    }
+
+    public partial class SoftWithdrawCoinsFunction : SoftWithdrawCoinsFunctionBase { }
+
+    [Function("softWithdrawCoins")]
+    public class SoftWithdrawCoinsFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+        [Parameter("int32", "amount", 2)]
+        public virtual int Amount { get; set; }
     }
 
     public partial class SpawnFunction : SpawnFunctionBase { }
@@ -2273,6 +2318,10 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
     public partial class GetDynamicFieldOutputDTO : GetDynamicFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -2434,6 +2483,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

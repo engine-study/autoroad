@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using mudworld;
-public enum PaymentType {None, Coins, Gems, Eth}
 public enum ItemType { GameplayStashable, GameplayEquipment, Cosmetic, PayedCosmetic }
-
 [CreateAssetMenu(fileName = "Item", menuName = "Gaul/Item", order = 1)]
 public class GaulItem : ScriptableObject, IComparable<GaulItem> {
 

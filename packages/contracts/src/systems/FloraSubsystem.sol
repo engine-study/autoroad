@@ -5,7 +5,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { Player, Health, Tree, Seeds, Move, Axe, Road } from "../codegen/index.sol";
-import { ActionType, TerrainType, FloraType, MoveType } from "../codegen/common.sol";
+import { ActionName, TerrainType, FloraType, MoveType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
@@ -69,7 +69,7 @@ contract FloraSubsystem is System {
     require(Rules.canInteract(player, Position.get(player), atPosition, 1), "bad interact");
     require(Tree.get(atPosition[0]) != uint32(FloraType.None), "no tree");
 
-    Actions.setActionTargeted(player, ActionType.Chop, x, y, atPosition[0]);
+    Actions.setActionTargeted(player, ActionName.Chop, x, y, atPosition[0]);
 
     int32 health = Health.get(atPosition[0]);
     health--;
@@ -112,7 +112,7 @@ contract FloraSubsystem is System {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);
     require(Rules.canInteractEmpty(player, Position.get(player), pos, atPosition, 1), "bad interact");
 
-    Actions.setAction(player, ActionType.Plant, x, y);
+    Actions.setAction(player, ActionName.Plant, x, y);
 
     Seeds.set(player, seeds-1);
     SystemSwitch.call(abi.encodeCall(world.spawnTerrain, (player, x, y, TerrainType.Tree)));

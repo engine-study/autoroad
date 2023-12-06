@@ -5,7 +5,6 @@ using mud;
 using mudworld;
 using IWorld.ContractDefinition;
 
-public enum FloraType {None, Tree, Oak, Bramble}
 public class TreeComponent : MUDComponent {
 
     [Header("Tree")]

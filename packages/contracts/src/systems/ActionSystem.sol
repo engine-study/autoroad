@@ -5,7 +5,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Action, Name, Player, Health} from "../codegen/index.sol";
-import { ActionType, PaymentType, CosmeticType } from "../codegen/common.sol";
+import { ActionName, PaymentType, CosmeticType } from "../codegen/common.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 
 import { Actions } from "../utility/actions.sol";
@@ -79,7 +79,7 @@ contract ActionSystem is System {
     IWorld world = IWorld(_world());
     SystemSwitch.call(abi.encodeCall(world.buyItem, (player, player, id, payment)));
     PositionData memory pos = Position.get(player);
-    Actions.setAction(player, ActionType.Buy, pos.x, pos.y);
+    Actions.setAction(player, ActionName.Buy, pos.x, pos.y);
   }
 
   function walk(int32 x, int32 y, int32 distance) public {
@@ -93,50 +93,50 @@ contract ActionSystem is System {
   }
 
   //this is gross... and wasting gas on if else and systemswitch
-  function action(ActionType newAction, int32 x, int32 y) public {
+  function action(ActionName newAction, int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     IWorld world = IWorld(_world());
 
     Rules.requirePlayer(player);
     require(Rules.canDoStuff(player), "hmm");
 
-    if (newAction == ActionType.Idle) {} 
-    else if (newAction == ActionType.Mining) {
+    if (newAction == ActionName.Idle) {} 
+    else if (newAction == ActionName.Mining) {
       SystemSwitch.call(abi.encodeCall(world.mine, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Shoveling) {
+    } else if (newAction == ActionName.Shoveling) {
       SystemSwitch.call(abi.encodeCall(world.shovel, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Stick) {
+    } else if (newAction == ActionName.Stick) {
       SystemSwitch.call(abi.encodeCall(world.stick, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Fishing) {
+    } else if (newAction == ActionName.Fishing) {
       SystemSwitch.call(abi.encodeCall(world.fish, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Walking) {
+    } else if (newAction == ActionName.Walking) {
       SystemSwitch.call(abi.encodeCall(world.moveSimple, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Buy) {
+    } else if (newAction == ActionName.Buy) {
       require(false, "Not setup.");
-    } else if (newAction == ActionType.Plant) {
+    } else if (newAction == ActionName.Plant) {
       SystemSwitch.call(abi.encodeCall(world.plant, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Push) {
+    } else if (newAction == ActionName.Push) {
       SystemSwitch.call(abi.encodeCall(world.push, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Chop) {
+    } else if (newAction == ActionName.Chop) {
       SystemSwitch.call(abi.encodeCall(world.chop, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Teleport) {
+    } else if (newAction == ActionName.Teleport) {
       SystemSwitch.call(abi.encodeCall(world.teleportScroll, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Melee) {
+    } else if (newAction == ActionName.Melee) {
       SystemSwitch.call(abi.encodeCall(world.melee, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Swap) {
+    } else if (newAction == ActionName.Swap) {
       SystemSwitch.call(abi.encodeCall(world.swapScroll, (player, x, y)));
       return;
-    } else if (newAction == ActionType.Pocket) {
+    } else if (newAction == ActionName.Pocket) {
       SystemSwitch.call(abi.encodeCall(world.pocket, (player, x, y)));
       return;
     }

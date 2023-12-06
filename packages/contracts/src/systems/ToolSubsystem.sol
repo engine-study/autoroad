@@ -7,7 +7,7 @@ import { RoadConfig, MapConfig, Position, Player, Health, GameState, Bounds } fr
 import { Road, Move, Action, Rock, Scroll, Seeds, Boots, Weight, NPC, ScrollSwap, Pocket, Carry } from "../codegen/index.sol";
 import { Shovel, Pickaxe, Stick, FishingRod, Sword} from "../codegen/index.sol";
 import { PositionTableId, PositionData } from "../codegen/index.sol";
-import { RoadState, RockType, MoveType, ActionType, NPCType } from "../codegen/common.sol";
+import { RoadState, RockType, MoveType, ActionName, NPCType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
@@ -52,7 +52,7 @@ contract ToolSubsystem is System {
     Rules.canInteractEmpty(player, Position.get(player), PositionData(x, y, 0),Rules.getKeysAtPosition(world,x, y, 0), 1);
     
     SystemSwitch.call(abi.encodeCall(world.spawnShoveledRoad, (player, x,y)));
-    Actions.setAction(player, ActionType.Shoveling, x, y);
+    Actions.setAction(player, ActionName.Shoveling, x, y);
 
   }
 
@@ -70,7 +70,7 @@ contract ToolSubsystem is System {
     int32 health = Health.get(atPosition[0]);
     require(health > 0, "this thing on?");
 
-    Actions.setActionTargeted(player, ActionType.Melee, x, y, atPosition[0]);
+    Actions.setActionTargeted(player, ActionName.Melee, x, y, atPosition[0]);
 
     health--;
 
@@ -100,7 +100,7 @@ contract ToolSubsystem is System {
     rockState++;
 
     Rock.set(atPosition[0], rockState);
-    Actions.setActionTargeted(player, ActionType.Mining, x, y, atPosition[0]);
+    Actions.setActionTargeted(player, ActionName.Mining, x, y, atPosition[0]);
 
     //give rocks that are mined a pushable component
     if (rockState == uint32(RockType.Statumen)) {
@@ -130,7 +130,7 @@ contract ToolSubsystem is System {
     Rules.requirePushable(atPos);
 
     //set player action
-    Actions.setActionTargeted(player, ActionType.Fishing, x, y, atPos[0]);
+    Actions.setActionTargeted(player, ActionName.Fishing, x, y, atPos[0]);
 
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
@@ -146,7 +146,7 @@ contract ToolSubsystem is System {
     require(scrolls > uint32(0), "not enough scrolls");
 
     Scroll.set(player, scrolls - 1);
-    SystemSwitch.call(abi.encodeCall(world.teleport, (player, x, y, ActionType.Teleport)));
+    SystemSwitch.call(abi.encodeCall(world.teleport, (player, x, y, ActionName.Teleport)));
 
   }
 
@@ -163,7 +163,6 @@ contract ToolSubsystem is System {
     if(doSwap(player, player, startPos, endPos)) {
       ScrollSwap.set(player, scrolls - 1);
     }
-
 
   }
 
@@ -186,8 +185,8 @@ contract ToolSubsystem is System {
     Position.set(atPosition[0], targetPos.x, targetPos.y, -2);
 
     //move everything into place
-    SystemSwitch.call(abi.encodeCall(world.teleport, (entity, targetPos.x, targetPos.y, ActionType.Swap)));
-    SystemSwitch.call(abi.encodeCall(world.teleport, (atPosition[0], entityPos.x, entityPos.y, ActionType.Swap)));
+    SystemSwitch.call(abi.encodeCall(world.teleport, (entity, targetPos.x, targetPos.y, ActionName.Swap)));
+    SystemSwitch.call(abi.encodeCall(world.teleport, (atPosition[0], entityPos.x, entityPos.y, ActionName.Swap)));
 
     return true;
 

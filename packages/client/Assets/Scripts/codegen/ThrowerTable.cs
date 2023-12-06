@@ -9,15 +9,15 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class ThrowTable : MUDTable
+    public class ThrowerTable : MUDTable
     {
-        public class ThrowTableUpdate : RecordUpdate
+        public class ThrowerTableUpdate : RecordUpdate
         {
             public uint? Value;
             public uint? PreviousValue;
         }
 
-        public readonly static string ID = "Throw";
+        public readonly static string ID = "Thrower";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -32,17 +32,17 @@ namespace mudworld
 
         public override Type TableType()
         {
-            return typeof(ThrowTable);
+            return typeof(ThrowerTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(ThrowTableUpdate);
+            return typeof(ThrowerTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            ThrowTable other = (ThrowTable)obj;
+            ThrowerTable other = (ThrowerTable)obj;
 
             if (other == null)
             {
@@ -60,9 +60,9 @@ namespace mudworld
             Value = (uint)functionParameters[0];
         }
 
-        public static IObservable<RecordUpdate> GetThrowTableUpdates()
+        public static IObservable<RecordUpdate> GetThrowerTableUpdates()
         {
-            ThrowTable mudTable = new ThrowTable();
+            ThrowerTable mudTable = new ThrowerTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -94,7 +94,7 @@ namespace mudworld
                 previousValueTyped = (uint)previousValue["value"];
             }
 
-            return new ThrowTableUpdate
+            return new ThrowerTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,

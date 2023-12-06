@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using mud;
 using mudworld;
-using IWorld.ContractDefinition;
 
 public class RockComponent : MUDComponent {
 

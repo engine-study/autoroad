@@ -4,10 +4,10 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Throw, EnumTest, Thief, Cursed} from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Thrower, EnumTest, Thief, Cursed} from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander, Rock } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
-import { MoveType, ActionType, RockType, NPCType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
+import { MoveType, ActionName, RockType, NPCType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
 
 import { Actions } from "../utility/actions.sol";
 import { randomCoord } from "../utility/random.sol";
@@ -28,7 +28,7 @@ contract SpawnSubsystem is System {
 
     if (!playerExists) {
       Player.set(entity, true);
-      Coinage.set(entity, 10);
+      Coinage.set(entity, 15);
       Eth.set(entity, 10000);
       Weight.set(entity, -1);
 
@@ -81,7 +81,7 @@ contract SpawnSubsystem is System {
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y, 0);
-    Actions.setAction(entity, ActionType.Spawn, x, y);
+    Actions.setAction(entity, ActionName.Spawn, x, y);
     
 
     
@@ -130,12 +130,12 @@ contract SpawnSubsystem is System {
     } else if (npcType == NPCType.Shoveler) {
       Ox.set(entity, true);
       Weight.set(entity, -5);
-      Throw.set(entity, 1);
+      Thrower.set(entity, 1);
       Entities.pushEntities(entity);
     } else if (npcType == NPCType.Gargoyle) {
       Rock.set(entity, uint32(RockType.Gargoyle));
       Weight.set(entity, 99);
-      Cursed.set(entity, 1);
+      Cursed.set(entity, 2);
       Entities.pushEntities(entity);
     }
 
@@ -143,7 +143,7 @@ contract SpawnSubsystem is System {
     Health.set(entity, 1);
     Position.set(entity, PositionData(x, y, 0));
 
-    Actions.setAction(entity, ActionType.Spawn, x, y);
+    Actions.setAction(entity, ActionName.Spawn, x, y);
   }
 
   function createTickers(bytes32 causedBy, int32 width, int32 up, int32 down) public {
@@ -179,7 +179,7 @@ contract SpawnSubsystem is System {
     Health.set(target, -1);
 
     //set to dead
-    Actions.setAction(target, ActionType.Dead, pos.x, pos.y);
+    Actions.setAction(target, ActionName.Dead, pos.x, pos.y);
 
     //rewards
     SystemSwitch.call(abi.encodeCall(world.killRewards, (causedBy, target, attacker)));
