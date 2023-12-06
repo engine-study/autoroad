@@ -52,7 +52,7 @@ public class GaulItem : ScriptableObject, IComparable<GaulItem> {
     public float StatToValue(StatType statType) { 
 
         if(statType == StatType.RoadCoin && Inventory.LocalInventory && Inventory.LocalInventory.ItemUnlocked(this) && Multiplier > 1) {
-            return Inventory.LocalInventory.GetItemSlot(this).amount + Inventory.LocalInventory.GetItemSlot(this).amount * value.StatToValue(statType);
+            return (Inventory.LocalInventory.GetItemSlot(this).amount + 1) * value.StatToValue(statType);
         } else {
             return value.StatToValue(statType);
         }

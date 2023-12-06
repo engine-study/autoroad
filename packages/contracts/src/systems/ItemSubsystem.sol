@@ -51,7 +51,7 @@ contract ItemSubsystem is System {
       } 
       else if (id == 4) { //grapeleaf
         int32 newStrength = int32(Grapeleaf.get(player)) + 1;
-        pay(player, 100 * newStrength + 1, 0, 0, payment, 0);
+        pay(player, 100 * newStrength, 0, 0, payment, 0);
         Grapeleaf.set(player, uint32(newStrength));
         Weight.set(player, int32(-newStrength) - 1);
       } 
