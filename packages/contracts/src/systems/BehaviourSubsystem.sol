@@ -60,7 +60,10 @@ contract BehaviourSubsystem is System {
     //walk towards target
 
     PositionData memory walkPos = addPosition(entityPos, randomDirection(entity, entityPos.x, entityPos.y, 0));
-    if (Rules.onMap(walkPos.x, walkPos.y) == false) { return;}
+    if (Rules.onMap(walkPos.x, walkPos.y) == false) { 
+      Actions.setAction(entity, ActionName.Idle, walkPos.x, walkPos.y);
+      return;
+    }
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
     SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionName.Walking)));
 

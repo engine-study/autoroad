@@ -270,13 +270,12 @@ public class AnimationMUD : MonoBehaviour
             
             for(int i = 0; i < ActionQueue.Count; i++) {
 
-                Color color =  Color.Lerp(Color.yellow, Color.blue, i/(float)ActionQueue.Count);
+                Color color =  Color.Lerp(Color.yellow, Color.blue, (i+1f)/((float)ActionQueue.Count));
                 Gizmos.color = color;
                 style.normal.textColor = color;
-           
 
                 Vector3 waypoint = new Vector3((int)ActionQueue[i].X, 0.5f, (int)ActionQueue[i].Y);
-                Gizmos.DrawWireSphere(waypoint, .25f);
+                Gizmos.DrawSphere(waypoint, .05f);
                 UnityEditor.Handles.Label(waypoint + Vector3.up * .5f, ((ActionName)ActionQueue[i].Action).ToString(), style);
                 if(i > 0) {
                     Vector3 from = new Vector3((int)ActionQueue[i-1].X, 0.5f, (int)ActionQueue[i-1].Y);
@@ -286,7 +285,7 @@ public class AnimationMUD : MonoBehaviour
             #endif
             
             if(actionData && actionData.Target) {
-                Gizmos.color = actionData.Target.Moving ? Color.blue : Color.green;
+                Gizmos.color = actionData.Target.Moving ? Color.red : Color.blue;
                 Gizmos.DrawWireCube(actionData.Target.GridPos, Vector3.one * .5f - Vector3.up * .48f);
                 Gizmos.DrawLine(transform.position + Vector3.up * .15f, actionData.Target.transform.position + Vector3.up * .15f);
                 Gizmos.DrawWireSphere(actionData.Target.Pos.Pos + Vector3.up * .15f, .1f);
