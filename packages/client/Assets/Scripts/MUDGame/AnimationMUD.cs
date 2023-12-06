@@ -140,6 +140,8 @@ public class AnimationMUD : MonoBehaviour
         bool startQueue = ActionQueue.Count == 0;
         ActionQueue.Add(newAction);
 
+        Debug.Log($"[QUEUE]: {newAction} [{ActionQueue.Count}]", this);
+
         //start the coroutine again
         if(startQueue) {
             if(queue != null) {actionData.Entity.StopCoroutine(queue);}
@@ -151,7 +153,6 @@ public class AnimationMUD : MonoBehaviour
 
     IEnumerator ActionQueueCoroutine() {
         while(ActionQueue.Count > 0) {
-            Debug.Log($"[QUEUE]: {actionData.Entity.Name} [{ActionQueue.Count}]", this);
 
             animation = actionData.Entity.StartCoroutine(EnterState(ActionQueue[0]));
             yield return animation;
