@@ -166,6 +166,8 @@ export default mudConfig({
     Aggro: "uint32",
     Wander: "uint32",
     Fling: "uint32",
+    Throw: "uint32",
+    Thief: "uint32",
     Cursed: "uint32",
     Animal: "bool",
     LastAction: "uint256",

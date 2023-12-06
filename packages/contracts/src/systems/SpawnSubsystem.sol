@@ -4,10 +4,10 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, EnumTest } from "../codegen/index.sol";
-import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Throw, EnumTest, Thief, Cursed} from "../codegen/index.sol";
+import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander, Rock } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
-import { MoveType, ActionType, NPCType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
+import { MoveType, ActionType, RockType, NPCType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
 
 import { Actions } from "../utility/actions.sol";
 import { randomCoord } from "../utility/random.sol";
@@ -121,6 +121,21 @@ contract SpawnSubsystem is System {
       Fling.set(entity, 1);
       Wander.set(entity, 1);
       // Entities.setEntities(entity);
+      Entities.pushEntities(entity);
+    } else if (npcType == NPCType.Taxman) {
+      Ox.set(entity, true);
+      Weight.set(entity, 1);
+      Thief.set(entity, 1);
+      Entities.pushEntities(entity);
+    } else if (npcType == NPCType.Shoveler) {
+      Ox.set(entity, true);
+      Weight.set(entity, -5);
+      Throw.set(entity, 1);
+      Entities.pushEntities(entity);
+    } else if (npcType == NPCType.Gargoyle) {
+      Rock.set(entity, uint32(RockType.Gargoyle));
+      Weight.set(entity, 99);
+      Cursed.set(entity, 1);
       Entities.pushEntities(entity);
     }
 
