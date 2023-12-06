@@ -134,19 +134,33 @@ public class AnimationMUD : MonoBehaviour
 
     }
 
+    Coroutine queue, animation;
     public virtual void IngestState(ActionTable newAction) {
 
+        bool startQueue = ActionQueue.Count == 0;
         ActionQueue.Add(newAction);
 
         //start the coroutine again
-        if(ActionQueue.Count == 1) {
-            actionData.Entity.StartCoroutine(ActionQueueCoroutine());
+        if(startQueue) {
+            if(queue != null) {actionData.Entity.StopCoroutine(queue);}
+            if(animation != null) actionData.Entity.StopCoroutine(animation); 
+
+            queue = actionData.Entity.StartCoroutine(ActionQueueCoroutine());
         }
     }
 
+    IEnumerator ActionQueueCoroutine() {
+        while(ActionQueue.Count > 0) {
+            Debug.Log($"[QUEUE]: {actionData.Entity.Name} [{ActionQueue.Count}]", this);
 
+            animation = actionData.Entity.StartCoroutine(EnterState(ActionQueue[0]));
+            yield return animation;
 
-    public virtual Coroutine EnterState(ActionTable newAction) {
+            ActionQueue.RemoveAt(0);
+        }
+    }
+
+    public virtual IEnumerator EnterState(ActionTable newAction) {
 
         actionTable = newAction;
 
@@ -156,7 +170,7 @@ public class AnimationMUD : MonoBehaviour
 
         //error checks
         Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)position.x},{(int)position.z})", this);
-        if(newEffect == null) { Debug.LogError($"{actionType} not handled"); return null;}
+        if(newEffect == null) { Debug.LogError($"{actionType} not handled"); yield return null;}
         if(newEffect.Action != actionType) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
 
         //setup movement
@@ -171,56 +185,38 @@ public class AnimationMUD : MonoBehaviour
         else {PositionSync.StartMove(PositionSync.Target.position);}
 
         if(entity.gameObject.activeInHierarchy) {
-            //wait for target to move into place, then do animation
-            if(Animation != null) actionData.Entity.StopCoroutine(Animation); 
-            Animation = actionData.Entity.StartCoroutine(DoAction(newEffect));
-            return Animation;
+          
+             Debug.Log(actionData.Entity.Name + " START -------------", this);
+
+            //wait a frame so all the positions are synced
+            yield return null;
+            while(PositionSync.Moving) {yield return null;}
+
+            //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
+            while(!IsDisplace(newEffect.Action) && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
+
+            //turn off old action
+            if (actionEffect != null && newEffect.Action != Action) { ToggleAction(false, actionEffect); }
+
+            Debug.Log(actionData.Entity.Name + " TOGGLE -------------", this);
+
+            //turn on new action
+            ToggleAction(true, newEffect);
+
+            //let it play for a couple seconds
+            if(IsMove(actionEffect.Action) == false) {
+                yield return new WaitForSeconds(entity.IsLocal ? 1.5f : 1.5f);
+            }
+            
+            Debug.Log(actionData.Entity.Name + " END -------------", this);
+
+            ToggleAction(false, newEffect);
+
         } else {
             ToggleAction(true, newEffect);
-            return null;
         }
         
     }   
-
-    IEnumerator ActionQueueCoroutine() {
-        while(ActionQueue.Count > 0) {
-            yield return EnterState(ActionQueue[0]);
-            ActionQueue.RemoveAt(0);
-        }
-    }
-
-
-    Coroutine Animation;
-    IEnumerator DoAction(ActionEffect newAction) {
-
-        Debug.Log(actionData.Entity.Name + " START -------------", this);
-
-        //wait a frame so all the positions are synced
-        yield return null;
-        while(PositionSync.Moving) {yield return null;}
-
-        //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
-        while(!IsDisplace(newAction.Action) && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
-
-        //turn off old action
-        if (actionEffect != null && newAction.Action != Action) { ToggleAction(false, actionEffect); }
-
-        Debug.Log(actionData.Entity.Name + " TOGGLE -------------", this);
-
-        //turn on new action
-        ToggleAction(true, newAction);
-
-        //let it play for a couple seconds
-        if(IsMove(actionEffect.Action) == false) {
-            yield return new WaitForSeconds(entity.IsLocal ? 1.5f : 1.5f);
-        }
-        
-        Debug.Log(actionData.Entity.Name + " END -------------", this);
-
-        ToggleAction(false, newAction);
-
-        Animation = null;
-    }
 
     public virtual void ToggleMovement(bool toggle, ActionEffect newEffect) {
         //play new action if it exists
@@ -260,36 +256,34 @@ public class AnimationMUD : MonoBehaviour
     }
 
     void OnDrawGizmos() {
-        if(actionData && Animation != null) {
+
+        if(!Application.isPlaying) {return;}
+
+        #if UNITY_EDITOR
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 18;
+        style.fontStyle = FontStyle.Bold;
+        style.alignment = TextAnchor.MiddleCenter;
         
-            // if(actionData.Action != ActionName.None && actionData.Position != transform.position) {
-            //     Gizmos.color = Color.green;
-            //     Gizmos.DrawLine(transform.position + Vector3.up * .2f, actionData.Position + Vector3.up * .2f);    
-            // }
+        for(int i = 0; i < ActionQueue.Count; i++) {
 
-            #if UNITY_EDITOR
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 18;
-            style.fontStyle = FontStyle.Bold;
-            style.alignment = TextAnchor.MiddleCenter;
-            
-            for(int i = 0; i < ActionQueue.Count; i++) {
+            Color color =  Color.Lerp(Color.cyan, Color.yellow, (i)/((float)ActionQueue.Count));
+            Gizmos.color = color;
+            style.normal.textColor = color;
 
-                Color color =  Color.Lerp(Color.cyan, Color.yellow, (i)/((float)ActionQueue.Count));
-                Gizmos.color = color;
-                style.normal.textColor = color;
-
-                Vector3 waypoint = new Vector3((int)ActionQueue[i].X, 0.5f, (int)ActionQueue[i].Y);
-                Gizmos.DrawSphere(waypoint, .05f);
-                if(i > 0) {
-                    Vector3 from = new Vector3((int)ActionQueue[i-1].X, 0.5f, (int)ActionQueue[i-1].Y);
-                    Gizmos.DrawLine(from, waypoint);
-                }
-                waypoint += Vector3.up * (i*.1f);
-                UnityEditor.Handles.Label(waypoint + Vector3.up * .5f, ((ActionName)ActionQueue[i].Action).ToString(), style);
+            Vector3 waypoint = new Vector3((int)ActionQueue[i].X, 0.5f, (int)ActionQueue[i].Y);
+            Gizmos.DrawSphere(waypoint, .05f);
+            if(i > 0) {
+                Vector3 from = new Vector3((int)ActionQueue[i-1].X, 0.5f, (int)ActionQueue[i-1].Y);
+                Gizmos.DrawLine(from, waypoint);
             }
-            #endif
-            
+            waypoint += Vector3.up * (i*.1f);
+            UnityEditor.Handles.Label(waypoint + Vector3.up * .5f, ((ActionName)ActionQueue[i].Action).ToString(), style);
+        }
+        #endif
+
+        if(actionData && animation != null) {
+
             if(actionData && actionData.Target) {
                 Gizmos.color = actionData.Target.Moving ? Color.yellow : Color.cyan;
                 Gizmos.DrawWireCube(actionData.Target.GridPos, Vector3.one * .5f - Vector3.up * .48f);
