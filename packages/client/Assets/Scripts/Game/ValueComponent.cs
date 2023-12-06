@@ -44,6 +44,11 @@ public class ValueComponent : MUDComponent {
 
     protected override void PostInit() {
         base.PostInit();
+
+        if(visualPrefab == gameObject) {
+            Debug.LogError("Visual prefab must be child", this);
+        }
+        
         if(visualPrefab && visualPrefab.transform.IsChildOf(transform)) {
             visualPrefab.SetActive(false);
         }

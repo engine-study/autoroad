@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   table: {fileID: 0}
   requiredComponents: []
+  canPool: 0
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -69,6 +70,7 @@ MonoBehaviour:
   value: 0
   valueString: 
   statType: 0
+  slots: []
   seeds: 0
 --- !u!1 &3283544837887128663
 GameObject:
@@ -178,7 +180,7 @@ Transform:
   m_GameObject: {fileID: 3649264298654918066}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4778682371302607008}
@@ -224,19 +226,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9df866b54e23bd049a49a6faeae9a024, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8689527
+      value: 0.8689513
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9df866b54e23bd049a49a6faeae9a024, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9df866b54e23bd049a49a6faeae9a024, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9df866b54e23bd049a49a6faeae9a024, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.49489528
+      value: -0.49489763
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9df866b54e23bd049a49a6faeae9a024, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

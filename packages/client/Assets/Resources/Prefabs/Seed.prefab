@@ -161,7 +161,7 @@ Transform:
   m_GameObject: {fileID: 4868235975534627793}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4676257647702309435}
@@ -196,7 +196,7 @@ Transform:
   m_GameObject: {fileID: 8867173478741591717}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.080555, y: 0.1208325, z: 0.080555}
+  m_LocalScale: {x: 0.080555, y: 0.08, z: 0.080555}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8050777004138277945}
@@ -299,7 +299,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872bfe9da31aa864abaf17a2cb5a05da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {x: 0.5, y: 0.75}
+  time: 1
+  offset: {x: 0, y: 0, z: 0}
+  arc: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0}
   sfx_spawn:
   - {fileID: 8300000, guid: 80ca992292c0c0f44a8b1d242af6416f, type: 3}
