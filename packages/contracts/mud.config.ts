@@ -49,10 +49,10 @@ export default mudConfig({
 
   enums: {
     ActionType: ["None", "Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn", "Bow", "Swap", "Pocket"],
-    TerrainType: ["None", "Rock", "Trap", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole", "Cursed"],
-    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer", "Taxman"],
+    TerrainType: ["None", "Rock", "Trap", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole"],
+    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer", "Taxman", "Shoveler", "Gargoyle"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
-    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae", "Gremlin", "Amphora"],
+    RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae", "Gargoyle", "Amphora"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap", "Permanent"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
     PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Count"],
@@ -150,20 +150,9 @@ export default mudConfig({
       },
     },
 
-    TickTest: {
-      dataStruct: false,
-      keySchema: {},
-      valueSchema: {
-        lastBlock: "uint256",
-        entities: "bytes32",
-      },
-    },
-
     Entities: {
-      dataStruct: false,
       keySchema: {},
       valueSchema: {
-        lastBlock: "uint256",
         entities: "bytes32[]",
       },
     },
@@ -179,6 +168,7 @@ export default mudConfig({
     Fling: "uint32",
     Cursed: "uint32",
     Animal: "bool",
+    LastAction: "uint256",
 
   //puzzle components try to be moved onto triggers (ie. Miliarli )
     Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool", solver:"bytes32"},},

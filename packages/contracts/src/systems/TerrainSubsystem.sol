@@ -42,7 +42,6 @@ contract TerrainSubsystem is System {
     bytes32 carriage = Actions.getCarriageEntity();
     Carriage.set(carriage, true);
     Position.set(carriage, 0, -1, 0);
-
   }
 
 
@@ -116,6 +115,9 @@ contract TerrainSubsystem is System {
 
     console.log("mile ready");
 
+    // reset ticking entities
+    Entities.set(new bytes32[](0));
+    
     console.log("create puzzle");
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createMiliarium, (causedBy, right, up, down)));
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
@@ -124,9 +126,6 @@ contract TerrainSubsystem is System {
 
     //set bounds 
     Bounds.set(left, right, up, down);
-
-    //reset ticking entities
-    // Entities.setEntities(new bytes32[](0));
 
     console.log("set chunk");
     bytes32 chunkEntity = Actions.getChunkEntity(mile);

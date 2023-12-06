@@ -36,7 +36,6 @@ namespace mudworld
         Pillar,
         Road,
         Hole,
-        Cursed,
     }
 
     public enum NPCType
@@ -49,6 +48,8 @@ namespace mudworld
         BarbarianArcher,
         Deer,
         Taxman,
+        Shoveler,
+        Gargoyle,
     }
 
     public enum RoadState
@@ -75,7 +76,7 @@ namespace mudworld
         HeavyHeavy,
         Pillar,
         Statuae,
-        Gremlin,
+        Gargoyle,
         Amphora,
     }
 

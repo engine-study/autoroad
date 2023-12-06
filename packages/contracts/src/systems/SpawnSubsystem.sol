@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal, TickTest } from "../codegen/index.sol";
+import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal } from "../codegen/index.sol";
 import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, EnumTest } from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
@@ -18,9 +18,6 @@ import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.s
 
 
 contract SpawnSubsystem is System {
-  function spawnTicker(bytes32 entity) public {
-    // Entities.setEntities
-  }
 
   function spawnPlayerNPC(bytes32 entity, int32 x, int32 y) public {
     spawnPlayer(entity, x, y, true);
@@ -123,8 +120,8 @@ contract SpawnSubsystem is System {
       Weight.set(entity, 1);
       Fling.set(entity, 1);
       Wander.set(entity, 1);
-      TickTest.setEntities(entity);
-      // Entities.pushEntities(entity);
+      // Entities.setEntities(entity);
+      Entities.pushEntities(entity);
     }
 
     Move.set(entity, uint32(MoveType.Push));

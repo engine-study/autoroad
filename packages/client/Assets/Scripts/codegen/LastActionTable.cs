@@ -9,15 +9,15 @@ using Property = System.Collections.Generic.Dictionary<string, object>;
 
 namespace mudworld
 {
-    public class EntitiesTable : MUDTable
+    public class LastActionTable : MUDTable
     {
-        public class EntitiesTableUpdate : RecordUpdate
+        public class LastActionTableUpdate : RecordUpdate
         {
-            public string[]? Entities;
-            public string[]? PreviousEntities;
+            public System.Numerics.BigInteger? Value;
+            public System.Numerics.BigInteger? PreviousValue;
         }
 
-        public readonly static string ID = "Entities";
+        public readonly static string ID = "LastAction";
         public static RxTable Table
         {
             get { return NetworkManager.Instance.ds.store[ID]; }
@@ -28,27 +28,27 @@ namespace mudworld
             return ID;
         }
 
-        public string[]? Entities;
+        public System.Numerics.BigInteger? Value;
 
         public override Type TableType()
         {
-            return typeof(EntitiesTable);
+            return typeof(LastActionTable);
         }
 
         public override Type TableUpdateType()
         {
-            return typeof(EntitiesTableUpdate);
+            return typeof(LastActionTableUpdate);
         }
 
         public override bool Equals(object? obj)
         {
-            EntitiesTable other = (EntitiesTable)obj;
+            LastActionTable other = (LastActionTable)obj;
 
             if (other == null)
             {
                 return false;
             }
-            if (Entities != other.Entities)
+            if (Value != other.Value)
             {
                 return false;
             }
@@ -57,12 +57,12 @@ namespace mudworld
 
         public override void SetValues(params object[] functionParameters)
         {
-            Entities = (string[])functionParameters[0];
+            Value = (System.Numerics.BigInteger)functionParameters[0];
         }
 
-        public static IObservable<RecordUpdate> GetEntitiesTableUpdates()
+        public static IObservable<RecordUpdate> GetLastActionTableUpdates()
         {
-            EntitiesTable mudTable = new EntitiesTable();
+            LastActionTable mudTable = new LastActionTable();
 
             return NetworkManager.Instance.sync.onUpdate
                 .Where(update => update.Table.Name == ID)
@@ -74,31 +74,27 @@ namespace mudworld
 
         public override void PropertyToTable(Property property)
         {
-            Entities = ((object[])property["entities"]).Cast<string>().ToArray();
+            Value = (System.Numerics.BigInteger)property["value"];
         }
 
         public override RecordUpdate RecordUpdateToTyped(RecordUpdate recordUpdate)
         {
             var currentValue = recordUpdate.CurrentRecordValue as Property;
             var previousValue = recordUpdate.PreviousRecordValue as Property;
-            string[]? currentEntitiesTyped = null;
-            string[]? previousEntitiesTyped = null;
+            System.Numerics.BigInteger? currentValueTyped = null;
+            System.Numerics.BigInteger? previousValueTyped = null;
 
-            if (currentValue != null && currentValue.ContainsKey("entities"))
+            if (currentValue != null && currentValue.ContainsKey("value"))
             {
-                currentEntitiesTyped = ((object[])currentValue["entities"])
-                    .Cast<string>()
-                    .ToArray();
+                currentValueTyped = (System.Numerics.BigInteger)currentValue["value"];
             }
 
-            if (previousValue != null && previousValue.ContainsKey("entities"))
+            if (previousValue != null && previousValue.ContainsKey("value"))
             {
-                previousEntitiesTyped = ((object[])previousValue["entities"])
-                    .Cast<string>()
-                    .ToArray();
+                previousValueTyped = (System.Numerics.BigInteger)previousValue["value"];
             }
 
-            return new EntitiesTableUpdate
+            return new LastActionTableUpdate
             {
                 Table = recordUpdate.Table,
                 CurrentRecordValue = recordUpdate.CurrentRecordValue,
@@ -106,8 +102,8 @@ namespace mudworld
                 CurrentRecordKey = recordUpdate.CurrentRecordKey,
                 PreviousRecordKey = recordUpdate.PreviousRecordKey,
                 Type = recordUpdate.Type,
-                Entities = currentEntitiesTyped,
-                PreviousEntities = previousEntitiesTyped,
+                Value = currentValueTyped,
+                PreviousValue = previousValueTyped,
             };
         }
     }

@@ -11,7 +11,7 @@ import { RoadState, MoveType, ActionType, NPCType } from "../codegen/common.sol"
 import { Rules } from "../utility/rules.sol";
 import { Actions } from "../utility/actions.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
-import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum } from "../utility/grid.sol";
+import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum, addPosition } from "../utility/grid.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 contract MoveSubsystem is System {
@@ -54,42 +54,46 @@ contract MoveSubsystem is System {
     doMoveDistance(causedBy, player, startPos, vector, minDistance);
   }
 
-  function doMoveDistance(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory vector, int32 distance) private {
+  function doMoveDistance(bytes32 causedBy, bytes32 entity, PositionData memory startPos, PositionData memory vector, int32 distance) private {
 
-      PositionData memory endPos = PositionData(startPos.x + (vector.x * distance), startPos.y + (vector.y * distance), 0);
-      doMove(causedBy, player, startPos, endPos, distance);
-  }
-
-  function doMove(bytes32 causedBy, bytes32 player, PositionData memory startPos, PositionData memory endPos, int32 distance) private {
-
-    require(Rules.requireLegalMove(player, startPos, endPos, uint256(uint32(distance))), "Bad move");
+    int32 remainingMoves = distance;
+    PositionData memory endPos = PositionData(startPos.x + (vector.x * distance), startPos.y + (vector.y * distance), 0);
+    
+    require(Rules.requireLegalMove(entity, startPos, endPos, uint256(uint32(distance))), "Bad move");
 
     // get all the positions in the line we are walking (including starting position)
-    PositionData[] memory positions = lineWalkPositions(startPos, endPos);
+    PositionData memory movePos = startPos;
+    PositionData memory nextPos = addPosition(movePos, vector);
 
     // iterate over all the positions we move over, stop at the first blockage
     //START index at 1, ignoring our own position
 
-    for (uint i = 1; i < positions.length; i++) {
-  
-      bytes32[] memory atDest = Rules.getKeysAtPosition(IWorld(_world()),positions[i].x, positions[i].y, 0);
-      assert(atDest.length < 2);
+    while(remainingMoves > 0) {
+
+      bytes32[] memory atDest = Rules.getKeysAtPosition(IWorld(_world()), nextPos.x, nextPos.y, 0);
+      require(atDest.length < 2, "double position found");
 
       //check if valid position
-      bool canWalk = Rules.onMapOrSpawn(player, positions[i]);
-      //don't let players walk into holes themselves, need someone else to force them into holes
+      bool canWalk = Rules.onMapOrSpawn(entity, nextPos);
 
+      //don't let entities walk into holes themselves, need someone else to force them into holes
       //if we hit an object or at the end of our walk, break out
       if(canWalk && atDest.length > 0) {
           MoveType moveType = MoveType(Move.get(atDest[0]));
-          canWalk = causedBy == player ? Rules.canWalkOn(moveType) : Rules.canPlaceOn(moveType);
+          canWalk = causedBy == entity ? Rules.canWalkOn(moveType) : Rules.canPlaceOn(moveType);
       }
-      if (!canWalk) { require(i > 1, "Nowhere to move"); return;}
 
-      moveTo(causedBy, player, positions[i-1], positions[i], atDest, ActionType.Walking);
+      if (!canWalk) { return; }
+
+      moveTo(causedBy, entity, movePos, nextPos, atDest, ActionType.Walking);
 
       //if we die while moving we must stop
-      if(Rules.canDoStuff(player) == false) { return;}
+      if(Rules.canDoStuff(entity) == false) { return; }
+
+      //update where we are (moveTo can cause positions to shift other than where we walked)
+      movePos = Position.get(entity);
+      nextPos = addPosition(movePos, vector);
+      remainingMoves--;
     }
   }
 

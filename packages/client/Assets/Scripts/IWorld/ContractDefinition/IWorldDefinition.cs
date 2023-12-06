@@ -1548,15 +1548,6 @@ namespace IWorld.ContractDefinition
         public virtual byte TerrainType { get; set; }
     }
 
-    public partial class SpawnTickerFunction : SpawnTickerFunctionBase { }
-
-    [Function("spawnTicker")]
-    public class SpawnTickerFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "entity", 1)]
-        public virtual byte[] Entity { get; set; }
-    }
-
     public partial class SpliceDynamicDataFunction : SpliceDynamicDataFunctionBase { }
 
     [Function("spliceDynamicData")]
@@ -2443,8 +2434,6 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
-
-
 
 
 

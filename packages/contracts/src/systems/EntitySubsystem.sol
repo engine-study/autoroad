@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
-import { Player, Position, PositionTableId, PositionData, Entities, NPC, TickTest } from "../codegen/index.sol";
+import { Player, Position, PositionTableId, PositionData, Entities, NPC } from "../codegen/index.sol";
 import { NPCType } from "../codegen/common.sol";
 
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
@@ -15,15 +15,14 @@ import { Rules } from "../utility/rules.sol";
 contract EntitySubsystem is System {
 
   function triggerTicks(bytes32 causedby) public {
-    uint256 lastBlock = TickTest.getLastBlock();
-    bytes32 entity = TickTest.getEntities();
-    if(block.number == lastBlock) {return;}
 
-    //set the blocknumber so we can't re-enter
-    TickTest.setLastBlock(block.number);
-    
+    bytes32 [] memory entities = Entities.get();
     IWorld world = IWorld(_world());
-    SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, TickTest.getEntities())));
+
+    for(uint i = 0; i < entities.length; i++) {
+      if(Rules.isTired(entities[i])) {continue;}
+      SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, entities[i])));
+    }
 
   }
 
@@ -45,6 +44,7 @@ contract EntitySubsystem is System {
 
     for (uint i = 0; i < positions.length; i++) {
       if (entities[i] == bytes32(0)) {continue;}
+      if(Rules.isTired(entities[i])) {continue;}
 
       //tick npcs
       NPCType npcType = NPCType(NPC.get(entities[i]));

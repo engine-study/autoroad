@@ -3385,32 +3385,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTerrainAdminFunction, cancellationToken);
         }
 
-        public Task<string> SpawnTickerRequestAsync(SpawnTickerFunction spawnTickerFunction)
-        {
-             return ContractHandler.SendRequestAsync(spawnTickerFunction);
-        }
-
-        public Task<TransactionReceipt> SpawnTickerRequestAndWaitForReceiptAsync(SpawnTickerFunction spawnTickerFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTickerFunction, cancellationToken);
-        }
-
-        public Task<string> SpawnTickerRequestAsync(byte[] entity)
-        {
-            var spawnTickerFunction = new SpawnTickerFunction();
-                spawnTickerFunction.Entity = entity;
-            
-             return ContractHandler.SendRequestAsync(spawnTickerFunction);
-        }
-
-        public Task<TransactionReceipt> SpawnTickerRequestAndWaitForReceiptAsync(byte[] entity, CancellationTokenSource cancellationToken = null)
-        {
-            var spawnTickerFunction = new SpawnTickerFunction();
-                spawnTickerFunction.Entity = entity;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnTickerFunction, cancellationToken);
-        }
-
         public Task<string> SpliceDynamicDataRequestAsync(SpliceDynamicDataFunction spliceDynamicDataFunction)
         {
              return ContractHandler.SendRequestAsync(spliceDynamicDataFunction);

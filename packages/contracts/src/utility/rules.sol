@@ -2,7 +2,7 @@
 pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { MapConfig, RoadConfig, Bounds, Weight, Conscription } from "../codegen/index.sol";
-import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health, Puzzle } from "../codegen/index.sol";
+import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health, Puzzle, LastAction } from "../codegen/index.sol";
 import { MoveType } from "../codegen/common.sol";
 
 import { withinManhattanMinimum } from "./grid.sol";
@@ -61,6 +61,10 @@ library Rules {
     //TODO add game pausing global
     if (Health.get(entity) < 1) return false;
     return true;
+  }
+
+  function isTired(bytes32 entity) internal view returns (bool) {
+    return LastAction.get(entity) >= block.number;
   }
 
   function requireInteractable(

@@ -3,7 +3,7 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Cursed} from "../codegen/index.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Cursed, LastAction} from "../codegen/index.sol";
 import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
 import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
@@ -28,6 +28,7 @@ contract BehaviourSubsystem is System {
 
   function tickAction(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
 
+    if(Rules.isTired(entity)) {return;}
     IWorld world = IWorld(_world());
 
     //all movement related stuff
@@ -46,6 +47,8 @@ contract BehaviourSubsystem is System {
       console.log("tick");
       tickBehaviour(causedBy, entity, entities[i], entityPos, positions[i]);
     }
+
+    LastAction.set(entity, block.number);
 
   }
 
@@ -67,8 +70,11 @@ contract BehaviourSubsystem is System {
 
     console.log("tickBehaviour");
 
+    if(Rules.isTired(entity)) {return;}
     if(Rules.canDoStuff(entity) == false) {return;}
     
+    LastAction.set(entity, block.number);
+
     //activate all behaviours
     uint32 distance = uint32(getDistance(targetPos, entityPos));
 
@@ -83,7 +89,7 @@ contract BehaviourSubsystem is System {
     if(archer > 0 && archer >= distance) { doArrow(causedBy, entity, target, entityPos, targetPos);}
     uint32 cursed = Cursed.get(entity);
     if(cursed > 0 && cursed >= distance) { doCurse(causedBy, entity, target, entityPos, targetPos);}
-  }
+ }
 
   function callFling(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
     console.log("fling");
