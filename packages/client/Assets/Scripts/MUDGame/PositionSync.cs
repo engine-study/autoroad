@@ -17,6 +17,7 @@ public class PositionSync : ComponentSync
     public bool Moving {get{return moving;}}
 
     [Header("Optional")]
+    public bool overrideSync = false; 
     [SerializeField] Transform target;
     [SerializeField] public bool hideIfNoPosition = true;    
     [SerializeField] public bool hideIfBelowGround = true;    
@@ -38,7 +39,8 @@ public class PositionSync : ComponentSync
     [SerializeField] MoverMUD movement;
     [SerializeField] Vector3 gridPos;
     [SerializeField] Vector3 StartPos;
-    [SerializeField] Vector3 TargetPos => pos.Pos; 
+    [SerializeField] Vector3 TargetOverride;
+    [SerializeField] Vector3 TargetPos => overrideSync ? TargetOverride : pos.Pos; 
     [SerializeField] bool moving = false;    
     [SerializeField] float moveLerp = 0f;
     [SerializeField] float distanceMoved = 0f;
@@ -102,10 +104,12 @@ public class PositionSync : ComponentSync
         return !(pos.UpdateInfo.UpdateType == UpdateType.DeleteRecord && hideIfNoPosition) && !(pos.PosLayer.y < 0 && hideIfBelowGround);
     }
 
-
-
     protected override void HandleUpdate() {
         base.HandleUpdate();
+
+        if(overrideSync) {
+            return;
+        }
 
         if (syncType == ComponentSyncType.Lerp) {
             // if(target.position != TargetPos) StartMove();
@@ -118,6 +122,11 @@ public class PositionSync : ComponentSync
 
     void UpdateGrid(Vector3 pos) {
         gridPos = new Vector3(Mathf.Round(pos.x),Mathf.Round(pos.y),Mathf.Round(pos.z));
+    }
+
+    public void StartMove(Vector3 pos) {
+        TargetOverride = pos;
+        StartMove();
     }
 
     void StartMove() {
@@ -143,19 +152,16 @@ public class PositionSync : ComponentSync
         OnMoveStart?.Invoke();
     }
 
-    void StartModifiedMove() {
-        distance = Vector3.Distance(StartPos, TargetPos);
-    }
-    
+
     void EndMove() {
 
         bool wasMoving = moving;
 
         enabled = false;
         moving = false;
-        target.position = pos.Pos;
+        target.position = TargetPos;
 
-        UpdateGrid(pos.Pos);
+        UpdateGrid(TargetPos);
 
         // Debug.Log(gameObject.name + " MOVE: End (" + (movement ? movement.name : "/") + ")", this);
 

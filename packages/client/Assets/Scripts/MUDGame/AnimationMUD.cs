@@ -7,6 +7,8 @@ using Edelweiss.Coroutine;
 
 public class AnimationMUD : MonoBehaviour
 {
+    public bool IsMove(ActionName action) {return action == ActionName.Walking || action == ActionName.Push || action == ActionName.Hop || action == ActionName.Teleport || action == ActionName.Swap || action == ActionName.Spawn;}
+
     public ActionName Action {get{return actionEffect ? actionEffect.Action : ActionName.Idle;}}
     public ActionComponent ActionData {get{return actionData;}}
     public SPLooker Look {get{return looker;}}
@@ -22,7 +24,8 @@ public class AnimationMUD : MonoBehaviour
     Dictionary<string, ActionEffect> effects = new Dictionary<string, ActionEffect>();
 
     [Header("Action Debug")]
-    [SerializeField] ActionName actionName;
+    public List<ActionTable> ActionQueue;
+    [SerializeField] ActionTable actionTable;
     [SerializeField] ActionEffect actionEffect;
 
     [Header("Linked")]
@@ -38,6 +41,8 @@ public class AnimationMUD : MonoBehaviour
     protected virtual void Awake() {
         if(root == null) root = transform;
 
+        ActionQueue = new List<ActionTable>();
+
         entity = GetComponentInParent<MUDEntity>();
         looker = root.gameObject.AddComponent<SPLooker>();
 
@@ -50,6 +55,7 @@ public class AnimationMUD : MonoBehaviour
         if(entity == null) return;
 
         PositionSync = GetComponentInParent<PositionSync>(true);
+        PositionSync.overrideSync = true;
 
         Controller = GetComponentInChildren<SPController>(true);
         if(Controller == null) {
@@ -89,8 +95,9 @@ public class AnimationMUD : MonoBehaviour
 
     }
 
+
     void UpdateAction() {
-        EnterState(actionData.Action);
+        IngestState(actionData.ActiveTable as ActionTable);
     }
 
 
@@ -126,62 +133,66 @@ public class AnimationMUD : MonoBehaviour
 
     }
 
-    public virtual void EnterState(ActionName newAction) {
+    public virtual void IngestState(ActionTable newAction) {
 
-        actionName = newAction;
+        ActionQueue.Add(newAction);
 
-        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)actionData.Position.x},{(int)actionData.Position.z})", this);
-        ActionEffect newEffect = LoadAction(newAction.ToString());
-
-        //look at the new thing
-        looker?.SetLookRotation(actionData.Position);
-
-        if(newEffect == null) {
-            ToggleAction(false, actionEffect);
-            actionEffect = null;
-            return;
+        //start the coroutine again
+        if(ActionQueue.Count == 1) {
+            actionData.Entity.StartCoroutine(ActionQueueCoroutine());
         }
+    }
 
-        //check that the action is the right one
-        if(newEffect.Action != newAction) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
 
-        //setup the new movement type instantlye
-        newEffect.ToggleMovement(true, this);
 
-        if(Animation != null) actionData.Entity.StopCoroutine(Animation); 
+    public virtual Coroutine EnterState(ActionTable newAction) {
+
+        actionTable = newAction;
+
+        ActionName actionType = (ActionName)newAction.Action;
+        Vector3 position = new Vector3((int)newAction.X, 0f, (int)newAction.Y);
+        ActionEffect newEffect = LoadAction(actionType.ToString());
+
+        //error checks
+        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)position.x},{(int)position.z})", this);
+        if(newEffect == null) { Debug.LogError($"{actionType} not handled"); return null;}
+        if(newEffect.Action != actionType) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
+
+        //setup movement
+        ToggleMovement(true, newEffect); 
+        
+        //do move if it is a move
+        looker?.SetLookRotation(position);
+        if(IsMove(actionType)) { PositionSync.StartMove(position); }
 
         if(entity.gameObject.activeInHierarchy) {
-            if(entity.IsLocal) {
-                //assume we're already in the action because we had to have cast it?
-                // Animation = StartCoroutine(AnimationInsanityLocal(newEffect));
-                Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
-            } else {
-                //wait for target to move into place, then do animation
-                Animation = actionData.Entity.StartCoroutine(AnimationInsanity(newEffect));
-            }
+            //wait for target to move into place, then do animation
+            if(Animation != null) actionData.Entity.StopCoroutine(Animation); 
+            Animation = actionData.Entity.StartCoroutine(DoAction(newEffect));
+            return Animation;
         } else {
             ToggleAction(true, newEffect);
+            return null;
         }
         
     }   
 
-
-    IEnumerator AnimationInsanityLocal(ActionEffect newAction) {
-
-        ToggleAction(true, newAction);
-        yield return null;
-        ToggleAction(false, newAction);
-        Animation = null;
-
+    IEnumerator ActionQueueCoroutine() {
+        while(ActionQueue.Count > 0) {
+            yield return EnterState(ActionQueue[0]);
+            ActionQueue.RemoveAt(0);
+        }
     }
 
+
     Coroutine Animation;
-    IEnumerator AnimationInsanity(ActionEffect newAction) {
+    IEnumerator DoAction(ActionEffect newAction) {
 
         Debug.Log(actionData.Entity.Name + " START -------------", this);
 
         //wait a frame so all the positions are synced
         yield return null;
+        while(PositionSync.Moving) {yield return null;}
 
         //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
         while(actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
@@ -195,7 +206,9 @@ public class AnimationMUD : MonoBehaviour
         ToggleAction(true, newAction);
 
         //let it play for a couple seconds
-        yield return new WaitForSeconds(entity.IsLocal ? 2f : 2f);
+        if(IsMove(actionEffect.Action) == false) {
+            yield return new WaitForSeconds(entity.IsLocal ? 1.5f : 1.5f);
+        }
         
         Debug.Log(actionData.Entity.Name + " END -------------", this);
 
@@ -248,6 +261,29 @@ public class AnimationMUD : MonoBehaviour
             //     Gizmos.color = Color.green;
             //     Gizmos.DrawLine(transform.position + Vector3.up * .2f, actionData.Position + Vector3.up * .2f);    
             // }
+
+            #if UNITY_EDITOR
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 18;
+            style.fontStyle = FontStyle.Bold;
+            style.alignment = TextAnchor.MiddleCenter;
+            
+            for(int i = 0; i < ActionQueue.Count; i++) {
+
+                Color color =  Color.Lerp(Color.yellow, Color.blue, i/(float)ActionQueue.Count);
+                Gizmos.color = color;
+                style.normal.textColor = color;
+           
+
+                Vector3 waypoint = new Vector3((int)ActionQueue[i].X, 0.5f, (int)ActionQueue[i].Y);
+                Gizmos.DrawWireSphere(waypoint, .25f);
+                UnityEditor.Handles.Label(waypoint + Vector3.up * .5f, ((ActionName)ActionQueue[i].Action).ToString(), style);
+                if(i > 0) {
+                    Vector3 from = new Vector3((int)ActionQueue[i-1].X, 0.5f, (int)ActionQueue[i-1].Y);
+                    Gizmos.DrawLine(from, waypoint);
+                }
+            }
+            #endif
             
             if(actionData && actionData.Target) {
                 Gizmos.color = actionData.Target.Moving ? Color.blue : Color.green;

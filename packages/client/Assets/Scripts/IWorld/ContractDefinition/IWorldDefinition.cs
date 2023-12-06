@@ -189,6 +189,21 @@ namespace IWorld.ContractDefinition
         public virtual int Eth { get; set; }
     }
 
+    public partial class CauseEffectsFunction : CauseEffectsFunctionBase { }
+
+    [Function("causeEffects")]
+    public class CauseEffectsFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "pos", 3)]
+        public virtual PositionData Pos { get; set; }
+        [Parameter("uint8", "action", 4)]
+        public virtual byte Action { get; set; }
+    }
+
     public partial class ChopFunction : ChopFunctionBase { }
 
     [Function("chop")]
@@ -413,11 +428,13 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "target", 2)]
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("bytes32", "target", 3)]
         public virtual byte[] Target { get; set; }
-        [Parameter("tuple", "startPos", 3)]
+        [Parameter("tuple", "startPos", 4)]
         public virtual PositionData StartPos { get; set; }
-        [Parameter("tuple", "endPos", 4)]
+        [Parameter("tuple", "endPos", 5)]
         public virtual PositionData EndPos { get; set; }
     }
 
@@ -2230,6 +2247,8 @@ namespace IWorld.ContractDefinition
     public class WorldUnlimiteddelegationnotallowedErrorBase : IErrorDTO
     {
     }
+
+
 
 
 

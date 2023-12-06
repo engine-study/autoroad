@@ -135,7 +135,7 @@ contract ToolSubsystem is System {
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
     
-    SystemSwitch.call(abi.encodeCall(world.doFling, (player, atPos[0], startPos, endPos)));
+    SystemSwitch.call(abi.encodeCall(world.doFling, (player, player, atPos[0], startPos, endPos)));
 
   }
   
@@ -182,7 +182,7 @@ contract ToolSubsystem is System {
     }
 
     //put swap object underground for a second
-    Position.set(atPosition[0], targetPos.x, targetPos.y, -2);
+    Position.set(atPosition[0], targetPos.x, targetPos.y, 10);
 
     //move everything into place
     SystemSwitch.call(abi.encodeCall(world.teleport, (entity, targetPos.x, targetPos.y, ActionName.Swap)));

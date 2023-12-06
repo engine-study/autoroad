@@ -97,7 +97,7 @@ contract MoveSubsystem is System {
     }
   }
 
-  function doFling(bytes32 causedBy, bytes32 target, PositionData memory startPos, PositionData memory endPos) public {
+  function doFling(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory startPos, PositionData memory endPos) public {
     IWorld world = IWorld(_world());
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, endPos.x, endPos.y, 0);
     bool canFling = Rules.onMapOrSpawn(target, endPos) && MoveType(Move.get(target)) == MoveType.Push;
@@ -106,7 +106,10 @@ contract MoveSubsystem is System {
       canFling = Rules.canPlaceOn(MoveType(Move.get(atDest[0])));
     }
     
-    if(canFling) { moveTo(causedBy, target, startPos, endPos, atDest, ActionName.Hop); }
+    if(canFling) { 
+      Actions.setActionTargeted(entity, ActionName.Melee, startPos.x, startPos.y, target);
+      moveTo(causedBy, target, startPos, endPos, atDest, ActionName.Hop); 
+    }
   }
 
   function push(bytes32 player, int32 x, int32 y) public {
@@ -210,8 +213,6 @@ contract MoveSubsystem is System {
     ActionName actionType
   ) public {
 
-    Actions.setAction(entity, actionType, to.x, to.y);
-
     //simple move, no terrain at destination, exit out of method early
     if(atDest.length == 0) {
       setPosition(causedBy, entity, to, actionType);
@@ -223,14 +224,12 @@ contract MoveSubsystem is System {
       //we soft fail bad moves and exit out of them
       if(actionType != ActionName.Hop && Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
 
-      //check if we survive the move through terrain
-      if(handleMoveType(causedBy, entity, to, atDest[0], moveTypeAtDest, actionType) == false) {
-        return;
-      }
-
-      //if we're still alive after handleMoveType, move into the position (this will trigger an entity update too)
-      if(Rules.canDoStuff(entity)) {
+      //check if we survive the move through terrain then move
+      if(handleMoveType(causedBy, entity, to, atDest[0], moveTypeAtDest, actionType) && Rules.canDoStuff(entity)) {
         setPosition(causedBy, entity, to, actionType);
+      } else {
+        //maybe set action to idle here to show rotation?
+        // Actions.setAction(entity, action, pos.x, pos.y);
       }
 
     }
@@ -278,27 +277,29 @@ contract MoveSubsystem is System {
 
   function setPosition(bytes32 causedBy, bytes32 entity, PositionData memory pos, ActionName action) public {
 
-    IWorld world = IWorld(_world());
-
     //we move
     Position.set(entity, pos);
+    Actions.setAction(entity, action, pos.x, pos.y);
 
     //only movements onto main game map update stuff
     if(pos.layer != 0) { return; }
       
-    //this should be in handle move really..
-    SystemSwitch.call(abi.encodeCall(world.triggerPuzzles, (causedBy, entity, pos)));
-
-    //set loose all behaviours
-    //we have to be careful not to infinite loop here 
-    //(ie. an entity moves that triggers a move that triggers a move)
-    SystemSwitch.call(abi.encodeCall(world.triggerEntities, (causedBy, entity, pos)));
-
-    //ticks that activate once per block
-    SystemSwitch.call(abi.encodeCall(world.triggerTicks, (causedBy)));
+    causeEffects(causedBy, entity, pos, action);
 
   }
 
+  function causeEffects(bytes32 causedBy, bytes32 entity, PositionData memory pos, ActionName action) public {
+    IWorld world = IWorld(_world());
+
+    //this should be in handle move really..
+    SystemSwitch.call(abi.encodeCall(world.triggerPuzzles, (causedBy, entity, pos)));
+
+    //trigger all local entities effect by the move
+    SystemSwitch.call(abi.encodeCall(world.triggerEntities, (causedBy, entity, pos)));
+
+    //trigger all entities that "tick" globally
+    SystemSwitch.call(abi.encodeCall(world.triggerTicks, (causedBy)));
+  }
 
   function teleport(bytes32 player, int32 x, int32 y, ActionName actionType) public {
     require(Rules.canDoStuff(player), "hmm");

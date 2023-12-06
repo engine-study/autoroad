@@ -57,26 +57,8 @@ contract SpawnSubsystem is System {
       Boots.set(entity, 1, 3);
 
       int32 mileJoined = GameState.getMiles();
-
       Stats.set(entity, mileJoined);
-
-      // uint8[] memory array = new uint8[](4);
-      // array[0] = 3;
-      // array[1] = 6;
-      // int32[] memory arrayInt = new int32[](4);
-      // arrayInt[0] = 3;
-      // arrayInt[1] = 6;
-      // int256[] memory arrayBig = new int256[](4);
-      // arrayBig[0] = 3;
-      // arrayBig[1] = 6;
-      // uint256[] memory arrayUintBig = new uint256[](4);
-      // arrayUintBig[0] = 3;
-      // arrayUintBig[1] = 6;
-      // EnumTest.set(entity, NPCType.Player, array, arrayInt, arrayBig, arrayUintBig);
-
-    } else {
-      // EnumTest.pushMaxMove(entity, 5);
-    }
+    } 
 
     Health.set(entity, 3);
     Move.set(entity, uint32(MoveType.Push));
@@ -126,17 +108,20 @@ contract SpawnSubsystem is System {
       Ox.set(entity, true);
       Weight.set(entity, 1);
       Thief.set(entity, 1);
+      Wander.set(entity, 1);
       Entities.pushEntities(entity);
     } else if (npcType == NPCType.Shoveler) {
       Ox.set(entity, true);
       Weight.set(entity, -5);
       Thrower.set(entity, 1);
+      Wander.set(entity, 1);
       Entities.pushEntities(entity);
     } else if (npcType == NPCType.Gargoyle) {
       Rock.set(entity, uint32(RockType.Gargoyle));
       Weight.set(entity, 99);
       Cursed.set(entity, 2);
-      Entities.pushEntities(entity);
+      // Wander.set(entity, 1);
+      // Entities.pushEntities(entity);
     }
 
     Move.set(entity, uint32(MoveType.Push));
