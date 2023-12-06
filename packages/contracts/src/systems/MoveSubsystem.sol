@@ -184,7 +184,7 @@ contract MoveSubsystem is System {
       bytes32 pushed = pushArray[i];
 
       //recalculate at position everytime
-      atPos = Rules.getKeysAtPosition(world,pushPos.x, pushPos.y, 0);
+      atPos = Rules.getKeysAtPosition(world, pushPos.x, pushPos.y, 0);
       moveTo(causer, pushed, shoverPos, pushPos, atPos, ActionType.Push);
 
       pushPos.x -= vector.x;

@@ -25,18 +25,17 @@ public class StoreItemUI : SPWindow
         item = newItem;
         itemText.UpdateField(item.Name);
 
-        buyButtonCoin.SetValue( StatType.RoadCoin, item.value.price);
-        buyButtonGem.SetValue( StatType.Gem, item.value.gem);
-        buyButtonEth.SetValue( StatType.Eth, item.value.eth);
+        buyButtonCoin.SetValue( StatType.RoadCoin, item.StatToValue(StatType.RoadCoin));
+        buyButtonGem.SetValue( StatType.Gem, item.StatToValue(StatType.Gem));
+        buyButtonEth.SetValue( StatType.Eth, item.StatToValue(StatType.Eth));
 
-        buyButtonCoin.ToggleWindow(item.value.price > 0);
-        buyButtonGem.ToggleWindow(item.value.gem > 0);
-        buyButtonEth.ToggleWindow(item.value.eth > 0);
+        buyButtonCoin.ToggleWindow(item.StatToValue(StatType.RoadCoin) > 0);
+        buyButtonGem.ToggleWindow(item.StatToValue(StatType.Gem) > 0);
+        buyButtonEth.ToggleWindow(item.StatToValue(StatType.Eth) > 0);
         
         itemTypeImage.sprite = itemTypeSprites[(int)item.itemType];
 
-        CanBuy();
-    }
+     }
 
     public void UpdateDescription() {
         SPRawText text = SPHoverWindow.Instance.GetComponentInChildren<SPRawText>(true);
@@ -57,6 +56,8 @@ public class StoreItemUI : SPWindow
 
     public void CanBuy() {
 
+        SetItem(item);
+
         bool isValid = (item.HighEnoughLevel && item.InMileRange) || SPGlobal.IsDebug;
         bool doesNotOwn = item.itemType == ItemType.GameplayStashable || Inventory.LocalInventory.ItemUnlocked(item) == false;
         
@@ -64,8 +65,11 @@ public class StoreItemUI : SPWindow
 
         if(!isValid || !doesNotOwn) {return;}
 
-        buyButtonCoin.Button.ToggleState(CoinComponent.LocalCoins >= item.value.price ? SPSelectableState.Default : SPSelectableState.Disabled);
-        buyButtonGem.Button.ToggleState(GemComponent.LocalGems >= item.value.gem ? SPSelectableState.Default : SPSelectableState.Disabled);
-        buyButtonEth.Button.ToggleState(CoinComponent.LocalCoins >= item.value.eth ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonCoin.Button.ToggleState(CoinComponent.LocalCoins >= item.StatToValue(StatType.RoadCoin) ? SPSelectableState.Default : SPSelectableState.Disabled);
+        buyButtonGem.Button.ToggleState(GemComponent.LocalGems >= item.StatToValue(StatType.Gem) ? SPSelectableState.Default : SPSelectableState.Disabled);
+
+        //todo get eth value of player
+        buyButtonEth.Button.ToggleState(SPSelectableState.Default);
+        //CoinComponent.LocalCoins >= item.StatToValue(StatType.Eth)
     }
 }

@@ -28,7 +28,7 @@ contract BehaviourSubsystem is System {
 
   function tickAction(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
 
-    if(Rules.hasMoved(entity)) {return;}
+    if(Rules.hasTicked(entity)) {return;}
     IWorld world = IWorld(_world());
 
     LastMovement.set(entity, block.number);

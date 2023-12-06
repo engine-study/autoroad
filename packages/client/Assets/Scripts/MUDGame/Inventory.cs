@@ -112,4 +112,14 @@ public class Inventory : MonoBehaviour {
 public class InventorySlot{
     public GaulItem item;
     public int amount = -1; 
+
+    public float StatToValue(StatType statType) {
+
+        if(statType == StatType.RoadCoin) {
+            return item.StatToValue(statType) + amount * item.StatToValue(statType);
+        } else {
+            return item.StatToValue(statType);
+        }
+
+    } 
 }

@@ -204,6 +204,7 @@ export default mudConfig({
     Gem: "int32",
     Eth: "uint256",
     Seeds: "uint32",
+    Grapeleaf: "uint32",
     Conscription: "bool",
 
     //items

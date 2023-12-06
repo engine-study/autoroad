@@ -63,7 +63,7 @@ library Rules {
     return true;
   }
 
-  function hasMoved(bytes32 entity) internal view returns (bool) {
+  function hasTicked(bytes32 entity) internal view returns (bool) {
     return LastMovement.get(entity) >= block.number;
   }
 

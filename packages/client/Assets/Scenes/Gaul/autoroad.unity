@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.5
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.2714275, g: 0.25985748, b: 0.2347337, a: 0.5}
+  m_IndirectSpecularColor: {r: 0.2712319, g: 0.25972185, b: 0.23439059, a: 0.5}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -27878,6 +27878,7 @@ MonoBehaviour:
   - {fileID: 2189738813310324464, guid: f4ae706acbd00c7499c8744b724b3ea7, type: 3}
   - {fileID: 5650571335107367827, guid: a0972e080cdc04b4583af09e6087c97b, type: 3}
   - {fileID: 378270646931629764, guid: 79c7c7a450cd26545a594bbdcd153a7d, type: 3}
+  - {fileID: 3209547795443491490, guid: 60b4cf9ac0c59ce4a8868ad9e54e6666, type: 3}
   - {fileID: 5288600917751335645, guid: 0fc1be4bd00fa244f849d7d4d8c7b6f1, type: 3}
   - {fileID: 77022645062805081, guid: 219b049c5faf436428e270937e831a80, type: 3}
   - {fileID: 754855843078915279, guid: 3707d7bed91d077439bc3fee19584e79, type: 3}
@@ -42640,7 +42641,7 @@ MonoBehaviour:
   fovClamp: {x: 0.5, y: 40}
   shakeFalloff: 10
   screenshotSize: 1
-  fov: 10.5
+  fov: 3
   follow: 1
   followTransform: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
@@ -45795,9 +45796,9 @@ Camera:
     height: 1
   near clip plane: 50
   far clip plane: 125
-  field of view: 10.5
+  field of view: 3
   orthographic: 1
-  orthographic size: 10.5
+  orthographic size: 3
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

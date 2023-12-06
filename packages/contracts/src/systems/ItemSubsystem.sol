@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Player, Action, Conscription, Weight } from "../codegen/index.sol";
-import { Coinage, Gem, Eth, XP, Scroll, Stick, Pickaxe, Axe, Sword, Robe, Head, Effect, Material, Boots, FishingRod, ScrollSwap, Seeds, Pocket } from "../codegen/index.sol";
+import { Coinage, Gem, Eth, XP, Scroll, Stick, Pickaxe, Axe, Sword, Robe, Head, Effect, Material, Boots, FishingRod, ScrollSwap, Seeds, Pocket, Grapeleaf } from "../codegen/index.sol";
 import { PaymentType, CosmeticType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
 
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
@@ -50,9 +50,10 @@ contract ItemSubsystem is System {
         FishingRod.set(player, true);
       } 
       else if (id == 4) { //grapeleaf
-        pay(player, 100, 0, 0, payment, 0);
-        int32 weight = Weight.get(player);
-        Weight.set(player, weight - 1);
+        int32 newStrength = int32(Grapeleaf.get(player)) + 1;
+        pay(player, 100 * newStrength + 1, 0, 0, payment, 0);
+        Grapeleaf.set(player, uint32(newStrength));
+        Weight.set(player, int32(-newStrength) - 1);
       } 
       else if (id == 5) { //scroll
         pay(player, 5, 0, 0, payment, 0);

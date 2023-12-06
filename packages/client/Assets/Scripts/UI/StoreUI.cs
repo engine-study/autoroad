@@ -48,7 +48,7 @@ public class StoreUI : SPWindowParent
 
         //sort all items by cost
         for(int i = 0; i < itemCategories.Length; i++) {
-            itemCategories[i].Sort((a, b) => b.value.CompareTo(a.value));
+            itemCategories[i].Sort((a, b) => b.CompareTo(a));
         }
 
         //spawn store objects
@@ -68,6 +68,7 @@ public class StoreUI : SPWindowParent
             }
         }
 
+        UpdateStore();
 
         XPComponent.OnLocalLevelUp += UpdateStore;
         CoinComponent.OnLocalUpdate += UpdateStore;

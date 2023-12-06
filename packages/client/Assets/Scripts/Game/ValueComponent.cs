@@ -24,7 +24,7 @@ public class ValueComponent : MUDComponent {
     [SerializeField] protected List<InventorySlot> slots;
     PositionSync pos;
 
-    protected virtual float SetValue(MUDTable update) {return (int)MUDTable.GetRecord(Entity.Key, MUDTableType)?.RawValue["value"];}
+    protected virtual float SetValue(MUDTable update) {TryValue("value", out uint result); return result;}
     protected virtual StatType SetStat(MUDTable update) {return StatType;}
     protected virtual string SetString(MUDTable update) {return Value.ToString("00");}
 
