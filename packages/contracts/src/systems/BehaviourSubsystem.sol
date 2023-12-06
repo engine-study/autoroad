@@ -105,7 +105,7 @@ contract BehaviourSubsystem is System {
 
     IWorld world = IWorld(_world());
     PositionData memory newPos = addPosition(targetPos, getVectorNormalized(entityPos, targetPos));
-    SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, entity, target, targetPos, newPos)));
+    SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, entity, target, targetPos, newPos, ActionName.Throw)));
   }
 
   function doCurse(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory entityPos, PositionData memory targetPos) public {
@@ -128,9 +128,7 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
     PositionData memory throwStrength = multiplyPosition(getVectorNormalized(targetPos, entityPos), 2);
     PositionData memory newPos = addPosition(targetPos, throwStrength);
-
-    Actions.setActionTargeted(entity, ActionName.Melee, targetPos.x, targetPos.y, target);
-    SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, entity, target, targetPos, newPos)));
+    SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, entity, target, targetPos, newPos, ActionName.Throw)));
   }
 
   function doSeek(bytes32 causedBy, bytes32 seek, bytes32 target, PositionData memory seekerPos, PositionData memory targetPos) public {

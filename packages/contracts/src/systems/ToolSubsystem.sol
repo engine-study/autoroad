@@ -40,6 +40,7 @@ contract ToolSubsystem is System {
     require(NPC.get(atStick[0]) > 0, "Not an NPC");
     
     PositionData memory vector = PositionData(stickPos.x - playerPos.x, stickPos.y - playerPos.y, 0);
+    Actions.setActionTargeted(player, ActionName.Stick, x, y, atStick[0]);
     SystemSwitch.call(abi.encodeCall(world.moveOrPush, (player, atStick[0], stickPos, vector, 3)));
 
   }
@@ -129,13 +130,10 @@ contract ToolSubsystem is System {
     require(Weight.get(atPos[0]) + Weight.get(player) <= 0, "too heavy");
     Rules.requirePushable(atPos);
 
-    //set player action
-    Actions.setActionTargeted(player, ActionName.Fishing, x, y, atPos[0]);
-
     PositionData memory vector = PositionData(startPos.x - fishPos.x, startPos.y - fishPos.y, 0);
     PositionData memory endPos = PositionData(startPos.x + vector.x, startPos.y + vector.y, 0);
     
-    SystemSwitch.call(abi.encodeCall(world.doFling, (player, player, atPos[0], startPos, endPos)));
+    SystemSwitch.call(abi.encodeCall(world.doFling, (player, player, atPos[0], startPos, endPos, ActionName.Fishing)));
 
   }
   

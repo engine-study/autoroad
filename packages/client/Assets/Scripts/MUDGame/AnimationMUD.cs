@@ -8,6 +8,7 @@ using Edelweiss.Coroutine;
 public class AnimationMUD : MonoBehaviour
 {
     public bool IsMove(ActionName action) {return action == ActionName.Walking || action == ActionName.Push || action == ActionName.Hop || action == ActionName.Teleport || action == ActionName.Swap || action == ActionName.Spawn;}
+    public bool IsDisplace(ActionName action) {return action == ActionName.Push || action == ActionName.Throw || action == ActionName.Stick;}
 
     public ActionName Action {get{return actionEffect ? actionEffect.Action : ActionName.Idle;}}
     public ActionComponent ActionData {get{return actionData;}}
@@ -195,7 +196,7 @@ public class AnimationMUD : MonoBehaviour
         while(PositionSync.Moving) {yield return null;}
 
         //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
-        while(actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
+        while(!IsDisplace(newAction.Action) && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
 
         //turn off old action
         if (actionEffect != null && newAction.Action != Action) { ToggleAction(false, actionEffect); }

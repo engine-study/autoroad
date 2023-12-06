@@ -23,6 +23,7 @@ namespace mudworld
         Bow,
         Swap,
         Pocket,
+        Throw,
     }
 
     public enum TerrainType

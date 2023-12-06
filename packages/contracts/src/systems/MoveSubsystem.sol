@@ -97,7 +97,7 @@ contract MoveSubsystem is System {
     }
   }
 
-  function doFling(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory startPos, PositionData memory endPos) public {
+  function doFling(bytes32 causedBy, bytes32 entity, bytes32 target, PositionData memory startPos, PositionData memory endPos, ActionName actionType) public {
     IWorld world = IWorld(_world());
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, endPos.x, endPos.y, 0);
     bool canFling = Rules.onMapOrSpawn(target, endPos) && MoveType(Move.get(target)) == MoveType.Push;
@@ -107,7 +107,7 @@ contract MoveSubsystem is System {
     }
     
     if(canFling) { 
-      Actions.setActionTargeted(entity, ActionName.Melee, startPos.x, startPos.y, target);
+      Actions.setActionTargeted(entity, actionType, startPos.x, startPos.y, target);
       moveTo(causedBy, target, startPos, endPos, atDest, ActionName.Hop); 
     }
   }
@@ -264,7 +264,7 @@ contract MoveSubsystem is System {
     } else if(actionType == ActionName.Hop) {
 
       if(Rules.canCrush(moveTypeAtDest) && Rules.canSquish(entity, atDest)) {
-        SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, atDest, causedBy, to)));
+        SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, atDest, entity, to)));
       } else {
         return false;
       }
