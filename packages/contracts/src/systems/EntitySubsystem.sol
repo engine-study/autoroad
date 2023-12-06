@@ -20,7 +20,7 @@ contract EntitySubsystem is System {
     IWorld world = IWorld(_world());
 
     for(uint i = 0; i < entities.length; i++) {
-      if(Rules.isTired(entities[i])) {continue;}
+      if(Rules.hasMoved(entities[i])) {continue;}
       SystemSwitch.call(abi.encodeCall(world.tickEntity, (causedby, entities[i])));
     }
 

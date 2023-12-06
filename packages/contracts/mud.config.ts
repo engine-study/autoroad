@@ -169,6 +169,7 @@ export default mudConfig({
     Cursed: "uint32",
     Animal: "bool",
     LastAction: "uint256",
+    LastMovement: "uint256",
 
   //puzzle components try to be moved onto triggers (ie. Miliarli )
     Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool", solver:"bytes32"},},

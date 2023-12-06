@@ -3,7 +3,7 @@ pragma solidity >=0.8.21;
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Cursed, LastAction} from "../codegen/index.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Cursed, LastMovement, LastAction} from "../codegen/index.sol";
 import { Soldier, Barbarian, Archer} from "../codegen/index.sol";
 import { ActionType, NPCType, MoveType } from "../codegen/common.sol";
 
@@ -28,8 +28,10 @@ contract BehaviourSubsystem is System {
 
   function tickAction(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
 
-    if(Rules.isTired(entity)) {return;}
+    if(Rules.hasMoved(entity)) {return;}
     IWorld world = IWorld(_world());
+
+    LastMovement.set(entity, block.number);
 
     //all movement related stuff
     console.log("tick movement");
@@ -47,8 +49,6 @@ contract BehaviourSubsystem is System {
       console.log("tick");
       tickBehaviour(causedBy, entity, entities[i], entityPos, positions[i]);
     }
-
-    LastAction.set(entity, block.number);
 
   }
 
