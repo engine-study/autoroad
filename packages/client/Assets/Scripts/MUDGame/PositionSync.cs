@@ -236,12 +236,12 @@ public class PositionSync : ComponentSync
 
         if(Application.isPlaying && Pos) {
 
-            Gizmos.color = Moving ? Color.cyan : Color.black;
+            Gizmos.color = Moving ? Color.blue - Color.black * .5f : Color.black;
             Gizmos.DrawWireCube(GridPos, (Vector3.right + Vector3.forward) * .4f + Vector3.up * .05f);
 
             if(Moving) {
 
-                Gizmos.color = Color.magenta;
+                Gizmos.color = Color.blue;
 
                 Gizmos.DrawLine(transform.position + Vector3.up * .1f, Pos.Pos + Vector3.up * .1f);
                 Gizmos.DrawSphere(Pos.Pos + Vector3.up * .1f, .05f);
