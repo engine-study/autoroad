@@ -2,7 +2,7 @@
 pragma solidity >=0.8.21;
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { MapConfig, RoadConfig, Bounds, Weight, Conscription } from "../codegen/index.sol";
-import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health, Puzzle, LastAction, LastMovement } from "../codegen/index.sol";
+import { Chunk, Position, PositionTableId, PositionData, Carriage, Move, Player, Health, Puzzle, NPC, LastAction, LastMovement } from "../codegen/index.sol";
 import { MoveType } from "../codegen/common.sol";
 
 import { withinManhattanMinimum } from "./grid.sol";
@@ -95,7 +95,7 @@ library Rules {
   }
 
   function canSquish(bytes32 incoming, bytes32 target) internal view returns (bool) {
-    return Weight.get(incoming) > Weight.get(target);
+    return NPC.get(incoming) == 0 && Weight.get(incoming) > Weight.get(target);
   }
 
   function canWalkOn(MoveType moveAt) internal pure returns (bool) {

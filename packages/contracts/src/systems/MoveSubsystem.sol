@@ -102,10 +102,6 @@ contract MoveSubsystem is System {
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, endPos.x, endPos.y, 0);
     bool canFling = Rules.onMapOrSpawn(target, endPos) && MoveType(Move.get(target)) == MoveType.Push;
     
-    if(canFling && atDest.length > 0) {
-      canFling = Rules.canPlaceOn(MoveType(Move.get(atDest[0])));
-    }
-    
     if(canFling) { 
       Actions.setActionTargeted(entity, actionType, startPos.x, startPos.y, target);
       moveTo(causedBy, target, startPos, endPos, atDest, ActionName.Hop); 

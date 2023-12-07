@@ -279,10 +279,9 @@ public class AnimationMUD : MonoBehaviour
 
             Vector3 waypoint = new Vector3((int)ActionQueue[i].X, 0.5f, (int)ActionQueue[i].Y);
             Gizmos.DrawSphere(waypoint, .05f);
-            if(i > 0) {
-                Vector3 from = new Vector3((int)ActionQueue[i-1].X, 0.5f, (int)ActionQueue[i-1].Y);
-                Gizmos.DrawLine(from, waypoint);
-            }
+            Vector3 from = i > 0 ? new Vector3((int)ActionQueue[i-1].X, 0.5f, (int)ActionQueue[i-1].Y) : PositionSync.Target.position + Vector3.up *.5f;
+            Gizmos.DrawLine(from, waypoint);
+            
             waypoint += Vector3.up * (i*.1f);
             UnityEditor.Handles.Label(waypoint + Vector3.up * .5f, ((ActionName)ActionQueue[i].Action).ToString(), style);
         }
