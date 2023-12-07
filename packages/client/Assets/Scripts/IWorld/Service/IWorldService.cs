@@ -979,7 +979,7 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doFlingFunction, cancellationToken);
         }
 
-        public Task<string> DoFlingRequestAsync(byte[] causedBy, byte[] entity, byte[] target, PositionData startPos, PositionData endPos)
+        public Task<string> DoFlingRequestAsync(byte[] causedBy, byte[] entity, byte[] target, PositionData startPos, PositionData endPos, byte actionType)
         {
             var doFlingFunction = new DoFlingFunction();
                 doFlingFunction.CausedBy = causedBy;
@@ -987,11 +987,12 @@ namespace IWorld.Service
                 doFlingFunction.Target = target;
                 doFlingFunction.StartPos = startPos;
                 doFlingFunction.EndPos = endPos;
+                doFlingFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAsync(doFlingFunction);
         }
 
-        public Task<TransactionReceipt> DoFlingRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, byte[] target, PositionData startPos, PositionData endPos, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> DoFlingRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, byte[] target, PositionData startPos, PositionData endPos, byte actionType, CancellationTokenSource cancellationToken = null)
         {
             var doFlingFunction = new DoFlingFunction();
                 doFlingFunction.CausedBy = causedBy;
@@ -999,6 +1000,7 @@ namespace IWorld.Service
                 doFlingFunction.Target = target;
                 doFlingFunction.StartPos = startPos;
                 doFlingFunction.EndPos = endPos;
+                doFlingFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doFlingFunction, cancellationToken);
         }

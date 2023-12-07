@@ -436,6 +436,8 @@ namespace IWorld.ContractDefinition
         public virtual PositionData StartPos { get; set; }
         [Parameter("tuple", "endPos", 5)]
         public virtual PositionData EndPos { get; set; }
+        [Parameter("uint8", "actionType", 6)]
+        public virtual byte ActionType { get; set; }
     }
 
     public partial class DoSeekFunction : DoSeekFunctionBase { }

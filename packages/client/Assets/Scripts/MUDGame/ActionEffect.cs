@@ -28,21 +28,16 @@ public class ActionEffect : MonoBehaviour {
         if(moveEffect) moveEffect.ToggleActive(false);
     }
     
-    public virtual void ToggleMovement(bool toggle, AnimationMUD animation) {
-
-        //set the movement 
-        if(movement) animation.PositionSync.SetMovement(movement);
-
-    }
-
     public virtual void Toggle(bool toggle, AnimationMUD animation) {
 
         anim = animation;
+        if(movement) animation.PositionSync.SetMovement(movement);
 
         Debug.Log($"[A-Toggle]: {anim.ActionData.Entity.Name} [{gameObject.name}] {toggle}", this);
 
         //first time setup
         if (active != toggle) {
+
             if (toggle) { anim.PositionSync.OnMoveEnd += OnMoveEnd;}  
             else {anim.PositionSync.OnMoveEnd -= OnMoveEnd; }
         }
@@ -50,13 +45,12 @@ public class ActionEffect : MonoBehaviour {
         if(toggle) {
 
             //first check if we are moving or not before performing action
-            if(anim.PositionSync.Moving) {
-                //play movement animation
+            if(AnimationMUD.IsMove(Action)) {
                 ToggleMovementEffects(true);
             } else {
-                //play state animation
                 ToggleActionEffects(true);
             }
+            
         } else {
             ToggleActionEffects(false);
         }

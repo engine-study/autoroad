@@ -7,8 +7,8 @@ using Edelweiss.Coroutine;
 
 public class AnimationMUD : MonoBehaviour
 {
-    public bool IsMove(ActionName action) {return action == ActionName.Walking || action == ActionName.Push || action == ActionName.Hop || action == ActionName.Teleport || action == ActionName.Swap || action == ActionName.Spawn;}
-    public bool IsDisplace(ActionName action) {return action == ActionName.Push || action == ActionName.Fishing || action == ActionName.Throw || action == ActionName.Stick;}
+    public static bool IsMove(ActionName action) {return action == ActionName.Walking || action == ActionName.Push || action == ActionName.Hop || action == ActionName.Teleport || action == ActionName.Swap || action == ActionName.Spawn;}
+    public static bool IsDisplace(ActionName action) {return action == ActionName.Push || action == ActionName.Fishing || action == ActionName.Throw || action == ActionName.Stick;}
 
     public ActionName Action {get{return actionEffect ? actionEffect.Action : ActionName.Idle;}}
     public ActionComponent ActionData {get{return actionData;}}
@@ -24,9 +24,9 @@ public class AnimationMUD : MonoBehaviour
     Quaternion headRotLocal;
     Dictionary<string, ActionEffect> effects = new Dictionary<string, ActionEffect>();
 
-    [Header("Action Debug")]
+    [Header("Action Debug")]    
+    [SerializeField] ActionName actionName;
     public List<ActionTable> ActionQueue;
-    [SerializeField] ActionTable actionTable;
     [SerializeField] ActionEffect actionEffect;
 
     [Header("Linked")]
@@ -52,13 +52,15 @@ public class AnimationMUD : MonoBehaviour
         // ourComponent.OnToggle += ToggleDead;
     }
 
+    void OnDisable() {
+        ActionQueue = new List<ActionTable>();
+    }
+
     protected virtual void Start() {
 
         if(entity == null) return;
 
         PositionSync = GetComponentInParent<PositionSync>(true);
-        PositionSync.overrideSync = true;
-
         Controller = GetComponentInChildren<SPController>(true);
         if(Controller == null) {
             Controller = gameObject.AddComponent<SPController>();
@@ -89,6 +91,9 @@ public class AnimationMUD : MonoBehaviour
         if (actionData == null) { Debug.LogError("No action component", this); return; }
 
         actionData.OnUpdated += UpdateAction;
+        PositionSync.overrideSync = true;
+        PositionSync.hideAfterLoaded = false;
+        
         hasInit = true;
     }
 
@@ -161,13 +166,11 @@ public class AnimationMUD : MonoBehaviour
             animation = actionData.Entity.StartCoroutine(EnterState(ActionQueue[0]));
             yield return animation;
 
-            ActionQueue.RemoveAt(0);
+            if(ActionQueue.Count > 0) {ActionQueue.RemoveAt(0);}
         }
     }
 
     public virtual IEnumerator EnterState(ActionTable newAction) {
-
-        actionTable = newAction;
 
         ActionName actionType = (ActionName)newAction.Action;
         Vector3 position = new Vector3((int)newAction.X, 0f, (int)newAction.Y);
@@ -177,37 +180,30 @@ public class AnimationMUD : MonoBehaviour
         Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)position.x},{(int)position.z})", this);
         if(newEffect == null) { Debug.LogError($"{actionType} not handled"); yield return null;}
         if(newEffect.Action != actionType) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
-
-        //setup movement
-        ToggleMovement(true, newEffect); 
         
-        //do move if it is a move
-        looker?.SetLookRotation(position);
+        //wait a frame so position or other updates have settled
+        yield return null;
+
+        //turn on new action
+        ToggleAction(true, newEffect);
 
         //move to the position of our action's movement if its a move action
         //otherwise don't move us, but handle movement (so that necessary updates are sent through positionsync, like IsVisible)
+        looker?.SetLookRotation(position);
         if(IsMove(actionType)) { PositionSync.StartMove(position); }
         else {PositionSync.StartMove(PositionSync.Target.position);}
+        //wait a frame so all the positions are synced
+        while(PositionSync.Moving) {yield return null;}
 
         if(entity.gameObject.activeInHierarchy) {
           
              Debug.Log(actionData.Entity.Name + " START -------------", this);
 
-            //wait a frame so all the positions are synced
-            yield return null;
-            while(PositionSync.Moving) {yield return null;}
-
             //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
             bool waitForTarget = IsMove(newEffect.Action) == false && IsDisplace(newEffect.Action) == false;
             while(waitForTarget && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
 
-            //turn off old action
-            if (actionEffect != null && newEffect.Action != Action) { ToggleAction(false, actionEffect); }
-
             Debug.Log(actionData.Entity.Name + " TOGGLE -------------", this);
-
-            //turn on new action
-            ToggleAction(true, newEffect);
 
             //let it play for a couple seconds
             if(IsMove(actionEffect.Action) == false) {
@@ -221,18 +217,15 @@ public class AnimationMUD : MonoBehaviour
         } else {
             ToggleAction(true, newEffect);
         }
+
+        entity.Toggle(Action != ActionName.Dead && Action != ActionName.Destroy);
         
     }   
-
-    public virtual void ToggleMovement(bool toggle, ActionEffect newEffect) {
-        //play new action if it exists
-        if(newEffect == null) return;
-        newEffect.ToggleMovement(toggle, this);
-    }
 
     public virtual void ToggleAction(bool toggle, ActionEffect newEffect) {
 
         actionEffect = toggle ? newEffect : null;
+        actionName = newEffect ? newEffect.Action : ActionName.None;
 
         //play new action if it exists
         if(newEffect == null) return;
@@ -266,12 +259,13 @@ public class AnimationMUD : MonoBehaviour
         if(!Application.isPlaying) {return;}
 
         #if UNITY_EDITOR
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 18;
-        style.fontStyle = FontStyle.Bold;
-        style.alignment = TextAnchor.MiddleCenter;
-        
-        for(int i = 0; i < ActionQueue.Count; i++) {
+        GUIStyle style = new GUIStyle {
+            fontSize = 18,
+            fontStyle = FontStyle.Bold,
+            alignment = TextAnchor.MiddleCenter
+        };
+
+        for (int i = 0; i < ActionQueue.Count; i++) {
 
             Color color =  Color.Lerp(Color.cyan, Color.yellow, (i)/((float)ActionQueue.Count));
             Gizmos.color = color;

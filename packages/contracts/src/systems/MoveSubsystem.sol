@@ -243,6 +243,7 @@ contract MoveSubsystem is System {
       }
 
       //kill
+      Actions.setAction(entity, actionType, to.x, to.y);
       SystemSwitch.call(abi.encodeCall(world.destroy, (causedBy, entity, causedBy, to)));
       return false;
 
@@ -250,6 +251,7 @@ contract MoveSubsystem is System {
 
       //kill if it was an NPC
       if(NPC.get(entity) > 0) { 
+        Actions.setAction(entity, actionType, to.x, to.y);
         SystemSwitch.call(abi.encodeCall(world.kill, (causedBy, entity, causedBy, to)));
         return false;
       } else {

@@ -15,13 +15,6 @@ library Actions {
     Action.set(player, uint32(newAction), x, y, target);
   }
 
-  function deleteAtRequire(IWorld world, PositionData memory pos) internal {
-    bytes32[] memory atPosition = Rules.getKeysAtPosition(world,pos.x, pos.y, pos.layer);
-    require(atPosition.length > 0, "Nothing to delete");
-    Position.deleteRecord(atPosition[0]);
-    Health.deleteRecord(atPosition[0]);
-  }
-
   function deleteAt(IWorld world, PositionData memory pos) internal {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,pos.x, pos.y, pos.layer);
     if(atPosition.length == 0) return;

@@ -152,7 +152,7 @@ contract SpawnSubsystem is System {
       //destroy
       Position.set(target, pos.x, pos.y, -2);
       Health.set(target, -1);
-      Actions.setAction(target, ActionName.Dead, pos.x, pos.y);
+      Actions.setAction(target, ActionName.Destroy, pos.x, pos.y);
     }
   }
 

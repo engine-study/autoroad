@@ -24,6 +24,7 @@ namespace mudworld
         Swap,
         Pocket,
         Throw,
+        Destroy,
     }
 
     public enum TerrainType
