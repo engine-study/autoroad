@@ -177,10 +177,9 @@ contract MoveSubsystem is System {
 
     //iterate backwards pushing everything forward one by one with a lighter position set that doesn't check for holes
     //DONT iterate to the 0 index (so we don't get -1 index lookup on the pushArray)
-    for (uint i = index; i > 0; i--) {
+    for (int i = int(index); i >= 0; i--) {
 
-      bytes32 shover = pushArray[i-1];
-      bytes32 pushed = pushArray[i];
+      bytes32 pushed = pushArray[uint(i)];
 
       //recalculate at position everytime
       atPos = Rules.getKeysAtPosition(world, pushPos.x, pushPos.y, 0);
@@ -191,12 +190,7 @@ contract MoveSubsystem is System {
       shoverPos.x -= vector.x;
       shoverPos.y -= vector.y;
 
-      atPos = new bytes32[](0);
-
     }
-
-    //first player to do the push pushes themselves
-    moveTo(causer, player, shoverPos, pushPos, atPos, ActionName.Push);
 
   }
 
