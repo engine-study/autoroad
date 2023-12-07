@@ -221,7 +221,8 @@ contract MoveSubsystem is System {
       if(actionType != ActionName.Hop && Rules.canPlaceOn(moveTypeAtDest) == false) {return;}
 
       //check if we survive the move through terrain then move
-      if(handleMoveType(causedBy, entity, to, atDest[0], moveTypeAtDest, actionType) && Rules.canDoStuff(entity)) {
+      bool canMove = handleMoveType(causedBy, entity, to, atDest[0], moveTypeAtDest, actionType);
+      if(canMove && Rules.canDoStuff(entity)) {
         setPosition(causedBy, entity, to, actionType);
       } else {
         //maybe set action to idle here to show rotation?
@@ -291,12 +292,9 @@ contract MoveSubsystem is System {
 
     //this should be in handle move really..
     SystemSwitch.call(abi.encodeCall(world.triggerPuzzles, (causedBy, entity, pos)));
-
     //trigger all local entities effect by the move
     SystemSwitch.call(abi.encodeCall(world.triggerEntities, (causedBy, entity, pos)));
 
-    //trigger all entities that "tick" globally
-    SystemSwitch.call(abi.encodeCall(world.triggerTicks, (causedBy)));
   }
 
   function teleport(bytes32 player, int32 x, int32 y, ActionName actionType) public {

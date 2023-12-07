@@ -15,12 +15,6 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { lineWalkPositions, withinManhattanDistance, withinChessDistance, getDistance, withinManhattanMinimum, getVectorNormalized } from "../utility/grid.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
-import { TerrainSubsystem } from "./TerrainSubsystem.sol";
-import { SpawnSubsystem } from "./SpawnSubsystem.sol";
-import { RewardSubsystem } from "./RewardSubsystem.sol";
-import { EntitySubsystem } from "./EntitySubsystem.sol";
-import { MoveSubsystem } from "./MoveSubsystem.sol";
-
 contract ToolSubsystem is System {
 
   //forces a player to push

@@ -255,15 +255,3 @@ function mooreNeighborhood(PositionData memory center) pure returns (PositionDat
   return neighbors;
 }
 
-function activeEntities(IWorld world, PositionData[] memory positions) view returns (bytes32[] memory) {
-  // console.log("activeEntities");
-  bytes32[] memory neighbors = new bytes32[](positions.length);
-  for (uint i = 0; i < positions.length; i++) {
-    bytes32[] memory entities = Rules.getKeysAtPosition(world, positions[i].x, positions[i].y, 0);
-    if (entities.length > 0) {
-      neighbors[i] = entities[0];
-    }
-  }
-
-  return neighbors;
-}

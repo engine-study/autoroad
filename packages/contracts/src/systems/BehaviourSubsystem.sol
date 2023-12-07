@@ -5,7 +5,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
 import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Thrower, Thief, Cursed} from "../codegen/index.sol";
-import { Soldier, Barbarian, Archer, LastMovement, LastAction} from "../codegen/index.sol";
+import { Entities, Soldier, Barbarian, Archer, LastMovement, LastAction} from "../codegen/index.sol";
 import { ActionName, NPCType, MoveType } from "../codegen/common.sol";
 
 import { Rules } from "../utility/rules.sol";
@@ -14,17 +14,47 @@ import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getDistance, getVectorNormalized, addPosition, lineWalkPositions, multiplyPosition } from "../utility/grid.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { randomDirection } from "../utility/random.sol";
-import { neumanNeighborhoodOuter, activeEntities } from "../utility/grid.sol";
+import { neumanNeighborhoodOuter } from "../utility/grid.sol";
 
 
 contract BehaviourSubsystem is System {
 
-  function tickEntity(bytes32 causedBy, bytes32 entity) public {
+  //find all nearby and global entities that have tick updates and tick them
+  function triggerEntities(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
+
+    // console.log("triggerEntities");
+    IWorld world = IWorld(_world());
+
+    //only NPC movements trigger local entity ticks
+    if(NPC.get(entity) > uint32(NPCType.None) && Rules.onMap(pos.x, pos.y)) {
+
+      //TODO gas golf, calculate distances and other things here so tickBehaviour doesnt do it
+      PositionData[] memory positions = neumanNeighborhoodOuter(pos, 2);
+
+      for (uint i = 0; i < positions.length; i++) {
+        bytes32[] memory entities = Rules.getKeysAtPosition(world, positions[i].x, positions[i].y, 0);
+        if (entities.length == 0) { continue;}
+        if(Rules.isTired(entities[0])) {continue;}
+
+        //tick npcs
+        NPCType npcType = NPCType(NPC.get(entities[0]));
+        if(npcType > NPCType.None) {tickBehaviour(causedBy, entities[0], entity, positions[i], pos);}
+
+        //tick other things possible (resources, idk)
+
+        //check entity is still alive, exit early if not?? 
+        //test this pls, what happens if 3 npcs try to kill one entity at once
+        // if(Rules.canDoStuff(entity) == false) {return;}
+      }
+
+    }
     
-    //perform the tick action that can happen once per block maximum
-    //also notice entity takes credit for its own actions (ignores causedBy)
-    tickAction(entity, entity, Position.get(entity));
-    //do nothing else for now
+    bytes32 [] memory globalEntities = Entities.get();
+
+    for(uint i = 0; i < globalEntities.length; i++) {
+      if(Rules.hasTicked(globalEntities[i])) {continue;}
+      tickAction(globalEntities[i], globalEntities[i], Position.get(globalEntities[i]));
+    }
   }
 
   function tickAction(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
@@ -39,17 +69,16 @@ contract BehaviourSubsystem is System {
     if(Wander.get(entity) > 0) { doWander(causedBy, entity, entityPos);} 
 
     //all action related stuff, refresh position
-    console.log("tick behaviour");
-    entityPos = Position.get(entity);
+    // console.log("tick behaviour");
+    // entityPos = Position.get(entity);
 
-    PositionData[] memory positions = neumanNeighborhoodOuter(entityPos, 1);
-    bytes32[] memory entities = activeEntities(world, positions);
+    // PositionData[] memory positions = neumanNeighborhoodOuter(entityPos, 1);
 
-    for (uint i = 0; i < positions.length; i++) {
-      if (entities[i] == bytes32(0)) {continue;}
-      console.log("tick");
-      tickBehaviour(causedBy, entity, entities[i], entityPos, positions[i]);
-    }
+    // for (uint i = 0; i < positions.length; i++) {
+    //   bytes32[] memory entities = Rules.getKeysAtPosition(world, positions[i].x, positions[i].y, 0);
+    //   if (entities.length == 0) { continue;}
+    //   tickBehaviour(causedBy, entity, entities[0], entityPos, positions[i]);
+    // }
 
   }
 
@@ -64,6 +93,7 @@ contract BehaviourSubsystem is System {
       Actions.setAction(entity, ActionName.Idle, walkPos.x, walkPos.y);
       return;
     }
+
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
     SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionName.Walking)));
 
@@ -195,7 +225,7 @@ contract BehaviourSubsystem is System {
 
     //soldiers don't attack players or other soldiers
     if(canAggroEntity(entity, target) == false) {return;}
-    
+
     Actions.setActionTargeted(entity, ActionName.Bow, targetPos.x, targetPos.y, target);
 
     //kill target if it is NPC

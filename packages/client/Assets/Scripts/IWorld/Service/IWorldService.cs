@@ -3890,34 +3890,6 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(tickBehaviourFunction, cancellationToken);
         }
 
-        public Task<string> TickEntityRequestAsync(TickEntityFunction tickEntityFunction)
-        {
-             return ContractHandler.SendRequestAsync(tickEntityFunction);
-        }
-
-        public Task<TransactionReceipt> TickEntityRequestAndWaitForReceiptAsync(TickEntityFunction tickEntityFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(tickEntityFunction, cancellationToken);
-        }
-
-        public Task<string> TickEntityRequestAsync(byte[] causedBy, byte[] entity)
-        {
-            var tickEntityFunction = new TickEntityFunction();
-                tickEntityFunction.CausedBy = causedBy;
-                tickEntityFunction.Entity = entity;
-            
-             return ContractHandler.SendRequestAsync(tickEntityFunction);
-        }
-
-        public Task<TransactionReceipt> TickEntityRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, CancellationTokenSource cancellationToken = null)
-        {
-            var tickEntityFunction = new TickEntityFunction();
-                tickEntityFunction.CausedBy = causedBy;
-                tickEntityFunction.Entity = entity;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(tickEntityFunction, cancellationToken);
-        }
-
         public Task<string> TransferBalanceToAddressRequestAsync(TransferBalanceToAddressFunction transferBalanceToAddressFunction)
         {
              return ContractHandler.SendRequestAsync(transferBalanceToAddressFunction);
@@ -4016,21 +3988,21 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);
         }
 
-        public Task<string> TriggerEntitiesRequestAsync(byte[] causedBy, byte[] player, PositionData pos)
+        public Task<string> TriggerEntitiesRequestAsync(byte[] causedBy, byte[] entity, PositionData pos)
         {
             var triggerEntitiesFunction = new TriggerEntitiesFunction();
                 triggerEntitiesFunction.CausedBy = causedBy;
-                triggerEntitiesFunction.Player = player;
+                triggerEntitiesFunction.Entity = entity;
                 triggerEntitiesFunction.Pos = pos;
             
              return ContractHandler.SendRequestAsync(triggerEntitiesFunction);
         }
 
-        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] player, PositionData pos, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> TriggerEntitiesRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, PositionData pos, CancellationTokenSource cancellationToken = null)
         {
             var triggerEntitiesFunction = new TriggerEntitiesFunction();
                 triggerEntitiesFunction.CausedBy = causedBy;
-                triggerEntitiesFunction.Player = player;
+                triggerEntitiesFunction.Entity = entity;
                 triggerEntitiesFunction.Pos = pos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerEntitiesFunction, cancellationToken);
@@ -4064,32 +4036,6 @@ namespace IWorld.Service
                 triggerPuzzlesFunction.Pos = pos;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerPuzzlesFunction, cancellationToken);
-        }
-
-        public Task<string> TriggerTicksRequestAsync(TriggerTicksFunction triggerTicksFunction)
-        {
-             return ContractHandler.SendRequestAsync(triggerTicksFunction);
-        }
-
-        public Task<TransactionReceipt> TriggerTicksRequestAndWaitForReceiptAsync(TriggerTicksFunction triggerTicksFunction, CancellationTokenSource cancellationToken = null)
-        {
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerTicksFunction, cancellationToken);
-        }
-
-        public Task<string> TriggerTicksRequestAsync(byte[] causedby)
-        {
-            var triggerTicksFunction = new TriggerTicksFunction();
-                triggerTicksFunction.Causedby = causedby;
-            
-             return ContractHandler.SendRequestAsync(triggerTicksFunction);
-        }
-
-        public Task<TransactionReceipt> TriggerTicksRequestAndWaitForReceiptAsync(byte[] causedby, CancellationTokenSource cancellationToken = null)
-        {
-            var triggerTicksFunction = new TriggerTicksFunction();
-                triggerTicksFunction.Causedby = causedby;
-            
-             return ContractHandler.SendRequestAndWaitForReceiptAsync(triggerTicksFunction, cancellationToken);
         }
 
         public Task<string> UnregisterStoreHookRequestAsync(UnregisterStoreHookFunction unregisterStoreHookFunction)

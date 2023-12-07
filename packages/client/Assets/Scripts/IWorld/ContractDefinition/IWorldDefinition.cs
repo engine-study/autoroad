@@ -1783,17 +1783,6 @@ namespace IWorld.ContractDefinition
         public virtual PositionData TargetPos { get; set; }
     }
 
-    public partial class TickEntityFunction : TickEntityFunctionBase { }
-
-    [Function("tickEntity")]
-    public class TickEntityFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "causedBy", 1)]
-        public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "entity", 2)]
-        public virtual byte[] Entity { get; set; }
-    }
-
     public partial class TransferBalanceToAddressFunction : TransferBalanceToAddressFunctionBase { }
 
     [Function("transferBalanceToAddress")]
@@ -1838,8 +1827,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "player", 2)]
-        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
         [Parameter("tuple", "pos", 3)]
         public virtual PositionData Pos { get; set; }
     }
@@ -1855,15 +1844,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Entity { get; set; }
         [Parameter("tuple", "pos", 3)]
         public virtual PositionData Pos { get; set; }
-    }
-
-    public partial class TriggerTicksFunction : TriggerTicksFunctionBase { }
-
-    [Function("triggerTicks")]
-    public class TriggerTicksFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "causedby", 1)]
-        public virtual byte[] Causedby { get; set; }
     }
 
     public partial class UnregisterStoreHookFunction : UnregisterStoreHookFunctionBase { }
@@ -2629,10 +2609,6 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "version", 1)]
         public virtual byte[] Version { get; set; }
     }
-
-
-
-
 
 
 

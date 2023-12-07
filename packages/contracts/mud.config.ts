@@ -13,10 +13,6 @@ export default mudConfig({
       name: "behaviour",
       openAccess: false,
     },
-    EntitySubsystem: {
-      name: "entities",
-      openAccess: false,
-    },
     FloraSubsystem: {
       name: "flora",
       openAccess: false,
