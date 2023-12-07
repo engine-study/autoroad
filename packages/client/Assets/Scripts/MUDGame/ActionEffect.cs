@@ -5,6 +5,7 @@ public class ActionEffect : MonoBehaviour {
     
 
     public ActionName Action {get{return actionName;}}
+    public SPAction ActionData {get{return action;}}
     [Header("Action")]
     [SerializeField] ActionName actionName;
 

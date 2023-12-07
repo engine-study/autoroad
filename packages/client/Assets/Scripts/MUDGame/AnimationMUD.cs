@@ -235,7 +235,7 @@ public class AnimationMUD : MonoBehaviour
 
             //let it play for a couple seconds
             if(IsMove(actionEffect.Action) == false) {
-                yield return new WaitForSeconds(entity.IsLocal ? 1.5f : 1.5f);
+                yield return new WaitForSeconds(actionEffect.ActionData ? actionEffect.ActionData.CastDuration : 1f);
             }
             
             Debug.Log(actionData.Entity.Name + " END -------------", this);
