@@ -175,9 +175,6 @@ contract BehaviourSubsystem is System {
     console.log("archer");
     IWorld world = IWorld(_world());
 
-    //soldiers don't attack players or other soldiers
-    if(canAggroEntity(entity, target) == false) {return;}
-
     PositionData[] memory positions = lineWalkPositions(entityPos, targetPos);
 
     //check if anything is in the way 
@@ -196,6 +193,9 @@ contract BehaviourSubsystem is System {
       }
     }
 
+    //soldiers don't attack players or other soldiers
+    if(canAggroEntity(entity, target) == false) {return;}
+    
     Actions.setActionTargeted(entity, ActionName.Bow, targetPos.x, targetPos.y, target);
 
     //kill target if it is NPC
