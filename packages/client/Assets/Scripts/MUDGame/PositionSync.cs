@@ -60,7 +60,6 @@ public class PositionSync : ComponentSync
 
     }
 
-
     protected override void InitialSync() {
         base.InitialSync();
 
@@ -93,6 +92,10 @@ public class PositionSync : ComponentSync
 
         ourComponent.Toggle(IsVisible(), false);
 
+    }
+
+    protected void OnDisable() {
+        if(Moving) {EndMove();}
     }
 
     public void SetMovement(MoverMUD newMove) {

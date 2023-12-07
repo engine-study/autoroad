@@ -53,7 +53,9 @@ public class AnimationMUD : MonoBehaviour
     }
 
     void OnDisable() {
-        ActionQueue = new List<ActionTable>();
+        if(ActionQueue.Count > 0) {
+            IngestState(ActionQueue[ActionQueue.Count-1], true);
+        }
     }
 
     protected virtual void Start() {
@@ -91,9 +93,7 @@ public class AnimationMUD : MonoBehaviour
         if (actionData == null) { Debug.LogError("No action component", this); return; }
 
         actionData.OnUpdated += UpdateAction;
-        PositionSync.overrideSync = true;
-        PositionSync.hideAfterLoaded = false;
-        
+    
         hasInit = true;
     }
 
@@ -107,6 +107,9 @@ public class AnimationMUD : MonoBehaviour
 
 
     void UpdateAction() {
+        //turn off positionsync
+        PositionSync.overrideSync = true;
+        PositionSync.hideAfterLoaded = false;
         IngestState(actionData.ActiveTable as ActionTable);
     }
 
@@ -144,22 +147,27 @@ public class AnimationMUD : MonoBehaviour
     }
 
     Coroutine queue, animation;
-    public virtual void IngestState(ActionTable newAction) {
-
+    public virtual void IngestState(ActionTable newAction, bool instant = false) {
+        
         bool startQueue = ActionQueue.Count == 0;
         ActionQueue.Add(newAction);
 
         Debug.Log($"[QUEUE]: {newAction.Action} [{ActionQueue.Count}]", this);
 
         //start the coroutine again
-        if(startQueue) {
-            if(queue != null) {actionData.Entity.StopCoroutine(queue);}
-            if(animation != null) actionData.Entity.StopCoroutine(animation); 
-
-            queue = actionData.Entity.StartCoroutine(ActionQueueCoroutine());
+        if(entity.gameObject.activeInHierarchy && !instant) {
+            if(startQueue) {
+                if(queue != null) {actionData.Entity.StopCoroutine(queue);}
+                if(animation != null) actionData.Entity.StopCoroutine(animation); 
+                queue = actionData.Entity.StartCoroutine(ActionQueueCoroutine());
+            }
+        } else {
+            LoadAction(ActionQueue[ActionQueue.Count-1]);
+            ActionQueue = new List<ActionTable>();
         }
     }
 
+    //process the queue
     IEnumerator ActionQueueCoroutine() {
         while(ActionQueue.Count > 0) {
 
@@ -170,19 +178,17 @@ public class AnimationMUD : MonoBehaviour
         }
     }
 
-    public virtual IEnumerator EnterState(ActionTable newAction) {
-
-        ActionName actionType = (ActionName)newAction.Action;
-        Vector3 position = new Vector3((int)newAction.X, 0f, (int)newAction.Y);
+    //load the action, set movement
+    public ActionEffect LoadAction(ActionTable table) {
+        
+        ActionName actionType = (ActionName)table.Action;
+        Vector3 position = new Vector3((int)table.X, 0f, (int)table.Y);
         ActionEffect newEffect = LoadAction(actionType.ToString());
 
         //error checks
-        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{newAction.ToString().ToUpper()}] ({(int)position.x},{(int)position.z})", this);
-        if(newEffect == null) { Debug.LogError($"{actionType} not handled"); yield return null;}
-        if(newEffect.Action != actionType) {Debug.LogError(newAction + " doesn't match on " + newEffect.name);}
-        
-        //wait a frame so position or other updates have settled
-        yield return null;
+        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{table.ToString().ToUpper()}] ({(int)position.x},{(int)position.z})", this);
+        if(newEffect == null) { Debug.LogError($"{actionType} not handled"); return null;}
+        if(newEffect.Action != actionType) {Debug.LogError(table + " doesn't match on " + newEffect.name);}
 
         //turn on new action
         ToggleAction(true, newEffect);
@@ -192,6 +198,28 @@ public class AnimationMUD : MonoBehaviour
         looker?.SetLookRotation(position);
         if(IsMove(actionType)) { PositionSync.StartMove(position); }
         else {PositionSync.StartMove(PositionSync.Target.position);}
+
+        return newEffect;
+    }
+
+    public virtual void ToggleAction(bool toggle, ActionEffect newEffect) {
+
+        actionEffect = toggle ? newEffect : null;
+        actionName = newEffect ? newEffect.Action : ActionName.None;
+
+        //play new action if it exists
+        if(newEffect == null) return;
+        newEffect.Toggle(toggle, this);
+
+    }
+
+    public virtual IEnumerator EnterState(ActionTable actionTable) {
+
+        //wait a frame so position or other updates have settled
+        yield return null;
+
+        ActionEffect newEffect = LoadAction(actionTable);
+
         //wait a frame so all the positions are synced
         while(PositionSync.Moving) {yield return null;}
 
@@ -222,16 +250,6 @@ public class AnimationMUD : MonoBehaviour
         
     }   
 
-    public virtual void ToggleAction(bool toggle, ActionEffect newEffect) {
-
-        actionEffect = toggle ? newEffect : null;
-        actionName = newEffect ? newEffect.Action : ActionName.None;
-
-        //play new action if it exists
-        if(newEffect == null) return;
-        newEffect.Toggle(toggle, this);
-
-    }
     
     //load from resources folder
     ActionEffect LoadAction(string action) {
