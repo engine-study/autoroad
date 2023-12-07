@@ -38,6 +38,7 @@ public class AnimationMUD : MonoBehaviour
     [SerializeField] ActionComponent actionData;
     [SerializeField] SPLooker looker;
     [SerializeField] IActor actor;
+    bool hasInit = false; 
 
     protected virtual void Awake() {
         if(root == null) root = transform;
@@ -82,10 +83,13 @@ public class AnimationMUD : MonoBehaviour
     }
 
     void Init() {
+        if(hasInit) {Debug.LogError("Double Init"); return;}
+
         actionData = entity.GetMUDComponent<ActionComponent>();
         if (actionData == null) { Debug.LogError("No action component", this); return; }
 
         actionData.OnUpdated += UpdateAction;
+        hasInit = true;
     }
 
     void OnDestroy() {
@@ -140,7 +144,7 @@ public class AnimationMUD : MonoBehaviour
         bool startQueue = ActionQueue.Count == 0;
         ActionQueue.Add(newAction);
 
-        Debug.Log($"[QUEUE]: {newAction} [{ActionQueue.Count}]", this);
+        Debug.Log($"[QUEUE]: {newAction.Action} [{ActionQueue.Count}]", this);
 
         //start the coroutine again
         if(startQueue) {
@@ -194,7 +198,8 @@ public class AnimationMUD : MonoBehaviour
             while(PositionSync.Moving) {yield return null;}
 
             //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
-            while(!IsDisplace(newEffect.Action) && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
+            bool waitForTarget = IsMove(newEffect.Action) == false && IsDisplace(newEffect.Action) == false;
+            while(waitForTarget && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
 
             //turn off old action
             if (actionEffect != null && newEffect.Action != Action) { ToggleAction(false, actionEffect); }

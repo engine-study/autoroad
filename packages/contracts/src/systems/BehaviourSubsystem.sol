@@ -143,18 +143,17 @@ contract BehaviourSubsystem is System {
 
   function canAggroEntity(bytes32 attacker, bytes32 target) public returns(bool) {
 
-    bool attackerIsSoldier = Soldier.get(attacker);
-    bool targetIsBarbarian = Barbarian.get(target);
-
     //soldiers only attack barbarians
+    bool attackerIsSoldier = Soldier.get(attacker);
     if(attackerIsSoldier) {
-      return targetIsBarbarian;
+      return Barbarian.get(target);
     } 
     
     //barbarians attack everything not a soldier
     bool attackerIsBarbarian = Barbarian.get(attacker);
     if(attackerIsBarbarian) {
-      return !targetIsBarbarian;
+      NPCType npc = NPCType(NPC.get(target));
+      return npc == NPCType.Player || npc == NPCType.Soldier;
     }
 
     return true;
