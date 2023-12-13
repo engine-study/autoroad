@@ -3,8 +3,9 @@ using mudworld;
 
 public abstract class MoverComponent : MUDComponent {
 
-    SPAnimationMover anim;
-    PositionSync sync;
+    protected SPAnimationMover anim;
+    protected SPAnimator animator;
+    protected PositionSync sync;
     protected override void Init(SpawnInfo newSpawnInfo) {
         base.Init(newSpawnInfo);
 
@@ -15,7 +16,8 @@ public abstract class MoverComponent : MUDComponent {
             sync.rotateToFace = true;
         }
         
-        anim = GetComponentInChildren<SPAnimationMover>();
+        anim = GetComponentInChildren<SPAnimationMover>(true);
+        animator = GetComponentInChildren<SPAnimator>(true);
 
     }
     
