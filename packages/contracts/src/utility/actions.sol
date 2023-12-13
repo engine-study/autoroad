@@ -20,7 +20,7 @@ library Actions {
     if(atPosition.length == 0) return;
     Position.deleteRecord(atPosition[0]);
     Health.deleteRecord(atPosition[0]);
-
+    setAction(atPosition[0], ActionName.Destroy, pos.x, pos.y);
   }
   
   function getRoadEntity(int32 x, int32 y) internal pure returns(bytes32) {return keccak256(abi.encode("Road", x, y));}
@@ -29,6 +29,7 @@ library Actions {
     else return keccak256(abi.encode("Puzzle", puzzleNumber));
   }
   function getChunkEntity(int32 mile) internal pure returns(bytes32) {return keccak256(abi.encode("Chunk", mile));}
+  function getProctorEntity() internal pure returns(bytes32) {return keccak256(abi.encode("Proctor"));}
   function getCarriageEntity() internal pure returns(bytes32) {return keccak256(abi.encode("Carriage"));}
   function getWorldColumnEntity() internal pure returns(bytes32) {return keccak256(abi.encode("WorldColumn"));}
 

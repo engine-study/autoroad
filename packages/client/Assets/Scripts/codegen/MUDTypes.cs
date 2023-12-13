@@ -52,6 +52,7 @@ namespace mudworld
         Taxman,
         Shoveler,
         Gargoyle,
+        Proctor,
     }
 
     public enum RoadState
@@ -107,6 +108,7 @@ namespace mudworld
         Miliarium,
         Bearer,
         Statuae,
+        Proctor,
         Count,
     }
 

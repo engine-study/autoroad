@@ -13,11 +13,12 @@ import { Actions } from "../utility/actions.sol";
 import { findEmptyPositionInArea } from "../utility/grid.sol";
 
 contract PuzzleSubsystem is System {
-  function triggerPuzzles(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
+  function movementTriggers(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
+
     PuzzleType puzzleType = PuzzleType(Puzzle.getPuzzleType(entity));
 
     //we aren't a puzzle, skip this trigger
-    if (puzzleType == PuzzleType.None) return;
+    if (puzzleType == PuzzleType.None || Puzzle.getComplete(entity)) return;
 
     IWorld world = IWorld(_world());
 
@@ -25,11 +26,20 @@ contract PuzzleSubsystem is System {
     //search underground for triggers (-1)
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world, pos.x, pos.y, -1);
     if (atPosition.length > 0 && atPosition[0] == target) {
-      //success, freeze miliarium in place
-      Move.set(entity, uint32(MoveType.Permanent));
-      //TODO set to single setter
-      Puzzle.set(entity, uint32(puzzleType), true, causedBy);
-      SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));
+
+      if(puzzleType == PuzzleType.Proctor) {
+        //remove the linker for noow so that we can't finish the puzzle
+        Linker.set(entity, bytes32(0));
+        SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));
+        SystemSwitch.call(abi.encodeCall(world.callFinishMile, (causedBy)));
+
+      } else {
+        //success, freeze miliarium in place
+        Move.set(entity, uint32(MoveType.Permanent));
+        //TODO set to single setter
+        Puzzle.set(entity, uint32(puzzleType), true, causedBy);
+        SystemSwitch.call(abi.encodeCall(world.givePuzzleReward, (causedBy)));
+      }
     }
   }
 
@@ -71,6 +81,8 @@ contract PuzzleSubsystem is System {
     pos = findEmptyPositionInArea(world, trigger, width, up, down, -1, roadSide);
     pos.layer = int32(-1);
 
+    require(pos.x < width || pos.x > width, "puzzle spawned on road");
+
     Position.set(trigger, pos);
     Trigger.set(trigger, true);
 
@@ -104,6 +116,8 @@ contract PuzzleSubsystem is System {
 
     //put triggers underground
     pos = PositionData(roadSide + 1, down + 4, -1);
+
+    require(pos.x < width || pos.x > width, "puzzle spawned on road");
 
     Position.set(trigger, pos);
     Trigger.set(trigger, true);

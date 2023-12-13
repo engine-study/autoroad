@@ -46,12 +46,12 @@ export default mudConfig({
   enums: {
     ActionName: ["None", "Idle", "Dead", "Mining", "Shoveling", "Stick", "Fishing", "Walking", "Buy", "Plant", "Push", "Chop", "Teleport", "Melee", "Hop", "Spawn", "Bow", "Swap", "Pocket", "Throw", "Destroy"],
     TerrainType: ["None", "Rock", "Trap", "Tree", "HeavyBoy", "HeavyHeavyBoy", "Pillar", "Road", "Hole"],
-    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer", "Taxman", "Shoveler", "Gargoyle"],
+    NPCType: ["None", "Player", "Soldier", "Barbarian", "Ox", "BarbarianArcher", "Deer", "Taxman", "Shoveler", "Gargoyle", "Proctor"],
     RoadState: ["None", "Shoveled", "Statumen", "Rudus", "Nucleas", "Paved", "Bones"],
     RockType: ["None", "Raw", "Statumen", "Pavimentum", "Rudus", "Nucleus", "Miliarium", "Heavy", "HeavyHeavy", "Pillar", "Statuae", "Gargoyle", "Amphora"],
     MoveType: ["None", "Obstruction", "Hole", "Carry", "Push", "Trap", "Permanent"],
     FloraType: ["None", "Tree", "Oak", "Bramble"],
-    PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Count"],
+    PuzzleType: ["None", "Miliarium", "Bearer", "Statuae", "Proctor", "Count"],
     PaymentType: ["None", "Coins", "Gems", "Eth"],
     ArmorSet: ["None", "Armor", "Samurai", "Wizard", "Chibi", "Traitor", "Cityslicker", "TBD4", "TBD5", "Count"],
     EffectSet: ["None", "Fire", "Water", "Holy", "Woodland", "Static", "Nebula", "Stormy", "TBD4", "TBD5", "Count"],
@@ -168,6 +168,7 @@ export default mudConfig({
     Animal: "bool",
     LastAction: "uint256",
     LastMovement: "uint256",
+    Respawn: "bool",
 
   //puzzle components try to be moved onto triggers (ie. Miliarli )
     Puzzle: { dataStruct: false, valueSchema: { puzzleType: "uint32", complete: "bool", solver:"bytes32"},},

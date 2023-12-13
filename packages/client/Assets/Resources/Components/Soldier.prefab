@@ -246,7 +246,7 @@ Transform:
   m_Children:
   - {fileID: 2403410038964456189}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2224159141207559923
 MonoBehaviour:
@@ -260,8 +260,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9157e2d96f5d568428878dfb42e0b58f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  table: {fileID: 11400000, guid: 0be1c63380f66d540b18f0a1dc79d756, type: 2}
   requiredComponents:
   - {fileID: 7854098582000433893, guid: 135ce94ab023ef8409ebcf67ffa01a91, type: 3}
+  canPool: 0
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -291,11 +293,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e77e591581519b408d5dd1e1635b5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2697586234055374659}
-  action: 0
+  root: {fileID: 0}
+  actionName: 0
+  ActionQueue: []
   actionEffect: {fileID: 0}
+  PositionSync: {fileID: 0}
+  Animator: {fileID: 0}
+  Controller: {fileID: 0}
   entity: {fileID: 0}
-  actionComponent: {fileID: 0}
+  ourComponent: {fileID: 0}
+  actionData: {fileID: 0}
+  looker: {fileID: 0}
 --- !u!114 &6509897785512992930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,6 +329,8 @@ MonoBehaviour:
   usePos: 0
   minPos: {x: 0, y: 0, z: 0}
   maxPos: {x: 0, y: 0, z: 0}
+  useMaterial: 0
+  textures: []
   child: -1
   rotate: -1
   scale: -1
@@ -470,6 +480,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier
       objectReference: {fileID: 0}
+    - target: {fileID: 801813816114531513, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335481788101057838, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0.13777299
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335481788101057838, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: -0.0027491983
+      objectReference: {fileID: 0}
     - target: {fileID: 4641965802316363022, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -513,6 +535,14 @@ PrefabInstance:
     - target: {fileID: 4641965802316363022, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8199884865968389443, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -0.1377728
+      objectReference: {fileID: 0}
+    - target: {fileID: 8199884865968389443, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: 0.0027488857
       objectReference: {fileID: 0}
     - target: {fileID: 8995701207794047039, guid: 169c7bdbfc47e944db5cf47d340fd0e6, type: 3}
       propertyPath: m_IsActive

@@ -4,10 +4,10 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Thrower, EnumTest, Thief, Cursed} from "../codegen/index.sol";
-import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander, Rock } from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Thrower, EnumTest, Thief, Cursed, Puzzle} from "../codegen/index.sol";
+import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander, Rock, Respawn } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
-import { MoveType, ActionName, RockType, NPCType, ArmorSet, EffectSet, MaterialSet } from "../codegen/common.sol";
+import { MoveType, ActionName, RockType, NPCType, ArmorSet, EffectSet, MaterialSet, PuzzleType } from "../codegen/common.sol";
 
 import { Actions } from "../utility/actions.sol";
 import { randomCoord } from "../utility/random.sol";
@@ -64,9 +64,6 @@ contract SpawnSubsystem is System {
     Move.set(entity, uint32(MoveType.Push));
     Position.set(entity, x, y, 0);
     Actions.setAction(entity, ActionName.Spawn, x, y);
-    
-
-    
   }
 
   function spawnNPC(bytes32 spawner, int32 x, int32 y, NPCType npcType) public {
@@ -82,7 +79,7 @@ contract SpawnSubsystem is System {
       spawnPlayerNPC(entity, x, y);
     } else if (npcType == NPCType.Soldier) {
       Soldier.set(entity, true);
-      Weight.set(entity, 0);
+      Weight.set(entity, 1);
       Seek.set(entity, 2);
       Aggro.set(entity, 1);
     } else if (npcType == NPCType.Barbarian) {
@@ -122,7 +119,12 @@ contract SpawnSubsystem is System {
       Cursed.set(entity, 2);
       // Wander.set(entity, 1);
       // Entities.pushEntities(entity);
-    }
+    } else if (npcType == NPCType.Proctor) {
+      Weight.set(entity, 1);
+      Respawn.set(entity, true);
+      Soldier.set(entity, true);
+      Puzzle.set(entity, uint32(PuzzleType.Proctor), false, bytes32(0));
+    } 
 
     Move.set(entity, uint32(MoveType.Push));
     Health.set(entity, 1);
@@ -137,7 +139,9 @@ contract SpawnSubsystem is System {
 
     bytes32 entity = getUniqueEntity();
 
-    PositionData memory pos = findEmptyPositionInArea(world, entity, width, up, down, 0, roadSide);
+    //spawn on middle of road
+    PositionData memory pos = PositionData(0, down + up - 4, 0);
+    // PositionData memory pos = findEmptyPositionInArea(world, entity, width, up, down, 0, roadSide);
     Actions.deleteAt(world, pos);
 
     spawnNPC(causedBy, pos.x, pos.y, NPCType.Deer);

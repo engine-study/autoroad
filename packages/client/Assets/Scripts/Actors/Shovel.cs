@@ -8,7 +8,7 @@ using Cysharp.Threading.Tasks;
 public class Shovel : Equipment
 {
     public override bool IsInteractable() {
-        canUse = base.IsInteractable() && RoadConfigComponent.OnRoad(transform.position) && entityUnder != null && entityUnder.GetMUDComponent<RoadComponent>()?.State == RoadState.Path; //distanceToPlayer > .5f && distanceToPlayer <= 1f &&
+        canUse = base.IsInteractable() && RoadConfigComponent.OnRoad(transform.position) && (entityUnder == null || entityUnder.GetMUDComponent<RoadComponent>()?.State == RoadState.Path); //distanceToPlayer > .5f && distanceToPlayer <= 1f &&
         return canUse;
     }
 

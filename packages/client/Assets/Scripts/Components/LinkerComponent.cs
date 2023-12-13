@@ -8,7 +8,8 @@ public class LinkerComponent : MUDComponent {
 
 
     [Header("Link")]
-    [SerializeField] SPLine line;
+    public SPLine line;
+    public bool alwaysVisible;
 
     [Header("Debug")]
     [SerializeField] string targetKey;
@@ -28,6 +29,10 @@ public class LinkerComponent : MUDComponent {
     
         ourPos = Entity.GetRootComponent<PositionSync>();
         if(ourPos == null) {Debug.LogError("We don't have pos", this); return;}
+
+        if(alwaysVisible) {
+
+        }
 
     }
 
@@ -64,6 +69,15 @@ public class LinkerComponent : MUDComponent {
 
     public void ToggleTarget(bool toggle, MUDEntity entity) {
 
+        //disable old target
+        if(!toggle) {
+            if(entity != null) {
+                targetEntity.OnLoaded -= Setup;
+                targetEntity = null;
+            }
+            return;
+        }
+
         //turn off old
         if(targetEntity != null && entity != targetEntity) {ToggleTarget(false, targetEntity);}
 
@@ -75,14 +89,23 @@ public class LinkerComponent : MUDComponent {
 
     public void Setup() {
 
+        targetEntity.OnLoaded -= Setup;
+
         posSync = targetEntity?.GetRootComponent<PositionSync>();
         
         if(posSync == null) {Debug.LogError("They don't have pos", this); return;}
 
         if(line) line.SetTarget(ourPos.Target, posSync.Target);
+        if(alwaysVisible) {
+            line.Toggle(true);
+        }
     }
 
     public void Hover(bool toggle) {
+        
+        if(alwaysVisible) {
+            return;
+        }
         
         if(line) {
             if(toggle) {

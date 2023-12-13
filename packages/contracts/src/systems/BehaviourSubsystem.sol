@@ -18,8 +18,8 @@ import { neumanNeighborhoodOuter } from "../utility/grid.sol";
 
 contract BehaviourSubsystem is System {
   //find all nearby and global entities that have tick updates and tick them
-  function triggerEntities(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
-    // console.log("triggerEntities");
+  function movementTicks(bytes32 causedBy, bytes32 entity, PositionData memory pos) public {
+    // console.log("movementTicks");
     IWorld world = IWorld(_world());
 
     //only NPC movements trigger local entity ticks

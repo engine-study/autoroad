@@ -48,7 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d0aa3194e451e48a6ce14af334d233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  table: {fileID: 0}
   requiredComponents: []
+  canPool: 0
   entity: {fileID: 0}
   hasInit: 0
   loaded: 0
@@ -78,11 +80,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e77e591581519b408d5dd1e1635b5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  action: 0
+  root: {fileID: 0}
+  actionName: 0
+  ActionQueue: []
   actionEffect: {fileID: 0}
+  PositionSync: {fileID: 0}
+  Animator: {fileID: 0}
+  Controller: {fileID: 0}
   entity: {fileID: 0}
-  actionComponent: {fileID: 0}
+  ourComponent: {fileID: 0}
+  actionData: {fileID: 0}
+  looker: {fileID: 0}
 --- !u!54 &6660698322561214512
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -132,15 +140,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 327dc5c218e2558479e11db26a172f8d, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 327dc5c218e2558479e11db26a172f8d, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 327dc5c218e2558479e11db26a172f8d, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 327dc5c218e2558479e11db26a172f8d, type: 3}
       propertyPath: m_LocalPosition.x

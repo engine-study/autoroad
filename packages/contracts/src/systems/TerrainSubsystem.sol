@@ -5,8 +5,8 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { console } from "forge-std/console.sol";
 
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Entities } from "../codegen/index.sol";
-import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, NPC, WorldColumn } from "../codegen/index.sol";
-import { Position, PositionData, PositionTableId, Tree, Seeds, Row } from "../codegen/index.sol";
+import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, NPC, Linker, WorldColumn } from "../codegen/index.sol";
+import { Position, PositionData, PositionTableId, Tree, Seeds, Row, Trigger } from "../codegen/index.sol";
 import { TerrainType, RockType, RoadState, MoveType, NPCType, FloraType} from "../codegen/common.sol";
 
 import { Actions } from "../utility/actions.sol";
@@ -14,7 +14,7 @@ import { Rules } from "../utility/rules.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { addressToEntityKey } from "../utility/addressToEntityKey.sol";
 import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
-import { randomCoord, randomFromEntity } from "../utility/random.sol";
+import { randomCoord, randomFromEntity, randomFromEntitySeed } from "../utility/random.sol";
 
 contract TerrainSubsystem is System {
   //updateRow
@@ -43,7 +43,6 @@ contract TerrainSubsystem is System {
     Carriage.set(carriage, true);
     Position.set(carriage, 0, -1, 0);
   }
-
 
   function createMile() public {
 
@@ -121,8 +120,9 @@ contract TerrainSubsystem is System {
     console.log("create puzzle");
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createMiliarium, (causedBy, right, up, down)));
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).createTickers, (causedBy, right, up, down)));
+
+    createProctor(causedBy, up, down);
 
     //set bounds 
     Bounds.set(left, right, up, down);
@@ -130,6 +130,19 @@ contract TerrainSubsystem is System {
     console.log("set chunk");
     bytes32 chunkEntity = Actions.getChunkEntity(mile);
     Chunk.set(chunkEntity, mile, true, false, 0, 0);
+  }
+
+  function createProctor(bytes32 causedBy, int32 up, int32 down) public {
+    bytes32 proctor = Actions.getProctorEntity();
+    //spawn proctor
+    if(NPC.get(proctor) == 0) {
+      SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnNPC, (causedBy, 0, down, NPCType.Proctor)));
+    }
+    
+    //set the proctor to the top of the road
+    bytes32 proctorTrigger = Actions.getRoadEntity(0,up);
+    Linker.set(proctorTrigger, Actions.getRoadEntity(0,up));
+    Trigger.set(proctorTrigger, true);
   }
 
   function summonRow(bytes32 causedBy, int32 left, int32 right, uint difficulty) public returns(int32 row) {
@@ -140,7 +153,7 @@ contract TerrainSubsystem is System {
     row++;
 
     spawnRow(causedBy, right, row, difficulty);
-    spawnEmptyRoad(0,row);
+    spawnProcRoad(0,row);
 
     Row.set(row);
     return row;
@@ -303,11 +316,20 @@ contract TerrainSubsystem is System {
     pieces++;
 
     //road complete!
-    if (pieces >= (roadWidth * uint32(playHeight))) {
+    if (false && pieces >= (roadWidth * uint32(playHeight))) {
+      //NOT DOING THIS ANYMORE, THE PROCTOR FINISHES THE MILE
       finishMile(causedBy, chunk, currentMile, pieces);
     } else {
       Chunk.set(chunk, currentMile, true, false, pieces, 0);
     }
+  }
+
+  function callFinishMile(bytes32 causedBy) public {
+    int32 currentMile = GameState.getMiles();
+    bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
+    uint32 pieces = Chunk.getRoads(chunk);
+
+    finishMile(causedBy, chunk, currentMile, pieces);
   }
 
   function finishMile(bytes32 causedBy, bytes32 chunk, int32 currentMile, uint32 pieces) public {
@@ -353,37 +375,55 @@ contract TerrainSubsystem is System {
 
   }
 
-  function spawnEmptyRoad(int32 x, int32 y) public {
-    bytes32 entity = Actions.getRoadEntity(x,y);
-    Road.set(entity, uint32(RoadState.None), 0, false);
-    Position.set(entity, x, y, -1);
+  function spawnProcRoad(int32 x, int32 y) public {
+    bytes32 road = Actions.getRoadEntity(x,y);
+    uint randomRoad = randomFromEntitySeed(0,100,road,uint256(uint32(y)));
+
+    if(randomRoad < 75) {
+      spawnEmptyRoad(road, x, y);
+    } else if(randomRoad < 90) {
+      spawnShoveledRoad(road, x, y);
+    } else {
+      spawnFinishedRoad(road, x, y, RoadState.Paved);
+    }
+    
   }
 
-  function spawnShoveledRoad(bytes32 player, int32 x, int32 y) public {
+  function spawnEmptyRoad(bytes32 causedBy, int32 x, int32 y) public {
+    bytes32 road = Actions.getRoadEntity(x,y);
+    Position.set(road, x, y, -1);
+    Road.set(road, uint32(RoadState.None), 0, false);
+  }
+
+  function spawnShoveledRoad(bytes32 causedBy, int32 x, int32 y) public {
     IWorld world = IWorld(_world());
 
-    bytes32 entity = Actions.getRoadEntity(x,y);
-    require(Road.getState(entity) == uint32(RoadState.None), "road");
+    bytes32 road = Actions.getRoadEntity(x,y);
+    require(Road.getState(road) == uint32(RoadState.None), "road");
 
     //TODO setState
-    Road.set(entity, uint32(RoadState.Shoveled), 0, false);
-    Move.set(entity, uint32(MoveType.Hole));
-    Position.set(entity, x, y, 0);
+    Road.set(road, uint32(RoadState.Shoveled), 0, false);
+    Move.set(road, uint32(MoveType.Hole));
+    Position.set(road, x, y, 0);
 
-    SystemSwitch.call(abi.encodeCall(world.giveRoadShoveledReward, (player)));
+    if(causedBy != road) {
+      SystemSwitch.call(abi.encodeCall(world.giveRoadShoveledReward, (causedBy)));
+    }
+
   }
 
   function spawnRoadFromPush(bytes32 causedBy, bytes32 pushed, bytes32 road, PositionData memory pos) public {
 
     bool pushedNPC = NPC.get(pushed) > 0;
     RoadState state = pushedNPC ? RoadState.Bones : RoadState.Paved;
-    spawnFinishedRoad(causedBy, pos.x, pos.y, state);
+    spawnFinishedRoad(causedBy, pos.x, pos.y, RoadState.Paved);
 
   }
 
   function spawnFinishedRoad(bytes32 causedBy, int32 x, int32 y, RoadState state) public {
     IWorld world = IWorld(_world());
     require(Rules.onRoad(x, y), "off road");
+    require(state >= RoadState.Paved, "must be paved or bonementum");
 
     bytes32 road = Actions.getRoadEntity(x,y);
     Position.set(road, x, y, -1);
@@ -393,7 +433,9 @@ contract TerrainSubsystem is System {
     Move.set(road, uint32(MoveType.None));
 
     //reward the player
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadFilledReward, (causedBy)));
+    if(causedBy != road) {
+      SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadFilledReward, (causedBy)));
+    }
 
     updateChunk(causedBy);
 

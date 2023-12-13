@@ -285,9 +285,9 @@ contract MoveSubsystem is System {
     IWorld world = IWorld(_world());
 
     //this should be in handle move really..
-    SystemSwitch.call(abi.encodeCall(world.triggerPuzzles, (causedBy, entity, pos)));
+    SystemSwitch.call(abi.encodeCall(world.movementTriggers, (causedBy, entity, pos)));
     //trigger all local entities effect by the move
-    SystemSwitch.call(abi.encodeCall(world.triggerEntities, (causedBy, entity, pos)));
+    SystemSwitch.call(abi.encodeCall(world.movementTicks, (causedBy, entity, pos)));
 
   }
 

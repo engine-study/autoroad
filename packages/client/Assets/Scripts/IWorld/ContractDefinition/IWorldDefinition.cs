@@ -67,6 +67,19 @@ namespace IWorld.ContractDefinition
         public virtual BigInteger Amount { get; set; }
     }
 
+    public partial class AoeFlingFunction : AoeFlingFunctionBase { }
+
+    [Function("aoeFling")]
+    public class AoeFlingFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "entityPos", 3)]
+        public virtual PositionData EntityPos { get; set; }
+    }
+
     public partial class BatchCallFunction : BatchCallFunctionBase { }
 
     [Function("batchCall", "bytes[]")]
@@ -256,6 +269,19 @@ namespace IWorld.ContractDefinition
         [Parameter("int32", "up", 3)]
         public virtual int Up { get; set; }
         [Parameter("int32", "down", 4)]
+        public virtual int Down { get; set; }
+    }
+
+    public partial class CreateProctorFunction : CreateProctorFunctionBase { }
+
+    [Function("createProctor")]
+    public class CreateProctorFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("int32", "up", 2)]
+        public virtual int Up { get; set; }
+        [Parameter("int32", "down", 3)]
         public virtual int Down { get; set; }
     }
 
@@ -1033,6 +1059,32 @@ namespace IWorld.ContractDefinition
         public virtual byte ActionType { get; set; }
     }
 
+    public partial class MovementTicksFunction : MovementTicksFunctionBase { }
+
+    [Function("movementTicks")]
+    public class MovementTicksFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "pos", 3)]
+        public virtual PositionData Pos { get; set; }
+    }
+
+    public partial class MovementTriggersFunction : MovementTriggersFunctionBase { }
+
+    [Function("movementTriggers")]
+    public class MovementTriggersFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("tuple", "pos", 3)]
+        public virtual PositionData Pos { get; set; }
+    }
+
     public partial class NameFunction : NameFunctionBase { }
 
     [Function("name")]
@@ -1409,9 +1461,11 @@ namespace IWorld.ContractDefinition
     [Function("spawnEmptyRoad")]
     public class SpawnEmptyRoadFunctionBase : FunctionMessage
     {
-        [Parameter("int32", "x", 1)]
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("int32", "x", 2)]
         public virtual int X { get; set; }
-        [Parameter("int32", "y", 2)]
+        [Parameter("int32", "y", 3)]
         public virtual int Y { get; set; }
     }
 
@@ -1537,6 +1591,17 @@ namespace IWorld.ContractDefinition
         public virtual int Y { get; set; }
     }
 
+    public partial class SpawnProcRoadFunction : SpawnProcRoadFunctionBase { }
+
+    [Function("spawnProcRoad")]
+    public class SpawnProcRoadFunctionBase : FunctionMessage
+    {
+        [Parameter("int32", "x", 1)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 2)]
+        public virtual int Y { get; set; }
+    }
+
     public partial class SpawnPuzzleAdminFunction : SpawnPuzzleAdminFunctionBase { }
 
     [Function("spawnPuzzleAdmin")]
@@ -1565,8 +1630,8 @@ namespace IWorld.ContractDefinition
     [Function("spawnShoveledRoad")]
     public class SpawnShoveledRoadFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "player", 1)]
-        public virtual byte[] Player { get; set; }
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
         [Parameter("int32", "x", 2)]
         public virtual int X { get; set; }
         [Parameter("int32", "y", 3)]
@@ -1818,32 +1883,6 @@ namespace IWorld.ContractDefinition
         public virtual byte[] NamespaceId { get; set; }
         [Parameter("address", "newOwner", 2)]
         public virtual string NewOwner { get; set; }
-    }
-
-    public partial class TriggerEntitiesFunction : TriggerEntitiesFunctionBase { }
-
-    [Function("triggerEntities")]
-    public class TriggerEntitiesFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "causedBy", 1)]
-        public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "entity", 2)]
-        public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "pos", 3)]
-        public virtual PositionData Pos { get; set; }
-    }
-
-    public partial class TriggerPuzzlesFunction : TriggerPuzzlesFunctionBase { }
-
-    [Function("triggerPuzzles")]
-    public class TriggerPuzzlesFunctionBase : FunctionMessage
-    {
-        [Parameter("bytes32", "causedBy", 1)]
-        public virtual byte[] CausedBy { get; set; }
-        [Parameter("bytes32", "entity", 2)]
-        public virtual byte[] Entity { get; set; }
-        [Parameter("tuple", "pos", 3)]
-        public virtual PositionData Pos { get; set; }
     }
 
     public partial class UnregisterStoreHookFunction : UnregisterStoreHookFunctionBase { }
@@ -2278,6 +2317,10 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
     public partial class CreatorOutputDTO : CreatorOutputDTOBase { }
 
     [FunctionOutput]
@@ -2601,6 +2644,12 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
+
+
     public partial class StoreVersionOutputDTO : StoreVersionOutputDTOBase { }
 
     [FunctionOutput]
@@ -2609,10 +2658,6 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "version", 1)]
         public virtual byte[] Version { get; set; }
     }
-
-
-
-
 
 
 

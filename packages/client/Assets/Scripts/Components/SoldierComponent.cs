@@ -8,8 +8,9 @@ public class SoldierComponent : MoverComponent
 {
     protected override void PostInit() {
         base.PostInit();
-        Entity.SetName("Soldier");
+        if(ActiveTable is SoldierTable) {
+            Entity.SetName("Militus");
+        } 
     }
-    protected override MUDTable GetTable() {return new SoldierTable();}
 
 }
