@@ -288,10 +288,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("int32", "up", 2)]
-        public virtual int Up { get; set; }
-        [Parameter("int32", "down", 3)]
-        public virtual int Down { get; set; }
+        [Parameter("bool", "mileLink", 2)]
+        public virtual bool MileLink { get; set; }
     }
 
     public partial class CreatePuzzleOnMileFunction : CreatePuzzleOnMileFunctionBase { }
@@ -1325,6 +1323,17 @@ namespace IWorld.ContractDefinition
     public class ResetPlayerFunctionBase : FunctionMessage
     {
 
+    }
+
+    public partial class RespawnFunction : RespawnFunctionBase { }
+
+    [Function("respawn")]
+    public class RespawnFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "target", 2)]
+        public virtual byte[] Target { get; set; }
     }
 
     public partial class RevokeAccessFunction : RevokeAccessFunctionBase { }
@@ -2587,6 +2596,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

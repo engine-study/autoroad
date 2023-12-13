@@ -676,22 +676,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createProctorFunction, cancellationToken);
         }
 
-        public Task<string> CreateProctorRequestAsync(byte[] causedBy, int up, int down)
+        public Task<string> CreateProctorRequestAsync(byte[] causedBy, bool mileLink)
         {
             var createProctorFunction = new CreateProctorFunction();
                 createProctorFunction.CausedBy = causedBy;
-                createProctorFunction.Up = up;
-                createProctorFunction.Down = down;
+                createProctorFunction.MileLink = mileLink;
             
              return ContractHandler.SendRequestAsync(createProctorFunction);
         }
 
-        public Task<TransactionReceipt> CreateProctorRequestAndWaitForReceiptAsync(byte[] causedBy, int up, int down, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CreateProctorRequestAndWaitForReceiptAsync(byte[] causedBy, bool mileLink, CancellationTokenSource cancellationToken = null)
         {
             var createProctorFunction = new CreateProctorFunction();
                 createProctorFunction.CausedBy = causedBy;
-                createProctorFunction.Up = up;
-                createProctorFunction.Down = down;
+                createProctorFunction.MileLink = mileLink;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createProctorFunction, cancellationToken);
         }
@@ -2895,6 +2893,34 @@ namespace IWorld.Service
         public Task<TransactionReceipt> ResetPlayerRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
         {
              return ContractHandler.SendRequestAndWaitForReceiptAsync<ResetPlayerFunction>(null, cancellationToken);
+        }
+
+        public Task<string> RespawnRequestAsync(RespawnFunction respawnFunction)
+        {
+             return ContractHandler.SendRequestAsync(respawnFunction);
+        }
+
+        public Task<TransactionReceipt> RespawnRequestAndWaitForReceiptAsync(RespawnFunction respawnFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(respawnFunction, cancellationToken);
+        }
+
+        public Task<string> RespawnRequestAsync(byte[] causedBy, byte[] target)
+        {
+            var respawnFunction = new RespawnFunction();
+                respawnFunction.CausedBy = causedBy;
+                respawnFunction.Target = target;
+            
+             return ContractHandler.SendRequestAsync(respawnFunction);
+        }
+
+        public Task<TransactionReceipt> RespawnRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] target, CancellationTokenSource cancellationToken = null)
+        {
+            var respawnFunction = new RespawnFunction();
+                respawnFunction.CausedBy = causedBy;
+                respawnFunction.Target = target;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(respawnFunction, cancellationToken);
         }
 
         public Task<string> RevokeAccessRequestAsync(RevokeAccessFunction revokeAccessFunction)
