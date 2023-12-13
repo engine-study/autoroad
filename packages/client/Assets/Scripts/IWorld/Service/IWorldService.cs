@@ -356,6 +356,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(callFunction, cancellationToken);
         }
 
+        public Task<string> CallFinishMileRequestAsync(CallFinishMileFunction callFinishMileFunction)
+        {
+             return ContractHandler.SendRequestAsync(callFinishMileFunction);
+        }
+
+        public Task<TransactionReceipt> CallFinishMileRequestAndWaitForReceiptAsync(CallFinishMileFunction callFinishMileFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(callFinishMileFunction, cancellationToken);
+        }
+
+        public Task<string> CallFinishMileRequestAsync(byte[] causedBy)
+        {
+            var callFinishMileFunction = new CallFinishMileFunction();
+                callFinishMileFunction.CausedBy = causedBy;
+            
+             return ContractHandler.SendRequestAsync(callFinishMileFunction);
+        }
+
+        public Task<TransactionReceipt> CallFinishMileRequestAndWaitForReceiptAsync(byte[] causedBy, CancellationTokenSource cancellationToken = null)
+        {
+            var callFinishMileFunction = new CallFinishMileFunction();
+                callFinishMileFunction.CausedBy = causedBy;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(callFinishMileFunction, cancellationToken);
+        }
+
         public Task<string> CallFlingRequestAsync(CallFlingFunction callFlingFunction)
         {
              return ContractHandler.SendRequestAsync(callFlingFunction);
@@ -3403,6 +3429,40 @@ namespace IWorld.Service
                 spawnNPCAdminFunction.NpcType = npcType;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnNPCAdminFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnNPCWithEntityRequestAsync(SpawnNPCWithEntityFunction spawnNPCWithEntityFunction)
+        {
+             return ContractHandler.SendRequestAsync(spawnNPCWithEntityFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnNPCWithEntityRequestAndWaitForReceiptAsync(SpawnNPCWithEntityFunction spawnNPCWithEntityFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnNPCWithEntityFunction, cancellationToken);
+        }
+
+        public Task<string> SpawnNPCWithEntityRequestAsync(byte[] spawner, byte[] entity, int x, int y, byte npcType)
+        {
+            var spawnNPCWithEntityFunction = new SpawnNPCWithEntityFunction();
+                spawnNPCWithEntityFunction.Spawner = spawner;
+                spawnNPCWithEntityFunction.Entity = entity;
+                spawnNPCWithEntityFunction.X = x;
+                spawnNPCWithEntityFunction.Y = y;
+                spawnNPCWithEntityFunction.NpcType = npcType;
+            
+             return ContractHandler.SendRequestAsync(spawnNPCWithEntityFunction);
+        }
+
+        public Task<TransactionReceipt> SpawnNPCWithEntityRequestAndWaitForReceiptAsync(byte[] spawner, byte[] entity, int x, int y, byte npcType, CancellationTokenSource cancellationToken = null)
+        {
+            var spawnNPCWithEntityFunction = new SpawnNPCWithEntityFunction();
+                spawnNPCWithEntityFunction.Spawner = spawner;
+                spawnNPCWithEntityFunction.Entity = entity;
+                spawnNPCWithEntityFunction.X = x;
+                spawnNPCWithEntityFunction.Y = y;
+                spawnNPCWithEntityFunction.NpcType = npcType;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(spawnNPCWithEntityFunction, cancellationToken);
         }
 
         public Task<string> SpawnPlayerRequestAsync(SpawnPlayerFunction spawnPlayerFunction)

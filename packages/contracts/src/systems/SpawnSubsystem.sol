@@ -67,11 +67,14 @@ contract SpawnSubsystem is System {
   }
 
   function spawnNPC(bytes32 spawner, int32 x, int32 y, NPCType npcType) public {
+      bytes32 entity = getUniqueEntity();
+      spawnNPCWithEntity(spawner, entity, x, y, npcType);
+  }
+
+
+  function spawnNPCWithEntity(bytes32 spawner, bytes32 entity, int32 x, int32 y, NPCType npcType) public {
     console.log("spawn NPC");
-
     require(npcType != NPCType.None, "None");
-
-    bytes32 entity = getUniqueEntity();
 
     NPC.set(entity, uint32(npcType));
 

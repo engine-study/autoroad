@@ -4,7 +4,7 @@ using UnityEngine;
 using mud;
 using mudworld;
 
-public class BarbarianComponent : MoverComponent {
+public class BarbarianComponent : MoverNPCComponent {
 
 
     [Header("Barbarian")]
@@ -14,13 +14,11 @@ public class BarbarianComponent : MoverComponent {
     [SerializeField] RuntimeAnimatorController bowStance;
 
     [Header("Debug")]
-    [SerializeField] NPCComponent npc;
     [SerializeField] SPAnimator animator;
 
     protected override void PostInit() {
         base.PostInit();
 
-        npc = Entity.GetMUDComponent<NPCComponent>();
         animator = GetComponentInChildren<SPAnimator>(true);
 
         if(npc.NPC == NPCType.Barbarian) {

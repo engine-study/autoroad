@@ -136,12 +136,13 @@ contract TerrainSubsystem is System {
     bytes32 proctor = Actions.getProctorEntity();
     //spawn proctor
     if(NPC.get(proctor) == 0) {
-      SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnNPC, (causedBy, 0, down, NPCType.Proctor)));
+      SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnNPCWithEntity, (causedBy, proctor, 0, down, NPCType.Proctor)));
     }
     
+    Linker.set(proctor, Actions.getRoadEntity(0,up));
+
     //set the proctor to the top of the road
     bytes32 proctorTrigger = Actions.getRoadEntity(0,up);
-    Linker.set(proctorTrigger, Actions.getRoadEntity(0,up));
     Trigger.set(proctorTrigger, true);
   }
 
@@ -381,11 +382,12 @@ contract TerrainSubsystem is System {
 
     if(randomRoad < 75) {
       spawnEmptyRoad(road, x, y);
-    } else if(randomRoad < 90) {
-      spawnShoveledRoad(road, x, y);
     } else {
-      spawnFinishedRoad(road, x, y, RoadState.Paved);
-    }
+      spawnShoveledRoad(road, x, y);
+    } 
+    // else {
+    //   spawnFinishedRoad(road, x, y, RoadState.Paved);
+    // }
     
   }
 

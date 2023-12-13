@@ -148,6 +148,15 @@ namespace IWorld.ContractDefinition
         public virtual byte[] CallData { get; set; }
     }
 
+    public partial class CallFinishMileFunction : CallFinishMileFunctionBase { }
+
+    [Function("callFinishMile")]
+    public class CallFinishMileFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+    }
+
     public partial class CallFlingFunction : CallFlingFunctionBase { }
 
     [Function("callFling")]
@@ -1563,6 +1572,23 @@ namespace IWorld.ContractDefinition
         public virtual byte NpcType { get; set; }
     }
 
+    public partial class SpawnNPCWithEntityFunction : SpawnNPCWithEntityFunctionBase { }
+
+    [Function("spawnNPCWithEntity")]
+    public class SpawnNPCWithEntityFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "spawner", 1)]
+        public virtual byte[] Spawner { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("int32", "x", 3)]
+        public virtual int X { get; set; }
+        [Parameter("int32", "y", 4)]
+        public virtual int Y { get; set; }
+        [Parameter("uint8", "npcType", 5)]
+        public virtual byte NpcType { get; set; }
+    }
+
     public partial class SpawnPlayerFunction : SpawnPlayerFunctionBase { }
 
     [Function("spawnPlayer")]
@@ -2321,6 +2347,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class CreatorOutputDTO : CreatorOutputDTOBase { }
 
     [FunctionOutput]
@@ -2527,6 +2555,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bool", "", 1)]
         public virtual bool ReturnValue1 { get; set; }
     }
+
+
 
 
 

@@ -32,9 +32,6 @@ contract BehaviourSubsystem is System {
         if (entities.length == 0) {
           continue;
         }
-        if (Rules.isTired(entities[0])) {
-          continue;
-        }
 
         //tick npcs
         NPCType npcType = NPCType(NPC.get(entities[0]));
@@ -61,9 +58,9 @@ contract BehaviourSubsystem is System {
   }
 
   function tickAction(bytes32 causedBy, bytes32 entity, PositionData memory entityPos) public {
-    if (Rules.hasTicked(entity)) {
-      return;
-    }
+    if (Rules.hasTicked(entity)) { return;}
+    if (Rules.canDoStuff(entity) == false) { return; }
+
     IWorld world = IWorld(_world());
 
     LastMovement.set(entity, block.number);
@@ -111,12 +108,8 @@ contract BehaviourSubsystem is System {
   ) public {
     console.log("tickBehaviour");
 
-    if (Rules.isTired(entity)) {
-      return;
-    }
-    if (Rules.canDoStuff(entity) == false) {
-      return;
-    }
+    if (Rules.isTired(entity)) { return; }
+    if (Rules.canDoStuff(entity) == false) { return; }
 
     LastAction.set(entity, block.number);
 

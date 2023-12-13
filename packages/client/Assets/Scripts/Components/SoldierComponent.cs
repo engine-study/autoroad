@@ -4,13 +4,19 @@ using UnityEngine;
 using mud;
 using mudworld;
 
-public class SoldierComponent : MoverComponent
+public class SoldierComponent : MoverNPCComponent
 {
+    [Header("Soldier")]
+    public GameObject [] heads;
+    public GameObject [] bodies;
     protected override void PostInit() {
         base.PostInit();
-        if(ActiveTable is SoldierTable) {
+
+        if(npc.NPC == NPCType.Proctor) {
+            Entity.SetName("Proctor");
+        } else {
             Entity.SetName("Militus");
-        } 
+        }
     }
 
 }
