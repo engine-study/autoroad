@@ -7,7 +7,7 @@ import { console } from "forge-std/console.sol";
 import { GameState, GameConfig, GameConfigData, MapConfig, RoadConfig, Chunk, Bounds, Entities } from "../codegen/index.sol";
 import { Road, Move, Player, Rock, Health, Carriage, Coinage, Weight, Stats, NPC, Linker, WorldColumn } from "../codegen/index.sol";
 import { Position, PositionData, PositionTableId, Tree, Seeds, Row, Trigger } from "../codegen/index.sol";
-import { TerrainType, RockType, RoadState, MoveType, NPCType, FloraType} from "../codegen/common.sol";
+import { TerrainType, RockType, RoadState, MoveType, NPCType, FloraType, ActionName} from "../codegen/common.sol";
 
 import { Actions } from "../utility/actions.sol";
 import { Rules } from "../utility/rules.sol";
@@ -17,63 +17,7 @@ import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueent
 import { randomCoord, randomFromEntity, randomFromEntitySeed } from "../utility/random.sol";
 
 contract TerrainSubsystem is System {
-  //updateRow
-  //finishRow
   
-  function createWorld() public {
-
-    console.log("creating world");
-
-    bool debug = true; 
-    bool dummyPlayers = false; 
-    bool roadComplete = true; 
-
-    GameState.set(int32(-1), 0);
-    GameConfig.set(debug, dummyPlayers);
-    MapConfig.set(5, 10, 8);
-    RoadConfig.set(1, 0, 0);
-    Bounds.set(0, 0, int32(-1), 1);
-    Row.set(int32(-1));
-
-    bytes32 worldColumn = Actions.getWorldColumnEntity();
-    WorldColumn.set(worldColumn, true);
-    Position.set(worldColumn, 0,-10,0);
-
-    bytes32 carriage = Actions.getCarriageEntity();
-    Carriage.set(carriage, true);
-    Position.set(carriage, 0, -1, 0);
-  }
-
-  function createMile() public {
-
-    console.log("creating mile");
-
-    int32 mile = GameState.getMiles();
-    bytes32 oldChunk = Actions.getChunkEntity(mile);
-
-    console.log("old mile");
-    console.logInt(mile);
-
-    require(mile == -1 || Chunk.getCompleted(oldChunk) == true , "fatal, mile not complete");
-
-    mile++;
-
-    console.log("new mile");
-    console.logInt(mile);
-
-    //TODO simple setter
-    GameState.set(mile, 0);
-    // GameState.setMiles(mile);
-
-    //move carriage to top of mile
-    int32 height = MapConfig.getPlayHeight();
-    Position.set(Actions.getCarriageEntity(), 0, ((mile+1) * height) + 1, 0);
-
-    //create the chunk
-    bytes32 newChunk = Actions.getChunkEntity(mile);
-    Chunk.set(newChunk, mile, false, false,  0, 0);
-
-  }
 
   function summonMile(bytes32 causedBy, bool summonAll) public {
 
@@ -226,24 +170,20 @@ contract TerrainSubsystem is System {
     }
   }
 
-  function procProgression(int32 width, int32 y) private {
-
-  }
-
   function contemplateMile(bytes32 causedBy, int32 mileNumber) public {
     
     (int32 left, int32 right, int32 up, int32 down) = Rules.getMileBounds(mileNumber);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveProctorLottery, (causedBy)));
 
-    uint noiseCoord = randomFromEntity(uint(uint32(down)), uint(uint32(up)), causedBy);
-    int32 noiseTile = int32(uint32(noiseCoord));
-    require(noiseTile >= down && noiseTile <= up, "out of range");
+    //old system of awarding road reward to random road paving
+    // uint noiseCoord = randomFromEntity(uint(uint32(down)), uint(uint32(up)), causedBy);
+    // int32 noiseTile = int32(uint32(noiseCoord));
+    // require(noiseTile >= down && noiseTile <= up, "out of range");
+    // bytes32 road = Actions.getRoadEntity(0, noiseTile);
+    // require(Road.getState(road) == uint32(RoadState.Paved), "not paved");
+    // SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadLottery, (road)));
 
-    bytes32 road = Actions.getRoadEntity(0, noiseTile);
-
-    require(Road.getState(road) == uint32(RoadState.Paved), "not paved");
-
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).giveRoadLottery, (road)));
-
+    //OTHER system of givnig random rewards for each road
     // for (int32 y = down; y <= up; y++) {
     //   for (int32 x = left; x <= right; x++) {
     //     bytes32 road = Actions.getRoadEntity(x,y);
@@ -342,38 +282,9 @@ contract TerrainSubsystem is System {
 
     currentMile += 1;
 
-    createMile();
-  }
-
-  function debugMile(bytes32 credit) public {
     IWorld world = IWorld(_world());
-
-    (, int32 left, int32 right) = RoadConfig.get();
-    int32 currentMile = GameState.getMiles();
-    int32 playHeight = MapConfig.getPlayHeight();
-
-    int32 yStart = int32(currentMile * playHeight);
-    int32 yEnd = yStart + playHeight;
-
-    console.log("debug mile");
-    console.logInt(currentMile);
-    console.log("from");
-    console.logInt(yStart);
-    console.log("to");
-    console.logInt(yEnd);
-
-    for (int32 y = yStart; y < yEnd; y++) {
-      for (int32 x = left; x <= right; x++) {
-
-        bytes32 road = Actions.getRoadEntity(x,y);
-        uint32 roadState = Road.getState(road);
-        if(roadState >= uint32(RoadState.Paved)) continue;
-        spawnFinishedRoad(credit, x, y, RoadState.Paved);
-
-      }
-
-    }
-
+    SystemSwitch.call(abi.encodeCall(world.createMile, ()));
+    
   }
 
   function spawnProcRoad(int32 x, int32 y) public {

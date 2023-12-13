@@ -32,6 +32,10 @@ contract RewardSubsystem is System {
     
   }
 
+  function giveProctorLottery(bytes32 player) public {
+    giveGem(player, 1);
+  }
+
   function giveRoadLottery(bytes32 road) public {
 
     //TODO revert after unimud fix

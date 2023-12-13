@@ -13,6 +13,10 @@ export default mudConfig({
       name: "behaviour",
       openAccess: false,
     },
+    ChunkSubsystem: {
+      name: "chunk",
+      openAccess: false,
+    },
     FloraSubsystem: {
       name: "flora",
       openAccess: false,

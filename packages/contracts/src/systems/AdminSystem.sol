@@ -81,6 +81,13 @@ contract AdminSystem is System {
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).debugMile,(player)));
   }
 
+  
+  function finishProctorAdmin() public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).debugProctor,(player)));
+  }
+
   function spawnFinishedRoadAdmin(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");

@@ -843,6 +843,32 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(debugMileFunction, cancellationToken);
         }
 
+        public Task<string> DebugProctorRequestAsync(DebugProctorFunction debugProctorFunction)
+        {
+             return ContractHandler.SendRequestAsync(debugProctorFunction);
+        }
+
+        public Task<TransactionReceipt> DebugProctorRequestAndWaitForReceiptAsync(DebugProctorFunction debugProctorFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(debugProctorFunction, cancellationToken);
+        }
+
+        public Task<string> DebugProctorRequestAsync(byte[] causedBy)
+        {
+            var debugProctorFunction = new DebugProctorFunction();
+                debugProctorFunction.CausedBy = causedBy;
+            
+             return ContractHandler.SendRequestAsync(debugProctorFunction);
+        }
+
+        public Task<TransactionReceipt> DebugProctorRequestAndWaitForReceiptAsync(byte[] causedBy, CancellationTokenSource cancellationToken = null)
+        {
+            var debugProctorFunction = new DebugProctorFunction();
+                debugProctorFunction.CausedBy = causedBy;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(debugProctorFunction, cancellationToken);
+        }
+
         public Task<string> DeleteAdminRequestAsync(DeleteAdminFunction deleteAdminFunction)
         {
              return ContractHandler.SendRequestAsync(deleteAdminFunction);
@@ -1335,6 +1361,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync<FinishMileAdminFunction>(null, cancellationToken);
         }
 
+        public Task<string> FinishProctorAdminRequestAsync(FinishProctorAdminFunction finishProctorAdminFunction)
+        {
+             return ContractHandler.SendRequestAsync(finishProctorAdminFunction);
+        }
+
+        public Task<string> FinishProctorAdminRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<FinishProctorAdminFunction>();
+        }
+
+        public Task<TransactionReceipt> FinishProctorAdminRequestAndWaitForReceiptAsync(FinishProctorAdminFunction finishProctorAdminFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(finishProctorAdminFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> FinishProctorAdminRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<FinishProctorAdminFunction>(null, cancellationToken);
+        }
+
         public Task<string> FishRequestAsync(FishFunction fishFunction)
         {
              return ContractHandler.SendRequestAsync(fishFunction);
@@ -1649,6 +1695,32 @@ namespace IWorld.Service
                 giveKillRewardFunction.Player = player;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(giveKillRewardFunction, cancellationToken);
+        }
+
+        public Task<string> GiveProctorLotteryRequestAsync(GiveProctorLotteryFunction giveProctorLotteryFunction)
+        {
+             return ContractHandler.SendRequestAsync(giveProctorLotteryFunction);
+        }
+
+        public Task<TransactionReceipt> GiveProctorLotteryRequestAndWaitForReceiptAsync(GiveProctorLotteryFunction giveProctorLotteryFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveProctorLotteryFunction, cancellationToken);
+        }
+
+        public Task<string> GiveProctorLotteryRequestAsync(byte[] player)
+        {
+            var giveProctorLotteryFunction = new GiveProctorLotteryFunction();
+                giveProctorLotteryFunction.Player = player;
+            
+             return ContractHandler.SendRequestAsync(giveProctorLotteryFunction);
+        }
+
+        public Task<TransactionReceipt> GiveProctorLotteryRequestAndWaitForReceiptAsync(byte[] player, CancellationTokenSource cancellationToken = null)
+        {
+            var giveProctorLotteryFunction = new GiveProctorLotteryFunction();
+                giveProctorLotteryFunction.Player = player;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(giveProctorLotteryFunction, cancellationToken);
         }
 
         public Task<string> GivePuzzleRewardRequestAsync(GivePuzzleRewardFunction givePuzzleRewardFunction)

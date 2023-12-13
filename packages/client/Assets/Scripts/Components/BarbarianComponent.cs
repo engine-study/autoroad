@@ -13,13 +13,8 @@ public class BarbarianComponent : MoverNPCComponent {
     [SerializeField] RuntimeAnimatorController swordStance;
     [SerializeField] RuntimeAnimatorController bowStance;
 
-    [Header("Debug")]
-    [SerializeField] SPAnimator animator;
-
     protected override void PostInit() {
         base.PostInit();
-
-        animator = GetComponentInChildren<SPAnimator>(true);
 
         if(npc.NPC == NPCType.Barbarian) {
             Entity.SetName("Barbarian");

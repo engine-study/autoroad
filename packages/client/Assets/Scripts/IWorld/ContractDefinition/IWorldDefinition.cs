@@ -358,6 +358,15 @@ namespace IWorld.ContractDefinition
         public virtual byte[] Credit { get; set; }
     }
 
+    public partial class DebugProctorFunction : DebugProctorFunctionBase { }
+
+    [Function("debugProctor")]
+    public class DebugProctorFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+    }
+
     public partial class DeleteAdminFunction : DeleteAdminFunctionBase { }
 
     [Function("deleteAdmin")]
@@ -588,6 +597,14 @@ namespace IWorld.ContractDefinition
 
     }
 
+    public partial class FinishProctorAdminFunction : FinishProctorAdminFunctionBase { }
+
+    [Function("finishProctorAdmin")]
+    public class FinishProctorAdminFunctionBase : FunctionMessage
+    {
+
+    }
+
     public partial class FishFunction : FishFunctionBase { }
 
     [Function("fish")]
@@ -792,6 +809,15 @@ namespace IWorld.ContractDefinition
 
     [Function("giveKillReward")]
     public class GiveKillRewardFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "player", 1)]
+        public virtual byte[] Player { get; set; }
+    }
+
+    public partial class GiveProctorLotteryFunction : GiveProctorLotteryFunctionBase { }
+
+    [Function("giveProctorLottery")]
+    public class GiveProctorLotteryFunctionBase : FunctionMessage
     {
         [Parameter("bytes32", "player", 1)]
         public virtual byte[] Player { get; set; }
@@ -2394,6 +2420,10 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
+
+
     public partial class GetDynamicFieldOutputDTO : GetDynamicFieldOutputDTOBase { }
 
     [FunctionOutput]
@@ -2518,6 +2548,8 @@ namespace IWorld.ContractDefinition
         [Parameter("bytes32", "valueSchema", 1)]
         public virtual byte[] ValueSchema { get; set; }
     }
+
+
 
 
 

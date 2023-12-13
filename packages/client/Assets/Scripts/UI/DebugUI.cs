@@ -41,4 +41,8 @@ public class DebugUI : SPWindowParent
     public void FinishMile() {
         TxManager.SendDirect<FinishMileAdminFunction>();
     }
+
+    public void FinishProctor() {
+        TxManager.SendDirect<FinishProctorAdminFunction>();
+    }
 }
