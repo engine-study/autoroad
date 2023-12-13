@@ -88,9 +88,9 @@ public class CoinComponent : ValueComponent {
 
             SPResourceJuicy coin = SPResourceJuicy.SpawnResource(prefab, position.Target, position.Target.position, Random.rotation);
             
-            coin.time = Random.Range(.75f,1f);
-            coin.arc = Vector3.up * Random.Range(.5f,1f);
-            coin.offset = Vector3.up * 1.5f;
+            coin.time = Random.Range(.9f,1f);
+            coin.arc = Vector3.up * Random.Range(1.5f,1f);
+            coin.offset = Vector3.up * .5f;
             // coin.arc = Vector3.up * Random.Range(.25f,.5f);
             coin.SendResource();
 
