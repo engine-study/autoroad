@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal } from "../codegen/index.sol";
-import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Thrower, EnumTest, Thief, Cursed, Puzzle} from "../codegen/index.sol";
+import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Thrower, EnumTest, Thief, Cursed, Puzzle, Respawn} from "../codegen/index.sol";
 import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander, Rock, Respawn } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionName, RockType, NPCType, ArmorSet, EffectSet, MaterialSet, PuzzleType } from "../codegen/common.sol";
@@ -161,6 +161,15 @@ contract SpawnSubsystem is System {
       Health.set(target, -1);
       Actions.setAction(target, ActionName.Destroy, pos.x, pos.y);
     }
+
+    if(Respawn.get(target)) {
+      respawn(causedBy, target);
+    }
+  }
+
+  function respawn(bytes32 causedBy, bytes32 target) public {
+    IWorld world = IWorld(_world());
+    SystemSwitch.call(abi.encodeCall(world.createProctor, (causedBy, false)));
   }
 
   function kill(bytes32 causedBy, bytes32 target, bytes32 attacker, PositionData memory pos) public {

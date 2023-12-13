@@ -26,6 +26,7 @@ contract TerrainSubsystem is System {
 
     //check if chunk is already spawned
     int32 mile = GameState.getMiles();
+    
     bytes32 chunkEntity = Actions.getChunkEntity(mile);
     
     require(mile > -1, "fatal, mile not created");
@@ -60,13 +61,14 @@ contract TerrainSubsystem is System {
 
     // reset ticking entities
     Entities.set(new bytes32[](0));
-    
-    console.log("create puzzle");
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createMiliarium, (causedBy, right, up, down)));
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createStatuePuzzle, (causedBy, right, up, down)));
-    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createTickers, (causedBy, right, up, down)));
+    IWorld world = IWorld(_world());
 
-    createProctor(causedBy, up, down);
+
+    console.log("create puzzle");
+    SystemSwitch.call(abi.encodeCall(world.createMiliarium, (causedBy, right, up, down)));
+    SystemSwitch.call(abi.encodeCall(world.createStatuePuzzle, (causedBy, right, up, down)));
+    SystemSwitch.call(abi.encodeCall(world.createTickers, (causedBy, right, up, down)));
+    SystemSwitch.call(abi.encodeCall(world.createProctor, (causedBy, true)));
 
     //set bounds 
     Bounds.set(left, right, up, down);
@@ -76,19 +78,6 @@ contract TerrainSubsystem is System {
     Chunk.set(chunkEntity, mile, true, false, 0, 0);
   }
 
-  function createProctor(bytes32 causedBy, int32 up, int32 down) public {
-    bytes32 proctor = Actions.getProctorEntity();
-    //spawn proctor
-    if(NPC.get(proctor) == 0) {
-      SystemSwitch.call(abi.encodeCall(IWorld(_world()).spawnNPCWithEntity, (causedBy, proctor, 0, down, NPCType.Proctor)));
-    }
-    
-    Linker.set(proctor, Actions.getRoadEntity(0,up));
-
-    //set the proctor to the top of the road
-    bytes32 proctorTrigger = Actions.getRoadEntity(0,up);
-    Trigger.set(proctorTrigger, true);
-  }
 
   function summonRow(bytes32 causedBy, int32 left, int32 right, uint difficulty) public returns(int32 row) {
 
