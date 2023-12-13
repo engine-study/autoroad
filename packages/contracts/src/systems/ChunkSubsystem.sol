@@ -69,7 +69,7 @@ contract ChunkSubsystem is System {
     Chunk.set(newChunk, mile, false, false, 0, 0);
   }
 
-  function createProctor(bytes32 causedBy, bool mileLink) public {
+  function createProctor(bytes32 causedBy, bool isMileSetup) public {
     IWorld world = IWorld(_world());
     int32 mile = GameState.getMiles();
     (, , int32 up, int32 down) = Rules.getMileBounds(mile);
@@ -79,6 +79,15 @@ contract ChunkSubsystem is System {
     //spawn if it doesnt exist yet
     PositionData memory spawnPos = PositionData(0, down, 0);
     Actions.deleteAt(world, spawnPos);
+
+    if (isMileSetup) {
+      bytes32 proctorTrigger = Actions.getRoadEntity(0, up);
+      //link proctor to end of road
+      Linker.set(proctor, proctorTrigger);
+      Trigger.set(proctorTrigger, true);
+    } else {
+
+    }
 
     if (NPC.get(proctor) == 0) {
       SystemSwitch.call(
@@ -90,12 +99,7 @@ contract ChunkSubsystem is System {
       Actions.setAction(proctor, ActionName.Spawn, spawnPos.x, spawnPos.y);
     }
 
-    if (mileLink) {
-      bytes32 proctorTrigger = Actions.getRoadEntity(0, up);
-      //link proctor to end of road
-      Linker.set(proctor, proctorTrigger);
-      Trigger.set(proctorTrigger, true);
-    }
+
   }
 
   function debugProctor(bytes32 causedBy) public {

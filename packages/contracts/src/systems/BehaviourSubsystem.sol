@@ -4,7 +4,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
-import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Thrower, Thief, Cursed } from "../codegen/index.sol";
+import { Position, PositionTableId, PositionData, Health, Action, NPC, Aggro, Seek, Move, Wander, Fling, Thrower, Thief, Cursed, Gardener } from "../codegen/index.sol";
 import { Entities, Soldier, Barbarian, Archer, LastMovement, LastAction } from "../codegen/index.sol";
 import { ActionName, NPCType, MoveType } from "../codegen/common.sol";
 
@@ -145,6 +145,10 @@ contract BehaviourSubsystem is System {
     if (thrower > 0 && thrower >= distance) {
       doThrower(causedBy, entity, target, entityPos, targetPos);
     }
+    uint8 gardener = Gardener.get(entity);
+    if (gardener > 0 && gardener >= distance) {
+      doGarden(causedBy, entity, target, entityPos, targetPos);
+    }
   }
 
   function aoeFling(
@@ -222,6 +226,19 @@ contract BehaviourSubsystem is System {
     SystemSwitch.call(abi.encodeCall(world.doFling, (causedBy, entity, target, targetPos, newPos, ActionName.Throw)));
   }
 
+   function doGarden(
+    bytes32 causedBy,
+    bytes32 entity,
+    bytes32 target,
+    PositionData memory entityPos,
+    PositionData memory targetPos
+  ) public {
+    console.log("thief");
+    IWorld world = IWorld(_world());
+    SystemSwitch.call(abi.encodeCall(world.softWithdrawCoins, (target, 5)));
+    SystemSwitch.call(abi.encodeCall(world.giveCoins, (entity, 5)));
+  }
+
   function doSeek(
     bytes32 causedBy,
     bytes32 seek,
@@ -249,7 +266,7 @@ contract BehaviourSubsystem is System {
     bool attackerIsBarbarian = Barbarian.get(attacker);
     if (attackerIsBarbarian) {
       NPCType npc = NPCType(NPC.get(target));
-      return npc == NPCType.Player || npc == NPCType.Soldier;
+      return npc == NPCType.Player || Soldier.get(target);
     }
 
     return true;

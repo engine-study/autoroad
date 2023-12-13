@@ -94,7 +94,7 @@ public class LinkerComponent : MUDComponent {
         posSync = targetEntity?.GetRootComponent<PositionSync>();
         
         if(posSync == null) {Debug.LogError("They don't have pos", this); return;}
-        if(ourPos == null) {Debug.LogError("We don't have a position"); return;}
+        if(ourPos == null) {Debug.LogError("We don't have a position", this); return;}
         
         if(line) line.SetTarget(ourPos.Target, posSync.Target);
         if(alwaysVisible) {

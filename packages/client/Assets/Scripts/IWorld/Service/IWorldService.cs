@@ -676,20 +676,20 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createProctorFunction, cancellationToken);
         }
 
-        public Task<string> CreateProctorRequestAsync(byte[] causedBy, bool mileLink)
+        public Task<string> CreateProctorRequestAsync(byte[] causedBy, bool isMileSetup)
         {
             var createProctorFunction = new CreateProctorFunction();
                 createProctorFunction.CausedBy = causedBy;
-                createProctorFunction.MileLink = mileLink;
+                createProctorFunction.IsMileSetup = isMileSetup;
             
              return ContractHandler.SendRequestAsync(createProctorFunction);
         }
 
-        public Task<TransactionReceipt> CreateProctorRequestAndWaitForReceiptAsync(byte[] causedBy, bool mileLink, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CreateProctorRequestAndWaitForReceiptAsync(byte[] causedBy, bool isMileSetup, CancellationTokenSource cancellationToken = null)
         {
             var createProctorFunction = new CreateProctorFunction();
                 createProctorFunction.CausedBy = causedBy;
-                createProctorFunction.MileLink = mileLink;
+                createProctorFunction.IsMileSetup = isMileSetup;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createProctorFunction, cancellationToken);
         }
@@ -762,24 +762,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createTickersFunction, cancellationToken);
         }
 
-        public Task<string> CreateTickersRequestAsync(byte[] causedBy, int width, int up, int down)
+        public Task<string> CreateTickersRequestAsync(byte[] causedBy, int width, int up, int down, BigInteger difficulty)
         {
             var createTickersFunction = new CreateTickersFunction();
                 createTickersFunction.CausedBy = causedBy;
                 createTickersFunction.Width = width;
                 createTickersFunction.Up = up;
                 createTickersFunction.Down = down;
+                createTickersFunction.Difficulty = difficulty;
             
              return ContractHandler.SendRequestAsync(createTickersFunction);
         }
 
-        public Task<TransactionReceipt> CreateTickersRequestAndWaitForReceiptAsync(byte[] causedBy, int width, int up, int down, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CreateTickersRequestAndWaitForReceiptAsync(byte[] causedBy, int width, int up, int down, BigInteger difficulty, CancellationTokenSource cancellationToken = null)
         {
             var createTickersFunction = new CreateTickersFunction();
                 createTickersFunction.CausedBy = causedBy;
                 createTickersFunction.Width = width;
                 createTickersFunction.Up = up;
                 createTickersFunction.Down = down;
+                createTickersFunction.Difficulty = difficulty;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createTickersFunction, cancellationToken);
         }

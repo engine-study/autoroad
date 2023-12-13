@@ -5,7 +5,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { RoadConfig, MapConfig, Player, Health, GameState, Bounds, Entities, Animal } from "../codegen/index.sol";
 import { Move, Bones, Name, Stats, Coinage, Weight, Boots, NPC, XP, Eth, Shovel, Conscription, Head, Robe, Effect, Material, Thrower, EnumTest, Thief, Cursed, Puzzle, Respawn} from "../codegen/index.sol";
-import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander, Rock, Respawn } from "../codegen/index.sol";
+import { Soldier, Barbarian, Ox, Aggro, Seek, Archer, Fling, Wander, Rock, Respawn, Gardener } from "../codegen/index.sol";
 import { Position, PositionTableId, PositionData } from "../codegen/index.sol";
 import { MoveType, ActionName, RockType, NPCType, ArmorSet, EffectSet, MaterialSet, PuzzleType } from "../codegen/common.sol";
 
@@ -120,13 +120,17 @@ contract SpawnSubsystem is System {
       Rock.set(entity, uint32(RockType.Gargoyle));
       Weight.set(entity, 99);
       Cursed.set(entity, 2);
-      // Wander.set(entity, 1);
-      // Entities.pushEntities(entity);
+      Entities.pushEntities(entity);
     } else if (npcType == NPCType.Proctor) {
       Weight.set(entity, 1);
       Respawn.set(entity, true);
       Soldier.set(entity, true);
       Puzzle.set(entity, uint32(PuzzleType.Proctor), false, bytes32(0));
+    } else if (npcType == NPCType.Gardener) {
+      Ox.set(entity, true);
+      Gardener.set(entity, 1);
+      Weight.set(entity, 1);
+      Entities.pushEntities(entity);
     } 
 
     Move.set(entity, uint32(MoveType.Push));
@@ -136,18 +140,20 @@ contract SpawnSubsystem is System {
     Actions.setAction(entity, ActionName.Spawn, x, y);
   }
 
-  function createTickers(bytes32 causedBy, int32 width, int32 up, int32 down) public {
+  function createTickers(bytes32 causedBy, int32 width, int32 up, int32 down, uint difficulty) public {
     IWorld world = IWorld(_world());
     int32 roadSide = RoadConfig.getRight();
+    uint256 index = uint256(difficulty);
 
-    bytes32 entity = getUniqueEntity();
+    NPCType[5] memory tickers = [NPCType.Deer, NPCType.Shoveler, NPCType.Gargoyle, NPCType.Taxman, NPCType.Gardener];
+    require(index < tickers.length, "difficulty mismatch");
 
     //spawn on middle of road
     PositionData memory pos = PositionData(0, down + up - 4, 0);
     // PositionData memory pos = findEmptyPositionInArea(world, entity, width, up, down, 0, roadSide);
     Actions.deleteAt(world, pos);
 
-    spawnNPC(causedBy, pos.x, pos.y, NPCType.Deer);
+    spawnNPC(causedBy, pos.x, pos.y, tickers[index]);
 
   }
 

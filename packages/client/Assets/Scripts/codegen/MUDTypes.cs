@@ -53,6 +53,7 @@ namespace mudworld
         Shoveler,
         Gargoyle,
         Proctor,
+        Gardener,
     }
 
     public enum RoadState

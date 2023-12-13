@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoverNPCComponent : MoverComponent
 {
+    public NPCComponent NPC {get{return npc;}}
     [Header("NPC")]
     public NPCComponent npc;
 

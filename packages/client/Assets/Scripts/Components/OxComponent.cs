@@ -4,7 +4,7 @@ using UnityEngine;
 using mud;
 using mudworld;
 using IWorld.ContractDefinition;
-public class OxComponent : MoverComponent {
+public class OxComponent : MoverNPCComponent {
 
     protected override void PostInit() {
         base.PostInit();

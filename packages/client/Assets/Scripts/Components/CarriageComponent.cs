@@ -15,6 +15,8 @@ public class CarriageComponent : MUDComponent
     protected override void PostInit() {
         base.PostInit();
 
+        Entity.SetName("Carriage");
+
         sync.OnMoveStart += WagonFX;
         sync.OnMoveEnd += WagonEndFX;
 

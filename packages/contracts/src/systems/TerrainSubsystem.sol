@@ -39,7 +39,7 @@ contract TerrainSubsystem is System {
 
     (int32 left, int32 right, int32 up, int32 down) = Rules.getMileBounds(mile);
     int32 row = Row.get();
-    uint256 difficulty = uint(uint32(mile % 5));
+    uint difficulty = uint(uint32(mile % 5));
 
     if(summonAll) {
       while(row < up) {row = summonRow(causedBy, left, right, difficulty);}
@@ -67,7 +67,7 @@ contract TerrainSubsystem is System {
     console.log("create puzzle");
     SystemSwitch.call(abi.encodeCall(world.createMiliarium, (causedBy, right, up, down)));
     SystemSwitch.call(abi.encodeCall(world.createStatuePuzzle, (causedBy, right, up, down)));
-    SystemSwitch.call(abi.encodeCall(world.createTickers, (causedBy, right, up, down)));
+    SystemSwitch.call(abi.encodeCall(world.createTickers, (causedBy, right, up, down, difficulty)));
     SystemSwitch.call(abi.encodeCall(world.createProctor, (causedBy, true)));
 
     //set bounds 
@@ -278,14 +278,15 @@ contract TerrainSubsystem is System {
 
   function spawnProcRoad(int32 x, int32 y) public {
     bytes32 road = Actions.getRoadEntity(x,y);
-    uint randomRoad = randomFromEntitySeed(0,100,road,uint256(uint32(y)));
 
-    if(randomRoad < 75) {
-      spawnEmptyRoad(road, x, y);
-    } else {
-      spawnShoveledRoad(road, x, y);
-    } 
-    // else {
+    spawnEmptyRoad(road, x, y);
+    
+    // uint randomRoad = randomFromEntitySeed(0,100,road,uint256(uint32(y)));
+    // if(randomRoad < 75) {
+    //   spawnEmptyRoad(road, x, y);
+    // } else if(randomRoad < 95){
+    //   spawnShoveledRoad(road, x, y);
+    // } else {
     //   spawnFinishedRoad(road, x, y, RoadState.Paved);
     // }
     

@@ -288,8 +288,8 @@ namespace IWorld.ContractDefinition
     {
         [Parameter("bytes32", "causedBy", 1)]
         public virtual byte[] CausedBy { get; set; }
-        [Parameter("bool", "mileLink", 2)]
-        public virtual bool MileLink { get; set; }
+        [Parameter("bool", "isMileSetup", 2)]
+        public virtual bool IsMileSetup { get; set; }
     }
 
     public partial class CreatePuzzleOnMileFunction : CreatePuzzleOnMileFunctionBase { }
@@ -329,6 +329,8 @@ namespace IWorld.ContractDefinition
         public virtual int Up { get; set; }
         [Parameter("int32", "down", 4)]
         public virtual int Down { get; set; }
+        [Parameter("uint256", "difficulty", 5)]
+        public virtual BigInteger Difficulty { get; set; }
     }
 
     public partial class CreateWorldFunction : CreateWorldFunctionBase { }

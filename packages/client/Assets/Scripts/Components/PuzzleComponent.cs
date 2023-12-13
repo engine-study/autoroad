@@ -21,20 +21,22 @@ public class PuzzleComponent : MUDComponent {
 
     [Header("Debug")]
     [SerializeField] PositionSync sync;
-    [SerializeField] RockComponent rock;
-
 
     protected override void PostInit() {
         base.PostInit();
 
-        rock = Entity.GetMUDComponent<RockComponent>();
-        sync = rock.GetComponent<PositionSync>();
-
+        sync = Entity.GetRootComponent<PositionSync>();
         sync.OnMoveEnd += CompletedWhenMoved;
 
-        transform.parent = rock.transform;
+        transform.parent = sync.transform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+
+        if(puzzle == PuzzleType.Proctor) {
+
+        } else {
+
+        }
     
         InstantUpdate();
     }

@@ -3,6 +3,8 @@ using mudworld;
 
 public abstract class MoverComponent : MUDComponent {
 
+    public SPAnimator Animator {get{return animator;}}
+
     protected SPAnimationMover anim;
     protected SPAnimator animator;
     protected PositionSync sync;
