@@ -47,6 +47,10 @@ public class AnimationMUD : MonoBehaviour
 
         entity = GetComponentInParent<MUDEntity>();
         looker = root.gameObject.AddComponent<SPLooker>();
+        float randomRot = Random.Range(0f,360f);
+        randomRot = (int)(Mathf.Round(randomRot / 90f) * 90f);
+        looker?.SetLookRotation(Quaternion.Euler(Vector3.up * randomRot));
+        
 
         ourComponent = GetComponent<MUDComponent>();
         // ourComponent.OnToggle += ToggleDead;
