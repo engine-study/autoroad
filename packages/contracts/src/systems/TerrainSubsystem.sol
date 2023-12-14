@@ -142,9 +142,9 @@ contract TerrainSubsystem is System {
           npcType = NPCType.Ox;
         } else if (noiseCoord > 1100 && noiseCoord <= 1200 - difficulty * 10) {
           npcType = NPCType.Soldier;
-        } else if(difficulty > 0 && noiseCoord > 1500 && noiseCoord < 1550 + difficulty * 20) {
+        } else if(difficulty >= 0 && noiseCoord > 1500 && noiseCoord < 1550 + difficulty * 20) {
           npcType = NPCType.Barbarian;
-        } else if (difficulty > 1 && noiseCoord > 1700 && noiseCoord <= 1750 + difficulty * 20) {
+        } else if (difficulty > 1 && noiseCoord > 1700 && noiseCoord <= 1750 + difficulty * 10) {
           npcType = NPCType.BarbarianArcher;
         } 
         // else if (config.dummyPlayers && noiseCoord > 1500 && noiseCoord <= 1550) {

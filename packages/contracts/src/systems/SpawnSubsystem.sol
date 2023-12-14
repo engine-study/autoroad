@@ -149,7 +149,7 @@ contract SpawnSubsystem is System {
     require(index < tickers.length, "difficulty mismatch");
 
     //spawn on middle of road
-    PositionData memory pos = PositionData(0, down + up - 4, 0);
+    PositionData memory pos = PositionData(0, down + ((up-down) - 4), 0);
     // PositionData memory pos = findEmptyPositionInArea(world, entity, width, up, down, 0, roadSide);
     Actions.deleteAt(world, pos);
 
