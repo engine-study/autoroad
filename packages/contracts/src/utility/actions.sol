@@ -18,9 +18,12 @@ library Actions {
   function deleteAt(IWorld world, PositionData memory pos) internal {
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,pos.x, pos.y, pos.layer);
     if(atPosition.length == 0) return;
-    Position.deleteRecord(atPosition[0]);
-    Health.deleteRecord(atPosition[0]);
+
     setAction(atPosition[0], ActionName.Destroy, pos.x, pos.y);
+
+    pos.layer = -2;
+    Position.set(atPosition[0], pos);
+    Health.set(atPosition[0], -1);
   }
   
   function getRoadEntity(int32 x, int32 y) internal pure returns(bytes32) {return keccak256(abi.encode("Road", x, y));}

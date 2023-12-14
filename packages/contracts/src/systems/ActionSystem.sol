@@ -49,7 +49,7 @@ contract ActionSystem is System {
     Rules.requirePlayer(entity);
 
     bool playerExists = Player.get(entity);
-    if (playerExists) { require(Health.get(entity) == -1, "not dead, can't respawn");}
+    if (playerExists) { require(Health.get(entity) <= 0, "not dead, can't respawn");}
     require(Rules.onSpawn(x,y), "out of spawn");
 
     bytes32[] memory atPosition = Rules.getKeysAtPosition(world,x, y, 0);

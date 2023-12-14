@@ -18,7 +18,7 @@ public class PuzzleComponent : MUDComponent {
     public PuzzleType puzzle;
     public string solvedBy;
     public bool completed;
-
+    bool wasCompleted = false; 
     [Header("Debug")]
     [SerializeField] PositionSync sync;
 
@@ -57,6 +57,8 @@ public class PuzzleComponent : MUDComponent {
             InstantUpdate();
         }
 
+        wasCompleted = completed;
+
     }
 
     void InstantUpdate() {
@@ -75,6 +77,9 @@ public class PuzzleComponent : MUDComponent {
             
             completeFX.Spawn(true);
             InstantUpdate();
+
+            sync.OnMoveEnd -= CompletedWhenMoved;
+
         }
 
 
