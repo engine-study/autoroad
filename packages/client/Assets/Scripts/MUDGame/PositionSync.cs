@@ -153,6 +153,10 @@ public class PositionSync : ComponentSync
         if(line) line.Toggle(useLine);
 
         OnMoveStart?.Invoke();
+
+        if(!target.gameObject.activeInHierarchy) {
+            EndMove();
+        }
     }
 
 

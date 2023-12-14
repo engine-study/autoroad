@@ -191,21 +191,26 @@ contract ToolSubsystem is System {
 
     bytes32 carry = Carry.get(player);
     bytes32[] memory atDest = Rules.getKeysAtPosition(world,x, y, 0);
+    PositionData memory playerPos = Position.get(player);
+    bool isPocketing = carry == bytes32(0);
 
-    if(carry == bytes32(0)) {
+    if(isPocketing) {
 
-      require(Rules.canInteract(player, Position.get(player), atDest, 1), "bad interact");
+      require(Rules.canInteract(player, playerPos, atDest, 1), "bad interact");
       Rules.requireIsFairGame(carry);
 
       Carry.set(player, atDest[0]);
       Position.set(atDest[0], PositionData(x,y,-2));
       Health.set(atDest[0], -1);
     } else {
-      require(Rules.canInteractEmpty(player, Position.get(player), PositionData(x,y,0), atDest, 1), "bad interact");
+      require(Rules.canInteractEmpty(player, playerPos, PositionData(x,y,0), atDest, 1), "bad interact");
       Position.set(carry, x,y,0);
       Health.set(carry, 1);
       Carry.set(player, bytes32(0));
     }
+
+    Actions.setActionTargeted(player, ActionName.Pocket, x, y, carry);
+    Actions.setAction(carry, isPocketing ? ActionName.Destroy : ActionName.Spawn, x, y);
 
   }
 

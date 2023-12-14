@@ -94,7 +94,7 @@ contract ItemSubsystem is System {
         Axe.set(player, true);
       }
       else if (id == 17) { //pocket
-        pay(player, 200, 0, 0, payment, 0);
+        pay(player, 100, 0, 0, payment, 0);
         Pocket.set(player, true);
       }
     
