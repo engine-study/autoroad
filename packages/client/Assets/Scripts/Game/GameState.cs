@@ -161,7 +161,7 @@ public class GameState : MonoBehaviour {
     
         ConscriptionTable pass = MUDWorld.GetTable<ConscriptionTable>(NetworkManager.LocalKey);
 
-        if(pass != null && (bool)pass.Value && (skipMenu || !MainMenuUI.IsNewGame)) {
+        if(false && pass != null && (bool)pass.Value && (skipMenu || !MainMenuUI.IsNewGame)) {
             //use the default that NetworkManager gives us
         } else {
             //wait for name table        
@@ -278,10 +278,10 @@ public class GameState : MonoBehaviour {
 
         NetworkManager.Instance.networkType = NetworkType;
 
-        if(NetworkManager.Instance.networkType == NetworkTypes.NetworkType.Local) {
-            // worldSelector.loadFrom = WorldLocation.ResourcesFolder;
+        if(NetworkManager.Instance.networkType == NetworkTypes.NetworkType.Local || Application.isEditor) {
+            worldSelector.loadFrom = WorldLocation.ResourcesFolder;
         } else {
-            // worldSelector.loadFrom = WorldLocation.URL;
+            worldSelector.loadFrom = WorldLocation.URL;
         }
 
     }
