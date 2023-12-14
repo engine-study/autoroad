@@ -67,7 +67,7 @@ contract TerrainSubsystem is System {
     console.log("create puzzle");
     SystemSwitch.call(abi.encodeCall(world.createMiliarium, (causedBy, right, up, down)));
     SystemSwitch.call(abi.encodeCall(world.createStatuePuzzle, (causedBy, right, up, down)));
-    SystemSwitch.call(abi.encodeCall(world.createTickers, (causedBy, right, up, down, difficulty)));
+    SystemSwitch.call(abi.encodeCall(world.createTickers, (causedBy, right, up, down, mile)));
     SystemSwitch.call(abi.encodeCall(world.createProctor, (causedBy, true)));
 
     //set bounds 
@@ -140,9 +140,9 @@ contract TerrainSubsystem is System {
 
         if (noiseCoord > 1000 && noiseCoord <= 1050 - difficulty * 10) {
           npcType = NPCType.Ox;
-        } else if (noiseCoord > 1100 && noiseCoord <= 1300 - difficulty * 20) {
+        } else if (noiseCoord > 1100 && noiseCoord <= 1200 - difficulty * 10) {
           npcType = NPCType.Soldier;
-        } else if(difficulty > 0 && noiseCoord > 1500 && noiseCoord < 1600 + difficulty * 20) {
+        } else if(difficulty > 0 && noiseCoord > 1500 && noiseCoord < 1550 + difficulty * 20) {
           npcType = NPCType.Barbarian;
         } else if (difficulty > 1 && noiseCoord > 1700 && noiseCoord <= 1750 + difficulty * 20) {
           npcType = NPCType.BarbarianArcher;

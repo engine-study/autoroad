@@ -34,7 +34,7 @@ contract ItemSubsystem is System {
     if(id < 100) {
 
       if (id == 0) { //stick
-        pay(player, 75, 0, 0, payment, 0);
+        pay(player, 50, 0, 0, payment, 0);
         Stick.set(player, true);
       } 
       // else if (id == 1) { //robe

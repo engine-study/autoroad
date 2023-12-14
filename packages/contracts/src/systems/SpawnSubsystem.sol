@@ -120,7 +120,6 @@ contract SpawnSubsystem is System {
       Rock.set(entity, uint32(RockType.Gargoyle));
       Weight.set(entity, 99);
       Cursed.set(entity, 2);
-      Entities.pushEntities(entity);
     } else if (npcType == NPCType.Proctor) {
       Weight.set(entity, 1);
       Respawn.set(entity, true);
@@ -140,12 +139,13 @@ contract SpawnSubsystem is System {
     Actions.setAction(entity, ActionName.Spawn, x, y);
   }
 
-  function createTickers(bytes32 causedBy, int32 width, int32 up, int32 down, uint difficulty) public {
+  function createTickers(bytes32 causedBy, int32 width, int32 up, int32 down, int32 mile) public {
     IWorld world = IWorld(_world());
     int32 roadSide = RoadConfig.getRight();
-    uint256 index = uint256(difficulty);
 
-    NPCType[5] memory tickers = [NPCType.Deer, NPCType.Shoveler, NPCType.Gargoyle, NPCType.Taxman, NPCType.Gardener];
+    NPCType[3] memory tickers = [NPCType.Deer, NPCType.Shoveler, NPCType.Gargoyle]; 
+    uint256 index = uint256(uint32(mile)) % tickers.length;
+    //NPCType.Taxman, NPCType.Gardener
     require(index < tickers.length, "difficulty mismatch");
 
     //spawn on middle of road
