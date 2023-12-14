@@ -231,6 +231,7 @@ public class AnimationMUD : MonoBehaviour
 
         //wait a frame so position or other updates have settled
         yield return null;
+        yield return null;
 
         ActionEffect effect = LoadAction(actionTable);
         if(IsMove(effect.Action)) {
@@ -260,7 +261,11 @@ public class AnimationMUD : MonoBehaviour
         }
         
         Debug.Log(actionData.Entity.Name + " END -------------", this);
-        entity.Toggle(IsVisible(effect.Action));
+
+        //ONLY LISTEN TO TOGGLES IF ITS THE LAST ACTION
+        if(ActionQueue.Count == 1) {
+            entity.Toggle(IsVisible(effect.Action));
+        }
         
     }   
 

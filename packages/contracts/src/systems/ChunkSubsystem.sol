@@ -78,7 +78,11 @@ contract ChunkSubsystem is System {
 
     //spawn if it doesnt exist yet
     PositionData memory spawnPos = PositionData(0, down, 0);
-    Actions.deleteAt(world, spawnPos);
+    bytes32[] memory atDest = Rules.getKeysAtPosition(world, spawnPos.x, spawnPos.y, 0);
+
+    if(atDest.length > 0 && atDest[0] != proctor) {
+      Actions.deleteAt(world, spawnPos);
+    }
 
     if (isMileSetup) {
       bytes32 proctorTrigger = Actions.getRoadEntity(0, up);
