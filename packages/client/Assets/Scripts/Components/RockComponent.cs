@@ -103,8 +103,6 @@ public class RockComponent : MUDComponent {
 
     Coroutine sinkCoroutine;
     void Sink() {
-        flash.Flash();
-        return;
 
         if (sinkCoroutine != null) { StopCoroutine(sinkCoroutine); }
         StartCoroutine(SinkCoroutine());
@@ -115,36 +113,19 @@ public class RockComponent : MUDComponent {
 
         Debug.Log("Sinking", this);
 
+        yield return null;
         while (posSync.Moving) { yield return null; }
         
         flash.Flash();
 
-        fx_fillParticles.Play();
-
-        SPAudioSource.Play(transform.position, sfx_slide);
-        SPAudioSource.Play(transform.position, sfx_fillSound);
-
-        float lerp = 0f;
-
-        while (lerp < 1f) {
-            lerp += Time.deltaTime * 2f;
-            visualParent.transform.localPosition = Vector3.Lerp(Vector3.zero, Vector3.down * 1f, lerp);
-            yield return null;
-        }
+        // SPAudioSource.Play(transform.position, sfx_slide);
+        // SPAudioSource.Play(transform.position, sfx_fillSound);
+        SPAudioSource.Play(transform.position, sfx_finalThump);
 
         fx_fillParticles.Emit(10);
         fx_fillExplosion.Play();
-        SPAudioSource.Play(transform.position, sfx_finalThump);
 
-        visualParent.SetActive(false);
-
-        SPCamera.AddShake(Mathf.Clamp01(1f - Vector3.Distance(transform.position, SPPlayer.LocalPlayer.Root.position) * .1f) * .1f, transform.position);
-        RoadComponent road = MUDWorld.FindComponent<RoadTable, RoadComponent>(MUDHelper.Keccak256("Road", (int)posSync.Pos.Pos.x, (int)posSync.Pos.Pos.z));
-
-        if(road == null) {
-            Debug.LogError("Can't find road", this);
-            yield break;
-        }
+        SPCamera.AddShake(.1f, transform.position);
 
     }
 

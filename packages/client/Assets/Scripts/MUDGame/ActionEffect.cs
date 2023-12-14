@@ -8,6 +8,7 @@ public class ActionEffect : MonoBehaviour {
     public SPAction ActionData {get{return action;}}
     [Header("Action")]
     [SerializeField] ActionName actionName;
+    public Vector3 position;
 
     [Header("Movement")]
     public MoverMUD movement;
@@ -34,7 +35,7 @@ public class ActionEffect : MonoBehaviour {
         anim = animation;
         if(movement) animation.PositionSync.SetMovement(movement);
 
-        Debug.Log($"[A-Toggle]: {anim.ActionData.Entity.Name} [{gameObject.name}] {toggle}", this);
+        Debug.Log($"[EFFECT_TOGGLE {toggle}]: {anim.ActionData.Entity.Name} [{gameObject.name}]", this);
 
         //first time setup
         if (active != toggle) {
@@ -45,8 +46,10 @@ public class ActionEffect : MonoBehaviour {
 
         if(toggle) {
 
-            //first check if we are moving or not before performing action
+            //move to the position of our action's movement if its a move action
+            animation.Looker?.SetLookRotation(position);
             if(AnimationMUD.IsMove(Action)) {
+                animation.PositionSync.StartMove(position);
                 ToggleMovementEffects(true);
             } else {
                 ToggleActionEffects(true);
@@ -72,7 +75,7 @@ public class ActionEffect : MonoBehaviour {
 
     protected virtual void ToggleMovementEffects(bool toggle) {
 
-        Debug.Log($"[A-Move]: {anim.ActionData.Entity.Name} [{gameObject.name}] {toggle}", this);
+        Debug.Log($"[EFFECT_MOVE {toggle}]: {anim.ActionData.Entity.Name} [{gameObject.name}] ", this);
 
         if(toggle) {
             moveEffect?.Spawn(true);
@@ -86,7 +89,7 @@ public class ActionEffect : MonoBehaviour {
 
     protected virtual void ToggleActionEffects(bool toggle) {
 
-        Debug.Log($"[A-Action]: {anim.ActionData.Entity.Name} [{gameObject.name}] {toggle}", this);
+        Debug.Log($"[EFFECT_ACTION {toggle}]: {anim.ActionData.Entity.Name} [{gameObject.name}]", this);
 
         if(toggle) {
 

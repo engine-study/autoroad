@@ -7,12 +7,13 @@ using Edelweiss.Coroutine;
 
 public class AnimationMUD : MonoBehaviour
 {
+    public static bool IsVisible(ActionName action) {return action != ActionName.Dead && action != ActionName.Destroy;}
     public static bool IsMove(ActionName action) {return action == ActionName.Walking || action == ActionName.Push || action == ActionName.Hop || action == ActionName.Teleport || action == ActionName.Swap || action == ActionName.Spawn;}
     public static bool IsDisplace(ActionName action) {return action == ActionName.Push || action == ActionName.Fishing || action == ActionName.Throw || action == ActionName.Stick;}
 
     public ActionName Action {get{return actionEffect ? actionEffect.Action : ActionName.Idle;}}
     public ActionComponent ActionData {get{return actionData;}}
-    public SPLooker Look {get{return looker;}}
+    public SPLooker Look {get{return Looker;}}
     public IActor Actor {get{return actor;}}
 
     [Header("Animation")]
@@ -37,20 +38,22 @@ public class AnimationMUD : MonoBehaviour
     [SerializeField] MUDEntity entity;
     [SerializeField] MUDComponent ourComponent;
     [SerializeField] ActionComponent actionData;
-    [SerializeField] SPLooker looker;
+    public SPLooker Looker;
     [SerializeField] IActor actor;
     bool hasInit = false; 
 
     protected virtual void Awake() {
+        
         if(root == null) root = transform;
 
         ActionQueue = new List<ActionTable>();
 
         entity = GetComponentInParent<MUDEntity>();
-        looker = root.gameObject.AddComponent<SPLooker>();
+
+        if(Looker == null) { Looker = root.gameObject.AddComponent<SPLooker>();}
         float randomRot = Random.Range(0f,360f);
         randomRot = (int)(Mathf.Round(randomRot / 90f) * 90f);
-        looker?.SetLookRotation(Quaternion.Euler(Vector3.up * randomRot));
+        Looker?.SetLookRotation(Quaternion.Euler(Vector3.up * randomRot));
         
 
         ourComponent = GetComponent<MUDComponent>();
@@ -159,7 +162,7 @@ public class AnimationMUD : MonoBehaviour
         bool startQueue = ActionQueue.Count == 0;
         ActionQueue.Add(newAction);
 
-        Debug.Log($"[QUEUE]: {newAction.Action} [{ActionQueue.Count}]", this);
+        Debug.Log($"[QUEUE]: {(ActionName)newAction.Action} [{ActionQueue.Count}]", this);
 
         //start the coroutine again
         if(entity.gameObject.activeInHierarchy && !instant) {
@@ -169,9 +172,10 @@ public class AnimationMUD : MonoBehaviour
                 queue = actionData.Entity.StartCoroutine(ActionQueueCoroutine());
             }
         } else {
-            LoadAction(newAction, true);
+            ActionEffect effect = LoadAction(newAction, true);
+            DoAction(effect, true);
+            EndAction(effect, true);
             ActionQueue = new List<ActionTable>();
-
         }
     }
 
@@ -192,37 +196,34 @@ public class AnimationMUD : MonoBehaviour
         CurrentTable = table;
         ActionName actionType = (ActionName)table.Action;
         Vector3 position = new Vector3((int)table.X, 0f, (int)table.Y);
-        ActionEffect newEffect = LoadAction(actionType.ToString());
+        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{table.ToString().ToUpper()}] ({(int)position.x},{(int)position.z}) [Instant: {instant}]", this);
 
-        //error checks
-        Debug.Log($"[ANIM]: {actionData.Entity.Name} [{table.ToString().ToUpper()}] ({(int)position.x},{(int)position.z})", this);
-        if(newEffect == null) { Debug.LogError($"{actionType} not handled"); return null;}
-        if(newEffect.Action != actionType) {Debug.LogError(table + " doesn't match on " + newEffect.name);}
+        ActionEffect effect = LoadAction(actionType.ToString());
+        if(effect == null) { Debug.LogError($"{actionType} not handled"); return null;}
+        if(effect.Action != actionType) {Debug.LogError(table + " doesn't match on " + effect.name);}
+                
+        effect.position = position;
 
-        //turn on new action
-        ToggleAction(true, newEffect);
-
-        //move to the position of our action's movement if its a move action
-        //otherwise don't move us, but handle movement (so that necessary updates are sent through positionsync, like IsVisible)
-        looker?.SetLookRotation(position);
-        if(IsMove(actionType)) { PositionSync.StartMove(position); }
-        else {PositionSync.StartMove(PositionSync.Target.position);}
-
-        if(instant) {
-            entity.Toggle(newEffect.Action != ActionName.Dead && newEffect.Action != ActionName.Destroy);
-        }
-        
-        return newEffect;
+        return effect;
     }
 
-    public virtual void ToggleAction(bool toggle, ActionEffect newEffect) {
+    public void DoAction(ActionEffect effect, bool instant = false) {
 
-        actionEffect = toggle ? newEffect : null;
-        actionName = newEffect ? newEffect.Action : ActionName.None;
+        actionName = effect.Action;
+        actionEffect = effect;
 
-        //play new action if it exists
-        if(newEffect == null) return;
-        newEffect.Toggle(toggle, this);
+        effect.Toggle(true, this);
+        if(instant) entity.Toggle(IsVisible(effect.Action));
+
+    }
+
+    public void EndAction(ActionEffect effect, bool instant = false) {
+
+        effect.Toggle(false, this);
+        if(instant) entity.Toggle(IsVisible(effect.Action));
+
+        actionEffect = null;
+        actionName = ActionName.None;
 
     }
 
@@ -231,35 +232,35 @@ public class AnimationMUD : MonoBehaviour
         //wait a frame so position or other updates have settled
         yield return null;
 
-        ActionEffect newEffect = LoadAction(actionTable);
+        ActionEffect effect = LoadAction(actionTable);
+        if(IsMove(effect.Action)) {
 
-        //wait a frame so all the positions are synced
-        while(PositionSync.Moving) {yield return null;}
+            DoAction(effect);
+            while(PositionSync.Moving) {yield return null;}
+            EndAction(effect);
 
-        if(entity.gameObject.activeInHierarchy) {
-          
-             Debug.Log(actionData.Entity.Name + " START -------------", this);
+        } else {
+
+            Debug.Log(actionData.Entity.Name + " START -------------", this);
 
             //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
-            bool waitForTarget = IsMove(newEffect.Action) == false && IsDisplace(newEffect.Action) == false;
+            bool waitForTarget = IsMove(effect.Action) == false && IsDisplace(effect.Action) == false;
             while(waitForTarget && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
+
+            DoAction(effect);
 
             Debug.Log(actionData.Entity.Name + " TOGGLE -------------", this);
 
             //let it play for a couple seconds
-            if(IsMove(actionEffect.Action) == false && Animator != null) {
+            if(Animator != null && entity.IsLocal == false) {
                 yield return new WaitForSeconds(actionEffect.ActionData ? actionEffect.ActionData.CastDuration : 1f);
             }
-            
-            Debug.Log(actionData.Entity.Name + " END -------------", this);
 
-            ToggleAction(false, newEffect);
-
-        } else {
-            ToggleAction(true, newEffect);
+            EndAction(effect);
         }
-
-        entity.Toggle(newEffect.Action != ActionName.Dead && newEffect.Action != ActionName.Destroy);
+        
+        Debug.Log(actionData.Entity.Name + " END -------------", this);
+        entity.Toggle(IsVisible(effect.Action));
         
     }   
 

@@ -154,27 +154,24 @@ public class PositionSync : ComponentSync
 
         OnMoveStart?.Invoke();
 
-        if(!target.gameObject.activeInHierarchy) {
-            EndMove();
-        }
+        if(!target.gameObject.activeInHierarchy) { EndMove();}
     }
-
 
     void EndMove() {
 
         bool wasMoving = moving;
 
-        enabled = false;
         moving = false;
-        target.position = TargetPos;
+        enabled = false;
 
+        target.position = TargetPos;
         UpdateGrid(TargetPos);
 
         // Debug.Log(gameObject.name + " MOVE: End (" + (movement ? movement.name : "/") + ")", this);
 
         // if(action && wasMoving) {action.PlayAnimation(false);}
         if(line) line.Toggle(false);
-        if(hideAfterLoaded) { ourComponent.Toggle(IsVisible());}
+        if(hideAfterLoaded && !overrideSync) { ourComponent.Toggle(IsVisible());}
 
         OnMoveEnd?.Invoke();
     }

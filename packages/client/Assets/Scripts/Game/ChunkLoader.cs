@@ -18,7 +18,8 @@ public class ChunkLoader : MonoBehaviour
     public static int Mile {get{return Instance.mile;}}
     public static ChunkComponent Chunk {get{return Instance.chunk;}}
     public static void SetCull(int newCull) {Instance.cull = newCull; if(ActiveChunk) {LoadMile(Mile);}}
-    public static int CullDistance = 2;
+    public static int CullDistance = 3;
+    public static int MinCullDistance = 1;
     
     [Header("Chunks")]
     [SerializeField] TableManager pos;

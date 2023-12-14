@@ -76,8 +76,10 @@ contract FloraSubsystem is System {
 
     if (health <= 0) {
       
-      Health.deleteRecord(atPosition[0]);
-      Position.deleteRecord(atPosition[0]);
+      SystemSwitch.call(abi.encodeCall(IWorld(_world()).destroy,(player, atPosition[0], player, PositionData(x,y,0))));
+
+      // Health.deleteRecord(atPosition[0]);
+      // Position.deleteRecord(atPosition[0]);
 
       uint32 seedCount = Seeds.get(player);
       Seeds.set(player, seedCount + 1);

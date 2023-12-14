@@ -236,6 +236,8 @@ contract TerrainSubsystem is System {
 
   //TODO fix this horrible thing,make it more robust
   function updateChunk(bytes32 causedBy) public {
+    return;
+    //NOT BEING USED ATM, FIX THIS LATER
     int32 currentMile = GameState.getMiles();
     bytes32 chunk = keccak256(abi.encode("Chunk", currentMile));
 

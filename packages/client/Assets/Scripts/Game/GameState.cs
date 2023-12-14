@@ -324,7 +324,7 @@ public class GameState : MonoBehaviour {
         PlayerPrefs.SetInt("quality", toggle ? 0 : 1);
         PlayerPrefs.Save();
 
-        ChunkLoader.SetCull(toggle ? ChunkLoader.CullDistance : 0);
+        ChunkLoader.SetCull(toggle ? ChunkLoader.CullDistance : ChunkLoader.MinCullDistance);
 
         for(int i = 0; i < qualityObjects.Length; i++) {
             qualityObjects[i].SetActive(toggle);

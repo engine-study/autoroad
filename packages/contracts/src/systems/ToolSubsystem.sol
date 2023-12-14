@@ -103,8 +103,10 @@ contract ToolSubsystem is System {
     }
     //become shovelable once we are broken down enough
     else if (rockState >= uint32(RockType.Pavimentum)) {
-      Position.deleteRecord(atPosition[0]);
-      Health.deleteRecord(atPosition[0]);
+
+      SystemSwitch.call(abi.encodeCall(IWorld(_world()).destroy,(player, atPosition[0], player, PositionData(x,y,0))));
+      // Position.deleteRecord(atPosition[0]);
+      // Health.deleteRecord(atPosition[0]);
       // Move.set(atPosition[0], uint32(MoveType.Shovel));
     }
   }
@@ -207,11 +209,7 @@ contract ToolSubsystem is System {
       Rules.requireIsFairGame(carry);
       Carry.set(player, carry);
 
-      //should just use destroy
-      Position.set(carry, PositionData(x,y,-2));
-      Health.set(carry, -1);
-
-      Actions.setAction(carry, ActionName.Destroy, x, y);
+      SystemSwitch.call(abi.encodeCall(IWorld(_world()).destroy,(player, carry, player, PositionData(x,y,0))));
 
     } else {
       require(Rules.canInteractEmpty(player, playerPos, PositionData(x,y,0), atDest, 1), "bad interact");
