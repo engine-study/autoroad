@@ -135,7 +135,7 @@ public class AnimationMUD : MonoBehaviour
 
     public void ToggleRagdoll(bool toggle) {
         
-        if(Animator.IsHumanoid == false) return;
+        if(Animator == null || Animator.IsHumanoid == false) return;
 
         Controller.Ragdoll(toggle);
 
@@ -247,7 +247,7 @@ public class AnimationMUD : MonoBehaviour
             Debug.Log(actionData.Entity.Name + " TOGGLE -------------", this);
 
             //let it play for a couple seconds
-            if(IsMove(actionEffect.Action) == false) {
+            if(IsMove(actionEffect.Action) == false && Animator != null) {
                 yield return new WaitForSeconds(actionEffect.ActionData ? actionEffect.ActionData.CastDuration : 1f);
             }
             
