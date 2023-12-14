@@ -201,13 +201,15 @@ contract ToolSubsystem is System {
     if(isPocketing) {
 
       require(Rules.canInteract(player, playerPos, atDest, 1), "bad interact");
-      Rules.requireIsFairGame(carry);
 
-      Carry.set(player, atDest[0]);
+      carry = atDest[0];
+
+      Rules.requireIsFairGame(carry);
+      Carry.set(player, carry);
 
       //should just use destroy
-      Position.set(atDest[0], PositionData(x,y,-2));
-      Health.set(atDest[0], -1);
+      Position.set(carry, PositionData(x,y,-2));
+      Health.set(carry, -1);
 
       Actions.setAction(carry, ActionName.Destroy, x, y);
 

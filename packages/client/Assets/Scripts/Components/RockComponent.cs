@@ -103,8 +103,9 @@ public class RockComponent : MUDComponent {
 
     Coroutine sinkCoroutine;
     void Sink() {
+        flash.Flash();
         return;
-        
+
         if (sinkCoroutine != null) { StopCoroutine(sinkCoroutine); }
         StartCoroutine(SinkCoroutine());
 
