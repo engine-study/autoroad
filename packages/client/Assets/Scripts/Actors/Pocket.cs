@@ -11,7 +11,7 @@ public class Pocket : Equipment
     public override bool IsInteractable() {
         CarryTable ct = MUDTable.GetTable<CarryTable>(NetworkManager.LocalKey);
         bool isPickingUp = ct == null || string.IsNullOrEmpty(ct.Value.Replace("0", "").Replace("x", ""));
-        bool canPickUpOrPutDown = (isPickingUp && entity && entity.GetMUDComponent<PlayerComponent>() == null) || (!isPickingUp && !entity);
+        bool canPickUpOrPutDown = (isPickingUp && entity && entity.GetMUDComponent<PlayerComponent>() == null && entity.GetMUDComponent<PuzzleComponent>() == null) || (!isPickingUp && !entity);
         // Debug.Log("base: " + base.IsInteractable());
         // Debug.Log("canPickUpOrPutDown: " + canPickUpOrPutDown);
         canUse = base.IsInteractable() && canPickUpOrPutDown;

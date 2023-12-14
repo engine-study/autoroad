@@ -134,7 +134,7 @@ public class AnimationMUD : MonoBehaviour
 
     public void ToggleRagdoll(bool toggle) {
         
-        if(Controller == null || head == null) return;
+        if(Animator.IsHumanoid == false) return;
 
         Controller.Ragdoll(toggle);
 
@@ -252,7 +252,7 @@ public class AnimationMUD : MonoBehaviour
             ToggleAction(true, newEffect);
         }
 
-        entity.Toggle(Action != ActionName.Dead && Action != ActionName.Destroy);
+        entity.Toggle(newEffect.Action != ActionName.Dead && newEffect.Action != ActionName.Destroy);
         
     }   
 

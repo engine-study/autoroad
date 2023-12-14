@@ -163,6 +163,8 @@ contract SpawnSubsystem is System {
       kill(causedBy, target, attacker, pos);
     } else {
       //destroy
+
+      //MERGE THIS ALL INTO KILL
       Position.set(target, pos.x, pos.y, -2);
       Health.set(target, -1);
       Actions.setAction(target, ActionName.Destroy, pos.x, pos.y);
@@ -192,10 +194,8 @@ contract SpawnSubsystem is System {
     //rewards
     SystemSwitch.call(abi.encodeCall(world.killRewards, (causedBy, target, attacker)));
 
-    //spawn bones
-    // bytes32 bonesEntity = keccak256(abi.encode("Bones", pos.x, pos.y));
-    // Bones.set(bonesEntity, true);
-    // Position.set(bonesEntity, pos);
-    // Move.set(bonesEntity, uint32(MoveType.Push));
+    if(Respawn.get(target)) {
+      respawn(causedBy, target);
+    }
   }
 }
