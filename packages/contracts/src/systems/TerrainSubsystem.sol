@@ -117,11 +117,11 @@ contract TerrainSubsystem is System {
         //TERRAIN
         TerrainType terrainType = TerrainType.None;
 
-        if (noiseCoord <= 150) {
+        if (noiseCoord <= 100) {
           terrainType = TerrainType.Tree;
-        } else if (noiseCoord > 200 && noiseCoord <= 400) {
+        } else if (noiseCoord > 200 && noiseCoord <= 300 + difficulty * 20) {
           terrainType = TerrainType.Rock;
-        } else if (noiseCoord > 500 && noiseCoord <= 600 + difficulty * 5) {
+        } else if (noiseCoord > 500 && noiseCoord <= 600 + difficulty * 10) {
           terrainType = TerrainType.HeavyBoy;
         } else if (noiseCoord > 700 && noiseCoord <= 750 + difficulty * 10) {
           if (Rules.onRoad(x, y)) { continue; }

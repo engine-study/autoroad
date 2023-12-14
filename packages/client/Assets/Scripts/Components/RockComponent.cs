@@ -103,7 +103,8 @@ public class RockComponent : MUDComponent {
 
     Coroutine sinkCoroutine;
     void Sink() {
-
+        return;
+        
         if (sinkCoroutine != null) { StopCoroutine(sinkCoroutine); }
         StartCoroutine(SinkCoroutine());
 

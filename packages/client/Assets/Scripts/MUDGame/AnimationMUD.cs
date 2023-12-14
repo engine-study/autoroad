@@ -134,6 +134,8 @@ public class AnimationMUD : MonoBehaviour
 
     public void ToggleRagdoll(bool toggle) {
         
+        if(Controller == null || head == null) return;
+
         Controller.Ragdoll(toggle);
 
         if(toggle) {
