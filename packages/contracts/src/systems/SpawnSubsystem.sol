@@ -82,7 +82,7 @@ contract SpawnSubsystem is System {
       spawnPlayerNPC(entity, x, y);
     } else if (npcType == NPCType.Soldier) {
       Soldier.set(entity, true);
-      Weight.set(entity, 1);
+      Weight.set(entity, -1);
       Seek.set(entity, 2);
       Aggro.set(entity, 1);
     } else if (npcType == NPCType.Barbarian) {

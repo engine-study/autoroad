@@ -6144,7 +6144,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b59063aba75e98e43a6c3ebeb7c2445e, type: 2}
+  - {fileID: 2100000, guid: 6e658fa4130ab884b886c8010482cf97, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6494,6 +6494,7 @@ MonoBehaviour:
   syncType: 1
   synced: 0
   targetComponent: {fileID: 0}
+  overrideSync: 0
   target: {fileID: 0}
   hideIfNoPosition: 1
   hideIfBelowGround: 0
@@ -6507,6 +6508,7 @@ MonoBehaviour:
   movement: {fileID: 0}
   gridPos: {x: 0, y: 0, z: 0}
   StartPos: {x: 0, y: 0, z: 0}
+  TargetOverride: {x: 0, y: 0, z: 0}
   moving: 0
   moveLerp: 0
   distanceMoved: 0

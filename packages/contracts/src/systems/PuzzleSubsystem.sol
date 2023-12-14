@@ -61,6 +61,7 @@ contract PuzzleSubsystem is System {
     console.log("statue");
 
     PositionData memory pos = findEmptyPositionInArea(world, statue, width, up, down, 0, roadSide);
+    require(pos.x < roadSide || pos.x > roadSide, "puzzle spawned on road");
 
     //delete whatever was there and place puzzle
     Actions.deleteAt(world, pos);
@@ -80,8 +81,7 @@ contract PuzzleSubsystem is System {
     //put triggers underground
     pos = findEmptyPositionInArea(world, trigger, width, up, down, -1, roadSide);
     pos.layer = int32(-1);
-
-    require(pos.x < width || pos.x > width, "puzzle spawned on road");
+    require(pos.x < roadSide || pos.x > roadSide, "puzzle spawned on road");
 
     Position.set(trigger, pos);
     Trigger.set(trigger, true);
@@ -101,6 +101,7 @@ contract PuzzleSubsystem is System {
     console.log("miliarium");
 
     PositionData memory pos = findEmptyPositionInArea(world, mil, width, up, down, 0, roadSide);
+    require(pos.x < roadSide || pos.x > roadSide, "puzzle spawned on road");
 
     //delete whatever was there and place puzzle
     Actions.deleteAt(world, pos);
@@ -116,8 +117,6 @@ contract PuzzleSubsystem is System {
 
     //put triggers underground
     pos = PositionData(roadSide + 1, down + 4, -1);
-
-    require(pos.x < width || pos.x > width, "puzzle spawned on road");
 
     Position.set(trigger, pos);
     Trigger.set(trigger, true);

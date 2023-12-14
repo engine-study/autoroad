@@ -182,7 +182,7 @@ function getRandomPositionNotRoad(
   uint seed
 ) view returns (PositionData memory pos) {
   //spawn on right side
-  pos.x = int32(uint32(randomFromEntitySeed(uint(uint32(roadSide)), uint(uint32(width)), entity, seed)));
+  pos.x = int32(uint32(randomFromEntitySeed(uint(uint32(roadSide+1)), uint(uint32(width)), entity, seed)));
   pos.y = int32(uint32(randomFromEntitySeed(uint(uint32(down)), uint(uint32(up)), entity, seed * 10)));
   pos.layer = 0;
 
