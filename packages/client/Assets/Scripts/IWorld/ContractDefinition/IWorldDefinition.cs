@@ -292,6 +292,14 @@ namespace IWorld.ContractDefinition
         public virtual bool IsMileSetup { get; set; }
     }
 
+    public partial class CreateProctorAdminFunction : CreateProctorAdminFunctionBase { }
+
+    [Function("createProctorAdmin")]
+    public class CreateProctorAdminFunctionBase : FunctionMessage
+    {
+
+    }
+
     public partial class CreatePuzzleOnMileFunction : CreatePuzzleOnMileFunctionBase { }
 
     [Function("createPuzzleOnMile")]
@@ -329,8 +337,8 @@ namespace IWorld.ContractDefinition
         public virtual int Up { get; set; }
         [Parameter("int32", "down", 4)]
         public virtual int Down { get; set; }
-        [Parameter("uint256", "difficulty", 5)]
-        public virtual BigInteger Difficulty { get; set; }
+        [Parameter("int32", "mile", 5)]
+        public virtual int Mile { get; set; }
     }
 
     public partial class CreateWorldFunction : CreateWorldFunctionBase { }
@@ -482,6 +490,23 @@ namespace IWorld.ContractDefinition
         public virtual PositionData EndPos { get; set; }
         [Parameter("uint8", "actionType", 6)]
         public virtual byte ActionType { get; set; }
+    }
+
+    public partial class DoGardenFunction : DoGardenFunctionBase { }
+
+    [Function("doGarden")]
+    public class DoGardenFunctionBase : FunctionMessage
+    {
+        [Parameter("bytes32", "causedBy", 1)]
+        public virtual byte[] CausedBy { get; set; }
+        [Parameter("bytes32", "entity", 2)]
+        public virtual byte[] Entity { get; set; }
+        [Parameter("bytes32", "target", 3)]
+        public virtual byte[] Target { get; set; }
+        [Parameter("tuple", "entityPos", 4)]
+        public virtual PositionData EntityPos { get; set; }
+        [Parameter("tuple", "targetPos", 5)]
+        public virtual PositionData TargetPos { get; set; }
     }
 
     public partial class DoSeekFunction : DoSeekFunctionBase { }
@@ -2386,6 +2411,8 @@ namespace IWorld.ContractDefinition
 
 
 
+
+
     public partial class CreatorOutputDTO : CreatorOutputDTOBase { }
 
     [FunctionOutput]
@@ -2394,6 +2421,8 @@ namespace IWorld.ContractDefinition
         [Parameter("address", "", 1)]
         public virtual string ReturnValue1 { get; set; }
     }
+
+
 
 
 

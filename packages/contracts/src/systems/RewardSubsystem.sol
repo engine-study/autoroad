@@ -25,8 +25,8 @@ contract RewardSubsystem is System {
     if(isSoldier) {
       //do something bad to players for killing their own oldiers
       // if(NPC.get(causedBy) > 0 && causedBy != attacker) { doSomethingBad;}
-      NPCType attackerType = NPCType(NPC.get(attacker));
-      if(attackerType != NPCType.None) giveKillReward(attacker);
+      bool isBarbarian = Barbarian.get(attacker);
+      if(isBarbarian) giveKillReward(attacker);
       return;
     }
     

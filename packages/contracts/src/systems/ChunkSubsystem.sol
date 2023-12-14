@@ -78,8 +78,14 @@ contract ChunkSubsystem is System {
 
     //spawn if it doesnt exist yet
     PositionData memory spawnPos = PositionData(0, down, 0);
+
+    //move out of the way so we can check what is at our position 
+    spawnPos.layer = 2;
+    Position.set(proctor, spawnPos);
+
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, spawnPos.x, spawnPos.y, 0);
 
+    spawnPos.layer = 0;
     if(atDest.length > 0 && atDest[0] != proctor) {
       Actions.deleteAt(world, spawnPos);
     }
@@ -92,6 +98,7 @@ contract ChunkSubsystem is System {
     } else {
 
     }
+
 
     if (NPC.get(proctor) == 0) {
       SystemSwitch.call(

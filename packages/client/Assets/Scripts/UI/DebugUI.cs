@@ -33,6 +33,9 @@ public class DebugUI : SPWindowParent
     public void SpawnPuzzle() {
         TxManager.SendDirect<SpawnPuzzleAdminFunction>();
     }
+    public void SpawnProctor() {
+        TxManager.SendDirect<CreateProctorAdminFunction>();
+    }
     
     public void SpawnMile() {
         TxManager.SendDirect<SpawnMileAdminFunction>();

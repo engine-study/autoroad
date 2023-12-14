@@ -694,6 +694,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createProctorFunction, cancellationToken);
         }
 
+        public Task<string> CreateProctorAdminRequestAsync(CreateProctorAdminFunction createProctorAdminFunction)
+        {
+             return ContractHandler.SendRequestAsync(createProctorAdminFunction);
+        }
+
+        public Task<string> CreateProctorAdminRequestAsync()
+        {
+             return ContractHandler.SendRequestAsync<CreateProctorAdminFunction>();
+        }
+
+        public Task<TransactionReceipt> CreateProctorAdminRequestAndWaitForReceiptAsync(CreateProctorAdminFunction createProctorAdminFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(createProctorAdminFunction, cancellationToken);
+        }
+
+        public Task<TransactionReceipt> CreateProctorAdminRequestAndWaitForReceiptAsync(CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync<CreateProctorAdminFunction>(null, cancellationToken);
+        }
+
         public Task<string> CreatePuzzleOnMileRequestAsync(CreatePuzzleOnMileFunction createPuzzleOnMileFunction)
         {
              return ContractHandler.SendRequestAsync(createPuzzleOnMileFunction);
@@ -762,26 +782,26 @@ namespace IWorld.Service
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createTickersFunction, cancellationToken);
         }
 
-        public Task<string> CreateTickersRequestAsync(byte[] causedBy, int width, int up, int down, BigInteger difficulty)
+        public Task<string> CreateTickersRequestAsync(byte[] causedBy, int width, int up, int down, int mile)
         {
             var createTickersFunction = new CreateTickersFunction();
                 createTickersFunction.CausedBy = causedBy;
                 createTickersFunction.Width = width;
                 createTickersFunction.Up = up;
                 createTickersFunction.Down = down;
-                createTickersFunction.Difficulty = difficulty;
+                createTickersFunction.Mile = mile;
             
              return ContractHandler.SendRequestAsync(createTickersFunction);
         }
 
-        public Task<TransactionReceipt> CreateTickersRequestAndWaitForReceiptAsync(byte[] causedBy, int width, int up, int down, BigInteger difficulty, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> CreateTickersRequestAndWaitForReceiptAsync(byte[] causedBy, int width, int up, int down, int mile, CancellationTokenSource cancellationToken = null)
         {
             var createTickersFunction = new CreateTickersFunction();
                 createTickersFunction.CausedBy = causedBy;
                 createTickersFunction.Width = width;
                 createTickersFunction.Up = up;
                 createTickersFunction.Down = down;
-                createTickersFunction.Difficulty = difficulty;
+                createTickersFunction.Mile = mile;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(createTickersFunction, cancellationToken);
         }
@@ -1115,6 +1135,40 @@ namespace IWorld.Service
                 doFlingFunction.ActionType = actionType;
             
              return ContractHandler.SendRequestAndWaitForReceiptAsync(doFlingFunction, cancellationToken);
+        }
+
+        public Task<string> DoGardenRequestAsync(DoGardenFunction doGardenFunction)
+        {
+             return ContractHandler.SendRequestAsync(doGardenFunction);
+        }
+
+        public Task<TransactionReceipt> DoGardenRequestAndWaitForReceiptAsync(DoGardenFunction doGardenFunction, CancellationTokenSource cancellationToken = null)
+        {
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(doGardenFunction, cancellationToken);
+        }
+
+        public Task<string> DoGardenRequestAsync(byte[] causedBy, byte[] entity, byte[] target, PositionData entityPos, PositionData targetPos)
+        {
+            var doGardenFunction = new DoGardenFunction();
+                doGardenFunction.CausedBy = causedBy;
+                doGardenFunction.Entity = entity;
+                doGardenFunction.Target = target;
+                doGardenFunction.EntityPos = entityPos;
+                doGardenFunction.TargetPos = targetPos;
+            
+             return ContractHandler.SendRequestAsync(doGardenFunction);
+        }
+
+        public Task<TransactionReceipt> DoGardenRequestAndWaitForReceiptAsync(byte[] causedBy, byte[] entity, byte[] target, PositionData entityPos, PositionData targetPos, CancellationTokenSource cancellationToken = null)
+        {
+            var doGardenFunction = new DoGardenFunction();
+                doGardenFunction.CausedBy = causedBy;
+                doGardenFunction.Entity = entity;
+                doGardenFunction.Target = target;
+                doGardenFunction.EntityPos = entityPos;
+                doGardenFunction.TargetPos = targetPos;
+            
+             return ContractHandler.SendRequestAndWaitForReceiptAsync(doGardenFunction, cancellationToken);
         }
 
         public Task<string> DoSeekRequestAsync(DoSeekFunction doSeekFunction)

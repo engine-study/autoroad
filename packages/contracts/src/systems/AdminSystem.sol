@@ -55,6 +55,12 @@ contract AdminSystem is System {
     Move.deleteRecord(entity);
   }
 
+  function createProctorAdmin() public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(isAdmin(player), "not admin");
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).createProctor,(player, true)));
+  }
+
   function deleteAdmin(int32 x, int32 y, int32 layer) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(isAdmin(player), "not admin");
