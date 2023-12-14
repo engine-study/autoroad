@@ -10101,7 +10101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 977803b8463764443b40d128c3160e23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadFrom: 0
+  loadFrom: 1
   worldFilePath: worlds
   worldURL: ./worlds.json
   worldAddress: 
@@ -27061,9 +27061,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f81524fb4724d4cb445f038a81f0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkType: 0
+  networkType: 1
   newGame: 0
-  skipMenu: 1
+  skipMenu: 0
   mainTables: {fileID: 1273645192}
   chunkTable: {fileID: 1265459090}
   playerTable: {fileID: 1212426689}
@@ -48660,7 +48660,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 488818311025724108, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6392306158663181893, guid: f3d8c2ac3c69ffd4780ca64afddb1209, type: 3}
       propertyPath: s_error

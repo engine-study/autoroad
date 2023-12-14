@@ -245,7 +245,7 @@ public class AnimationMUD : MonoBehaviour
             Debug.Log(actionData.Entity.Name + " START -------------", this);
 
             //if we have a target that is moving (and is not us), wait until it comes into the same grid as the position
-            bool waitForTarget = IsMove(effect.Action) == false && IsDisplace(effect.Action) == false;
+            bool waitForTarget = IsDisplace(effect.Action) == false;
             while(waitForTarget && actionData.Target && actionData.Target.GridPos != actionData.Position) {yield return null;} 
 
             DoAction(effect);
