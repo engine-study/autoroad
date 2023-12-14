@@ -188,11 +188,11 @@ contract ToolSubsystem is System {
     IWorld world = IWorld(_world());
     require(Pocket.get(player), "no Pocket");
     require(Rules.canDoStuff(player), "hmm");
+    PositionData memory targetPos = PositionData(x,y,0);
 
     bytes32 carry = Carry.get(player);
     bytes32[] memory atDest = Rules.getKeysAtPosition(world,x, y, 0);
     PositionData memory playerPos = Position.get(player);
-    PositionData memory targetPos = PositionData(x,y,0);
 
     bool isPocketing = carry == bytes32(0);
 
@@ -215,6 +215,8 @@ contract ToolSubsystem is System {
 
     } else {
       require(Rules.canInteractEmpty(player, playerPos, PositionData(x,y,0), atDest, 1), "bad interact");
+      require(Rules.onMapOrSpawn(carry, targetPos), "offmap");
+
       Position.set(carry, x,y,0);
       Health.set(carry, 1);
       Carry.set(player, bytes32(0));

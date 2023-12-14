@@ -27,6 +27,7 @@ public class AnimationMUD : MonoBehaviour
     [Header("Action Debug")]    
     [SerializeField] ActionName actionName;
     public List<ActionTable> ActionQueue;
+    public ActionTable CurrentTable;
     [SerializeField] ActionEffect actionEffect;
 
     [Header("Linked")]
@@ -57,7 +58,7 @@ public class AnimationMUD : MonoBehaviour
     }
 
     void OnDisable() {
-        if(ActionQueue.Count > 0) {
+        if(ActionQueue.Count > 0 && ActionQueue[ActionQueue.Count-1] != CurrentTable) {
             IngestState(ActionQueue[ActionQueue.Count-1], true);
         }
     }
@@ -168,8 +169,9 @@ public class AnimationMUD : MonoBehaviour
                 queue = actionData.Entity.StartCoroutine(ActionQueueCoroutine());
             }
         } else {
-            LoadAction(ActionQueue[ActionQueue.Count-1]);
+            LoadAction(newAction, true);
             ActionQueue = new List<ActionTable>();
+
         }
     }
 
@@ -185,8 +187,9 @@ public class AnimationMUD : MonoBehaviour
     }
 
     //load the action, set movement
-    public ActionEffect LoadAction(ActionTable table) {
+    public ActionEffect LoadAction(ActionTable table, bool instant = false) {
         
+        CurrentTable = table;
         ActionName actionType = (ActionName)table.Action;
         Vector3 position = new Vector3((int)table.X, 0f, (int)table.Y);
         ActionEffect newEffect = LoadAction(actionType.ToString());
@@ -205,6 +208,10 @@ public class AnimationMUD : MonoBehaviour
         if(IsMove(actionType)) { PositionSync.StartMove(position); }
         else {PositionSync.StartMove(PositionSync.Target.position);}
 
+        if(instant) {
+            entity.Toggle(newEffect.Action != ActionName.Dead && newEffect.Action != ActionName.Destroy);
+        }
+        
         return newEffect;
     }
 
