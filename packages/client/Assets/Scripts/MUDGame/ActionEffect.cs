@@ -16,7 +16,6 @@ public class ActionEffect : MonoBehaviour {
     public string movementClip;
 
     [Header("Action")]
-    public bool targeted;
     [SerializeField] SPAction action;
     [SerializeField] SPEnableDisable effect;
     [SerializeField] string actionClip;

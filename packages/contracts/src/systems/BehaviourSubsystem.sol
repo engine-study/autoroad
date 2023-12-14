@@ -88,14 +88,17 @@ contract BehaviourSubsystem is System {
     IWorld world = IWorld(_world());
     //walk towards target
 
-    PositionData memory walkPos = addPosition(entityPos, randomDirection(entity, entityPos.x, entityPos.y, 0));
+    PositionData memory vector = randomDirection(entity, entityPos.x, entityPos.y, 0);
+    PositionData memory walkPos = addPosition(entityPos, vector);
     if (Rules.onMap(walkPos.x, walkPos.y) == false) {
       Actions.setAction(entity, ActionName.Idle, walkPos.x, walkPos.y);
       return;
     }
 
     bytes32[] memory atDest = Rules.getKeysAtPosition(world, walkPos.x, walkPos.y, 0);
-    SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionName.Walking)));
+    // SystemSwitch.call(abi.encodeCall(world.moveTo, (causedBy, entity, entityPos, walkPos, atDest, ActionName.Walking)));
+    SystemSwitch.call(abi.encodeCall(world.moveOrPush, (causedBy, entity, entityPos, vector, 1)));
+    
   }
 
   //out of world positions have been already filtered  at this point, can trust this is hapepning on map

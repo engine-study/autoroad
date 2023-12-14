@@ -140,11 +140,10 @@ library Rules {
     }
   }
 
-  //complex, returns true if pushable, false if not pushable, but requires not obstructed
-  function requireEmptyOrPushable(bytes32[] memory at) internal view returns (bool) {
+  function isPushableNotEmpty(bytes32[] memory at) internal view returns (bool) {
     if (at.length == 0) return false;
     MoveType move = MoveType(Move.get(at[0]));
-    require(move != MoveType.Obstruction && move != MoveType.Permanent, "blocked");
+    if(move == MoveType.Obstruction || move == MoveType.Permanent) return false;
     return move == MoveType.Push;
   }
 

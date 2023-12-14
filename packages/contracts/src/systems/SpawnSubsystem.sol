@@ -99,7 +99,7 @@ contract SpawnSubsystem is System {
       Weight.set(entity, -5);
     } else if (npcType == NPCType.Deer) {
       Animal.set(entity, true);
-      Weight.set(entity, 1);
+      Weight.set(entity, -5);
       Fling.set(entity, 1);
       Wander.set(entity, 1);
       // Entities.setEntities(entity);

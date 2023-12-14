@@ -139,7 +139,7 @@ contract MoveSubsystem is System {
       console.logUint(index);
 
       //leave loop early if we get blocked or finally reach a non-pushable space (empty or hole)
-      if(Rules.requireEmptyOrPushable(atPos) == false) {
+      if(Rules.isPushableNotEmpty(atPos) == false) {
         break;
       }
 
@@ -149,7 +149,7 @@ contract MoveSubsystem is System {
 
       //weight always must be pushable, else we fail
       totalWeight += Weight.get(atPos[0]);
-      require(totalWeight < 1, "too heavy");
+      if(!(totalWeight < 1)) {console.log("TOO HEAVY"); return;}
 
       //don't let anything go off map
       Rules.requireOnMap(atPos[0], pushPos);
@@ -166,7 +166,7 @@ contract MoveSubsystem is System {
 
     }
 
-    require(index > uint(1), "no pushable object");
+    if(!(index > uint(1))) {console.log("NO PUSHABLE OBJECT"); return;}
     
     //go back to the last non empty object
     index--;
